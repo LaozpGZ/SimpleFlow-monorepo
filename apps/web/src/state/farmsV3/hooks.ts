@@ -62,12 +62,25 @@ export const farmV3ApiFetch = (chainId: number): Promise<FarmsV3Response> =>
       }
     })
 
-const fallback: Awaited<ReturnType<typeof farmFetcherV3.fetchFarms>> = {
+const baseFallback = {
   chainId: ChainId.BSC,
-  farmsWithPrice: [],
   poolLength: 0,
   cakePerSecond: '0',
   totalAllocPoint: '0',
+}
+
+const fallbackWithPrice: typeof baseFallback & {
+  farmsWithPrice: Awaited<ReturnType<typeof farmFetcherV3.fetchFarms>>['farmsWithPrice']
+} = {
+  ...baseFallback,
+  farmsWithPrice: [],
+}
+
+const fallbackWithData: typeof baseFallback & {
+  farmsData: Awaited<ReturnType<typeof baseFarmFetcherV3.fetchFarms>>['farmsData']
+} = {
+  ...baseFallback,
+  farmsData: [],
 }
 
 const API_FLAG = false
@@ -85,7 +98,7 @@ export const useFarmsV3Public = () => {
       if (API_FLAG && chainId) {
         return farmV3ApiFetch(chainId).catch((err) => {
           console.error(err)
-          return fallback
+          return fallbackWithPrice
         })
       }
 
@@ -112,7 +125,7 @@ export const useFarmsV3Public = () => {
       } catch (error) {
         console.error(error)
         // return fallback for now since not all chains supported
-        return fallback
+        return fallbackWithPrice
       }
     },
     refetchInterval: 1_000 * 60 * 10,
@@ -124,7 +137,7 @@ export const useFarmsV3Public = () => {
 
   return {
     ...resp,
-    data: resp?.data ?? fallback,
+    data: resp?.data ?? fallbackWithPrice,
   }
 }
 
@@ -135,7 +148,7 @@ export const useBaseFarmsV3Public = ({ enabled = true }: { enabled?: boolean } =
     queryKey: [chainId, 'farmV3BaseFetch'],
     queryFn: async () => {
       if (!chainId) {
-        return fallback
+        return fallbackWithData
       }
 
       try {
@@ -158,7 +171,7 @@ export const useBaseFarmsV3Public = ({ enabled = true }: { enabled?: boolean } =
         }
       } catch (error) {
         console.error(error)
-        return fallback
+        return fallbackWithData
       }
     },
     refetchInterval: 1_000 * 60 * 10,
@@ -170,7 +183,7 @@ export const useBaseFarmsV3Public = ({ enabled = true }: { enabled?: boolean } =
 
   return {
     ...resp,
-    data: resp?.data ?? fallback,
+    data: resp?.data ?? fallbackWithData,
   }
 }
 
