@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "স্থির: পুল তৈরি হওয়ার পরে ফি নির্দিষ্ট লেভেলে স্থির থাকে।",
   "Static": "স্থির",
   "Dynamic": "গতিশীল",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "গতিশীল: পুল তৈরির পরে হুক ব্যবহার করে ফি পরিবর্তন করা যেতে পারে। প্রাথমিক ফি লেভেল 0-তে সেট করা আছে।",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "ডাইনামিক: পুল তৈরি করার পরে হুক ব্যবহার করে ফি পরিবর্তন করা যেতে পারে। প্রাথমিক ফি লেভেল 0 তে সেট করা আছে।",
   "Contract is verified on block explorer": "ব্লক এক্সপ্লোরারে কন্ট্রাক্ট যাচাই করা হয়েছে",
   "Contract is not verified on block explorer": "ব্লক এক্সপ্লোরারে কন্ট্রাক্ট যাচাই করা হয়নি",
   "Verified": "যাচাই করা হয়েছে",

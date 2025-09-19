@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Staattinen: maksu pysyy kiinteänä tietyllä tasolla, kun pooli on luotu.",
   "Static": "Staattinen",
   "Dynamic": "Dynaaminen",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynaaminen: maksua voi muuttaa käyttämällä hookia poolin luomisen jälkeen. Alustavaksi maksutasoksi on asetettu 0.",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynaaminen: Palkkiota voidaan muokata hookin avulla poolin luomisen jälkeen. Aloituspalkkiotaso on 0.",
   "Contract is verified on block explorer": "Sopimus on vahvistettu lohkoselaimessa",
   "Contract is not verified on block explorer": "Sopimusta ei ole vahvistettu lohkoselaimessa",
   "Verified": "Vahvistettu",

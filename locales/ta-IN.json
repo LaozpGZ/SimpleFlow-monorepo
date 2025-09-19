@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "நிலையானது: பூல் உருவாக்கப்பட்டவுடன் கட்டணம் குறிப்பிட்ட மட்டத்தில் நிலையாக இருக்கும்.",
   "Static": "நிலையானது",
   "Dynamic": "மாறுவது",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "மாறுவது: பூல் உருவாக்கப்பட்ட பிறகு ஹூக்கைப் பயன்படுத்தி கட்டணத்தை மாற்றியமைக்கலாம். ஆரம்ப கட்டண நிலை 0 ஆக அமைக்கப்பட்டுள்ளது",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "டைனமிக்: பூல் உருவாக்கப்பட்ட பிறகு, ஹூக் மூலம் கட்டணத்தை மாற்றியமைக்க முடியும். ஆரம்பக் கட்டண நிலை 0 என அமைக்கப்பட்டுள்ளது.",
   "Contract is verified on block explorer": "ப்ளாக் எக்ஸ்ப்ளோரரில் ஒப்பந்தம் சரிபார்க்கப்பட்டது",
   "Contract is not verified on block explorer": "ப்ளாக் எக்ஸ்ப்ளோரரில் ஒப்பந்தம் சரிபார்க்கப்படவில்லை",
   "Verified": "சரிபார்த்தது",

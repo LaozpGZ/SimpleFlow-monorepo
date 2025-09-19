@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Статическая: после создания пула комиссия остается фиксированной на указанном уровне.",
   "Static": "Статическая",
   "Dynamic": "Динамическая",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Динамическая: после создания пула комиссию можно изменить с помощью хука. Исходный уровень комиссии — 0.",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Динамический: комиссия может быть изменена с помощью хука после создания пула. Начальный уровень комиссии установлен на 0.",
   "Contract is verified on block explorer": "Контракт проверен в обозревателе блоков",
   "Contract is not verified on block explorer": "Контракт не проверен в обозревателе блоков",
   "Verified": "Проверен",

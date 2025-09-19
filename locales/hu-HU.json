@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Statikus: a díj az összevont alap létrehozását követően a meghatározott szinten marad.",
   "Static": "Statikus",
   "Dynamic": "Dinamikus",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinamikus: a díj kampó használatával módosítható az összevont alap létrehozását követően. A kezdeti díjszint 0-ra van beállítva",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinamikus: A díjat egy hook segítségével lehet módosítani a pool létrehozása után. A kezdeti díjszint 0-ra van állítva.",
   "Contract is verified on block explorer": "Az okos kontraktus ellenőrizve a Block exploreren",
   "Contract is not verified on block explorer": "Az okos kontraktus nem ellenőrizött a Block exploreren",
   "Verified": "Ellenőrzött",

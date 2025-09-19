@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Statisch: de vergoeding blijft vast op het opgegeven niveau zodra de pool is gemaakt.",
   "Static": "Statisch",
   "Dynamic": "Dynamisch",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamisch: de vergoeding kan worden aangepast met behulp van hooks nadat de pool is gemaakt. Het initiële vergoedingsniveau is ingesteld op 0.",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamisch: De fee kan worden aangepast via een hook nadat de pool is aangemaakt. Het initiële fee-niveau is ingesteld op 0.",
   "Contract is verified on block explorer": "Het contract is geverifieerd op BlockExplorer",
   "Contract is not verified on block explorer": "Het contract is niet geverifieerd op BlockExplorer",
   "Verified": "Geverifieerd",

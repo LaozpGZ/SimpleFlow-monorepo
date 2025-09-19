@@ -2592,7 +2592,12 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Static: Mananatiling naka-fix ang fee sa tinukoy na level kapag nagawa na ang pool.",
   "Static": "Nakapirmi",
   "Dynamic": "Dinamiko",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamic: Puwedeng baguhin ang fee gamit ang hook pagkatapos magawa ang pool. Naka-set sa 0 ang paunang level ng fee",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": {
+    "key": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "source": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "translation": "Dynamic: Maaaring baguhin ang fee gamit ang hook pagkatapos malikha ang pool. Ang paunang fee level ay naka-set sa 0",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Contract is verified on block explorer": "Na-verify ang kontrata sa explorer ng block",
   "Contract is not verified on block explorer": "Hindi na-verify ang kontrata sa explorer ng block",
   "Verified": "Na-verify",

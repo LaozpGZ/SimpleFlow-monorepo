@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Статичний: комісія залишається незмінною на вказаному рівні після створення пулу.",
   "Static": "Статичний",
   "Dynamic": "Динамічний",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Динамічний: комісію можна змінювати за допомогою хука після створення пулу. Початковий рівень комісії встановлено на 0.",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Динамічний: комісію можна змінити за допомогою хука після створення пулу. Початковий рівень комісії — 0.",
   "Contract is verified on block explorer": "Контракт підтверджено в провіднику блокчейну",
   "Contract is not verified on block explorer": "Контракт не підтверджено в провіднику блокчейну",
   "Verified": "Підтверджено",

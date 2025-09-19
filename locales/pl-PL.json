@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Stała: prowizja pozostaje stała na określonym poziomie po utworzeniu puli.",
   "Static": "Stała",
   "Dynamic": "Zmienna",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Zmienna: prowizja może być modyfikowana za pomocą haka po utworzeniu puli. Początkowy poziom prowizji jest ustawiony na 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamiczna: Opłatę można modyfikować za pomocą hooka po utworzeniu puli. Początkowy poziom opłaty jest ustawiony na 0.",
   "Contract is verified on block explorer": "Kontrakt jest zweryfikowany w eksploratorze bloków",
   "Contract is not verified on block explorer": "Kontrakt nie jest zweryfikowany w eksploratorze bloków",
   "Verified": "Zweryfikowany",

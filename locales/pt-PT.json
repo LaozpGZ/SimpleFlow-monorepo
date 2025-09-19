@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Static: The fee remains fixed at the specified level once the pool is created.",
   "Static": "Estático",
   "Dynamic": "Dinâmico",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinâmico: A taxa pode ser modificada usando um hook após a criação da pool. O nível de taxa inicial está definido como 0",
   "Contract is verified on block explorer": "O Contrato está verificado no explorador de blocos",
   "Contract is not verified on block explorer": "O Contrato não está verificado no explorador de blocos",
   "Verified": "Verificado",

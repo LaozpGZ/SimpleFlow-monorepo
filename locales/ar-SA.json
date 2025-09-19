@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "ثابتة: تبقى الرسم ثابتة عند المستوى المحدد وقت إنشاء التجمُّع.",
   "Static": "ثابتة",
   "Dynamic": "ديناميكية",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "ديناميكية: يمكن تعديل الرسوم باستخدام عنصر جذب بعد إنشاء التجمُّع. يتم تعيين مستوى الرسوم الأولي إلى 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "ديناميكي: يمكن تعديل الرسوم باستخدام hook بعد إنشاء المجمع. تم تعيين مستوى الرسوم المبدئي على 0.",
   "Contract is verified on block explorer": "تم التحقق من العقد على مستكشف الكُتل",
   "Contract is not verified on block explorer": "لم يتم التحقق من العقد على مستكشف الكُتل",
   "Verified": "مُتحقق منه",

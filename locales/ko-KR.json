@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "정적: 풀이 생성된 후에는 지정된 수준으로 수수료가 고정됩니다.",
   "Static": "정적",
   "Dynamic": "동적",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "동적: 풀이 생성된 후에 후크를 사용하여 수수료를 조정할 수 있습니다. 초기 수수료 수준은 0으로 설정됩니다",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "동적: 풀 생성 후 hook을 사용하여 수수료를 변경할 수 있습니다. 초기 수수료 레벨은 0으로 설정됩니다.",
   "Contract is verified on block explorer": "블록 탐색기에서 계약이 확인되었습니다",
   "Contract is not verified on block explorer": "블록 탐색기에서 계약이 확인되지 않았습니다",
   "Verified": "확인됨",

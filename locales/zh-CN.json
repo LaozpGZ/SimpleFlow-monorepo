@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "静态：糖浆池创建后，手续费将固定在指定级别。",
   "Static": "静态",
   "Dynamic": "动态",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "动态：糖浆池创建后，可以使用钩子修改手续费。初始手续费级别设置为 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "动态：流动性池创建后，可通过 hook 修改手续费。初始手续费等级为 0。",
   "Contract is verified on block explorer": "合约已在区块浏览器上验证",
   "Contract is not verified on block explorer": "合约未在区块浏览器上验证",
   "Verified": "已验证",

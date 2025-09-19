@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Statis: Biaya tetap pada tingkat yang ditentukan setelah pool dibuat.",
   "Static": "Statis",
   "Dynamic": "Dinamis",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinamis: Biaya dapat diubah dengan menggunakan hook setelah pool dibuat. Tingkat biaya awal ditetapkan ke 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinamis: Biaya dapat diubah menggunakan hook setelah pool dibuat. Tingkat biaya awal diatur ke 0",
   "Contract is verified on block explorer": "Kontrak diverifikasi pada penelusur blok",
   "Contract is not verified on block explorer": "Kontrak tidak diverifikasi pada penelusur blok",
   "Verified": "Diverifikasi",

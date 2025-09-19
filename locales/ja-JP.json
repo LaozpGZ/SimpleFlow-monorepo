@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "静的：プール作成後、手数料は指定したレベルで固定されます。",
   "Static": "静的",
   "Dynamic": "動的",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "動的：プール作成後、フックを使用して手数料を変更できます。初期手数料ティアは0に設定されます",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "ダイナミック: プール作成後にフックを使用して手数料を変更できます。初期手数料レベルは0に設定されています。",
   "Contract is verified on block explorer": "コントラクトはブロックエクスプローラーで検証済み",
   "Contract is not verified on block explorer": "コントラクトはブロックエクスプローラーで検証されていません",
   "Verified": "検証済み",

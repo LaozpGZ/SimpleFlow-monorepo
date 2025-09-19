@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Statică: taxa rămâne fixă la nivelul specificat după ce portofoliul este creat.",
   "Static": "Static",
   "Dynamic": "Dinamic",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinamic: taxa poate fi modificată folosind hook după crearea portofoliului. Nivelul inițial al taxei este setat la 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dinamic: comisionul poate fi modificat utilizând un hook după crearea fondului de lichidități. Nivelul inițial al comisionului este setat la 0",
   "Contract is verified on block explorer": "Contractul este verificat în exploratorul de blocuri",
   "Contract is not verified on block explorer": "Contractul nu este verificat în exploratorul de blocuri",
   "Verified": "Verificat",

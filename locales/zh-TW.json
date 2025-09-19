@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "靜態：建立資金池後，手續費將固定在指定的等級上。",
   "Static": "靜態",
   "Dynamic": "動態",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "動態：資金池建立後，可透過 hook 修改手續費。初始費率為 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "動態：在流動性池建立後，可透過 hook 修改手續費。初始手續費等級設定為 0",
   "Contract is verified on block explorer": "合約已在區塊瀏覽器上驗證",
   "Contract is not verified on block explorer": "合約尚未在區塊瀏覽器上驗證",
   "Verified": "已驗證",

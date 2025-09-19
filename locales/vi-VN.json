@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Cố định: Phí được cố định ở mức cụ thể sau khi quỹ được tạo.",
   "Static": "Cố định",
   "Dynamic": "Năng động",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Năng động: Phí có thể được sửa đổi bằng hook sau khi quỹ được tạo. Mức phí ban đầu được đặt là 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Linh hoạt: Phí có thể được sửa đổi bằng hook sau khi bể được tạo. Mức phí ban đầu được đặt là 0",
   "Contract is verified on block explorer": "Hợp đồng được xác minh trên trình duyệt chuỗi khối",
   "Contract is not verified on block explorer": "Hợp đồng không được xác minh trên trình duyệt chuỗi khối",
   "Verified": "Đã xác minh",

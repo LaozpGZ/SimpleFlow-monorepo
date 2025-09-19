@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "स्टैटिक: एक बार पूल बन जाने के बाद फ़ीस निर्दिष्ट स्तर पर स्थिर बनी रहती है।",
   "Static": "स्टैटिक",
   "Dynamic": "डाइनैमिक",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "डाइनैमिक: पूल बनाने के बाद हुक का इस्तेमाल करके फ़ीस को संशोधित किया जा सकता है। आरंभिक फ़ीस स्तर 0 पर सेट है",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "डायनामिक: पूल बनने के बाद हुक का उपयोग करके फीस को संशोधित किया जा सकता है। शुरुआती फीस स्तर 0 पर सेट है",
   "Contract is verified on block explorer": "ब्लॉक एक्सप्लोरर पर कॉन्ट्रैक्ट को सत्यापित किया गया है",
   "Contract is not verified on block explorer": "ब्लॉक एक्सप्लोरर पर कॉन्ट्रैक्ट को सत्यापित नहीं किया गया है",
   "Verified": "सत्यापित",

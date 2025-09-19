@@ -2592,7 +2592,12 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Στατικό: Το τέλος παραμένει σταθερό στο καθορισμένο επίπεδο μετά τη δημιουργία της δεξαμενής.",
   "Static": "Στατικό",
   "Dynamic": "Δυναμικό",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Δυναμικό: Το τέλος μπορεί να τροποποιηθεί χρησιμοποιώντας hook μετά τη δημιουργία της δεξαμενής. Το αρχικό επίπεδο του τέλους ορίζεται σε 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": {
+    "key": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "source": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "translation": "Δυναμικό: Η προμήθεια μπορεί να τροποποιηθεί μέσω hook μετά τη δημιουργία του pool. Το αρχικό επίπεδο προμήθειας έχει οριστεί στο 0",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Contract is verified on block explorer": "Η σύμβαση επαληθεύεται στον block explorer",
   "Contract is not verified on block explorer": "Η σύμβαση δεν έχει επαληθευτεί στον block explorer",
   "Verified": "Επαληθευμένο",

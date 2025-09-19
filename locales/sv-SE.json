@@ -2592,7 +2592,7 @@
   "Static: The fee remains fixed at the specified level once the pool is created.": "Statisk: Avgiften förblir fast på den angivna nivån när poolen har skapats.",
   "Static": "Statisk",
   "Dynamic": "Dynamisk",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamisk: Avgiften kan ändras med hjälp av hook efter att poolen har skapats. Den initiala avgiftsnivån är satt till 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamisk: Avgiften kan ändras med en hook efter att poolen har skapats. Den ursprungliga avgiftsnivån är satt till 0",
   "Contract is verified on block explorer": "Kontrakt verifierat på block explorer",
   "Contract is not verified on block explorer": "Kontrakt inte verifierat på block explorer",
   "Verified": "Verifierat",
