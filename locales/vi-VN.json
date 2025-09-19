@@ -3398,7 +3398,12 @@
   "Initialize AMM v4 pool": "Bắt đầu quỹ AMM v4",
   "Initialize CPMM pool": "Bắt đầu quỹ CPMM",
   "I want to...": "Tôi muốn...",
-  "Create pool": "Tạo quỹ",
+  "Create pool": {
+    "key": "Create pool",
+    "source": "Create pool",
+    "translation": "Tạo pool",
+    "hint": "found in 3 of files, see apps/solana/src/features/Create/components/CreatePoolEntryDialog.tsx,apps/solana/src/store/configs/liquidity.tsx,apps/solana/src/store/configs/market.tsx"
+  },
   "V3 Pools": "Các quỹ V3",
   "Custom ranges, increased capital efficiency": "Khoảng tùy chỉnh, tăng hiệu suất vốn",
   "Suggested": "Được đề xuất",
@@ -4002,7 +4007,12 @@
   "twap.loading": "Đang tải",
   "twap.confirm": "Xác nhận",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} cho {dstAmount} {dstToken}",
-  "Create Pool": "Tạo quỹ",
+  "Create Pool": {
+    "key": "Create Pool",
+    "source": "Create Pool",
+    "translation": "Tạo Pool",
+    "hint": "found in 4 of files, see apps/web/src/views/CreateLiquidityPool/components/PreviewModal.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V2/useV2CreateForm.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V3/useV3CreateForm.tsx,apps/web/src/views/universalFarms/components/CreatePoolButton.tsx"
+  },
   "Create Liquidity Pool": "Tạo quỹ thanh khoản",
   "Select the DEX type of the liquidity pool": "Chọn loại DEX của quỹ thanh khoản",
   "Infinity Pool": "Quỹ Infinity",
@@ -4217,7 +4227,7 @@
   "Info.section_title": "Thông tin",
   "HealthIndicator.Down": "Không hoạt động",
   "Win.action": "Thắng",
-  "To.recipient": "Đến",
+  "To.recipient": "Người nhận",
   "Total.amount": "Tổng cộng",
   "From.sender": "Từ",
   "Total Supply": "Tổng cung",

@@ -4002,7 +4002,7 @@
   "twap.loading": "正在載入",
   "twap.confirm": "確認",
   "twap.srcTokenForDstToken": "以 {srcAmount} {srcToken} 交換 {dstAmount} {dstToken}",
-  "Create Pool": "建立資金池",
+  "Create Pool": "建立流動性池",
   "Create Liquidity Pool": "建立流動性池",
   "Select the DEX type of the liquidity pool": "選擇流動性池的 DEX 類型",
   "Infinity Pool": "Infinity 池",

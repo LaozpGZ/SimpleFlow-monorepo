@@ -4002,7 +4002,7 @@
   "twap.loading": "Läser in",
   "twap.confirm": "Bekräfta",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} för {dstAmount} {dstToken}",
-  "Create Pool": "Skapa pool",
+  "Create Pool": "Skapa Pool",
   "Create Liquidity Pool": "Skapa likviditetspool",
   "Select the DEX type of the liquidity pool": "Välj DEX-typ för likviditetspoolen",
   "Infinity Pool": "Infinity Pool",
