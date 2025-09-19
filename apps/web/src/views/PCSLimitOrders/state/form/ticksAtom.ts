@@ -56,11 +56,11 @@ export const ticksAtom = atom(async (get) => {
     else targetTick -= tickSpacing
   }
 
-  // Calculate tickLower and tickUpper
+  // Calculate tickLower and tickUpper (Already correct for placing limit order)
   const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
   const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
 
-  // To determine if selling or buying at worse price, need quoting ticks and not inverted ticks
+  // To determine if selling or buying at worse price, if worse, would need inverted ticks (disable this case in UI anyways)
   const isSellingOrBuyingAtWorsePrice = zeroForOne ? tickLower <= tickCurrent : tickUpper >= tickCurrent
 
   const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
