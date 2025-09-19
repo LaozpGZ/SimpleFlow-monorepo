@@ -57,11 +57,11 @@ export function getUnifiedTokenAddress(currency: Currency): string {
 
 export function generateBridgeCommands({
   trade,
-  recipient,
+  refundAddress,
   bridgeTransactionData,
 }: {
   trade: BridgeTrade<TradeType>
-  recipient: Address
+  refundAddress: Address
   bridgeTransactionData: BridgeTransactionData
 }): BridgeDataSchema {
   return {
@@ -73,7 +73,7 @@ export function generateBridgeCommands({
       inputAmount: trade.inputAmount.quotient.toString(),
       originChainId: trade.inputAmount.currency.chainId,
       destinationChainId: trade.outputAmount.currency.chainId,
-      originChainRecipient: recipient,
+      originChainRecipient: refundAddress,
       minOutputAmount: trade.outputAmount.quotient.toString(),
       bridgeTransactionData,
     },
@@ -243,11 +243,13 @@ export const getSolanaToEVMBridgeCalldata = async ({
 
 export const getBridgeCalldata = async ({
   order,
+  account,
   recipient,
   permit2,
   allowedSlippage,
 }: {
   order: BridgeOrderWithCommands
+  account: Address
   recipient: Address
   permit2?: Permit2Schema
   allowedSlippage: number
@@ -265,7 +267,7 @@ export const getBridgeCalldata = async ({
       if (command.type === OrderType.PCS_BRIDGE) {
         return generateBridgeCommands({
           trade: command.trade,
-          recipient,
+          refundAddress: account,
           bridgeTransactionData: command.bridgeTransactionData,
         })
       }

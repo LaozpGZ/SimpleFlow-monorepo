@@ -644,7 +644,7 @@ const useConfirmActions = (
       step: ConfirmModalState.PENDING_CONFIRMATION,
       action: async () => {
         // TODO: show error message???
-        if (!order || !recipient || isSVMOrder(order)) {
+        if (!order || !recipient || isSVMOrder(order) || !account) {
           return
         }
 
@@ -662,7 +662,7 @@ const useConfirmActions = (
           let swapData: { transactionData: Calldata; gasFee: string } | undefined
 
           // Swap from EVM to Solana
-          if (isDestinationSolana && account) {
+          if (isDestinationSolana) {
             swapData = bridgeSolanaSwapCalldata
 
             if (!swapData) {
@@ -674,6 +674,7 @@ const useConfirmActions = (
           } else {
             swapData = await getBridgeCalldata({
               order: order as BridgeOrderWithCommands,
+              account,
               recipient: recipient as Address,
               permit2: permit2Signature as Permit2Schema | undefined,
               allowedSlippage,
