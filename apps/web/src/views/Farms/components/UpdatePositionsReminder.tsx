@@ -200,7 +200,7 @@ export function UpdatePositionsReminder_() {
     )
 
     if (resp?.status) {
-      toastSuccess(`Updated!`)
+      toastSuccess(t('Updated!'))
 
       stakedUserInfos.refetch()
       modal.onDismiss()
@@ -215,6 +215,7 @@ export function UpdatePositionsReminder_() {
     sendTransactionAsync,
     stakedUserInfos,
     toastSuccess,
+    t,
   ])
 
   if (
