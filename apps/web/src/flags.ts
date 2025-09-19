@@ -1,6 +1,9 @@
 import { flag } from 'flags/next'
 import { EXPERIMENTAL_FEATURES, EXPERIMENTAL_FEATURE_CONFIGS } from 'config/experimentalFeatures'
 import { ExtendedNextReq } from 'middlewares/types'
+import { getOverrides } from 'feature-flags'
+import { RequestCookies } from '@edge-runtime/cookies'
+import { ReadonlyRequestCookies, RequestCookiesAdapter } from 'feature-flags/libs/request-cookies'
 
 // Helper function to get feature config by feature key
 const getFeatureConfig = (feature: EXPERIMENTAL_FEATURES) => {
@@ -96,14 +99,28 @@ export const flags = {
   [EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE]: optimizedAmmTradeFlag,
 }
 
+function sealCookies(headers: Headers): ReadonlyRequestCookies {
+  const sealed = RequestCookiesAdapter.seal(new RequestCookies(headers))
+  return sealed
+}
+
 // Get experimental feature access using the new flags SDK
 export const getExperimentalFeatureAccessList = async (
   request: ExtendedNextReq,
 ): Promise<Array<{ feature: EXPERIMENTAL_FEATURES; hasAccess: boolean }>> => {
+  const readonlyCookies = sealCookies(request.headers)
+
+  const overrides = await getOverrides(readonlyCookies.get('vercel-flag-overrides')?.value)
+
   const flagEvaluations = await Promise.all(
     Object.entries(flags).map(async ([feature, flagFunction]) => {
       try {
         console.log('executing flag', feature)
+
+        if (overrides && overrides[feature] !== undefined) {
+          return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess: overrides[feature] as boolean }
+        }
+
         // Pass the adapted request object to the flag function
         const hasAccess = await flagFunction(request as any)
         console.log('done flag function', feature, hasAccess)
@@ -114,13 +131,6 @@ export const getExperimentalFeatureAccessList = async (
       }
     }),
   )
-
-  const test = await flags[EXPERIMENTAL_FEATURES.PCSX].run({
-    identify: () => EXPERIMENTAL_FEATURES.PCSX,
-    request: request as any,
-  })
-
-  console.log(`test ${EXPERIMENTAL_FEATURES.PCSX}`, test)
 
   return flagEvaluations
 }
