@@ -72,7 +72,7 @@ const API_FLAG = false
 
 const farmFetcherV3 = createFarmFetcherV3(getViemClients)
 
-export const useFarmsV3Public = () => {
+export const useFarmsV3Public = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const { chainId } = useActiveChainId()
 
   const resp = useQuery({
@@ -116,7 +116,7 @@ export const useFarmsV3Public = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
-    enabled: Boolean(farmFetcherV3.isChainSupported(chainId ?? -1)),
+    enabled: Boolean(enabled && farmFetcherV3.isChainSupported(chainId ?? -1)),
   })
 
   return {

@@ -7,7 +7,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useMasterchefV3 } from 'hooks/useContract'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import { useV3TokenIdsByAccount } from 'hooks/v3/useV3Positions'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useFarmsV3Public } from 'state/farmsV3/hooks'
 import { Hex, encodeFunctionData } from 'viem'
 import { useAccount, useReadContracts, useSendTransaction } from 'wagmi'
@@ -62,7 +62,6 @@ export function UpdatePositionsReminder() {
 
 export function UpdatePositionsReminder_() {
   const { t } = useTranslation()
-  const { data: farmsV3 } = useFarmsV3Public()
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
 
@@ -87,26 +86,32 @@ export function UpdatePositionsReminder_() {
     },
   })
 
-  const isOverRewardGrowthGlobalUserInfos = stakedUserInfos?.data
-    ?.map((userInfo: any, i) => ({
-      ...userInfo,
-      tokenId: stakedTokenIds[i],
-    }))
-    ?.filter((userInfo) => {
-      if (!userInfo?.pid) return false
-      const farm = farmsV3?.farmsWithPrice.find((f) => f.pid === Number(userInfo.pid))
-      if (!farm) return false
-      if (
-        userInfo.rewardGrowthInside >
-        BigInt(
-          // @ts-ignore
-          farm._rewardGrowthGlobalX128,
-        )
-      ) {
-        return true
-      }
-      return true
-    })
+  const { data: farmsV3 } = useFarmsV3Public({ enabled: Boolean(stakedUserInfos?.data) })
+
+  const isOverRewardGrowthGlobalUserInfos = useMemo(
+    () =>
+      stakedUserInfos?.data
+        ?.map((userInfo: any, i) => ({
+          ...userInfo,
+          tokenId: stakedTokenIds[i],
+        }))
+        ?.filter((userInfo) => {
+          if (!userInfo?.pid) return false
+          const farm = farmsV3?.farmsWithPrice.find((f) => f.pid === Number(userInfo.pid))
+          if (!farm) return false
+          if (
+            userInfo.rewardGrowthInside >
+            BigInt(
+              // @ts-ignore
+              farm._rewardGrowthGlobalX128,
+            )
+          ) {
+            return true
+          }
+          return true
+        }),
+    [stakedTokenIds, stakedUserInfos?.data, farmsV3?.farmsWithPrice],
+  )
 
   // getting it on client side to final confirm
   const { data: rewardGrowthGlobalX128s, isLoading } = useReadContracts({
@@ -126,19 +131,23 @@ export function UpdatePositionsReminder_() {
     },
   })
 
-  const needRetrigger = isOverRewardGrowthGlobalUserInfos
-    ?.filter((u, i) => {
-      if (rewardGrowthGlobalX128s?.[i]) {
-        return u.rewardGrowthInside.gt(rewardGrowthGlobalX128s[i])
-      }
-      return false
-    })
-    ?.map((u) => {
-      return {
-        ...u,
-        needReduce: true,
-      }
-    })
+  const needRetrigger = useMemo(
+    () =>
+      isOverRewardGrowthGlobalUserInfos
+        ?.filter((u, i) => {
+          if (rewardGrowthGlobalX128s?.[i]) {
+            return u.rewardGrowthInside.gt(rewardGrowthGlobalX128s[i])
+          }
+          return false
+        })
+        ?.map((u) => {
+          return {
+            ...u,
+            needReduce: true,
+          }
+        }),
+    [isOverRewardGrowthGlobalUserInfos, rewardGrowthGlobalX128s],
+  )
 
   const modal = useModalV2()
 
@@ -152,7 +161,7 @@ export function UpdatePositionsReminder_() {
   const [triggerOnce, setTriggerOnce] = useState(false)
 
   // eslint-disable-next-line consistent-return
-  const handleUpdateAll = async () => {
+  const handleUpdateAll = useCallback(async () => {
     if (!needRetrigger || !sendTransactionAsync) return null
     const calldata: (Hex | Hex[])[] = []
     needRetrigger.forEach((userInfo) => {
@@ -196,7 +205,17 @@ export function UpdatePositionsReminder_() {
       stakedUserInfos.refetch()
       modal.onDismiss()
     }
-  }
+  }, [
+    account,
+    deadline,
+    fetchWithCatchTxError,
+    masterChefV3Address,
+    modal,
+    needRetrigger,
+    sendTransactionAsync,
+    stakedUserInfos,
+    toastSuccess,
+  ])
 
   if (
     !triggerOnce &&
@@ -229,14 +248,7 @@ export function UpdatePositionsReminder_() {
           >
             <Trans>Learn More</Trans>
           </LinkExternal>
-          <Button
-            mt="12px"
-            width="100%"
-            disabled={txLoading}
-            onClick={() => {
-              handleUpdateAll()
-            }}
-          >
+          <Button mt="12px" width="100%" disabled={txLoading} onClick={handleUpdateAll}>
             {txLoading ? <Trans>Updating...</Trans> : <Trans>Update All</Trans>}
           </Button>
         </AtomBox>

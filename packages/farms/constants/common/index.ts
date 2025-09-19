@@ -34,6 +34,7 @@ export const priceHelperTokens = {
       bscTokens.solvbtc,
       bscTokens.solvBTCena,
       bscTokens.boxy,
+      bscTokens.usdx,
     ],
   },
   [ChainId.POLYGON_ZKEVM]: {
