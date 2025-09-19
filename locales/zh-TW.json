@@ -2622,7 +2622,7 @@
   "Hook Address": "Hook 位址",
   "Hook List (%hooksCount%)": "Hook 清單 (%hooksCount%)",
   "Hook Contract Address": "Hook 合約位址",
-  "Pool Type": "資金池類型",
+  "Pool Type": "流動性池類型",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "Tick 間距",

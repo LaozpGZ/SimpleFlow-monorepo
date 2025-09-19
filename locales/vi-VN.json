@@ -2622,7 +2622,7 @@
   "Hook Address": "Địa chỉ hook",
   "Hook List (%hooksCount%)": "Danh sách hook (%hooksCount%)",
   "Hook Contract Address": "Địa chỉ hợp đồng hook",
-  "Pool Type": "Loại quỹ",
+  "Pool Type": "Loại Pool",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "Khoảng cách Tick",

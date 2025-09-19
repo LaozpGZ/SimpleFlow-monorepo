@@ -2622,7 +2622,7 @@
   "Hook Address": "Hookin osoite",
   "Hook List (%hooksCount%)": "Hook-luettelo (%hooksCount%)",
   "Hook Contract Address": "Hookin sopimusosoite",
-  "Pool Type": "Poolin tyyppi",
+  "Pool Type": "Poolityyppi",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "Tikkiväli",

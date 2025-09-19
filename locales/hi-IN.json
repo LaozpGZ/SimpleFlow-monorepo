@@ -2622,7 +2622,7 @@
   "Hook Address": "हुक का पता",
   "Hook List (%hooksCount%)": "हुक की सूची (%hooksCount%)",
   "Hook Contract Address": "हुक कॉन्ट्रैक्ट पता",
-  "Pool Type": "पूल टाइप",
+  "Pool Type": "पूल प्रकार",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "टिक स्पेसिंग",

@@ -2622,7 +2622,7 @@
   "Hook Address": "钩子地址",
   "Hook List (%hooksCount%)": "钩子列表 (%hooksCount%)",
   "Hook Contract Address": "钩子合约地址",
-  "Pool Type": "糖浆池类型",
+  "Pool Type": "池类型",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "Tick 间距",

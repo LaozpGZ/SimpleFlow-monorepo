@@ -2622,7 +2622,7 @@
   "Hook Address": "Kampó címe",
   "Hook List (%hooksCount%)": "Kampólista (%hooksCount%)",
   "Hook Contract Address": "Kampó okos kontraktus címe",
-  "Pool Type": "Összevont alap típusa",
+  "Pool Type": "Pool típus",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "Ticklépésköz",

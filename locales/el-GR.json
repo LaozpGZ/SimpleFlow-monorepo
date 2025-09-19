@@ -2622,7 +2622,7 @@
   "Hook Address": "Διεύθυνση Hook",
   "Hook List (%hooksCount%)": "Λίστα Hook (%hooksCount%)",
   "Hook Contract Address": "Διεύθυνση συμβολαίου Hook",
-  "Pool Type": "Τύπος δεξαμενής",
+  "Pool Type": "Τύπος Pool",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "Διάστημα Tick",

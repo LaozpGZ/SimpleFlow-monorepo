@@ -2622,7 +2622,7 @@
   "Hook Address": "Dirección del hook",
   "Hook List (%hooksCount%)": "Lista del hook (%hooksCount%)",
   "Hook Contract Address": "Dirección de contrato del hook",
-  "Pool Type": "Tipo de pool",
+  "Pool Type": "Tipo de Pool",
   "CLAMM": "CLAMM",
   "LBAMM": "LBAMM",
   "TickSpacing": "TickSpacing",
