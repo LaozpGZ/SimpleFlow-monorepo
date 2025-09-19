@@ -185,7 +185,7 @@ const config: (
       hideSubNav: true,
       items: [
         {
-          label: t('Info (section/title)'),
+          label: t('Info.section_title'),
           href: '/info/v3',
         },
         {

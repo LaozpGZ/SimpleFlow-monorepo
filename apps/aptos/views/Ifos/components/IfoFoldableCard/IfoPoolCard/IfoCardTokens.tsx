@@ -89,7 +89,7 @@ const OnSaleInfo = ({ token, saleAmount, distributionRatio }) => {
   return (
     <TokenSection primaryToken={token}>
       <Flex flexDirection="column">
-        <Label textTransform="uppercase">{t('On sale (amount)')}</Label>
+        <Label textTransform="uppercase">{t('On sale')}</Label>
         <Value>{saleAmount}</Value>
         <Text fontSize="14px" color="textSubtle">
           {t('%ratio%% of total sale', { ratio: distributionRatio })}
@@ -159,7 +159,7 @@ const IfoCardTokens: React.FC<React.PropsWithChildren<IfoCardTokensProps>> = ({
       return (
         <>
           <TokenSection primaryToken={ifo.token}>
-            <Label>{t('On sale (amount)')}</Label>
+            <Label>{t('On sale')}</Label>
             <Value>{ifo[poolId].saleAmount}</Value>
           </TokenSection>
           <Text fontSize="14px" color="textSubtle" pl="48px">
