@@ -1,4 +1,4 @@
-import { flag } from 'flags/next'
+import { Flag, flag } from 'flags/next'
 import { EXPERIMENTAL_FEATURES, EXPERIMENTAL_FEATURE_CONFIGS } from 'config/experimentalFeatures'
 import { ExtendedNextReq } from 'middlewares/types'
 import { getOverrides } from 'feature-flags'
@@ -34,63 +34,25 @@ const getUserIdentifier = (request: any): string => {
   return request?.clientId || 'anonymous'
 }
 
-// Web Notifications Feature Flag
-const webNotificationsFlag = flag({
-  identify: () => EXPERIMENTAL_FEATURES.WebNotifications,
-  key: EXPERIMENTAL_FEATURES.WebNotifications,
-  async decide(request) {
-    const userIdentifier = getUserIdentifier(request)
-    return getFeatureAccess(userIdentifier, EXPERIMENTAL_FEATURES.WebNotifications)
-  },
-})
-
-// Speed Quote Feature Flag
-const speedQuoteFlag = flag({
-  identify: () => EXPERIMENTAL_FEATURES.SpeedQuote,
-  key: EXPERIMENTAL_FEATURES.SpeedQuote,
-  async decide(request) {
-    const userIdentifier = getUserIdentifier(request)
-    return getFeatureAccess(userIdentifier, EXPERIMENTAL_FEATURES.SpeedQuote)
-  },
-})
-
-// Price API Feature Flag
-const priceAPIFlag = flag({
-  identify: () => EXPERIMENTAL_FEATURES.PriceAPI,
-  key: EXPERIMENTAL_FEATURES.PriceAPI,
-  async decide(request) {
-    const userIdentifier = getUserIdentifier(request)
-    return getFeatureAccess(userIdentifier, EXPERIMENTAL_FEATURES.PriceAPI)
-  },
-})
-
-// PCSX Feature Flag
-const pcsxFlag = flag({
-  identify: () => EXPERIMENTAL_FEATURES.PCSX,
-  key: EXPERIMENTAL_FEATURES.PCSX,
-  async decide(request) {
-    const userIdentifier = getUserIdentifier(request)
-    return getFeatureAccess(userIdentifier, EXPERIMENTAL_FEATURES.PCSX)
-  },
-})
-
-// Optimized AMM Trade Feature Flag
-const optimizedAmmTradeFlag = flag({
-  identify: () => EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE,
-  key: EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE,
-  async decide(request) {
-    const userIdentifier = getUserIdentifier(request)
-    return getFeatureAccess(userIdentifier, EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
-  },
-})
-
-export const flags = {
-  [EXPERIMENTAL_FEATURES.WebNotifications]: webNotificationsFlag,
-  [EXPERIMENTAL_FEATURES.SpeedQuote]: speedQuoteFlag,
-  [EXPERIMENTAL_FEATURES.PriceAPI]: priceAPIFlag,
-  [EXPERIMENTAL_FEATURES.PCSX]: pcsxFlag,
-  [EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE]: optimizedAmmTradeFlag,
+// Helper function to create a feature flag for any experimental feature
+const createFeatureFlag = (feature: EXPERIMENTAL_FEATURES) => {
+  return flag({
+    identify: () => feature,
+    key: feature,
+    async decide(request) {
+      const userIdentifier = getUserIdentifier(request)
+      return getFeatureAccess(userIdentifier, feature)
+    },
+  })
 }
+
+// Dynamically generate flags for all experimental features
+export const flags = EXPERIMENTAL_FEATURE_CONFIGS.reduce((acc, config) => {
+  return {
+    ...acc,
+    [config.feature]: createFeatureFlag(config.feature),
+  }
+}, {} as Record<EXPERIMENTAL_FEATURES, Flag<boolean, EXPERIMENTAL_FEATURES>>)
 
 function sealCookies(headers: Headers): ReadonlyRequestCookies {
   const sealed = RequestCookiesAdapter.seal(new RequestCookies(headers))
