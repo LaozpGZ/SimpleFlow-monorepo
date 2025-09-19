@@ -114,5 +114,13 @@ export const getExperimentalFeatureAccessList = async (
       }
     }),
   )
+
+  const test = await flags[EXPERIMENTAL_FEATURES.PCSX].run({
+    identify: () => EXPERIMENTAL_FEATURES.PCSX,
+    request: request as any,
+  })
+
+  console.log(`test ${EXPERIMENTAL_FEATURES.PCSX}`, test)
+
   return flagEvaluations
 }
