@@ -189,7 +189,7 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
   return (
     <FlexGap gap="8px" alignItems="center">
       <Text color="textSubtle" fontSize="14px">
-        {t('Fee')}
+        {t('Fee.rate')}
       </Text>
       <SkeletonV2 width="108px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={loaded}>
         {feeText}

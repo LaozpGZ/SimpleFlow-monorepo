@@ -187,7 +187,7 @@ export function ConfirmTransactionContent({
           </>
 
           <Flex justifyContent="space-between" width="100%" mb="8px" alignItems="flex-start">
-            <Text color="textSubtle">{t('To')}</Text>
+            <Text color="textSubtle">{t('To.recipient')}</Text>
             <Box maxWidth="70%" style={{ wordBreak: 'break-all', textAlign: 'right' }}>
               <Text>{recipient}</Text>
             </Box>

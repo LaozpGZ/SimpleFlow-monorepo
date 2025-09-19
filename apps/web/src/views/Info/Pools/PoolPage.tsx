@@ -143,7 +143,7 @@ const PoolPage: React.FC<React.PropsWithChildren<{ address: string }>> = ({ addr
           <Flex justifyContent="space-between" mb="16px" flexDirection={['column', 'column', 'row']}>
             <Breadcrumbs mb="32px">
               <NextLinkFromReactRouter to={`/info${chainPath}${infoTypeParam}`}>
-                <Text color="primary">{t('Info')}</Text>
+                <Text color="primary">{t('Info (section/title)')}</Text>
               </NextLinkFromReactRouter>
               <NextLinkFromReactRouter to={`/info${chainPath}/pairs${infoTypeParam}`}>
                 <Text color="primary">{t('Pairs')}</Text>

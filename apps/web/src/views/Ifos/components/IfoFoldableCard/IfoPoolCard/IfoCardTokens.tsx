@@ -111,7 +111,7 @@ const OnSaleInfo = ({ token, saleAmount, distributionRatio }) => {
   return (
     <TokenSection primaryToken={token}>
       <Flex flexDirection="column">
-        <Label textTransform="uppercase">{t('On sale')}</Label>
+        <Label textTransform="uppercase">{t('On sale (amount)')}</Label>
         <Value
           value={typeof saleAmount === 'string' ? saleAmount : getBalanceAmount(saleAmount, token.decimals)}
           suffix={` ${token.symbol}`}
@@ -256,7 +256,7 @@ const IfoCardTokens: React.FC<React.PropsWithChildren<IfoCardTokensProps>> = ({
       return (
         <>
           <TokenSection primaryToken={ifo.token}>
-            <Label>{t('On sale')}</Label>
+            <Label>{t('On sale (amount)')}</Label>
             {offeringAmountPool ? (
               <Value value={getBalanceAmount(offeringAmountPool, ifo.token.decimals)} suffix={` ${ifo.token.symbol}`} />
             ) : null}
@@ -273,7 +273,7 @@ const IfoCardTokens: React.FC<React.PropsWithChildren<IfoCardTokensProps>> = ({
               isLoading={enableStatus === EnableStatus.IS_ENABLING}
               endIcon={enableStatus === EnableStatus.IS_ENABLING ? <AutoRenewIcon spin color="currentColor" /> : null}
             >
-              {t('Enable')}
+              {t('Enable.Approval')}
             </Button>
           )}
         </>
