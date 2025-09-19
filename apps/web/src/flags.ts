@@ -40,6 +40,7 @@ const getUserIdentifier = (request: any): string => {
 
 // Web Notifications Feature Flag
 const webNotificationsFlag = flag({
+  identify: () => EXPERIMENTAL_FEATURES.WebNotifications,
   key: EXPERIMENTAL_FEATURES.WebNotifications,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -49,6 +50,7 @@ const webNotificationsFlag = flag({
 
 // Speed Quote Feature Flag
 const speedQuoteFlag = flag({
+  identify: () => EXPERIMENTAL_FEATURES.SpeedQuote,
   key: EXPERIMENTAL_FEATURES.SpeedQuote,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -58,6 +60,7 @@ const speedQuoteFlag = flag({
 
 // Price API Feature Flag
 const priceAPIFlag = flag({
+  identify: () => EXPERIMENTAL_FEATURES.PriceAPI,
   key: EXPERIMENTAL_FEATURES.PriceAPI,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -67,6 +70,7 @@ const priceAPIFlag = flag({
 
 // PCSX Feature Flag
 const pcsxFlag = flag({
+  identify: () => EXPERIMENTAL_FEATURES.PCSX,
   key: EXPERIMENTAL_FEATURES.PCSX,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -76,6 +80,7 @@ const pcsxFlag = flag({
 
 // Optimized AMM Trade Feature Flag
 const optimizedAmmTradeFlag = flag({
+  identify: () => EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE,
   key: EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -98,7 +103,7 @@ export const getExperimentalFeatureAccessList = async (
   const flagEvaluations = await Promise.all(
     Object.entries(flags).map(async ([feature, flagFunction]) => {
       try {
-        console.log('executing flag function', feature)
+        console.log('executing flag', feature)
         // Pass the adapted request object to the flag function
         const hasAccess = await flagFunction(request as any)
         console.log('done flag function', feature, hasAccess)

@@ -1,6 +1,7 @@
 import { getCookieKey } from 'config/experimentalFeatures'
 import { NextFetchEvent, NextResponse } from 'next/server'
 import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies'
+
 import { getExperimentalFeatureAccessList } from '../flags'
 import { ONE_YEAR_SECONDS } from './constants'
 import { ExtendedNextReq, MiddlewareFactory, NextMiddleware } from './types'
@@ -12,13 +13,11 @@ export const withABTesting: MiddlewareFactory = (next: NextMiddleware) => {
 
     const cookies = new RequestCookies(request.headers)
 
-    console.log('cookies', cookies)
+    console.log('cookies vercel-flag-overrides', cookies.get('vercel-flag-overrides')?.value)
 
     console.log('clientId', clientId)
 
     if (!clientId) return response
-
-    console.log('request', request)
 
     const accessList = await getExperimentalFeatureAccessList(request)
 
