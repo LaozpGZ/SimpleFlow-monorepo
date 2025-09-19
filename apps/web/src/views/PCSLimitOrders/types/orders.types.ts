@@ -29,6 +29,7 @@ interface ResponseOrder {
 export enum OrderStatus {
   Open = 'Open',
   Filled = 'Filled',
+  PartiallyFilled = 'PartiallyFilled',
   Cancelled = 'Cancelled',
   Withdrawn = 'Withdrawn',
 }

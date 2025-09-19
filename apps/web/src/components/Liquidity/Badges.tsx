@@ -41,7 +41,7 @@ export const PoolTypeBadge = ({ poolType, withBorder, ...props }: PoolTypeBadgeP
 }
 
 // Might get these Tags/Badges added by universal farm page feature when its pushed
-type TagVariant = 'default' | 'success' | 'warning' | 'danger'
+type TagVariant = 'default' | 'success' | 'warning' | 'danger' | 'info'
 const StyledTag = styled(Badge)<{ $variant: TagVariant }>`
   padding: 4px 8px;
   font-size: 12px;
@@ -66,6 +66,14 @@ const StyledTag = styled(Badge)<{ $variant: TagVariant }>`
         background: ${theme.colors.v2Positive10};
         color: ${theme.colors.v2Positive60};
         border: 2px solid ${theme.colors.v2Positive20};
+      `
+    }
+
+    if ($variant === 'info') {
+      return `
+        background: ${theme.colors.v2Secondary10};
+        color: ${theme.colors.secondary};
+        border: 2px solid ${theme.colors.v2Secondary20};
       `
     }
 
