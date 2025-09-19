@@ -278,7 +278,12 @@
   "Won": "Nanalo",
   "Entered": "Inilagay",
   "Connect your wallet to view your prediction history": "Ikonekta ang iyong wallet upang matingnan ang iyong prediction history",
-  "You’ve already staked the maximum amount you can stake in this pool!": "Na-stake mo na ang maximum na halagang maaari mong ma-stake sa pool na ito!",
+  "You’ve already staked the maximum amount you can stake in this pool!": {
+    "key": "You’ve already staked the maximum amount you can stake in this pool!",
+    "source": "You’ve already staked the maximum amount you can stake in this pool!",
+    "translation": "Na-stake mo na ang maximum na halaga na maaari mong i-stake sa pool na ito!",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/withStakeActions.tsx"
+  },
   "Markets Paused": "Naka-pause ang mga merkado",
   "Prediction markets have been paused due to an error.": "Ang mga prediction market ay na-pause dahil sa isang error.",
   "All open positions have been cancelled.": "Kinansela ang lahat ng bukas na posisyon.",
@@ -331,34 +336,74 @@
   "The CAKE from the participation fee will be burnt as part of the weekly token burn.": "Ibe-burn ang CAKE mula sa bayarin sa pagsali bilang bahagi ng lingguhang pag-burn ng token.",
   "How can I get an achievement for participating in the IFO?": "Paano ako makakakuha ng isang pagtamo para sa paglahok sa IFO?",
   "Contract Enabled": "Naka-enable ang Kontrata",
-  "You can now stake in the %symbol% pool!": "Maaari ka na ngayong mag-stake sa %symbol% pool!",
+  "You can now stake in the %symbol% pool!": {
+    "key": "You can now stake in the %symbol% pool!",
+    "source": "You can now stake in the %symbol% pool!",
+    "translation": "Maaari ka nang mag-stake sa %symbol% pool!",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/hooks/useApprove.tsx"
+  },
   "Please try again. Confirm the transaction and make sure you are paying enough gas!": "Mangyaring pakiulit. Kumpirmahin ang transaksyon at tiyaking nagbabayad ka ng sapat na gas!",
   "Start earning": "Magsimulang kumita",
   "Unlock liquidity while earning rewards": "I-unlock ang liquidity habang nakakakuha ng mga reward",
   "Liquid Staking": "Liquid Staking",
   "Unstaked!": "I-unstake!",
   "Staked!": "Na-stake!",
-  "Your funds have been staked in the pool": "Ang iyong mga pondo ay na-stake sa pool",
+  "Your funds have been staked in the pool": {
+    "key": "Your funds have been staked in the pool",
+    "source": "Your funds have been staked in the pool",
+    "translation": "Na-stake na ang iyong pondo sa pool.",
+    "hint": "found in 1 of files, see apps/web/src/views/FixedStaking/components/StakingModalTemplate.tsx"
+  },
   "Your earnings have also been harvested to your wallet": "Na-harvest na ang iyong mga kinita sa iyong wallet",
-  "Stake in Pool": "Pag-stake sa Pool",
+  "Stake in Pool": {
+    "key": "Stake in Pool",
+    "source": "Stake in Pool",
+    "translation": "Mag-stake sa Pool",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "Balance: %balance%": "Balanse: %balance%",
   "Cancelled": "Kinansela",
   "Harvested": "Na-harvest",
   "Close Window": "Isara ang Window",
   "Insufficient %symbol% balance": "Hindi sapat na %symbol% balanse",
-  "You’ll need %symbol% to stake in this pool!": "Kailangan mo ng %symbol% upang mag-stake sa pool na ito!",
-  "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.": "Bumili ng ilang %symbol%, o siguraduhin ang iyong %symbol% ay wala sa ibang pool o LP.",
+  "You’ll need %symbol% to stake in this pool!": {
+    "key": "You’ll need %symbol% to stake in this pool!",
+    "source": "You’ll need %symbol% to stake in this pool!",
+    "translation": "Kakailanganin mo ng %symbol% para makapag-stake sa pool na ito!",
+    "hint": "found in 2 of files, see apps/web/src/views/Pools/components/Modals/NotEnoughTokensModal.tsx,packages/uikit/src/widgets/Modal/NotEnoughTokensModal.tsx"
+  },
+  "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.": {
+    "key": "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.",
+    "source": "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.",
+    "translation": "Bumili ng %symbol%, o siguraduhing ang iyong %symbol% ay wala sa ibang pool o LP.",
+    "hint": "found in 2 of files, see apps/web/src/views/Pools/components/Modals/NotEnoughTokensModal.tsx,packages/uikit/src/widgets/Modal/NotEnoughTokensModal.tsx"
+  },
   "Buy": "Bumili",
   "Locate Assets": "Hanapin ang Mga Asset",
   "%symbol% required": "%symbol% kinakailangan",
   "Your %symbol% earnings have also been harvested to your wallet!": "Ang iyong %symbol% mga kinita ay na-harvest din sa iyong wallet!",
-  "Your %symbol% funds have been staked in the pool!": "Ang iyong %symbol% mga pondo ay na-stake sa iyong pool!",
-  "Max stake for this pool: %amount% %token%": "Max na stake para sa pool na ito: %amount% %token%",
+  "Your %symbol% funds have been staked in the pool!": {
+    "key": "Your %symbol% funds have been staked in the pool!",
+    "source": "Your %symbol% funds have been staked in the pool!",
+    "translation": "Na-stake na sa pool ang iyong mga %symbol% na pondo!",
+    "hint": "found in 2 of files, see apps/aptos/components/Pools/components/PoolCard/StakeModalContainer.tsx,apps/web/src/views/Pools/components/Modals/StakeModal.tsx"
+  },
+  "Max stake for this pool: %amount% %token%": {
+    "key": "Max stake for this pool: %amount% %token%",
+    "source": "Max stake for this pool: %amount% %token%",
+    "translation": "Maximum na stake para sa pool na ito: %amount% %token%",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "Maximum total stake: %amount% %token%": "Maximum na kabuuang stake: %amount% %token%",
   "Auto": "Awtomatiko",
   "Manual": "Manwal",
   "Earn CAKE, stake CAKE": "Kumita ng CAKE, mag-stake ng CAKE",
-  "Syrup Pools": "Mga Syrup Pool",
+  "Syrup Pools": {
+    "key": "Syrup Pools",
+    "source": "Syrup Pools",
+    "translation": "Mga Syrup Pool",
+    "hint": "found in 3 of files, see apps/aptos/components/Pools/index.tsx,apps/web/src/components/Menu/config/config.ts,apps/web/src/views/Pools/index.tsx"
+  },
   "Best round: #%roundId%": "Pinakamabuting round: #%roundId%",
   "View Reclaimed & Won": "Tingnan ang Reclaimed at Nanalo",
   "This round was automatically cancelled due to an error. If you entered a position, please reclaim your funds below.": "Awtomatikong kinansela ang round na ito dahil sa error. Kung naglagay ka ng posisyon, paki-reclaim ang iyong mga pondo sa ibaba.",
@@ -505,7 +550,12 @@
   "Screenshot or press & hold the image to share!": "I-sreenshot o pindutin nang matagal ang larawan upang ibahagi!",
   "Block %num%": "I-block %num%",
   "Profile Pic": "Larawan sa Profile",
-  "Pool status": "Status ng pool",
+  "Pool status": {
+    "key": "Pool status",
+    "source": "Pool status",
+    "translation": "Status ng Pool",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/PoolTabButtons.tsx"
+  },
   "Old": "Luma",
   "Transfer": "Maglipat",
   "Congratulations!": "Congratulations!",
@@ -521,10 +571,18 @@
   "%symbol% to receive": "%symbol% na matatanggap",
   "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your": "Hindi magtatagumpay ang transaksyong ito dahil sa paggalaw ng presyo o bayarin sa paglipat. Subukang pataasin ang iyong",
   "slippage tolerance.": "slippage tolerance.",
-  "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!": "Eggscellent! Ipinagdiriwang ang Syrup Storm na nanalo sa Easter Battle!",
+  "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!": {
+    "key": "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!",
+    "source": "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!",
+    "translation": "Eggscellent! Ipinagdiriwang ang pagkapanalo ng Syrup Storm sa Easter Battle!"
+  },
   "Melting Easter eggs and melting hearts!": "Tinutunaw ang mga Easter egg at tinutunaw ang mga puso!",
   "Watch out for Flipsie’s spatula smash!": "Abangan ang spatula smash ni Flipsie!",
-  "Do you like chocolate with your syrup? Go long!": "Gusto mo ba ng tsokolate sa iyong syrup? Sige lang!",
+  "Do you like chocolate with your syrup? Go long!": {
+    "key": "Do you like chocolate with your syrup? Go long!",
+    "source": "Do you like chocolate with your syrup? Go long!",
+    "translation": "Gusto mo ba ng tsokolate kasama ng iyong syrup? Go long!"
+  },
   "Happy Niu Year! This bunny’s excited for the year of the bull (market!)": "Maligayang Bagong Taon! Ang bunny na ito ay nasasabik para sa taon ng toro (merkado!)",
   "Oopsie daisy! Hiccup's had a bit of an accident. Poor little fella.": "Oopsie daisy! Si Hiccup ay medyo naaksidente. Kawawang nilalang.",
   "Sunny is always cheerful when there are pancakes around. Smile!": "Si Sunny ay palaging masayahin kapag may mga pancake sa paligid. Ngumiti ka!",
@@ -532,17 +590,34 @@
   "Nommm... Oh hi, I'm just meditating on the meaning of CAKE.": "Nommm... Oh hi, pinagninilayan ko lang ang kahulugan ng CAKE.",
   "Three guesses what's put that twinkle in those eyes! (Hint: it's CAKE)": "Tatlong mga paghula kung ano ang naglagay ng kislap sa mga mata na iyon! (Pahiwatig: ito ay isang CAKE)",
   "These bunnies love nothing more than swapping pancakes. Especially on BSC.": "Ang mga bunnies na ito ay hindi nagmamahal ng higit pa sa pagpapalit ng mga pancake. Lalo na sa BSC.",
-  "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?": "Umuulan ng syrup sa bunny na ito, ngunit tila wala siyang pakialam. Masisisi mo ba siya?",
+  "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?": {
+    "key": "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?",
+    "source": "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?",
+    "translation": "Umuulan ng syrup sa bunny na ito, pero mukhang okay lang sa kanya. Masisisi mo ba siya?"
+  },
   "These bunnies like their pancakes with blueberries. What's your favorite topping?": "Ang mga bunny na ito ay tulad ng kanilang mga pancake na may mga blueberry. Ano ang iyong paboritong topping?",
   "Love makes the world go 'round... but so do pancakes. And these bunnies know it.": "Ang pag-ibig ang nagpapaikot sa mundo... ngunit gayun din ang mga pancake. At alam ito ng mga bunny.",
-  "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.": "Ang makislap na syrup, mga pancake, at kahit na mga ticket sa lotto! Mahal talaga ito ng bunny.",
-  "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!": "Paparating ang bagyo! Tingnan mo! Ang mga toro na ito ay tumatakbo sa isang mala-arnibal na daluyong!",
+  "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.": {
+    "key": "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.",
+    "source": "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.",
+    "translation": "Kumikinang na syrup, mga pancake, at maging mga lottery ticket! Talagang gustong-gusto ito ng bunny."
+  },
+  "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!": {
+    "key": "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    "source": "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    "translation": "Paparating na ang bagyo! Mag-ingat! Sumusugod ang mga bull na ito sa isang mala-syrup na pag-alon!"
+  },
   "The flippening is coming. Don't get in these bunnies' way, or you'll get flipped, too!": "Darating ang flippening. Huwag harangan ang daraanan ng mga bunny na ito, o baka ma-flip ka din!",
   "Can you stand the heat? Stay out of the kitchen or you might get burned to a crisp!": "Kaya mo bang tiisin ang init? Manatili sa labas ng kusina o baka masunog ka ng mala-tustado!",
   "%ratio%% of total sale": "%ratio%% ng kabuuang benta",
   "Your %symbol% earnings have been sent to your wallet!": "Ang iyong %symbol% ng mga kinita ay na-harvest din sa iyong wallet!",
   "Stake %symbol%": "I-stake %symbol%",
-  "You must harvest and compound your earnings from this pool manually.": "Dapat mong mag-harvest at pagsamahin ang iyong mga kinita mula sa pool na ito nang manu-mano.",
+  "You must harvest and compound your earnings from this pool manually.": {
+    "key": "You must harvest and compound your earnings from this pool manually.",
+    "source": "You must harvest and compound your earnings from this pool manually.",
+    "translation": "Kailangan mong i-harvest at i-compound ang iyong mga kita mula sa pool na ito nang manu-mano.",
+    "hint": "found in 3 of files, see apps/aptos/components/Pools/components/PoolCard/CardFooter.tsx,apps/aptos/components/Pools/components/PoolTable/ActionPanel.tsx,apps/web/src/views/Pools/components/PoolTypeTag.tsx"
+  },
   "Register": "Mag-rehistro",
   "Contribute %symbol%": "Mag-ambag %symbol%",
   "Volume": "Dami",
@@ -559,12 +634,27 @@
   "Team Ranks": "Mga Ranggo ng Team",
   "Prizes": "Mga Premyo",
   "Rules": "Mga Rule",
-  "Enable pool": "I-enable ang pool",
+  "Enable pool": {
+    "key": "Enable pool",
+    "source": "Enable pool",
+    "translation": "I-enable ang pool",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/PoolsTable/ActionPanel/Stake.tsx"
+  },
   "Start staking": "Magsimulang mag-stake",
-  "Search Pools": "Maghanap ng mga Pool",
+  "Search Pools": {
+    "key": "Search Pools",
+    "source": "Search Pools",
+    "translation": "Maghanap ng mga Pool",
+    "hint": "found in 2 of files, see apps/web/src/components/MiniUniversalFarms/MiniUniversalFarmsOverlay.tsx,packages/widgets-internal/pool/PoolControls.tsx"
+  },
   "Ends in": "Magtatapos sa",
   "Starts in": "Magsisimula sa",
-  "Total amount of %symbol% staked in this pool": "Kabuuang halaga na %symbol% na-stake sa pool na ito",
+  "Total amount of %symbol% staked in this pool": {
+    "key": "Total amount of %symbol% staked in this pool",
+    "source": "Total amount of %symbol% staked in this pool",
+    "translation": "Kabuuang halaga ng %symbol% na naka-stake sa pool na ito",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/TotalStaked.tsx"
+  },
   "Max. stake per user": "Max. stake kada user",
   "You have claimed your rewards!": "Na-claim mo ang iyong mga gantimpala!",
   "Already Collected": "Nakolekta Na",
@@ -626,7 +716,12 @@
   "Your voting power is determined by the amount of CAKE you held and the remaining duration on the fixed-term staking position (if you have one) at the block detailed below. CAKE held in other places does not contribute to your voting power.": "Natutukoy ang iyong kakayahan sa pagboto ayon sa halaga ng CAKE na mayroon ka at ang natitirang tagal ng fixed-term na posisyon sa pag-stake (kung mayroon ka nito) sa block na nakadetalye sa ibaba. Hindi nakakadagdag sa iyong kakayahan sa pagboto ang CAKE na mayroon ka sa ibang lugar.",
   "Wallet": "Wallet",
   "CAKE BNB LP": "CAKE BNB LP",
-  "Other Syrup Pools": "Iba pang mga Pool ng Syrup",
+  "Other Syrup Pools": {
+    "key": "Other Syrup Pools",
+    "source": "Other Syrup Pools",
+    "translation": "Iba pang Syrup Pools",
+    "hint": "found in 1 of files, see apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Voting Power": "Kapangyarihan ng Pagboto",
   "You need at least %count% voting power to publish a proposal.": "Kailangan mo ng kahit na %count% ng kapangyarihan sa pagboto upang mag-publish ng isang panukala.",
   "Check voting power": "I-check ang kapangyarihan sa pagboto",
@@ -889,7 +984,12 @@
   "ROI at current rates": "Ang ROI sa kasalukuyang antas",
   "Farm Multiplier": "Multiplier ng Farm",
   "“My Balance” here includes both LP Tokens in your wallet, and LP Tokens already staked in this farm.": "“Aking Balanse” kinabibilangan nito ang parehong mga LP Token sa iyong wallet, at mga LP Token na na-stake na sa farm na ito.",
-  "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.": "“Aking Balanse” kinabibilangan nito ang parehong mga %assetSymbol% sa iyong wallet, at mga %assetSymbol% na na-stake na sa pool na ito.",
+  "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.": {
+    "key": "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.",
+    "source": "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.",
+    "translation": "Kasama sa “My Balance” dito ang parehong %assetSymbol% sa iyong wallet, at %assetSymbol% na naka-stake na sa pool na ito.",
+    "hint": "found in 1 of files, see packages/uikit/src/components/RoiCalculatorModal/RoiCalculatorModal.tsx"
+  },
   "APY (%compoundTimes%x daily compound)": "APY (%compoundTimes%x araw-araw na compound)",
   "My Balance": "Aking Balanse",
   "Staked for": "Na-stake para sa",
@@ -993,7 +1093,12 @@
   "Your action has been requested and we are processing the funds. Please check back in a couple of hours to request withdrawal of funds.": "Na-request ang aksyon mo at pinoproseso namin ang pondo. Bumalik pagkaraan ng dalawang oras para i-request ang pag-withdraw ng pondo.",
   "Maximum %amount% %symbol%": "Maximum %amount% %symbol%",
   "Minimum %amount% %symbol%": "Minimum %amount% %symbol%",
-  "Maximum pool %amount% %symbol%": "Maximum pool %amount% %symbol%",
+  "Maximum pool %amount% %symbol%": {
+    "key": "Maximum pool %amount% %symbol%",
+    "source": "Maximum pool %amount% %symbol%",
+    "translation": "Maximum sa pool %amount% %symbol%",
+    "hint": "found in 1 of files, see apps/web/src/views/FixedStaking/components/StakingModalTemplate.tsx"
+  },
   "Maximum sold": "Maximum na naibenta",
   "Ends In": "Magtatapos Sa",
   "The difference between the market price and estimated price due to trade size.": "Ang pagkakaiba ng presyo sa merkado at tinantyang presyo dahil sa laki ng trade.",
@@ -1202,7 +1307,12 @@
   "Making neat stuff beyond her comprehension": "Paggawa ng maayos na bagay na lampas sa kanyang pang-unawa",
   "The bunnies were working in a big ol’ kitchen": "Ang mga bunny ay nagtatrabaho sa isang malaking kusina",
   "Cooking hot pancakes for their big ol’ mission:": "Pagluluto ng mainit na mga pancake para sa kanilang malaking misyon:",
-  "To drizzle in syrup and hand them out soon": "Upang ibuhos ang syrup at ibigay ang mga ito sa lalong madaling panahon",
+  "To drizzle in syrup and hand them out soon": {
+    "key": "To drizzle in syrup and hand them out soon",
+    "source": "To drizzle in syrup and hand them out soon",
+    "translation": "Upang lagyan ng syrup at ipamigay sa lalong madaling panahon",
+    "hint": "found in 1 of files, see apps/web/src/views/PancakeSquad/components/ArtistSection/config.tsx"
+  },
   "So that bunnies worldwide may fly to the moon.": "Upang ang mga bunny sa buong mundo ay maaaring lumipad sa buwan.",
   "All Pancake Squad NFTs are allocated to Squad Ticket holders through a provably-fair system based on ChainLink at the time of minting.": "Ang lahat ng Pancake Squad NFT ay inilalaan sa mga may hawak ng Squad Ticket sa pamamagitan ng isang provably-fair na sistema batay sa ChainLink sa oras ng pag-minting.",
   "Presale:": "Presale:",
@@ -1285,7 +1395,12 @@
   "Sign up for battle and you’re guaranteed a prize!": "Mag-sign up para sa labanan at siguradong may isang premyo ka na!",
   "Compete with other teams for the highest trading volume!": "Makipagkumpitensya sa iba pang team para sa pinakamaraming pag-trade!",
   "Trading Competition": "Kumpetisyon sa Pag-trade",
-  "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!": "Para sumali sa susunod na IFO, mag-lock ng ilang CAKE sa pool ng pag-stake ng CAKE na may nakatakdang termino!",
+  "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!": {
+    "key": "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!",
+    "source": "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!",
+    "translation": "Para makasali sa susunod na IFO, i-lock ang ilang CAKE sa fixed-term staking CAKE pool!",
+    "hint": "found in 1 of files, see apps/web/src/views/Ifos/components/IfoFoldableCard/IfoPoolCard/IfoCardTokens.tsx"
+  },
   "Learn more about iCAKE": "Matuto pa tungkol sa iCAKE",
   "For the basic sale, Max CAKE entry is capped by minimum between your average CAKE balance in the iCAKE, or the pool’s hard cap. To increase the max entry, Stake more CAKE into the iCAKE": "Para sa basic na pagbebenta, nililimitahan ang max na maipapasok na CAKE ng minimum ng average na balanse mo sa CAKE sa iCAKE, o ang hard cap ng pool. Para pataasin ang max na maipapasok, Mag-stake pa ng CAKE sa iCAKE",
   "You don’t have any iCAKE available for IFO public sale.": "Wala kang anumang iCAKE na available para sa pampublikong pagbebenta ng IFO.",
@@ -1293,7 +1408,12 @@
   "Start in": "Magsimula sa",
   "Exceeded max CAKE entry": "Lumampas sa max na maipapasok na CAKE",
   "Earn %asset%": "Makakuha ng %asset%",
-  "IFO Pool": "IFO Pool",
+  "IFO Pool": {
+    "key": "IFO Pool",
+    "source": "IFO Pool",
+    "translation": "IFO Pool",
+    "hint": "found in 1 of files, see apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Chart": "Chart",
   "You’ve successfully claimed tokens back.": "Matagumpay mong na-claim ulit ang mga token.",
   "Stake CAKE to participate in IFOs": "Mag-stake ng CAKE para sumali sa mga IFO",
@@ -1317,15 +1437,35 @@
   "Learn How": "Alamin Kung Paano",
   "Network": "Network",
   "Switch Network": "Lumipat ng Network",
-  "This pool requires active Pancake Profile and %amount% profile points.": "Kailangan ng aktibong Profile sa Pancake at %amount% (na) puntos sa profile para sa pool na ito.",
-  "This pool requires active Pancake Profile": "Kailangan ng aktibong Profile sa Pancake para sa pool na ito",
-  "This pool requires %amount% profile points.": "Kailangan ng %amount% (na) puntos sa profile para sa pool na ito.",
+  "This pool requires active Pancake Profile and %amount% profile points.": {
+    "key": "This pool requires active Pancake Profile and %amount% profile points.",
+    "source": "This pool requires active Pancake Profile and %amount% profile points.",
+    "translation": "Kailangan sa pool na ito ang aktibong Pancake Profile at %amount% na profile points.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/ProfileRequirementWarning.tsx"
+  },
+  "This pool requires active Pancake Profile": {
+    "key": "This pool requires active Pancake Profile",
+    "source": "This pool requires active Pancake Profile",
+    "translation": "Kailangan sa pool na ito ang aktibong Pancake Profile",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/ProfileRequirementWarning.tsx"
+  },
+  "This pool requires %amount% profile points.": {
+    "key": "This pool requires %amount% profile points.",
+    "source": "This pool requires %amount% profile points.",
+    "translation": "Kailangan sa pool na ito ang %amount% na profile points.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/ProfileRequirementWarning.tsx"
+  },
   "Requirement": "Kinakailangan",
   "Create Profile": "Gumawa ng Profile",
   "Go to Profile": "Pumunta sa Profile",
   "Profile Points": "Mga Puntos sa Profile",
   "You're using this NFT as your Pancake Profile picture": "Ginagamit mo ang NFT na ito bilang ang iyong larawan sa Profile sa Pancake",
-  "You've already staked the maximum amount you can stake in this pool!": "Na-stake mo na ang maximum na halaga na mase-stake mo sa pool na ito!",
+  "You've already staked the maximum amount you can stake in this pool!": {
+    "key": "You've already staked the maximum amount you can stake in this pool!",
+    "source": "You've already staked the maximum amount you can stake in this pool!",
+    "translation": "Na-stake mo na ang maximum amount na maaari mong i-stake sa pool na ito!",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/PoolsTable/ActionPanel/Stake.tsx"
+  },
   "Don't show this again": "Huwag na itong ipakita ulit",
   "You're all set!": "Handa ka na!",
   "Max. Tickets per wallet:": "Max. na Ticket bawat wallet:",
@@ -1335,16 +1475,31 @@
   "Unstaking LP Tokens and CAKE": "Pag-unstake ng Mga LP Token at CAKE",
   "Stake in the new contract.": "Mag-stake sa bagong kontrata.",
   "All the earned CAKE will be harvested to your wallet upon unstake.": "Iha-harvest ang lahat ng nakuhang CAKE sa iyong wallet pagkatapos mag-unstake.",
-  "Each farm and pool has to be individually enabled before staking.": "Dapat na indibidwal na naka-enable ang bawat farm at pool bago mag-stake.",
+  "Each farm and pool has to be individually enabled before staking.": {
+    "key": "Each farm and pool has to be individually enabled before staking.",
+    "source": "Each farm and pool has to be individually enabled before staking.",
+    "translation": "Ang bawat farm at pool ay kailangang i-enable nang paisa-isa bago mag-staking.",
+    "hint": "found in 1 of files, see apps/web/src/views/Migration/components/MigrationSticky.tsx"
+  },
   "Go to Stake": "Pumunta sa Pag-stake",
   "Skip": "Laktawan",
-  "Please connect wallet to check your pools & farms status.": "Pakikonekta ang wallet para tingnan ang status ng iyong mga pool at farm.",
+  "Please connect wallet to check your pools & farms status.": {
+    "key": "Please connect wallet to check your pools & farms status.",
+    "source": "Please connect wallet to check your pools & farms status.",
+    "translation": "Paki-konekta ang wallet para i-check ang status ng iyong mga pool at farm.",
+    "hint": "found in 1 of files, see apps/web/src/views/Migration/components/MigrationSticky.tsx"
+  },
   "Please connect wallet to check your farms status.": "Pakikonekta ang wallet para tingnan ang status ng iyong mga farm.",
   "You are not currently staking in any farms that require migrations.": "Sa ngayon, hindi ka nag-i-stake sa anumang farm na nangangailangan ng mga pag-migrate.",
   "Unstake All": "I-unstake Lahat",
   "Old Farms": "Mga Dating Farm",
   "Please note that this is the old BTT token, which has been swapped to the new BTT tokens in the following ratio:": "Pakitandaan na ito ang dating BTT token, na na-swap sa mga bagong BTT token sa sumusunod na ratio:",
-  "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.": "Mali ang pagkaka-configure sa pool na ito. Paki-unstake ang iyong mga token mula rito, gagamitin ang emergencyWithdraw na paraan. Ibabalik ang iyong mga token sa wallet mo, pero hindi maha-harvest ang mga reward.",
+  "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.": {
+    "key": "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.",
+    "source": "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.",
+    "translation": "Mali ang pagkaka-configure ng pool na ito. Paki-unstake ang iyong mga token mula rito, gagamitin ang emergencyWithdraw method. Ibabalik ang iyong mga token sa iyong wallet, ngunit hindi maha-harvest ang mga reward.",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "For the private sale, each eligible participant will be able to commit any amount of CAKE up to the maximum commit limit, which is published along with the IFO voting proposal.": "Para sa pribadong pagbebenta, magagawa ng mga bawat kwalipikadong kasali na mag-commit anumang halaga ng CAKE hanggang sa maximum na limitasyon sa pag-commit, na na-publish kasama ng mungkahi sa pagboto ng IFO.",
   "Meet any one of the following requirements to be eligible.": "Tugunan ang alinmang isa sa mga sumusunod na kinakailangan para maging kwalipikado.",
   "You are eligible to participate in this Private Sale!": "Kwalipikado kang sumali sa Pribadong Pagbebenta na ito!",
@@ -1462,7 +1617,12 @@
   "Don't see the farm you are staking?": "Hindi mo nakikita ang farm na sine-stake mo?",
   "check out v1 farms": "tingnan ang v1 ng mga farm",
   "Up to": "Hanggang",
-  "Looking for v1 CAKE syrup pools?": "Naghahanap ng mga v1 na CAKE syrup pool?",
+  "Looking for v1 CAKE syrup pools?": {
+    "key": "Looking for v1 CAKE syrup pools?",
+    "source": "Looking for v1 CAKE syrup pools?",
+    "translation": "Naghahanap ka ba ng v1 CAKE syrup pools?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/index.tsx"
+  },
   "Go to migration page": "Pumunta sa page ng paglipat",
   "%asset% Staked": "%asset% ang Na-stake",
   "Add": "Magdagdag",
@@ -1497,7 +1657,12 @@
   "The price of token prizes ($CAKE and $DAR) in USD will be determined as per their BUSD pair price during the tally period.": "Ang presyo ng mga papremyong token ($CAKE at $DAR) sa USD ay tutukuyin ayon sa presyo ng BUSD na pares ng mga ito sa loob ng panahon ng kalkulasyon.",
   "Eligible pairs: DAR/BNB, CAKE/BNB, and CAKE/BUSD. Please note that the volume from limit orders will not be indexed.": "Mga kwalipikadong pares: DAR/BNB, CAKE/BNB, at CAKE/BUSD. Pakitandaan na ang volume para sa mga limit order ay hindi ii-index.",
   "iCAKE": "iCAKE",
-  "Go to CAKE pool": "Pumunta sa CAKE pool",
+  "Go to CAKE pool": {
+    "key": "Go to CAKE pool",
+    "source": "Go to CAKE pool",
+    "translation": "Pumunta sa CAKE pool",
+    "hint": "found in 1 of files, see apps/web/src/views/Ifos/components/IfoFoldableCard/StakeVaultButton.tsx"
+  },
   "April": "Abril",
   "Easter Battle": "Labanan sa Easter",
   "$200,000 in Prizes!": "$200,000 sa mga Papremyo!",
@@ -1588,7 +1753,12 @@
   "Flexible CAKE Staking": "Flexible na Pag-stake ng CAKE",
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Kinakalkula ang kakayahan sa pagboto gamit ang halaga ng pag-stake at ang natitirang tagal ng pag-stake ng fixed-term na posisyon sa pag-stake ng CAKE sa block.",
   "CAKE locked:": "Naka-lock na CAKE:",
-  "Go to Pools": "Pumunta sa Mga Pool",
+  "Go to Pools": {
+    "key": "Go to Pools",
+    "source": "Go to Pools",
+    "translation": "Pumunta sa mga Pool",
+    "hint": "found in 2 of files, see apps/web/src/hooks/useLockedEndNotification.tsx,apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Boosted by vCAKE": "Na-boost ng vCAKE",
   "Boosting Expired": "Nag-expire na ang Pag-boost",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Nag-expire ang pag-boost ng vCAKE mo sa snapshot block. I-renew ang iyong fixed-term na posisyon sa pag-stake para i-activate ang pag-boost para sa mga mungkahi sa pagboto sa hinaharap.",
@@ -1754,7 +1924,12 @@
   "Farm Types": "Mga Uri ng Farm",
   "Lock End": "Tapos na ang Pag-lock",
   "The locked staking duration has ended.": "Natapos na ang tagal ng naka-lock na pag-stake.",
-  "Cake Syrup Pool": "Pool ng Cake Syrup",
+  "Cake Syrup Pool": {
+    "key": "Cake Syrup Pool",
+    "source": "Cake Syrup Pool",
+    "translation": "Cake Syrup Pool",
+    "hint": "found in 1 of files, see apps/web/src/hooks/useLockedEndNotification.tsx"
+  },
   "Use": "Gamitin",
   "to bridge this asset.": "para iugnay ang asset na ito.",
   "to bridge %symbol%.": "para iugnay ang %symbol%.",
@@ -1875,7 +2050,12 @@
   "Simplified Decentralized Trading": "Pinasimpleng Desentralisadong Pag-trade",
   "Experience true decentralization with our exchange, offering you complete control over your trades in a secure and easy-to-use environment": "Maranasan ang totoong desentralisasyon sa aming exchange, na nag-aalok sa iyo ng kumpletong kontrol sa iyong mga pag-trade sa ligtas at madaling gamiting environment",
   "Earn while you Trade": "Kumita habang Nagte-trade ka",
-  "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery": "Makakuha ng mga CAKE na token sa karamihan ng mga pag-trade na ginawa sa PancakeSwap. Mag-stake para sa higit pang reward o gamitin ang mga iyon sa aming Lottery at Pottery",
+  "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery": {
+    "key": "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery",
+    "source": "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery",
+    "translation": "Kumita ng mga CAKE token sa karamihan ng mga trade na ginawa sa PancakeSwap. Mag-stake para sa mas maraming reward o gamitin ang mga ito sa aming Lottery at Pottery",
+    "hint": "found in 1 of files, see apps/web/src/views/AffiliatesProgram/components/OnBoardingModal/StepIntro.tsx"
+  },
   "Welcome to PancakeSwap!": "Welcome sa PancakeSwap!",
   "has referred you to start trading on PancakeSwap": "ay nag-refer sa iyo para magsimulang mag-trade sa PancakeSwap",
   "Start trading today and get a": "Magsimulang mag-trade ngayon at makakuha ng",
@@ -1982,7 +2162,12 @@
   "Split routing enables token swaps to be broken into multiple routes to achieve the best deal.": "Nagbibigay-daan ang paghahatid ng ruta na mahati-hati ang mga pag-swap ng token sa maraming ruta para maabot ang pinakamagandang deal.",
   "Turning this off will only allow a single route, which may result in low efficiency or higher slippage.": "Kapag na-off ito, isang ruta lang ang papayagan, na puwedeng magresulta sa mababang efficiency o mas mataas na slippage.",
   "Route is automatically calculated based on your routing preference to achieve the best price for your trade.": "Awtomatikong kinakalkula ang ruta batay sa iyong kagustuhan sa pagruruta para maabot ang pinakamagandang presyo para sa pag-trade mo.",
-  "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"": "Nag-iiba ang trading fee ayon sa tier ng pool fee. Tingnan ito sa pamamagitan ng icon ng magnifier sa ilalim ng \"Ruta.\"",
+  "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"": {
+    "key": "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"",
+    "source": "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"",
+    "translation": "Nag-iiba ang trading fee ayon sa pool fee tier. Tingnan ito sa pamamagitan ng magnifier icon sa ilalim ng \"Route.\"",
+    "hint": "found in 4 of files, see apps/web/src/views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderDetailsPanel.tsx,apps/web/src/views/Swap/Bridge/components/FeeToolTip.tsx,apps/web/src/views/Swap/V3Swap/components/SwapModalFooterV2.tsx,apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Fee Breakdown and Tokenomics": "Detalye ng Fee at Tokenomics",
   "Harvest All": "I-harvest Lahat",
   "Avg": "Avg",
@@ -2093,7 +2278,12 @@
   "Switch network": "Lumipat ng network",
   "to claim rewards": "para mag-claim ng mga reward",
   "You have %number% incompleted request in Historical Claim.": "Mayroon kang %number% hindi nakumpletong kahilingan sa Dating Pag-claim.",
-  "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.": "APR ng Farm lang ang binu-boost ng bCAKE. Napapailalim sa mga kundisyon ng farm at pool ang aktwal na multiplier ng boost.",
+  "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.": {
+    "key": "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.",
+    "source": "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.",
+    "translation": "Ang bCAKE ay nagbu-boost lamang ng Farm APR. Ang aktwal na boost multiplier ay nakadepende sa mga kondisyon ng farm at pool.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/PoolAprButton/AprTooltipContent.tsx,apps/web/src/views/universalFarms/components/PoolAprButtonV3/AprTooltipContent.tsx"
+  },
   "Buy %currency%": "Bumili ng %currency%",
   "Caution - METIS Token": "Mag-ingat - METIS Token",
   "Twitter": "MetisDAO",
@@ -2245,7 +2435,12 @@
   "Fee APY:": "Fee APY:",
   "Stake APY:": "Stake APY:",
   "CAKE Staking": "Pag-stake ng CAKE",
-  "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.": "Hindi puwedeng i-extend o i-top up ang na-migrate na position mula CAKE Pool. Para i-extend o magdagdag pa ng CAKE, mag-set up ng native na veCAKE position.",
+  "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.": {
+    "key": "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.",
+    "source": "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.",
+    "translation": "Hindi maaaring i-extend o dagdagan ang posisyon na inilipat mula sa CAKE Pool. Para mag-extend o magdagdag pa ng CAKE, mag-set up ng native na veCAKE position.",
+    "hint": "found in 1 of files, see packages/widgets-internal/ifo/Tips.tsx"
+  },
   "Chain": "Chain",
   "Type": "Uri",
   "Reward paused for this position": "Na-pause ang reward para sa posisyong ito",
@@ -2355,10 +2550,25 @@
   "Withdrawal Fee": "Bayarin sa Pag-withdraw",
   "View Staking Token Project Site": "Tingnan ang Site ng Staking Token Project",
   "Stake %stakedToken%, Earn APT on": "Mag-stake ng %stakedToken%, Makakuha ng APT sa",
-  "%stakedToken% Syrup Pool": "%stakedToken% Syrup Pool",
-  "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.": "Kung mas maraming %lpLabel% LP ang idedeposito sa Farm namin ngayong linggo, patataasin namin ang reward ng APT para sa %stakedToken% Syrup Pool sa susunod na linggo.",
+  "%stakedToken% Syrup Pool": {
+    "key": "%stakedToken% Syrup Pool",
+    "source": "%stakedToken% Syrup Pool",
+    "translation": "%stakedToken% Syrup Pool",
+    "hint": "found in 1 of files, see apps/aptos/components/Farms/components/FarmTable/PoolEarnAptTooltips.tsx"
+  },
+  "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.": {
+    "key": "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.",
+    "source": "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.",
+    "translation": "Kapag mas maraming %lpLabel% LP ang idineposito sa aming Farm ngayong linggo, dadagdagan namin ang mga reward na APT para sa %stakedToken% Syrup Pool sa susunod na linggo.",
+    "hint": "found in 1 of files, see apps/aptos/components/Farms/components/FarmTable/PoolEarnAptTooltips.tsx"
+  },
   "Enjoying the %stakingToken% Staking APR? Get more rewards with the %lpLabel% LP on our": "Nagugustuhan ang %stakingToken% Staking APR? Makakuha ng higit pang reward gamit ang %lpLabel% LP sa aming",
-  "The rewards for this Syrup Pool will not be applicable to or claimable by": "Ang mga reward para sa Syrup Pool na ito ay hindi magagamit o make-claim ng",
+  "The rewards for this Syrup Pool will not be applicable to or claimable by": {
+    "key": "The rewards for this Syrup Pool will not be applicable to or claimable by",
+    "source": "The rewards for this Syrup Pool will not be applicable to or claimable by",
+    "translation": "Ang mga reward para sa Syrup Pool na ito ay hindi magiging available o hindi maaaring i-claim ng",
+    "hint": "found in 1 of files, see apps/aptos/components/Pools/components/PoolTable/UsUserAptRewardTooltips.tsx"
+  },
   "Verify your address to continue": "I-verify ang address mo para magpatuloy",
   "Invalid BTC address": "Hindi valid na BTC address",
   "Buy with %provider%": "Bumili sa %provider%",
@@ -2402,8 +2612,18 @@
   "Merkl APR": "Merkl APR",
   "Quotes may be unavailable for some assets based on market conditions and provider availability in your region.": "Posibleng hindi available ang mga quote para sa ilang asset batay sa mga kundisyon ng market at availability ng provider sa rehiyon mo.",
   "Stake CAKE, Earn PEPE in our": "Mag-stake ng CAKE, Makakuha ng PEPE sa aming",
-  "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our": "Nagugustuhan ang APR? Makakuha ng higit pang PEPE reward sa Syrup Pool ng susunod na buwan sa pamamagitan ng pag-stake sa higit pang PEPE-BNB LP sa aming",
-  "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month": "Kung mas maraming PEPE-BNB LP ang nakadeposito sa aming Farm, tataasan namin ang mga reward para sa PEPE Syrup Pool sa susunod na buwan",
+  "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our": {
+    "key": "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our",
+    "source": "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our",
+    "translation": "Nag-e-enjoy sa APR? Kumuha ng mas maraming PEPE rewards sa Syrup Pool sa susunod na buwan sa pamamagitan ng pag-stake ng mas maraming PEPE-BNB LP sa aming",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/PoolsTable/PoolRow.tsx"
+  },
+  "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month": {
+    "key": "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month",
+    "source": "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month",
+    "translation": "Kung mas maraming PEPE-BNB LP ang ideposito sa aming Farm, tataasan namin ang mga reward para sa PEPE Syrup Pool sa susunod na buwan.",
+    "hint": "found in 2 of files, see apps/web/src/views/Farms/components/FarmCard/CardHeading.tsx,apps/web/src/views/Farms/components/FarmTable/Farm.tsx"
+  },
   "Total APR": "Kabuuang APR",
   "Start Earning": "Magsimulang Kumita",
   "Reward/Day": "Reward/Araw",
@@ -2537,7 +2757,12 @@
   "Rocker launching your meme career": "Inilulunsad ang iyong meme career",
   "Stake LP Tokens to Earn Cake and APT": "Mag-stake ng mga LP Token para Makakuha ng Cake at APT",
   "Read The Guide": "Basahin Ang Gabay",
-  "Earn Cake and APT with up to 50% apr on 15+ Pools": "Makakuha ng Cake at APT nang may hanggang 50% apr sa 15+ Pool",
+  "Earn Cake and APT with up to 50% apr on 15+ Pools": {
+    "key": "Earn Cake and APT with up to 50% apr on 15+ Pools",
+    "source": "Earn Cake and APT with up to 50% apr on 15+ Pools",
+    "translation": "Kumita ng Cake at APT na may hanggang 50% apr sa 15+ na Pool",
+    "hint": "found in 1 of files, see apps/aptos/components/Banner/AptosYieldFarmingBanner.tsx"
+  },
   "Earn Dual Incentives with Yield Farming on Aptos PancakeSwap": "Makakuha ng Dual Incentives gamit ang Yield Farming sa Aptos PancakeSwap",
   "No quotes available for %cryptoCurrency% right now.": "Walang available na quote para sa %cryptoCurrency% sa ngayon.",
   "No Quotes": "Walang Quote",
@@ -2585,14 +2810,29 @@
   "Add +": "Magdagdag +",
   "Choose Liquidity Shape": "Pumili ng Liquidity Shape",
   "Fee tier": "Tier ng fee",
-  "Pool features": "Mga feature ng pool",
+  "Pool features": {
+    "key": "Pool features",
+    "source": "Pool features",
+    "translation": "Mga feature ng Pool",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolFeaturesBadge.tsx"
+  },
   "Fee Level": "Level ng Fee",
   "Common range: 0.01% to 0.3%, Ideal range <1%": "Karaniwang range: 0.01% hanggang 0.3%, Ideal na range <1%",
   "Fee Tier Setting": "Setting ng Tier ng Fee",
-  "Static: The fee remains fixed at the specified level once the pool is created.": "Static: Mananatiling naka-fix ang fee sa tinukoy na level kapag nagawa na ang pool.",
+  "Static: The fee remains fixed at the specified level once the pool is created.": {
+    "key": "Static: The fee remains fixed at the specified level once the pool is created.",
+    "source": "Static: The fee remains fixed at the specified level once the pool is created.",
+    "translation": "Static: Ang fee ay nananatiling fixed sa itinakdang level kapag nagawa na ang pool.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Static": "Nakapirmi",
   "Dynamic": "Dinamiko",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamic: Puwedeng baguhin ang fee gamit ang hook pagkatapos magawa ang pool. Naka-set sa 0 ang paunang level ng fee",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": {
+    "key": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "source": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "translation": "Dynamic: Maaaring baguhin ang fee gamit ang hook pagkatapos magawa ang pool. Ang initial fee level ay naka-set sa 0.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Contract is verified on block explorer": "Na-verify ang kontrata sa explorer ng block",
   "Contract is not verified on block explorer": "Hindi na-verify ang kontrata sa explorer ng block",
   "Verified": "Na-verify",
@@ -2622,7 +2862,12 @@
   "Infinity Bin Pool Created": "Nakagawa ng Infinity Bin Pool",
   "Position Created!": "Nakagawa ng Posisyon!",
   "Pool Created!": "Nalikha na ang Pool!",
-  "Error creating pool": "Error sa paggawa ng pool",
+  "Error creating pool": {
+    "key": "Error creating pool",
+    "source": "Error creating pool",
+    "translation": "Error sa paggawa ng pool.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/hooks/useFormSubmitCallback.ts"
+  },
   "Error Add Liquidity": "Error sa Pagdaragdag ng Liquidity",
   "A pool with the selected configuration already exists.": "Mayroon nang pool na may napiling configuration.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "HINDI compatible sa V3 ang fee sa paglilipat ng mga token at pagbabago ng mga token.",
@@ -2687,7 +2932,12 @@
   "No gas cost or fee will be charged on failed orders.": "Walang sisingiling gas cost sa mga nabigong order.",
   "Caution - %token% Token": "Mag-ingat - %token% Token",
   "CAKE Incentives": "Mga Insentibo ng CAKE",
-  "Staking Pools": "Mga Staking Pool",
+  "Staking Pools": {
+    "key": "Staking Pools",
+    "source": "Staking Pools",
+    "translation": "Mga Staking Pool",
+    "hint": "found in 2 of files, see apps/aptos/components/Menu/footerConfig.ts,packages/uikit/src/widgets/Menu/components/footerConfig.ts"
+  },
   "Token Launches": "Mga Paglulunsad ng Token",
   "Get Help": "Makakuha ng Tulong",
   "Audits": "Mga Audit",
@@ -2696,7 +2946,12 @@
   "Play": "I-play",
   "Legacy products": "Mga legacy na produkto",
   "APR Breakdown": "Breakdown ng APR",
-  "Pool Feature": "Mga Feature ng Pool",
+  "Pool Feature": {
+    "key": "Pool Feature",
+    "source": "Pool Feature",
+    "translation": "Feature ng Pool",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/useColumnConfig.tsx,apps/web/src/views/universalFarms/constants.ts"
+  },
   "Swap Now": "Mag-swap Ngayon",
   "ZERO": "ZERO",
   "%amount% of your liquidity is currently staking in farm.": "Kasalukuyang nag-i-stake sa farm ang %amount% ng iyong liquidity.",
@@ -2832,7 +3087,12 @@
   "Audit info": "Impormasyon ng Audit",
   "Audit Outcome": "Resulta ng Audit",
   "Hook Creator": "Creator ng Hook",
-  "The price range is outside current pool price": "Wala sa kasalukuyang presyo ng pool ang price range",
+  "The price range is outside current pool price": {
+    "key": "The price range is outside current pool price",
+    "source": "The price range is outside current pool price",
+    "translation": "Ang price range ay nasa labas ng kasalukuyang presyo ng pool",
+    "hint": "found in 1 of files, see apps/web/src/components/Liquidity/Form/FieldDepositAmount.tsx"
+  },
   "Set price range first": "I-set muna ang price range",
   "No hooks available with the selected filters": "Walang hook na available sa napiling mga filter",
   "Reset filters": "I-reset ang mga filter",
@@ -2855,14 +3115,24 @@
   "No Existing Orders": "Walang Kasalukuyang Order",
   "Existing Orders": "Mga Kasalukuyang Order",
   "status": "status",
-  "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.": "Posibleng sumingil ng fee ang pool na ito para sa mga aksyon ng liquidity. I-adjust ang slippage tolerance sa ilalim ng Mga Setting kapag kinakailangan.",
+  "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.": {
+    "key": "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.",
+    "source": "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.",
+    "translation": "Maaaring maningil ng fee ang pool na ito para sa mga liquidity action. I-adjust ang slippage tolerance sa ilalim ng Settings kung kinakailangan.",
+    "hint": "found in 2 of files, see apps/web/src/views/RemoveLiquidityInfinity/components/RemoveBinPosition.tsx,apps/web/src/views/RemoveLiquidityInfinity/components/RemoveClPosition.tsx"
+  },
   "Swap %token% to win a share of": "Mag-swap ng %token% para manalo ng",
   "Empty page: No results found.": "Walang-lamang page: Walang nakitang resulta.",
   "View details in Docs": "Tingnan ang mga detalye sa Docs",
   "Insufficient data for historical price chart.": "Hindi sapat na data para sa chart ng historical na presyo.",
   "CLAMM Pool": "CLAMM Pool",
   "Liquidity Book AMM": "Liquidity Book AMM",
-  "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Nakapokus ang Concentrated Liquidity Automated Market Maker (CLAMM) na mga pool sa partikular na mga price range, na nagma-maximize sa efficiency ng capital at nagbibigay-daan sa mas makikitid na spread.",
+  "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": {
+    "key": "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.",
+    "source": "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.",
+    "translation": "Ang mga Concentrated Liquidity Automated Market Maker (CLAMM) pool ay nagpo-focus ng liquidity sa loob ng mga partikular na price range, na nagma-maximize ng capital efficiency at nagbibigay-daan para sa mas masikip na spread.",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolTypeModal.tsx"
+  },
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "Gumagamit ang Liquidity Book AMM (Bin Pool) ng discrete na mga price bin para i-segment ang liquidity, na nagbibigay ng granular na kontrol sa allocation ng capital at binabawasan ang slippage.",
   "Active Liquidity Management hooks enable fine-tuned control over liquidity positions, helping liquidity providers optimize returns by automating rebalancing, concentration, and exposure strategies.": "Binibigyang-daan ng Active Liquidity Management na mga hook ang naka-fine tune na kontrol sa mga position ng liquidity, na tumutulong sa mga provider ng liquidity na i-optimize ang mga return sa pamamagitan ng pag-automate sa mga diskarte ng rebalancing, concentration, at exposure.",
   "Dynamic Fees hooks allow fee adjustments based on market conditions, enhancing protocol efficiency by optimizing transaction costs during high volatility or incentivizing trades in low-activity periods.": "Binibigyang-daan ng Dynamic Fees na mga hook ang mga adjustment ng fee batay sa mga kundisyon ng market, pinapahusay ang efficiency ng protocol sa pamamagitan ng pag-optimize sa mga halaga ng transaksyon habang nasa high volatility o binibigyan ng insentibo ang mga trade sa mga panahon ng mababang aktibidad.",
@@ -2870,7 +3140,12 @@
   "Liquidity Incentivization hooks provide mechanisms to reward liquidity providers, using token incentives or innovative reward structures to attract and retain capital within the protocol.": "Nagbibigay ang Liquidity Incentivization na mga hook ng mekanismo para i-reward ang mga provider ng liquidity, gamit ang mga incentive ng token o innovative na structure ng reward para makaakit at magpanatili ng puhunan na nasa protocol.",
   "MEV (Maximal Extractable Value) hooks focus on mitigating or leveraging MEV, enabling protocols to minimize negative impacts or capitalize on profitable reordering opportunities.": "Nakapokus ang MEV (Maximal Extractable Value) na mga hook sa pag-mitigate o pag-leverage sa MEV, na nagbibigay-daan sa mga protocol na ma-minimize ang mga negatibong epekto o masamantala ang mga pagkakataon sa mapagkakakitaang pag-order muli.",
   "Real-World Assets hooks bridge traditional and decentralized finance, facilitating tokenized representation and on-chain interaction with real-world assets such as bonds, real estate, or commodities.": "Pinagdudugtong ng Real-World Assets na mga hook ang tradisyunal at decentralized na finance, na nagpapadali sa naka-tokenize na representation at on-chain na interaction sa mga asset sa tunay na buhay tulad ng mga bond, real estate, o commodity.",
-  "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.": "Ino-automate ng Yield Optimization na mga hook ang mga diskarte para ma-maximize ang mga return sa nakadepositong puhunan, na nagre-reallocate nang dynamic sa pondo sa lahat ng mga pool o diskarte para makamit ang optimal na pagganap.",
+  "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.": {
+    "key": "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.",
+    "source": "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.",
+    "translation": "Nag-o-automate ang Yield Optimization hooks ng mga strategy para i-maximize ang kita sa idinepositong capital, pabago-bagong inilalaan ang pondo sa iba't ibang pool o strategy para makamit ang pinakamahusay na performance.",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/hookCategoryDesc.tsx"
+  },
   "Other hooks are used to manage other aspects of the protocol.": "Ginagamit ang ibang mga hook para i-manage ang ibang mga aspeto ng protocol.",
   "Oracle hooks provide secure and reliable off-chain data integration, ensuring accurate price feeds, market data, or other critical information is available for on-chain applications.": "Nagbibigay ang Oracle na mga hook ng secure at maaasahang off-chain na pag-integrate ng data, na tumitiyak na available ang tumpak na mga feed ng presyo, market data, o iba pang mahalagang impormasyon para sa mga on-chain na application.",
   "Cross-Chain hooks enable seamless interaction between multiple blockchain ecosystems, allowing asset transfers, liquidity sharing, and protocol interoperability across chains.": "Binibigyang-daan ng Cross-Chain na mga hook ang seamless na interaksyon sa pagitan ng maraming ecosystem ng blockchain, na nagbibigay-daan sa mga paglipat ng asset, liquidity sharing, at interoperability ng protocol sa lahat ng mga chain.",
@@ -2946,7 +3221,12 @@
   "PANCAKE PICKS": "PANCAKE PICKS",
   "More Information": "Higit pang Impormasyon",
   "Please connect wallet to view your position / add liquidity.": "Pakikonekta ang wallet para tingnan ang iyong posisyon / magdagdag ng liquidity.",
-  "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": "Kinakalkula ang mga APR gamit ang kabuuang liquidity sa pool kumpara sa kabuuang halaga ng reward. Posibleng mas mataas ang aktwal na APR dahil hindi naka-stake o wala sa range ang ilang liquidity.",
+  "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": {
+    "key": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
+    "source": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
+    "translation": "Kinakalkula ang mga APR gamit ang kabuuang liquidity sa pool kumpara sa kabuuang halaga ng reward, maaaring mas mataas ang aktwal na mga APR dahil ang ilang liquidity ay hindi naka-stake o wala sa range.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/PoolAprButton/AprTooltipContent.tsx,apps/web/src/views/universalFarms/components/PoolAprButtonV3/AprTooltipContent.tsx"
+  },
   "APRs for individual positions may vary depending on the price range set.": "Posibleng mag-iba-iba ang mga APR para sa mga indibidwal na posisyon depende sa set ng hanay ng presyo.",
   "View in Wallet": "Tingnan sa Wallet",
   "Trade %token%": "Mag-trade ng %token%",
@@ -2964,7 +3244,12 @@
   "The TGE status (e.g., oversubscribed or not)": "Ang status ng TGE (hal., kung sumobra ang subscription o hindi)",
   "2. How many tokens will I receive?": "2. Gaano karaming token ang matatanggap ko?",
   "During the TGE, users can subscribe up to a maximum of 3 BNB. The final token allocation is determined based on the proportion of BNB a user contributed relative to the total BNB subscribed by all participants at the time the sale ends.": "Habang nasa TGE, puwedeng mag-subsribe ang mga user ng hanggang maximum na 3 BNB. Tinutukoy ang pinal na allocation ng token batay sa proporyson ng BNB na naiambag ng user may kaugnayan sa kabuuang BNB na na-subscribe ng lahat ng participant sa oras ng pagtatapos ng sale.",
-  "3. Will I receive a refund if the pool is oversubscribed?": "3. Tatanggap ba ako ng refund kung na-oversubsribe ang pool?",
+  "3. Will I receive a refund if the pool is oversubscribed?": {
+    "key": "3. Will I receive a refund if the pool is oversubscribed?",
+    "source": "3. Will I receive a refund if the pool is oversubscribed?",
+    "translation": "3. Makakatanggap ba ako ng refund kung oversubscribed ang pool?",
+    "hint": "found in 1 of files, see apps/web/src/views/Idos/config/index.tsx"
+  },
   "Yes. If the TGE is oversubscribed, any excess BNB that was not used to purchase tokens will be automatically refunded to your wallet when you claim your tokens.": "Oo. Kung na-oversubscribe ang TGE, awtomatikong ire-refund sa iyong wallet ang anumang sobrang BNB na hindi nagamit para bumili ng mga token kapag nag-claim ka ng mga token mo.",
   "4. Which regions or countries are restricted from participating in this event?": "4. Aling mga rehiyon o bansa ang pinaghihigpitan sa pagsali sa event na ito?",
   "The following nationalities are currently not eligible to participate in Binance-exclusive TGEs:": "Kasalukuyang hindi kwalipikado ang mga sumusunod na nationality para sumali sa eksklusibo sa Binance na mga TGE:",
@@ -3026,22 +3311,47 @@
   "Earn a share of platform revenue.": "Makakuha ng bahagi ng kita ng platform.",
   "More details here": "Higit pang mga detalye rito",
   "Use veCAKE to vote on where CAKE emissions are allocated.": "Gamitin ang veCAKE para bumoto kung saan ia-allocate ang gma emission ng CAKE.",
-  "Earn increased rewards when providing liquidity in selected pools.": "Makakuha ng mas maraming reward kapag nagbibigay ng liquidity sa mga piling pool.",
+  "Earn increased rewards when providing liquidity in selected pools.": {
+    "key": "Earn increased rewards when providing liquidity in selected pools.",
+    "source": "Earn increased rewards when providing liquidity in selected pools.",
+    "translation": "Kumita ng mas malaking reward sa pagbibigay ng liquidity sa mga piling pool.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/faqConfig.tsx"
+  },
   "Gain exclusive access to Initial Farm Offerings (IFOs) with higher allocation limits.": "Makakuha ng eksklusibong access sa mga Initial Farm Oferring (mga IFO) nang may mas mataas na mga limit sa allocation.",
   "How do I claim my CAKE rewards?": "Paano ko ike-claim ang aking mga reward ng CAKE?",
   "What is cross-chain CAKE, and what is it used for?": "Ano ang cross-chain CAKE at saan ito ginagamit?",
   "cross-chain bridging": "cross-chain na bridging",
   "Can I transfer or trade my staked CAKE or veCAKE?": "Puwede ko bang ilipat o i-trade ang aking naka-stake na CAKE o veCAKE?",
-  "What are Syrup Pools?": "Ano ang Mga Pool ng Syrup?",
-  "How do I stake CAKE in Syrup Pools?": "Paano ako mag-stake ng CAKE sa Mga Pool ng Syrup?",
-  "What rewards can I earn from Syrup Pools?": "Anong mga reward ang puwede kong makuha mula sa Mga Pool ng Syrup?",
+  "What are Syrup Pools?": {
+    "key": "What are Syrup Pools?",
+    "source": "What are Syrup Pools?",
+    "translation": "Ano ang mga Syrup Pool?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
+  "How do I stake CAKE in Syrup Pools?": {
+    "key": "How do I stake CAKE in Syrup Pools?",
+    "source": "How do I stake CAKE in Syrup Pools?",
+    "translation": "Paano ako mag-i-stake ng CAKE sa mga Syrup Pool?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
+  "What rewards can I earn from Syrup Pools?": {
+    "key": "What rewards can I earn from Syrup Pools?",
+    "source": "What rewards can I earn from Syrup Pools?",
+    "translation": "Anong mga reward ang maaari kong kitain mula sa mga Syrup Pool?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "Are there any fees for staking or unstaking?": "May mga babayaran ba sa pag-stake o pag-unstake?",
   "Once your CAKE is locked, rewards will accumulate continuously. You can claim your revenue sharing CAKE rewards weekly.To avoid losing rewards, make sure to": "Kapag na-lock na ang iyong CAKE, tuloy-tuloy na maiipon ang mga reward mo. Puwede mong i-claim ang iyong kita sa pagbabahagi ng mga reward ng CAKE bawat linggo. Para maiwasang maiwala ang mga reward, siguraduhing",
   "claim your CAKE regularly or extend your locking period.": "i-claim ang iyong CAKE nang regular o i-extend ang iyong panahon ng pag-lock.",
   "You can do this directly from the veCAKE staking page.": "Magagawa mo ito nang direkta mula sa page ng pag-stake ng veCAKE.",
   "Cross-chain CAKE allows veCAKE holders to participate in gauges voting on multiple chains, including Ethereum and Arbitrum. Through": "Binibigyang-daan ng cross-chain CAKE ang mga holder ng veCAKE na sumali sa mga gauge na pagboto sa maraming chain, kabilang ang Ethereum at Arbitrum. Sa pamamagitan ng",
   ", users can influence CAKE emissions and liquidity across various chains.": ", puwedeng maimpluwensiyahan ng mga user ang mga emission at liquidity ng CAKE sa lahat ng iba't ibang chain.",
-  "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?": "May naka-stake pa rin akong CAKE sa lumang Auto o Manual na mga Pool ng Cake. Ano ang dapat kong gawin?",
+  "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?": {
+    "key": "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?",
+    "source": "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?",
+    "translation": "May CAKE pa rin akong naka-stake sa mga lumang Auto o Manual CAKE Pool. Ano ang dapat kong gawin?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "Particle Network's Token Generation Event": "Event ng Pag-generate ng Token ng Network ng Particle",
   "Particle Network is the largest chain abstraction infrastructure for Web3. Its core technology, Universal Accounts, represents the solution to Web3's user, data, and liquidity fragmentation, giving users a single account and balance across all chains.": "Ang Particle Network ay ang pinakamalaking chain abstraction infrastructure para sa Web3. Kinakatawan ng core technology nito, ang Mga Universal Account, ang solusyon sa fragmentation ng user, data, at liquidity ng Web3, na nagbibigay sa mga user ng iisang account at balanse sa lahat ng mga chain.",
   "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token.": "Kumikilos ang Particle Chain, ang L1 blockchain ng Particle Network, bilang ang engine na nagpapatakbo sa Mga Universal Account. Para ipakita ang innovation na ito, nai-release na ng Particle ang chain-agnostic Mainnet dApp — UniversalX. Sa pamamagitan nito, Puwedeng mag-trade ang mga user gamit ang mga token mula sa alinmang chain, na nagsasama sa kanilang mga asset sa lahat ng mga ecosystem at nagbabayad ng gas gamit ang anumang token.",
@@ -3061,18 +3371,33 @@
   "Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE start date.": "Sa kasamaang-palad, hindi mo natutugunan ang mga kinakailangan sa pagsali sa ngayon. Para magkwalipikad, dapat na nakabili ang mga participant ng mga token ng Binance Alpha sa pamamagitan ng Binance Wallet (Keyless) o sa pamamagitan ng mga Spot/Funding account sa Binance Exchange sa loob ng 30 araw bago ang petsa ng simula ng TGE.",
   "Lorenzo Protocol is described as an institutional-grade on-chain asset management platform that structures and deploys yield-optimized fund vaults, effectively channeling on-chain liquidity into the most competitive yield opportunities.": "Inilalarawan ang Lorenzo Protocol bilang isang institutional-grade on-chain na platform ng asset management na nag-i-structure at nagde-deploy ng mga vault ng yield-optimized fund, na nagcha-channel sa on-chain liquidity sa pinaka-competitive na mga yield opportunity.",
   "Earn 30x Ethena Points!": "Makakuha ng 30x Ethena Points!",
-  "Add liquidity to this pool and earn 30x Ethena points!": "Magdagdag ng liquidity sa pool na ito at makakuha ng 30x Ethena points!",
+  "Add liquidity to this pool and earn 30x Ethena points!": {
+    "key": "Add liquidity to this pool and earn 30x Ethena points!",
+    "source": "Add liquidity to this pool and earn 30x Ethena points!",
+    "translation": "Magdagdag ng liquidity sa pool na ito at kumita ng 30x Ethena points!",
+    "hint": "found in 1 of files, see apps/web/src/views/universalFarms/components/FarmStatusDisplay/index.tsx"
+  },
   "Claim your rewards & learn more": "I-claim ang mga reward mo at alamin ang higit pa",
   "on Ethena's official site.": "sa opisyal na site ng Ethena.",
   "Boost Your Yield with Ethena": "I-boost ang Iyong Yield gamit ang Ethena",
-  "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": "Magdagdag ng liquidity sa mga pool n aito (USDe/USDT at sUSDe/USDe) para makakuha ng napakalalaking reward - 30x Ethena Points!",
+  "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": {
+    "key": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
+    "source": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
+    "translation": "Magdagdag ng liquidity sa mga pool na ito (USDe/USDT at sUSDe/USDe) para kumita ng malalaking reward - 30x Ethena Points!",
+    "hint": "found in 1 of files, see apps/web/src/views/universalFarms/components/RewardInfoCard/index.tsx"
+  },
   "Please update to the latest APP version": "Mag-update sa pinakabagong bersyon ng APP",
   "Only": "Lang",
   "veCake Redeem": "pag-redeem ng veCake",
   "MY CAKE STAKING POSITION": "ANG AKING POSISYON SA CAKE STAKING",
   "Anytime": "Anumang oras",
   "My Total rewards": "Aking Kabuuang mga reward",
-  "CAKE Pool Rewards": "Mga Reward ng CAKE Pool",
+  "CAKE Pool Rewards": {
+    "key": "CAKE Pool Rewards",
+    "source": "CAKE Pool Rewards",
+    "translation": "Mga Reward sa CAKE Pool",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/VeCakeRedeem.tsx"
+  },
   "Revenue Sharing Rewards": "Mga Reward sa Pagbabahagi ng Kita",
   "REDEEM NOW": "I-REDEEM NGAYON",
   "Total amount": "Kabuuang halaga",
@@ -3085,12 +3410,22 @@
   "Rewards have been sent to your wallet.": "Ipinadala ang mga reward sa iyong wallet.",
   "veCAKE Redeem Successfully": "Nagawang Mag-redeem ng veCAKE",
   "CAKE has been sent to your wallet.": "Naipadala sa iyong wallet ang CAKE.",
-  "CAKE Pool Redeem Successfully": "Nagawang Mag-redeem ng CAKE Pool",
+  "CAKE Pool Redeem Successfully": {
+    "key": "CAKE Pool Redeem Successfully",
+    "source": "CAKE Pool Redeem Successfully",
+    "translation": "Matagumpay na Na-redeem ang CAKE Pool",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/VeCakeRedeem.tsx"
+  },
   "Unlocked on": "Na-unlock noong",
   "All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.": "Na-unlock ang lahat ng naka-lock na CAKE simula noong Abril 23, 2025, sa oras na 08:00 AM UTC at available para i-claim.",
   "What am I redeeming and how does this work?": "Ano ang nire-redeem ko at paano ito gumagana?",
   "You're redeeming:": "Nagre-redeem ka ng:",
-  "Legacy CAKE Pool rewards": "Mga reward ng legacy CAKE Pool",
+  "Legacy CAKE Pool rewards": {
+    "key": "Legacy CAKE Pool rewards",
+    "source": "Legacy CAKE Pool rewards",
+    "translation": "Mga reward ng Legacy CAKE Pool",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "Unclaimed rewards: This includes revenue sharing rewards and any remaining veCAKE gauge voting rewards.": "Mga hindi na-claim na reward: Kabilang dito ang mga reward ng pagbabahagi ng kita at anumang natitirang mga reward ng veCAKE gauge voting.",
   "Important: If you want to receive rewards from Epoch 38 (April 25 – May 6), do not withdraw CAKE before 00:00 AM UTC, May 7, 2025.": "Mahalaga: Kung gusto mong tumanggap ng mga reward mula Epoch 38 (Abril 25 – Mayo 6), huwag mag-withdraw ng CAKE bago ang 00:00 AM UTC, Mayo 7, 2025.",
   "How long will this redemption page be available?": "Gaano katagal magiging available ang page ng pag-redeem na ito?",
@@ -3101,17 +3436,37 @@
   "Starting 00:00 AM UTC April 23, 2025, veCAKE and all gauge voting will be retired.": "Simula 00:00 AM UTC Abril 23, 2025, ire-retire ang veCAKE at lahat ng gauge voting.",
   "The final round of gauge voting will end on 00:00 AM UTC, April 23, 2025 (Epoch 37).": "Matatapos ang panghuling round ng gauge voting sa 00:00 AM UTC, Abril 23, 2025 (Epoch 37).",
   "Results from Epoch 37 will be executed in Epoch 38 (April 25 – May 6).": "Gagawin ang mga resulta mula Epoch 37 sa Epoch 38 (Abril 25 – Mayo 6).",
-  "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.": "Patuloy na maiipon ang mga gauges reward, kabilang ang veCAKE Pool APR at Bribe APR, hanggang Mayo 7, 2025.",
+  "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.": {
+    "key": "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.",
+    "source": "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.",
+    "translation": "Ang mga reward sa Gauges, kabilang ang veCAKE Pool APR at Bribe APR, ay patuloy na maiipon hanggang Mayo 7, 2025.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "What’s the impact on other products like yield farming and revenue sharing?": "Ano ang epekto sa ibang mga produkto tulad ng yield farming at pagbabahagi ng kita?",
-  "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.": "Ipe-phase out ang mga boost ng yield farming (mula sa veCAKE) sa lahat ng mga manager ng position, Syrup Pool, at aktibidad ng pag-farm sa pagitan ng Abril 24 at Mayo 7, 2025.",
+  "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.": {
+    "key": "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.",
+    "source": "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.",
+    "translation": "Ang mga yield farming boost (mula sa veCAKE) ay unti-unting aalisin sa mga position manager, Syrup Pool, at farming activities sa pagitan ng Abril 24 at Mayo 7, 2025.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "The PancakeSwap UI will gradually reflect the retirement of affected products from these changes.": "Unti-unting ipapakita ng PancakeSwap UI ang retirement ng mga apektadong produkto mula sa mga pagbabagong ito.",
   "For more on these changes, check out:": "Para sa higit pa sa mga pagbabagong ito, tingnan ang:",
   "CAKE Tokenomics 3.0 Docs": "Mga Doc ng CAKE Tokenomics 3.0",
   "Blog Post: What You Need to Know": "Blog Post: Ang Kailangan mong Malaman",
   "Underlying CAKE (from your veCAKE position)": "Underlying CAKE (mula sa positio ng iyong veCAKE)",
   "You'll have 6 months to redeem your veCAKE and other unclaimed rewards, from April 23, 2025 at 8:00 AM UTC until October 23, 2025.": "May 6 na buwan ka para i-redeem ang iyong veCAKE at iba pang hindi na-claim na mga reward, mula Abril 23, 2025 sa oras na 8:00 AM UTC hanggang Oktubre 23, 2025.",
-  "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.": "Para makuha ang lahat ng mga final na APR (veCAKE Pool + Bribe + Revenue Sharing), hwag i-redeem ang CAKE bago ang 00:00 AM UTC, Mayo 7, 2025.",
-  "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.": "5% ng Revenue Sharing mula sa mga trading fee ang magtatapos sa 00:00 UTC sa Mayo 7, 2025. Ire-redirect na ngayon sa CAKE burn mechanism ang mga fund na dating naka-allocate sa revenue sharing, na nagpapataas sa burn rate para sa mga pool na ito mula sa 10% hanggang 15%.",
+  "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.": {
+    "key": "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.",
+    "source": "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.",
+    "translation": "Para makuha ang lahat ng final APR (veCAKE Pool + Bribe + Revenue Sharing), huwag i-redeem ang CAKE bago ang 00:00 AM UTC, Mayo 7, 2025.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
+  "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.": {
+    "key": "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.",
+    "source": "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.",
+    "translation": "Magtatapos ang 5% Revenue Sharing mula sa trading fees sa 00:00 UTC sa Mayo 7, 2025. Ang mga pondo na dating para sa revenue sharing ay ililipat na sa CAKE burn mechanism, na magpapataas ng burn rate ng mga pool na ito mula 10% hanggang 15%.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "Product Doc: veCAKE Redemption Guide": "Product Doc: Gabay sa Pag-redeem ng veCAKE",
   "PancakeSwap Infinity supports both CLAMM (Concentrated Liquidity AMM) and LBAMM (Liquidity Book AMM) pools.": "Sinusuportahan ng PancakeSwap Infinity ang CLAMM (Concentrated Liquidity AMM) at LBAMM (Liquidity Book AMM) na mga pool.",
   "Infinity Bin Position Created": "Nakagawa ng Infinity Bin Position",
@@ -3121,11 +3476,36 @@
   "SS": "SS",
   "These values represent the rewards earned in the last epoch. For the first epoch, the values are estimates.": "Kinakatawan ng mga value na ito ang mga reward na nakuha sa nakaraang epoch. Para sa unang epoch, mga estimate ang mga value.",
   "Epoch = 8-hour reward cycle": "Epoch = 8 oras na cycle ng reward",
-  "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.": "Nagte-trade ka sa pamamagitan ng Brevis Hook-enabled na pool, tingnan kung kwalipikado para sa discount sa page ng pool.",
-  "You’ve qualified for a discount via a Brevis Hook-enabled pool!": "Kwalipikado ka para sa discount sa pamamagitan ng Brevis Hook-enables na pool!",
-  "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.": "Nagte-trade ka sa pamamagitan ng Primus Hook-enabled na pool, tingnan kung kwalipikado para sa discount sa page ng pool.",
-  "You’ve qualified for a discount via a Primus Hook-enabled pool!": "Kwalipikado ka para sa discount sa pamamagitan ng Primus Hook-enables na pool!",
-  "This route uses a dynamic fee pool; actual fees may vary.": "Gumagamit ng dynamic na fee pool ang rutang ito; posibleng mag-iba ang mga fee.",
+  "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.": {
+    "key": "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.",
+    "source": "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.",
+    "translation": "Nagte-trade ka sa pamamagitan ng Brevis Hook-enabled pool. Tingnan sa page ng pool kung kwalipikado ka sa discount.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’ve qualified for a discount via a Brevis Hook-enabled pool!": {
+    "key": "You’ve qualified for a discount via a Brevis Hook-enabled pool!",
+    "source": "You’ve qualified for a discount via a Brevis Hook-enabled pool!",
+    "translation": "Kwalipikado ka para sa isang discount sa pamamagitan ng isang Brevis Hook-enabled pool!",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.": {
+    "key": "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.",
+    "source": "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.",
+    "translation": "Nagte-trade ka sa pamamagitan ng Primus Hook-enabled pool. Tingnan sa page ng pool kung kwalipikado ka sa discount.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’ve qualified for a discount via a Primus Hook-enabled pool!": {
+    "key": "You’ve qualified for a discount via a Primus Hook-enabled pool!",
+    "source": "You’ve qualified for a discount via a Primus Hook-enabled pool!",
+    "translation": "Kwalipikado ka para sa isang discount sa pamamagitan ng isang Primus Hook-enabled pool!",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "This route uses a dynamic fee pool; actual fees may vary.": {
+    "key": "This route uses a dynamic fee pool; actual fees may vary.",
+    "source": "This route uses a dynamic fee pool; actual fees may vary.",
+    "translation": "Gumagamit ang route na ito ng isang dynamic fee pool; maaaring mag-iba ang aktwal na mga fee.",
+    "hint": "found in 2 of files, see apps/web/src/views/Swap/V3Swap/components/SwapModalFooterV2.tsx,apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Burn Dashboard": "Dasboard ng Pag-burn",
   "Select a tab": "Pumili ng tab",
   "Burn (In last 7d)": "Pag-burn (Sa huling 7d)",
@@ -3189,21 +3569,41 @@
   "Unsuccessful": "Hindi matagumpay",
   "%split% Split": "%split% Split",
   "Your bridge transaction failed. You will be refunded shortly.": "Hindi natuloy ang iyong bridge transaction Mare-refund ka sa ilang sandali.",
-  "Via %poolTypes% Pool": "Sa pamamagitan ng %poolTypes% Pool",
+  "Via %poolTypes% Pool": {
+    "key": "Via %poolTypes% Pool",
+    "source": "Via %poolTypes% Pool",
+    "translation": "Sa pamamagitan ng %poolTypes% Pool",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/BridgeRoutesDisplay.tsx"
+  },
   "%percent%%": "%percent%%",
   "MY CAKE": "AKING CAKE",
-  "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.": "Ini-apply sa source at destination chain na mga swap batay sa mga tier ng pool fee. Tingnan ang mga detalye ng routing para sa higit pang impormasyon.",
+  "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.": {
+    "key": "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.",
+    "source": "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.",
+    "translation": "Ina-apply sa mga swap sa source at destination chain batay sa mga pool fee tier. Tingnan ang mga detalye ng routing para sa karagdagang impormasyon.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/Bridge/components/FeeToolTip.tsx"
+  },
   "Paid to relayers for bridging the assets.": "Ibinabayad sa mga nagre-relay para sa pag-bridge ng mga asset.",
   "Your voting power is determined by your CAKE balance at the snapshot block, which represents how much weight your vote carries.": "Tinutukoy ang iyong voting power ng balanse ng iyong CAKE sa block ng snapshot, na kumakatawan sa kung gaano kabigat ang boto mo.",
   "Cake Balance": "Balanse ng Cake",
   "Not enough CAKE": "Walang sapat na CAKE",
   "Your voting power is determined by the number of CAKE you have at the block detailed above. CAKE held in other places does NOT contribute to your voting power.": "Ang iyong kapangyarihan sa pagboto ay natutukoy ng bilang ng CAKE na iyong hawak sa block na idinetalye sa itaas. Ang CAKE na nakalagay sa iba pang mga lugar ay hindi nakakatulong sa iyong kapangyarihan sa pagboto.",
-  "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": "Kapag nagdagdag ng liquidity sa mababang TVL pool, magdadala ito ng mas malaking panganib ng pagkalugi sa mga pagbabago ng presyo. Magpatuloy nang nag-iingat.",
+  "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": {
+    "key": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
+    "source": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
+    "translation": "Ang pagdaragdag ng liquidity sa isang pool na may mababang TVL ay may mas mataas na panganib ng pagkalugi mula sa mga pagbabago ng presyo. Magpatuloy nang may pag-iingat.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Previously used": "Ginamit noong nakaraan",
   "Top Wallets": "Mga Nangungunang Wallet",
   "More Wallets": "Higit Pang Mga Wallet",
   "Wallets with MEV Protection": "Mga Wallet na may Proteksyon ng MEV",
-  "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": "Puwedeng magkaroon ng mas malalaking pagbabago sa presyo ang mga bagong pool na may mababang liquidity, na nagpapalaki sa panganib ng pagkalugi. Magpatuloy nang nag-iingat.",
+  "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": {
+    "key": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
+    "source": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
+    "translation": "Maaaring magkaroon ng mas malaking pagbabago sa presyo ang mga bagong pool na may mababang liquidity, na nagpapataas ng panganib na malugi. Magpatuloy nang may pag-iingat.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Color Theme": "Tema ng Kulay",
   "Default Explorer": "Default na Explorer",
   "Select preferred block explorer": "Piliin ang gustong explorer ng block",
@@ -3248,14 +3648,29 @@
   "Switch": "Lumipat",
   "APR Calculation Method": "APR na Paraan ng Pagkalkula",
   "Calculations are an estimate and only for reference.": "Pagtatantya at bilang reperensya lang ang mga kalkulasyon.",
-  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": "Ginagamit ng paraang ito ang implied na pagbabago (delta) sa liquidity ng pool, kagaya ng tinutukoy ng hanay ng presyo ng user at laki ng position, para kalkulahin ang tinatayang APR.",
-  "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": "Gumagamit ang paraang ito ng multiplier, na tinutukoy ng intersection ng hanay ng presyo ng user at ang historical na hanay ng presyo ng pool, para kalkulahin ang APR.",
+  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": {
+    "key": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+    "source": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+    "translation": "Ginagamit ng paraang ito ang implied change (delta) sa liquidity ng pool, na tinutukoy ng price range at position size ng user, para kalkulahin ang tinatayang APR.",
+    "hint": "found in 1 of files, see apps/solana/src/components/AprMDSwitchWidget.tsx"
+  },
+  "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": {
+    "key": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
+    "source": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
+    "translation": "Ang paraang ito ay nag-a-apply ng multiplier, na tinutukoy ng intersection ng price range ng user at ng historical na price range ng pool, para kalkulahin ang tinatayang APR.",
+    "hint": "found in 1 of files, see apps/solana/src/components/AprMDSwitchWidget.tsx"
+  },
   "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.": "Available ang dalawang paraan ng pagkalkula sa tinatayang APR, batay sa historical na mga trade fee at emission. Mga position lang na nasa range ang makakakuha ng yield. Hindi ipinapahiwatig ng nakaraang performance ang mga susunod na resulta.",
   "Farm period": "Panaho ng farm",
   "Start on": "Magsimula sa",
   "Start at": "Magsimula sa",
   "Farm will end at": "Matatapos ang farm sa",
-  "Total locked liquidity in this pool: %percent%": "Kabuuang naka-lock na liquidity sa pool na ito: %percent%",
+  "Total locked liquidity in this pool: %percent%": {
+    "key": "Total locked liquidity in this pool: %percent%",
+    "source": "Total locked liquidity in this pool: %percent%",
+    "translation": "Kabuuang naka-lock na liquidity sa pool na ito: %percent%",
+    "hint": "found in 1 of files, see apps/solana/src/components/LockPercentCircle.tsx"
+  },
   "Connect your wallet to PancakeSwap": "Ikonekta ang iyong wallet sa PancakeSwap",
   "Oops... Looks like you don’t have Phantom installed!": "Naku... Mukhang wala kang naka-install na Phantom!",
   "Install Phantom": "I-install ang Phantom",
@@ -3304,11 +3719,31 @@
   "Add Deposit Amount": "Magdagdag ng Halaga ng Deposito",
   "Total Deposit": "Kabuuang Deposito",
   "Deposit Ratio": "Ratio ng Deposito",
-  "Pool price is %percent% away from market": "%percent% ang layo sa market ng presyo ng pool",
+  "Pool price is %percent% away from market": {
+    "key": "Pool price is %percent% away from market",
+    "source": "Pool price is %percent% away from market",
+    "translation": "Ang presyo ng pool ay %percent% ang layo mula sa market",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
   "Low Liquidity: ": "Mababang Liquidity: ",
-  "Loading pool": "Naglo-load ng pool",
-  "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.": "Hindi balanse ang presyo ng pool para sa pares na ito. Kapag nagdagdag ng maliit na halaga ng liquidity sa malawak na hanay, posibleng mailapit ang presyo sa kasalukuyang presyo ng market.",
-  "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.": "Masyadong malaki ang iyong deposito may kaugnayan sa kasalukuyang liquidity sa pool, na posibleng mauwi sa arbitrage sa iyong posisyon. Kung malayo ang na-quote na presyo sa presyo ng market, posibleng lumaki ang panganib.",
+  "Loading pool": {
+    "key": "Loading pool",
+    "source": "Loading pool",
+    "translation": "Naglo-load ng pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
+  "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.": {
+    "key": "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.",
+    "source": "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.",
+    "translation": "Hindi balanse ang presyo ng pool para sa pair na ito. Ang pagdaragdag ng kaunting liquidity sa malawak na range ay maaaring magpalapit ng presyo sa kasalukuyang market price.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
+  "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.": {
+    "key": "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.",
+    "source": "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.",
+    "translation": "Malaki ang iyong deposit kumpara sa kasalukuyang liquidity sa pool, na maaaring humantong sa arbitrage sa iyong position. Kung ang quoted na presyo ay malayo sa market price, maaaring lumaki ang risk na ito.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
   "Deposit successfully": "Nakapagdeposito",
   "A new NFT representing your Concentrated Liquidity position is now in your wallet.": "Nasa wallet mo na ang isang bagong NFT na kumakatawan sa iyong Concentrated Liquidity na posisyon.",
   "NFT Mint": "NFT Mint",
@@ -3343,14 +3778,34 @@
   "By confirming below, I agree to permanently lock liquidity. I understand access to the underlying assets will be lost forever.": "Sa pagkumpirma sa ibaba, sumasang-ayon ako na i-lock nang permanente ang liquidity. Nauunawaan ko na tuluyan nang mawawala ang access sa mga kasamang asset.",
   "Estimated APR": "Tinantyang APR",
   "Trade fees": "Mga trade fee",
-  "Migrate to Concentrated Liquidity pool": "Mag-migrate sa pool ng Concentrated Liquidity",
-  "Migrate below or learn more about CLMM pools and risks": "Mag-migrate sa ibaba o alamin ang higit pa tungkol sa mga pool at panganib ng CLMM",
+  "Migrate to Concentrated Liquidity pool": {
+    "key": "Migrate to Concentrated Liquidity pool",
+    "source": "Migrate to Concentrated Liquidity pool",
+    "translation": "Mag-migrate sa Concentrated Liquidity pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
+  "Migrate below or learn more about CLMM pools and risks": {
+    "key": "Migrate below or learn more about CLMM pools and risks",
+    "source": "Migrate below or learn more about CLMM pools and risks",
+    "translation": "Mag-migrate sa ibaba o alamin ang higit pa tungkol sa mga CLMM pool at mga risk",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
   "Quick migration": "Mabilis na pag-migrate",
   "Very wide price range for a more passive strategy.": "Napakalawak na hanay ng presyo para sa mas passive na diskarte.",
   "Custom migration": "Custom na pag-migrate",
   "Set a custom price range for higher capital efficiency.": "Mag-set ng custom na hanay ng presyo para sa mas mataas na efficiency ng kapital.",
-  "CLMM Pool": "CLMM Pool",
-  "CLMM pools": "Mga CLMM pool",
+  "CLMM Pool": {
+    "key": "CLMM Pool",
+    "source": "CLMM Pool",
+    "translation": "CLMM Pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
+  "CLMM pools": {
+    "key": "CLMM pools",
+    "source": "CLMM pools",
+    "translation": "Mga CLMM pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/CreateClmmPool.tsx"
+  },
   "%subA%/%subB%": "%subA%/%subB%",
   "Current price": "Kasalukuyang presyo",
   "%token% price": "Presyo ng %token%",
@@ -3361,7 +3816,12 @@
   "24 hour": "24 oras",
   "7 day": "7 araw",
   "1 month": "1 buwan",
-  "Pool liquidity will appear here.": "Makikita rito ang liquidity ng pool.",
+  "Pool liquidity will appear here.": {
+    "key": "Pool liquidity will appear here.",
+    "source": "Pool liquidity will appear here.",
+    "translation": "Dito lalabas ang liquidity ng pool.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/components/LiquidityChartRangeInput/index.tsx"
+  },
   "Preview Deposit": "I-preview ang Deposito",
   "Transaction initiating": "Nagsisimula ang transaksyon",
   "The market price is outside your specified price range. Single asset deposit only.": "Hindi kasama sa tinukoy mong hanay ng presyo ang market price. Isang asset lang na pagdeposito.",
@@ -3369,34 +3829,59 @@
   "Next, set initial token price & position price range": "Pagkatapos, i-set ang paunang presyo ng token at hanay ng presyo ng position",
   "Last, please enter token deposit amount": "Panghuli, pakilagay ang halaga ng deposito ng token",
   "Please Note": "Pakitandaan",
-  "Pool created & position added successfully!": "Nagawa ang pool at naidagdag ang position!",
+  "Pool created & position added successfully!": {
+    "key": "Pool created & position added successfully!",
+    "source": "Pool created & position added successfully!",
+    "translation": "Matagumpay na nagawa ang pool at naidagdag ang position!",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessModal.tsx"
+  },
   "Note:": "Tandaan:",
   "Got it": "Ok",
-  "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": "Posibleng tumagal nang ilang minuto bago lumitaw ang iyong pool sa listahan ng pool. Maghintay lang at i-refresh ang page, pagkatapos ay maghanap sa listahan ng pool para sa iyong pool bago subukang gumawa ng farm.",
-  "Pool and position created successfully": "Nakagawa ng pool at position",
+  "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": {
+    "key": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
+    "source": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
+    "translation": "Maaaring tumagal ng ilang minuto bago lumabas ang iyong pool sa listahan ng pool. Mangyaring maghintay at i-refresh ang page, at pagkatapos ay hanapin ang iyong pool sa listahan ng pool bago subukang gumawa ng farm.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessModal.tsx"
+  },
+  "Pool and position created successfully": {
+    "key": "Pool and position created successfully",
+    "source": "Pool and position created successfully",
+    "translation": "Matagumpay na nagawa ang pool at position",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessWithLockModal.tsx"
+  },
   "Quote token": "Token ng quote",
   "Base token": "Base na token",
   "Initial price": "Paunang presyo",
   "Price Setting": "Setting ng Presyo",
   "%subject% price": "Presyo ng %subject%",
-  "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.": "Ito ang kasalukuyang presyo ng kasalukuyang pool sa PancakeSwap. Puwede ka pa ring maglagay ng ibang paunang presyo, pero maging nakakaalam na posible itong humantong sa arbitrage kung masyadong malaki ang pagkakaiba ng presyo.",
+  "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.": {
+    "key": "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.",
+    "source": "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.",
+    "translation": "Ito ang kasalukuyang presyo ng isang umiiral na pool sa PancakeSwap. Maaari ka pa ring maglagay ng ibang initial price ngunit tandaan na maaari itong humantong sa arbitrage kung malaki ang pagkakaiba ng presyo.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/SetPriceAndRange.tsx"
+  },
   "Select token & fee tier": "Pumili ng tier ng token at fee",
   "Set initial price & range": "I-set ang paunang presyo at range",
   "Enter deposit amount": "Ilagay ang halaga ng deposito",
-  "Preview Pool": "I-preview ang Pool",
-  "Your pool has been created successfully!": "Nagawa ang iyong pool!",
+  "Preview Pool": {
+    "key": "Preview Pool",
+    "source": "Preview Pool",
+    "translation": "I-preview ang Pool",
+    "hint": "found in 2 of files, see apps/solana/src/features/Create/ClmmPool/components/TokenAmountInput.tsx,apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
+  "Your pool has been created successfully!": "Matagumpay na nagawa ang iyong pool!",
   "You can now create a farm or go back": "Puwede ka nang gumawa ng farm o bumalik",
   "Create Farm": "Gumawa ng Farm",
-  "Back to My Pools": "Bumalik sa Aking Mga Pool",
+  "Back to My Pools": "Bumalik sa Aking mga Pool",
   "Initial liquidity": "Paunang liquidity",
   "Start time": "Oras ng simula",
-  "Initialize Liquidity Pool": "Simulan ang Pool ng Liquidity",
+  "Initialize Liquidity Pool": "Simulan ang Liquidity Pool",
   "Initial price is set by the ratio of tokens deposited for initial liquidity. If the token is already trading on PancakeSwap, initial price will be auto-filled with the current price.": "Itinatakda ang inisyal na presyo ng ratio ng mga token na nakadeposito para sa inisyal na liquidity. Kung itine-trade na ang token sa PancakeSwap, awtomatikong ilalagay ang inisyal na presyo gamit ang kasalukuyang presyo.",
-  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.": "Kasalukuyang may naka-reserve na pool creation fee na 0.15 SOL para suportahan ang front at backend infrastructure. Tinatayang 0.3 SOL ang kailangan para sa renta ng OpenBook Marketat paggawa ng account ng program.",
-  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.": "Kasalukuyang may naka-reserve na pool creation fee na 0.15 SOL para suportahan ang front at backend infrastructure. Tinatayang 0.05 SOL ang kailangan para sa paggawa ng account ng program at mga network fee.",
+  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.": "Ang pool creation fee na 0.15 SOL ay kasalukuyang nakalaan para suportahan ang front at backend infrastructure. Tinatayang 0.3 SOL ang kinakailangan para sa OpenBook Market rent at paggawa ng program account.",
+  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.": "Ang pool creation fee na 0.15 SOL ay kasalukuyang nakalaan para suportahan ang front at backend infrastructure. Tinatayang 0.05 SOL ang kinakailangan para sa paggawa ng program account at mga network fee.",
   "fee tier": "tier ng fee",
-  "Initialize AMM v4 pool": "Simulan ang pool ng AMM v4",
-  "Initialize CPMM pool": "Simulan ang pool ng CPMM",
+  "Initialize AMM v4 pool": "Simulan ang AMM v4 pool",
+  "Initialize CPMM pool": "Simulan ang CPMM pool",
   "I want to...": "Gusto kong...",
   "Create pool": "Gumawa ng pool",
   "V3 Pools": "Mga V3 Pool",
@@ -3413,15 +3898,15 @@
   "Rewards allocated to farms cannot be withdrawn after farming starts. Newly created farms generally appear on PancakeSwap 10-30 minutes after creation, depending on Solana network status.": "Hindi puwedeng i-withdraw ang mga reward na na-allocate sa mga farm pagkaraang magsimula ng farming. Karaniwang makikita ang mga bagong gawang farm sa PancakeSwap 10-30 minuto pagkatapos ng paggawa, depeende sa status ng network ng Solana.",
   "Search for a pair or paste AMM ID": "Maghanap ng pares o i-paste ang AMM ID",
   "input AmmId / TVL": "ilagay ang AmmId / TVL",
-  "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.": "Hindi makita ang pool na hinahanap mo? Subukang ilagay ang address ng token o tingnan ang mga listahan ng pool sa ibaba.",
-  "Select Pool": "Piliin ang Pool",
+  "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.": "Hindi mahanap ang pool na iyong hinahanap? Subukang ilagay ang token address o tingnan ang mga listahan ng pool sa ibaba.",
+  "Select Pool": "Pumili ng Pool",
   "Concentrated Liquidity": "Concentrated na Liquidity",
   "Standard AMM": "Karaniwang AMM",
   "Search for a pair or enter AMM ID": "Maghanap ng pares o ilagay ang AMM ID",
   "Can't find what you want?": "Hindi makita ang hinahanap mo?",
   "Create a new pool": "Gumawa ng bagong pool",
-  "Select from your created pools": "Pumili mula sa mga nagawa mong pool",
-  "The farm will be created for the selected pool": "Gagawin ang farm na ito para sa napiling pool",
+  "Select from your created pools": "Pumili mula sa iyong mga ginawang pool",
+  "The farm will be created for the selected pool": "Ang farm ay gagawin para sa napiling pool",
   "Create Farm TX success!!": "Nakagawa ng Farm TX!!",
   "Farm created successfully!": "Nakagawa ng Farm!",
   "Farm ID": "ID ng Farm",
@@ -3432,7 +3917,7 @@
   "Add Rewards": "Magdagdag ng Mga Reward",
   "Step 3": "Hakbang 3",
   "Review Farm Detail": "I-review ang Detalye ng Farm",
-  "First, select a pool for farm rewards": "Una, pumili ng pool para sa mga reward ng farm",
+  "First, select a pool for farm rewards": "Una, pumili ng pool para sa mga farm reward",
   "Next, enter rewards for the farm": "Pagkatapos, maglagay ng mga reward para sa farm",
   "Add another": "Magdagdag ng isa pa",
   "Farm not found": "Hindi nakita ang farm",
@@ -3470,17 +3955,42 @@
   "Not Now": "Hindi Ngayon",
   "Auto-swap": "Auto-swap",
   "When auto-swap is on, token amounts will be automatically swapped to the deposit ratio needed to create your position.": "Kapag naka-on ang auto-swap, awtomatikong isa-swap ang dami ng token sa ratio ng depositong kailangan para gawin ang posisyon mo.",
-  "Pool Not Found": "Hindi Nakita ang Pool",
+  "Pool Not Found": {
+    "key": "Pool Not Found",
+    "source": "Pool Not Found",
+    "translation": "Hindi Nahanap ang Pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/Add/index.tsx"
+  },
   "Stake Liquidity": "Liquidity ng Stake",
   "Total APR 7D": "Kabuuang APR 7D",
   "LP": "LP",
   "AMM ID": "AMM ID",
   "Market ID": "ID ng Market",
-  "Pool Liquidity": "Liquidity ng Pool",
-  "Pool detail": "Detalye ng pool",
+  "Pool Liquidity": {
+    "key": "Pool Liquidity",
+    "source": "Pool Liquidity",
+    "translation": "Liquidity ng Pool",
+    "hint": "found in 2 of files, see apps/solana/src/features/Liquidity/Increase/components/PoolInfo.tsx,apps/solana/src/features/Liquidity/Increase/index.tsx"
+  },
+  "Pool detail": {
+    "key": "Pool detail",
+    "source": "Pool detail",
+    "translation": "Detalye ng Pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/components/PoolInfoMobileDrawer.tsx"
+  },
   "LP Token Balances": "Mga Balanse ng Token ng LP",
-  "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.": "May mga naka-unstake na token ng LP ka para sa pool na ito. Puwede mong i-stake ang mga ito nang direkta sa tab na Liquidity ng Stake.",
-  "There is no active farm for this pool.": "Walang aktibong farm para sa pool na ito.",
+  "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.": {
+    "key": "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.",
+    "source": "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.",
+    "translation": "Mayroon kang mga unstaked LP token para sa pool na ito. Maaari mo itong i-stake nang direkta sa tab na Stake Liquidity.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/components/StakeableHint.tsx"
+  },
+  "There is no active farm for this pool.": {
+    "key": "There is no active farm for this pool.",
+    "source": "There is no active farm for this pool.",
+    "translation": "Walang aktibong farm para sa pool na ito.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/index.tsx"
+  },
   "Show more": "Ipakita ang higit pa",
   "Set amount of position to lock:": "Magtakda ng halaga ng posisyon na ila-lock:",
   "Position locked successfully!": "Nagawang i-lock ang posisyon!",
@@ -3499,22 +4009,47 @@
   "default": "default",
   "TVL (dsc)": "TVL (dsc)",
   "TVL (asc)": "TVL (asc)",
-  "Liquidity Pools": "Mga Pool ng Liquidity",
+  "Liquidity Pools": {
+    "key": "Liquidity Pools",
+    "source": "Liquidity Pools",
+    "translation": "Mga Liquidity Pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/Pools.tsx"
+  },
   "Provide liquidity": "Magbigay ng liquidity",
   "Time base": "Batayan ng oras",
   "Show Farms": "Ipakita ang Mga Farm",
-  "No pools found": "Walang nahanap na pool",
+  "No pools found": {
+    "key": "No pools found",
+    "source": "No pools found",
+    "translation": "Walang nahanap na pool",
+    "hint": "found in 2 of files, see apps/solana/src/features/Pools/Pools.tsx,apps/web/src/components/MiniUniversalFarms/components/PoolsTable.tsx"
+  },
   "No data for this chart.": "Walang data para sa chart na ito.",
   "Please wait for a moment or try refreshing the page.": "Maghintay sandali o subukang i-refresh ang page.",
   "Volume %timeBase%": "Volume %timeBase%",
   "Fees %timeBase%": "Mga Fee %timeBase%",
   "Weekly Rewards": "Lingguhang Mga Reward",
   "APR %timeBase%": "APR %timeBase%",
-  "Pool id": "ID ng Pool",
-  "View pool charts": "Tingnan ang mga chart ng pool",
+  "Pool id": {
+    "key": "Pool id",
+    "source": "Pool id",
+    "translation": "Pool id",
+    "hint": "found in 2 of files, see apps/solana/src/features/Pools/components/PoolTableColumns/ColumnsPoolName.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionItemsCard.tsx"
+  },
+  "View pool charts": {
+    "key": "View pool charts",
+    "source": "View pool charts",
+    "translation": "Tingnan ang mga chart ng pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/components/PoolTableColumns/ColumnsPoolActions.tsx"
+  },
   "This is a %type% with a %feeRate%% fee tier": "%type% ito na may %feeRate%% na fee tier",
   "V3 concentrated liquidity pool (CLMM)": "Concentrated na liquidity pool ng V3 (CLMM)",
-  "V2 standard liquidity pool (CPMM)": "Standard na liquidity pool ng V2 (CPMM)",
+  "V2 standard liquidity pool (CPMM)": {
+    "key": "V2 standard liquidity pool (CPMM)",
+    "source": "V2 standard liquidity pool (CPMM)",
+    "translation": "V2 standard liquidity pool (CPMM)",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/components/PoolListItem.tsx"
+  },
   "View Chart": "Tingnan ang Chart",
   "Week": "Linggo",
   "24h Volume": "24h Volume",
@@ -3528,16 +4063,31 @@
   "Period": "Panahon",
   "My created farms": "Mga nagawa kong farm",
   "You don’t have any concentrated liquidity positions.": "Wala kang anumang naka-concentrate na mga posisyon ng liquidity.",
-  "Go to pools": "Pumunta sa mga pool",
+  "Go to pools": {
+    "key": "Go to pools",
+    "source": "Go to pools",
+    "translation": "Pumunta sa mga pool",
+    "hint": "found in 2 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/TabClmm.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/TabStandard.tsx"
+  },
   "You don’t have any staked RAY.": "Wala kang anumang naka-stake na RAY.",
   "Go to Staking": "Pumunta sa Pag-stake",
   "You don’t have any standard liquidity positions.": "Wala kang anumang karaniwang mga posisyon ng liquidity.",
   "NFT Mint Address": "Mint Address ng NFT",
   "%subject% has been copied to clipboard": "Nakopya ang %subject% sa clipboard",
   "NFT address": "Address ng NFT",
-  "24h Pool Fee": "24h Pool Fee",
+  "24h Pool Fee": {
+    "key": "24h Pool Fee",
+    "source": "24h Pool Fee",
+    "translation": "24h Pool Fee",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail.tsx"
+  },
   "My Range": "Aking Range",
-  "Pending rewards are calculated based on the current pool size and the time since the last harvest.": "Kinakalkula ang mga pending na reward batay sa kasalukuyang laki ng pool at ang panahon simula nang huling harvest.",
+  "Pending rewards are calculated based on the current pool size and the time since the last harvest.": {
+    "key": "Pending rewards are calculated based on the current pool size and the time since the last harvest.",
+    "source": "Pending rewards are calculated based on the current pool size and the time since the last harvest.",
+    "translation": "Ang mga nakabinbing reward ay kinakalkula batay sa kasalukuyang laki ng pool at sa oras mula noong huling harvest.",
+    "hint": "found in 3 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail/PendingYield.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Staked/MobileStakeDetailDrawer.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Staked/PendingRewards.tsx"
+  },
   "Base/quote tokens have been switched to simplify data display.": "Pinagpalit ang mga base/quote token para mapasimple ang pagpapakita ng data.",
   "Create New Position": "Gumawa ng Bagong Posisyon",
   "Locked positions": "Mga naka-lock na posisyon",
@@ -3557,7 +4107,12 @@
   "Pending rewards": "Mga pending na reward",
   "You have unstaked LP tokens that could be staked in a farm. Stake now": "Na-unstake mo ang mga toke ng LP na puwedeng ma-stake sa isang farm. Mag-stake ngayon",
   "Rewards have ended for this farm. You can unstake your LP tokens.": "Tinapos na ang mga reward para sa farm na ito. Puwede mong i-unstake ang iyong mga token ng LP.",
-  "Estimated APR based on trading fees earned by the pool in the past 24H": "Tinantyang APR batay sa mga trading fee na nakuha ng pool sa nakalipas na 24H",
+  "Estimated APR based on trading fees earned by the pool in the past 24H": {
+    "key": "Estimated APR based on trading fees earned by the pool in the past 24H",
+    "source": "Estimated APR based on trading fees earned by the pool in the past 24H",
+    "translation": "Tinatayang APR batay sa mga trading fee na kinita ng pool sa nakalipas na 24H",
+    "hint": "found in 2 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Standard/ItemDetail/StandardPoolAPR.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Standard/StandardPoolRowItem.tsx"
+  },
   "Pooled %token%": "Naka-pool na %token%",
   "Locked position": "Naka-lock na posisyon",
   "View less": "Tingnan ang mas kaunti",
@@ -3570,7 +4125,12 @@
   "Connect wallet to see your positions.": "Ikonekta ang wallet para makita ang mga posisyon mo.",
   "Idle tokens": "Mga idle na token",
   "Connect wallet to see your deposited assets.": "Ikonekta ang wallet para makita ang mga nakadeposito mong asset.",
-  "Assets by pool": "Mga asset ayon sa pool",
+  "Assets by pool": {
+    "key": "Assets by pool",
+    "source": "Assets by pool",
+    "translation": "Mga Asset ayon sa pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionOverview/components/PortfolioInfo.tsx"
+  },
   "Assets by token": "Mga asset ayon sa token",
   "All Type": "Lahat ng Uri",
   "CLMM": "CLMM",
@@ -3616,17 +4176,27 @@
   "Invalid max price": "Hindi valid na max na presyo",
   "Enter Lower Price": "Ilagay ang Lower na Presyo",
   "Invalid min price": "Hindi valid na min na presyo",
-  "Pool not found": "Hindi nakita ang pool",
+  "Pool not found": {
+    "key": "Pool not found",
+    "source": "Pool not found",
+    "translation": "Hindi nahanap ang pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/useValidate.ts"
+  },
   "Enter token amount": "Ilagay ang halaga ng token",
   "Enter upper price": "Ilagay ang upper na presyo",
   "Enter lower price": "Ilagay ang lower na presyo",
   "Enter current price": "Ilagay ang kasalukuyang presyo",
-  "Select pool fee tier": "Piliin ang tier ng pool fee",
-  "Select pool token 2": "Piliin ang token ng pool 2",
-  "Select pool token 1": "Piliin ang token ng pool 1",
+  "Select pool fee tier": {
+    "key": "Select pool fee tier",
+    "source": "Select pool fee tier",
+    "translation": "Pumili ng pool fee tier",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/useValidate.ts"
+  },
+  "Select pool token 2": "Pumili ng pool token 2",
+  "Select pool token 1": "Pumili ng pool token 1",
   "Enter min price": "Ilagay ang min na presyo",
   "Enter max price": "Ilagay ang max na presyo",
-  "Note: A creation fee of %subject% SOL is required for new pools.": "Tandaan: Kailangan ng %subject% SOL na fee sa paggawa para sa mga bagong pool.",
+  "Note: A creation fee of %subject% SOL is required for new pools.": "Paalala: Kinakailangan ng creation fee na %subject% SOL para sa mga bagong pool.",
   "Initial liquidity is too low, try increasing the amount.": "Masyadong mababa ang inisyal na liquidity, subukang taasan ang halaga.",
   "Start time cannot be set to a time in the past.": "Hindi puwedeng itakda ang oras ng simula sa nakalipas nang oras.",
   "%side% token balance is insufficient": "Hindi sapat ang %side% token na balanse",
@@ -3643,9 +4213,14 @@
   "To start, select a CLMM position below to lock. Ensure that position value and NFT mint  match the position you want to lock!": "Para magsimula, pumili ng posisyon ng CLMM sa ibaba para i-lock. Tiyaking tumutugma ang value ng posisyon at mint ng NFT sa posisyon na gusto mong i-lock!",
   "Are you sure you want to permanently lock/burn liquidity? You will be unable to access or withdraw underlying position assets, only trading fees earned will remain claimable.": "Sigurado ka bang gusto mong permanenteng i-lock/i-burn ang liquidity? Hindi mo magagawang ma-access o ma-withdraw ang kasamang mga asset na posisyon, tanging mga trading fee ang mananatiling nake-claim.",
   "This tool is for advanced users. For detailed instructions, read the guide for": "Para sa mga advance na user ang tool na ito. Para sa mga detalyadong tagubilin, basahin ang gabay para sa",
-  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": "Para sa mga advance na user ang tool na ito. Para sa mga detalyadong tagubilin, basahin ang gabay para sa mga Karaniwang pool.",
-  "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.": "Para sa mga advance na user ang tool na ito. Para sa mga detalyadong tagubilin, basahin ang gabay para sa mga CLMM o Karaniwang pool.",
-  "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.": "TANDAAN: Sinusuportahan lang ng feature na ito ang mga pool ng CPMM na ginawa sa UI. Hindi sinusuportahan sa ngayon ang mga mas lumang V4 pool.",
+  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": "Para sa mga advanced na user ang tool na ito. Para sa detalyadong mga tagubilin, basahin ang gabay para sa mga Standard pool.",
+  "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.": "Para sa mga advanced na user ang tool na ito. Para sa detalyadong mga tagubilin, basahin ang gabay para sa CLMM o Standard pools.",
+  "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.": {
+    "key": "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.",
+    "source": "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.",
+    "translation": "TANDAAN: Sinusuportahan lamang ng feature na ito ang mga CPMM pool na ginawa sa UI. Ang mga mas lumang V4 pool ay hindi suportado sa ngayon.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Lock/index.tsx"
+  },
   "Learn more here.": "Alamin ang higit pa rito.",
   "To start, select a standard AMM position below to lock. Ensure that position value and LP balance match the position you want to lock!": "Para magsimula, pumili ng posisyon ng karaniwang AMM sa ibaba para i-lock. Tiyaking tumutugma ang value ng posisyon at balanse ng LP sa posisyon na gusto mong i-lock!",
   "Price impact for this swap is %percent%": "%percent% ang epekto ng presyo para sa swap na ito",
@@ -3673,9 +4248,24 @@
   "Search by token name/address, pool type (e.g. clamm, lbamm), features (e.g. dynamic fees), or pool address. Example: 'bnb usdt infinity clamm'": "Maghanap ayon sa pangalan/address ng token, uri ng pool (hal. clamm, lbamm), mga feature (hal. mga dynamic fee), o pool address. Halimbawa: 'bnb usdt infinity clamm'",
   "Expanding Search..": "Pinapalawak ang Paghahanap..",
   "To proceed, please type the word \"%word%\"": "Para magpatuloy, paki-type ang salitang \"%word%\"",
-  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.": "Nagpapakita ang presyo ng pool ng kapansin-pansing pagbabago sa kasalukuyang mga rate ng market (%slippage%). Pinapataas nito ang panganib ng pagkalugi mula sa arbitrage.",
-  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.": "Nagpapakita ang presyo ng pool ng kapansin-pansing pagbabago sa kasalukuyang mga rate ng market (%slippage%). Pinapataas nito ang panganib ng pagkalugi mula sa arbitrage. Magpatuloy nang may pag-iingat.",
-  "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.": "Kasama sa ipinapakitang mga halaga ang mga fee. Sa mga LBAMM pool, idinadagdag sa mga pool reserve ang mga naipong fee.",
+  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.": {
+    "key": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.",
+    "source": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.",
+    "translation": "Ang presyo ng pool ay nagpapakita ng malaking pagkakaiba mula sa kasalukuyang market rates (%slippage%). Pinapataas nito ang panganib ng pagkalugi mula sa arbitrage.",
+    "hint": "found in 1 of files, see apps/web/src/views/AddLiquidityInfinity/components/SubmitButton.tsx"
+  },
+  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.": {
+    "key": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.",
+    "source": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.",
+    "translation": "Nagpapakita ang presyo ng pool ng malaking pagkakaiba sa kasalukuyang market rates (%slippage%). Pinapataas nito ang panganib ng pagkalugi mula sa arbitrage. Magpatuloy nang may pag-iingat.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
+  "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.": {
+    "key": "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.",
+    "source": "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.",
+    "translation": "Kasama sa mga ipinapakitang halaga ang mga fee. Sa mga LBAMM pool, ang mga naipon na fee ay idinadagdag pabalik sa mga reserba ng pool.",
+    "hint": "found in 2 of files, see apps/web/src/views/PositionInfinity/InfinityBinPosition.tsx,apps/web/src/views/RemoveLiquidityInfinity/components/RemoveBinPosition.tsx"
+  },
   "Invalid wallet address": "Hindi valid na address ng wallet",
   "Send": "Ipadala",
   "Insufficient balance": "Hindi sapat na balanse",
@@ -3696,20 +4286,30 @@
   "Couldn't retrieve token info. Please try again!": "Hindi ma-retrieve ang impormasyon ng token. Pakisubukan ulit!",
   "Amount you are guaranteed to receive.": "Halagang garantisadong matatanggap mo.",
   "Fees saved on PancakeSwap compared to major DEXs charging interface fees.": "Mga fee na natipid sa PancakeSwap kumpara sa mga pangunahing DEX na sumisingil ng mga interface fee.",
-  "The change in pool price caused by your swap.": "Ang pagbabago sa presyo ng pool na sanhi ng pag-swap mo.",
+  "The change in pool price caused by your swap.": {
+    "key": "The change in pool price caused by your swap.",
+    "source": "The change in pool price caused by your swap.",
+    "translation": "Ang pagbabago sa presyo ng pool na sanhi ng iyong swap.",
+    "hint": "found in 1 of files, see apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Estimated time to complete this transaction.": "Tinantyang oras para makumpleto ang transaksyong ito.",
   "Retry with lower input amount!": "Subukan ulit gamit ang mas mababang input amount!",
   "Developer Doc": "Doc ng Developer",
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Makakuha ng Mga Falcon Mile!",
-  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": {
+    "key": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+    "source": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+    "translation": "Kumikita ang mga LP ng %multiplier%x Falcon's Miles batay sa kabuuang TVL na idinagdag sa pool. Ang Miles ay na-a-accrue lamang sa mga position na nasa loob ng 0.95 hanggang 1.05 na range.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/FarmStatusDisplay/index.tsx,apps/web/src/views/universalFarms/components/RewardInfoCard/index.tsx"
+  },
   "Enter value between %min% and %max%": "Maglagay ng value sa pagitan ng %min% at %max%",
   "balance not enough": "hindi sapat ang balanse",
   "Select base token": "Pumili ng base token",
   "Select quote token": "Pumili ng quote token",
   "Enter order size": "Maglagay ng laki ng order",
   "Enter price tick": "Maglagay ng presyo ng tick",
-  "Create a farm for any live pool": "Gumawa ng farm para sa anumang live pool",
+  "Create a farm for any live pool": "Gumawa ng farm para sa anumang live na pool",
   "You can add up to %count% reward tokens.": "Puwede kang magdagdag ng hanggang %count% (na) reward token.",
   "Reward Token %index%": "Reward Token %index%",
   "Updated": "Na-update",
@@ -3721,8 +4321,18 @@
   "Please type the word \"confirm\" to continue with this swap.": "Paki-type ang salitang \"kumpirmahin\" para magpatuloy sa swap na ito.",
   "Computing": "Nagko-compute",
   "Swap %amountA% %symbolA% for %amountB% %symbolB%.": "Mag-swap ng %amountA% %symbolA% para sa %amountB% %symbolB%.",
-  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "Wala pang reward na iha-harvest. Tingnan sa ibang pagkakataon — lalaki ang kita mo sa pag-trade ng mga user sa pool na ito.",
-  "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": "Makikita ang iyong Pool sa Listahan ng Pool sa loob ng halos 5 minuto, at puwede mo ring tingnan ang idinagdag mong posisyon sa tab na Aking Posisyon. Kinakatawan ang pool na ito ng NFT—huwag itong i-burn o ilipat, dahil kailangan ito para panatilihin ang pagmamay-ari ng posisyong ito.",
+  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": {
+    "key": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+    "source": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+    "translation": "Wala pang reward na pwedeng i-harvest. Bumalik mamaya — lalago ang iyong mga kita habang nagte-trade ang mga user sa pool na ito.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail/PendingYield.tsx"
+  },
+  "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": {
+    "key": "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.",
+    "source": "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.",
+    "translation": "Lalabas ang iyong Pool sa Pool List sa loob ng humigit-kumulang 5 minuto, at maaari mo ring tingnan ang iyong idinagdag na position sa ilalim ng My Position tab. Ang pool na ito ay kinakatawan ng isang NFT—mangyaring huwag itong i-burn o i-transfer, dahil kailangan ito upang mapanatili ang pagmamay-ari ng position.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessWithLockModal.tsx"
+  },
   "Decrease Reward Rate": "Bawasan ang Rate ng Reward",
   "Amount and days cannot both be zero": "Hindi puwedeng zero pareho ang halaga at mga araw",
   "Split Display": "Naka-split na Display",
@@ -3740,7 +4350,12 @@
   "Trade Fees": "Mga Trade Fee",
   "Farm Rewards": "Mga Reward ng Farm",
   "Unsupported protocol: %protocol%": "Hindi sinusuportahang protocol: %protocol%",
-  "Pool Features": "Mga Feature ng Pool",
+  "Pool Features": {
+    "key": "Pool Features",
+    "source": "Pool Features",
+    "translation": "Mga Feature ng Pool",
+    "hint": "found in 3 of files, see apps/web/src/components/PoolInfoHeader/index.tsx,apps/web/src/views/PoolDetail/components/PoolFeaturesModal.tsx,apps/web/src/views/PoolDetail/components/PoolInfo.tsx"
+  },
   "Total Value Locked (TVL)": "Kabuuang Value na Naka-lock (TVL)",
   "Total Liquidity": "Kabuuang Liquidity",
   "Total Farm Earnings": "Kabuuang Mga Kinita ng Farm",
@@ -3749,7 +4364,12 @@
   "Price Range (Min/Max)": "Range ng Presyo (Min/Max)",
   "No positions found": "Walang nakitang posisyon",
   "Harvesting...": "Hina-harvest...",
-  "Pool feature": "Feature ng pool",
+  "Pool feature": {
+    "key": "Pool feature",
+    "source": "Pool feature",
+    "translation": "Feature ng Pool",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolFeaturesBadge.tsx"
+  },
   "Farm rewards": "Mga reward ng farm",
   "Edit farm": "I-edit ang farm",
   "Create farm": "Gumawa ng farm",
@@ -3825,7 +4445,12 @@
   "Just sent you %totalUsd%! 🎉 Tap this link and to claim it: 👉 %claimLink%\n\nPlease connect your wallet to claim it!\n\nAlternatively, you can manually enter the code %code% on PancakeSwap wallet to claim.": "Pinadalhan ka ng %totalUsd%! 🎉 I-tap ang link na ito para i-claim ito: 👉 %claimLink%\n\nPakikonekta ang wallet mo para i-claim ito!\n\nO kaya, puwede mo ring manual na ilagay ang code %code% sa PancakeSwap wallet para i-claim.",
   "Chart Information": "Impormasyon ng Chart",
   "The price data displayed is for reference only and may not reflect exact trading prices.": "Reperensya lang ang data ng presyo na ipinapakita at posibleng hindi ipinapakita ang eksaktong mga presyo ng pag-trade.",
-  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": "Ipinapakita ng chart na ito ang naka-aggregate na data ng presyo mula sa maraming pinagmulan. Posibleng mag-iba ang aktwal na output na mga halaga para sa isang request ng swap o mga presyo mula sa isang partikular na PancakeSwap pool.",
+  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": {
+    "key": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.",
+    "source": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.",
+    "translation": "Ipinapakita ng chart na ito ang pinagsama-samang data ng presyo mula sa iba't ibang source. Maaaring mag-iba ang mga aktwal na halaga ng output para sa isang swap request o mga presyo mula sa isang partikular na PancakeSwap pool.",
+    "hint": "found in 1 of files, see apps/web/src/components/Chart/AggregatePricingModal.tsx"
+  },
   "Provided by <0>HashDit</0>": "Ibinigay ng <0>HashDit</0>",
   "Learn more about risk rating <0>here.</0>": "Alamin pa ang tungkol sa rating ng panganib <0>dito.</0>",
   "Risk scan results are provided by a third party, <0>HashDit</0>": "Ang mga resulta ng pag-scan ng panganib ay mula sa isang third party, <0>HashDit</0>",
@@ -3855,7 +4480,11 @@
   "solana.removed_liquidity_desc": "Inalis ang %amountA% %symbolA% at %amountB% %symbolB%.",
   "solana.update_rewards": "I-update ang Mga Reward",
   "solana.update_rewards_in_pool": "I-update ang mga reward sa %pool%.",
-  "solana.create_pool": "Gumawa ng Pool",
+  "solana.create_pool": {
+    "key": "solana.create_pool",
+    "source": "Create Pool",
+    "translation": "Gumawa ng Pool"
+  },
   "solana.create_v3_pool": "Gumawa ng V3 pool",
   "solana.create_new_farm": "Gumawa ng Bagong Farm",
   "solana.farm_id": "ID: %poolId%",
@@ -3870,14 +4499,24 @@
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Kasalukuyang hindi sinusuportahan ang TWAP at Limitahan ang mga order para sa mga wallet ng Smart Account.",
   "Create your Wallet with Social Login": "Gawin ang Wallet mo gamit ang Social Login",
   "Important Notice: %chain% Sunset": "Mahalagang Notice: Sunset ng %chain%",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "Ihihinto na ang %chain% sa %date%. Pakitiyak na aalisin ang iyong liquidity sa lahat ng pool bago ang deadline.",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": {
+    "key": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
+    "source": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
+    "translation": "Ang %chain% ay ititigil sa %date%. Pakisigurong alisin ang iyong liquidity mula sa lahat ng pool bago ang deadline.",
+    "hint": "found in 1 of files, see apps/web/src/components/Liquidity/LiquiditySunsetWarning.tsx"
+  },
   "TransactionExecutionError: The requested account and / or method has not been authorised by the user. Please make sure your wallet is updated to the latest version.": "TransactionExecutionError: The requested account and / or method has not been authorised by the user. Please make sure your wallet is updated to the latest version.",
   "Solana swap submitted": "Naipadala ang Solana swap",
   "Smart contract wallets are currently not supported on Bridge. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on Bridge. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Global Settings": "Pangkalahatang Setting",
   "EVM Settings": "Mga Setting ng EVM",
   "Solana Settings": "Mga Setting ng Solana",
-  "Loading more pools...": "Naglo-load ng higit pang mga pool...",
+  "Loading more pools...": {
+    "key": "Loading more pools...",
+    "source": "Loading more pools...",
+    "translation": "Naglo-load ng marami pang pool...",
+    "hint": "found in 1 of files, see apps/web/src/components/MiniUniversalFarms/components/PoolsTable.tsx"
+  },
   "Try Zap": "Subukan ang Zap",
   "to automatically balance and provide V3 liquidity in one click.": "para awtomatikong magbalanse at magbigay ng V3 liquidity sa isang click.",
   "Set position range": "Itakda ang saklaw ng posisyon",
@@ -4003,22 +4642,57 @@
   "twap.confirm": "Kumpirmahin",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} for {dstAmount} {dstToken}",
   "Create Pool": "Gumawa ng Pool",
-  "Create Liquidity Pool": "Gumawa ng Liquidity Pool",
-  "Select the DEX type of the liquidity pool": "Piliin ang uri ng DEX ng liquidity pool",
+  "Create Liquidity Pool": {
+    "key": "Create Liquidity Pool",
+    "source": "Create Liquidity Pool",
+    "translation": "Gumawa ng Liquidity Pool",
+    "hint": "found in 2 of files, see apps/web/src/config/constants/meta.ts,apps/web/src/views/CreateLiquidityPool/components/BreadcrumbNav.tsx"
+  },
+  "Select the DEX type of the liquidity pool": {
+    "key": "Select the DEX type of the liquidity pool",
+    "source": "Select the DEX type of the liquidity pool",
+    "translation": "Piliin ang DEX type ng liquidity pool.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
   "Infinity Pool": "Infinity Pool",
   "V3 Pool": "V3 Pool",
   "V2 Pool": "V2 Pool",
-  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
-  "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
-  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": {
+    "key": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
+    "source": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
+    "translation": "Sumusuporta sa maraming uri ng pool na may gas-efficient na disenyo, mga hook, at flexible na liquidity options. Mainam para sa mga advanced na strategy at pag-maximize ng kita.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
+  "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": {
+    "key": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
+    "source": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
+    "translation": "Mga advanced na pool kung saan maaari kang pumili ng mga partikular na price range para magbigay ng liquidity, na kumikita ng mas mataas na fee sa iyong napiling range.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
+  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": {
+    "key": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+    "source": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+    "translation": "Mga classic na pool na nagbibigay-daan sa iyong magbigay ng liquidity sa buong price range para sa stable at predictable na trading fees.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
   "Use Market Price": "Gamitin ang Presyo ng Market",
   "%assetA% = 1 %assetB%": "%assetA% = 1 %assetB%",
   "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.",
   "Initial Price": "Paunang Presyo",
   "Dynamic Fee": "Dinamikong Bayarin",
   "Infinity Pools are not supported on this chain": "Hindi sinusuportahan ang Infinity Pools sa chain na ito",
-  "Successfully created pool": "Matagumpay na nalikha ang pool",
-  "A pool with selected settings already exists. Please add liquidity instead.": "A pool with selected settings already exists. Please add liquidity instead.",
+  "Successfully created pool": {
+    "key": "Successfully created pool",
+    "source": "Successfully created pool",
+    "translation": "Matagumpay na nagawa ang pool.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/hooks/V2/useV2CreateForm.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V3/useV3CreateForm.tsx"
+  },
+  "A pool with selected settings already exists. Please add liquidity instead.": {
+    "key": "A pool with selected settings already exists. Please add liquidity instead.",
+    "source": "A pool with selected settings already exists. Please add liquidity instead.",
+    "translation": "Mayroon nang pool na may mga napiling setting. Magdagdag na lang ng liquidity.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/V3/MessagePoolInitialized.tsx"
+  },
   "Insufficient SOL balance to complete transaction": "Hindi sapat na balanse ng SOL para makumpleto ang transaksyon",
   "Priority Fee Settings": "Mga Setting ng Priority Fee",
   "Connect Solana Wallet": "Ikonekta ang Solana Wallet",
@@ -4159,10 +4833,25 @@
   "PancakeSwap’s <0>Initial Farm Offering (IFO)</0> is a platform to launch new tokens.": "Ang <0>Initial Farm Offering (IFO)</0> ng PancakeSwap ay isang plataporma para maglunsad ng mga bagong token.",
   "Pcs's": "Pcs's",
   "ifo-what-is-ifo-description-1": "<p> Maaaring bumili ang mga user ng mga token ng proyekto gamit ang %symbol%, habang ang mga proyekto naman ay nakakakuha ng liquidity, visibility, at direktang access sa aming komunidad. </p>",
-  "syrup-pools-desc": "Hinahayaan ka ng Syrup Pools na mag-stake ng CAKE para kumita ng mga reward. Sa pagdeposito ng CAKE sa isang Syrup Pool, makakatanggap ka ng mga token mula sa mga partner project, depende sa pool.",
-  "syrup-pools-instructions": "Pumunta sa seksyon ng <0>Syrup Pools</0> sa PancakeSwap, pumili ng pool, at magdeposito ng CAKE. Ang iyong mga reward ay awtomatikong magsisimulang mag-ipon. Maaari mong i-unstake ang iyong CAKE anumang oras.",
+  "syrup-pools-desc": {
+    "key": "syrup-pools-desc",
+    "source": "Syrup Pools let you stake CAKE to earn rewards. By depositing CAKE into a Syrup Pool, you can receive tokens from partner projects, depending on the pool.",
+    "translation": "Hinahayaan ka ng mga Syrup Pool na mag-stake ng CAKE para kumita ng mga reward. Sa pagdeposito ng CAKE sa isang Syrup Pool, maaari kang makatanggap ng mga token mula sa mga partner na proyekto, depende sa pool.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
+  "syrup-pools-instructions": {
+    "key": "syrup-pools-instructions",
+    "source": "Go to the <0>Syrup Pools</0> section on PancakeSwap, choose a pool, and deposit CAKE. Your rewards will start accumulating automatically. You can unstake your CAKE anytime.",
+    "translation": "Pumunta sa <0>Syrup Pools</0> na seksyon sa PancakeSwap, pumili ng pool, at magdeposito ng CAKE. Awtomatikong magsisimulang maipon ang iyong mga reward. Maaari mong i-unstake ang iyong CAKE anumang oras.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "rewards-list": "<0>Partner Token Pools</0>: Kumita ng mga token mula sa mga partner project sa pag-stake ng CAKE (hal., Mag-stake ng CAKE para kumita ng PEPE). <1>Ang mga reward ay dapat i-claim nang mano-mano sa pag-click ng button na \"Harvest\" sa ilalim ng \"Details\" para sa bawat pool.</1>",
-  "fees-description": "Walang <0>platform fees</0> para sa pag-stake o pag-unstake sa Syrup Pools. Gayunpaman, <1>ang karaniwang blockchain gas fees</1> ay sasakupin pa rin kapag gumagawa ng mga transaksyon, tulad ng pagdedeposito, pag-harvest ng mga reward, o pag-unstake ng CAKE.",
+  "fees-description": {
+    "key": "fees-description",
+    "source": "There are <0>no platform fees</0> for staking or unstaking in Syrup Pools. However, <1>standard blockchain gas fees</1> will still apply when making transactions, such as depositing, harvesting rewards, or unstaking CAKE.",
+    "translation": "Walang <0>platform fees</0> para sa pag-stake o pag-unstake sa mga Syrup Pool. Gayunpaman, ang <1>standard na blockchain gas fees</1> ay mananatiling may-bisa kapag gumagawa ng mga transaksyon, tulad ng pagdedeposito, pag-harvest ng mga reward, o pag-unstake ng CAKE.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "unclaimed-rewards": "Ang iyong mga reward ay patuloy na mag-iipon habang naka-stake ang iyong CAKE. Maaari mo itong i-claim anumang oras sa pag-click ng button na \"<0>Harvest</0>\".",
   "legacy-pools": "Ang <0>Auto CAKE at Manual CAKE Pools</0> ay na-upgrade na sa <1>veCAKE</1> staking. Kung mayroon ka pang CAKE na naka-stake sa mga legacy pool, kailangan mong <2>mag-migrate sa veCAKE</2> para patuloy na kumita ng mga reward. <3>Alamin kung paano mag-migrate dito</3>",
   "Gift Failed to Claim": "Nabigong I-claim ang Regalo",

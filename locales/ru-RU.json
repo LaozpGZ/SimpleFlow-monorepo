@@ -278,7 +278,12 @@
   "Won": "Выиграно",
   "Entered": "Участвую",
   "Connect your wallet to view your prediction history": "Чтобы посмотреть историю прогнозов, подключите кошелек",
-  "You’ve already staked the maximum amount you can stake in this pool!": "Вы уже вложили максимально возможную в этом пуле сумму!",
+  "You’ve already staked the maximum amount you can stake in this pool!": {
+    "key": "You’ve already staked the maximum amount you can stake in this pool!",
+    "source": "You’ve already staked the maximum amount you can stake in this pool!",
+    "translation": "Вы уже разместили в стейкинге максимальную сумму, которую можно внести в этот пул!",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/withStakeActions.tsx"
+  },
   "Markets Paused": "Рынки приостановлены",
   "Prediction markets have been paused due to an error.": "Рынки прогнозов приостановлены из-за ошибки.",
   "All open positions have been cancelled.": "Все открытые позиции отменены.",
@@ -331,34 +336,74 @@
   "The CAKE from the participation fee will be burnt as part of the weekly token burn.": "CAKE из комиссии за участие будут сожжены в рамках еженедельного сжигания токенов.",
   "How can I get an achievement for participating in the IFO?": "Как можно получить достижение за участие в IFO?",
   "Contract Enabled": "Контракт активирован",
-  "You can now stake in the %symbol% pool!": "Теперь вы можете вкладывать в пул %symbol%!",
+  "You can now stake in the %symbol% pool!": {
+    "key": "You can now stake in the %symbol% pool!",
+    "source": "You can now stake in the %symbol% pool!",
+    "translation": "Теперь вы можете отправить в стейкинг в пуле %symbol%!",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/hooks/useApprove.tsx"
+  },
   "Please try again. Confirm the transaction and make sure you are paying enough gas!": "Попробуйте еще раз. Подтвердите транзакцию и проверьте, что вы оплачиваете достаточно газа!",
   "Start earning": "Начать зарабатывать",
   "Unlock liquidity while earning rewards": "Разблокируйте ликвидность и зарабатывайте вознаграждения",
   "Liquid Staking": "Вложение ликвидности",
   "Unstaked!": "Вложение возвращено!",
   "Staked!": "Вложено!",
-  "Your funds have been staked in the pool": "Ваши средства вложены в пул",
+  "Your funds have been staked in the pool": {
+    "key": "Your funds have been staked in the pool",
+    "source": "Your funds have been staked in the pool",
+    "translation": "Ваши средства отправлены в стейкинг в пуле.",
+    "hint": "found in 1 of files, see apps/web/src/views/FixedStaking/components/StakingModalTemplate.tsx"
+  },
   "Your earnings have also been harvested to your wallet": "Ваши поступления также собраны в кошелек",
-  "Stake in Pool": "Вложение в пул",
+  "Stake in Pool": {
+    "key": "Stake in Pool",
+    "source": "Stake in Pool",
+    "translation": "Стейкинг в пуле",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "Balance: %balance%": "Баланс: %balance%",
   "Cancelled": "Отменено",
   "Harvested": "Собрано",
   "Close Window": "Закрыть окно",
   "Insufficient %symbol% balance": "Недостаточный баланс %symbol%",
-  "You’ll need %symbol% to stake in this pool!": "Вам понадобятся %symbol% для вложения в этот пул!",
-  "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.": "Купите %symbol% или проверьте, не находятся ли ваши %symbol% в другом пуле или LP.",
+  "You’ll need %symbol% to stake in this pool!": {
+    "key": "You’ll need %symbol% to stake in this pool!",
+    "source": "You’ll need %symbol% to stake in this pool!",
+    "translation": "Вам понадобится %symbol% для стейкинга в этом пуле!",
+    "hint": "found in 2 of files, see apps/web/src/views/Pools/components/Modals/NotEnoughTokensModal.tsx,packages/uikit/src/widgets/Modal/NotEnoughTokensModal.tsx"
+  },
+  "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.": {
+    "key": "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.",
+    "source": "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.",
+    "translation": "Купите немного %symbol% или убедитесь, что ваши %symbol% не находятся в другом пуле или LP.",
+    "hint": "found in 2 of files, see apps/web/src/views/Pools/components/Modals/NotEnoughTokensModal.tsx,packages/uikit/src/widgets/Modal/NotEnoughTokensModal.tsx"
+  },
   "Buy": "Купить",
   "Locate Assets": "Найти активы",
   "%symbol% required": "Необходимо %symbol%",
   "Your %symbol% earnings have also been harvested to your wallet!": "Ваши поступления %symbol% также собраны в кошелек!",
-  "Your %symbol% funds have been staked in the pool!": "Ваши средства %symbol% вложены в пул!",
-  "Max stake for this pool: %amount% %token%": "Максимальный вклад в этом пуле: %amount% %token%",
+  "Your %symbol% funds have been staked in the pool!": {
+    "key": "Your %symbol% funds have been staked in the pool!",
+    "source": "Your %symbol% funds have been staked in the pool!",
+    "translation": "Ваши средства в %symbol% были размещены в пуле!",
+    "hint": "found in 2 of files, see apps/aptos/components/Pools/components/PoolCard/StakeModalContainer.tsx,apps/web/src/views/Pools/components/Modals/StakeModal.tsx"
+  },
+  "Max stake for this pool: %amount% %token%": {
+    "key": "Max stake for this pool: %amount% %token%",
+    "source": "Max stake for this pool: %amount% %token%",
+    "translation": "Максимальный стейк для этого пула: %amount% %token%",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "Maximum total stake: %amount% %token%": "Общий максимальный вклад: %amount% %token%",
   "Auto": "Автоматически",
   "Manual": "Вручную",
   "Earn CAKE, stake CAKE": "Зарабатывайте CAKE, вкладывайте CAKE",
-  "Syrup Pools": "Пулы Syrup",
+  "Syrup Pools": {
+    "key": "Syrup Pools",
+    "source": "Syrup Pools",
+    "translation": "Пулы Syrup",
+    "hint": "found in 3 of files, see apps/aptos/components/Pools/index.tsx,apps/web/src/components/Menu/config/config.ts,apps/web/src/views/Pools/index.tsx"
+  },
   "Best round: #%roundId%": "Лучший раунд: № %roundId%",
   "View Reclaimed & Won": "Посмотреть возвращенные и выигранные",
   "This round was automatically cancelled due to an error. If you entered a position, please reclaim your funds below.": "Этот раунд был автоматически отменен из-за ошибки. Если вы заняли какую-либо позицию, верните средства ниже.",
@@ -505,7 +550,12 @@
   "Screenshot or press & hold the image to share!": "Чтобы поделиться, сделайте скриншот или нажмите и удерживайте изображение!",
   "Block %num%": "Блок %num%",
   "Profile Pic": "Изображение в профиле",
-  "Pool status": "Статус пула",
+  "Pool status": {
+    "key": "Pool status",
+    "source": "Pool status",
+    "translation": "Статус пула",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/PoolTabButtons.tsx"
+  },
   "Old": "Старые",
   "Transfer": "Перевести",
   "Congratulations!": "Поздравляем!",
@@ -521,10 +571,18 @@
   "%symbol% to receive": "%symbol% к получению",
   "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your": "Эта транзакция не пройдет из-за движения цены или комиссии за перевод. Попробуйте повысить",
   "slippage tolerance.": "допустимый слипедж.",
-  "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!": "Отяично! Празднуем победу Сиропной бури в Пасхальной битве!",
+  "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!": {
+    "key": "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!",
+    "source": "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!",
+    "translation": "Великолепно! Празднуем победу Syrup Storm в Пасхальной битве!"
+  },
   "Melting Easter eggs and melting hearts!": "Тают пасхальные яйца и сердца!",
   "Watch out for Flipsie’s spatula smash!": "Остерегайтесь метких ударов кулинарной лопаткой от Флипси!",
-  "Do you like chocolate with your syrup? Go long!": "Вам нравится шоколад в сиропе? Бесподобно!",
+  "Do you like chocolate with your syrup? Go long!": {
+    "key": "Do you like chocolate with your syrup? Go long!",
+    "source": "Do you like chocolate with your syrup? Go long!",
+    "translation": "Любите шоколад с сиропом? Играйте на повышение!"
+  },
   "Happy Niu Year! This bunny’s excited for the year of the bull (market!)": "Счастливого Ниу-вого года! Этот зайчик в восторге от наступления бычьих дней!",
   "Oopsie daisy! Hiccup's had a bit of an accident. Poor little fella.": "Ой! У Икоты проблемы. Бедняжка.",
   "Sunny is always cheerful when there are pancakes around. Smile!": "Санни всегда радостно, когда поблизости есть панкейки. Улыбочку!",
@@ -532,17 +590,34 @@
   "Nommm... Oh hi, I'm just meditating on the meaning of CAKE.": "Ням-ням-ням… Привет! Я тут медитирую над значением слова CAKE.",
   "Three guesses what's put that twinkle in those eyes! (Hint: it's CAKE)": "Угадайте с трех раз, почему блестят эти глазки! (Подсказка: это CAKE)",
   "These bunnies love nothing more than swapping pancakes. Especially on BSC.": "Эти зайчики больше всего в жизни любят обменивать панкейки. Особенно на BSC.",
-  "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?": "На этого зайчика льется дождь из сиропа, но он, похоже, не возражает. Его можно понять, правда?",
+  "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?": {
+    "key": "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?",
+    "source": "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?",
+    "translation": "На этого кролика льется сиропный дождь, но он, кажется, не против. Разве можно его винить?"
+  },
   "These bunnies like their pancakes with blueberries. What's your favorite topping?": "Этим зайчикам нравятся панкейки с черникой. А с чем вы едите панкейки?",
   "Love makes the world go 'round... but so do pancakes. And these bunnies know it.": "Любовь правит миром… И панкейки тоже. А зайчики знают об этом.",
-  "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.": "Сверкающий сироп, панкейки и даже лотерейные билеты! Зайчик в восторге!",
-  "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!": "Приближается буря! Поберегитесь! Быки в страхе отступают перед наплывом сиропа!",
+  "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.": {
+    "key": "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.",
+    "source": "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.",
+    "translation": "Игристый сироп, панкейки и даже лотерейные билеты! Этому кролику это очень нравится."
+  },
+  "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!": {
+    "key": "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    "source": "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    "translation": "Надвигается буря! Берегись! Эти быки несутся в сиропном потоке!"
+  },
   "The flippening is coming. Don't get in these bunnies' way, or you'll get flipped, too!": "Грядет переворот. Не попадайтесь на глаза этим зайчикам, а то вас тоже перевернут!",
   "Can you stand the heat? Stay out of the kitchen or you might get burned to a crisp!": "Вам не жарко? Не задерживайтесь на кухне, иначе можно зажариться до шкварок!",
   "%ratio%% of total sale": "%ratio%% от общих продаж",
   "Your %symbol% earnings have been sent to your wallet!": "Ваши поступления %symbol% отправлены в кошелек!",
   "Stake %symbol%": "Вложить %symbol%",
-  "You must harvest and compound your earnings from this pool manually.": "Собирать и домешивать поступления из этого пула необходимо вручную.",
+  "You must harvest and compound your earnings from this pool manually.": {
+    "key": "You must harvest and compound your earnings from this pool manually.",
+    "source": "You must harvest and compound your earnings from this pool manually.",
+    "translation": "Вы должны собирать и реинвестировать свои доходы из этого пула вручную.",
+    "hint": "found in 3 of files, see apps/aptos/components/Pools/components/PoolCard/CardFooter.tsx,apps/aptos/components/Pools/components/PoolTable/ActionPanel.tsx,apps/web/src/views/Pools/components/PoolTypeTag.tsx"
+  },
   "Register": "Регистрация",
   "Contribute %symbol%": "Внести %symbol%",
   "Volume": "Объем",
@@ -559,12 +634,27 @@
   "Team Ranks": "Рейтинги команд",
   "Prizes": "Призы",
   "Rules": "Правила",
-  "Enable pool": "Включить пул",
+  "Enable pool": {
+    "key": "Enable pool",
+    "source": "Enable pool",
+    "translation": "Активировать пул",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/PoolsTable/ActionPanel/Stake.tsx"
+  },
   "Start staking": "Начать вложение",
-  "Search Pools": "Искать в пулах",
+  "Search Pools": {
+    "key": "Search Pools",
+    "source": "Search Pools",
+    "translation": "Поиск пулов",
+    "hint": "found in 2 of files, see apps/web/src/components/MiniUniversalFarms/MiniUniversalFarmsOverlay.tsx,packages/widgets-internal/pool/PoolControls.tsx"
+  },
   "Ends in": "До окончания",
   "Starts in": "До начала",
-  "Total amount of %symbol% staked in this pool": "Общая сумма %symbol%, вложенных в пул",
+  "Total amount of %symbol% staked in this pool": {
+    "key": "Total amount of %symbol% staked in this pool",
+    "source": "Total amount of %symbol% staked in this pool",
+    "translation": "Общее количество %symbol% в стейкинге в этом пуле",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/TotalStaked.tsx"
+  },
   "Max. stake per user": "Максимальное вложение на пользователя",
   "You have claimed your rewards!": "Вы получили вознаграждения!",
   "Already Collected": "Уже собрано",
@@ -626,7 +716,12 @@
   "Your voting power is determined by the amount of CAKE you held and the remaining duration on the fixed-term staking position (if you have one) at the block detailed below. CAKE held in other places does not contribute to your voting power.": "Ваше влияние в голосовании определяется количеством CAKE, удерживаемых вами, и оставшейся продолжительностью позиции вложения с фиксированным сроком (если она у вас есть) в блоке, указанном ниже. CAKE, удерживаемые в других местах, не учитываются.",
   "Wallet": "Кошелек",
   "CAKE BNB LP": "CAKE BNB LP",
-  "Other Syrup Pools": "Другие пулы Syrup",
+  "Other Syrup Pools": {
+    "key": "Other Syrup Pools",
+    "source": "Other Syrup Pools",
+    "translation": "Другие сиропные пулы",
+    "hint": "found in 1 of files, see apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Voting Power": "Влияние в голосовании",
   "You need at least %count% voting power to publish a proposal.": "Необходимый минимум влияния в голосовании для публикации предложения: %count%.",
   "Check voting power": "Проверить влияние в голосовании",
@@ -889,7 +984,12 @@
   "ROI at current rates": "ROI по текущему курсу",
   "Farm Multiplier": "Множитель фарминга",
   "“My Balance” here includes both LP Tokens in your wallet, and LP Tokens already staked in this farm.": "\"Мой баланс\" здесь включает в себя как LP-токены в кошельке, так и LP-токены, которые уже вложены в этот фарминг.",
-  "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.": "\"Мой баланс\" здесь включает в себя как %assetSymbol% в кошельке, так и %assetSymbol%, которые уже вложены в этот пул.",
+  "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.": {
+    "key": "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.",
+    "source": "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.",
+    "translation": "«Мой баланс» здесь включает как %assetSymbol% в вашем кошельке, так и %assetSymbol%, уже размещенные в этом пуле.",
+    "hint": "found in 1 of files, see packages/uikit/src/components/RoiCalculatorModal/RoiCalculatorModal.tsx"
+  },
   "APY (%compoundTimes%x daily compound)": "APY (%compoundTimes% x ежедневное домешивание)",
   "My Balance": "Мой баланс",
   "Staked for": "Вложено на",
@@ -993,7 +1093,12 @@
   "Your action has been requested and we are processing the funds. Please check back in a couple of hours to request withdrawal of funds.": "Ваше действие было запрошено, и мы обрабатываем средства. Вернитесь через пару часов, чтобы запросить снятие средств.",
   "Maximum %amount% %symbol%": "Максимум %amount% %symbol%",
   "Minimum %amount% %symbol%": "Минимум %amount% %symbol%",
-  "Maximum pool %amount% %symbol%": "Максимальный размер пула %amount% %symbol%",
+  "Maximum pool %amount% %symbol%": {
+    "key": "Maximum pool %amount% %symbol%",
+    "source": "Maximum pool %amount% %symbol%",
+    "translation": "Максимум пула: %amount% %symbol%",
+    "hint": "found in 1 of files, see apps/web/src/views/FixedStaking/components/StakingModalTemplate.tsx"
+  },
   "Maximum sold": "Максимальная сумма продажи",
   "Ends In": "До окончания",
   "The difference between the market price and estimated price due to trade size.": "Разница между рыночной ценой и расчетной ценой из-за размера сделки.",
@@ -1202,7 +1307,12 @@
   "Making neat stuff beyond her comprehension": "Творивших дивные дела.",
   "The bunnies were working in a big ol’ kitchen": "Зайчики трудились на старой кухне допоздна.",
   "Cooking hot pancakes for their big ol’ mission:": "Пекли горячие панкейки, и цель их была донельзя проста:",
-  "To drizzle in syrup and hand them out soon": "Спрыснуть их сиропом и раздать по одному,",
+  "To drizzle in syrup and hand them out soon": {
+    "key": "To drizzle in syrup and hand them out soon",
+    "source": "To drizzle in syrup and hand them out soon",
+    "translation": "Полить сиропом и скоро раздать",
+    "hint": "found in 1 of files, see apps/web/src/views/PancakeSquad/components/ArtistSection/config.tsx"
+  },
   "So that bunnies worldwide may fly to the moon.": "Чтобы зайцы по всему миру улетели на Луну.",
   "All Pancake Squad NFTs are allocated to Squad Ticket holders through a provably-fair system based on ChainLink at the time of minting.": "Все NFT PancakeSquad в момент чеканки распределяются держателям билетов PancakeSquad через доказуемо справедливую систему на базе ChainLink.",
   "Presale:": "Предпродажа:",
@@ -1285,7 +1395,12 @@
   "Sign up for battle and you’re guaranteed a prize!": "Зарегистрируйтесь на битву — и приз будет гарантирован!",
   "Compete with other teams for the highest trading volume!": "Соревнуйтесь с другими командами за наибольший объем торгов!",
   "Trading Competition": "Соревнование по торговлеТорговая битва",
-  "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!": "Для участия в следующем IFO вложите CAKE в соответствующий пул CAKE с фиксированным сроком!",
+  "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!": {
+    "key": "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!",
+    "source": "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!",
+    "translation": "Чтобы участвовать в следующем IFO, заблокируйте немного CAKE в пуле CAKE с фиксированным сроком стейкинга!",
+    "hint": "found in 1 of files, see apps/web/src/views/Ifos/components/IfoFoldableCard/IfoPoolCard/IfoCardTokens.tsx"
+  },
   "Learn more about iCAKE": "Подробнее про iCAKE",
   "For the basic sale, Max CAKE entry is capped by minimum between your average CAKE balance in the iCAKE, or the pool’s hard cap. To increase the max entry, Stake more CAKE into the iCAKE": "При базовой продаже максимум CAKE ограничен меньшим значением из двух: ваш средний баланс CAKE в iCAKE и жесткий лимит пула. Чтобы повысить этот максимум, вложите больше CAKE в iCAKE.",
   "You don’t have any iCAKE available for IFO public sale.": "У вас нет iCAKE для публичной продажи IFO.",
@@ -1293,7 +1408,12 @@
   "Start in": "До начала",
   "Exceeded max CAKE entry": "Превышен максимум CAKE",
   "Earn %asset%": "Зарабатывайте %asset%",
-  "IFO Pool": "Пул IFO",
+  "IFO Pool": {
+    "key": "IFO Pool",
+    "source": "IFO Pool",
+    "translation": "Пул IFO",
+    "hint": "found in 1 of files, see apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Chart": "Диаграмма",
   "You’ve successfully claimed tokens back.": "Токены возвращены.",
   "Stake CAKE to participate in IFOs": "Для участия в IFO вложите CAKE",
@@ -1317,15 +1437,35 @@
   "Learn How": "Инструкция",
   "Network": "Сеть",
   "Switch Network": "Переключить сеть",
-  "This pool requires active Pancake Profile and %amount% profile points.": "Для пула требуется активный профиль Pancake и очки профиля в количестве %amount%.",
-  "This pool requires active Pancake Profile": "Для пула требуется активный профиль Pancake.",
-  "This pool requires %amount% profile points.": "Для пула требуются очки профиля в количестве %amount%.",
+  "This pool requires active Pancake Profile and %amount% profile points.": {
+    "key": "This pool requires active Pancake Profile and %amount% profile points.",
+    "source": "This pool requires active Pancake Profile and %amount% profile points.",
+    "translation": "Для этого пула требуется активный профиль Pancake и %amount% очков профиля.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/ProfileRequirementWarning.tsx"
+  },
+  "This pool requires active Pancake Profile": {
+    "key": "This pool requires active Pancake Profile",
+    "source": "This pool requires active Pancake Profile",
+    "translation": "Для этого пула требуется активный профиль Pancake",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/ProfileRequirementWarning.tsx"
+  },
+  "This pool requires %amount% profile points.": {
+    "key": "This pool requires %amount% profile points.",
+    "source": "This pool requires %amount% profile points.",
+    "translation": "Для этого пула требуется %amount% очков профиля.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/ProfileRequirementWarning.tsx"
+  },
   "Requirement": "Требование",
   "Create Profile": "Создание профиля",
   "Go to Profile": "Перейти к профилю",
   "Profile Points": "Очки профиля",
   "You're using this NFT as your Pancake Profile picture": "Вы используете этот NFT как свое изображение профиля Pancake",
-  "You've already staked the maximum amount you can stake in this pool!": "Вы уже вложили максимально возможную в этом пуле сумму!",
+  "You've already staked the maximum amount you can stake in this pool!": {
+    "key": "You've already staked the maximum amount you can stake in this pool!",
+    "source": "You've already staked the maximum amount you can stake in this pool!",
+    "translation": "Вы уже внесли в стейкинг максимальную сумму для этого пула!",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/PoolsTable/ActionPanel/Stake.tsx"
+  },
   "Don't show this again": "Больше не показывать",
   "You're all set!": "Всё готово!",
   "Max. Tickets per wallet:": "Макс. билетов на кошелек:",
@@ -1335,16 +1475,31 @@
   "Unstaking LP Tokens and CAKE": "Возврат токенов LP и CAKE",
   "Stake in the new contract.": "Вложить на новый контракт.",
   "All the earned CAKE will be harvested to your wallet upon unstake.": "Все заработанные CAKE будут собраны в кошельке после возврата вложения.",
-  "Each farm and pool has to be individually enabled before staking.": "Перед вложением каждый фарм и пул нужно включить по отдельности.",
+  "Each farm and pool has to be individually enabled before staking.": {
+    "key": "Each farm and pool has to be individually enabled before staking.",
+    "source": "Each farm and pool has to be individually enabled before staking.",
+    "translation": "Перед стейкингом каждую ферму и пул необходимо активировать отдельно.",
+    "hint": "found in 1 of files, see apps/web/src/views/Migration/components/MigrationSticky.tsx"
+  },
   "Go to Stake": "Перейти к вложению",
   "Skip": "Пропустить",
-  "Please connect wallet to check your pools & farms status.": "Чтобы проверить статус пулов и фармов, подключите кошелек.",
+  "Please connect wallet to check your pools & farms status.": {
+    "key": "Please connect wallet to check your pools & farms status.",
+    "source": "Please connect wallet to check your pools & farms status.",
+    "translation": "Пожалуйста, подключите кошелёк, чтобы проверить статус ваших пулов и ферм.",
+    "hint": "found in 1 of files, see apps/web/src/views/Migration/components/MigrationSticky.tsx"
+  },
   "Please connect wallet to check your farms status.": "Чтобы проверить статус фармов, подключите кошелек.",
   "You are not currently staking in any farms that require migrations.": "У вас нет вложений в фармы, которые требуют миграции.",
   "Unstake All": "Забрать всё",
   "Old Farms": "Старые фармы",
   "Please note that this is the old BTT token, which has been swapped to the new BTT tokens in the following ratio:": "Обратите внимание: это старый токен BTT, который был обменен на новые токены BTT в следующем соотношении:",
-  "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.": "Пул был неправильно настроен. Заберите из него токены. Будет использован метод emergencyWithdraw. Токены вернутся в кошелек, но вознаграждение не будет получено.",
+  "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.": {
+    "key": "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.",
+    "source": "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.",
+    "translation": "Этот пул был настроен неправильно. Пожалуйста, выведите свои токены из него, будет использован метод экстренного вывода (emergencyWithdraw). Ваши токены будут возвращены на ваш кошелек, однако награды не будут получены.",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "For the private sale, each eligible participant will be able to commit any amount of CAKE up to the maximum commit limit, which is published along with the IFO voting proposal.": "При закрытой продаже каждый соответствующий требованиям участник сможет выделить любое количество CAKE, но не более максимальной суммы, которая сообщается вместе с предложением голосования по IFO.",
   "Meet any one of the following requirements to be eligible.": "Чтобы иметь право на участие, выполните любое из следующих требований.",
   "You are eligible to participate in this Private Sale!": "Вы можете участвовать в этой закрытой продаже!",
@@ -1462,7 +1617,12 @@
   "Don't see the farm you are staking?": "Не видите фарм, в который вкладываете?",
   "check out v1 farms": "посмотрите фармы v1",
   "Up to": "До",
-  "Looking for v1 CAKE syrup pools?": "Ищете пулы Syrup для CAKE v1?",
+  "Looking for v1 CAKE syrup pools?": {
+    "key": "Looking for v1 CAKE syrup pools?",
+    "source": "Looking for v1 CAKE syrup pools?",
+    "translation": "Ищете сиропные пулы CAKE v1?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/index.tsx"
+  },
   "Go to migration page": "Перейти на страницу миграции",
   "%asset% Staked": "Вложено: %asset%",
   "Add": "Добавить",
@@ -1497,7 +1657,12 @@
   "The price of token prizes ($CAKE and $DAR) in USD will be determined as per their BUSD pair price during the tally period.": "Цена в долл. США призов в токенах ($CAKE и $DAR) будет определена в соответствии с ценой соответствующей пары BUSD во время подсчета.",
   "Eligible pairs: DAR/BNB, CAKE/BNB, and CAKE/BUSD. Please note that the volume from limit orders will not be indexed.": "Допустимые пары: DAR/BNB, CAKE/BNB и CAKE/BUSD. Объем лимитных ордеров учитываться не будет.",
   "iCAKE": "iCAKE",
-  "Go to CAKE pool": "Перейти к пулу CAKE",
+  "Go to CAKE pool": {
+    "key": "Go to CAKE pool",
+    "source": "Go to CAKE pool",
+    "translation": "Перейти в пул CAKE",
+    "hint": "found in 1 of files, see apps/web/src/views/Ifos/components/IfoFoldableCard/StakeVaultButton.tsx"
+  },
   "April": "Апрель",
   "Easter Battle": "Пасхальная битва",
   "$200,000 in Prizes!": "Призовой фонд на 200 000 долл. США!",
@@ -1588,7 +1753,12 @@
   "Flexible CAKE Staking": "Гибкое вложение CAKE",
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Влияние в голосовании рассчитывается по сумме вложения и оставшейся продолжительности позиции вложения CAKE с фиксированным сроком в блоке.",
   "CAKE locked:": "CAKE заблокированы:",
-  "Go to Pools": "Перейти к пулам",
+  "Go to Pools": {
+    "key": "Go to Pools",
+    "source": "Go to Pools",
+    "translation": "Перейти к пулам",
+    "hint": "found in 2 of files, see apps/web/src/hooks/useLockedEndNotification.tsx,apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Boosted by vCAKE": "Усилено через vCAKE",
   "Boosting Expired": "Срок усиления истек",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Срок усиления vCAKE в блоке снимка истек. Чтобы активировать усиление для будущих предложений по голосованию, возобновите позицию вложения с фиксированным сроком.",
@@ -1754,7 +1924,12 @@
   "Farm Types": "Типы фарма",
   "Lock End": "Конец блокировки",
   "The locked staking duration has ended.": "Период блокировки вложения завершился.",
-  "Cake Syrup Pool": "Пул Cake Syrup",
+  "Cake Syrup Pool": {
+    "key": "Cake Syrup Pool",
+    "source": "Cake Syrup Pool",
+    "translation": "Пул Syrup CAKE",
+    "hint": "found in 1 of files, see apps/web/src/hooks/useLockedEndNotification.tsx"
+  },
   "Use": "Используйте",
   "to bridge this asset.": "для перевода этого актива.",
   "to bridge %symbol%.": "для перевода %symbol%.",
@@ -1875,7 +2050,12 @@
   "Simplified Decentralized Trading": "Упрощенная децентрализованная торговля",
   "Experience true decentralization with our exchange, offering you complete control over your trades in a secure and easy-to-use environment": "Наша биржа обеспечивает настоящую децентрализацию — с полным контролем над сделками в безопасной и простой в использовании среде",
   "Earn while you Trade": "Зарабатывайте на торговле",
-  "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery": "На большинстве сделок на PancakeSwap вы можете зарабатывать токены CAKE. Их можно вложить и получить вознаграждение, а также использовать в лотереях.",
+  "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery": {
+    "key": "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery",
+    "source": "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery",
+    "translation": "Зарабатывайте токены CAKE на большинстве сделок на PancakeSwap. Отправляйте их в стейкинг для получения больших наград или используйте в наших Лотерее и Pottery.",
+    "hint": "found in 1 of files, see apps/web/src/views/AffiliatesProgram/components/OnBoardingModal/StepIntro.tsx"
+  },
   "Welcome to PancakeSwap!": "Добро пожаловать на PancakeSwap!",
   "has referred you to start trading on PancakeSwap": "приглашает вас торговать на PancakeSwap",
   "Start trading today and get a": "Начните торговать сегодня и получите скидку",
@@ -1982,7 +2162,12 @@
   "Split routing enables token swaps to be broken into multiple routes to achieve the best deal.": "Раздельная маршрутизация позволяет разбить обмен токенов на несколько маршрутов для достижения самого выгодного результата.",
   "Turning this off will only allow a single route, which may result in low efficiency or higher slippage.": "Если это отключить, будет использоваться только один маршрут, что может привести к снижению эффективности и увеличению слипеджа.",
   "Route is automatically calculated based on your routing preference to achieve the best price for your trade.": "Маршрут рассчитывается автоматически на основе указанных настроек с целью достичь наилучшей цены для сделки.",
-  "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"": "Торговая комиссия зависит от уровня комиссии пула. Узнать его можно с помощью значка лупы в разделе «Маршрут».",
+  "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"": {
+    "key": "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"",
+    "source": "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"",
+    "translation": "Торговая комиссия зависит от уровня комиссии пула. Проверьте ее, нажав на значок лупы в разделе «Маршрут».",
+    "hint": "found in 4 of files, see apps/web/src/views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderDetailsPanel.tsx,apps/web/src/views/Swap/Bridge/components/FeeToolTip.tsx,apps/web/src/views/Swap/V3Swap/components/SwapModalFooterV2.tsx,apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Fee Breakdown and Tokenomics": "Схема комиссий и токеномика",
   "Harvest All": "Собрать всё",
   "Avg": "Ср.",
@@ -2093,7 +2278,12 @@
   "Switch network": "Переключите сеть",
   "to claim rewards": "для получения вознаграждений",
   "You have %number% incompleted request in Historical Claim.": "В истории получений есть невыполненные запросы (%number%).",
-  "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.": "BCAKE увеличивает только APR фарма. Фактический множитель зависит от условий фарма и пула.",
+  "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.": {
+    "key": "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.",
+    "source": "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.",
+    "translation": "bCAKE только увеличивает APR фермы. Фактический множитель буста зависит от условий фермы и пула.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/PoolAprButton/AprTooltipContent.tsx,apps/web/src/views/universalFarms/components/PoolAprButtonV3/AprTooltipContent.tsx"
+  },
   "Buy %currency%": "Покупка %currency%",
   "Caution - METIS Token": "Предупреждение о токене METIS",
   "Twitter": "твиттере MetisDAO",
@@ -2245,7 +2435,12 @@
   "Fee APY:": "Комиссия APY:",
   "Stake APY:": "APY вложения:",
   "CAKE Staking": "Вложение CAKE",
-  "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.": "Позиция, мигрированная из пула CAKE, не подлежит продлению или пополнению. Чтобы продлить или добавить еще CAKE, установите немодифицированную позицию veCAKE.",
+  "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.": {
+    "key": "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.",
+    "source": "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.",
+    "translation": "Позиция, перенесенная из пула CAKE, не может быть продлена или пополнена. Чтобы продлить или добавить больше CAKE, создайте нативную позицию veCAKE.",
+    "hint": "found in 1 of files, see packages/widgets-internal/ifo/Tips.tsx"
+  },
   "Chain": "Блокчейн",
   "Type": "Тип",
   "Reward paused for this position": "Вознаграждение для этой позиции приостановлено",
@@ -2355,10 +2550,25 @@
   "Withdrawal Fee": "Комиссия за снятие",
   "View Staking Token Project Site": "Просмотр проектного сайта по вложению токенов",
   "Stake %stakedToken%, Earn APT on": "Вложите %stakedToken%, заработайте APT в",
-  "%stakedToken% Syrup Pool": "Пул Syrup %stakedToken%",
-  "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.": "Если на этой неделе в наш фарминг вложено более %lpLabel% пулов ликвидности, мы увеличим вознаграждения APT за пул Syrup %stakedToken% на следующей неделе.",
+  "%stakedToken% Syrup Pool": {
+    "key": "%stakedToken% Syrup Pool",
+    "source": "%stakedToken% Syrup Pool",
+    "translation": "Сиропный пул %stakedToken%",
+    "hint": "found in 1 of files, see apps/aptos/components/Farms/components/FarmTable/PoolEarnAptTooltips.tsx"
+  },
+  "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.": {
+    "key": "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.",
+    "source": "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.",
+    "translation": "Если на этой неделе на нашу Ферму будет внесено больше LP %lpLabel%, мы увеличим награды в APT для пула Syrup %stakedToken% на следующей неделе.",
+    "hint": "found in 1 of files, see apps/aptos/components/Farms/components/FarmTable/PoolEarnAptTooltips.tsx"
+  },
   "Enjoying the %stakingToken% Staking APR? Get more rewards with the %lpLabel% LP on our": "Вы довольны APR от вложений %stakingToken%? Получайте еще больше вознаграждений с пулами ликвидности %lpLabel% на нашем",
-  "The rewards for this Syrup Pool will not be applicable to or claimable by": "Вознаграждения за этот пул Syrup ввиду их неприменимости не смогут получить",
+  "The rewards for this Syrup Pool will not be applicable to or claimable by": {
+    "key": "The rewards for this Syrup Pool will not be applicable to or claimable by",
+    "source": "The rewards for this Syrup Pool will not be applicable to or claimable by",
+    "translation": "Награды из этого пула Syrup не будут доступны или не могут быть получены",
+    "hint": "found in 1 of files, see apps/aptos/components/Pools/components/PoolTable/UsUserAptRewardTooltips.tsx"
+  },
   "Verify your address to continue": "Для продолжения необходимо проверить ваш адрес",
   "Invalid BTC address": "Недопустимый адрес Bitcoin",
   "Buy with %provider%": "Купить (%provider%)",
@@ -2402,8 +2612,18 @@
   "Merkl APR": "APR Merkl",
   "Quotes may be unavailable for some assets based on market conditions and provider availability in your region.": "В зависимости от рыночных условий и наличия провайдера в вашем регионе котировки для некоторых активов могут быть недоступны.",
   "Stake CAKE, Earn PEPE in our": "Вкладывайте CAKE, получайте PEPE в нашем",
-  "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our": "Нравится такая APR? Чтобы получить больше вознаграждений PEPE в Syrup Pool следующего месяца, вложите дополнительные PEPE-BNB LP в нашем",
-  "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month": "Если вы вложите дополнительные PEPE-BNB LP в нашу ферму, мы увеличим вознаграждения за PEPE Syrup Pool следующего месяца",
+  "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our": {
+    "key": "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our",
+    "source": "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our",
+    "translation": "Нравится APR? Получите больше наград в PEPE в Syrup-пуле в следующем месяце, разместив в стейкинг больше PEPE-BNB LP в нашей",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/components/PoolsTable/PoolRow.tsx"
+  },
+  "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month": {
+    "key": "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month",
+    "source": "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month",
+    "translation": "Если на нашу ферму будет внесено больше LP PEPE-BNB, мы увеличим награды для Syrup-пула PEPE в следующем месяце.",
+    "hint": "found in 2 of files, see apps/web/src/views/Farms/components/FarmCard/CardHeading.tsx,apps/web/src/views/Farms/components/FarmTable/Farm.tsx"
+  },
   "Total APR": "Всего APR",
   "Start Earning": "Начните зарабатывать",
   "Reward/Day": "Вознаграждение в день",
@@ -2537,7 +2757,12 @@
   "Rocker launching your meme career": "Ускоренный запуск мемной карьеры",
   "Stake LP Tokens to Earn Cake and APT": "Вкладывайте LP-токены и получайте Cake и APT",
   "Read The Guide": "Прочитать руководство",
-  "Earn Cake and APT with up to 50% apr on 15+ Pools": "Получайте Cake и APT с APR до 50% в 15 с лишним пулах",
+  "Earn Cake and APT with up to 50% apr on 15+ Pools": {
+    "key": "Earn Cake and APT with up to 50% apr on 15+ Pools",
+    "source": "Earn Cake and APT with up to 50% apr on 15+ Pools",
+    "translation": "Зарабатывайте CAKE и APT с APR до 50% в более чем 15 пулах",
+    "hint": "found in 1 of files, see apps/aptos/components/Banner/AptosYieldFarmingBanner.tsx"
+  },
   "Earn Dual Incentives with Yield Farming on Aptos PancakeSwap": "Получайте двойные поощрения с помощью фарминга выручки на Aptos PancakeSwap",
   "No quotes available for %cryptoCurrency% right now.": "На данный момент котировок %cryptoCurrency% нет.",
   "No Quotes": "Котировок нет",
@@ -2585,14 +2810,29 @@
   "Add +": "Добавить +",
   "Choose Liquidity Shape": "Выберите форму ликвидности",
   "Fee tier": "Уровень комиссии",
-  "Pool features": "Характеристики пула",
+  "Pool features": {
+    "key": "Pool features",
+    "source": "Pool features",
+    "translation": "Особенности пула",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolFeaturesBadge.tsx"
+  },
   "Fee Level": "Уровень комиссии",
   "Common range: 0.01% to 0.3%, Ideal range <1%": "Обычный диапазон: 0,01–0,3%, идеально <1%",
   "Fee Tier Setting": "Настройка уровня комиссии",
-  "Static: The fee remains fixed at the specified level once the pool is created.": "Статическая: после создания пула комиссия остается фиксированной на указанном уровне.",
+  "Static: The fee remains fixed at the specified level once the pool is created.": {
+    "key": "Static: The fee remains fixed at the specified level once the pool is created.",
+    "source": "Static: The fee remains fixed at the specified level once the pool is created.",
+    "translation": "Статическая: комиссия остается фиксированной на указанном уровне после создания пула.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Static": "Статическая",
   "Dynamic": "Динамическая",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Динамическая: после создания пула комиссию можно изменить с помощью хука. Исходный уровень комиссии — 0.",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": {
+    "key": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "source": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "translation": "Динамическая: комиссию можно изменить с помощью hook после создания пула. Начальный уровень комиссии установлен на 0.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Contract is verified on block explorer": "Контракт проверен в обозревателе блоков",
   "Contract is not verified on block explorer": "Контракт не проверен в обозревателе блоков",
   "Verified": "Проверен",
@@ -2622,7 +2862,12 @@
   "Infinity Bin Pool Created": "Создан бин-пул Infinity",
   "Position Created!": "Позиция создана!",
   "Pool Created!": "Пул создан!",
-  "Error creating pool": "Ошибка создания пула",
+  "Error creating pool": {
+    "key": "Error creating pool",
+    "source": "Error creating pool",
+    "translation": "Ошибка создания пула",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/hooks/useFormSubmitCallback.ts"
+  },
   "Error Add Liquidity": "Ошибка добавления ликвидности",
   "A pool with the selected configuration already exists.": "Пул с выбранной конфигурацией уже существует.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Комиссии на передачу и перебазирование токенов НЕСОВМЕСТИМЫ с V3.",
@@ -2687,7 +2932,12 @@
   "No gas cost or fee will be charged on failed orders.": "За невыполненные ордеры комиссия и плата за газ взиматься не будут.",
   "Caution - %token% Token": "Предупреждение о токене %token%",
   "CAKE Incentives": "Стимулы CAKE",
-  "Staking Pools": "Пулы вложений",
+  "Staking Pools": {
+    "key": "Staking Pools",
+    "source": "Staking Pools",
+    "translation": "Пулы стейкинга",
+    "hint": "found in 2 of files, see apps/aptos/components/Menu/footerConfig.ts,packages/uikit/src/widgets/Menu/components/footerConfig.ts"
+  },
   "Token Launches": "Запуск токенов",
   "Get Help": "Помощь",
   "Audits": "Аудиты",
@@ -2696,7 +2946,12 @@
   "Play": "Играть",
   "Legacy products": "Старые продукты",
   "APR Breakdown": "Схема APR",
-  "Pool Feature": "Характеристика пула",
+  "Pool Feature": {
+    "key": "Pool Feature",
+    "source": "Pool Feature",
+    "translation": "Особенность пула",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/useColumnConfig.tsx,apps/web/src/views/universalFarms/constants.ts"
+  },
   "Swap Now": "Обменять",
   "ZERO": "НУЛЕВЫЕ",
   "%amount% of your liquidity is currently staking in farm.": "%amount% из вашей ликвидности вложено в фарм.",
@@ -2832,7 +3087,12 @@
   "Audit info": "Информация об аудите",
   "Audit Outcome": "Результат аудита",
   "Hook Creator": "Создатель хука",
-  "The price range is outside current pool price": "Ценовой диапазон за пределами текущей цены пула",
+  "The price range is outside current pool price": {
+    "key": "The price range is outside current pool price",
+    "source": "The price range is outside current pool price",
+    "translation": "Ценовой диапазон находится за пределами текущей цены пула.",
+    "hint": "found in 1 of files, see apps/web/src/components/Liquidity/Form/FieldDepositAmount.tsx"
+  },
   "Set price range first": "Сначала задайте ценовой диапазон",
   "No hooks available with the selected filters": "С выбранными фильтрами хуков нет",
   "Reset filters": "Сбросить фильтры",
@@ -2855,14 +3115,24 @@
   "No Existing Orders": "Ордеров нет",
   "Existing Orders": "Существующие ордеры",
   "status": "статус",
-  "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.": "Пул может взимать комиссию за действия с ликвидностью. При необходимости измените допустимый слипедж в настройках.",
+  "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.": {
+    "key": "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.",
+    "source": "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.",
+    "translation": "Этот пул может взимать комиссию за действия с ликвидностью. При необходимости настройте допустимое проскальзывание в разделе «Настройки».",
+    "hint": "found in 2 of files, see apps/web/src/views/RemoveLiquidityInfinity/components/RemoveBinPosition.tsx,apps/web/src/views/RemoveLiquidityInfinity/components/RemoveClPosition.tsx"
+  },
   "Swap %token% to win a share of": "Обменяйте %token% и выиграйте часть",
   "Empty page: No results found.": "Пустая страница. Ничего не найдено.",
   "View details in Docs": "Подробности — в Документах",
   "Insufficient data for historical price chart.": "Недостаточно данных для графика изменения цены.",
   "CLAMM Pool": "Пул CLAMM",
   "Liquidity Book AMM": "AMM с книгой ликвидности",
-  "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Пулы автоматизированного маркетмейкера с концентрированной ликвидностью (CLAMM) сосредоточивают ликвидность в определенных ценовых диапазонах, что позволяет добиться максимальной эффективности капитала и более узких спредов.",
+  "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": {
+    "key": "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.",
+    "source": "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.",
+    "translation": "Пулы автоматизированного маркет-мейкера с концентрированной ликвидностью (CLAMM) концентрируют ликвидность в определенных ценовых диапазонах, максимизируя эффективность капитала и обеспечивая более узкие спреды.",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolTypeModal.tsx"
+  },
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "AMM с книгой ликвидности (бин-пулы) использует дискретные ценовые бины для сегментации ликвидности, что обеспечивает детальный контроль над распределением капитала и сокращает слипедж.",
   "Active Liquidity Management hooks enable fine-tuned control over liquidity positions, helping liquidity providers optimize returns by automating rebalancing, concentration, and exposure strategies.": "Хуки активного управления ликвидностью позволяют осуществлять точный контроль над позициями ликвидности, что помогает поставщикам ликвидности повышать доходность за счет автоматизации стратегий ребалансировки, концентрации и риска.",
   "Dynamic Fees hooks allow fee adjustments based on market conditions, enhancing protocol efficiency by optimizing transaction costs during high volatility or incentivizing trades in low-activity periods.": "Хуки динамических комиссий позволяют корректировать комиссию в зависимости от рыночных условий, что повышает эффективность протокола за счет оптимизации транзакционных издержек в периоды высокой волатильности и стимулирования сделок в периоды низкой активности.",
@@ -2870,7 +3140,12 @@
   "Liquidity Incentivization hooks provide mechanisms to reward liquidity providers, using token incentives or innovative reward structures to attract and retain capital within the protocol.": "Хуки стимулирования ликвидности дают механизмы вознаграждения поставщиков ликвидности с использованием токенизированных поощрений или инновационных структур вознаграждений, что позволяет привлекать и удерживать капитал в рамках протокола.",
   "MEV (Maximal Extractable Value) hooks focus on mitigating or leveraging MEV, enabling protocols to minimize negative impacts or capitalize on profitable reordering opportunities.": "Хуки MEV (максимальная извлекаемая стоимость) направлены на противодействие или использование MEV и позволяют протоколам снизить негативное воздействие или извлечь выгоду из возможностей выгодного повторного ордера.",
   "Real-World Assets hooks bridge traditional and decentralized finance, facilitating tokenized representation and on-chain interaction with real-world assets such as bonds, real estate, or commodities.": "Хуки реальных активов объединяют традиционные и децентрализованные финансы и облегчают токенизированное представление реальных активов (например, облигации, недвижимость или товары) и взаимодействие с ними в блокчейне.",
-  "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.": "Хуки оптимизации выручки автоматизируют стратегии с целью повышения прибыли от внесенного капитала, динамически перераспределяя средства между различными пулами или стратегиями для достижения оптимальной продуктивности.",
+  "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.": {
+    "key": "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.",
+    "source": "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.",
+    "translation": "Хуки оптимизации доходности автоматизируют стратегии для максимизации доходности вложенного капитала, динамически перераспределяя средства между различными пулами или стратегиями для достижения оптимальной производительности.",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/hookCategoryDesc.tsx"
+  },
   "Other hooks are used to manage other aspects of the protocol.": "Иные хуки используются для управления другими аспектами протокола.",
   "Oracle hooks provide secure and reliable off-chain data integration, ensuring accurate price feeds, market data, or other critical information is available for on-chain applications.": "Хуки-оракулы обеспечивают безопасную и надежную интеграцию данных вне блокчейна и гарантируют доступность точных ценовых каналов, рыночных данных и другой важной информации для приложений, работающих в блокчейне.",
   "Cross-Chain hooks enable seamless interaction between multiple blockchain ecosystems, allowing asset transfers, liquidity sharing, and protocol interoperability across chains.": "Межсетевые хуки обеспечивают взаимодействие между несколькими экосистемами блокчейнов и позволяют осуществлять передачу активов, предоставление доступа к ликвидности и взаимодействие протоколов между блокчейнами.",
@@ -2946,7 +3221,12 @@
   "PANCAKE PICKS": "ВЫБОР PANCAKE",
   "More Information": "Подробнее",
   "Please connect wallet to view your position / add liquidity.": "Чтобы просмотреть свою позицию или добавить ликвидность, подключите кошелек.",
-  "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": "APR рассчитывается по общей ликвидности в пуле по сравнению с общей суммой вознаграждения. Фактические APR могут быть выше, поскольку часть ликвидности не вложена или не входит в диапазон.",
+  "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": {
+    "key": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
+    "source": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
+    "translation": "APR рассчитывается на основе общей ликвидности в пуле по отношению к общей сумме вознаграждения. Фактический APR может быть выше, поскольку часть ликвидности не находится в стейкинге или вне диапазона.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/PoolAprButton/AprTooltipContent.tsx,apps/web/src/views/universalFarms/components/PoolAprButtonV3/AprTooltipContent.tsx"
+  },
   "APRs for individual positions may vary depending on the price range set.": "APR для отдельных позиций могут зависеть от настроек ценового диапазона.",
   "View in Wallet": "Посмотреть в кошельке",
   "Trade %token%": "Торговать %token%",
@@ -2964,7 +3244,12 @@
   "The TGE status (e.g., oversubscribed or not)": "Статус TGE (например, превышена подписка или нет)",
   "2. How many tokens will I receive?": "2. Сколько токенов я получу?",
   "During the TGE, users can subscribe up to a maximum of 3 BNB. The final token allocation is determined based on the proportion of BNB a user contributed relative to the total BNB subscribed by all participants at the time the sale ends.": "Во время TGE пользователи могут подписаться максимум на 3 BNB. Окончательное распределение токенов рассчитывается по отношению доли BNB, внесенных пользователем, к общему количеству BNB, на которые подписались все участники на момент завершения продажи.",
-  "3. Will I receive a refund if the pool is oversubscribed?": "3. Будет ли возврат средств, если подписка на пул будет превышена?",
+  "3. Will I receive a refund if the pool is oversubscribed?": {
+    "key": "3. Will I receive a refund if the pool is oversubscribed?",
+    "source": "3. Will I receive a refund if the pool is oversubscribed?",
+    "translation": "3. Получу ли я возврат средств, если пул будет переполнен?",
+    "hint": "found in 1 of files, see apps/web/src/views/Idos/config/index.tsx"
+  },
   "Yes. If the TGE is oversubscribed, any excess BNB that was not used to purchase tokens will be automatically refunded to your wallet when you claim your tokens.": "Да. Если подписка на TGE будет превышена, все лишние BNB, которые не были использованы для покупки токенов, будут автоматически возвращены на кошелек, когда вы получите свои токены.",
   "4. Which regions or countries are restricted from participating in this event?": "4. Пользователям из каких регионов и стран запрещено участвовать в событии?",
   "The following nationalities are currently not eligible to participate in Binance-exclusive TGEs:": "Граждане следующих стран пока что не могут участвовать в TGE, эксклюзивных для Binance:",
@@ -3026,22 +3311,47 @@
   "Earn a share of platform revenue.": "Вы получаете долю от дохода платформы.",
   "More details here": "Подробнее — здесь",
   "Use veCAKE to vote on where CAKE emissions are allocated.": "Используйте veCAKE для голосования по распределению эмиссии CAKE.",
-  "Earn increased rewards when providing liquidity in selected pools.": "Получайте повышенные вознаграждения, предоставляя ликвидность в выбранных пулах.",
+  "Earn increased rewards when providing liquidity in selected pools.": {
+    "key": "Earn increased rewards when providing liquidity in selected pools.",
+    "source": "Earn increased rewards when providing liquidity in selected pools.",
+    "translation": "Получайте повышенные награды за предоставление ликвидности в избранных пулах.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/faqConfig.tsx"
+  },
   "Gain exclusive access to Initial Farm Offerings (IFOs) with higher allocation limits.": "Получите эксклюзивный доступ к первичным предложениям фарминга (IFO) с более высокими лимитами размещения.",
   "How do I claim my CAKE rewards?": "Как получить вознаграждения CAKE?",
   "What is cross-chain CAKE, and what is it used for?": "Что такое межсетевые CAKE и для чего они используются?",
   "cross-chain bridging": "межсетевой перевод",
   "Can I transfer or trade my staked CAKE or veCAKE?": "Можно ли передать или обменять вложенные CAKE и veCAKE?",
-  "What are Syrup Pools?": "Что такое пулы Syrup?",
-  "How do I stake CAKE in Syrup Pools?": "Как вкладывать CAKE в пулах Syrup?",
-  "What rewards can I earn from Syrup Pools?": "Какие вознаграждения даются за пулы Syrup?",
+  "What are Syrup Pools?": {
+    "key": "What are Syrup Pools?",
+    "source": "What are Syrup Pools?",
+    "translation": "Что такое Syrup-пулы?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
+  "How do I stake CAKE in Syrup Pools?": {
+    "key": "How do I stake CAKE in Syrup Pools?",
+    "source": "How do I stake CAKE in Syrup Pools?",
+    "translation": "Как стейкать CAKE в Syrup-пулах?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
+  "What rewards can I earn from Syrup Pools?": {
+    "key": "What rewards can I earn from Syrup Pools?",
+    "source": "What rewards can I earn from Syrup Pools?",
+    "translation": "Какие награды я могу заработать в Syrup-пулах?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "Are there any fees for staking or unstaking?": "Взимаются ли комиссии за вложение и возврат?",
   "Once your CAKE is locked, rewards will accumulate continuously. You can claim your revenue sharing CAKE rewards weekly.To avoid losing rewards, make sure to": "После блокировки CAKE вознаграждения будут накапливаться непрерывно. Вы можете забирать вознаграждения CAKE от распределения доходов еженедельно. Чтобы не потерять их,",
   "claim your CAKE regularly or extend your locking period.": "регулярно забирайте CAKE или продлевайте период блокировки.",
   "You can do this directly from the veCAKE staking page.": "Это можно делать прямо на странице вложения veCAKE.",
   "Cross-chain CAKE allows veCAKE holders to participate in gauges voting on multiple chains, including Ethereum and Arbitrum. Through": "Межсетевые CAKE позволяют держателям veCAKE участвовать в Gauge-голосовании на нескольких блокчейнах, включая Ethereum и Arbitrum. Благодаря",
   ", users can influence CAKE emissions and liquidity across various chains.": " пользователи могут влиять на эмиссию и ликвидность CAKE по различным блокчейнам.",
-  "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?": "У меня есть CAKE, вложенные в старых автоматических или ручных пулах CAKE. Что делать?",
+  "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?": {
+    "key": "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?",
+    "source": "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?",
+    "translation": "У меня все еще есть CAKE в стейкинге в старых пулах Auto или Manual CAKE. Что мне делать?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "Particle Network's Token Generation Event": "Событие генерации токенов Particle Network",
   "Particle Network is the largest chain abstraction infrastructure for Web3. Its core technology, Universal Accounts, represents the solution to Web3's user, data, and liquidity fragmentation, giving users a single account and balance across all chains.": "Particle Network — крупнейшая инфраструктура абстракции блокчейнов для Web3. Лежащая в основе проекта технология — Universal Accounts (универсальные аккаунты) — представляет собой решение проблемы фрагментации пользователей, данных и ликвидности в рамках Web3. Это дает пользователям возможность иметь единый аккаунт и баланс для всех блокчейнов.",
   "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token.": "Блокчейн уровня L1 сети Particle Network — Particle Chain — выступает в качестве платформы, обеспечивающей работу универсальных аккаунтов. Чтобы продемонстрировать новые возможности, Particle выпустили независимое от блокчейна децентрализованное приложение на базе Mainnet, которое называется UniversalX. С его помощью пользователи могут торговать токенами любых блокчейнов и объединять свои активы во всех экосистемах, оплачивая комиссии за газ любыми токенами.",
@@ -3061,18 +3371,33 @@
   "Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE start date.": "Вы не соответствуете требованиям к участию. Участники должны были приобрести токены Binance Alpha через бесключевой кошелек Binance или через спотовые либо финансовые аккаунты на бирже Binance в течение 30 дней, предшествующих дате начала TGE.",
   "Lorenzo Protocol is described as an institutional-grade on-chain asset management platform that structures and deploys yield-optimized fund vaults, effectively channeling on-chain liquidity into the most competitive yield opportunities.": "Lorenzo Protocol — это платформа управления активами на основе блокчейна институционального уровня, которая позволяет структурировать и развертывать хранилища средств с оптимизированной доходностью, а также использовать ликвидность на основе блокчейна в наиболее выгодных вариантах получения прибыли.",
   "Earn 30x Ethena Points!": "Заработайте в 30 раз больше очков Ethena!",
-  "Add liquidity to this pool and earn 30x Ethena points!": "Добавьте ликвидность в этот пул и заработайте в 30 раз больше очков Ethena!",
+  "Add liquidity to this pool and earn 30x Ethena points!": {
+    "key": "Add liquidity to this pool and earn 30x Ethena points!",
+    "source": "Add liquidity to this pool and earn 30x Ethena points!",
+    "translation": "Добавьте ликвидность в этот пул и заработайте в 30 раз больше очков Ethena!",
+    "hint": "found in 1 of files, see apps/web/src/views/universalFarms/components/FarmStatusDisplay/index.tsx"
+  },
   "Claim your rewards & learn more": "Получить вознаграждения и узнать подробнее можно",
   "on Ethena's official site.": "на официальном сайте Ethena.",
   "Boost Your Yield with Ethena": "Увеличьте выручку с помощью Ethena",
-  "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": "Добавьте ликвидность в эти пулы (USDe/USDT и sUSDe/USDe) и получите огромные вознаграждения — очки Ethena в 30-кратном размере!",
+  "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": {
+    "key": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
+    "source": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
+    "translation": "Добавьте ликвидность в эти пулы (USDe/USDT и sUSDe/USDe), чтобы получить огромные награды — 30x баллов Ethena!",
+    "hint": "found in 1 of files, see apps/web/src/views/universalFarms/components/RewardInfoCard/index.tsx"
+  },
   "Please update to the latest APP version": "Обновите приложение до последней версии",
   "Only": "Только",
   "veCake Redeem": "Обмен veCAKE",
   "MY CAKE STAKING POSITION": "МОЯ ПОЗИЦИЯ ВЛОЖЕНИЯ CAKE",
   "Anytime": "В любое время",
   "My Total rewards": "Все мои вознаграждения",
-  "CAKE Pool Rewards": "Вознаграждения пула CAKE",
+  "CAKE Pool Rewards": {
+    "key": "CAKE Pool Rewards",
+    "source": "CAKE Pool Rewards",
+    "translation": "Награды пула CAKE",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/VeCakeRedeem.tsx"
+  },
   "Revenue Sharing Rewards": "Вознаграждения перераспределения доходов",
   "REDEEM NOW": "ОБМЕНЯТЬ",
   "Total amount": "Общая сумма",
@@ -3085,12 +3410,22 @@
   "Rewards have been sent to your wallet.": "Вознаграждения отправлены в кошелек.",
   "veCAKE Redeem Successfully": "Обмен veCAKE выполнен",
   "CAKE has been sent to your wallet.": "CAKE отправлены в кошелек.",
-  "CAKE Pool Redeem Successfully": "Обмен вознаграждений пула CAKE выполнен",
+  "CAKE Pool Redeem Successfully": {
+    "key": "CAKE Pool Redeem Successfully",
+    "source": "CAKE Pool Redeem Successfully",
+    "translation": "Средства из пула CAKE успешно выведены",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/VeCakeRedeem.tsx"
+  },
   "Unlocked on": "Разблокировано",
   "All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.": "Все заблокированные CAKE были разблокированы 23 апреля 2025 г. в 08:00 (UTC) и доступны для получения.",
   "What am I redeeming and how does this work?": "Что я обмениваю и как это работает?",
   "You're redeeming:": "Вы обмениваете:",
-  "Legacy CAKE Pool rewards": "Старые вознаграждения пула CAKE",
+  "Legacy CAKE Pool rewards": {
+    "key": "Legacy CAKE Pool rewards",
+    "source": "Legacy CAKE Pool rewards",
+    "translation": "Награды старого пула CAKE",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "Unclaimed rewards: This includes revenue sharing rewards and any remaining veCAKE gauge voting rewards.": "Невостребованные вознаграждения: сюда входят вознаграждения за распределение доходов и оставшиеся вознаграждения за Gauge-голосование по шкале veCAKE.",
   "Important: If you want to receive rewards from Epoch 38 (April 25 – May 6), do not withdraw CAKE before 00:00 AM UTC, May 7, 2025.": "Внимание! Если вы хотите получить вознаграждения за эпоху 38 (25 апреля — 6 мая), не выводите CAKE до 00:00 7 мая 2025 г. (UTC).",
   "How long will this redemption page be available?": "Как долго будет доступна страница обмена?",
@@ -3101,17 +3436,37 @@
   "Starting 00:00 AM UTC April 23, 2025, veCAKE and all gauge voting will be retired.": "Начиная с 00:00 23 апреля 2025 г. (UTC) использование veCAKE и Gauge-голосования будут прекращены.",
   "The final round of gauge voting will end on 00:00 AM UTC, April 23, 2025 (Epoch 37).": "Финальный раунд Gauge-голосования завершится в 00:00 23 апреля 2025 г. (время в UTC, эпоха 37).",
   "Results from Epoch 37 will be executed in Epoch 38 (April 25 – May 6).": "Результаты эпохи 37 будут реализованы в эпохе 38 (25 апреля — 6 мая).",
-  "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.": "Вознаграждения Gauge, включая APR пула veCAKE и APR стимулов, будут накапливаться до 7 мая 2025 г.",
+  "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.": {
+    "key": "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.",
+    "source": "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.",
+    "translation": "Награды Gauges, включая APR пула veCAKE и Bribe APR, будут продолжать начисляться до 7 мая 2025 года.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "What’s the impact on other products like yield farming and revenue sharing?": "Как это повлияет на другие продукты, такие как фарминг выручки и распределение доходов?",
-  "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.": "Усиление фарминга выручки (посредством veCAKE) будет постепенно отменено для менеджеров позиций, пулов Syrup и фарминга. Это будет происходить в период с 24 апреля по 7 мая 2025 г.",
+  "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.": {
+    "key": "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.",
+    "source": "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.",
+    "translation": "Бусты для фарминга (от veCAKE) будут постепенно отменены в менеджерах позиций, Syrup-пулах и фарминге в период с 24 апреля по 7 мая 2025 года.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "The PancakeSwap UI will gradually reflect the retirement of affected products from these changes.": "В интерфейсе PancakeSwap будет отражаться постепенное прекращение действия затронутых этими изменениями продуктов.",
   "For more on these changes, check out:": "Подробнее об этих изменениях — здесь:",
   "CAKE Tokenomics 3.0 Docs": "документы по токеномике CAKE 3.0.",
   "Blog Post: What You Need to Know": "Запись в блоге: «Что вам нужно знать»",
   "Underlying CAKE (from your veCAKE position)": "Базовые CAKE (для вашей позиции veCAKE)",
   "You'll have 6 months to redeem your veCAKE and other unclaimed rewards, from April 23, 2025 at 8:00 AM UTC until October 23, 2025.": "У вас будет шесть месяцев, чтобы использовать veCAKE и другие невостребованные вознаграждения: с 8:00 23 апреля 2025 г. до 23 октября 2025 г. (UTC).",
-  "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.": "Чтобы получить все окончательные APR (пул veCAKE + стимул + распределение доходов), не обменивайте CAKE до 00:00 7 мая 2025 г. (UTC).",
-  "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.": "Распределение доходов в размере 5% от торговых комиссий прекратится в 00:00 7 мая 2025 г. (UTC). Средства, ранее направлявшиеся на распределение доходов, теперь будут перенаправлены в механизм сжигания CAKE, что увеличит скорость сжигания для этих пулов с 10% до 15%.",
+  "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.": {
+    "key": "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.",
+    "source": "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.",
+    "translation": "Чтобы получить все итоговые APR (пул veCAKE + взятки + распределение доходов), не выводите CAKE до 00:00 UTC 7 мая 2025 года.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
+  "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.": {
+    "key": "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.",
+    "source": "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.",
+    "translation": "Распределение 5% дохода от торговых комиссий прекратится в 00:00 UTC 7 мая 2025 года. Средства, ранее выделявшиеся на распределение дохода, теперь будут перенаправлены в механизм сжигания CAKE, что увеличит коэффициент сжигания для этих пулов с 10% до 15%.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "Product Doc: veCAKE Redemption Guide": "Документация по продукту: руководство по обмену veCAKE",
   "PancakeSwap Infinity supports both CLAMM (Concentrated Liquidity AMM) and LBAMM (Liquidity Book AMM) pools.": "PancakeSwap Infinity поддерживает пулы CLAMM (AMM концентрированной ликвидности) и LBAMM (AMM книги ликвидности).",
   "Infinity Bin Position Created": "Создана бин-позиция Infinity",
@@ -3121,11 +3476,36 @@
   "SS": "SS",
   "These values represent the rewards earned in the last epoch. For the first epoch, the values are estimates.": "Эти значения представляют собой вознаграждения, полученные в последней эпохе. Для первой эпохи значения являются оценочными.",
   "Epoch = 8-hour reward cycle": "Эпоха = 8-часовой цикл вознаграждения",
-  "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.": "Вы торгуете через пул, поддерживающий хук Brevis. Проверьте возможность получения скидки на странице пула.",
-  "You’ve qualified for a discount via a Brevis Hook-enabled pool!": "Вы получили право на скидку через пул, поддерживающий хук Brevis!",
-  "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.": "Вы торгуете через пул, поддерживающий хук Primus. Проверьте возможность получения скидки на странице пула.",
-  "You’ve qualified for a discount via a Primus Hook-enabled pool!": "Вы получили право на скидку через пул, поддерживающий хук Primus!",
-  "This route uses a dynamic fee pool; actual fees may vary.": "В этом маршруте используется пул с динамическими комиссиями; фактические комиссии могут отличаться.",
+  "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.": {
+    "key": "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.",
+    "source": "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.",
+    "translation": "Вы торгуете через пул с поддержкой Brevis Hook, проверьте право на скидку на странице пула.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’ve qualified for a discount via a Brevis Hook-enabled pool!": {
+    "key": "You’ve qualified for a discount via a Brevis Hook-enabled pool!",
+    "source": "You’ve qualified for a discount via a Brevis Hook-enabled pool!",
+    "translation": "Вы получили право на скидку через пул с поддержкой Brevis Hook!",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.": {
+    "key": "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.",
+    "source": "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.",
+    "translation": "Вы торгуете через пул с поддержкой Primus Hook, проверьте право на скидку на странице пула.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’ve qualified for a discount via a Primus Hook-enabled pool!": {
+    "key": "You’ve qualified for a discount via a Primus Hook-enabled pool!",
+    "source": "You’ve qualified for a discount via a Primus Hook-enabled pool!",
+    "translation": "Вы получили право на скидку через пул с поддержкой Primus Hook!",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "This route uses a dynamic fee pool; actual fees may vary.": {
+    "key": "This route uses a dynamic fee pool; actual fees may vary.",
+    "source": "This route uses a dynamic fee pool; actual fees may vary.",
+    "translation": "Этот маршрут использует пул с динамической комиссией; фактические комиссии могут отличаться.",
+    "hint": "found in 2 of files, see apps/web/src/views/Swap/V3Swap/components/SwapModalFooterV2.tsx,apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Burn Dashboard": "Инфопанель сжигания",
   "Select a tab": "Выберите вкладку",
   "Burn (In last 7d)": "Сжигание (за последние 7 дней)",
@@ -3189,21 +3569,41 @@
   "Unsuccessful": "Неудачно",
   "%split% Split": "%split% (разделенные)",
   "Your bridge transaction failed. You will be refunded shortly.": "Мостовая транзакция не выполнена. В ближайшее время мы вернем средства.",
-  "Via %poolTypes% Pool": "Через пул %poolTypes%",
+  "Via %poolTypes% Pool": {
+    "key": "Via %poolTypes% Pool",
+    "source": "Via %poolTypes% Pool",
+    "translation": "Через пул %poolTypes%",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/BridgeRoutesDisplay.tsx"
+  },
   "%percent%%": "%percent%%",
   "MY CAKE": "МОИ CAKE",
-  "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.": "Применяется к обменам как в исходной, так и в целевой цепочке в зависимости от уровней комиссии пула. Проверьте детали маршрутизации для дополнительной информации.",
+  "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.": {
+    "key": "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.",
+    "source": "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.",
+    "translation": "Применяется к свопам как в исходной, так и в целевой сети в зависимости от уровней комиссий пула. Для получения дополнительной информации проверьте детали маршрутизации.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/Bridge/components/FeeToolTip.tsx"
+  },
   "Paid to relayers for bridging the assets.": "Оплачивается ретрансляторам за перенос активов.",
   "Your voting power is determined by your CAKE balance at the snapshot block, which represents how much weight your vote carries.": "Влияние в голосовании определяется балансом CAKE на блоке снимка, который показывает, какой вес имеет ваш голос.",
   "Cake Balance": "Баланс CAKE",
   "Not enough CAKE": "Недостаточно CAKE",
   "Your voting power is determined by the number of CAKE you have at the block detailed above. CAKE held in other places does NOT contribute to your voting power.": "Ваше влияние в голосовании определяется количеством CAKE, удерживаемых вами в блоке, указанном ниже. CAKE, удерживаемые в других местах, НЕ учитываются при расчете вашего влияния в голосовании.",
-  "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": "Добавление ликвидности в пул с низким TVL несет в себе более высокий риск потерь от колебаний цен. Действуйте осмотрительно.",
+  "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": {
+    "key": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
+    "source": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
+    "translation": "Добавление ликвидности в пул с низким TVL несет повышенный риск потерь из-за колебаний цен. Действуйте с осторожностью.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Previously used": "Ранее использовалось",
   "Top Wallets": "Топ кошельков",
   "More Wallets": "Другие кошельки",
   "Wallets with MEV Protection": "Кошельки с защитой от MEV",
-  "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": "В новых пулах с низкой ликвидностью могут быть более существенные колебания цен, что увеличивает риск потерь. Действуйте осторожно.",
+  "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": {
+    "key": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
+    "source": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
+    "translation": "Новые пулы с низкой ликвидностью могут иметь большие колебания цен, что увеличивает риск потерь. Пожалуйста, действуйте осторожно.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Color Theme": "Цветная тема",
   "Default Explorer": "Обозреватель по умолчанию",
   "Select preferred block explorer": "Выберите желаемый блокчейн-обозреватель",
@@ -3248,14 +3648,29 @@
   "Switch": "Переключить",
   "APR Calculation Method": "Метод вычисления APR",
   "Calculations are an estimate and only for reference.": "Расчеты являются примерными и приведены только для ознакомления.",
-  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": "Этот метод для вычисления примерной APR использует условное отклонение (дельту) ликвидности пула, определенное на основе ценового диапазона и размера позиции пользователя.",
-  "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": "Этот метод для вычисления примерной APR применяет множитель, определенный на основе пересечения ценового диапазона пользователя и исторического ценового диапазона пула.",
+  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": {
+    "key": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+    "source": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+    "translation": "Этот метод использует подразумеваемое изменение (дельту) в ликвидности пула, определяемое ценовым диапазоном и размером позиции пользователя, для расчета предполагаемой APR.",
+    "hint": "found in 1 of files, see apps/solana/src/components/AprMDSwitchWidget.tsx"
+  },
+  "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": {
+    "key": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
+    "source": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
+    "translation": "Этот метод применяет множитель, определяемый пересечением ценового диапазона пользователя и исторического ценового диапазона пула, для расчета предполагаемой APR.",
+    "hint": "found in 1 of files, see apps/solana/src/components/AprMDSwitchWidget.tsx"
+  },
   "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.": "Доступны два метода вычисления примерной APR, основанные на исторических торговых комиссиях и эмиссиях. Только позиции в пределах диапазона приносят доход. Прошлые результаты не гарантируют доходов в будущем.",
   "Farm period": "Период фарминга",
   "Start on": "Начало:",
   "Start at": "Начало:",
   "Farm will end at": "Фарминг закончится:",
-  "Total locked liquidity in this pool: %percent%": "Общая заблокированная ликвидность в этом пуле: %percent%",
+  "Total locked liquidity in this pool: %percent%": {
+    "key": "Total locked liquidity in this pool: %percent%",
+    "source": "Total locked liquidity in this pool: %percent%",
+    "translation": "Общая заблокированная ликвидность в этом пуле: %percent%",
+    "hint": "found in 1 of files, see apps/solana/src/components/LockPercentCircle.tsx"
+  },
   "Connect your wallet to PancakeSwap": "Подключите свой кошелек к PancakeSwap",
   "Oops... Looks like you don’t have Phantom installed!": "Ой... Кажется, у вас не установлен Phantom!",
   "Install Phantom": "Установить Phantom",
@@ -3304,11 +3719,31 @@
   "Add Deposit Amount": "Добавьте сумму для внесения",
   "Total Deposit": "Общая сумма вклада",
   "Deposit Ratio": "Соотношение вклада",
-  "Pool price is %percent% away from market": "Цена пула отличается от рыночной на %percent%%",
+  "Pool price is %percent% away from market": {
+    "key": "Pool price is %percent% away from market",
+    "source": "Pool price is %percent% away from market",
+    "translation": "Цена пула отличается от рыночной на %percent%",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
   "Low Liquidity: ": "Низкая ликвидность: ",
-  "Loading pool": "Загрузка пула",
-  "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.": "Цена в пуле для этой пары не соответствует рыночной. Добавление небольшого количества ликвидности в широком диапазоне может выровнять ее до рыночной цены.",
-  "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.": "Ваш вклад является значительным по сравнению с текущей ликвидностью в пуле, что может привести к арбитражу вашей позиции. Если указанная цена существенно отличается от рыночной, этот риск может увеличиться.",
+  "Loading pool": {
+    "key": "Loading pool",
+    "source": "Loading pool",
+    "translation": "Загрузка пула",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
+  "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.": {
+    "key": "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.",
+    "source": "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.",
+    "translation": "Цена пула для этой пары несбалансирована. Добавление небольшого количества ликвидности в широком диапазоне может приблизить ее к текущей рыночной цене.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
+  "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.": {
+    "key": "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.",
+    "source": "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.",
+    "translation": "Размер вашего депозита значителен по сравнению с текущей ликвидностью в пуле, что может привести к арбитражу вашей позиции. Если котируемая цена сильно отличается от рыночной, этот риск может возрасти.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
   "Deposit successfully": "Вклад успешно выполнен",
   "A new NFT representing your Concentrated Liquidity position is now in your wallet.": "Новый NFT, представляющий вашу позицию с концентрированной ликвидностью, уже в вашем кошельке.",
   "NFT Mint": "Чеканка NFT",
@@ -3343,14 +3778,34 @@
   "By confirming below, I agree to permanently lock liquidity. I understand access to the underlying assets will be lost forever.": "Подтверждая ниже, я соглашаюсь навсегда заблокировать ликвидность. Я понимаю, что доступ к внесенным активам будет утрачен навсегда.",
   "Estimated APR": "Примерная APR",
   "Trade fees": "Торговые комиссии",
-  "Migrate to Concentrated Liquidity pool": "Мигрировать в пул с концентрированной ликвидностью",
-  "Migrate below or learn more about CLMM pools and risks": "Мигрируйте ниже или узнайте больше о CLMM-пулах и связанных с ними рисках",
+  "Migrate to Concentrated Liquidity pool": {
+    "key": "Migrate to Concentrated Liquidity pool",
+    "source": "Migrate to Concentrated Liquidity pool",
+    "translation": "Перейти в пул концентрированной ликвидности",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
+  "Migrate below or learn more about CLMM pools and risks": {
+    "key": "Migrate below or learn more about CLMM pools and risks",
+    "source": "Migrate below or learn more about CLMM pools and risks",
+    "translation": "Выполните миграцию ниже или узнайте больше о пулах CLMM и рисках.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
   "Quick migration": "Быстрая миграция",
   "Very wide price range for a more passive strategy.": "Использование широкого ценового диапазона характерно для пассивной стратегии.",
   "Custom migration": "Миграция со своими параметрами",
   "Set a custom price range for higher capital efficiency.": "Задайте собственный ценовой диапазон для более эффективного использования капитала.",
-  "CLMM Pool": "Пул CLMM",
-  "CLMM pools": "Пулы CLMM",
+  "CLMM Pool": {
+    "key": "CLMM Pool",
+    "source": "CLMM Pool",
+    "translation": "Пул CLMM",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
+  "CLMM pools": {
+    "key": "CLMM pools",
+    "source": "CLMM pools",
+    "translation": "Пулы CLMM",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/CreateClmmPool.tsx"
+  },
   "%subA%/%subB%": "%subA%/%subB%",
   "Current price": "Текущая цена",
   "%token% price": "Цена %token%",
@@ -3361,7 +3816,12 @@
   "24 hour": "24 часа",
   "7 day": "7 дней",
   "1 month": "1 месяц",
-  "Pool liquidity will appear here.": "Ликвидность пула появится здесь.",
+  "Pool liquidity will appear here.": {
+    "key": "Pool liquidity will appear here.",
+    "source": "Pool liquidity will appear here.",
+    "translation": "Ликвидность пула будет отображаться здесь.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/components/LiquidityChartRangeInput/index.tsx"
+  },
   "Preview Deposit": "Просмотреть вклад",
   "Transaction initiating": "Инициализация транзакции",
   "The market price is outside your specified price range. Single asset deposit only.": "Рыночная цена за пределами указанного вами ценового диапазона. Можно внести только один актив.",
@@ -3369,31 +3829,56 @@
   "Next, set initial token price & position price range": "Далее установите начальную цену токена и ценовой диапазон позиции",
   "Last, please enter token deposit amount": "И наконец, укажите количество токенов для внесения",
   "Please Note": "Обратите внимание",
-  "Pool created & position added successfully!": "Пул создан, позиция успешно добавлена!",
+  "Pool created & position added successfully!": {
+    "key": "Pool created & position added successfully!",
+    "source": "Pool created & position added successfully!",
+    "translation": "Пул создан и позиция успешно добавлена!",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessModal.tsx"
+  },
   "Note:": "Примечание:",
   "Got it": "Понятно",
-  "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": "Ваш пул может появиться в списке не сразу. Подождите несколько минут, обновите страницу и найдите свой пул в списке перед созданием фермы.",
-  "Pool and position created successfully": "Пул и позиция успешно созданы",
+  "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": {
+    "key": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
+    "source": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
+    "translation": "Ваш пул появится в списке в течение нескольких минут. Пожалуйста, подождите, обновите страницу и найдите свой пул в списке, прежде чем создавать ферму.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessModal.tsx"
+  },
+  "Pool and position created successfully": {
+    "key": "Pool and position created successfully",
+    "source": "Pool and position created successfully",
+    "translation": "Пул и позиция успешно созданы",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessWithLockModal.tsx"
+  },
   "Quote token": "Котируемый токен",
   "Base token": "Базовый токен",
   "Initial price": "Начальная цена",
   "Price Setting": "Настройка цены",
   "%subject% price": "Цена %subject%",
-  "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.": "Это текущая цена существующего пула на PancakeSwap. Вы можете задать другую начальную цену, но помните: существенная разница может привести к арбитражу.",
+  "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.": {
+    "key": "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.",
+    "source": "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.",
+    "translation": "Это текущая цена существующего пула на PancakeSwap. Вы можете указать другую начальную цену, но имейте в виду, что при большой разнице цен это может привести к арбитражу.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/SetPriceAndRange.tsx"
+  },
   "Select token & fee tier": "Выберите токен и уровень комиссии",
   "Set initial price & range": "Задайте начальную цену и диапазон",
   "Enter deposit amount": "Укажите сумму вклада",
-  "Preview Pool": "Предпросмотр пула",
+  "Preview Pool": {
+    "key": "Preview Pool",
+    "source": "Preview Pool",
+    "translation": "Предпросмотр пула",
+    "hint": "found in 2 of files, see apps/solana/src/features/Create/ClmmPool/components/TokenAmountInput.tsx,apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Your pool has been created successfully!": "Ваш пул успешно создан!",
   "You can now create a farm or go back": "Теперь вы можете создать ферму или перейти назад",
   "Create Farm": "Создать ферму",
-  "Back to My Pools": "Назад к моим пулам",
+  "Back to My Pools": "Вернуться к моим пулам",
   "Initial liquidity": "Начальная ликвидность",
   "Start time": "Время начала",
   "Initialize Liquidity Pool": "Инициализировать пул ликвидности",
   "Initial price is set by the ratio of tokens deposited for initial liquidity. If the token is already trading on PancakeSwap, initial price will be auto-filled with the current price.": "Начальная цена устанавливается на основе соотношения токенов, внесенных для начальной ликвидности. Если токен уже торгуется на PancakeSwap, начальная цена будет автоматически заполнена текущей.",
-  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.": "Комиссия за создание пула в размере 0,15 SOL сейчас резервируется для поддержки фронтенда и бэкенда. Примерно 0,3 SOL нужно для аренды на OpenBook Market и создания программного аккаунта.",
-  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.": "Комиссия за создание пула в размере 0,15 SOL сейчас резервируется для поддержки инфраструктуры фронтенда и бэкенда. Примерно 0,05 SOL нужно для создания программного аккаунта и оплаты комиссий сети.",
+  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.": "Комиссия за создание пула в размере 0.15 SOL в настоящее время зарезервирована для поддержки инфраструктуры фронтенда и бэкенда. Приблизительно 0.3 SOL требуется для аренды OpenBook Market и создания программного аккаунта.",
+  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.": "Комиссия за создание пула в размере 0.15 SOL в настоящее время зарезервирована для поддержки инфраструктуры фронтенда и бэкенда. Приблизительно 0.05 SOL требуется для создания программного аккаунта и сетевых комиссий.",
   "fee tier": "уровень комиссии",
   "Initialize AMM v4 pool": "Инициализировать пул AMM v4",
   "Initialize CPMM pool": "Инициализировать пул CPMM",
@@ -3413,15 +3898,15 @@
   "Rewards allocated to farms cannot be withdrawn after farming starts. Newly created farms generally appear on PancakeSwap 10-30 minutes after creation, depending on Solana network status.": "Вознаграждения, назначенные фермам, нельзя отозвать после начала фарминга. Вновь созданные фермы обычно появляются на PancakeSwap через 10–30 минут после создания, в зависимости от состояния сети Solana.",
   "Search for a pair or paste AMM ID": "Найдите пару или вставьте ID AMM",
   "input AmmId / TVL": "Введите AmmId или TVL",
-  "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.": "Не можете найти нужный пул? Попробуйте ввести адрес токена или просмотрите списки пулов ниже.",
-  "Select Pool": "Выбрать пул",
+  "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.": "Не можете найти нужный пул? Попробуйте ввести адрес токена или проверьте списки пулов ниже.",
+  "Select Pool": "Выберите пул",
   "Concentrated Liquidity": "Концентрированная ликвидность",
   "Standard AMM": "Стандартный AMM",
   "Search for a pair or enter AMM ID": "Найдите пару или введите ID AMM",
   "Can't find what you want?": "Не нашли то, что искали?",
   "Create a new pool": "Создать новый пул",
-  "Select from your created pools": "Выбрать из созданных вами пулов",
-  "The farm will be created for the selected pool": "Для выбранного пула будет создана ферма",
+  "Select from your created pools": "Выберите из созданных вами пулов",
+  "The farm will be created for the selected pool": "Ферма будет создана для выбранного пула",
   "Create Farm TX success!!": "Транзакция создания фермы успешно выполнена!",
   "Farm created successfully!": "Ферма создана!",
   "Farm ID": "ID фермы",
@@ -3432,7 +3917,7 @@
   "Add Rewards": "Добавить вознаграждения",
   "Step 3": "Шаг 3",
   "Review Farm Detail": "Просмотреть детали фермы",
-  "First, select a pool for farm rewards": "Сначала выберите пул, в котором будут распределяться вознаграждения фермы",
+  "First, select a pool for farm rewards": "Сначала выберите пул для наград фермы",
   "Next, enter rewards for the farm": "Далее укажите вознаграждения, которые будут начислены в ферме",
   "Add another": "Добавить еще",
   "Farm not found": "Ферма не найдена",
@@ -3470,17 +3955,42 @@
   "Not Now": "Не сейчас",
   "Auto-swap": "Автоматический обмен",
   "When auto-swap is on, token amounts will be automatically swapped to the deposit ratio needed to create your position.": "Если автообмен включен, суммы токенов будут автоматически обменяны в соответствии с соотношением вклада, необходимого для создания вашей позиции.",
-  "Pool Not Found": "Пул не найден",
+  "Pool Not Found": {
+    "key": "Pool Not Found",
+    "source": "Pool Not Found",
+    "translation": "Пул не найден",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/Add/index.tsx"
+  },
   "Stake Liquidity": "Вложить ликвидность",
   "Total APR 7D": "Общая APR (за 7 дней)",
   "LP": "LP",
   "AMM ID": "ID AMM",
   "Market ID": "Идентификатор рынка",
-  "Pool Liquidity": "Ликвидность пула",
-  "Pool detail": "Детали пула",
+  "Pool Liquidity": {
+    "key": "Pool Liquidity",
+    "source": "Pool Liquidity",
+    "translation": "Ликвидность пула",
+    "hint": "found in 2 of files, see apps/solana/src/features/Liquidity/Increase/components/PoolInfo.tsx,apps/solana/src/features/Liquidity/Increase/index.tsx"
+  },
+  "Pool detail": {
+    "key": "Pool detail",
+    "source": "Pool detail",
+    "translation": "Детали пула",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/components/PoolInfoMobileDrawer.tsx"
+  },
   "LP Token Balances": "Балансы LP-токенов",
-  "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.": "В этом пуле у вас есть LP-токены, которые не находятся в стейкинге. Вы можете вложить их непосредственно на вкладке «Вложить ликвидность».",
-  "There is no active farm for this pool.": "Для этого пула нет активной фермы.",
+  "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.": {
+    "key": "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.",
+    "source": "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.",
+    "translation": "У вас есть незастейканные LP-токены для этого пула. Вы можете застейкать их прямо на вкладке «Стейкинг ликвидности».",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/components/StakeableHint.tsx"
+  },
+  "There is no active farm for this pool.": {
+    "key": "There is no active farm for this pool.",
+    "source": "There is no active farm for this pool.",
+    "translation": "Для этого пула нет активной фермы.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/index.tsx"
+  },
   "Show more": "Показать больше",
   "Set amount of position to lock:": "Укажите объем позиции для блокировки:",
   "Position locked successfully!": "Позиция успешно заблокирована!",
@@ -3499,22 +4009,47 @@
   "default": "по умолчанию",
   "TVL (dsc)": "TVL (снижение)",
   "TVL (asc)": "TVL (повышение)",
-  "Liquidity Pools": "Пулы ликвидности",
+  "Liquidity Pools": {
+    "key": "Liquidity Pools",
+    "source": "Liquidity Pools",
+    "translation": "Пулы ликвидности",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/Pools.tsx"
+  },
   "Provide liquidity": "Предоставить ликвидность",
   "Time base": "Период времени",
   "Show Farms": "Показать фермы",
-  "No pools found": "Пулы не найдены",
+  "No pools found": {
+    "key": "No pools found",
+    "source": "No pools found",
+    "translation": "Пулы не найдены",
+    "hint": "found in 2 of files, see apps/solana/src/features/Pools/Pools.tsx,apps/web/src/components/MiniUniversalFarms/components/PoolsTable.tsx"
+  },
   "No data for this chart.": "Нет данных для этого графика.",
   "Please wait for a moment or try refreshing the page.": "Подождите немного или попробуйте обновить страницу.",
   "Volume %timeBase%": "Объем за %timeBase%",
   "Fees %timeBase%": "Комиссии за %timeBase%",
   "Weekly Rewards": "Еженедельные вознаграждения",
   "APR %timeBase%": "APR за %timeBase%",
-  "Pool id": "Идентификатор пула",
-  "View pool charts": "Просмотреть графики пула",
+  "Pool id": {
+    "key": "Pool id",
+    "source": "Pool id",
+    "translation": "ID пула",
+    "hint": "found in 2 of files, see apps/solana/src/features/Pools/components/PoolTableColumns/ColumnsPoolName.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionItemsCard.tsx"
+  },
+  "View pool charts": {
+    "key": "View pool charts",
+    "source": "View pool charts",
+    "translation": "Просмотреть графики пула",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/components/PoolTableColumns/ColumnsPoolActions.tsx"
+  },
   "This is a %type% with a %feeRate%% fee tier": "Это %type% с уровнем комиссии %feeRate%",
   "V3 concentrated liquidity pool (CLMM)": "Пул концентрированной ликвидности V3 (CLMM)",
-  "V2 standard liquidity pool (CPMM)": "Стандартный пул ликвидности V2 (CPMM)",
+  "V2 standard liquidity pool (CPMM)": {
+    "key": "V2 standard liquidity pool (CPMM)",
+    "source": "V2 standard liquidity pool (CPMM)",
+    "translation": "Стандартный пул ликвидности V2 (CPMM)",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/components/PoolListItem.tsx"
+  },
   "View Chart": "Просмотреть график",
   "Week": "Неделя",
   "24h Volume": "Объем за 24 ч",
@@ -3528,16 +4063,31 @@
   "Period": "Период",
   "My created farms": "Мои созданные фермы",
   "You don’t have any concentrated liquidity positions.": "У вас нет позиций с концентрированной ликвидностью.",
-  "Go to pools": "Перейти к пулам",
+  "Go to pools": {
+    "key": "Go to pools",
+    "source": "Go to pools",
+    "translation": "Перейти к пулам",
+    "hint": "found in 2 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/TabClmm.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/TabStandard.tsx"
+  },
   "You don’t have any staked RAY.": "У вас нет вложенных RAY.",
   "Go to Staking": "Перейти к вложению",
   "You don’t have any standard liquidity positions.": "У вас нет стандартных позиций ликвидности.",
   "NFT Mint Address": "Адрес чеканки NFT",
   "%subject% has been copied to clipboard": "%subject% скопировано в буфер обмена",
   "NFT address": "Адрес NFT",
-  "24h Pool Fee": "Комиссия пула за 24 ч",
+  "24h Pool Fee": {
+    "key": "24h Pool Fee",
+    "source": "24h Pool Fee",
+    "translation": "Комиссия пула за 24 ч",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail.tsx"
+  },
   "My Range": "Мой диапазон",
-  "Pending rewards are calculated based on the current pool size and the time since the last harvest.": "Начисление вознаграждений зависит от текущего размера пула и времени, прошедшего с момента последнего сбора.",
+  "Pending rewards are calculated based on the current pool size and the time since the last harvest.": {
+    "key": "Pending rewards are calculated based on the current pool size and the time since the last harvest.",
+    "source": "Pending rewards are calculated based on the current pool size and the time since the last harvest.",
+    "translation": "Ожидаемые вознаграждения рассчитываются на основе текущего размера пула и времени, прошедшего с момента последнего сбора.",
+    "hint": "found in 3 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail/PendingYield.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Staked/MobileStakeDetailDrawer.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Staked/PendingRewards.tsx"
+  },
   "Base/quote tokens have been switched to simplify data display.": "Базовый и котируемый токены были поменяны местами для упрощения отображения данных.",
   "Create New Position": "Создать новую позицию",
   "Locked positions": "Заблокированные позиции",
@@ -3557,7 +4107,12 @@
   "Pending rewards": "Начисленные вознаграждения",
   "You have unstaked LP tokens that could be staked in a farm. Stake now": "У вас есть невложенные LP-токены, которые можно внести в ферму. Вложить сейчас",
   "Rewards have ended for this farm. You can unstake your LP tokens.": "Эта ферма больше не начисляет вознаграждения. Вы можете вывести свои LP-токены.",
-  "Estimated APR based on trading fees earned by the pool in the past 24H": "Примерная APR базируется на комиссиях за трейдинг, заработанных пулом в течение последних 24 часов",
+  "Estimated APR based on trading fees earned by the pool in the past 24H": {
+    "key": "Estimated APR based on trading fees earned by the pool in the past 24H",
+    "source": "Estimated APR based on trading fees earned by the pool in the past 24H",
+    "translation": "Ориентировочная годовая процентная доходность (APR) на основе торговых комиссий, полученных пулом за последние 24 часа",
+    "hint": "found in 2 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Standard/ItemDetail/StandardPoolAPR.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Standard/StandardPoolRowItem.tsx"
+  },
   "Pooled %token%": "В пуле: %token%",
   "Locked position": "Заблокированная позиция",
   "View less": "Показать меньше",
@@ -3570,7 +4125,12 @@
   "Connect wallet to see your positions.": "Подключите кошелек, чтобы просмотреть свои позиции.",
   "Idle tokens": "Неактивные токены",
   "Connect wallet to see your deposited assets.": "Подключите кошелек, чтобы просмотреть свои внесенные активы.",
-  "Assets by pool": "Активы по пулам",
+  "Assets by pool": {
+    "key": "Assets by pool",
+    "source": "Assets by pool",
+    "translation": "Активы по пулам",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionOverview/components/PortfolioInfo.tsx"
+  },
   "Assets by token": "Активы по токенам",
   "All Type": "Все типы",
   "CLMM": "CLMM",
@@ -3616,22 +4176,32 @@
   "Invalid max price": "Некорректная максимальная цена",
   "Enter Lower Price": "Укажите минимальную цену",
   "Invalid min price": "Некорректная минимальная цена",
-  "Pool not found": "Пул не найден",
+  "Pool not found": {
+    "key": "Pool not found",
+    "source": "Pool not found",
+    "translation": "Пул не найден",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/useValidate.ts"
+  },
   "Enter token amount": "Укажите сумму токенов",
   "Enter upper price": "Укажите максимальную цену",
   "Enter lower price": "Укажите минимальную цену",
   "Enter current price": "Укажите текущую цену",
-  "Select pool fee tier": "Выберите уровень комиссии пула",
-  "Select pool token 2": "Выберите второй токен пула",
-  "Select pool token 1": "Выберите первый токен пула",
+  "Select pool fee tier": {
+    "key": "Select pool fee tier",
+    "source": "Select pool fee tier",
+    "translation": "Выберите уровень комиссии пула",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/useValidate.ts"
+  },
+  "Select pool token 2": "Выберите токен пула 2",
+  "Select pool token 1": "Выберите токен пула 1",
   "Enter min price": "Укажите мин. цену",
   "Enter max price": "Укажите макс. цену",
-  "Note: A creation fee of %subject% SOL is required for new pools.": "Примечание: для создания нового пула требуется комиссия в размере %subject% SOL.",
+  "Note: A creation fee of %subject% SOL is required for new pools.": "Примечание: за создание новых пулов взимается комиссия в размере %subject% SOL.",
   "Initial liquidity is too low, try increasing the amount.": "Начальная ликвидность слишком низкая, попробуйте увеличить сумму.",
   "Start time cannot be set to a time in the past.": "Невозможно установить время начала в прошлом.",
   "%side% token balance is insufficient": "Недостаточный баланс токена для %side%",
   "Input an amount of %side% greater than zero": "Введите сумму больше нуля для %side%",
-  "Amm V4 pool does not support token 2022": "Пул AMM V4 не поддерживает токены стандарта Token-2022",
+  "Amm V4 pool does not support token 2022": "Пул Amm V4 не поддерживает токен 2022",
   "Select %side% token": "Выберите токен для%side%",
   "Reward emissions are lower than the min required": "Выплаты вознаграждений ниже минимально допустимых",
   "Insufficient farm duration": "Продолжительность фарминга слишком короткая",
@@ -3643,9 +4213,14 @@
   "To start, select a CLMM position below to lock. Ensure that position value and NFT mint  match the position you want to lock!": "Чтобы начать, выберите позицию CLMM ниже для блокировки. Убедитесь, что стоимость позиции и адрес чеканки NFT совпадают с параметрами позиции, которую вы хотите заблокировать!",
   "Are you sure you want to permanently lock/burn liquidity? You will be unable to access or withdraw underlying position assets, only trading fees earned will remain claimable.": "Вы действительно хотите навсегда заблокировать или сжечь ликвидность? Вы больше не сможете получить доступ к активам этой позиции или вывести их. Доступными для получения останутся только заработанные комиссии за трейдинг.",
   "This tool is for advanced users. For detailed instructions, read the guide for": "Это инструмент для опытных пользователей. Подробная инструкция доступна в руководстве:",
-  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": "Это инструмент для опытных пользователей. Подробная инструкция доступна в руководстве для стандартных пулов.",
-  "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.": "Это инструмент для опытных пользователей. Подробная инструкция доступна в руководстве для пулов CLMM или стандартных пулов.",
-  "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.": "Примечание: эта функция поддерживает только пулы CPMM, созданные через интерфейс. Старые пулы V4 в настоящее время не поддерживаются.",
+  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": "Этот инструмент предназначен для опытных пользователей. Для получения подробных инструкций прочтите руководство по стандартным пулам.",
+  "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.": "Этот инструмент предназначен для опытных пользователей. Для получения подробных инструкций прочтите руководство по пулам CLMM или стандартным пулам.",
+  "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.": {
+    "key": "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.",
+    "source": "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.",
+    "translation": "ПРИМЕЧАНИЕ: Эта функция поддерживает только пулы CPMM, созданные в пользовательском интерфейсе. Старые пулы V4 в настоящее время не поддерживаются.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Lock/index.tsx"
+  },
   "Learn more here.": "Подробнее — здесь.",
   "To start, select a standard AMM position below to lock. Ensure that position value and LP balance match the position you want to lock!": "Чтобы начать, выберите стандартную позицию AMM ниже для блокировки. Убедитесь, что стоимость позиции и баланс LP совпадают с параметрами позиции, которую вы хотите заблокировать!",
   "Price impact for this swap is %percent%": "Влияние на цену для этого обмена составляет %percent%%",
@@ -3673,9 +4248,24 @@
   "Search by token name/address, pool type (e.g. clamm, lbamm), features (e.g. dynamic fees), or pool address. Example: 'bnb usdt infinity clamm'": "Поиск по названию/адресу токена, типу пула (например clamm, lbamm), функциям (например динамические комиссии) или адресу пула. Пример: 'bnb usdt infinity clamm'",
   "Expanding Search..": "Расширение поиска...",
   "To proceed, please type the word \"%word%\"": "Чтобы продолжить, введите слово \"%word%\"",
-  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.": "Цена в пуле существенно отличается от текущих рыночных курсов (%slippage%). Это повышает риск потерь из-за арбитража.",
-  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.": "Цена в пуле существенно отличается от текущих рыночных курсов (%slippage%). Это повышает риск потерь из-за арбитража. Действуйте осторожно.",
-  "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.": "Суммы показаны с учетом комиссии. В пулах LBAMM накопленные комиссии добавляются к резервам пула.",
+  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.": {
+    "key": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.",
+    "source": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.",
+    "translation": "Цена в пуле показывает значительное отклонение от текущих рыночных курсов (%slippage%). Это увеличивает риск потерь от арбитража.",
+    "hint": "found in 1 of files, see apps/web/src/views/AddLiquidityInfinity/components/SubmitButton.tsx"
+  },
+  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.": {
+    "key": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.",
+    "source": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.",
+    "translation": "Цена в пуле значительно отклоняется от текущих рыночных курсов (%slippage%). Это увеличивает риск потерь от арбитража. Пожалуйста, действуйте с осторожностью.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
+  "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.": {
+    "key": "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.",
+    "source": "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.",
+    "translation": "Отображаемые суммы включают комиссии. В пулах LBAMM начисленные комиссии возвращаются в резервы пула.",
+    "hint": "found in 2 of files, see apps/web/src/views/PositionInfinity/InfinityBinPosition.tsx,apps/web/src/views/RemoveLiquidityInfinity/components/RemoveBinPosition.tsx"
+  },
   "Invalid wallet address": "Недействительный адрес кошелька",
   "Send": "Отправить",
   "Insufficient balance": "Недостаточный баланс",
@@ -3696,20 +4286,30 @@
   "Couldn't retrieve token info. Please try again!": "Не удалось получить информацию о токене. Попробуйте еще раз!",
   "Amount you are guaranteed to receive.": "Сумма, которую вы гарантированно получите.",
   "Fees saved on PancakeSwap compared to major DEXs charging interface fees.": "Сэкономленные комиссии на PancakeSwap по сравнению с ведущими DEX, которые взимают интерфейсные комиссии.",
-  "The change in pool price caused by your swap.": "Изменение цены в пуле, вызванное вашим обменом.",
+  "The change in pool price caused by your swap.": {
+    "key": "The change in pool price caused by your swap.",
+    "source": "The change in pool price caused by your swap.",
+    "translation": "Изменение цены в пуле, вызванное вашим свопом.",
+    "hint": "found in 1 of files, see apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Estimated time to complete this transaction.": "Примерное время завершения этой транзакции.",
   "Retry with lower input amount!": "Попробуйте ввести меньшую сумму!",
   "Developer Doc": "Документация для разработчиков",
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Зарабатывайте Falcon Miles!",
-  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": {
+    "key": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+    "source": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+    "translation": "LP зарабатывают в %multiplier% раз больше миль Falcon в зависимости от общего TVL, внесенного в пул. Мили начисляются только на позиции в диапазоне от 0,95 до 1,05.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/FarmStatusDisplay/index.tsx,apps/web/src/views/universalFarms/components/RewardInfoCard/index.tsx"
+  },
   "Enter value between %min% and %max%": "Введите значение в пределах от %min% до %max%",
   "balance not enough": "недостаточный баланс",
   "Select base token": "Выберите базовый токен",
   "Select quote token": "Выберите котируемый токен",
   "Enter order size": "Введите размер ордера",
   "Enter price tick": "Введите тик цены",
-  "Create a farm for any live pool": "Создайте ферму для любого активного пула",
+  "Create a farm for any live pool": "Создайте ферму для любого действующего пула",
   "You can add up to %count% reward tokens.": "Максимум можно добавить столько токенов для вознаграждения: %count%.",
   "Reward Token %index%": "Токен для вознаграждения %index%",
   "Updated": "Обновлено",
@@ -3721,8 +4321,18 @@
   "Please type the word \"confirm\" to continue with this swap.": "Чтобы продолжить обмен, введите слово «confirm» (подтверждаю).",
   "Computing": "Вычисление",
   "Swap %amountA% %symbolA% for %amountB% %symbolB%.": "Обменять %amountA% %symbolA% на %amountB% %symbolB%.",
-  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "Сейчас нет доступных вознаграждений для сбора. Вернитесь позже — ваша прибыль будет расти, когда пользователи будут торговать в этом пуле.",
-  "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": "Ваш пул появится в списке пулов примерно через 5 минут. Вы также сможете просмотреть добавленную позицию на вкладке «Моя позиция». Этот пул представлен как NFT — не сжигайте и не передавайте его, так как он подтверждает ваше право собственности на позицию.",
+  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": {
+    "key": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+    "source": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+    "translation": "Вознаграждений для сбора пока нет. Зайдите позже — ваш доход будет расти по мере того, как пользователи торгуют в этом пуле.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail/PendingYield.tsx"
+  },
+  "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": {
+    "key": "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.",
+    "source": "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.",
+    "translation": "Ваш пул появится в списке пулов примерно через 5 минут, а вашу добавленную позицию можно будет увидеть на вкладке «Моя позиция». Эта позиция представлена в виде NFT — пожалуйста, не сжигайте и не передавайте его, так как он необходим для сохранения права владения позицией.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessWithLockModal.tsx"
+  },
   "Decrease Reward Rate": "Уменьшить ставку вознаграждений",
   "Amount and days cannot both be zero": "Сумма и количество дней не могут одновременно равняться нулю",
   "Split Display": "Разделенное отображение",
@@ -3740,7 +4350,12 @@
   "Trade Fees": "Торговые комиссии",
   "Farm Rewards": "Вознаграждения с фермы",
   "Unsupported protocol: %protocol%": "Неподдерживаемый протокол: %protocol%",
-  "Pool Features": "Характеристики пула",
+  "Pool Features": {
+    "key": "Pool Features",
+    "source": "Pool Features",
+    "translation": "Особенности пула",
+    "hint": "found in 3 of files, see apps/web/src/components/PoolInfoHeader/index.tsx,apps/web/src/views/PoolDetail/components/PoolFeaturesModal.tsx,apps/web/src/views/PoolDetail/components/PoolInfo.tsx"
+  },
   "Total Value Locked (TVL)": "Общая заблокированная сумма (TVL)",
   "Total Liquidity": "Общая ликвидность",
   "Total Farm Earnings": "Всего заработано с фермы",
@@ -3749,7 +4364,12 @@
   "Price Range (Min/Max)": "Ценовой диапазон (мин./макс.)",
   "No positions found": "Позиции не найдены",
   "Harvesting...": "Идет сбор...",
-  "Pool feature": "Характеристики пула",
+  "Pool feature": {
+    "key": "Pool feature",
+    "source": "Pool feature",
+    "translation": "Особенность пула",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolFeaturesBadge.tsx"
+  },
   "Farm rewards": "Вознаграждения с фермы",
   "Edit farm": "Редактировать ферму",
   "Create farm": "Создать ферму",
@@ -3825,7 +4445,12 @@
   "Just sent you %totalUsd%! 🎉 Tap this link and to claim it: 👉 %claimLink%\n\nPlease connect your wallet to claim it!\n\nAlternatively, you can manually enter the code %code% on PancakeSwap wallet to claim.": "Я только что прислал(-ла) тебе %totalUsd%! 🎉 Нажми на эту ссылку, чтобы получить подарок: 👉 %claimLink%\n\nПодключи свой кошелек, чтобы завершить получение!\n\nИли введи вручную код %code% в кошельке PancakeSwap.",
   "Chart Information": "Данные графика",
   "The price data displayed is for reference only and may not reflect exact trading prices.": "Показанные ценовые данные приведены только для ознакомления и могут не отражать точные цены торгов.",
-  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": "На этом графике показаны сводные данные о цене из разных источников. Фактическая сумма по запросу на обмен или цены в конкретном пуле PancakeSwap могут быть другими.",
+  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": {
+    "key": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.",
+    "source": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.",
+    "translation": "Этот график показывает агрегированные данные о ценах из нескольких источников. Фактические суммы вывода по запросу на обмен или цены в конкретном пуле PancakeSwap могут отличаться.",
+    "hint": "found in 1 of files, see apps/web/src/components/Chart/AggregatePricingModal.tsx"
+  },
   "Provided by <0>HashDit</0>": "Предоставлено <0>HashDit</0>",
   "Learn more about risk rating <0>here.</0>": "Подробнее о рейтинге риска — <0>здесь</0>.",
   "Risk scan results are provided by a third party, <0>HashDit</0>": "Результаты оценки риска предоставляет сторонний партнер, <0>HashDit</0>",
@@ -3855,7 +4480,11 @@
   "solana.removed_liquidity_desc": "Удалено %amountA% %symbolA% и %amountB% %symbolB%.",
   "solana.update_rewards": "Обновить вознаграждения",
   "solana.update_rewards_in_pool": "Обновить вознаграждения в пуле %pool%.",
-  "solana.create_pool": "Создать пул",
+  "solana.create_pool": {
+    "key": "solana.create_pool",
+    "source": "Create Pool",
+    "translation": "Создать пул"
+  },
   "solana.create_v3_pool": "Создать пул V3",
   "solana.create_new_farm": "Создать новую ферму",
   "solana.farm_id": "Идентификатор: %poolId%",
@@ -3870,14 +4499,24 @@
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP и лимитные ордера пока не поддерживаются для кошельков на основе смарт-контрактов.",
   "Create your Wallet with Social Login": "Создайте кошелек с авторизацией через соцсеть",
   "Important Notice: %chain% Sunset": "Важное сообщение: прекращение поддержки %chain%",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "Поддержка %chain% будет прекращена %date%. Извлеките ликвидность из всех пулов до этой даты.",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": {
+    "key": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
+    "source": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
+    "translation": "Поддержка %chain% будет прекращена %date%. Пожалуйста, убедитесь, что вы вывели свою ликвидность из всех пулов до указанного срока.",
+    "hint": "found in 1 of files, see apps/web/src/components/Liquidity/LiquiditySunsetWarning.tsx"
+  },
   "TransactionExecutionError: The requested account and / or method has not been authorised by the user. Please make sure your wallet is updated to the latest version.": "TransactionExecutionError: The requested account and / or method has not been authorised by the user. Please make sure your wallet is updated to the latest version.",
   "Solana swap submitted": "Обмен Solana отправлен",
   "Smart contract wallets are currently not supported on Bridge. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on Bridge. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Global Settings": "Глобальные настройки",
   "EVM Settings": "Настройки EVM",
   "Solana Settings": "Настройки Solana",
-  "Loading more pools...": "Загружаем больше пулов...",
+  "Loading more pools...": {
+    "key": "Loading more pools...",
+    "source": "Loading more pools...",
+    "translation": "Загрузка новых пулов...",
+    "hint": "found in 1 of files, see apps/web/src/components/MiniUniversalFarms/components/PoolsTable.tsx"
+  },
   "Try Zap": "Попробуйте функцию Zap",
   "to automatically balance and provide V3 liquidity in one click.": "для автоматической балансировки и обеспечения ликвидности V3 в один клик.",
   "Set position range": "Установить диапазон позиции",
@@ -4003,22 +4642,57 @@
   "twap.confirm": "Подтвердить",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} for {dstAmount} {dstToken}",
   "Create Pool": "Создать пул",
-  "Create Liquidity Pool": "Создать пул ликвидности",
-  "Select the DEX type of the liquidity pool": "Выберите тип DEX пула ликвидности",
+  "Create Liquidity Pool": {
+    "key": "Create Liquidity Pool",
+    "source": "Create Liquidity Pool",
+    "translation": "Создать пул ликвидности",
+    "hint": "found in 2 of files, see apps/web/src/config/constants/meta.ts,apps/web/src/views/CreateLiquidityPool/components/BreadcrumbNav.tsx"
+  },
+  "Select the DEX type of the liquidity pool": {
+    "key": "Select the DEX type of the liquidity pool",
+    "source": "Select the DEX type of the liquidity pool",
+    "translation": "Выберите тип DEX для пула ликвидности.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
   "Infinity Pool": "Бесконечный пул",
   "V3 Pool": "V3 Pool",
   "V2 Pool": "V2 Pool",
-  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
-  "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
-  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": {
+    "key": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
+    "source": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
+    "translation": "Поддерживает несколько типов пулов с экономичным расходом газа, hook-ами и гибкими вариантами ликвидности. Идеально подходит для продвинутых стратегий и максимизации прибыли.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
+  "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": {
+    "key": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
+    "source": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
+    "translation": "Продвинутые пулы, в которых вы выбираете определенные ценовые диапазоны для предоставления ликвидности, получая более высокие комиссии в выбранном вами диапазоне.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
+  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": {
+    "key": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+    "source": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+    "translation": "Классические пулы, которые позволяют предоставлять ликвидность во всем ценовом диапазоне для получения стабильных и предсказуемых торговых комиссий.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
   "Use Market Price": "Использовать рыночную цену",
   "%assetA% = 1 %assetB%": "%assetA% = 1 %assetB%",
   "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.",
   "Initial Price": "Начальная цена",
   "Dynamic Fee": "Динамическая комиссия",
   "Infinity Pools are not supported on this chain": "Infinity Pools не поддерживаются в этой сети",
-  "Successfully created pool": "Пул успешно создан",
-  "A pool with selected settings already exists. Please add liquidity instead.": "A pool with selected settings already exists. Please add liquidity instead.",
+  "Successfully created pool": {
+    "key": "Successfully created pool",
+    "source": "Successfully created pool",
+    "translation": "Пул успешно создан",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/hooks/V2/useV2CreateForm.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V3/useV3CreateForm.tsx"
+  },
+  "A pool with selected settings already exists. Please add liquidity instead.": {
+    "key": "A pool with selected settings already exists. Please add liquidity instead.",
+    "source": "A pool with selected settings already exists. Please add liquidity instead.",
+    "translation": "Пул с выбранными настройками уже существует. Пожалуйста, добавьте ликвидность.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/V3/MessagePoolInitialized.tsx"
+  },
   "Insufficient SOL balance to complete transaction": "Недостаточный баланс SOL для завершения транзакции",
   "Priority Fee Settings": "Настройки приоритетной комиссии",
   "Connect Solana Wallet": "Подключить кошелек Solana",
@@ -4159,10 +4833,25 @@
   "PancakeSwap’s <0>Initial Farm Offering (IFO)</0> is a platform to launch new tokens.": "Платформа <0>Initial Farm Offering (IFO)</0> от PancakeSwap предназначена для запуска новых токенов.",
   "Pcs's": "От Pcs",
   "ifo-what-is-ifo-description-1": "<p>Пользователи могут покупать токены проектов, используя %symbol%, а проекты получают ликвидность, узнаваемость и прямой доступ к нашему сообществу.</p>",
-  "syrup-pools-desc": "Syrup Pools позволяют вам стейкать CAKE для получения наград. Депонируя CAKE в Syrup Pool, вы можете получать токены от проектов-партнеров, в зависимости от пула.",
-  "syrup-pools-instructions": "Перейдите в раздел <0>Syrup Pools</0> на PancakeSwap, выберите пул и внесите CAKE. Ваши награды начнут накапливаться автоматически. Вы можете вывести свой CAKE в любое время.",
+  "syrup-pools-desc": {
+    "key": "syrup-pools-desc",
+    "source": "Syrup Pools let you stake CAKE to earn rewards. By depositing CAKE into a Syrup Pool, you can receive tokens from partner projects, depending on the pool.",
+    "translation": "Syrup-пулы позволяют вам стейкать CAKE для получения наград. Внося CAKE в Syrup-пул, вы можете получать токены от партнёрских проектов в зависимости от пула.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
+  "syrup-pools-instructions": {
+    "key": "syrup-pools-instructions",
+    "source": "Go to the <0>Syrup Pools</0> section on PancakeSwap, choose a pool, and deposit CAKE. Your rewards will start accumulating automatically. You can unstake your CAKE anytime.",
+    "translation": "Перейдите в раздел <0>Syrup-пулы</0> на PancakeSwap, выберите пул и внесите CAKE. Ваши награды начнут накапливаться автоматически. Вы можете вывести свои CAKE из стейкинга в любое время.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "rewards-list": "<0>Пулы токенов партнеров</0>: Зарабатывайте токены от партнерских проектов, стейкая CAKE (например, стейкайте CAKE, чтобы заработать PEPE). <1>Награды необходимо забирать вручную, нажав кнопку \"Harvest\" в разделе \"Details\" для каждого пула.</1>",
-  "fees-description": "Платформа <0>не взимает комиссий</0> за стейкинг или вывод из Syrup Pools. Однако <1>стандартные комиссии за газ блокчейна</1> будут применяться при совершении транзакций, таких как внесение депозита, сбор наград или вывод CAKE.",
+  "fees-description": {
+    "key": "fees-description",
+    "source": "There are <0>no platform fees</0> for staking or unstaking in Syrup Pools. However, <1>standard blockchain gas fees</1> will still apply when making transactions, such as depositing, harvesting rewards, or unstaking CAKE.",
+    "translation": "За стейкинг и вывод средств из Syrup-пулов <0>комиссии платформы не взимаются</0>. Однако при совершении транзакций, таких как внесение депозита, сбор наград или вывод CAKE из стейкинга, по-прежнему будут применяться <1>стандартные комиссии сети за газ</1>.",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "unclaimed-rewards": "Ваши награды продолжат накапливаться, пока ваш CAKE остается в стейкинге. Вы можете получить их в любое время, нажав кнопку \"<0>Harvest</0>\".",
   "legacy-pools": "<0>Пулы Auto CAKE и Manual CAKE</0> были обновлены до стейкинга <1>veCAKE</1>. Если у вас все еще есть CAKE в устаревших пулах, вам необходимо <2>мигрировать на veCAKE</2>, чтобы продолжать получать награды. <3>Узнайте, как мигрировать здесь</3>",
   "Gift Failed to Claim": "Не удалось заклеймить подарок",

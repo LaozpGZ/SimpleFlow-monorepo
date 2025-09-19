@@ -278,7 +278,12 @@
   "Won": "Vunnit",
   "Entered": "Introducerad",
   "Connect your wallet to view your prediction history": "Anslut din plånbok för att visa din prognoshistorik",
-  "You’ve already staked the maximum amount you can stake in this pool!": "Du har redan satsat det maximala beloppet för den här poolen!",
+  "You’ve already staked the maximum amount you can stake in this pool!": {
+    "key": "You’ve already staked the maximum amount you can stake in this pool!",
+    "source": "You’ve already staked the maximum amount you can stake in this pool!",
+    "translation": "Du har redan satsat det maximala beloppet du kan satsa i denna pool!",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/withStakeActions.tsx"
+  },
   "Markets Paused": "Marknaderna har pausats",
   "Prediction markets have been paused due to an error.": "Prognosmarknaderna har pausats på grund av ett fel.",
   "All open positions have been cancelled.": "Alla öppna positioner har annullerats.",
@@ -331,34 +336,64 @@
   "The CAKE from the participation fee will be burnt as part of the weekly token burn.": "CAKE-tokens från deltagaravgiften bränns som del av tokenbränningen varje vecka.",
   "How can I get an achievement for participating in the IFO?": "Hur kan jag få en prestation för att delta i IFO?",
   "Contract Enabled": "Kontrakt aktiverat",
-  "You can now stake in the %symbol% pool!": "Du kan nu satsa i poolen %symbol%!",
+  "You can now stake in the %symbol% pool!": {
+    "key": "You can now stake in the %symbol% pool!",
+    "source": "You can now stake in the %symbol% pool!",
+    "translation": "Du kan nu staka i %symbol%-poolen!",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/hooks/useApprove.tsx"
+  },
   "Please try again. Confirm the transaction and make sure you are paying enough gas!": "Försök igen. Bekräfta överföringen och se till att du betalar tillräckligt!",
   "Start earning": "Börja tjäna",
   "Unlock liquidity while earning rewards": "Lås upp likviditet samtidigt som du tjänar belöningar",
   "Liquid Staking": "Flytande insats",
   "Unstaked!": "Har dragits tillbaka!",
   "Staked!": "Satsat!",
-  "Your funds have been staked in the pool": "Dina medel har satsats i poolen",
+  "Your funds have been staked in the pool": {
+    "key": "Your funds have been staked in the pool",
+    "source": "Your funds have been staked in the pool",
+    "translation": "Dina medel har stakats i poolen",
+    "hint": "found in 1 of files, see apps/web/src/views/FixedStaking/components/StakingModalTemplate.tsx"
+  },
   "Your earnings have also been harvested to your wallet": "Din förtjänst har också skördats till din plånbok",
-  "Stake in Pool": "Satsa i pool",
+  "Stake in Pool": {
+    "key": "Stake in Pool",
+    "source": "Stake in Pool",
+    "translation": "Satsa i poolen",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "Balance: %balance%": "Balans: %balance%",
   "Cancelled": "Annullerad",
   "Harvested": "Skördad",
   "Close Window": "Stäng fönster",
   "Insufficient %symbol% balance": "Otillräckligt %symbol%-saldo",
-  "You’ll need %symbol% to stake in this pool!": "Du behöver %symbol% för att satsa i den här poolen!",
-  "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.": "Köp någon %symbol% eller se till att din %symbol% inte är i en annan pool eller LP.",
+  "You’ll need %symbol% to stake in this pool!": "Du behöver %symbol% för att staka i den här poolen!",
+  "Buy some %symbol%, or make sure your %symbol% isn’t in another pool or LP.": "Köp %symbol%, eller se till att dina %symbol% inte finns i en annan pool eller LP.",
   "Buy": "Köp",
   "Locate Assets": "Lokalisera tillgångar",
   "%symbol% required": "%symbol% krävs",
   "Your %symbol% earnings have also been harvested to your wallet!": "Din %symbol%-förtjänst har också skördats till din plånbok!",
-  "Your %symbol% funds have been staked in the pool!": "Dina %symbol%-medel har satsats i poolen!",
-  "Max stake for this pool: %amount% %token%": "Maximal insats för den här poolen: %amount% %token%",
+  "Your %symbol% funds have been staked in the pool!": {
+    "key": "Your %symbol% funds have been staked in the pool!",
+    "source": "Your %symbol% funds have been staked in the pool!",
+    "translation": "Dina %symbol%-medel har satsats i poolen!",
+    "hint": "found in 2 of files, see apps/aptos/components/Pools/components/PoolCard/StakeModalContainer.tsx,apps/web/src/views/Pools/components/Modals/StakeModal.tsx"
+  },
+  "Max stake for this pool: %amount% %token%": {
+    "key": "Max stake for this pool: %amount% %token%",
+    "source": "Max stake for this pool: %amount% %token%",
+    "translation": "Maximal insats för denna pool: %amount% %token%",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "Maximum total stake: %amount% %token%": "Maximal total insats: %amount% %token%",
   "Auto": "Auto",
   "Manual": "Manuell",
   "Earn CAKE, stake CAKE": "Tjäna CAKE, satsa CAKE",
-  "Syrup Pools": "Syrup-pooler",
+  "Syrup Pools": {
+    "key": "Syrup Pools",
+    "source": "Syrup Pools",
+    "translation": "Syrup Pools",
+    "hint": "found in 3 of files, see apps/aptos/components/Pools/index.tsx,apps/web/src/components/Menu/config/config.ts,apps/web/src/views/Pools/index.tsx"
+  },
   "Best round: #%roundId%": "Bästa runda: #%roundId%",
   "View Reclaimed & Won": "Visa återinlösta och vunna",
   "This round was automatically cancelled due to an error. If you entered a position, please reclaim your funds below.": "Den här rundan annullerades automatiskt på grund av ett fel. Om du införde en position ber vi att du begär tillbaka dina medel nedan.",
@@ -505,7 +540,12 @@
   "Screenshot or press & hold the image to share!": "Skärmdump eller tryck och håll på bilden för att dela!",
   "Block %num%": "Block %num%",
   "Profile Pic": "Profilbild",
-  "Pool status": "Poolstatus",
+  "Pool status": {
+    "key": "Pool status",
+    "source": "Pool status",
+    "translation": "Poolstatus",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/PoolTabButtons.tsx"
+  },
   "Old": "Gammal",
   "Transfer": "Överför",
   "Congratulations!": "Grattis!",
@@ -521,10 +561,18 @@
   "%symbol% to receive": "%symbol% att ta emot",
   "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your": "Denna transaktion kommer inte att utföras, antingen på grund av prisrörelsen eller transaktionsavgiften. Prova att öka din",
   "slippage tolerance.": "prisförändringsgräns.",
-  "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!": "Äggande bra! Vi firar när Syrup Storm vinner påskstriden!",
+  "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!": {
+    "key": "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!",
+    "source": "Eggscellent! Celebrating Syrup Storm winning the Easter Battle!",
+    "translation": "Ägg-cellent! Vi firar att Syrup Storm vann påskstriden!"
+  },
   "Melting Easter eggs and melting hearts!": "Smältande påskägg och hjärtan!",
   "Watch out for Flipsie’s spatula smash!": "Se upp för Flipsies spatelsmash!",
-  "Do you like chocolate with your syrup? Go long!": "Gillar du choklad med din sirap? Kör hårt!",
+  "Do you like chocolate with your syrup? Go long!": {
+    "key": "Do you like chocolate with your syrup? Go long!",
+    "source": "Do you like chocolate with your syrup? Go long!",
+    "translation": "Gillar du choklad med din sirap? Satsa långt!"
+  },
   "Happy Niu Year! This bunny’s excited for the year of the bull (market!)": "Happy Niu Year! Den här kaninen är spänd inför tjurens år (marknad!)",
   "Oopsie daisy! Hiccup's had a bit of an accident. Poor little fella.": "Oj då, Hiccup har råkat ut för en olycka. Stackars liten.",
   "Sunny is always cheerful when there are pancakes around. Smile!": "Sunny är alltid glad när det finns pannkakor i närheten. Le!",
@@ -532,17 +580,34 @@
   "Nommm... Oh hi, I'm just meditating on the meaning of CAKE.": "Nommm... Åh, hej, jag mediterar bara lite angående betydelsen av CAKE.",
   "Three guesses what's put that twinkle in those eyes! (Hint: it's CAKE)": "Tre gissningar vad som orsakar de tindrande ögonen! (Ledtråd: det är CAKE)",
   "These bunnies love nothing more than swapping pancakes. Especially on BSC.": "Dessa kaniner älskar att byta pannkakor mer än något annat. Särskilt på BSC.",
-  "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?": "Det regnar sirap på den här kaninen, men han verkar inte bry sig. Kan du klandra honom?",
+  "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?": {
+    "key": "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?",
+    "source": "It's raining syrup on this bunny, but he doesn't seem to mind. Can you blame him?",
+    "translation": "Det regnar sirap på denna kanin, men den verkar inte bry sig. Kan du klandra den?"
+  },
   "These bunnies like their pancakes with blueberries. What's your favorite topping?": "Dessa kaniner gillar sina pannkakor med blåbär. Vilken är din favorittopping?",
   "Love makes the world go 'round... but so do pancakes. And these bunnies know it.": "Kärlek får jorden att gå runt... men det gör även pannkakor och det vet dessa kaniner om.",
-  "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.": "Det är glittrande sirap, pannkakor och till och med lotter! Den här kaninen älskar det verkligen.",
-  "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!": "Stormen är på väg! Se upp! Dessa tjurar rusar i en våg av sirap!",
+  "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.": {
+    "key": "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.",
+    "source": "It’s sparkling syrup, pancakes, and even lottery tickets! This bunny really loves it.",
+    "translation": "Det är glittrande sirap, pannkakor och till och med lotter! Denna kanin älskar det verkligen."
+  },
+  "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!": {
+    "key": "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    "source": "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    "translation": "Stormen kommer! Se upp! Dessa tjurar stampar fram i en sirapsvåg!"
+  },
   "The flippening is coming. Don't get in these bunnies' way, or you'll get flipped, too!": "Vändningen är på gång. Stå inte i vägen för dessa kaniner, för att då kommer du också att bli vänd!",
   "Can you stand the heat? Stay out of the kitchen or you might get burned to a crisp!": "Klarar du av hettan? Håll dig borta från köket annars kan du brännas frasig!",
   "%ratio%% of total sale": "%ratio% % av total försäljning",
   "Your %symbol% earnings have been sent to your wallet!": "Din %symbol%-förtjänst har skickats till din plånbok!",
   "Stake %symbol%": "Satsa %symbol%",
-  "You must harvest and compound your earnings from this pool manually.": "Du måste manuellt skörda och sammanställa dina förtjänster från den här poolen.",
+  "You must harvest and compound your earnings from this pool manually.": {
+    "key": "You must harvest and compound your earnings from this pool manually.",
+    "source": "You must harvest and compound your earnings from this pool manually.",
+    "translation": "Du måste skörda och återinvestera din avkastning från den här poolen manuellt.",
+    "hint": "found in 3 of files, see apps/aptos/components/Pools/components/PoolCard/CardFooter.tsx,apps/aptos/components/Pools/components/PoolTable/ActionPanel.tsx,apps/web/src/views/Pools/components/PoolTypeTag.tsx"
+  },
   "Register": "Registrera",
   "Contribute %symbol%": "Bidra med %symbol%",
   "Volume": "Volym",
@@ -561,10 +626,20 @@
   "Rules": "Regler",
   "Enable pool": "Aktivera pool",
   "Start staking": "Börja satsa",
-  "Search Pools": "Sök pooler",
+  "Search Pools": {
+    "key": "Search Pools",
+    "source": "Search Pools",
+    "translation": "Sök pooler",
+    "hint": "found in 2 of files, see apps/web/src/components/MiniUniversalFarms/MiniUniversalFarmsOverlay.tsx,packages/widgets-internal/pool/PoolControls.tsx"
+  },
   "Ends in": "Avslutas om",
   "Starts in": "Startar om",
-  "Total amount of %symbol% staked in this pool": "Totalt belopp av %symbol% satsat i denna pool",
+  "Total amount of %symbol% staked in this pool": {
+    "key": "Total amount of %symbol% staked in this pool",
+    "source": "Total amount of %symbol% staked in this pool",
+    "translation": "Totalt antal %symbol% satsade i denna pool",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/TotalStaked.tsx"
+  },
   "Max. stake per user": "Maximal insats per användare",
   "You have claimed your rewards!": "Du har löst in dina belöningar!",
   "Already Collected": "Har redan samlats in",
@@ -626,7 +701,12 @@
   "Your voting power is determined by the amount of CAKE you held and the remaining duration on the fixed-term staking position (if you have one) at the block detailed below. CAKE held in other places does not contribute to your voting power.": "Din röststyrka bestäms av den mängd CAKE du innehar och den återstående löptiden på den tidsbegränsade insatspositionen (om du har en) vid det block som anges nedan. CAKE som innehas på andra platser bidrar inte till din röststyrka.",
   "Wallet": "Plånbok",
   "CAKE BNB LP": "CAKE BNP LP",
-  "Other Syrup Pools": "Andra Syrup-pooler",
+  "Other Syrup Pools": {
+    "key": "Other Syrup Pools",
+    "source": "Other Syrup Pools",
+    "translation": "Andra Syrup-pooler",
+    "hint": "found in 1 of files, see apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Voting Power": "Rösträtt",
   "You need at least %count% voting power to publish a proposal.": "Du behöver åtminstone %count% i rösträtt för att publicera ett förslag.",
   "Check voting power": "Kontrollera rösträtt",
@@ -889,7 +969,12 @@
   "ROI at current rates": "Avkastning på investering med aktuella priser",
   "Farm Multiplier": "Farmmultiplikator",
   "“My Balance” here includes both LP Tokens in your wallet, and LP Tokens already staked in this farm.": "\"Mitt saldo\" här består både av LP-tokens i din plånbok och LP-tokens som redan har satsats i denna farm.",
-  "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.": "\"Mitt saldo\" här består både av %assetSymbol% i din plånbok och %assetSymbol% som redan har satsats i denna pool.",
+  "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.": {
+    "key": "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.",
+    "source": "“My Balance” here includes both %assetSymbol% in your wallet, and %assetSymbol% already staked in this pool.",
+    "translation": "\"Mitt saldo\" här inkluderar både %assetSymbol% i din plånbok och %assetSymbol% som redan är satsat i denna pool.",
+    "hint": "found in 1 of files, see packages/uikit/src/components/RoiCalculatorModal/RoiCalculatorModal.tsx"
+  },
   "APY (%compoundTimes%x daily compound)": "APY (sammansätts %compoundTimes% gång(er) per dag)",
   "My Balance": "Mitt saldo",
   "Staked for": "Satsas i",
@@ -993,7 +1078,12 @@
   "Your action has been requested and we are processing the funds. Please check back in a couple of hours to request withdrawal of funds.": "Din åtgärd har begärts och vi håller på att behandla pengarna. Återkom om ett par timmar för att begära uttag av pengar.",
   "Maximum %amount% %symbol%": "Max %amount% %symbol%",
   "Minimum %amount% %symbol%": "Min %amount% %symbol%",
-  "Maximum pool %amount% %symbol%": "Max pool %amount% %symbol%",
+  "Maximum pool %amount% %symbol%": {
+    "key": "Maximum pool %amount% %symbol%",
+    "source": "Maximum pool %amount% %symbol%",
+    "translation": "Maximalt poolbelopp %amount% %symbol%",
+    "hint": "found in 1 of files, see apps/web/src/views/FixedStaking/components/StakingModalTemplate.tsx"
+  },
   "Maximum sold": "Max sålt",
   "Ends In": "Avslutas om",
   "The difference between the market price and estimated price due to trade size.": "Skillnaden mellan marknadspris och uppskattat pris på grund av handelsvolym.",
@@ -1202,7 +1292,7 @@
   "Making neat stuff beyond her comprehension": "De gjorde häftiga saker som övergick hennes förstånd",
   "The bunnies were working in a big ol’ kitchen": "Kaninerna jobbade i ett stort gammalt kök",
   "Cooking hot pancakes for their big ol’ mission:": "De lagade pannkakor åt sin gamla missionsstation:",
-  "To drizzle in syrup and hand them out soon": "De skulle bara hälla på sirap och dela ut dem snart",
+  "To drizzle in syrup and hand them out soon": "Att ringla över sirap och dela ut dem snart",
   "So that bunnies worldwide may fly to the moon.": "Så att kaninerna över hela världen kunde flyga till månen.",
   "All Pancake Squad NFTs are allocated to Squad Ticket holders through a provably-fair system based on ChainLink at the time of minting.": "Alla Pancake Squad-NFT:er tilldelas till de som får Squad-biljetter via ett system som verifierats som rättvist och som baseras på Chainlink vid präglingstillfället.",
   "Presale:": "Förhandsförsäljning:",
@@ -1285,7 +1375,7 @@
   "Sign up for battle and you’re guaranteed a prize!": "Bli medlem så att du kan delta i tävlingen där alla vinner något!",
   "Compete with other teams for the highest trading volume!": "Tävla mot andra lag och försök uppnå den högsta handelsvolymen!",
   "Trading Competition": "Handelstävling",
-  "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!": "Lås några CAKE-tokens i den tidsbestämda insatspoolen för CAKE-tokens för att delta i nästa IF!",
+  "To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!": "För att delta i nästa IFO, lås CAKE i CAKE-poolen för fast staking!",
   "Learn more about iCAKE": "Mer information om iCAKE-tokens",
   "For the basic sale, Max CAKE entry is capped by minimum between your average CAKE balance in the iCAKE, or the pool’s hard cap. To increase the max entry, Stake more CAKE into the iCAKE": "Under grundförsäljningen bestäms maxgränsen för antal iCAKE-tokens av ditt genomsnittliga iCAKE-saldo i IF-iCAKE-poolen eller poolens övre gräns. Satsa fler iCAKE-tokens i IF-iCAKE-poolen för att öka den övre gränsen",
   "You don’t have any iCAKE available for IFO public sale.": "Du har inga tillgängliga iCAKE-tokens i den offentliga IF-försäljningen.",
@@ -1293,7 +1383,12 @@
   "Start in": "Börjar om",
   "Exceeded max CAKE entry": "Maxgränsen för antal CAKE-tokens har överskridits",
   "Earn %asset%": "Tjäna %asset%",
-  "IFO Pool": "IF-pool",
+  "IFO Pool": {
+    "key": "IFO Pool",
+    "source": "IFO Pool",
+    "translation": "IFO-pool",
+    "hint": "found in 1 of files, see apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Chart": "Diagram",
   "You’ve successfully claimed tokens back.": "Du har tagit tillbaka dina tokens.",
   "Stake CAKE to participate in IFOs": "Satsa CAKE-tokens för att delta i inledande farmerbjudanden",
@@ -1317,15 +1412,15 @@
   "Learn How": "Få reda på hur",
   "Network": "Nätverk",
   "Switch Network": "Byt nätverk",
-  "This pool requires active Pancake Profile and %amount% profile points.": "Denna pool kräver en aktiv Pancake-profil och %amount% profilpoäng.",
-  "This pool requires active Pancake Profile": "Denna pool kräver en aktiv Pancake-profil",
+  "This pool requires active Pancake Profile and %amount% profile points.": "Denna pool kräver en aktiv Pancake Profile och %amount% profilpoäng.",
+  "This pool requires active Pancake Profile": "Denna pool kräver en aktiv Pancake Profile",
   "This pool requires %amount% profile points.": "Denna pool kräver %amount% profilpoäng.",
   "Requirement": "Krav",
   "Create Profile": "Skapa profil",
   "Go to Profile": "Gå till din profil",
   "Profile Points": "Profilpoäng",
   "You're using this NFT as your Pancake Profile picture": "Du använder denna NFT som bild i din Pancake-profil",
-  "You've already staked the maximum amount you can stake in this pool!": "Du har redan satsat det maximala beloppet i den här poolen!",
+  "You've already staked the maximum amount you can stake in this pool!": "Du har redan stakat det maximala beloppet du kan staka i den här poolen!",
   "Don't show this again": "Visa inte detta igen",
   "You're all set!": "Du är redo!",
   "Max. Tickets per wallet:": "Max antal biljetter per plånbok:",
@@ -1335,16 +1430,21 @@
   "Unstaking LP Tokens and CAKE": "Så häver man insatsen av LP och CAKE-tokens",
   "Stake in the new contract.": "Satsa i nya kontraktet.",
   "All the earned CAKE will be harvested to your wallet upon unstake.": "Alla intjänade CAKE-tokens skördas till din plånbok vid unstake.",
-  "Each farm and pool has to be individually enabled before staking.": "Varje farm och pool måste aktiveras individuellt innan insatsen placeras.",
+  "Each farm and pool has to be individually enabled before staking.": "Varje farm och pool måste aktiveras individuellt före staking.",
   "Go to Stake": "Gå till \"Insats\"",
   "Skip": "Hoppa över",
-  "Please connect wallet to check your pools & farms status.": "Anslut plånboken för att kontrollera pooler och farmstatus.",
+  "Please connect wallet to check your pools & farms status.": "Anslut din plånbok för att kontrollera statusen på dina pooler och farms.",
   "Please connect wallet to check your farms status.": "Anslut plånboken för att kontrollera farmstatus.",
   "You are not currently staking in any farms that require migrations.": "Du är för närvarande inte engagerad i några farmar som behöver migreras.",
   "Unstake All": "Häv alla insatser",
   "Old Farms": "Gamla farmer",
   "Please note that this is the old BTT token, which has been swapped to the new BTT tokens in the following ratio:": "Observera att detta är den gamla BTT-token som har växlats in till de nya BTT-tokens enligt följande förhållande:",
-  "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.": "Denna pool har felkonfigurerats. Häv insatsen av dina tokens från den. Metoden \"emergencyWithdraw\" kommer att användas. Dina tokens skickas tillbaka till din plånbok, däremot skördas inga belöningar.",
+  "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.": {
+    "key": "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.",
+    "source": "This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.",
+    "translation": "Denna pool var felkonfigurerad. Ta ut dina tokens från den, metoden emergencyWithdraw kommer att användas. Dina tokens kommer att returneras till din plånbok, men belöningar kommer inte att skördas.",
+    "hint": "found in 1 of files, see packages/widgets-internal/pool/StakeModal.tsx"
+  },
   "For the private sale, each eligible participant will be able to commit any amount of CAKE up to the maximum commit limit, which is published along with the IFO voting proposal.": "Under den privata försäljningen kommer varje behörig deltagare att kunna avsätta valfritt antal CAKE-tokens upp till maxgränsen, som publiceras tillsammans med det inledande farmerbjudandets röstförslag.",
   "Meet any one of the following requirements to be eligible.": "Uppfyll något av följande krav för att bli behörig.",
   "You are eligible to participate in this Private Sale!": "Du är behörig att delta i denna privata försäljning!",
@@ -1462,7 +1562,12 @@
   "Don't see the farm you are staking?": "Ser du inte den farm du satsar på?",
   "check out v1 farms": "kolla in version 1-farmer",
   "Up to": "Upp till",
-  "Looking for v1 CAKE syrup pools?": "Letar du efter CAKE-sirappooler?",
+  "Looking for v1 CAKE syrup pools?": {
+    "key": "Looking for v1 CAKE syrup pools?",
+    "source": "Looking for v1 CAKE syrup pools?",
+    "translation": "Letar du efter v1 CAKE syrup-pooler?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/index.tsx"
+  },
   "Go to migration page": "Gå till migreringssidan",
   "%asset% Staked": "%asset% har satsats",
   "Add": "Lägg till",
@@ -1497,7 +1602,7 @@
   "The price of token prizes ($CAKE and $DAR) in USD will be determined as per their BUSD pair price during the tally period.": "Priset på token-priser ($CAKE and $DAR) i USD fastställs enligt BUSD-parpriset under avstämningsperioden.",
   "Eligible pairs: DAR/BNB, CAKE/BNB, and CAKE/BUSD. Please note that the volume from limit orders will not be indexed.": "Giltiga par: DAR/BNB, CAKE/BNB och CAKE/BUSD. Observera att volymen från begränsade beställningar inte indexeras.",
   "iCAKE": "iCAKE",
-  "Go to CAKE pool": "Gå till CAKE-pool",
+  "Go to CAKE pool": "Gå till CAKE-poolen",
   "April": "April",
   "Easter Battle": "Påskslaget",
   "$200,000 in Prizes!": "200 000 dollar i prispotten!",
@@ -1588,7 +1693,12 @@
   "Flexible CAKE Staking": "Flexibel CAKE-staking",
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Röststyrkan beräknas med hjälp av insatsbeloppet och den återstående insatstiden för den tidsbegränsade CAKE-insatsen i blocket.",
   "CAKE locked:": "CAKE låst:",
-  "Go to Pools": "Gå till Pools",
+  "Go to Pools": {
+    "key": "Go to Pools",
+    "source": "Go to Pools",
+    "translation": "Gå till Pooler",
+    "hint": "found in 2 of files, see apps/web/src/hooks/useLockedEndNotification.tsx,apps/web/src/views/Voting/components/CastVoteModal/DetailsView.tsx"
+  },
   "Boosted by vCAKE": "Boostad av vCAKE",
   "Boosting Expired": "Boostingen har upphört",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Din vCAKE-boosting löpte ut vid snapshot-blocket. Förnya din tidsbegränsade insatsposition för att aktivera boosten för framtida röstningsförslag.",
@@ -1754,7 +1864,12 @@
   "Farm Types": "Farmtyper",
   "Lock End": "Låst avslut",
   "The locked staking duration has ended.": "Den låsta satsningstiden har gått ut.",
-  "Cake Syrup Pool": "Cake Syrup-pool",
+  "Cake Syrup Pool": {
+    "key": "Cake Syrup Pool",
+    "source": "Cake Syrup Pool",
+    "translation": "Cake Syrup Pool",
+    "hint": "found in 1 of files, see apps/web/src/hooks/useLockedEndNotification.tsx"
+  },
   "Use": "Använd",
   "to bridge this asset.": "för att överbrygga denna tillgång.",
   "to bridge %symbol%.": "för att överbrygga %symbol%.",
@@ -1875,7 +1990,12 @@
   "Simplified Decentralized Trading": "Förenklad decentraliserad handel",
   "Experience true decentralization with our exchange, offering you complete control over your trades in a secure and easy-to-use environment": "Upplev äkta decentralisering med vår växling som ger dig fullständig kontroll över dina affärer i en säker och lättanvänd miljö",
   "Earn while you Trade": "Tjäna medan du handlar",
-  "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery": "Tjäna CAKE-tokens på de flesta affärer som görs på PancakeSwap. Satsa för fler belöningar eller använd dem i vårt Lottery and Pottery",
+  "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery": {
+    "key": "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery",
+    "source": "Earn CAKE tokens on most trades made on PancakeSwap. Stake for more rewards or use them in our Lottery and Pottery",
+    "translation": "Tjäna CAKE-tokens på de flesta affärer som görs på PancakeSwap. Satsa för fler belöningar eller använd dem i vårt Lotteri och Pottery",
+    "hint": "found in 1 of files, see apps/web/src/views/AffiliatesProgram/components/OnBoardingModal/StepIntro.tsx"
+  },
   "Welcome to PancakeSwap!": "Välkommen till PancakeSwap!",
   "has referred you to start trading on PancakeSwap": "har rekommenderat dig att börja handla på PancakeSwap",
   "Start trading today and get a": "Börja handla idag och få",
@@ -1982,7 +2102,12 @@
   "Split routing enables token swaps to be broken into multiple routes to achieve the best deal.": "Split routing gör det möjligt att dela upp token swaps i flera olika routningar för att uppnå bästa möjliga pris.",
   "Turning this off will only allow a single route, which may result in low efficiency or higher slippage.": "Om du stänger av den här funktionen tillåts endast en enda routning, vilket kan leda till låg effektivitet eller högre slippage.",
   "Route is automatically calculated based on your routing preference to achieve the best price for your trade.": "Routning beräknas automatiskt baserat på dina önskemål för att uppnå det bästa priset för din handel.",
-  "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"": "Handelsavgiften varierar beroende på poolavgiftsnivå. Kontrollera det via förstoringsglasikonen under ”Route”.",
+  "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"": {
+    "key": "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"",
+    "source": "Trading fee varies by pool fee tier. Check it via the magnifier icon under \"Route.\"",
+    "translation": "Handelsavgiften varierar beroende på poolens avgiftsnivå. Kontrollera den via förstoringsglasikonen under \"Route.\"",
+    "hint": "found in 4 of files, see apps/web/src/views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderDetailsPanel.tsx,apps/web/src/views/Swap/Bridge/components/FeeToolTip.tsx,apps/web/src/views/Swap/V3Swap/components/SwapModalFooterV2.tsx,apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Fee Breakdown and Tokenomics": "Avgiftsfördelning och Tokenomics",
   "Harvest All": "Skörda alla",
   "Avg": "Genomsn",
@@ -2093,7 +2218,12 @@
   "Switch network": "Byt nätverk",
   "to claim rewards": "för att lösa in belöningar",
   "You have %number% incompleted request in Historical Claim.": "Du har %number% ofullständig begäran i Inlösenhistorik.",
-  "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.": "bCAKE ökar endast gårdens APR. Den faktiska multiplikatorn beror på förhållandena på farmen och i poolen.",
+  "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.": {
+    "key": "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.",
+    "source": "bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.",
+    "translation": "bCAKE boostar endast Farm APR. Den faktiska boost-multiplikatorn beror på farmens och poolens förhållanden.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/PoolAprButton/AprTooltipContent.tsx,apps/web/src/views/universalFarms/components/PoolAprButtonV3/AprTooltipContent.tsx"
+  },
   "Buy %currency%": "Köp %currency%",
   "Caution - METIS Token": "Varning - METIS Token",
   "Twitter": "Twitter",
@@ -2245,7 +2375,12 @@
   "Fee APY:": "Avgift APY:",
   "Stake APY:": "Insats APY:",
   "CAKE Staking": "CAKE-insats",
-  "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.": "Positioner som flyttats från CAKE Pool kan inte förlängas eller fyllas på. För att utöka eller lägga till mer CAKE, skapa en ursprunglig veCAKE-position.",
+  "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.": {
+    "key": "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.",
+    "source": "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position.",
+    "translation": "Positioner som migrerats från CAKE-poolen kan inte utökas eller fyllas på. För att förlänga eller lägga till mer CAKE, skapa en inbyggd veCAKE-position.",
+    "hint": "found in 1 of files, see packages/widgets-internal/ifo/Tips.tsx"
+  },
   "Chain": "Kedja",
   "Type": "Typ",
   "Reward paused for this position": "Belöning pausad för den här positionen",
@@ -2355,10 +2490,25 @@
   "Withdrawal Fee": "Uttagsavgift",
   "View Staking Token Project Site": "Visa Staking Token-projektets webbplats",
   "Stake %stakedToken%, Earn APT on": "Insats %stakedToken%, Tjäna APT den",
-  "%stakedToken% Syrup Pool": "%stakedToken% Syrup Pool",
-  "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.": "Om fler %lpLabel% LP sätts in på vår Farm denna vecka, kommer vi att öka APT-belöningarna för %stakedToken% Syrup Pool nästa vecka.",
+  "%stakedToken% Syrup Pool": {
+    "key": "%stakedToken% Syrup Pool",
+    "source": "%stakedToken% Syrup Pool",
+    "translation": "%stakedToken% Syrup Pool",
+    "hint": "found in 1 of files, see apps/aptos/components/Farms/components/FarmTable/PoolEarnAptTooltips.tsx"
+  },
+  "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.": {
+    "key": "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.",
+    "source": "If more %lpLabel% LP is deposited in our Farm this week, we'll increase APT rewards for %stakedToken% Syrup Pool next week.",
+    "translation": "Om mer %lpLabel% LP deponeras i vår Farm den här veckan, kommer vi att öka APT-belöningarna för %stakedToken% Syrup Pool nästa vecka.",
+    "hint": "found in 1 of files, see apps/aptos/components/Farms/components/FarmTable/PoolEarnAptTooltips.tsx"
+  },
   "Enjoying the %stakingToken% Staking APR? Get more rewards with the %lpLabel% LP on our": "Njuter du av %stakingToken% insats APR? Få fler belöningar med %lpLabel% LP på vår",
-  "The rewards for this Syrup Pool will not be applicable to or claimable by": "Belöningarna för denna Syrup Pool kommer inte att gälla för eller kunna krävas av",
+  "The rewards for this Syrup Pool will not be applicable to or claimable by": {
+    "key": "The rewards for this Syrup Pool will not be applicable to or claimable by",
+    "source": "The rewards for this Syrup Pool will not be applicable to or claimable by",
+    "translation": "Belöningarna för denna Syrup Pool kommer inte att vara tillämpliga för eller kunna hämtas ut av",
+    "hint": "found in 1 of files, see apps/aptos/components/Pools/components/PoolTable/UsUserAptRewardTooltips.tsx"
+  },
   "Verify your address to continue": "Verifiera din adress för att gå vidare",
   "Invalid BTC address": "Ogiltig BTC-adress",
   "Buy with %provider%": "Köp med %provider%",
@@ -2402,8 +2552,13 @@
   "Merkl APR": "Merkl APR",
   "Quotes may be unavailable for some assets based on market conditions and provider availability in your region.": "Anbud kan vara otillgängliga för vissa tillgångar beroende på marknadsförhållanden och leverantörernas tillgänglighet i din region.",
   "Stake CAKE, Earn PEPE in our": "Satsa CAKE, tjäna PEPE i vår",
-  "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our": "Uppskattar du APR? Få fler PEPE-belöningar i nästa månads Syrup Pool genom att satsa fler PEPE-BNB LP i vår",
-  "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month": "Om fler PEPE-BNB LP sätts in på vår farm kommer vi att öka belöningarna för PEPE Syrup Pool nästa månad",
+  "Enjoying the APR? Get more PEPE rewards in next month's Syrup Pool by staking more PEPE-BNB LP in our": "Gillar du din APR? Få fler PEPE-belöningar i nästa månads Syrup Pool genom att staka mer PEPE-BNB LP i vår",
+  "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month": {
+    "key": "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month",
+    "source": "If more PEPE-BNB LP is deposited in our Farm, we'll increase rewards for the PEPE Syrup Pool next month",
+    "translation": "Om mer PEPE-BNB LP deponeras i vår Farm kommer vi att öka belöningarna för PEPE Syrup Pool nästa månad.",
+    "hint": "found in 2 of files, see apps/web/src/views/Farms/components/FarmCard/CardHeading.tsx,apps/web/src/views/Farms/components/FarmTable/Farm.tsx"
+  },
   "Total APR": "Total APR",
   "Start Earning": "Börja tjäna",
   "Reward/Day": "Belöning/dag",
@@ -2537,7 +2692,12 @@
   "Rocker launching your meme career": "Raketstart för din meme-karriär",
   "Stake LP Tokens to Earn Cake and APT": "Satsa LP-tokens för att tjäna Cake och APT",
   "Read The Guide": "Läs guiden",
-  "Earn Cake and APT with up to 50% apr on 15+ Pools": "Tjäna Cake och APT med upp till ca 50 % på över 15 pooler",
+  "Earn Cake and APT with up to 50% apr on 15+ Pools": {
+    "key": "Earn Cake and APT with up to 50% apr on 15+ Pools",
+    "source": "Earn Cake and APT with up to 50% apr on 15+ Pools",
+    "translation": "Tjäna CAKE och APT med upp till 50 % APR på 15+ pooler.",
+    "hint": "found in 1 of files, see apps/aptos/components/Banner/AptosYieldFarmingBanner.tsx"
+  },
   "Earn Dual Incentives with Yield Farming on Aptos PancakeSwap": "Tjäna dubbla incitament med avkastning på farmande på Aptos PancakeSwap",
   "No quotes available for %cryptoCurrency% right now.": "Inga tillgängliga noteringar på %cryptoCurrency% just nu.",
   "No Quotes": "Inga noteringar",
@@ -2585,14 +2745,29 @@
   "Add +": "Lägg till +",
   "Choose Liquidity Shape": "Välj likviditetsform",
   "Fee tier": "Avgiftsnivå",
-  "Pool features": "Poolfunktioner",
+  "Pool features": {
+    "key": "Pool features",
+    "source": "Pool features",
+    "translation": "Poolfunktioner",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolFeaturesBadge.tsx"
+  },
   "Fee Level": "Avgiftsnivå",
   "Common range: 0.01% to 0.3%, Ideal range <1%": "Vanligt intervall: 0,01 % till 0,3 %, idealiskt intervall <1 %",
   "Fee Tier Setting": "Inställning av avgiftsnivå",
-  "Static: The fee remains fixed at the specified level once the pool is created.": "Statisk: Avgiften förblir fast på den angivna nivån när poolen har skapats.",
+  "Static: The fee remains fixed at the specified level once the pool is created.": {
+    "key": "Static: The fee remains fixed at the specified level once the pool is created.",
+    "source": "Static: The fee remains fixed at the specified level once the pool is created.",
+    "translation": "Statisk: Avgiften förblir fast på den angivna nivån när poolen har skapats.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Static": "Statisk",
   "Dynamic": "Dynamisk",
-  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": "Dynamisk: Avgiften kan ändras med hjälp av hook efter att poolen har skapats. Den initiala avgiftsnivån är satt till 0",
+  "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0": {
+    "key": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "source": "Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0",
+    "translation": "Dynamisk: Avgiften kan ändras med hjälp av en hook efter att poolen har skapats. Initial avgiftsnivå är satt till 0.",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/components/FieldFeeLevel.tsx,apps/web/src/views/CreateLiquidityPool/components/FieldFeeTierSetting.tsx"
+  },
   "Contract is verified on block explorer": "Kontrakt verifierat på block explorer",
   "Contract is not verified on block explorer": "Kontrakt inte verifierat på block explorer",
   "Verified": "Verifierat",
@@ -2622,7 +2797,12 @@
   "Infinity Bin Pool Created": "Infinity Bin-pool har skapats",
   "Position Created!": "Position skapad!",
   "Pool Created!": "Poolen har skapats!",
-  "Error creating pool": "Fel när pool skapades",
+  "Error creating pool": {
+    "key": "Error creating pool",
+    "source": "Error creating pool",
+    "translation": "Fel vid skapande av pool",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/hooks/useFormSubmitCallback.ts"
+  },
   "Error Add Liquidity": "Fel när likviditet lades till",
   "A pool with the selected configuration already exists.": "En pool med den valda konfigurationen finns redan.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Tokens för överföring av avgifter och ombaseringstokens är INTE kompatibla med V3.",
@@ -2687,7 +2867,12 @@
   "No gas cost or fee will be charged on failed orders.": "Ingen bensinkostnad eller avgift kommer att debiteras för misslyckade ordrar.",
   "Caution - %token% Token": "Varning - %token% token",
   "CAKE Incentives": "CAKE-incitament",
-  "Staking Pools": "Insatspooler",
+  "Staking Pools": {
+    "key": "Staking Pools",
+    "source": "Staking Pools",
+    "translation": "Insatspooler",
+    "hint": "found in 2 of files, see apps/aptos/components/Menu/footerConfig.ts,packages/uikit/src/widgets/Menu/components/footerConfig.ts"
+  },
   "Token Launches": "Token-lanseringar",
   "Get Help": "Få hjälp",
   "Audits": "Granskningar",
@@ -2696,7 +2881,12 @@
   "Play": "Spela",
   "Legacy products": "Äldre produkter",
   "APR Breakdown": "APR-uppdelning",
-  "Pool Feature": "Poolfunktion",
+  "Pool Feature": {
+    "key": "Pool Feature",
+    "source": "Pool Feature",
+    "translation": "Poolfunktion",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/useColumnConfig.tsx,apps/web/src/views/universalFarms/constants.ts"
+  },
   "Swap Now": "Växla nu",
   "ZERO": "NOLL",
   "%amount% of your liquidity is currently staking in farm.": "%amount% av din likviditet satsas för närvarande i farm.",
@@ -2832,7 +3022,12 @@
   "Audit info": "Revisionsinfo",
   "Audit Outcome": "Revisionsresultat",
   "Hook Creator": "Hook-skapare",
-  "The price range is outside current pool price": "Prisintervallet är utanför aktuellt poolpris",
+  "The price range is outside current pool price": {
+    "key": "The price range is outside current pool price",
+    "source": "The price range is outside current pool price",
+    "translation": "Prisintervallet är utanför poolens nuvarande pris",
+    "hint": "found in 1 of files, see apps/web/src/components/Liquidity/Form/FieldDepositAmount.tsx"
+  },
   "Set price range first": "Ange först prisintervall",
   "No hooks available with the selected filters": "Inga hooks tillgängliga med de valda filtren",
   "Reset filters": "Återställ filter",
@@ -2855,14 +3050,24 @@
   "No Existing Orders": "Inga befintliga order",
   "Existing Orders": "Befintliga order",
   "status": "status",
-  "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.": "Denna pool kan ta ut en avgift för likviditetsåtgärder. Justera toleransen för slippage under Inställningar efter behov.",
+  "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.": {
+    "key": "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.",
+    "source": "This pool may charge a fee for liquidity actions. Adjust slippage tolerance under Settings as needed.",
+    "translation": "Denna pool kan ta ut en avgift för likviditetsåtgärder. Justera slippage-toleransen under Inställningar vid behov.",
+    "hint": "found in 2 of files, see apps/web/src/views/RemoveLiquidityInfinity/components/RemoveBinPosition.tsx,apps/web/src/views/RemoveLiquidityInfinity/components/RemoveClPosition.tsx"
+  },
   "Swap %token% to win a share of": "Växla %token% för att vinna en andel av",
   "Empty page: No results found.": "Tom sida: Inga resultat hittades.",
   "View details in Docs": "Visa detaljer i Docs",
   "Insufficient data for historical price chart.": "Otillräckligt med data för historiskt prisdiagram.",
   "CLAMM Pool": "CLAMM-pool",
   "Liquidity Book AMM": "Likviditetsbok AMM",
-  "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "CLAMM-pooler (Concentrated Liquidity Automated Market Maker) fokuserar likviditeten inom specifika prisintervall, vilket maximerar kapitaleffektiviteten och möjliggör snävare spreadar.",
+  "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": {
+    "key": "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.",
+    "source": "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.",
+    "translation": "Pooler med Koncentrerad Likviditet och Automatiserad Marknadsgarant (CLAMM) fokuserar likviditet inom specifika prisintervall, maximerar kapitaleffektiviteten och möjliggör snävare spreads.",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolTypeModal.tsx"
+  },
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "Likviditetsbok AMM (Bin Pool) använder diskreta prisområden för att segmentera likviditeten, vilket ger detaljerad kontroll över kapitalallokeringen och minskar slippage.",
   "Active Liquidity Management hooks enable fine-tuned control over liquidity positions, helping liquidity providers optimize returns by automating rebalancing, concentration, and exposure strategies.": "Aktiva likviditetshanterings-hooks möjliggör finjusterad kontroll över likviditetspositioner och hjälper likviditetsleverantörer att optimera avkastningen genom att automatisera strategier för ombalansering, koncentration och exponering.",
   "Dynamic Fees hooks allow fee adjustments based on market conditions, enhancing protocol efficiency by optimizing transaction costs during high volatility or incentivizing trades in low-activity periods.": "Dynamiska avgifts-hooks möjliggör avgiftsjusteringar som baseras på marknadsförhållandena, vilket förbättrar protokollets effektivitet genom att optimera transaktionskostnaderna under hög volatilitet eller ge incitament till handel under lågaktiva perioder.",
@@ -2870,7 +3075,12 @@
   "Liquidity Incentivization hooks provide mechanisms to reward liquidity providers, using token incentives or innovative reward structures to attract and retain capital within the protocol.": "Likviditetsincitaments-hooks tillhandahåller mekanismer för att belöna likviditetsleverantörer, med hjälp av incitament i form av tokens eller innovativa belöningsstrukturer för att attrahera och behålla kapital inom protokollet.",
   "MEV (Maximal Extractable Value) hooks focus on mitigating or leveraging MEV, enabling protocols to minimize negative impacts or capitalize on profitable reordering opportunities.": "MEV-hooks (Maximal Extractable Value) fokuserar på att mildra eller utnyttja MEV, vilket gör det möjligt för protokoll att minimera negativ påverkan eller dra nytta av lönsamma omorganiseringsmöjligheter.",
   "Real-World Assets hooks bridge traditional and decentralized finance, facilitating tokenized representation and on-chain interaction with real-world assets such as bonds, real estate, or commodities.": "Real-World Assets-hooks överbryggar traditionell och decentraliserad finansiering genom att underlätta tokeniserad representation och interaktion på kedjan med verkliga tillgångar som obligationer, fastigheter eller råvaror.",
-  "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.": "Yield Optimization-hooks automatiserar strategier för att maximera avkastningen på insatt kapital genom att dynamiskt omfördela medel mellan olika pooler eller strategier för att uppnå optimal prestanda.",
+  "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.": {
+    "key": "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.",
+    "source": "Yield Optimization hooks automate strategies to maximize returns on deposited capital, dynamically reallocating funds across various pools or strategies to achieve optimal performance.",
+    "translation": "Avkastningsoptimeringshooks automatiserar strategier för att maximera avkastningen på insatt kapital genom att dynamiskt omfördela medel mellan olika pooler eller strategier för att uppnå optimal prestanda.",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/hookCategoryDesc.tsx"
+  },
   "Other hooks are used to manage other aspects of the protocol.": "Andra hooks används för att hantera andra aspekter av protokollet.",
   "Oracle hooks provide secure and reliable off-chain data integration, ensuring accurate price feeds, market data, or other critical information is available for on-chain applications.": "Oracle-hooks ger säker och tillförlitlig dataintegration utanför kedjan, vilket säkerställer att korrekta prisflöden, marknadsdata eller annan kritisk information finns tillgänglig för applikationer på kedjan.",
   "Cross-Chain hooks enable seamless interaction between multiple blockchain ecosystems, allowing asset transfers, liquidity sharing, and protocol interoperability across chains.": "Kedjeöverskridande hooks möjliggör sömlös interaktion mellan flera blockkedjeekosystem, vilket möjliggör tillgångsöverföringar, likviditetsdelning och protokollinteroperabilitet mellan kedjor.",
@@ -2946,7 +3156,12 @@
   "PANCAKE PICKS": "PANCAKE PICKS",
   "More Information": "Mer information",
   "Please connect wallet to view your position / add liquidity.": "Anslut plånboken för att se din position / lägga till likviditet.",
-  "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": "APR beräknas med hjälp av den totala likviditeten i poolen jämfört med det totala belöningsbeloppet, faktisk APR kan vara högre eftersom viss likviditet inte är insatt eller inom räckhåll.",
+  "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": {
+    "key": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
+    "source": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
+    "translation": "APR beräknas med hjälp av den totala likviditeten i poolen gentemot det totala belöningsbeloppet, faktisk APR kan vara högre eftersom en del likviditet inte är stakad eller inom intervallet.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/PoolAprButton/AprTooltipContent.tsx,apps/web/src/views/universalFarms/components/PoolAprButtonV3/AprTooltipContent.tsx"
+  },
   "APRs for individual positions may vary depending on the price range set.": "APR för enskilda positioner kan variera beroende på vilket prisintervall som anges.",
   "View in Wallet": "Visa i plånbok",
   "Trade %token%": "Handla %token%",
@@ -2964,7 +3179,7 @@
   "The TGE status (e.g., oversubscribed or not)": "TGE-status (t.ex. övertecknad eller inte)",
   "2. How many tokens will I receive?": "2. Hur många tokens får jag?",
   "During the TGE, users can subscribe up to a maximum of 3 BNB. The final token allocation is determined based on the proportion of BNB a user contributed relative to the total BNB subscribed by all participants at the time the sale ends.": "Under TGE kan användare teckna upp till maximalt 3 BNB. Den slutliga tilldelningen av token bestäms utifrån den andel BNB som en användare bidragit med i förhållande till den totala BNB som tecknats av alla deltagare vid tidpunkten då försäljningen avslutas.",
-  "3. Will I receive a refund if the pool is oversubscribed?": "3. Kommer jag att få pengarna tillbaka om poolen är fulltecknad?",
+  "3. Will I receive a refund if the pool is oversubscribed?": "3. Får jag en återbetalning om poolen är övertecknad?",
   "Yes. If the TGE is oversubscribed, any excess BNB that was not used to purchase tokens will be automatically refunded to your wallet when you claim your tokens.": "Ja. Om TGE är övertecknad kommer överskjutande BNB som inte användes för att köpa tokens automatiskt att återbetalas till din plånbok när du löser in dina tokens.",
   "4. Which regions or countries are restricted from participating in this event?": "4. Vilka regioner eller länder är förhindrade att delta i detta event?",
   "The following nationalities are currently not eligible to participate in Binance-exclusive TGEs:": "Följande nationaliteter är för närvarande inte berättigade att delta i Binance-exklusiva TGE:er:",
@@ -3026,22 +3241,32 @@
   "Earn a share of platform revenue.": "Tjäna en andel av plattformsintäkterna.",
   "More details here": "Mer information här",
   "Use veCAKE to vote on where CAKE emissions are allocated.": "Använd veCAKE för att rösta om var CAKE-emissionerna ska fördelas.",
-  "Earn increased rewards when providing liquidity in selected pools.": "Tjäna ökade belöningar när du tillhandahåller likviditet i utvalda pooler.",
+  "Earn increased rewards when providing liquidity in selected pools.": {
+    "key": "Earn increased rewards when providing liquidity in selected pools.",
+    "source": "Earn increased rewards when providing liquidity in selected pools.",
+    "translation": "Tjäna ökade belöningar när du tillhandahåller likviditet i utvalda pooler.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/faqConfig.tsx"
+  },
   "Gain exclusive access to Initial Farm Offerings (IFOs) with higher allocation limits.": "Få exklusiv tillgång till Initial Farm Offerings (IFO) med högre tilldelningsgränser.",
   "How do I claim my CAKE rewards?": "Hur löser jag in mina CAKE-belöningar?",
   "What is cross-chain CAKE, and what is it used for?": "Vad är kedjeöverskridande CAKE, och vad används det till?",
   "cross-chain bridging": "kedjeöverskridande broar",
   "Can I transfer or trade my staked CAKE or veCAKE?": "Kan jag överföra eller handla med min insatta CAKE eller veCAKE?",
-  "What are Syrup Pools?": "Vad är Syrup-pooler?",
-  "How do I stake CAKE in Syrup Pools?": "Hur satsar jag CAKE i Syrup-pooler?",
-  "What rewards can I earn from Syrup Pools?": "Vilka belöningar kan jag tjäna från Syrup-pooler?",
+  "What are Syrup Pools?": "Vad är Syrup Pools?",
+  "How do I stake CAKE in Syrup Pools?": "Hur stakar jag CAKE i Syrup Pools?",
+  "What rewards can I earn from Syrup Pools?": "Vilka belöningar kan jag tjäna i Syrup Pools?",
   "Are there any fees for staking or unstaking?": "Finns det några avgifter för att satsa eller sluta satsa?",
   "Once your CAKE is locked, rewards will accumulate continuously. You can claim your revenue sharing CAKE rewards weekly.To avoid losing rewards, make sure to": "När din CAKE är låst kommer belöningar att ackumuleras kontinuerligt. Du kan lösa in dina CAKE-belöningar för intäktsdelning varje vecka.för att undvika att förlora belöningar, se till att",
   "claim your CAKE regularly or extend your locking period.": "lösa in din CAKE regelbundet eller förläng din låsningsperiod.",
   "You can do this directly from the veCAKE staking page.": "Du kan göra detta direkt från veCAKE:s insättningssida.",
   "Cross-chain CAKE allows veCAKE holders to participate in gauges voting on multiple chains, including Ethereum and Arbitrum. Through": "Kedjeöverskridande CAKE gör det möjligt för veCAKE-innehavare att delta i mätaromröstningar på flera kedjor, inklusive Ethereum och Arbitrum. Genom",
   ", users can influence CAKE emissions and liquidity across various chains.": ", kan användare påverka CAKE-emissioner och -likviditet i olika kedjor.",
-  "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?": "Jag har fortfarande CAKE placerat i de gamla automatiska eller manuella CAKE-poolerna. Vad ska jag göra då?",
+  "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?": {
+    "key": "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?",
+    "source": "I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?",
+    "translation": "Jag har fortfarande CAKE stakad i de gamla Auto eller Manuella CAKE-poolerna. Vad ska jag göra?",
+    "hint": "found in 1 of files, see apps/web/src/views/Pools/faqConfig.tsx"
+  },
   "Particle Network's Token Generation Event": "Particle Networks event för generering av token",
   "Particle Network is the largest chain abstraction infrastructure for Web3. Its core technology, Universal Accounts, represents the solution to Web3's user, data, and liquidity fragmentation, giving users a single account and balance across all chains.": "Particle Network är den största infrastrukturen för kedjeabstraktion för Web3. Dess kärnteknik, Universal Accounts, utgör lösningen på Web3:s fragmentering av användare, data och likviditet, genom att ge användarna ett enda konto och saldo i alla kedjor.",
   "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token.": "The Particle Chain, Particle Networks L1-blockkedja, fungerar som motorn som driver Universal Accounts. För att visa upp denna innovation har Particle redan släppt den kedjeagnostiska dApp för huvudnätet - UniversalX. Med den kan användare handla med tokens från vilken kedja som helst, kombinera sina tillgångar över alla ekosystem och betala gas med vilken token som helst.",
@@ -3061,18 +3286,33 @@
   "Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE start date.": "Tyvärr uppfyller du inte deltagarkraven den här gången. För att kvalificera sig måste deltagarna ha köpt Binance Alpha tokens via Binance Wallet (Keyless) eller via Spot/Fundingskonton på Binance Exchange inom 30-dagarsperioden före TGE-startdatumet.",
   "Lorenzo Protocol is described as an institutional-grade on-chain asset management platform that structures and deploys yield-optimized fund vaults, effectively channeling on-chain liquidity into the most competitive yield opportunities.": "Lorenzo-protokollet beskrivs som en institutionell kapitalförvaltningsplattform som strukturerar och distribuerar avkastningsoptimerade valv för medel, vilket effektivt kanaliserar likviditet i kedjan till de mest konkurrenskraftiga avkastningsmöjligheterna.",
   "Earn 30x Ethena Points!": "Tjäna 30x Ethena-poäng!",
-  "Add liquidity to this pool and earn 30x Ethena points!": "Lägg till likviditet i denna pool och tjäna 30x Ethena-poäng!",
+  "Add liquidity to this pool and earn 30x Ethena points!": {
+    "key": "Add liquidity to this pool and earn 30x Ethena points!",
+    "source": "Add liquidity to this pool and earn 30x Ethena points!",
+    "translation": "Lägg till likviditet till denna pool och tjäna 30x Ethena-poäng!",
+    "hint": "found in 1 of files, see apps/web/src/views/universalFarms/components/FarmStatusDisplay/index.tsx"
+  },
   "Claim your rewards & learn more": "Hämta dina belöningar och läs mer",
   "on Ethena's official site.": "på Ethenas officiella webbplats.",
   "Boost Your Yield with Ethena": "Öka din avkastning med Ethena",
-  "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": "Lägg till likviditet i dessa pooler (USDe/USDT och sUSDe/USDe) för att tjäna massiva belöningar - 30x Ethena-poäng!",
+  "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": {
+    "key": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
+    "source": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
+    "translation": "Lägg till likviditet i dessa pooler (USDe/USDT och sUSDe/USDe) för att tjäna massiva belöningar - 30x Ethena Points!",
+    "hint": "found in 1 of files, see apps/web/src/views/universalFarms/components/RewardInfoCard/index.tsx"
+  },
   "Please update to the latest APP version": "Uppdatera till den senaste APP-versionen",
   "Only": "Endast",
   "veCake Redeem": "veCake-inlösen",
   "MY CAKE STAKING POSITION": "MY CAKE STAKING-POSITION",
   "Anytime": "Närsomhelst",
   "My Total rewards": "Mina totala belöningar",
-  "CAKE Pool Rewards": "CAKE Pool-belöningar",
+  "CAKE Pool Rewards": {
+    "key": "CAKE Pool Rewards",
+    "source": "CAKE Pool Rewards",
+    "translation": "CAKE-poolbelöningar",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/VeCakeRedeem.tsx"
+  },
   "Revenue Sharing Rewards": "Belöningar för intäktsdelning",
   "REDEEM NOW": "LÖS IN NU",
   "Total amount": "Totalt belopp",
@@ -3085,12 +3325,22 @@
   "Rewards have been sent to your wallet.": "Belöningar har skickats till din plånbok.",
   "veCAKE Redeem Successfully": "veCAKE-inlösen lyckades",
   "CAKE has been sent to your wallet.": "CAKE har skickats till din plånbok.",
-  "CAKE Pool Redeem Successfully": "CAKE Pool-inlösen lyckades",
+  "CAKE Pool Redeem Successfully": {
+    "key": "CAKE Pool Redeem Successfully",
+    "source": "CAKE Pool Redeem Successfully",
+    "translation": "Inlösen av CAKE-pool lyckades",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/VeCakeRedeem.tsx"
+  },
   "Unlocked on": "Upplåst den",
   "All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.": "Alla låsta CAKE har låsts upp sedan 23 april 2025, kl. 08:00 UTC och är tillgänglig för att hämtas.",
   "What am I redeeming and how does this work?": "Vad är det jag löser in och hur fungerar det?",
   "You're redeeming:": "Du löser in:",
-  "Legacy CAKE Pool rewards": "Belöningar för Legacy CAKE-pool",
+  "Legacy CAKE Pool rewards": {
+    "key": "Legacy CAKE Pool rewards",
+    "source": "Legacy CAKE Pool rewards",
+    "translation": "Äldre CAKE-poolbelöningar",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "Unclaimed rewards: This includes revenue sharing rewards and any remaining veCAKE gauge voting rewards.": "Ej uthämtade belöningar: Detta inkluderar belöningar för intäktsdelning och eventuella återstående belöningar för röstning på veCAKE-mätare.",
   "Important: If you want to receive rewards from Epoch 38 (April 25 – May 6), do not withdraw CAKE before 00:00 AM UTC, May 7, 2025.": "Viktigt: Om du vill få belöningar från Epoch 38 (25 april - 6 maj) ska du inte ta ut CAKE före 00:00 UTC den 7 maj 2025.",
   "How long will this redemption page be available?": "Hur länge kommer denna inlösningssida att vara tillgänglig?",
@@ -3101,17 +3351,37 @@
   "Starting 00:00 AM UTC April 23, 2025, veCAKE and all gauge voting will be retired.": "Från och med 00:00 UTC den 23 april 2025 kommer veCAKE och all mätarröstning att dras tillbaka.",
   "The final round of gauge voting will end on 00:00 AM UTC, April 23, 2025 (Epoch 37).": "Den sista omgången mätarröstning kommer att avslutas den 00:00 UTC, 23 april 2025 (Epoch 37).",
   "Results from Epoch 37 will be executed in Epoch 38 (April 25 – May 6).": "Resultaten från Epoch 37 kommer att verkställas under Epoch 38 (25 april - 6 maj).",
-  "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.": "Mätarbelöningar, inklusive veCAKE Pool APR och Bribe APR, kommer att fortsätta att ackumuleras till och med den 7 maj 2025.",
+  "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.": {
+    "key": "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.",
+    "source": "Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.",
+    "translation": "Belöningar från Mätare, inklusive veCAKE Pool APR och Bribe APR, kommer att fortsätta att ackumuleras fram till 7 maj 2025.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "What’s the impact on other products like yield farming and revenue sharing?": "Hur påverkas andra produkter som avkastningsfarmande och intäktsdelning?",
-  "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.": "Avkastningsfarmarbooster (från veCAKE) kommer att fasas ut för positionshanterare, Syrup-pooler och farmaraktiviteter mellan 24 april och 7 maj 2025.",
+  "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.": {
+    "key": "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.",
+    "source": "Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming activities between April 24 and May 7, 2025.",
+    "translation": "Yield farming-boosts (från veCAKE) kommer att fasas ut för positionsförvaltare, Syrup Pools och farm-aktiviteter mellan 24 april och 7 maj 2025.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "The PancakeSwap UI will gradually reflect the retirement of affected products from these changes.": "PancakeSwap-gränssnittet kommer gradvis att återspegla pensioneringen av berörda produkter från dessa förändringar.",
   "For more on these changes, check out:": "För mer information om ändringarna, kolla in:",
   "CAKE Tokenomics 3.0 Docs": "CAKE Tokenomics 3.0 Docs",
   "Blog Post: What You Need to Know": "Blogginlägg: Vad du behöver veta",
   "Underlying CAKE (from your veCAKE position)": "Underliggande CAKE (från din veCAKE-position)",
   "You'll have 6 months to redeem your veCAKE and other unclaimed rewards, from April 23, 2025 at 8:00 AM UTC until October 23, 2025.": "Du har 6 månader på dig att lösa in dina veCAKE och andra outlösta belöningar, från den 23 april 2025 kl. 8:00 UTC till den 23 oktober 2025.",
-  "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.": "För att tjäna alla slutliga APR (veCAKE-pool + Bribe + intäktsdelning) ska du inte lösa in CAKE före 00:00 UTC den 7 maj 2025.",
-  "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.": "5 % intäktsdelning från handelsavgifter upphör den 7 maj 2025 kl. 00:00 UTC. Medel som tidigare allokerats till intäktsdelning kommer nu att omdirigeras till CAKE-förbränningsmekanismen, vilket ökar förbränningsgraden för dessa pooler från 10 % till 15 %.",
+  "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.": {
+    "key": "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.",
+    "source": "To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May 7, 2025.",
+    "translation": "För att tjäna alla slutliga APR:er (veCAKE Pool + Bribe + Revenue Sharing), lös inte in CAKE före kl. 00:00 UTC den 7 maj 2025.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
+  "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.": {
+    "key": "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.",
+    "source": "5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these pools from 10% to 15%.",
+    "translation": "5 % intäktsdelning från handelsavgifter kommer att avslutas kl. 00:00 UTC den 7 maj 2025. Medel som tidigare allokerats till intäktsdelning kommer nu att omdirigeras till CAKE burn-mekanismen, vilket ökar brännhastigheten för dessa pooler från 10 % till 15 %.",
+    "hint": "found in 1 of files, see apps/web/src/views/CakeStaking/components/RedeemFaqs.tsx"
+  },
   "Product Doc: veCAKE Redemption Guide": "Produktdokument: veCAKE inlösningsguide",
   "PancakeSwap Infinity supports both CLAMM (Concentrated Liquidity AMM) and LBAMM (Liquidity Book AMM) pools.": "PancakeSwap Infinity stöder både CLAMM- ( koncentrerad likviditet AMM) och LBAMM- ( likviditetsbok AMM)-pooler.",
   "Infinity Bin Position Created": "Infinity Bin-position har skapats",
@@ -3121,11 +3391,36 @@
   "SS": "SS",
   "These values represent the rewards earned in the last epoch. For the first epoch, the values are estimates.": "Dessa värden representerar de belöningar som tjänats in under senaste epoch. För första epoch är värdena uppskattningar.",
   "Epoch = 8-hour reward cycle": "Epoch = 8 timmars belöningscykel",
-  "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.": "Du handlar via en pool med Brevis Hook-aktivering, kontrollera om du är berättigad till rabatt på poolsidan.",
-  "You’ve qualified for a discount via a Brevis Hook-enabled pool!": "Du har kvalificerat dig för en rabatt via en Brevis Hook-aktiverad pool!",
-  "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.": "Du handlar via en pool med Primus Hook-aktivering, kontrollera om du är berättigad till rabatt på poolsidan.",
-  "You’ve qualified for a discount via a Primus Hook-enabled pool!": "Du har kvalificerat dig för en rabatt via en Primus Hook-aktiverad pool!",
-  "This route uses a dynamic fee pool; actual fees may vary.": "Denna rutt använder en dynamisk avgiftspool; de faktiska avgifterna kan variera.",
+  "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.": {
+    "key": "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.",
+    "source": "You’re trading via Brevis Hook-enabled pool, check for discount eligibility on pool page.",
+    "translation": "Du handlar via en Brevis Hook-aktiverad pool, kontrollera om du är berättigad till rabatt på poolsidan.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’ve qualified for a discount via a Brevis Hook-enabled pool!": {
+    "key": "You’ve qualified for a discount via a Brevis Hook-enabled pool!",
+    "source": "You’ve qualified for a discount via a Brevis Hook-enabled pool!",
+    "translation": "Du har kvalificerat dig för en rabatt via en Brevis Hook-aktiverad pool!",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.": {
+    "key": "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.",
+    "source": "You’re trading via Primus Hook-enabled pool, check for discount eligibility on pool page.",
+    "translation": "Du handlar via en Primus Hook-aktiverad pool, kontrollera om du är berättigad till rabatt på poolsidan.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "You’ve qualified for a discount via a Primus Hook-enabled pool!": {
+    "key": "You’ve qualified for a discount via a Primus Hook-enabled pool!",
+    "source": "You’ve qualified for a discount via a Primus Hook-enabled pool!",
+    "translation": "Du har kvalificerat dig för en rabatt via en Primus Hook-aktiverad pool!",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/HookDiscountFeeDisplay.tsx"
+  },
+  "This route uses a dynamic fee pool; actual fees may vary.": {
+    "key": "This route uses a dynamic fee pool; actual fees may vary.",
+    "source": "This route uses a dynamic fee pool; actual fees may vary.",
+    "translation": "Denna rutt använder en pool med dynamisk avgift; faktiska avgifter kan variera.",
+    "hint": "found in 2 of files, see apps/web/src/views/Swap/V3Swap/components/SwapModalFooterV2.tsx,apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Burn Dashboard": "Burn-kontrollpanel",
   "Select a tab": "Välj en flik",
   "Burn (In last 7d)": "Burn (senaste 7 dagarna)",
@@ -3189,21 +3484,41 @@
   "Unsuccessful": "Misslyckad",
   "%split% Split": "%split% Split",
   "Your bridge transaction failed. You will be refunded shortly.": "Din bryggöverföring misslyckades. Du kommer att få pengarna tillbaka inom kort.",
-  "Via %poolTypes% Pool": "Via %poolTypes%-pool",
+  "Via %poolTypes% Pool": {
+    "key": "Via %poolTypes% Pool",
+    "source": "Via %poolTypes% Pool",
+    "translation": "Via %poolTypes%-pool",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/V3Swap/components/RouteDisplay/BridgeRoutesDisplay.tsx"
+  },
   "%percent%%": "%percent%%",
   "MY CAKE": "MIN CAKE",
-  "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.": "Tillämpas på både käll- och destinationskedjeväxlingar baserat på poolavgiftsnivåer. Kontrollera routinginformationen för mer information.",
+  "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.": {
+    "key": "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.",
+    "source": "Applied on both source and destination chain swaps based on pool fee tiers. Check routing details for more info.",
+    "translation": "Tillämpas på byten på både käll- och destinationskedjan baserat på poolens avgiftsnivåer. Kontrollera routing-detaljer för mer information.",
+    "hint": "found in 1 of files, see apps/web/src/views/Swap/Bridge/components/FeeToolTip.tsx"
+  },
   "Paid to relayers for bridging the assets.": "Betalt till vidarebefordrare för att överföra tillgångarna.",
   "Your voting power is determined by your CAKE balance at the snapshot block, which represents how much weight your vote carries.": "Din röststyrka bestäms av ditt CAKE-saldo vid snapshot-blocket, vilket representerar hur stor vikt din röst har.",
   "Cake Balance": "Cake-saldo",
   "Not enough CAKE": "Ej tillräckligt med CAKE",
   "Your voting power is determined by the number of CAKE you have at the block detailed above. CAKE held in other places does NOT contribute to your voting power.": "Din rösträtt bestäms av antalet CAKE du har i det block som anges ovan. CAKE som innehas på andra platser bidrar INTE till din rösträtt.",
-  "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": "Att tillföra likviditet till en pool med låg TVL innebär en högre risk för förluster på grund av prisfluktuationer. Fortsätt med försiktighet.",
+  "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": {
+    "key": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
+    "source": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
+    "translation": "Att lägga till likviditet i en pool med låg TVL medför en högre risk för förluster från prissvängningar. Fortsätt med försiktighet.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Previously used": "Tidigare använt",
   "Top Wallets": "Topplånböcker",
   "More Wallets": "Fler plånböcker",
   "Wallets with MEV Protection": "Plånböcker med MEV-skydd",
-  "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": "Nya pooler med låg likviditet kan ha större prissvängningar, vilket ökar risken för förluster. Fortsätt med försiktighet.",
+  "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": {
+    "key": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
+    "source": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
+    "translation": "Nya pooler med låg likviditet kan ha större prissvängningar, vilket ökar risken för förluster. Vänligen fortsätt med försiktighet.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
   "Color Theme": "Färgtema",
   "Default Explorer": "Standardutforskare",
   "Select preferred block explorer": "Välj föredragen blockutforskare",
@@ -3248,14 +3563,29 @@
   "Switch": "Växla",
   "APR Calculation Method": "APR-beräkningsmetoden",
   "Calculations are an estimate and only for reference.": "Beräkningarna är uppskattningar och endast avsedda som referens.",
-  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": "Denna metod använder den implicita förändringen (delta) i poolens likviditet, som bestäms av användarens prisintervall och positionsstorlek, för att beräkna uppskattad APR.",
-  "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": "Denna metod tillämpar en multiplikator, som bestäms av skärningspunkten mellan användarens prisintervall och poolens historiska prisintervall, för att beräkna den uppskattade effektiva räntan.",
+  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": {
+    "key": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+    "source": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+    "translation": "Denna metod använder den implicita förändringen (delta) i poolens likviditet, som bestäms av användarens prisintervall och positionsstorlek, för att beräkna uppskattad APR.",
+    "hint": "found in 1 of files, see apps/solana/src/components/AprMDSwitchWidget.tsx"
+  },
+  "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": {
+    "key": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
+    "source": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
+    "translation": "Denna metod tillämpar en multiplikator, som bestäms av skärningspunkten mellan användarens prisintervall och poolens historiska prisintervall, för att beräkna uppskattad APR.",
+    "hint": "found in 1 of files, see apps/solana/src/components/AprMDSwitchWidget.tsx"
+  },
   "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.": "Det finns två metoder för att beräkna den uppskattade effektiva räntan, baserade på historiska handelsavgifter och utsläpp. Endast positioner inom intervallet ger avkastning. Tidigare resultat är inte en garanti för framtida resultat.",
   "Farm period": "Farmperiod",
   "Start on": "Starta på",
   "Start at": "Starta",
   "Farm will end at": "Farm avslutas",
-  "Total locked liquidity in this pool: %percent%": "Total låst likviditet i denna pool: %percent%",
+  "Total locked liquidity in this pool: %percent%": {
+    "key": "Total locked liquidity in this pool: %percent%",
+    "source": "Total locked liquidity in this pool: %percent%",
+    "translation": "Total låst likviditet i denna pool: %percent%",
+    "hint": "found in 1 of files, see apps/solana/src/components/LockPercentCircle.tsx"
+  },
   "Connect your wallet to PancakeSwap": "Anslut din plånbok till PancakeSwap",
   "Oops... Looks like you don’t have Phantom installed!": "Hoppsan... Det verkar som om du inte har Phantom installerat!",
   "Install Phantom": "Installera Phantom",
@@ -3304,11 +3634,31 @@
   "Add Deposit Amount": "Lägg till insättningsbelopp",
   "Total Deposit": "Total insättning",
   "Deposit Ratio": "Insättningskvot",
-  "Pool price is %percent% away from market": "Poolpriset ligger %percent% under marknadspriset",
+  "Pool price is %percent% away from market": {
+    "key": "Pool price is %percent% away from market",
+    "source": "Pool price is %percent% away from market",
+    "translation": "Poolens pris är %percent% från marknaden",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
   "Low Liquidity: ": "Låg likviditet: ",
-  "Loading pool": "Laddar pool",
-  "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.": "Poolpriset är obalanserat för detta par. Genom att lägga till en liten mängd likviditet i ett brett intervall kan priset närma sig det aktuella marknadspriset.",
-  "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.": "Din insättning är stor i förhållande till den aktuella likviditeten i poolen, vilket kan leda till arbitrage på din position. Om det noterade priset ligger långt från marknadspriset kan denna risk förstärkas.",
+  "Loading pool": {
+    "key": "Loading pool",
+    "source": "Loading pool",
+    "translation": "Laddar pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
+  "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.": {
+    "key": "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.",
+    "source": "The pool price is imbalanced for this pair. Adding a small amount of liquidity in a wide range can bring the price closer to the current market price.",
+    "translation": "Poolpriset är obalanserat för detta par. Att lägga till en liten mängd likviditet i ett brett intervall kan föra priset närmare det aktuella marknadspriset.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
+  "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.": {
+    "key": "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.",
+    "source": "Your deposit is large relative to current liquidity in the pool, which may lead to arbitrage on your position. If the quoted price is far from market price, this risk may be magnified.",
+    "translation": "Din insättning är stor i förhållande till nuvarande likviditet i poolen, vilket kan leda till arbitrage på din position. Om det noterade priset är långt från marknadspriset kan denna risk förstärkas.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/CreatePosition.tsx"
+  },
   "Deposit successfully": "Insättning lyckades",
   "A new NFT representing your Concentrated Liquidity position is now in your wallet.": "En ny NFT som representerar din koncentrerade likviditetsposition finns nu i din plånbok.",
   "NFT Mint": "NFT-mint",
@@ -3343,14 +3693,34 @@
   "By confirming below, I agree to permanently lock liquidity. I understand access to the underlying assets will be lost forever.": "Genom att bekräfta nedan samtycker jag till att permanent låsa likviditeten. Jag förstår att tillgången till de underliggande tillgångarna kommer att gå förlorad för alltid.",
   "Estimated APR": "Uppskattad APR",
   "Trade fees": "Handelsavgifter",
-  "Migrate to Concentrated Liquidity pool": "Migrera till koncentrerad likviditetspool",
-  "Migrate below or learn more about CLMM pools and risks": "Migrera nedan eller läs mer om CLMM-pooler och risker",
+  "Migrate to Concentrated Liquidity pool": {
+    "key": "Migrate to Concentrated Liquidity pool",
+    "source": "Migrate to Concentrated Liquidity pool",
+    "translation": "Migrera till Concentrated Liquidity-pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
+  "Migrate below or learn more about CLMM pools and risks": {
+    "key": "Migrate below or learn more about CLMM pools and risks",
+    "source": "Migrate below or learn more about CLMM pools and risks",
+    "translation": "Migrera nedan eller läs mer om CLMM-pooler och risker",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
   "Quick migration": "Snabb migration",
   "Very wide price range for a more passive strategy.": "Mycket brett prisintervall för en mer passiv strategi.",
   "Custom migration": "Anpassa migration",
   "Set a custom price range for higher capital efficiency.": "Ange ett anpassat prisintervall för högre kapitaleffektivitet.",
-  "CLMM Pool": "CLMM-pool",
-  "CLMM pools": "CLMM-pooler",
+  "CLMM Pool": {
+    "key": "CLMM Pool",
+    "source": "CLMM Pool",
+    "translation": "CLMM-pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/MigrateClmmFromStandardDialog/Dialog.tsx"
+  },
+  "CLMM pools": {
+    "key": "CLMM pools",
+    "source": "CLMM pools",
+    "translation": "CLMM-pooler",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/CreateClmmPool.tsx"
+  },
   "%subA%/%subB%": "%subA%/%subB%",
   "Current price": "Aktuellt pris",
   "%token% price": "%token%-pris",
@@ -3361,7 +3731,12 @@
   "24 hour": "24 timmar",
   "7 day": "7 dagar",
   "1 month": "1 månad",
-  "Pool liquidity will appear here.": "Poolens likviditet visas här.",
+  "Pool liquidity will appear here.": {
+    "key": "Pool liquidity will appear here.",
+    "source": "Pool liquidity will appear here.",
+    "translation": "Poolens likviditet kommer att visas här.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/components/LiquidityChartRangeInput/index.tsx"
+  },
   "Preview Deposit": "Förhandsvisa insättning",
   "Transaction initiating": "Överföring initieras",
   "The market price is outside your specified price range. Single asset deposit only.": "Marknadspriset ligger utanför ditt angivna prisintervall. Endast insättningar för en enda tillgång.",
@@ -3369,34 +3744,94 @@
   "Next, set initial token price & position price range": "Ställ sedan in initialt tokenpris och prisintervall",
   "Last, please enter token deposit amount": "Ange slutligen beloppet för token-insättningen",
   "Please Note": "Observera",
-  "Pool created & position added successfully!": "Pool skapad och position tillagd!",
+  "Pool created & position added successfully!": {
+    "key": "Pool created & position added successfully!",
+    "source": "Pool created & position added successfully!",
+    "translation": "Pool skapad & position tillagd!",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessModal.tsx"
+  },
   "Note:": "Observera:",
   "Got it": "Jag förstår",
-  "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": "Det kan ta några minuter innan din pool visas i pool-listan. Vänligen vänta och uppdatera sidan, och sök sedan efter din pool i pool-listan innan du försöker skapa en farm.",
-  "Pool and position created successfully": "Pool och position skapad",
+  "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": {
+    "key": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
+    "source": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
+    "translation": "Det kan ta några minuter innan din pool visas i poollistan. Vänligen vänta och uppdatera sidan, och sök sedan i poollistan efter din pool innan du försöker skapa en farm.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessModal.tsx"
+  },
+  "Pool and position created successfully": {
+    "key": "Pool and position created successfully",
+    "source": "Pool and position created successfully",
+    "translation": "Pool och position har skapats",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessWithLockModal.tsx"
+  },
   "Quote token": "Kurstoken",
   "Base token": "Bastoken",
   "Initial price": "Initialt pris",
   "Price Setting": "Prisinställning",
   "%subject% price": "%subject%-pris",
-  "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.": "Detta är det aktuella priset för en befintlig pool på PancakeSwap. Du kan fortfarande ange ett annat initialpris, men var medveten om att detta kan leda till arbitrage om prisskillnaden är stor.",
+  "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.": {
+    "key": "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.",
+    "source": "This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.",
+    "translation": "Detta är det aktuella priset för en befintlig pool på PancakeSwap. Du kan fortfarande ange ett annat initialt pris men var medveten om att detta kan leda till arbitrage om prisskillnaden är stor.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/SetPriceAndRange.tsx"
+  },
   "Select token & fee tier": "Välj token och avgiftsnivå",
   "Set initial price & range": "Välj initialt pris och intervall",
   "Enter deposit amount": "Ange insättningsbelopp",
-  "Preview Pool": "Förhandsgranska pool",
-  "Your pool has been created successfully!": "Din pool har skapats!",
+  "Preview Pool": {
+    "key": "Preview Pool",
+    "source": "Preview Pool",
+    "translation": "Förhandsgranska pool",
+    "hint": "found in 2 of files, see apps/solana/src/features/Create/ClmmPool/components/TokenAmountInput.tsx,apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
+  "Your pool has been created successfully!": {
+    "key": "Your pool has been created successfully!",
+    "source": "Your pool has been created successfully!",
+    "translation": "Din pool har skapats framgångsrikt!",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/components/Done.tsx"
+  },
   "You can now create a farm or go back": "Du kan nu skapa en farm eller gå tillbaka",
   "Create Farm": "Skapa farm",
-  "Back to My Pools": "Tillbaka till Mina pooler",
+  "Back to My Pools": {
+    "key": "Back to My Pools",
+    "source": "Back to My Pools",
+    "translation": "Tillbaka till Mina pooler",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/components/Done.tsx"
+  },
   "Initial liquidity": "Initial likviditet",
   "Start time": "Starttid",
-  "Initialize Liquidity Pool": "Initialisera likviditetspool",
+  "Initialize Liquidity Pool": {
+    "key": "Initialize Liquidity Pool",
+    "source": "Initialize Liquidity Pool",
+    "translation": "Initiera likviditetspool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/components/Initialize.tsx"
+  },
   "Initial price is set by the ratio of tokens deposited for initial liquidity. If the token is already trading on PancakeSwap, initial price will be auto-filled with the current price.": "Initialt pris fastställs utifrån förhållandet mellan tokens som deponerats för initial likviditet. Om token redan handlas på PancakeSwap kommer initialt pris automatiskt att fyllas i med det aktuella priset.",
-  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.": "En avgift på 0,15 SOL för skapande av pool är för närvarande reserverad för att stödja front- och backend-infrastrukturen. Cirka 0,3 SOL krävs för hyra av OpenBook Market och skapande av programkonto.",
-  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.": "En avgift på 0,15 SOL för skapande av pool är för närvarande reserverad för att stödja front- och backend-infrastrukturen. Cirka 0,05 SOL krävs för skapande av programkonto och nätverksavgifter.",
+  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.": {
+    "key": "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.",
+    "source": "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.3 SOL is required for OpenBook Market rent and program account creation.",
+    "translation": "En poolskapandeavgift på 0,15 SOL är för närvarande reserverad för att stödja front- och backend-infrastruktur. Cirka 0,3 SOL krävs för OpenBook Market-hyra och skapande av programkonto.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/components/Initialize.tsx"
+  },
+  "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.": {
+    "key": "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.",
+    "source": "A pool creation fee of 0.15 SOL is currently reserved to support front and backend infrastructure. Approximately 0.05 SOL is required for program account creation and network fees.",
+    "translation": "En poolskapandeavgift på 0,15 SOL är för närvarande reserverad för att stödja front- och backend-infrastruktur. Cirka 0,05 SOL krävs för skapande av programkonto och nätverksavgifter.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/components/Initialize.tsx"
+  },
   "fee tier": "avgiftsnivåer",
-  "Initialize AMM v4 pool": "Initialisera AMM v4-pool",
-  "Initialize CPMM pool": "Initialisera CPMM-pool",
+  "Initialize AMM v4 pool": {
+    "key": "Initialize AMM v4 pool",
+    "source": "Initialize AMM v4 pool",
+    "translation": "Initiera AMM v4-pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/index.tsx"
+  },
+  "Initialize CPMM pool": {
+    "key": "Initialize CPMM pool",
+    "source": "Initialize CPMM pool",
+    "translation": "Initiera CPMM-pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/index.tsx"
+  },
   "I want to...": "Jag vill...",
   "Create pool": "Skapa pool",
   "V3 Pools": "V3-pooler",
@@ -3413,15 +3848,40 @@
   "Rewards allocated to farms cannot be withdrawn after farming starts. Newly created farms generally appear on PancakeSwap 10-30 minutes after creation, depending on Solana network status.": "Belöningar som tilldelats farmar kan inte dras tillbaka efter att farmandet har påbörjats. Nyskapade farmar visas i allmänhet på PancakeSwap 10–30 minuter efter skapandet, beroende på Solana-nätverkets status.",
   "Search for a pair or paste AMM ID": "Sök efter ett par eller klistra in AMM-ID",
   "input AmmId / TVL": "mata in AmmId / TVL",
-  "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.": "Hittar du inte den pool du letar efter? Prova att ange token-adressen eller kolla pool-listorna nedan.",
-  "Select Pool": "Välj pool",
+  "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.": {
+    "key": "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.",
+    "source": "Can’t find the pool you’re looking for? Try entering the token address or check the pool lists below.",
+    "translation": "Hittar du inte poolen du letar efter? Prova att ange tokenadressen eller kontrollera poollistorna nedan.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Farm/Create/components/PoolSelectDialog.tsx"
+  },
+  "Select Pool": {
+    "key": "Select Pool",
+    "source": "Select Pool",
+    "translation": "Välj pool",
+    "hint": "found in 2 of files, see apps/solana/src/features/Farm/Create/components/SelectPool.tsx,apps/solana/src/features/Farm/Create/index.tsx"
+  },
   "Concentrated Liquidity": "Koncentrerad likviditet",
   "Standard AMM": "Standard-AMM",
   "Search for a pair or enter AMM ID": "Sök efter ett par eller ange AMM-ID",
   "Can't find what you want?": "Hittar du inte det du söker?",
-  "Create a new pool": "Skapa en ny pool",
-  "Select from your created pools": "Välj från dina skapade pooler",
-  "The farm will be created for the selected pool": "Farmen kommer att skapas för den valda poolen",
+  "Create a new pool": {
+    "key": "Create a new pool",
+    "source": "Create a new pool",
+    "translation": "Skapa en ny pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Farm/Create/components/SelectPool.tsx"
+  },
+  "Select from your created pools": {
+    "key": "Select from your created pools",
+    "source": "Select from your created pools",
+    "translation": "Välj från dina skapade pooler",
+    "hint": "found in 1 of files, see apps/solana/src/features/Farm/Create/components/SelectPool.tsx"
+  },
+  "The farm will be created for the selected pool": {
+    "key": "The farm will be created for the selected pool",
+    "source": "The farm will be created for the selected pool",
+    "translation": "Farmen kommer att skapas för den valda poolen",
+    "hint": "found in 1 of files, see apps/solana/src/features/Farm/Create/components/SelectPool.tsx"
+  },
   "Create Farm TX success!!": "Skapa Farm TX-framgång!!",
   "Farm created successfully!": "Farm skapad!",
   "Farm ID": "Farm-ID",
@@ -3432,7 +3892,12 @@
   "Add Rewards": "Lägg till belöningar",
   "Step 3": "Steg 3",
   "Review Farm Detail": "Granska farminformation",
-  "First, select a pool for farm rewards": "Välj först en pool för farm-belöningar",
+  "First, select a pool for farm rewards": {
+    "key": "First, select a pool for farm rewards",
+    "source": "First, select a pool for farm rewards",
+    "translation": "Välj först en pool för farmbelöningar",
+    "hint": "found in 1 of files, see apps/solana/src/features/Farm/Create/index.tsx"
+  },
   "Next, enter rewards for the farm": "Ange sedan belöningar för farmen",
   "Add another": "Lägg till en ny",
   "Farm not found": "Farm hittades inte",
@@ -3470,17 +3935,42 @@
   "Not Now": "Inte nu",
   "Auto-swap": "Automatisk växling",
   "When auto-swap is on, token amounts will be automatically swapped to the deposit ratio needed to create your position.": "När automatisk växling är aktiverad kommer token-belopp automatiskt att bytas till den insättningskvot som krävs för att skapa din position.",
-  "Pool Not Found": "Pool hittades inte",
+  "Pool Not Found": {
+    "key": "Pool Not Found",
+    "source": "Pool Not Found",
+    "translation": "Poolen hittades inte",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/Add/index.tsx"
+  },
   "Stake Liquidity": "Satsa likviditet",
   "Total APR 7D": "Total APR 7D",
   "LP": "LP",
   "AMM ID": "AMM-ID",
   "Market ID": "Marknads-ID",
-  "Pool Liquidity": "Poollikviditet",
-  "Pool detail": "Pooldetalj",
+  "Pool Liquidity": {
+    "key": "Pool Liquidity",
+    "source": "Pool Liquidity",
+    "translation": "Poollikviditet",
+    "hint": "found in 2 of files, see apps/solana/src/features/Liquidity/Increase/components/PoolInfo.tsx,apps/solana/src/features/Liquidity/Increase/index.tsx"
+  },
+  "Pool detail": {
+    "key": "Pool detail",
+    "source": "Pool detail",
+    "translation": "Pooldetaljer",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/components/PoolInfoMobileDrawer.tsx"
+  },
   "LP Token Balances": "LP-tokensaldon",
-  "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.": "Du har LP-tokens som inte är satsade för denna pool. Du kan satsa dem direkt på fliken Satsa likviditet.",
-  "There is no active farm for this pool.": "Det finns ingen aktiv farm för denna pool.",
+  "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.": {
+    "key": "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.",
+    "source": "You have unstaked LP tokens for this pool. You can stake them directly on the Stake Liquidity tab.",
+    "translation": "Du har LP-tokens som inte är stakade för denna pool. Du kan staka dem direkt på fliken Staka likviditet.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/components/StakeableHint.tsx"
+  },
+  "There is no active farm for this pool.": {
+    "key": "There is no active farm for this pool.",
+    "source": "There is no active farm for this pool.",
+    "translation": "Det finns ingen aktiv farm för denna pool.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Increase/index.tsx"
+  },
   "Show more": "Visa mer",
   "Set amount of position to lock:": "Ställ in belopp för position som ska låsas:",
   "Position locked successfully!": "Position låst!",
@@ -3499,22 +3989,47 @@
   "default": "standard",
   "TVL (dsc)": "TVL (dsc)",
   "TVL (asc)": "TVL (asc)",
-  "Liquidity Pools": "Likviditetspooler",
+  "Liquidity Pools": {
+    "key": "Liquidity Pools",
+    "source": "Liquidity Pools",
+    "translation": "Likviditetspooler",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/Pools.tsx"
+  },
   "Provide liquidity": "Tillhandahåll likviditet",
   "Time base": "Tidsbas",
   "Show Farms": "Visa farmar",
-  "No pools found": "Inga pooler hittades",
+  "No pools found": {
+    "key": "No pools found",
+    "source": "No pools found",
+    "translation": "Inga pooler hittades",
+    "hint": "found in 2 of files, see apps/solana/src/features/Pools/Pools.tsx,apps/web/src/components/MiniUniversalFarms/components/PoolsTable.tsx"
+  },
   "No data for this chart.": "Inga data för detta diagram.",
   "Please wait for a moment or try refreshing the page.": "Vänta lite eller försök uppdatera sidan.",
   "Volume %timeBase%": "Volym %timeBase%",
   "Fees %timeBase%": "Avgifter %timeBase%",
   "Weekly Rewards": "Veckobelöningar",
   "APR %timeBase%": "APR %timeBase%",
-  "Pool id": "Pool-id",
-  "View pool charts": "Visa pooldiagram",
+  "Pool id": {
+    "key": "Pool id",
+    "source": "Pool id",
+    "translation": "Pool-id",
+    "hint": "found in 2 of files, see apps/solana/src/features/Pools/components/PoolTableColumns/ColumnsPoolName.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionItemsCard.tsx"
+  },
+  "View pool charts": {
+    "key": "View pool charts",
+    "source": "View pool charts",
+    "translation": "Visa pooldiagram",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/components/PoolTableColumns/ColumnsPoolActions.tsx"
+  },
   "This is a %type% with a %feeRate%% fee tier": "Detta är en %type% med en avgiftsnivå på %feeRate%%",
   "V3 concentrated liquidity pool (CLMM)": "V3 koncentrerad likviditetspool (CLMM)",
-  "V2 standard liquidity pool (CPMM)": "V3 standardiserad likviditetspool (CPMM)",
+  "V2 standard liquidity pool (CPMM)": {
+    "key": "V2 standard liquidity pool (CPMM)",
+    "source": "V2 standard liquidity pool (CPMM)",
+    "translation": "V2 standardlikviditetspool (CPMM)",
+    "hint": "found in 1 of files, see apps/solana/src/features/Pools/components/PoolListItem.tsx"
+  },
   "View Chart": "Visa diagram",
   "Week": "Vecka",
   "24h Volume": "24 timmars volym",
@@ -3528,16 +4043,31 @@
   "Period": "Period",
   "My created farms": "Mina skapade farmar",
   "You don’t have any concentrated liquidity positions.": "Du har inga koncentrerade likviditetspositioner.",
-  "Go to pools": "Gå till pooler",
+  "Go to pools": {
+    "key": "Go to pools",
+    "source": "Go to pools",
+    "translation": "Gå till pooler",
+    "hint": "found in 2 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/TabClmm.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/TabStandard.tsx"
+  },
   "You don’t have any staked RAY.": "Du har inga RAY-insatser.",
   "Go to Staking": "Gå till satsa",
   "You don’t have any standard liquidity positions.": "Du har inga standardiserade likviditetspositioner.",
   "NFT Mint Address": "NFT-mintadress",
   "%subject% has been copied to clipboard": "%subject% har kopierats till Urklipp",
   "NFT address": "NFT-adress",
-  "24h Pool Fee": "24 tim poolavgift",
+  "24h Pool Fee": {
+    "key": "24h Pool Fee",
+    "source": "24h Pool Fee",
+    "translation": "24h-poolavgift",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail.tsx"
+  },
   "My Range": "Mitt intervall",
-  "Pending rewards are calculated based on the current pool size and the time since the last harvest.": "Väntande belöningar beräknas utifrån den aktuella storleken på poolen och tiden sedan den senaste skörden.",
+  "Pending rewards are calculated based on the current pool size and the time since the last harvest.": {
+    "key": "Pending rewards are calculated based on the current pool size and the time since the last harvest.",
+    "source": "Pending rewards are calculated based on the current pool size and the time since the last harvest.",
+    "translation": "Väntande belöningar beräknas baserat på den aktuella poolstorleken och tiden sedan den senaste insamlingen.",
+    "hint": "found in 3 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail/PendingYield.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Staked/MobileStakeDetailDrawer.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Staked/PendingRewards.tsx"
+  },
   "Base/quote tokens have been switched to simplify data display.": "Bas-/noteringstoken har bytts ut för att förenkla visningen av data.",
   "Create New Position": "Skapa ny position",
   "Locked positions": "Låsta positioner",
@@ -3557,7 +4087,12 @@
   "Pending rewards": "Väntande belöningar",
   "You have unstaked LP tokens that could be staked in a farm. Stake now": "Du har LP-tokens som inte är tillbakadragna och som kan satsas i en farm. Satsa nu",
   "Rewards have ended for this farm. You can unstake your LP tokens.": "Belöningarna för denna farm har upphört. Du kan återta dina LP-tokens.",
-  "Estimated APR based on trading fees earned by the pool in the past 24H": "Uppskattad APR baserad på handelsavgifter som poolen har tjänat under de senaste 24 timmarna",
+  "Estimated APR based on trading fees earned by the pool in the past 24H": {
+    "key": "Estimated APR based on trading fees earned by the pool in the past 24H",
+    "source": "Estimated APR based on trading fees earned by the pool in the past 24H",
+    "translation": "Uppskattad APR baserad på handelsavgifter som poolen tjänat in under de senaste 24 timmarna.",
+    "hint": "found in 2 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Standard/ItemDetail/StandardPoolAPR.tsx,apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Standard/StandardPoolRowItem.tsx"
+  },
   "Pooled %token%": "%token% har lagts till i poolen",
   "Locked position": "Låst position",
   "View less": "Visa mindre",
@@ -3570,7 +4105,12 @@
   "Connect wallet to see your positions.": "Anslut plånbok för att se dina positioner.",
   "Idle tokens": "Inaktiva tokens",
   "Connect wallet to see your deposited assets.": "Anslut plånbok för att se dina insatta tillgångar.",
-  "Assets by pool": "Tillgångar via pool",
+  "Assets by pool": {
+    "key": "Assets by pool",
+    "source": "Assets by pool",
+    "translation": "Tillgångar per pool",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionOverview/components/PortfolioInfo.tsx"
+  },
   "Assets by token": "Tillgångar via token",
   "All Type": "Alla typer",
   "CLMM": "CLMM",
@@ -3616,22 +4156,52 @@
   "Invalid max price": "Ogiltigt maxpris",
   "Enter Lower Price": "Ange nedre pris",
   "Invalid min price": "Ogiltigt minpris",
-  "Pool not found": "Pool hittades inte",
+  "Pool not found": {
+    "key": "Pool not found",
+    "source": "Pool not found",
+    "translation": "Poolen hittades inte",
+    "hint": "found in 1 of files, see apps/solana/src/features/Clmm/ClmmPosition/useValidate.ts"
+  },
   "Enter token amount": "Ange token-belopp",
   "Enter upper price": "Ange övre pris",
   "Enter lower price": "Ange nedre pris",
   "Enter current price": "Ange aktuellt pris",
-  "Select pool fee tier": "Välj pool-avgiftsnivå",
-  "Select pool token 2": "Välj pool-token 2",
-  "Select pool token 1": "Välj pool-token 1",
+  "Select pool fee tier": {
+    "key": "Select pool fee tier",
+    "source": "Select pool fee tier",
+    "translation": "Välj avgiftsnivå för poolen",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/useValidate.ts"
+  },
+  "Select pool token 2": {
+    "key": "Select pool token 2",
+    "source": "Select pool token 2",
+    "translation": "Välj pooltoken 2",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/useValidate.ts"
+  },
+  "Select pool token 1": {
+    "key": "Select pool token 1",
+    "source": "Select pool token 1",
+    "translation": "Välj pooltoken 1",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/useValidate.ts"
+  },
   "Enter min price": "Ange minpris",
   "Enter max price": "Ange maxpris",
-  "Note: A creation fee of %subject% SOL is required for new pools.": "Obs: En skapandeavgift på %subject% SOL krävs för nya pooler.",
+  "Note: A creation fee of %subject% SOL is required for new pools.": {
+    "key": "Note: A creation fee of %subject% SOL is required for new pools.",
+    "source": "Note: A creation fee of %subject% SOL is required for new pools.",
+    "translation": "Observera: En skapandeavgift på %subject% SOL krävs för nya pooler.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/components/Initialize.tsx"
+  },
   "Initial liquidity is too low, try increasing the amount.": "Den initiala likviditeten är för låg, försök att öka beloppet.",
   "Start time cannot be set to a time in the past.": "Starttiden kan inte ställas in på en tidpunkt i det förflutna.",
   "%side% token balance is insufficient": "%side% token-saldot är otillräckligt",
   "Input an amount of %side% greater than zero": "Ange ett belopp som är %side% större än noll",
-  "Amm V4 pool does not support token 2022": "Amm V4-poolen stöder inte token 2022",
+  "Amm V4 pool does not support token 2022": {
+    "key": "Amm V4 pool does not support token 2022",
+    "source": "Amm V4 pool does not support token 2022",
+    "translation": "Amm V4-poolen stöder inte token 2022",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/hooks/useInitPoolSchema.ts"
+  },
   "Select %side% token": "Välj %side%-token",
   "Reward emissions are lower than the min required": "Belöningsemissioner är lägre än det minsta kravet",
   "Insufficient farm duration": "Otillräcklig farmlängd",
@@ -3643,9 +4213,24 @@
   "To start, select a CLMM position below to lock. Ensure that position value and NFT mint  match the position you want to lock!": "För att börja, välj en CLMM-position nedan som du vill låsa. Se till att positionsvärdet och NFT-mint matchar den position du vill låsa!",
   "Are you sure you want to permanently lock/burn liquidity? You will be unable to access or withdraw underlying position assets, only trading fees earned will remain claimable.": "Är du säker på att du vill låsa/bränna likviditet permanent? Du kommer inte att kunna komma åt eller ta ut underliggande positionstillgångar, endast intjänade handelsavgifter kommer att kunna lösas in.",
   "This tool is for advanced users. For detailed instructions, read the guide for": "Detta verktyg är avsett för avancerade användare. För detaljerade instruktioner, läs guiden för",
-  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": "Detta verktyg är avsett för avancerade användare. För detaljerade instruktioner, läs guiden för Standardpooler.",
-  "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.": "Detta verktyg är avsett för avancerade användare. För detaljerade instruktioner, läs guiden för CLMM eller Standardpooler.",
-  "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.": "OBS: Denna funktion stöder endast CPMM-pooler som skapats i användargränssnittet. Äldre V4-pooler stöds inte för närvarande.",
+  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": {
+    "key": "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.",
+    "source": "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.",
+    "translation": "Detta verktyg är för avancerade användare. För detaljerade instruktioner, läs guiden för Standard-pooler.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/StandardPool/index.tsx"
+  },
+  "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.": {
+    "key": "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.",
+    "source": "This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.",
+    "translation": "Detta verktyg är för avancerade användare. För detaljerade instruktioner, läs guiden för CLMM- eller Standard-pooler.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Farm/Create/index.tsx"
+  },
+  "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.": {
+    "key": "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.",
+    "source": "NOTE: This feature only supports CPMM pools created on the UI. Older V4 pools are not supported at this time.",
+    "translation": "OBS: Denna funktion stöder endast CPMM-pooler som skapats i användargränssnittet. Äldre V4-pooler stöds inte för närvarande.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Liquidity/Lock/index.tsx"
+  },
   "Learn more here.": "Läs mer här.",
   "To start, select a standard AMM position below to lock. Ensure that position value and LP balance match the position you want to lock!": "För att börja, välj en standard AMM-position nedan som du vill låsa. Se till att positionsvärdet och LP-saldot stämmer överens med den position du vill låsa!",
   "Price impact for this swap is %percent%": "Prispåverkan för denna växling är %percent%",
@@ -3673,9 +4258,24 @@
   "Search by token name/address, pool type (e.g. clamm, lbamm), features (e.g. dynamic fees), or pool address. Example: 'bnb usdt infinity clamm'": "Sök efter token-namn/adress, pooltyp (t.ex. clamm, lbamm), funktioner (t.ex. dynamiska avgifter) eller pooladress. Exempel: 'bnb usdt infinity clamm'",
   "Expanding Search..": "Utökar sökningen...",
   "To proceed, please type the word \"%word%\"": "För att fortsätta, skriv ordet ”%word%”",
-  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.": "Poolpriset visar en betydande avvikelse från aktuella marknadskurser (%slippage%). Detta ökar risken för förluster från arbitrage.",
-  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.": "Poolpriset visar en betydande avvikelse från aktuella marknadskurser (%slippage%). Detta ökar risken för förluster från arbitrage. Var försiktig.",
-  "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.": "Beloppen som visas inkluderar avgifter. I LBAMM-pooler läggs upplupna avgifter tillbaka till poolreserverna.",
+  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.": {
+    "key": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.",
+    "source": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage.",
+    "translation": "Poolpriset visar en betydande avvikelse från nuvarande marknadskurser (%slippage%). Detta ökar risken för förluster från arbitrage.",
+    "hint": "found in 1 of files, see apps/web/src/views/AddLiquidityInfinity/components/SubmitButton.tsx"
+  },
+  "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.": {
+    "key": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.",
+    "source": "The pool price shows a significant deviation from current market rates (%slippage%). This increases the risk of losses from arbitrage. Please proceed with caution.",
+    "translation": "Poolpriset visar en betydande avvikelse från nuvarande marknadskurser (%slippage%). Detta ökar risken för förluster från arbitrage. Vänligen fortsätt med försiktighet.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/SubmitCreateButton.tsx"
+  },
+  "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.": {
+    "key": "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.",
+    "source": "Displayed amounts include fees. In LBAMM pools, accrued fees are added back to the pool reserves.",
+    "translation": "Visade belopp inkluderar avgifter. I LBAMM-pooler läggs upplupna avgifter tillbaka till poolens reserver.",
+    "hint": "found in 2 of files, see apps/web/src/views/PositionInfinity/InfinityBinPosition.tsx,apps/web/src/views/RemoveLiquidityInfinity/components/RemoveBinPosition.tsx"
+  },
   "Invalid wallet address": "Ogiltig plånboksadress",
   "Send": "Skicka",
   "Insufficient balance": "Otillräckligt saldo",
@@ -3696,20 +4296,35 @@
   "Couldn't retrieve token info. Please try again!": "Kunde inte hämta token-info. Försök igen!",
   "Amount you are guaranteed to receive.": "Belopp som du är garanterad att få.",
   "Fees saved on PancakeSwap compared to major DEXs charging interface fees.": "Avgifter som sparas på PancakeSwap jämfört med större DEX som tar ut gränssnittsavgifter.",
-  "The change in pool price caused by your swap.": "Den förändring i poolpriset som orsakats av din växling.",
+  "The change in pool price caused by your swap.": {
+    "key": "The change in pool price caused by your swap.",
+    "source": "The change in pool price caused by your swap.",
+    "translation": "Ändringen i poolpriset orsakad av ditt byte.",
+    "hint": "found in 1 of files, see apps/web/src/views/SwapSimplify/InfinitySwap/AdvancedSwapDetails.tsx"
+  },
   "Estimated time to complete this transaction.": "Beräknad tid för att genomföra överföringen.",
   "Retry with lower input amount!": "Försök igen med lägre inmatningsbelopp!",
   "Developer Doc": "Utvecklardokument",
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Tjäna Falcon Miles!",
-  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP-investerare tjänar %multiplier%x Falcon Miles baserat på den totala TVL som bidragit till poolen. Miles ackumuleras endast för positioner inom intervallet 0,95 till 1,05.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": {
+    "key": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+    "source": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+    "translation": "LP:s tjänar %multiplier%x Falcon's Miles baserat på totalt TVL som bidragits till poolen. Miles tillfaller endast positioner inom intervallet 0,95 till 1,05.",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/FarmStatusDisplay/index.tsx,apps/web/src/views/universalFarms/components/RewardInfoCard/index.tsx"
+  },
   "Enter value between %min% and %max%": "Ange ett värde mellan %min% och %max%",
   "balance not enough": "ej tillräckligt saldo",
   "Select base token": "Välj base token",
   "Select quote token": "Välj kurs token",
   "Enter order size": "Ange orderstorlek",
   "Enter price tick": "Ange pris-tick",
-  "Create a farm for any live pool": "Skapa en farm för valfri livepool",
+  "Create a farm for any live pool": {
+    "key": "Create a farm for any live pool",
+    "source": "Create a farm for any live pool",
+    "translation": "Skapa en farm för vilken live-pool som helst",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/components/CreatePoolEntryDialog.tsx"
+  },
   "You can add up to %count% reward tokens.": "Du kan lägga till upp till %count% belöningstoken.",
   "Reward Token %index%": "Belönings-token %index%",
   "Updated": "Uppdaterat",
@@ -3721,8 +4336,18 @@
   "Please type the word \"confirm\" to continue with this swap.": "Skriv ordet ”bekräfta” för att fortsätta med växlingen.",
   "Computing": "Beräknar",
   "Swap %amountA% %symbolA% for %amountB% %symbolB%.": "Växla %amountA% %symbolA% mot %amountB% %symbolB%.",
-  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "Inga belöningar att skörda än. Kom tillbaka senare – dina intäkter kommer att öka i takt med att användare handlar i denna pool.",
-  "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": "Din pool kommer att visas i pool-listan inom cirka 5 minuter, och du kan också se din tillagda position under fliken Min position. Denna pool representeras av en NFT – bränn eller överför den inte, eftersom den krävs för att behålla äganderätten till positionen.",
+  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": {
+    "key": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+    "source": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+    "translation": "Inga belöningar att samla in än. Kom tillbaka senare – dina intäkter kommer att växa när användare handlar i denna pool.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Portfolio/components/SectionMyPositions/components/Clmm/ClmmPositionAccountItemDetail/PendingYield.tsx"
+  },
+  "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": {
+    "key": "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.",
+    "source": "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.",
+    "translation": "Din pool kommer att visas i poollistan inom cirka 5 minuter, och du kan även se din tillagda position under fliken Min position. Denna pool representeras av en NFT—vänligen bränn eller överför den inte, eftersom den krävs för att behålla ägandet av positionen.",
+    "hint": "found in 1 of files, see apps/solana/src/features/Create/ClmmPool/components/CreateSuccessWithLockModal.tsx"
+  },
   "Decrease Reward Rate": "Minska belöningsgraden",
   "Amount and days cannot both be zero": "Belopp och dagar kan inte båda vara noll",
   "Split Display": "Delad skärm",
@@ -3740,7 +4365,12 @@
   "Trade Fees": "Handelsavgifter",
   "Farm Rewards": "Farm-belöningar",
   "Unsupported protocol: %protocol%": "Protokoll stöds inte: %protocol%",
-  "Pool Features": "Poolfunktioner",
+  "Pool Features": {
+    "key": "Pool Features",
+    "source": "Pool Features",
+    "translation": "Poolfunktioner",
+    "hint": "found in 3 of files, see apps/web/src/components/PoolInfoHeader/index.tsx,apps/web/src/views/PoolDetail/components/PoolFeaturesModal.tsx,apps/web/src/views/PoolDetail/components/PoolInfo.tsx"
+  },
   "Total Value Locked (TVL)": "Totalt låst värde (TVL)",
   "Total Liquidity": "Total likviditet",
   "Total Farm Earnings": "Totala intäkter från farmar",
@@ -3749,7 +4379,12 @@
   "Price Range (Min/Max)": "Prisintervall (Min/Max)",
   "No positions found": "Inga positioner hittades",
   "Harvesting...": "Skördar...",
-  "Pool feature": "Poolfunktion",
+  "Pool feature": {
+    "key": "Pool feature",
+    "source": "Pool feature",
+    "translation": "Poolfunktion",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolFeaturesBadge.tsx"
+  },
   "Farm rewards": "Farm-belöningar",
   "Edit farm": "Redigera farm",
   "Create farm": "Skapa farm",
@@ -3825,7 +4460,12 @@
   "Just sent you %totalUsd%! 🎉 Tap this link and to claim it: 👉 %claimLink%\n\nPlease connect your wallet to claim it!\n\nAlternatively, you can manually enter the code %code% on PancakeSwap wallet to claim.": "Har just skickat %totalUsd% till dig! 🎉 Klicka på den här länken för att lösa in: 👉 %claimLink%\n\nAnslut din plånbok för att lösa in!\n\nAlternativt kan du ange koden %code% manuellt i PancakeSwap-plånboken för att lösa in.",
   "Chart Information": "Diagraminformation",
   "The price data displayed is for reference only and may not reflect exact trading prices.": "Prisuppgifterna som visas är endast referensvärden och kanske inte återspeglar de exakta handelspriserna.",
-  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": "Diagrammet visar aggregerade prisdata från flera källor. De faktiska utgångsbeloppen för en swapbegäran eller priserna från en specifik PancakeSwap-pool kan variera.",
+  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": {
+    "key": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.",
+    "source": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.",
+    "translation": "Detta diagram visar aggregerad prisdata från flera källor. Faktiska utgående belopp för en swap-begäran eller priser från en specifik PancakeSwap-pool kan skilja sig.",
+    "hint": "found in 1 of files, see apps/web/src/components/Chart/AggregatePricingModal.tsx"
+  },
   "Provided by <0>HashDit</0>": "Tillhandahålls av <0>HashDit</0>",
   "Learn more about risk rating <0>here.</0>": "Läs mer om riskbedömning <0>här.</0>",
   "Risk scan results are provided by a third party, <0>HashDit</0>": "Riskanalysresultat tillhandahålls av en tredje part, <0>HashDit</0>",
@@ -3855,7 +4495,11 @@
   "solana.removed_liquidity_desc": "Tog bort %amountA% %symbolA% och %amountB% %symbolB%.",
   "solana.update_rewards": "Uppdatera belöningar",
   "solana.update_rewards_in_pool": "Uppdatera belöningar i %pool%.",
-  "solana.create_pool": "Skapa pool",
+  "solana.create_pool": {
+    "key": "solana.create_pool",
+    "source": "Create Pool",
+    "translation": "Skapa pool"
+  },
   "solana.create_v3_pool": "Skapa V3-pool",
   "solana.create_new_farm": "Skapa ny farm",
   "solana.farm_id": "ID: %poolId%",
@@ -3870,14 +4514,24 @@
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP- och limitorder stöds för närvarande inte för Smart-kontoplånböcker.",
   "Create your Wallet with Social Login": "Skapa din plånbok med inloggning via sociala medier",
   "Important Notice: %chain% Sunset": "Viktigt meddelande: %chain% Sunset",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% kommer att upphöra den %date%. Se till att ta bort din likviditet från alla pooler före deadline.",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": {
+    "key": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
+    "source": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
+    "translation": "%chain% kommer att avvecklas den %date%. Vänligen se till att ta bort din likviditet från alla pooler före deadline.",
+    "hint": "found in 1 of files, see apps/web/src/components/Liquidity/LiquiditySunsetWarning.tsx"
+  },
   "TransactionExecutionError: The requested account and / or method has not been authorised by the user. Please make sure your wallet is updated to the latest version.": "TransactionExecutionError: Det begärda kontot och/eller metoden har inte godkänts av användaren. Se till att din plånbok är uppdaterad till den senaste versionen.",
   "Solana swap submitted": "Solana-växling skickad",
   "Smart contract wallets are currently not supported on Bridge. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smarta kontrakt-plånböcker stöds för närvarande inte på Brygga. För att fortsätta, växla tillbaka till en EOA-plånbok (externt ägt konto) innan du interagerar med produkten.",
   "Global Settings": "Globala inställningar",
   "EVM Settings": "EVM-inställningar",
   "Solana Settings": "Solana-inställningar",
-  "Loading more pools...": "Laddar fler pooler...",
+  "Loading more pools...": {
+    "key": "Loading more pools...",
+    "source": "Loading more pools...",
+    "translation": "Laddar fler pooler...",
+    "hint": "found in 1 of files, see apps/web/src/components/MiniUniversalFarms/components/PoolsTable.tsx"
+  },
   "Try Zap": "Testa Zap",
   "to automatically balance and provide V3 liquidity in one click.": "för att automatiskt balansera och tillhandahålla V3-likviditet med ett klick.",
   "Set position range": "Ställ in positionsintervall",
@@ -4003,22 +4657,57 @@
   "twap.confirm": "Bekräfta",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} för {dstAmount} {dstToken}",
   "Create Pool": "Skapa Pool",
-  "Create Liquidity Pool": "Skapa likviditetspool",
-  "Select the DEX type of the liquidity pool": "Välj DEX-typ för likviditetspoolen",
+  "Create Liquidity Pool": {
+    "key": "Create Liquidity Pool",
+    "source": "Create Liquidity Pool",
+    "translation": "Skapa likviditetspool",
+    "hint": "found in 2 of files, see apps/web/src/config/constants/meta.ts,apps/web/src/views/CreateLiquidityPool/components/BreadcrumbNav.tsx"
+  },
+  "Select the DEX type of the liquidity pool": {
+    "key": "Select the DEX type of the liquidity pool",
+    "source": "Select the DEX type of the liquidity pool",
+    "translation": "Välj DEX-typ för likviditetspoolen",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
   "Infinity Pool": "Infinity Pool",
   "V3 Pool": "V3 Pool",
   "V2 Pool": "V2 Pool",
-  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
-  "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
-  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": {
+    "key": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
+    "source": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
+    "translation": "Stöder flera pooltyper med gaseffektiv design, hooks och flexibla likviditetsalternativ. Idealisk för avancerade strategier och för att maximera avkastningen.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
+  "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": {
+    "key": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
+    "source": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
+    "translation": "Avancerade pooler där du väljer specifika prisintervall för att tillhandahålla likviditet och tjänar högre avgifter inom ditt valda intervall.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
+  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": {
+    "key": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+    "source": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+    "translation": "Klassiska pooler som låter dig tillhandahålla likviditet över hela prisintervallet för stabila, förutsägbara handelsavgifter.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/index.tsx"
+  },
   "Use Market Price": "Använd marknadspris",
   "%assetA% = 1 %assetB%": "%assetA% = 1 %assetB%",
   "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.",
   "Initial Price": "Initialt pris",
   "Dynamic Fee": "Dynamisk avgift",
   "Infinity Pools are not supported on this chain": "Infinity Pools stöds inte på denna kedja",
-  "Successfully created pool": "Poolen har skapats",
-  "A pool with selected settings already exists. Please add liquidity instead.": "A pool with selected settings already exists. Please add liquidity instead.",
+  "Successfully created pool": {
+    "key": "Successfully created pool",
+    "source": "Successfully created pool",
+    "translation": "Poolen har skapats",
+    "hint": "found in 2 of files, see apps/web/src/views/CreateLiquidityPool/hooks/V2/useV2CreateForm.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V3/useV3CreateForm.tsx"
+  },
+  "A pool with selected settings already exists. Please add liquidity instead.": {
+    "key": "A pool with selected settings already exists. Please add liquidity instead.",
+    "source": "A pool with selected settings already exists. Please add liquidity instead.",
+    "translation": "En pool med de valda inställningarna finns redan. Vänligen lägg till likviditet istället.",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/components/V3/MessagePoolInitialized.tsx"
+  },
   "Insufficient SOL balance to complete transaction": "Otillräckligt SOL-saldo för att slutföra transaktionen",
   "Priority Fee Settings": "Prioritetsavgiftsinställningar",
   "Connect Solana Wallet": "Anslut Solana-plånbok",
@@ -4159,10 +4848,10 @@
   "PancakeSwap’s <0>Initial Farm Offering (IFO)</0> is a platform to launch new tokens.": "PancakeSwap’s <0>Initial Farm Offering (IFO)</0> är en plattform för att lansera nya tokens.",
   "Pcs's": "Pcs's",
   "ifo-what-is-ifo-description-1": "<p> Användare kan köpa projekttokens med %symbol%, samtidigt som projekt får likviditet, synlighet och direkt tillgång till vår community. </p>",
-  "syrup-pools-desc": "Syrup Pools låter dig stake:a CAKE för att tjäna belöningar. Genom att sätta in CAKE i en Syrup Pool kan du ta emot tokens från partnerprojekt, beroende på poolen.",
-  "syrup-pools-instructions": "Gå till sektionen <0>Syrup Pools</0> på PancakeSwap, välj en pool och sätt in CAKE. Dina belöningar börjar ackumuleras automatiskt. Du kan unstake:a din CAKE när som helst.",
+  "syrup-pools-desc": "Syrup Pools låter dig staka CAKE för att tjäna belöningar. Genom att sätta in CAKE i en Syrup Pool kan du få tokens från partnerprojekt, beroende på poolen.",
+  "syrup-pools-instructions": "Gå till avsnittet <0>Syrup Pools</0> på PancakeSwap, välj en pool och sätt in CAKE. Dina belöningar börjar ackumuleras automatiskt. Du kan ta ut dina stakade CAKE när som helst.",
   "rewards-list": "<0>Partner Token Pools</0>: Tjäna tokens från partnerprojekt genom att stake:a CAKE (t.ex. Stake:a CAKE för att tjäna PEPE). <1>Belöningar måste hämtas manuellt genom att klicka på knappen \"Harvest\" under \"Details\" för varje pool.</1>",
-  "fees-description": "Det finns <0>inga plattformsavgifter</0> för att stake:a eller unstake:a i Syrup Pools. Däremot kommer <1>standardmässiga blockchain-gasavgifter</1> fortfarande att gälla vid transaktioner, såsom insättning, skörd av belöningar eller unstake:ande av CAKE.",
+  "fees-description": "Det finns <0>inga plattformsavgifter</0> för att staka eller ta ut från Syrup Pools. Däremot tillkommer <1>standardmässiga gasavgifter för blockkedjan</1> när du gör transaktioner, som att sätta in, skörda belöningar eller ta ut stakade CAKE.",
   "unclaimed-rewards": "Dina belöningar fortsätter att ackumuleras så länge din CAKE är stake:ad. Du kan hämta dem när som helst genom att klicka på \"<0>Harvest</0>\"-knappen.",
   "legacy-pools": "De <0>Auto CAKE- och Manual CAKE-poolerna</0> har uppgraderats till <1>veCAKE</1> staking. Om du fortfarande har CAKE stake:ad i de äldre poolerna måste du <2>migrera till veCAKE</2> för att fortsätta tjäna belöningar. <3>Lär dig hur du migrerar här</3>",
   "Gift Failed to Claim": "Misslyckades att hämta gåvan",
