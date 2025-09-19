@@ -89,7 +89,7 @@ describe('fetchFarmsV3', () => {
 
     const cakePrice = '40'
 
-    expect(getFarmsPrices(farmsData, cakePrice, commonPrice)).toMatchInlineSnapshot(`
+    expect(await getFarmsPrices(farmsData, cakePrice, commonPrice)).toMatchInlineSnapshot(`
       [
         {
           "feeAmount": 2500,
