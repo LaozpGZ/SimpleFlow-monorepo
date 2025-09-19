@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, ERC20Token } from '@pancakeswap/sdk'
+import { Currency, ERC20Token, Token } from '@pancakeswap/sdk'
 import { CAKE } from '@pancakeswap/tokens'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import chunk from '@pancakeswap/utils/chunk'
@@ -496,7 +496,7 @@ export async function getFarmsPrices(
         quoteTokenPriceBusd = tokenPriceBusd.div(farm.tokenPriceVsQuote)
       }
 
-      const fallbackTokensToFetch = []
+      const fallbackTokensToFetch: Token[] = []
       if (tokenPriceBusd.isZero()) fallbackTokensToFetch.push(farm.token)
       if (quoteTokenPriceBusd.isZero()) fallbackTokensToFetch.push(farm.quoteToken)
 
