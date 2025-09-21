@@ -50,7 +50,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         return cache.get(cacheKey) || ''
       }
 
-      const candidate = bundle[key] ?? extendEnList[key]
+      const candidate = bundle[key] || extendEnList[key]
       const value = typeof candidate === 'string' ? candidate : key
 
       if (cacheKey) {
