@@ -50,8 +50,17 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         return cache.get(cacheKey) || ''
       }
 
-      const candidate = bundle[key] || extendEnList[key]
-      const value = typeof candidate === 'string' ? candidate : key
+      const candidate: any = bundle[key] || extendEnList[key] || key
+
+      const value =
+        typeof candidate === 'string'
+          ? candidate
+          : candidate &&
+            typeof candidate === 'object' &&
+            'translation' in candidate &&
+            typeof candidate.translation === 'string'
+          ? candidate.translation
+          : key
 
       if (cacheKey) {
         const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
