@@ -56,7 +56,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         typeof candidate === 'string'
           ? candidate
           : typeof candidate?.translation === 'string' && candidate.translation
-          ? candidate.translation
+          ? (candidate.translation as string)
           : key
 
       if (cacheKey) {
