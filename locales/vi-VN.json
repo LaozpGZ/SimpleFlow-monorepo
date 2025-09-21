@@ -3398,12 +3398,7 @@
   "Initialize AMM v4 pool": "Khởi tạo pool AMM v4",
   "Initialize CPMM pool": "Khởi tạo pool CPMM",
   "I want to...": "Tôi muốn...",
-  "Create pool": {
-    "key": "Create pool",
-    "source": "Create pool",
-    "translation": "Tạo pool",
-    "hint": "found in 3 of files, see apps/solana/src/features/Create/components/CreatePoolEntryDialog.tsx,apps/solana/src/store/configs/liquidity.tsx,apps/solana/src/store/configs/market.tsx"
-  },
+  "Create pool": "Tạo pool",
   "V3 Pools": "Các quỹ V3",
   "Custom ranges, increased capital efficiency": "Khoảng tùy chỉnh, tăng hiệu suất vốn",
   "Suggested": "Được đề xuất",
