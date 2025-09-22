@@ -52,7 +52,8 @@ export const CommitButton = () => {
     if (!inputBalance) return false
     const inputBalanceAmount = formatAmount(inputBalance, 6)
     if (!inputBalanceAmount) return false
-    return inputBalanceAmount >= formattedAmounts[Field.CURRENCY_A]
+    // TODO: handle native. should add some dust to account for gas
+    return BN(inputBalanceAmount).gte(formattedAmounts[Field.CURRENCY_A])
   }, [inputBalance, formattedAmounts])
 
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
@@ -65,10 +66,13 @@ export const CommitButton = () => {
     isEnabled && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   const buttonText = useMemo(() => {
-    if (!isEnoughBalance) return t('Insufficient %symbol% balance', { symbol: inputCurrency?.symbol ?? '' })
+    if (BN(formattedAmounts[Field.CURRENCY_A]).gt(0) && !isEnoughBalance)
+      return t('Insufficient %symbol% balance', { symbol: inputCurrency?.symbol ?? '' })
+
     if (errorReason === ValidationError.NO_LIQUIDITY) return t('Insufficient Liquidity')
+
     return t('Place Limit Order')
-  }, [errorReason, t, isEnoughBalance, inputCurrency?.symbol])
+  }, [errorReason, t, isEnoughBalance, inputCurrency?.symbol, formattedAmounts])
 
   const handleOpen = useCallback(() => {
     // Refetch pool to get latest market price
