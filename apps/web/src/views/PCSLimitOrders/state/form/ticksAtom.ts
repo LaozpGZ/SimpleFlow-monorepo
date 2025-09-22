@@ -58,7 +58,7 @@ export const ticksAtom = atom(async (get) => {
     sqrtPriceData
 
   // Calculated inverted ticks
-  // INVERTED needed only if selling/buying at a Bad price. Keeping it for support just in case
+  // Inverted ticks needed only if selling/buying at a Bad price. Keeping it for support just in case
   const invertedTickLower = nearestUsableTick(invertTickForLimitOrder(tickUpper, tickCurrent), tickSpacing)
   const invertedTickUpper = nearestUsableTick(invertTickForLimitOrder(tickLower, tickCurrent), tickSpacing)
   const invertedTargetTick = zeroForOne ? invertedTickUpper : invertedTickLower

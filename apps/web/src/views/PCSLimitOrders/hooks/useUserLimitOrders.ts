@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
-import { useCLLimitOrderHookContract } from 'hooks/useContract'
 import { useState, useCallback } from 'react'
+import { useCLLimitOrderHookContract } from 'hooks/useContract'
 import { PCS_LIMIT_ORDER_HISTORY_URL } from '../constants'
-import { OrderStatus, OrderHistoryResponse, PaginationParams, PaginationInfo } from '../types/orders.types'
+import { OrderHistoryResponse, OrderStatus, PaginationParams } from '../types/orders.types'
+import { fetchOrderDataById, parseOrders } from '../utils/orders'
 
 async function getUserLimitOrders(chainName: string, address: string, pagination?: PaginationParams) {
   const url = new URL(`${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}`)
@@ -31,7 +32,6 @@ async function getUserLimitOrders(chainName: string, address: string, pagination
 
 export const useUserLimitOrders = () => {
   const contract = useCLLimitOrderHookContract()
-
   const { account, chainId } = useAccountActiveChain()
   const chainName = chainIdToExplorerInfoChainName[chainId]
 
@@ -55,43 +55,25 @@ export const useUserLimitOrders = () => {
       const data = await getUserLimitOrders(chainName, account, paginationParams)
       const { rows } = data
 
-      console.log('%c [Order History Data]', 'background: green;color: white', rows)
-
-      const orders = await Promise.allSettled(
-        rows.map(async (item) => {
-          // Fetch Amounts //
-          let amount0: bigint | undefined
-          let amount1: bigint | undefined
-
-          // If order status is OPEN, simulate Cancel
-          //   if (item.status === OrderStatus.Open) {
-          //     const { result } = await contract.simulate.cancelOrder([BigInt(item.order_id), account])
-          //     amount0 = result[0]
-          //     amount1 = result[1]
-          //   }
-          //   // If order status is Filled, simulate Withdraw
-          //   if (item.status === OrderStatus.Filled) {
-          //     const { result } = await contract.simulate.withdraw([BigInt(item.order_id), account])
-          //     amount0 = result[0]
-          //     amount1 = result[1]
-          //   }
-
-          // But how to fetch amounts if order is cancelled or withdrawn 🤔
-
+      const orders = await Promise.all(
+        rows.map((row) => {
+          const data = fetchOrderDataById({
+            account,
+            contract,
+            orderId: row.order_id,
+            isWithdrawn: row.status === OrderStatus.Withdrawn,
+          })
           return {
-            amount0,
-            amount1,
-            ...item,
+            ...data,
+            ...row,
           }
         }),
       )
 
-      console.log('%c [Orders]', 'background: darkgreen;color: white', orders)
-
-      const processedOrders = orders.filter((order) => order.status === 'fulfilled').map((order) => order.value)
+      console.log('%c [Order History Data]', 'background: green;color: white', orders)
 
       return {
-        orders: processedOrders,
+        orders: parseOrders(orders),
         paginationInfo: {
           startCursor: data.startCursor,
           endCursor: data.endCursor,

@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/sdk'
+import { Currency, Price } from '@pancakeswap/sdk'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { BigNumber as BN } from 'bignumber.js'
@@ -23,6 +23,9 @@ export function getTickAdjustedPrice(
   quoteCurrency: Currency,
   zeroForOne?: boolean,
 ) {
+  // manual check, tick to price failing for tickCurrent = 0
+  if (price === '0') return { tick: 0, price: new Price(baseCurrency, quoteCurrency, '1', '1') }
+
   const price_ = tryParsePrice(baseCurrency, quoteCurrency, price)
   if (!price_) {
     console.error('getTickAdjustedPrice: No price found for given value', {

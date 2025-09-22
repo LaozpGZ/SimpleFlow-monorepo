@@ -23,7 +23,8 @@ export const OrdersSummaryCard = () => {
 
   const { data } = useUserLimitOrders()
 
-  const numOpenOrders = data?.filter((order) => order.status === OrderStatus.Open).length
+  // const numOpenOrders = data?.filter((order) => order && order.status === OrderStatus.Open).length
+  const numOpenOrders = data?.length // TESTING
   const totalOrders = data?.length
 
   const { isOpen, onOpen, onDismiss } = useModalV2()

@@ -106,9 +106,15 @@ export const QuickActionButtons = () => {
   }, [])
 
   const handleBlur = useCallback(() => {
+    if (BN(localPercent).isZero()) {
+      setCustomMarketPrice(undefined)
+      return
+    }
+
     if (localPercent && BN(localPercent).isFinite() && localPercent !== percentage)
       setPercentDifference(Number(localPercent))
-  }, [localPercent, setPercentDifference])
+    else setLocalPercent(percentage || '')
+  }, [localPercent, setPercentDifference, percentage])
 
   // Sync percent values
   useEffect(() => {

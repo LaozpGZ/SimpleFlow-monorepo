@@ -4,8 +4,9 @@ import { SwapType } from 'views/Swap/types'
 import { SwapSelection } from 'views/SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPanel'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
-import { Link } from '@pancakeswap/uikit'
+import { DynamicSection, Link } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { useAtomValue } from 'jotai'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
@@ -13,9 +14,12 @@ import { QuickActionButtons } from './components/QuickActionButtons'
 import { TradeDetails } from './components/TradeDetails'
 import { TestingArea } from './components/TestingArea'
 import { OrdersSummaryCard } from './components/OrderHistory/OrdersSummaryCard'
+import { selectedPoolAtom } from './state/pools/selectedPoolAtom'
 
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
+
+  // const { data: selectedPool, isLoading, isFetchedAfterMount } = useAtomValue(selectedPoolAtom)
 
   return (
     <>
@@ -25,10 +29,12 @@ export const PCSLimitOrdersView = () => {
             <SwapSelection swapType={SwapType.LIMIT} withToolkit />
             <LimitOrderForm />
 
+            {/* <DynamicSection disabled={!selectedPool || isLoading || !isFetchedAfterMount}> */}
             <FormContainer>
               <MarketPriceInput />
               <QuickActionButtons />
             </FormContainer>
+            {/* </DynamicSection> */}
           </SwapUIV2.SwapTabAndInputPanelWrapper>
 
           <PanelWrapper>

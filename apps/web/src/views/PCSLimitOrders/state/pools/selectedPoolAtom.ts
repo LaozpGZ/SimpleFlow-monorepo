@@ -13,12 +13,11 @@ export const selectedPoolAtom = atomWithQuery((get) => {
   return {
     queryKey: ['selectedPool', chainId, get(inputCurrencyAtom), get(outputCurrencyAtom)],
     refetchInterval: FAST_INTERVAL,
-    staleTime: FAST_INTERVAL,
     queryFn: async () => {
       const inputCurrency = await get(inputCurrencyAtom)
       const outputCurrency = await get(outputCurrencyAtom)
 
-      if (!inputCurrency || !outputCurrency) return undefined
+      if (!inputCurrency || !outputCurrency) return null
 
       const idA = getCurrencyAddress(inputCurrency)
       const idB = getCurrencyAddress(outputCurrency)
@@ -30,14 +29,14 @@ export const selectedPoolAtom = atomWithQuery((get) => {
           ((pool.currency0 === idA && pool.currency1 === idB) || (pool.currency0 === idB && pool.currency1 === idA)),
       )
 
-      console.log('SelectedPoolAtom', {
+      console.log('SelectedPoolAtom: Found basic pool', {
         idA,
         idB,
         basicPool,
         pools,
       })
 
-      if (!basicPool || !isPoolId(basicPool.poolId)) return undefined
+      if (!basicPool || !isPoolId(basicPool.poolId)) return null
 
       const { poolId, chainId } = basicPool
 
@@ -45,7 +44,7 @@ export const selectedPoolAtom = atomWithQuery((get) => {
       const poolInfo = await fetchCLPoolInfo(poolId, chainId)
 
       // Validate the pool
-      if (!poolInfo || (!poolInfo.dynamic && poolInfo.fee >= 1e6)) return undefined
+      if (!poolInfo || (!poolInfo.dynamic && poolInfo.fee >= 1e6)) return null
 
       const { currency0, fee, liquidity, lpFee, protocolFee, sqrtPriceX96, tick, parameters } = poolInfo
 
@@ -67,6 +66,15 @@ export const selectedPoolAtom = atomWithQuery((get) => {
         tickSpacing: parameters.tickSpacing,
       })
       pool.feeProtocol = protocolFee
+
+      console.log('SelectedPoolAtom: Constructed pool', {
+        poolId,
+        pool,
+        poolInfo,
+        zeroForOne,
+        currencyA,
+        currencyB,
+      })
 
       return { poolId, pool, poolInfo, zeroForOne, currencyA, currencyB }
     },

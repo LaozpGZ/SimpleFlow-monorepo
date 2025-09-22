@@ -3,8 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 import { parseOrders } from 'views/PCSLimitOrders/utils/orders'
 import { CAKE } from '@pancakeswap/tokens'
-import { Native, NATIVE } from '@pancakeswap/sdk'
-import { OrderStatus } from 'views/PCSLimitOrders/types/orders.types'
+import { Native } from '@pancakeswap/sdk'
 import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
 import { TokenAmountDisplay } from './TableItems/TokenAmountDisplay'
 
@@ -13,9 +12,6 @@ export const OrdersTable = () => {
 
   const { data } = useUserLimitOrders()
 
-  // Parse orders to match table format
-  const orders = parseOrders((data as any[]) ?? [])
-
   const columns = [
     {
       title: t('Sell'),
@@ -23,7 +19,7 @@ export const OrdersTable = () => {
       key: 'sell',
       render: (value) => (
         <div>
-          <TokenAmountDisplay currency={CAKE[56]} amount="100000" />
+          <TokenAmountDisplay currency={CAKE[56]} amount={value} />
         </div>
       ),
     },
@@ -33,7 +29,7 @@ export const OrdersTable = () => {
       key: 'buy',
       render: (value) => (
         <div>
-          <TokenAmountDisplay currency={Native.onChain(56)} amount="100000" />
+          <TokenAmountDisplay currency={Native.onChain(56)} amount={value} />
         </div>
       ),
     },
@@ -77,7 +73,7 @@ export const OrdersTable = () => {
 
   return (
     <>
-      <TableView columns={columns} data={orders as any[]} />
+      <TableView columns={columns} data={data as any[]} getRowKey={(record) => record.order_id} />
       {/* pagination support here for desktop. For mobile, infinite scroll when element interacts */}
     </>
   )

@@ -25,12 +25,12 @@ export const useSupportedTokens = () => {
     const outputTokenAddresses = inputCurrency ? tokenMap[getCurrencyAddress(inputCurrency)] ?? [] : []
 
     if (inputTokenAddresses.includes(ZERO_ADDRESS)) {
-      inputTokenAddresses.splice(inputTokenAddresses.indexOf(ZERO_ADDRESS))
+      inputTokenAddresses.splice(inputTokenAddresses.indexOf(ZERO_ADDRESS), 1)
       isNativeInputSupported = true
     }
 
     if (outputTokenAddresses.includes(ZERO_ADDRESS)) {
-      outputTokenAddresses.splice(outputTokenAddresses.indexOf(ZERO_ADDRESS))
+      outputTokenAddresses.splice(outputTokenAddresses.indexOf(ZERO_ADDRESS), 1)
       isNativeOutputSupported = true
     }
 

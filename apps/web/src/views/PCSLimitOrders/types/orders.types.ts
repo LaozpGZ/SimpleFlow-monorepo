@@ -18,20 +18,28 @@ export interface PaginationParams {
 
 interface ResponseOrder {
   order_id: string
+  pool_id: string
   owner: string
   liquidity: string
   status: OrderStatus
   updated_at: string
   zero_for_one: boolean
   tick_lower: number
+  transaction_hash: string
 }
 
 export enum OrderStatus {
   Open = 'Open',
   Filled = 'Filled',
-  PartiallyFilled = 'PartiallyFilled',
+  PartiallyFilled = 'Partially_Filled',
   Cancelled = 'Cancelled',
   Withdrawn = 'Withdrawn',
+}
+
+export enum ContractOrderStatus {
+  Open,
+  Pending,
+  Filled,
 }
 
 export interface Order {
