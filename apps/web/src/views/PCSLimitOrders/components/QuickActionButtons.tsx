@@ -136,6 +136,7 @@ export const QuickActionButtons = () => {
         {Object.keys(DEFAULT_PERCENTAGE_MAP).map((item) => {
           return (
             <QuickActionButton
+              key={item}
               onClick={() => setPercentDifference(Number(item))}
               $isActive={percentage === presetPercentMap[item]}
               width="100%"

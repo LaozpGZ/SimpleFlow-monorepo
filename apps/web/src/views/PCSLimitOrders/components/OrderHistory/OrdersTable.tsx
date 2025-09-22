@@ -7,6 +7,7 @@ import { Currency, Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { useRef } from 'react'
 import { useAtomValue } from 'jotai'
 import { useCurrency, useToken, useTokenByChainId } from 'hooks/Tokens'
+import { formatUnits } from '@pancakeswap/utils/viem/formatUnits'
 import { TokenAmountDisplay } from './TableItems/TokenAmountDisplay'
 import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
 
@@ -69,11 +70,17 @@ export const OrdersTable = () => {
         <AutoColumn>
           <TokenAmountDisplay
             currency={value?.order?.data.zeroForOne ? token0 : token1}
-            amount={value.amount0Received}
+            amount={formatUnits(
+              value.amount0Received ?? '0',
+              (value?.order?.data.zeroForOne ? token0.decimals : token1.decimals) ?? 18,
+            )}
           />
           <TokenAmountDisplay
             currency={value?.order?.data.zeroForOne ? token1 : token0}
-            amount={value.amount1Received}
+            amount={formatUnits(
+              value.amount1Received ?? '0',
+              (value?.order?.data.zeroForOne ? token1.decimals : token0.decimals) ?? 18,
+            )}
           />
         </AutoColumn>
       ),
