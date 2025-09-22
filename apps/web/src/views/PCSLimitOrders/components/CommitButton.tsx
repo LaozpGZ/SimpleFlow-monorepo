@@ -25,6 +25,7 @@ import { ApprovalState } from 'hooks/useApproveCallback'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field, ValidationError } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
@@ -35,6 +36,7 @@ import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { usePlaceLimitOrder } from '../hooks/usePlaceLimitOrder'
 import { useLimitOrderApproval } from '../hooks/useLimitOrderApproval'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
+import { useLimitOrderUserBalance } from '../hooks/useLimitOrderUserBalance'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
@@ -42,20 +44,10 @@ export const CommitButton = () => {
   const { account } = useAccountActiveChain()
 
   const { approvalState, approveCallback } = useLimitOrderApproval()
+  const { isEnoughBalance } = useLimitOrderUserBalance()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
-
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
-
-  const [inputBalance] = useCurrencyBalances(account, [inputCurrency ?? undefined])
-  const isEnoughBalance = useMemo(() => {
-    if (!inputBalance) return false
-    const inputBalanceAmount = formatAmount(inputBalance, 6)
-    if (!inputBalanceAmount) return false
-    // TODO: handle native. should add some dust to account for gas
-    return BN(inputBalanceAmount).gte(formattedAmounts[Field.CURRENCY_A])
-  }, [inputBalance, formattedAmounts])
-
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
 
   const isEnabled = enabled && isEnoughBalance
@@ -80,6 +72,10 @@ export const CommitButton = () => {
 
     onOpen()
   }, [onOpen, refetch])
+
+  if (!account) {
+    return <ConnectWalletButton />
+  }
 
   return (
     <>
