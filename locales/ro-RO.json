@@ -4002,7 +4002,7 @@
   "twap.loading": "Se încarcă",
   "twap.confirm": "Confirmă",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} for {dstAmount} {dstToken}",
-  "Create Pool": "Creare Pool",
+  "Create Pool": "Creează Pool",
   "Create Liquidity Pool": "Creați un fond de lichiditate",
   "Select the DEX type of the liquidity pool": "Selectați tipul de DEX al pool-ului de lichiditate",
   "Infinity Pool": "Infinity Pool",

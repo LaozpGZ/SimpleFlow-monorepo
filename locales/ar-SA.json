@@ -4002,7 +4002,7 @@
   "twap.loading": "جارٍ التحميل",
   "twap.confirm": "تأكيد",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} for {dstAmount} {dstToken}",
-  "Create Pool": "إنشاء مجمع سيولة",
+  "Create Pool": "إنشاء مجمع",
   "Create Liquidity Pool": "إنشاء مجمع سيولة",
   "Select the DEX type of the liquidity pool": "اختر نوع DEX لمجمع السيولة",
   "Infinity Pool": "مجمع Infinity",

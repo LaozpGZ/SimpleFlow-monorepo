@@ -4002,7 +4002,7 @@
   "twap.loading": "Φόρτωση",
   "twap.confirm": "Επιβεβαίωση",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} για {dstAmount} {dstToken}",
-  "Create Pool": "Δημιουργία Δεξαμενής",
+  "Create Pool": "Δημιουργία Pool",
   "Create Liquidity Pool": "Δημιουργία Πισίνας Ρευστότητας",
   "Select the DEX type of the liquidity pool": "Επιλέξτε τον τύπο DEX της pool ρευστότητας.",
   "Infinity Pool": "Δεξαμενή Infinity",

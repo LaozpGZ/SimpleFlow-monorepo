@@ -4002,7 +4002,7 @@
   "twap.loading": "Laden ...",
   "twap.confirm": "Bevestigen",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} voor {dstAmount} {dstToken}",
-  "Create Pool": "Pool Aanmaken",
+  "Create Pool": "Pool aanmaken",
   "Create Liquidity Pool": "Liquiditeitspool creëren",
   "Select the DEX type of the liquidity pool": "Selecteer het DEX-type van de liquiditeitspool",
   "Infinity Pool": "Infinity-pool",

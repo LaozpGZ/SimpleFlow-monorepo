@@ -4002,7 +4002,7 @@
   "twap.loading": "लोड हो रहा है",
   "twap.confirm": "पुष्टि करें",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} for {dstAmount} {dstToken}",
-  "Create Pool": "पूल बनाएँ",
+  "Create Pool": "पूल बनाएं",
   "Create Liquidity Pool": "लिक्विडिटी पूल बनाएँ",
   "Select the DEX type of the liquidity pool": "लिक्विडिटी पूल का DEX प्रकार चुनें",
   "Infinity Pool": "इन्फिनिटी पूल",
