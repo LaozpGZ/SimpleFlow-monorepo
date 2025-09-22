@@ -321,7 +321,7 @@ const PriceRangeCard: React.FC<{
     poolInfo,
     tickLower: position.tickLower,
     tickUpper: position.tickUpper,
-    liquidity: position.liquidity,
+    liquidity: new BN(10000),
   })
 
   const priceRangeData = usePriceRangeData({
@@ -441,6 +441,7 @@ const PositionChanges: React.FC<{
     tickUpper: position.tickUpper,
     liquidity: liquidityAdd,
   })
+
   return (
     <Card background={theme.colors.cardSecondary}>
       <CardBody>
