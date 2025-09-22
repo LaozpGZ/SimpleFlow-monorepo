@@ -1,4 +1,4 @@
-import { Currency, Price } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { BigNumber as BN } from 'bignumber.js'
@@ -82,4 +82,45 @@ export function getTickAdjustedPrice(
   }
 
   return { tick, price: priceFromTick }
+}
+
+export function getSqrtPriceFromMarketPrice(
+  marketPrice: string,
+  baseCurrency: Currency,
+  quoteCurrency: Currency,
+  tickSpacing: number,
+  tickCurrent: number,
+  zeroForOne: boolean,
+) {
+  if (!marketPrice) return undefined
+
+  // Get limit order tick from price
+  const parsedPrice = tryParsePrice(baseCurrency, quoteCurrency, marketPrice)
+  if (!parsedPrice) return undefined
+
+  let targetTick = tryParseTick(parsedPrice, tickSpacing)
+  if (!targetTick) return undefined
+
+  // If current tick is between targetTick and its next tick, adjust it depending on direction
+  if (targetTick <= tickCurrent && targetTick + tickSpacing >= tickCurrent) {
+    if (zeroForOne) targetTick += tickSpacing
+    else targetTick -= tickSpacing
+  }
+
+  // Calculate tickLower and tickUpper (Already correct for placing limit order)
+  const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
+  const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
+
+  // Determine if selling or buying at worse price. If worse, would need inverted ticks (disable this case in UI anyways)
+  const isSellingOrBuyingAtWorsePrice = zeroForOne ? tickLower <= tickCurrent : tickUpper >= tickCurrent
+
+  const priceLower = tickToPrice(baseCurrency, quoteCurrency, tickLower)
+  const priceUpper = tickToPrice(baseCurrency, quoteCurrency, tickUpper)
+
+  // Sqrt price = sqrt(priceLower * priceUpper)
+  const sqrtPrice = BN(priceLower.toFixed(18))
+    .multipliedBy(BN(priceUpper.toFixed(18)))
+    .sqrt()
+
+  return { sqrtPrice, isSellingOrBuyingAtWorsePrice, tickLower, tickUpper, targetTick, priceLower, priceUpper }
 }

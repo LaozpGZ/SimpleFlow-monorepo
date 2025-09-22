@@ -20,8 +20,6 @@ export const LimitOrderForm = () => {
   const outputCurrency = useAtomValue(outputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
 
-  const pool = useAtomValue(selectedPoolAtom)
-
   const setInput = useSetAtom(setInputAtom)
   const setCurrency = useSetAtom(setCurrencyAtom)
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
@@ -95,7 +93,6 @@ export const LimitOrderForm = () => {
             showMaxButton
           />
         </Suspense>
-        pool: {pool?.poolId || 'None'}
       </FormContainer>
     </>
   )

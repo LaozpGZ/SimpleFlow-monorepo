@@ -78,6 +78,7 @@ export const OrdersTable = () => {
   return (
     <>
       <TableView columns={columns} data={orders as any[]} />
+      {/* pagination support here for desktop. For mobile, infinite scroll when element interacts */}
     </>
   )
 }

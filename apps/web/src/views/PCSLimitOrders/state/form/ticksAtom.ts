@@ -1,16 +1,17 @@
 import { atom } from 'jotai'
-import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
-import { tryParsePrice } from 'hooks/v3/utils'
-import { BigNumber as BN } from 'bignumber.js'
-import { getTickAdjustedPrice, invertTickForLimitOrder } from 'views/PCSLimitOrders/utils/ticks'
+import { tickToPrice } from 'hooks/infinity/utils'
+import {
+  getSqrtPriceFromMarketPrice,
+  getTickAdjustedPrice,
+  invertTickForLimitOrder,
+} from 'views/PCSLimitOrders/utils/ticks'
 import { nearestUsableTick } from '@pancakeswap/v3-sdk'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { customMarketPriceAtom } from './customMarketPriceAtom'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 
 /**
- * Ticks in pool's perspective.
- * NOT according to limit order ticks, which are going to be opposite to pool's direction
+ * Ticks derived from current/custom market price
  */
 export const ticksAtom = atom(async (get) => {
   const inputCurrency = await get(inputCurrencyAtom)
@@ -43,37 +44,21 @@ export const ticksAtom = atom(async (get) => {
   const marketPrice = customMarketPrice || currentMarketPrice
   if (!marketPrice) return undefined
 
-  // Get limit order tick from price
-  const parsedPrice = tryParsePrice(inputCurrency, outputCurrency, marketPrice)
-  if (!parsedPrice) return undefined
+  const sqrtPriceData = getSqrtPriceFromMarketPrice(
+    marketPrice,
+    inputCurrency,
+    outputCurrency,
+    tickSpacing,
+    tickCurrent,
+    zeroForOne,
+  )
+  if (!sqrtPriceData) return undefined
 
-  let targetTick = tryParseTick(parsedPrice, tickSpacing)
-  if (!targetTick) return undefined
-
-  // If current tick is between targetTick and its next tick, adjust it depending on direction
-  if (targetTick <= tickCurrent && targetTick + tickSpacing >= tickCurrent) {
-    if (zeroForOne) targetTick += tickSpacing
-    else targetTick -= tickSpacing
-  }
-
-  // Calculate tickLower and tickUpper (Already correct for placing limit order)
-  const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
-  const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
-
-  // To determine if selling or buying at worse price, if worse, would need inverted ticks (disable this case in UI anyways)
-  const isSellingOrBuyingAtWorsePrice = zeroForOne ? tickLower <= tickCurrent : tickUpper >= tickCurrent
-
-  const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
-  const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper)
-
-  // Sqrt price = sqrt(priceLower * priceUpper)
-  const sqrtPrice = BN(priceLower.toFixed(18))
-    .multipliedBy(BN(priceUpper.toFixed(18)))
-    .sqrt()
+  const { sqrtPrice, tickLower, tickUpper, priceLower, priceUpper, targetTick, isSellingOrBuyingAtWorsePrice } =
+    sqrtPriceData
 
   // Calculated inverted ticks
-  // INVERTED needed only if selling/buying at BAD price
-  // Can consider removing this altogether, or keeping it to support bad prices just in case
+  // INVERTED needed only if selling/buying at a Bad price. Keeping it for support just in case
   const invertedTickLower = nearestUsableTick(invertTickForLimitOrder(tickUpper, tickCurrent), tickSpacing)
   const invertedTickUpper = nearestUsableTick(invertTickForLimitOrder(tickLower, tickCurrent), tickSpacing)
   const invertedTargetTick = zeroForOne ? invertedTickUpper : invertedTickLower

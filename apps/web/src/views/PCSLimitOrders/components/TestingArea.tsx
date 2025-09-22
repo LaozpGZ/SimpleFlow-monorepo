@@ -143,6 +143,7 @@ export const TestingArea = () => {
         <Text>
           {inputCurrency?.symbol} &rarr; {outputCurrency?.symbol}
         </Text>
+        <Text>{selectedPool?.poolId}</Text>
         <Text>{ticksData?.isSellingOrBuyingAtWorsePrice ? 'Bad Price ❌' : 'Good Price ✅'}</Text>
         <Text>
           <pre>

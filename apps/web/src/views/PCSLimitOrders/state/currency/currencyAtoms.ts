@@ -39,9 +39,11 @@ export const outputCurrencyIdAtom = atom(
 export const inputCurrencyAtom = atom((get) => get(currencyAtom(get(inputCurrencyIdAtom))))
 export const outputCurrencyAtom = atom((get) => get(currencyAtom(get(outputCurrencyIdAtom))))
 
+// base currency may not be being used. consider removing. quote also can be replaced
 export const baseCurrencyAtom = atom((get) =>
   get(independentFieldAtom) === Field.CURRENCY_A ? get(inputCurrencyAtom) : get(outputCurrencyAtom),
 )
+
 export const quoteCurrencyAtom = atom((get) =>
   get(independentFieldAtom) === Field.CURRENCY_A ? get(outputCurrencyAtom) : get(inputCurrencyAtom),
 )
