@@ -64,8 +64,8 @@ export const useUserLimitOrders = () => {
             isWithdrawn: row.status === OrderStatus.Withdrawn,
           })
           return {
-            ...data,
             ...row,
+            data,
           }
         }),
       )
@@ -73,7 +73,7 @@ export const useUserLimitOrders = () => {
       console.log('%c [Order History Data]', 'background: green;color: white', orders)
 
       return {
-        orders: parseOrders(orders),
+        orders: parseOrders(orders as any[]),
         paginationInfo: {
           startCursor: data.startCursor,
           endCursor: data.endCursor,

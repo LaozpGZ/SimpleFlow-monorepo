@@ -3,7 +3,7 @@ import { useCLLimitOrderHookContract } from 'hooks/useContract'
 import { Address } from 'viem/accounts'
 import { publicClient } from 'utils/viem'
 import { ContractFunctionArgs, ContractFunctionName } from 'viem'
-import { ContractOrderStatus, OrderStatus } from '../types/orders.types'
+import { ContractOrderStatus, OrderStatus, ResponseOrder } from '../types/orders.types'
 
 const simulateLimitOrderContract = (
   contract: ReturnType<typeof useCLLimitOrderHookContract>,
@@ -94,15 +94,15 @@ export const fetchOrderDataById = async ({ contract, orderId, account, isWithdra
 }
 
 // export const parseOrders = (orders: Order[]) => {
-export const parseOrders = (orders: Awaited<ReturnType<typeof fetchOrderDataById>>[]) => {
+export const parseOrders = (orders: (ResponseOrder & { data: Awaited<ReturnType<typeof fetchOrderDataById>> })[]) => {
   if (!orders) return []
   return orders.map((order) => {
-    if (!order) return null
+    if (!order || !order.data) return null
 
-    const { zeroForOne } = order
-    const sell = zeroForOne ? order.amount0Received : order.amount1Received
-    const buy = zeroForOne ? order.amount1Received : order.amount0Received
-    const limitPrice = order.tickLower
+    const { zeroForOne } = order.data
+    const sell = zeroForOne ? order.data.amount0Received : order.data.amount1Received
+    const buy = zeroForOne ? order.data.amount1Received : order.data.amount0Received
+    const limitPrice = order.data.tickLower
     const { status } = order
     const filled = '-'
     const amountReceived = '-'

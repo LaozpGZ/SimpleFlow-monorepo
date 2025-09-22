@@ -16,7 +16,7 @@ export interface PaginationParams {
   after?: string
 }
 
-interface ResponseOrder {
+export interface ResponseOrder {
   order_id: string
   pool_id: string
   owner: string
