@@ -28,7 +28,7 @@ export const OrdersSummaryCard = () => {
 
   const { isOpen, onOpen, onDismiss } = useModalV2()
 
-  if (!totalOrders) return <>total: {JSON.stringify(data, null, 2)}</>
+  if (!totalOrders) return null
 
   return (
     <>

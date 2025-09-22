@@ -3,6 +3,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { useState, useCallback } from 'react'
 import { useCLLimitOrderHookContract } from 'hooks/useContract'
+import { fetchCLPoolInfo } from 'state/farmsV4/state/accountPositions/fetcher/infinity/getPoolInfo'
 import { PCS_LIMIT_ORDER_HISTORY_URL } from '../constants'
 import { OrderHistoryResponse, OrderStatus, PaginationParams } from '../types/orders.types'
 import { fetchOrderDataById, parseOrders } from '../utils/orders'
@@ -56,16 +57,21 @@ export const useUserLimitOrders = () => {
       const { rows } = data
 
       const orders = await Promise.all(
-        rows.map((row) => {
-          const data = fetchOrderDataById({
+        rows.map(async (row) => {
+          const data = await fetchOrderDataById({
             account,
             contract,
             orderId: row.order_id,
             isWithdrawn: row.status === OrderStatus.Withdrawn,
           })
+
+          // fetch order's pool info
+          const pool = await fetchCLPoolInfo(row.pool_id as `0x${string}`, chainId)
+
           return {
             ...row,
             data,
+            pool,
           }
         }),
       )

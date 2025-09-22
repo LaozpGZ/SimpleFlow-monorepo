@@ -22,6 +22,9 @@ import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { BigNumber as BN } from 'bignumber.js'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import { useCurrencyBalances } from 'state/wallet/hooks'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field, ValidationError } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
@@ -36,21 +39,36 @@ import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 export const CommitButton = () => {
   const { t } = useTranslation()
   const { isOpen, onDismiss, onOpen } = useModalV2()
+  const { account } = useAccountActiveChain()
 
   const { approvalState, approveCallback } = useLimitOrderApproval()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
+
+  const formattedAmounts = useAtomValue(formattedAmountsAtom)
+
+  const [inputBalance] = useCurrencyBalances(account, [inputCurrency ?? undefined])
+  const isEnoughBalance = useMemo(() => {
+    if (!inputBalance) return false
+    const inputBalanceAmount = formatAmount(inputBalance, 6)
+    if (!inputBalanceAmount) return false
+    return inputBalanceAmount >= formattedAmounts[Field.CURRENCY_A]
+  }, [inputBalance, formattedAmounts])
+
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
+
+  const isEnabled = enabled && isEnoughBalance
 
   const { refetch } = useAtomValue(selectedPoolAtom)
 
   const showApproveButton =
-    enabled && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
+    isEnabled && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   const buttonText = useMemo(() => {
+    if (!isEnoughBalance) return t('Insufficient %symbol% balance', { symbol: inputCurrency?.symbol ?? '' })
     if (errorReason === ValidationError.NO_LIQUIDITY) return t('Insufficient Liquidity')
     return t('Place Limit Order')
-  }, [errorReason, t])
+  }, [errorReason, t, isEnoughBalance, inputCurrency?.symbol])
 
   const handleOpen = useCallback(() => {
     // Refetch pool to get latest market price
@@ -71,7 +89,7 @@ export const CommitButton = () => {
         )}
 
         {!showApproveButton && (
-          <Button onClick={handleOpen} disabled={!enabled}>
+          <Button onClick={handleOpen} disabled={!isEnabled}>
             {buttonText}
           </Button>
         )}

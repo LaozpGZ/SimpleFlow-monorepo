@@ -1,16 +1,22 @@
-import { TableView } from '@pancakeswap/uikit'
+import { AutoColumn, TableView } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 import { parseOrders } from 'views/PCSLimitOrders/utils/orders'
 import { CAKE } from '@pancakeswap/tokens'
-import { Native } from '@pancakeswap/sdk'
-import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
+import { Currency, Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
+import { useRef } from 'react'
+import { useAtomValue } from 'jotai'
+import { useCurrency, useToken, useTokenByChainId } from 'hooks/Tokens'
 import { TokenAmountDisplay } from './TableItems/TokenAmountDisplay'
+import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
 
 export const OrdersTable = () => {
   const { t } = useTranslation()
 
   const { data } = useUserLimitOrders()
+
+  const token0 = Native.onChain(56)
+  const token1 = CAKE[56]
 
   const columns = [
     {
@@ -19,7 +25,7 @@ export const OrdersTable = () => {
       key: 'sell',
       render: (value) => (
         <div>
-          <TokenAmountDisplay currency={CAKE[56]} amount={value} />
+          <TokenAmountDisplay currency={value?.order?.data.zeroForOne ? token0 : token1} amount={value.value} />
         </div>
       ),
     },
@@ -29,7 +35,7 @@ export const OrdersTable = () => {
       key: 'buy',
       render: (value) => (
         <div>
-          <TokenAmountDisplay currency={Native.onChain(56)} amount={value} />
+          <TokenAmountDisplay currency={value?.order?.data.zeroForOne ? token1 : token0} amount={value.value} />
         </div>
       ),
     },
@@ -59,10 +65,22 @@ export const OrdersTable = () => {
       title: t('Amount Received'),
       dataIndex: 'amountReceived',
       key: 'amountReceived',
-      render: (value) => <div>{value}</div>,
+      render: (value) => (
+        <AutoColumn>
+          <TokenAmountDisplay
+            currency={value?.order?.data.zeroForOne ? token0 : token1}
+            amount={value.amount0Received}
+          />
+          <TokenAmountDisplay
+            currency={value?.order?.data.zeroForOne ? token1 : token0}
+            amount={value.amount1Received}
+          />
+        </AutoColumn>
+      ),
     },
     {
-      title: t('View Pending Only'),
+      // title: t('View Pending Only'),
+      title: '',
       dataIndex: 'actions',
       key: 'actions',
       render: (value) => <div>{value}</div>,

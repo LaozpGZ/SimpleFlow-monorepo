@@ -3,7 +3,7 @@ import { useCLLimitOrderHookContract } from 'hooks/useContract'
 import { Address } from 'viem/accounts'
 import { publicClient } from 'utils/viem'
 import { ContractFunctionArgs, ContractFunctionName } from 'viem'
-import { ContractOrderStatus, OrderStatus, ResponseOrder } from '../types/orders.types'
+import { ContractOrderStatus, ResponseOrder } from '../types/orders.types'
 
 const simulateLimitOrderContract = (
   contract: ReturnType<typeof useCLLimitOrderHookContract>,
@@ -93,30 +93,39 @@ export const fetchOrderDataById = async ({ contract, orderId, account, isWithdra
   }
 }
 
-// export const parseOrders = (orders: Order[]) => {
 export const parseOrders = (orders: (ResponseOrder & { data: Awaited<ReturnType<typeof fetchOrderDataById>> })[]) => {
   if (!orders) return []
-  return orders.map((order) => {
-    if (!order || !order.data) return null
+  return orders
+    .map((order) => {
+      if (!order || !order.data) return null
 
-    const { zeroForOne } = order.data
-    const sell = zeroForOne ? order.data.amount0Received : order.data.amount1Received
-    const buy = zeroForOne ? order.data.amount1Received : order.data.amount0Received
-    const limitPrice = order.data.tickLower
-    const { status } = order
-    const filled = '-'
-    const amountReceived = '-'
-    const actions = '-'
+      const sell = { value: 0, order }
+      const buy = { value: 0, order }
+      // const limitPrice = tickToPrice(
+      //   tempTokenMap[order.pool?.currency0 as string],
+      //   tempTokenMap[order.pool?.currency1 as string],
+      //   order.data.tickLower as number,
+      // ).toFixed(6)
+      const limitPrice = '-'
+      const { status } = order
+      const filled = '-'
+      const amountReceived = {
+        order,
+        amount0Received: order.data.amount0Received,
+        amount1Received: order.data.amount1Received,
+      }
+      const actions = '-'
 
-    return {
-      ...order,
-      sell,
-      buy,
-      limitPrice,
-      status,
-      filled,
-      amountReceived,
-      actions,
-    }
-  })
+      return {
+        ...order,
+        sell,
+        buy,
+        limitPrice,
+        status,
+        filled,
+        amountReceived,
+        actions,
+      }
+    })
+    .filter((order) => order !== null)
 }

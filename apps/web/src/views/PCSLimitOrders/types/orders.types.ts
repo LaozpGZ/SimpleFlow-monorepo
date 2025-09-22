@@ -1,3 +1,5 @@
+import { CLPoolInfo } from 'state/farmsV4/state/accountPositions/fetcher/infinity/getPoolInfo'
+
 export interface OrderHistoryResponse {
   startCursor: string
   endCursor: string
@@ -26,6 +28,8 @@ export interface ResponseOrder {
   zero_for_one: boolean
   tick_lower: number
   transaction_hash: string
+
+  pool?: CLPoolInfo // TODO: separate to proper type
 }
 
 export enum OrderStatus {
