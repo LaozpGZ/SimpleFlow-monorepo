@@ -54,15 +54,14 @@ const useAddressListener = () => {
           clearUserStates(dispatch, { chainId })
         }
 
-        if (prevData.status === 'disconnected' && data.status === 'connected' && prevData.address !== data.address) {
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new Event('accountChange#pcs'))
-          }
-        }
-
-        if (prevData.status === 'connected' && data.status === 'connected' && prevData.address !== data.address) {
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new Event('accountChange#pcs'))
+        if (prevData.address !== data.address) {
+          if (
+            (prevData.status === 'disconnected' && data.status === 'connected') ||
+            (prevData.status === 'connected' && data.status === 'connected')
+          ) {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new Event('accountChange#pcs'))
+            }
           }
         }
       },
