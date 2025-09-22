@@ -51,7 +51,7 @@ const useAddressListener = () => {
     return watchAccount(config as any, {
       onChange(data, prevData) {
         if (prevData.status === 'connected' && data.status === 'connected' && prevData.chainId === data.chainId) {
-          if (typeof window !== 'undefined') {
+          if (typeof window !== 'undefined' && prevData.address !== data.address) {
             window.dispatchEvent(new Event('accountChange#pcs'))
           }
           clearUserStates(dispatch, { chainId })
