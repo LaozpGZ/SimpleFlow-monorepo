@@ -32,11 +32,11 @@ import { IncentraTag } from 'components/Incentra/IncentraTag'
 import {
   InfinityBinPoolPositionAprButton,
   InfinityCLPoolPositionAprButton,
-  PoolGlobalAprButton,
   V2PoolPositionAprButton,
   V3PoolPositionAprButton,
-} from '../PoolAprButton'
+} from 'views/universalFarms/components/PoolAprButton/PoolPositionAprButton'
 import { PositionDebugView } from './PositionDebugView'
+import { PoolGlobalAprButton } from '../PoolAprButton/PoolGlobalAprButton'
 
 export const formatPositionAmount = (amount?: CurrencyAmount<Token | Currency>) => {
   const minimumFractionDigits = Math.min(amount?.currency.decimals ?? 0, 6)

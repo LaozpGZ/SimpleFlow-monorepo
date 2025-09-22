@@ -26,10 +26,10 @@ import { useTokenByChainId } from 'hooks/Tokens'
 import { getFarmAprInfo, getFarmHookData } from 'state/farmsV4/search/farm.util'
 import { getCurrencySymbol } from 'utils/getTokenAlias'
 import { useAtomValue } from 'jotai'
+import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton/PoolGlobalAprButton'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
 import { getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
-import { PoolGlobalAprButton } from './PoolAprButton'
 import { PoolListItemAction } from './PoolListItemAction'
 import { getUnwhitelistedToken } from '../atom/farmSearch.filter'
 import { tokensMapAtom } from '../atom/tokensMapAtom'
@@ -185,7 +185,6 @@ export const usePoolFeatureConfig = (showPoolType = true) => {
 }
 
 export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { data: T }) => {
-  const { t } = useTranslation()
   const token0 = useTokenByChainId(getCurrencyAddress(data.token0), data.chainId) || data.token0
   const token1 = useTokenByChainId(getCurrencyAddress(data.token1), data.chainId) || data.token1
 

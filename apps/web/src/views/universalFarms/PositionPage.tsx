@@ -28,25 +28,18 @@ import styled from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import {
-  AddLiquidityButton,
-  Card,
-  IPoolsFilterPanelProps,
-  PoolsFilterPanel,
-  PositionItemSkeleton,
-  CardBody as StyledCardBody,
-  CardHeader as StyledCardHeader,
-  useSelectedProtocols,
-  PositionCard,
-} from './components'
 import { useFilterToQueries } from './hooks/useFilterToQueries'
 import { useInfinityPositions } from './hooks/useInfinityPositions'
 import { useV3Positions } from './hooks/useV3Positions'
 import { useV2Positions } from './hooks/useV2Positions'
 import { useStablePositions } from './hooks/useStablePositions'
 import { positionEarningAmountAtom } from './hooks/usePositionEarningAmount'
-import { getPositionKey } from './components/PositionItem/PositionCard'
+import { getPositionKey, PositionCard } from './components/PositionItem/PositionCard'
 import { matchPositionSearch } from './utils/matchPositionSearch'
+import { Card, CardBody as StyledCardBody, CardHeader as StyledCardHeader } from './components/StyledCard'
+import { IPoolsFilterPanelProps, PoolsFilterPanel, useSelectedProtocols } from './components/PoolsFilterPanel'
+import { PositionItemSkeleton } from './components/PositionItem/PositionItemSkeleton'
+import { AddLiquidityButton } from './components/AddLiquidityButton'
 
 const ToggleWrapper = styled.div`
   display: inline-flex;

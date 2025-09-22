@@ -33,9 +33,10 @@ import { useMemo } from 'react'
 import { usePoolInfo } from 'state/farmsV4/hooks'
 import { POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import type { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
-import { InfinityBinPoolPositionAprButton, formatPositionAmount } from 'views/universalFarms/components'
 import { useAccount } from 'wagmi'
 
+import { formatPositionAmount } from 'views/universalFarms/components/PositionItem/PositionInfo'
+import { InfinityBinPoolPositionAprButton } from 'views/universalFarms/components/PoolAprButton/PoolPositionAprButton'
 import { BinPositionPriceSection } from './components/BinPositionPrice'
 import { PositionHeader } from './components/PositionHeader'
 

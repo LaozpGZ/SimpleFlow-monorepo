@@ -6,12 +6,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { InfinityBinPoolInfo, InfinityCLPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { getRewardProvider } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
-import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 
 import { useAtom } from 'jotai'
 import { positionEarningAmountAtom } from 'views/universalFarms/hooks/usePositionEarningAmount'
 
 import { useAccount } from 'wagmi'
+import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks/useCheckShouldSwitchNetwork'
 import { MyPositionsProvider } from './MyPositionsContext'
 import {
   InfinityBinPositionsTable,

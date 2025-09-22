@@ -8,6 +8,7 @@ import { useAccountV3Positions, useV3PoolsLength } from 'state/farmsV4/hooks'
 import { POSITION_STATUS, PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { useAccount } from 'wagmi'
 import { useAllChainIds } from './useMultiChains'
+import { V3PositionItem } from '../components/PositionItem/V3PositionItem'
 
 const getPoolStatus = (pos: PositionDetail, pool: Pool | null) => {
   if (pos.liquidity === 0n) {
