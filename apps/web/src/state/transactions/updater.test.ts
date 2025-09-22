@@ -35,7 +35,7 @@ describe('transactions updater', () => {
     it('returns false if trx detail in fetchedTransaction', () => {
       expect(shouldCheck(fetchedTransactions, trxDetailInFetchedTransactions)).toEqual(false)
     })
-    it.only('returns true if trx detail not in fetchedTransaction', () => {
+    it('returns true if trx detail not in fetchedTransaction', () => {
       expect(shouldCheck(fetchedTransactions, trxDetailNotInFetchedTransactions)).toEqual(true)
     })
     it('returns false if trx has receipt', () => {
