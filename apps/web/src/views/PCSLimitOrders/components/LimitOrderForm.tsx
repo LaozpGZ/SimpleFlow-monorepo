@@ -6,7 +6,6 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { Suspense, useCallback } from 'react'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { formattedAmountsAtom, setInputAtom } from 'views/PCSLimitOrders/state/form/inputAtoms'
-import { Rounding } from '@pancakeswap/swap-sdk-core'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
 import { flipCurrenciesAtom, setCurrencyAtom } from '../state/currency/setCurrencyAtoms'
@@ -17,7 +16,8 @@ export const LimitOrderForm = () => {
   const { t } = useTranslation()
   const { inputTokens, outputTokens, isNativeInputSupported, isNativeOutputSupported } = useSupportedTokens()
 
-  const { inputBalance, outputBalance } = useLimitOrderUserBalance()
+  const { maxInputBalance, maxOutputBalance, getPercentInputCurrency, getPercentOutputCurrency } =
+    useLimitOrderUserBalance()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
@@ -60,13 +60,8 @@ export const LimitOrderForm = () => {
             supportCrossChain={false}
             showUSDPrice
             showMaxButton
-            onPercentInput={(percent) =>
-              handleInput(
-                Field.CURRENCY_A,
-                inputBalance?.multiply(percent).divide(100).toFixed(6, undefined, Rounding.ROUND_DOWN),
-              )
-            }
-            onMax={() => handleInput(Field.CURRENCY_A, inputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN))}
+            onPercentInput={(percent) => handleInput(Field.CURRENCY_A, getPercentInputCurrency(percent))}
+            onMax={() => handleInput(Field.CURRENCY_A, maxInputBalance)}
           />
         </Suspense>
         {showMinimumUSDWarning && (
@@ -101,13 +96,8 @@ export const LimitOrderForm = () => {
             supportCrossChain={false}
             showUSDPrice
             showMaxButton
-            onPercentInput={(percent) =>
-              handleInput(
-                Field.CURRENCY_B,
-                outputBalance?.multiply(percent).divide(100).toFixed(6, undefined, Rounding.ROUND_DOWN),
-              )
-            }
-            onMax={() => handleInput(Field.CURRENCY_B, outputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN))}
+            onPercentInput={(percent) => handleInput(Field.CURRENCY_B, getPercentOutputCurrency(percent))}
+            onMax={() => handleInput(Field.CURRENCY_B, maxOutputBalance)}
           />
         </Suspense>
       </FormContainer>

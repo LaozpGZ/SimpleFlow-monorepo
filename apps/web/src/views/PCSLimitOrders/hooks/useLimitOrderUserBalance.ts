@@ -1,10 +1,11 @@
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { useAtomValue } from 'jotai'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { BigNumber as BN } from 'bignumber.js'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
+import { Rounding } from '@pancakeswap/swap-sdk-core'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
@@ -21,22 +22,47 @@ export const useLimitOrderUserBalance = () => {
   const [inputBalance] = useCurrencyBalances(account, [inputCurrency ?? undefined])
   const [outputBalance] = useCurrencyBalances(account, [outputCurrency ?? undefined])
 
+  const maxInputBalance = useMemo(() => {
+    return inputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN)
+  }, [inputBalance])
+  const maxOutputBalance = useMemo(() => {
+    return outputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN)
+  }, [outputBalance])
+
   const isEnoughBalance = useMemo(() => {
     if (!inputBalance) return false
-    const inputBalanceAmount = formatAmount(inputBalance, 6)
+    const inputBalanceAmount = formatAmount(inputBalance, inputCurrency?.decimals)
     if (!inputBalanceAmount) return false
 
     // Add some dust to account for gas
-    const dust = inputCurrency?.isNative ? parseUnits('0.0001', inputCurrency.decimals) : 0n
+    // const dust = inputCurrency?.isNative ? baseDust : '0'
 
-    const requiredAmount = BN(formattedAmounts[Field.CURRENCY_A]).plus(dust.toString())
+    const requiredAmount = BN(formattedAmounts[Field.CURRENCY_A])
 
     return BN(inputBalanceAmount).gte(requiredAmount)
   }, [inputBalance, formattedAmounts, inputCurrency])
+
+  const getPercentInputCurrency = useCallback(
+    (percent: number) => {
+      return inputBalance?.multiply(percent).divide(100).toFixed(6, undefined, Rounding.ROUND_DOWN)
+    },
+    [inputBalance],
+  )
+
+  const getPercentOutputCurrency = useCallback(
+    (percent: number) => {
+      return outputBalance?.multiply(percent).divide(100).toFixed(6, undefined, Rounding.ROUND_DOWN)
+    },
+    [outputBalance],
+  )
 
   return {
     inputBalance,
     outputBalance,
     isEnoughBalance,
+    maxInputBalance,
+    maxOutputBalance,
+    getPercentInputCurrency,
+    getPercentOutputCurrency,
   }
 }
