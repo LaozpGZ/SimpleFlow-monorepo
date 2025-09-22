@@ -4002,12 +4002,7 @@
   "twap.loading": "Đang tải",
   "twap.confirm": "Xác nhận",
   "twap.srcTokenForDstToken": "{srcAmount} {srcToken} cho {dstAmount} {dstToken}",
-  "Create Pool": {
-    "key": "Create Pool",
-    "source": "Create Pool",
-    "translation": "Tạo Pool",
-    "hint": "found in 4 of files, see apps/web/src/views/CreateLiquidityPool/components/PreviewModal.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V2/useV2CreateForm.tsx,apps/web/src/views/CreateLiquidityPool/hooks/V3/useV3CreateForm.tsx,apps/web/src/views/universalFarms/components/CreatePoolButton.tsx"
-  },
+  "Create Pool": "Tạo pool",
   "Create Liquidity Pool": "Tạo Pool thanh khoản",
   "Select the DEX type of the liquidity pool": "Chọn loại DEX của bể bơi thanh khoản",
   "Infinity Pool": "Quỹ Infinity",
