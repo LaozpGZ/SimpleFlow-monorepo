@@ -4,7 +4,7 @@ import { stringify } from 'viem/utils'
 import { useMemo } from 'react'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { ticksAtom } from '../state/form/ticksAtom'
-import { selectedPoolAtom } from '../state/pools/poolAtoms'
+import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 
 const TickVisualization = ({ ticksData, selectedPool }: { ticksData: any; selectedPool: any }) => {
   const ticks = useMemo(() => {
@@ -133,7 +133,7 @@ export const TestingArea = () => {
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
 
-  const selectedPool = useAtomValue(selectedPoolAtom)
+  const { data: selectedPool } = useAtomValue(selectedPoolAtom)
   const ticksData = useAtomValue(ticksAtom)
 
   return (

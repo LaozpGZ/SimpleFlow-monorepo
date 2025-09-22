@@ -10,7 +10,7 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currenc
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
 import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
-import { selectedPoolAtom } from '../state/pools/poolAtoms'
+import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { getTickAdjustedPrice } from '../utils/ticks'
 
 const InputContainer = styled(Box)`
@@ -85,7 +85,7 @@ export const MarketPriceInput = () => {
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
 
-  const pool = useAtomValue(selectedPoolAtom)
+  const { data: pool } = useAtomValue(selectedPoolAtom)
 
   const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
 

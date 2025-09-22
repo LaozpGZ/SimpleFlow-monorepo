@@ -6,7 +6,7 @@ import {
   invertTickForLimitOrder,
 } from 'views/PCSLimitOrders/utils/ticks'
 import { nearestUsableTick } from '@pancakeswap/v3-sdk'
-import { selectedPoolAtom } from '../pools/poolAtoms'
+import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 import { customMarketPriceAtom } from './customMarketPriceAtom'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 
@@ -19,7 +19,7 @@ export const ticksAtom = atom(async (get) => {
 
   if (!inputCurrency || !outputCurrency) return undefined
 
-  const selectedPool = await get(selectedPoolAtom)
+  const { data: selectedPool } = get(selectedPoolAtom)
   if (!selectedPool || !selectedPool.pool) return undefined
 
   const {

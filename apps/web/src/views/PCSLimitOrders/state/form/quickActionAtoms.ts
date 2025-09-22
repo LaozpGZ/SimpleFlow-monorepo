@@ -4,7 +4,7 @@ import { DEFAULT_PERCENTAGE_MAP } from 'views/PCSLimitOrders/constants'
 import { getSqrtPriceFromMarketPrice } from 'views/PCSLimitOrders/utils/ticks'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
-import { selectedPoolAtom } from '../pools/poolAtoms'
+import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 import { customMarketPriceAtom } from './customMarketPriceAtom'
 import { currentMarketPriceAtom } from './currentMarketPriceAtom'
 
@@ -37,7 +37,7 @@ export const setPercentDifferenceAtom = atom(null, async (get, set, percent: num
 
   if (!inputCurrency || !outputCurrency) return
 
-  const selectedPool = await get(selectedPoolAtom)
+  const { data: selectedPool } = get(selectedPoolAtom)
   if (!selectedPool) return
 
   const {
@@ -82,7 +82,7 @@ export const presetPercentMapAtom = atom(async (get) => {
 
   if (!inputCurrency || !outputCurrency) return DEFAULT_PERCENTAGE_MAP
 
-  const selectedPool = await get(selectedPoolAtom)
+  const { data: selectedPool } = get(selectedPoolAtom)
   if (!selectedPool) return DEFAULT_PERCENTAGE_MAP
 
   const {

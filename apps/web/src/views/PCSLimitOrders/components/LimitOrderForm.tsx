@@ -10,7 +10,6 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currenc
 import { Field } from '../types/limitOrder.types'
 import { flipCurrenciesAtom, setCurrencyAtom } from '../state/currency/setCurrencyAtoms'
 import { useSupportedTokens } from '../hooks/useSupportedTokens'
-import { selectedPoolAtom } from '../state/pools/poolAtoms'
 
 export const LimitOrderForm = () => {
   const { t } = useTranslation()

@@ -15,10 +15,12 @@ export const OrderStatusDisplay = ({ status, ...props }: OrderStatusDisplayProps
         return t('Pending')
       case OrderStatus.Cancelled:
         return t('Cancelled')
+
+      // show "Filled" for withdrawn too
       case OrderStatus.Withdrawn:
-        return t('Withdrawn')
       case OrderStatus.Filled:
         return t('Filled')
+
       case OrderStatus.PartiallyFilled:
         return t('Partially Filled')
       default:

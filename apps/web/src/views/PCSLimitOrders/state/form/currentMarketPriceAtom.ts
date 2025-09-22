@@ -3,7 +3,7 @@ import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { getSqrtPriceFromMarketPrice, getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
 import { tickToPrice } from 'hooks/infinity/utils'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
-import { selectedPoolAtom } from '../pools/poolAtoms'
+import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 
 export const currentMarketPriceAtom = atom(async (get) => {
   const inputCurrency = await get(inputCurrencyAtom)
@@ -11,7 +11,7 @@ export const currentMarketPriceAtom = atom(async (get) => {
 
   if (!inputCurrency || !outputCurrency) return undefined
 
-  const selectedPool = await get(selectedPoolAtom)
+  const { data: selectedPool } = get(selectedPoolAtom)
   if (!selectedPool || !selectedPool.pool) return undefined
 
   const {

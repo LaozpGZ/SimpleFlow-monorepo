@@ -4,7 +4,7 @@ import { BigNumber as BN } from 'bignumber.js'
 import { currencyUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { ticksAtom } from './ticksAtom'
 import { formattedAmountsAtom } from './inputAtoms'
-import { selectedPoolAtom } from '../pools/poolAtoms'
+import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 import { outputCurrencyAtom } from '../currency/currencyAtoms'
 
 /**
@@ -33,7 +33,7 @@ export const feesEarnedUSDAtom = atom(async (get) => {
   const outputCurrency = await get(outputCurrencyAtom)
   if (!outputCurrency) return undefined
 
-  const selectedPool = await get(selectedPoolAtom)
+  const { data: selectedPool } = get(selectedPoolAtom)
   if (!selectedPool) return undefined
 
   const outputReceived = await get(outputReceivedAtom)

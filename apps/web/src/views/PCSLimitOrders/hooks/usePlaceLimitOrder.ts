@@ -16,7 +16,7 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currenc
 import { Field } from '../types/limitOrder.types'
 import { parsedAmountsAtom } from '../state/form/inputAtoms'
 import { ticksAtom } from '../state/form/ticksAtom'
-import { selectedPoolAtom } from '../state/pools/poolAtoms'
+import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { independentFieldAtom } from '../state/form/fieldAtoms'
 
 interface UsePlaceLimitOrder {
@@ -38,7 +38,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
   //   const isExactIn = independentField === Field.CURRENCY_A
 
   const parsedAmounts = useAtomValue(parsedAmountsAtom)
-  const selectedPool = useAtomValue(selectedPoolAtom)
+  const { data: selectedPool } = useAtomValue(selectedPoolAtom)
   const ticksData = useAtomValue(ticksAtom)
 
   // TODO: Handle passing native amounts

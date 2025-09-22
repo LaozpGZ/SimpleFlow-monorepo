@@ -1,18 +1,4 @@
-import { UnifiedCurrency, ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
-import memoize from 'lodash/memoize'
 import { SupportedPoolListItem } from '../types'
-
-/**
- *  Currency ID for:
- *  native = ZERO Address,
- *  token = Token Address
- */
-export const getCurrencyIdWithZeroAddr = (currency?: UnifiedCurrency | null) => {
-  if (!currency) return ''
-  if (currency.isNative) return ZERO_ADDRESS
-  if (currency.isToken) return currency.address
-  throw new Error('Invalid currency in getCurrencyIdWithZeroAddr')
-}
 
 /**
  * Get bi-directional tokens map from supported pools list

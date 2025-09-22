@@ -1,10 +1,10 @@
-import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
+import { getCurrencyAddress, ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
 import { useTokensByChainId } from 'hooks/Tokens'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { supportedPoolsListAtom } from 'views/PCSLimitOrders/state/pools/poolsListAtom'
-import { getCurrencyIdWithZeroAddr, getTokensMap } from 'views/PCSLimitOrders/utils'
+import { getTokensMap } from 'views/PCSLimitOrders/utils'
 import { inputCurrencyAtom } from '../state/currency/currencyAtoms'
 
 export const useSupportedTokens = () => {
@@ -22,7 +22,7 @@ export const useSupportedTokens = () => {
     let isNativeOutputSupported = false
 
     const inputTokenAddresses = Object.keys(tokenMap) ?? []
-    const outputTokenAddresses = tokenMap[getCurrencyIdWithZeroAddr(inputCurrency)] ?? []
+    const outputTokenAddresses = inputCurrency ? tokenMap[getCurrencyAddress(inputCurrency)] ?? [] : []
 
     if (inputTokenAddresses.includes(ZERO_ADDRESS)) {
       inputTokenAddresses.splice(inputTokenAddresses.indexOf(ZERO_ADDRESS))

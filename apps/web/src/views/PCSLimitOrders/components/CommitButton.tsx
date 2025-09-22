@@ -17,7 +17,7 @@ import {
 } from '@pancakeswap/uikit'
 import { DualCurrencyDisplay, LightGreyCard } from '@pancakeswap/widgets-internal'
 import { useAtomValue } from 'jotai'
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useCallback, useMemo, useState } from 'react'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { BigNumber as BN } from 'bignumber.js'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
@@ -31,6 +31,7 @@ import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { usePlaceLimitOrder } from '../hooks/usePlaceLimitOrder'
 import { useLimitOrderApproval } from '../hooks/useLimitOrderApproval'
+import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
@@ -41,6 +42,8 @@ export const CommitButton = () => {
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
 
+  const { refetch } = useAtomValue(selectedPoolAtom)
+
   const showApproveButton =
     enabled && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
@@ -49,10 +52,13 @@ export const CommitButton = () => {
     return t('Place Limit Order')
   }, [errorReason, t])
 
-  /** Look at existing commit buttons for states.
-   * Such as: Connect Wallet, Switch Network, Approve Tokens (need an extra button on top), etc.
-   * Actually, should approve button be in the main button or in the PREVIEW Modal? 🤔
-   */
+  const handleOpen = useCallback(() => {
+    // Refetch pool to get latest market price
+    refetch()
+
+    onOpen()
+  }, [onOpen, refetch])
+
   return (
     <>
       <Suspense>
@@ -65,7 +71,7 @@ export const CommitButton = () => {
         )}
 
         {!showApproveButton && (
-          <Button onClick={onOpen} disabled={!enabled}>
+          <Button onClick={handleOpen} disabled={!enabled}>
             {buttonText}
           </Button>
         )}
