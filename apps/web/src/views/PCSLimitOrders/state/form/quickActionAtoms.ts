@@ -1,9 +1,8 @@
 import { atom } from 'jotai'
 import { BigNumber as BN } from 'bignumber.js'
-import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
-import { tryParsePrice } from 'hooks/v3/utils'
-import { formatPrice } from '@pancakeswap/utils/formatFractions'
 import { DEFAULT_PERCENTAGE_MAP } from 'views/PCSLimitOrders/constants'
+import { getSqrtPriceFromMarketPrice } from 'views/PCSLimitOrders/utils/ticks'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { customMarketPriceAtom } from './customMarketPriceAtom'
@@ -41,25 +40,34 @@ export const setPercentDifferenceAtom = atom(null, async (get, set, percent: num
   const selectedPool = await get(selectedPoolAtom)
   if (!selectedPool) return
 
+  const {
+    pool: { tickSpacing, tickCurrent },
+    zeroForOne,
+  } = selectedPool
+
   const calculatedPrice = BN(currentMarketPrice).multipliedBy(BN(1).plus(BN(percent).dividedBy(100)))
 
-  // Get nearest tick to calculated price
-  const price = tryParsePrice(inputCurrency, outputCurrency, calculatedPrice.toFormat(6))
-  if (!price) {
-    console.error("Couldn't parse price for percent difference")
-    return
-  }
+  const sqrtPriceData = getSqrtPriceFromMarketPrice(
+    calculatedPrice.toString(),
+    inputCurrency,
+    outputCurrency,
+    tickSpacing,
+    tickCurrent,
+    zeroForOne,
+  )
+  if (!sqrtPriceData) return
 
-  const tick = tryParseTick(price, selectedPool?.pool.tickSpacing)
+  const { sqrtPrice } = sqrtPriceData
 
-  if (!tick) {
-    console.error("Couldn't parse tick for percent difference")
-    return
-  }
+  if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return
 
-  const adjustedPrice = tickToPrice(inputCurrency, outputCurrency, tick)
-
-  set(customMarketPriceAtom, formatPrice(adjustedPrice, 6))
+  set(
+    customMarketPriceAtom,
+    formatNumber(sqrtPrice, {
+      maxDecimalDisplayDigits: 6,
+      maximumSignificantDigits: 6,
+    }),
+  )
 })
 
 // Preset percentage values
@@ -77,6 +85,11 @@ export const presetPercentMapAtom = atom(async (get) => {
   const selectedPool = await get(selectedPoolAtom)
   if (!selectedPool) return DEFAULT_PERCENTAGE_MAP
 
+  const {
+    pool: { tickSpacing, tickCurrent },
+    zeroForOne,
+  } = selectedPool
+
   const percentages = Object.keys(DEFAULT_PERCENTAGE_MAP)
 
   const percentMap: Record<keyof typeof DEFAULT_PERCENTAGE_MAP, string> = DEFAULT_PERCENTAGE_MAP
@@ -84,23 +97,25 @@ export const presetPercentMapAtom = atom(async (get) => {
   percentages.forEach((percent) => {
     const calculatedPrice = BN(currentMarketPrice).multipliedBy(BN(1).plus(BN(percent).dividedBy(100)))
 
-    const price = tryParsePrice(inputCurrency, outputCurrency, calculatedPrice.toFormat(6))
-    if (!price) {
-      console.error("Couldn't parse price for Preset percent difference")
-      return
-    }
+    const sqrtPriceData = getSqrtPriceFromMarketPrice(
+      calculatedPrice.toString(),
+      inputCurrency,
+      outputCurrency,
+      tickSpacing,
+      tickCurrent,
+      zeroForOne,
+    )
+    if (!sqrtPriceData) return
 
-    const tick = tryParseTick(price, selectedPool?.pool.tickSpacing)
-    if (!tick) {
-      console.error("Couldn't parse tick for Preset percent difference")
-      return
-    }
+    const { sqrtPrice } = sqrtPriceData
 
-    const newPrice = tickToPrice(inputCurrency, outputCurrency, tick)
+    if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return
 
-    // Find the proper percentage now
-    const newPriceFormatted = formatPrice(newPrice, 6)
-    if (!newPriceFormatted) return
+    const newPriceFormatted = formatNumber(sqrtPrice, {
+      maxDecimalDisplayDigits: 6,
+      maximumSignificantDigits: 6,
+    })
+
     const difference = BN(newPriceFormatted).minus(currentMarketPrice)
     const newPercentage = BN(difference).dividedBy(currentMarketPrice).multipliedBy(100)
 

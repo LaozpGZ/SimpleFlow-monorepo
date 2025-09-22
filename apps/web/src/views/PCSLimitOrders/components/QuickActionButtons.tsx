@@ -106,7 +106,8 @@ export const QuickActionButtons = () => {
   }, [])
 
   const handleBlur = useCallback(() => {
-    if (localPercent && BN(localPercent).isFinite()) setPercentDifference(Number(localPercent))
+    if (localPercent && BN(localPercent).isFinite() && localPercent !== percentage)
+      setPercentDifference(Number(localPercent))
   }, [localPercent, setPercentDifference])
 
   // Sync percent values

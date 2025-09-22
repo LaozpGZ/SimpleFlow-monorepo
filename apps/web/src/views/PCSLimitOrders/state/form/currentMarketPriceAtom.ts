@@ -5,7 +5,6 @@ import { tickToPrice } from 'hooks/infinity/utils'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 
-// Current market price derived from ticks data
 export const currentMarketPriceAtom = atom(async (get) => {
   const inputCurrency = await get(inputCurrencyAtom)
   const outputCurrency = await get(outputCurrencyAtom)
