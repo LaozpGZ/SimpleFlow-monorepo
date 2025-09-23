@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, Card, CardBody, Grid, Text } from '@pancakeswap/uikit'
-import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
+import { StableNGFieldSelectCurrencies } from '../components/stableNG/FieldSelectCurrency'
 
 export const CreateStableSwapForm = () => {
   const { t } = useTranslation()
@@ -10,7 +10,7 @@ export const CreateStableSwapForm = () => {
       <Card style={{ height: 'fit-content' }}>
         <CardBody>
           <AutoColumn gap="16px">
-            <FieldSelectCurrencies />
+            <StableNGFieldSelectCurrencies />
           </AutoColumn>
         </CardBody>
       </Card>
