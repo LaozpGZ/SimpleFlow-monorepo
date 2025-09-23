@@ -4,20 +4,17 @@ import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
 import { encodePoolKey, PoolKey } from '@pancakeswap/infinity-sdk'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { nearestUsableTick, TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
-import { calculateGasMargin } from 'utils'
+import { TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
 import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { tickToPrice } from 'hooks/infinity/utils'
 import { stringify } from 'viem/utils'
 import { Hex } from 'viem'
-import { invertTickForLimitOrder } from '../utils/ticks'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
 import { parsedAmountsAtom } from '../state/form/inputAtoms'
 import { ticksAtom } from '../state/form/ticksAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
-import { independentFieldAtom } from '../state/form/fieldAtoms'
+import { useUserLimitOrders } from './useUserLimitOrders'
 
 interface UsePlaceLimitOrder {
   onError?: (error: any) => void
@@ -31,15 +28,14 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
 
   const contract = useCLLimitOrderHookContract()
   const { fetchWithCatchTxError } = useCatchTxError()
+  const { refetch: refetchUserLimitOrders } = useUserLimitOrders()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
-  //   const independentField = useAtomValue(independentFieldAtom)
-  //   const isExactIn = independentField === Field.CURRENCY_A
 
   const parsedAmounts = useAtomValue(parsedAmountsAtom)
-  const { data: selectedPool } = useAtomValue(selectedPoolAtom)
   const ticksData = useAtomValue(ticksAtom)
+  const { data: selectedPool, refetch: refetchSelectedPool } = useAtomValue(selectedPoolAtom)
 
   // TODO: Handle passing native amounts
   const placeOrder = useCallback(async () => {
@@ -144,13 +140,30 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
       if (receipt?.status) {
         console.log('placeOrder: Transaction successful', receipt.transactionHash)
         onSuccess?.(receipt.transactionHash)
+
+        // Wait 2 seconds to refetch
+        setTimeout(() => {
+          refetchSelectedPool()
+          refetchUserLimitOrders()
+        }, 2000)
       }
     } catch (error: any) {
       console.error('placeOrder: Unable to place limit order', error)
       toastError(t('Failed'), error.message || error.details || error)
       onError?.(error)
     }
-  }, [contract, account, selectedPool, ticksData, parsedAmounts, fetchWithCatchTxError, onError, onSuccess])
+  }, [
+    contract,
+    account,
+    selectedPool,
+    ticksData,
+    parsedAmounts,
+    fetchWithCatchTxError,
+    onError,
+    onSuccess,
+    refetchSelectedPool,
+    refetchUserLimitOrders,
+  ])
 
   return {
     placeOrder,
