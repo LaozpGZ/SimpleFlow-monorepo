@@ -5,6 +5,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { LightGreyCard, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getChainName } from '@pancakeswap/chains'
+import { Protocol } from '@pancakeswap/farms'
 import { BreadcrumbNav } from './components/BreadcrumbNav'
 import { useProtocolSupported } from './hooks/useProtocolSupported'
 
@@ -96,6 +97,32 @@ function V2Card({ disabled }: { disabled?: boolean }) {
   )
 }
 
+function StableSwapCard({ disabled }: { disabled?: boolean }) {
+  const { t } = useTranslation()
+
+  return (
+    <StyledCard
+      mt="16px"
+      title={disabled ? t('StableSwap Pools are not supported on this chain') : undefined}
+      $disabled={disabled}
+    >
+      <Box>
+        <Text fontSize="20px" color="secondary" bold>
+          {t('StableSwap Pool')}
+        </Text>
+        <Text small>
+          {t(
+            'Pools optimized for stable assets, offering minimal price impact and steady fees for correlated token pairs.',
+          )}
+        </Text>
+      </Box>
+      <Box>
+        <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+      </Box>
+    </StyledCard>
+  )
+}
+
 export const CreateLiquiditySelector = () => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
@@ -155,6 +182,9 @@ export const CreateLiquiditySelector = () => {
               ) : (
                 <V2Card disabled />
               )}
+              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/${Protocol.STABLENG}`}>
+                <StableSwapCard />
+              </NextLinkFromReactRouter>
             </CardBody>
           </Card>
         </Container>

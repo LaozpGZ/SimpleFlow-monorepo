@@ -32,11 +32,13 @@ export const zProtocolV3 = z.literal('v3')
 export const zProtocolSolanaV3 = z.literal('v3')
 export const zProtocolV2 = z.literal('v2')
 export const zProtocolStable = z.literal('stableSwap')
+export const zProtocolStableNg = z.literal('stableNG')
 export const zProtocol = zProtocolInfinity
   .or(zProtocolV3)
   .or(zProtocolSolanaV3)
   .or(zProtocolV2)
   .or(zProtocolStable)
+  .or(zProtocolStableNg)
   .optional()
 
 export const zCurrencyId = z.string()
@@ -72,7 +74,11 @@ export const zInfinityPoolIdObject = z.object({
   poolId: zInfinityPoolId,
 })
 export const zV3PoolIdTuple = z.tuple([zNetwork, zProtocolV3, zAddress, zAddress, z.number()])
-export const zPoolAddressTuple = z.tuple([zNetwork, zProtocolV2.or(zProtocolStable).or(zProtocolV3), zAddress])
+export const zPoolAddressTuple = z.tuple([
+  zNetwork,
+  zProtocolV2.or(zProtocolStable).or(zProtocolStableNg).or(zProtocolV3),
+  zAddress,
+])
 
 export const PoolIdRoute = {
   routeParams: z.object({

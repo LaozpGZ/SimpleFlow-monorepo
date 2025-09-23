@@ -34,7 +34,7 @@ export const useSelectIdRoute = () => {
           ? protocolFromQuery
           : // if protocol is not supported, default to v3
             'v3'
-      ) as 'infinity' | 'v3' | 'v2' | 'stable'
+      ) as 'infinity' | 'v3' | 'v2' | 'stable' | 'stableNg'
     )
   }, [activeChainId, router.query, protocolFromQuery])
 

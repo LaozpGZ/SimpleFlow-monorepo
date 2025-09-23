@@ -10,11 +10,13 @@ import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquid
 import PageLayout from 'components/Layout/Page'
 import { Box } from '@pancakeswap/uikit'
 import { CreateLiquidityV2Form } from 'views/CreateLiquidityPool/V2/CreateLiquidityV2Form'
+import { CreateStableSwapForm } from 'views/CreateLiquidityPool/StableSwap/CreateStableSwapForm'
 import styled from 'styled-components'
 import { isSolana } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { CreateSolanaLiquidityV3Form } from 'views/CreateLiquidityPool/Solana/CreateSolanaLiquidityV3Form'
 import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
+import { Protocol } from '@pancakeswap/farms'
 
 const StyledBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundPage};
@@ -47,6 +49,8 @@ const CreateLiquidityPage = () => {
             )
           ) : protocolName === 'v2' ? (
             <CreateLiquidityV2Form />
+          ) : protocolName === Protocol.STABLENG ? (
+            <CreateStableSwapForm />
           ) : null}
         </Box>
       </PageLayout>
