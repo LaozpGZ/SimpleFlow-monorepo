@@ -7,7 +7,7 @@ import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 initialize()
 
 export const SolanaWalletStateUpdater = () => {
-  const { connected, connecting, publicKey, disconnect } = useWallet()
+  const { connected, connecting, publicKey } = useWallet()
   const setWalletState = useSetAtom(accountActiveChainAtom)
 
   useEffect(() => {
@@ -16,28 +16,6 @@ export const SolanaWalletStateUpdater = () => {
       return { ...prev, solanaAccount }
     })
   }, [connected, connecting, publicKey, setWalletState])
-
-  useEffect(() => {
-    const handleAccountChange = async () => {
-      if (connected) {
-        try {
-          await disconnect()
-        } catch (err) {
-          console.error('Failed to disconnect Solana wallet:', err)
-        }
-      }
-    }
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('accountChange#pcs', handleAccountChange)
-    }
-
-    return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('accountChange#pcs', handleAccountChange)
-      }
-    }
-  }, [connected, disconnect])
 
   return null
 }
