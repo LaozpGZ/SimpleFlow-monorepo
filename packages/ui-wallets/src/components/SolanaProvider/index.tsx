@@ -12,7 +12,6 @@ import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
 import { useSetAtom } from 'jotai'
 import { walletConnectConfig } from './walletConnect.config'
 import { errorSolanaAtom } from '../../state/atom'
-import WalletAccountListener from './WalletAccountListener'
 import { TrustAccountsWalletAdapter } from './TrustAccountsWalletAdapter'
 
 export type SolanaProviderProps = React.PropsWithChildren<{
@@ -63,7 +62,6 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
         onError={onWalletError}
         wallets={walletsAdapter}
       >
-        <WalletAccountListener />
         {children}
       </WalletProvider>
     </ConnectionProvider>
