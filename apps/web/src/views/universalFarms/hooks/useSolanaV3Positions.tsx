@@ -82,7 +82,7 @@ export const useSolanaV3PositionItems = ({
   const poolIds = useMemo(() => positionInfos?.map((pos) => pos.poolId.toBase58()) || [], [positionInfos])
 
   const pools = useSolanaV3Pools(poolIds)
-  const { loading: poolsLoading } = useSolanaV3PoolsUpdater(pools.filter((pool) => !!pool))
+  const { loading: poolsLoading } = useSolanaV3PoolsUpdater(useMemo(() => pools.filter((pool) => !!pool), [pools]))
 
   const poolsMap = useMemo(() => new Map(pools.filter((pool) => !!pool).map((pool) => [pool.id, pool])), [pools])
 
