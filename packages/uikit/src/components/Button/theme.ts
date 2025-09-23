@@ -45,6 +45,13 @@ export const styleVariants = {
     backgroundColor: "failure",
     color: "white",
   },
+  [variants.DANGER_OUTLINE]: {
+    backgroundColor: "transparent",
+    color: "failure",
+    border: "2px solid",
+    borderColor: "failure",
+    boxShadow: "none",
+  },
   [variants.SUCCESS]: {
     backgroundColor: "success",
     color: "white",

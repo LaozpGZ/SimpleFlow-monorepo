@@ -17,6 +17,7 @@ export const variants = {
   TEXT: "text",
   TEXT_PRIMARY_60: "textPrimary60",
   DANGER: "danger",
+  DANGER_OUTLINE: "dangerOutline",
   SUBTLE: "subtle",
   SUCCESS: "success",
   LIGHT: "light",
