@@ -122,26 +122,29 @@ export const useOrder = (order: ResponseOrder) => {
 
     const liquidity = BigInt(order.liquidity)
 
-    if (order.zero_for_one) {
-      const token0Amount = SqrtPriceMath.getAmount0Delta(
-        TickMath.getSqrtRatioAtTick(order.tick_lower),
-        TickMath.getSqrtRatioAtTick(order.tick_lower + pool?.parameters.tickSpacing),
-        liquidity,
-        false,
-      )
-      const price = tickToPrice(currency0, currency1, order.tick_lower)
-      const amount1 = price.quote(CurrencyAmount.fromRawAmount(currency0, token0Amount))
-      return [formatUnits(token0Amount, currency0?.decimals), formatUnits(amount1.quotient, currency1?.decimals)]
-    }
-    const token1Amount = SqrtPriceMath.getAmount1Delta(
-      TickMath.getSqrtRatioAtTick(order.tick_lower - pool?.parameters.tickSpacing),
-      TickMath.getSqrtRatioAtTick(order.tick_lower),
+    const [tickLower, tickUpper] = order.zero_for_one
+      ? [order.tick_lower, order.tick_lower + pool.parameters.tickSpacing]
+      : [order.tick_lower - pool.parameters.tickSpacing, order.tick_lower]
+
+    const token0Amount = SqrtPriceMath.getAmount0Delta(
+      TickMath.getSqrtRatioAtTick(tickLower),
+      TickMath.getSqrtRatioAtTick(tickUpper),
       liquidity,
       false,
     )
-    const price = tickToPrice(currency0, currency1, order.tick_lower)
-    const amount0 = price.invert().quote(CurrencyAmount.fromRawAmount(currency1, token1Amount))
-    return [formatUnits(amount0.quotient, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
+
+    const token1Amount = SqrtPriceMath.getAmount1Delta(
+      TickMath.getSqrtRatioAtTick(tickLower),
+      TickMath.getSqrtRatioAtTick(tickUpper),
+      liquidity,
+      false,
+    )
+
+    const result = order.zero_for_one
+      ? [formatUnits(token0Amount, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
+      : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
+
+    return result
   }, [currency0, currency1, order.liquidity, pool?.tick, order.tick_lower, pool?.parameters.tickSpacing])
 
   console.log(`%c [Order ${order.order_id}][originalAmountA]`, 'background:red;color: black', originalAmountA)
