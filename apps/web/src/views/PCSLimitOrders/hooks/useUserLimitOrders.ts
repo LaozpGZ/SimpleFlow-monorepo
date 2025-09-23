@@ -3,10 +3,15 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { useState, useCallback } from 'react'
 import { PCS_LIMIT_ORDER_HISTORY_URL } from '../constants'
-import { OrderHistoryResponse, PaginationParams } from '../types/orders.types'
+import { OrderHistoryResponse, PaginationParams, OrderStatus } from '../types/orders.types'
 
-async function getUserLimitOrders(chainName: string, address: string, pagination?: PaginationParams) {
-  const url = new URL(`${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}`)
+async function getUserLimitOrders(
+  chainName: string,
+  address: string,
+  orderStatus?: OrderStatus,
+  pagination?: PaginationParams,
+) {
+  const url = new URL(`${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}${orderStatus ? `/${orderStatus}` : ''}`)
 
   if (pagination?.before) {
     url.searchParams.set('before', pagination.before)
@@ -32,13 +37,16 @@ export const useUserLimitOrders = () => {
   const { account, chainId } = useAccountActiveChain()
   const chainName = chainIdToExplorerInfoChainName[chainId]
 
+  // Order status filter state
+  const [filterOrderStatus, setFilterOrderStatus] = useState<OrderStatus | undefined>(undefined)
+
   // Cursor-based pagination state
   const [currentCursor, setCurrentCursor] = useState<string | null>(null)
   const [cursors, setCursors] = useState<string[]>([]) // Stack of cursors for backward navigation
   const [paginationDirection, setPaginationDirection] = useState<'forward' | 'backward' | null>(null)
 
   const queryResult = useQuery({
-    queryKey: ['userLimitOrders', chainId, account, currentCursor, paginationDirection],
+    queryKey: ['userLimitOrders', chainId, account, filterOrderStatus, currentCursor, paginationDirection],
     queryFn: async () => {
       if (!account) return { orders: [], paginationInfo: null }
 
@@ -49,7 +57,7 @@ export const useUserLimitOrders = () => {
         paginationParams.before = currentCursor
       }
 
-      const data = await getUserLimitOrders(chainName, account, paginationParams)
+      const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams)
       const { rows } = data
 
       console.log('%c [Order History Data]', 'background: green;color: white', rows)
@@ -98,6 +106,15 @@ export const useUserLimitOrders = () => {
     setPaginationDirection(null)
   }, [])
 
+  // Toggle function for order status filter
+  const toggleOpenFilter = useCallback(() => {
+    setFilterOrderStatus((prev) => (prev === OrderStatus.Open ? undefined : OrderStatus.Open))
+    // Reset pagination when filter changes
+    setCurrentCursor(null)
+    setCursors([])
+    setPaginationDirection(null)
+  }, [])
+
   const canGoBack = cursors.length > 0 || currentCursor !== null
   const canGoForward = queryResult.data?.paginationInfo?.hasNextPage ?? false
 
@@ -105,9 +122,11 @@ export const useUserLimitOrders = () => {
     ...queryResult,
     data: queryResult.data?.orders || [],
     paginationInfo: queryResult.data?.paginationInfo || null,
+    filterOrderStatus,
     nextPage,
     previousPage,
     resetPagination,
+    toggleOpenFilter,
     canGoBack,
     canGoForward,
   }

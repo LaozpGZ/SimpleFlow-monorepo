@@ -12,15 +12,22 @@ import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { OrderStatus, ResponseOrder } from '../types/orders.types'
 import { simulateLimitOrderContract } from '../utils/orders'
+import { useUserLimitOrders } from './useUserLimitOrders'
 
 export const useOrder = (order: ResponseOrder) => {
   const { t } = useTranslation()
   const { account, chainId } = useAccountActiveChain()
 
+  const { refetch: refetchUserLimitOrders } = useUserLimitOrders()
   const contract = useCLLimitOrderHookContract()
 
   const { fetchWithCatchTxError } = useCatchTxError()
   const { toastError } = useToast()
+
+  const [isInverted, setIsInverted] = useState(false)
+
+  // Provide live status to Table Row after Cancel/Withdraw txn
+  const [liveStatus, setLiveStatus] = useState(order.status)
 
   // Pool
   const { data: pool } = useQuery({
@@ -42,7 +49,6 @@ export const useOrder = (order: ResponseOrder) => {
   )
 
   // Limit Price
-  const [isInverted, setIsInverted] = useState(false)
   const limitPrice = useMemo(() => {
     if (!pool || !currencyA || !currencyB) return undefined
     const price = tickToPrice(currencyA, currencyB, order.tick_lower)
@@ -51,7 +57,7 @@ export const useOrder = (order: ResponseOrder) => {
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
   // Amounts Received
-  const { data: [amount0Received, amount1Received] = [0n, 0n] } = useQuery({
+  const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
     queryKey: ['order-amounts-received', account, chainId, order.order_id, order.pool_id],
     queryFn: async () => {
       if (!account) return undefined
@@ -121,16 +127,22 @@ export const useOrder = (order: ResponseOrder) => {
       })
 
       if (receipt?.status) {
-        console.log(
-          `%c [Order ${order.order_id}][Cancel Order Transaction successful]`,
-          'background:lightgreen;color: white',
-          receipt.transactionHash,
-        )
+        if (receipt.status === 'success') {
+          console.log(
+            `%c [Order ${order.order_id}][Cancel Order Transaction successful]`,
+            'background:lightgreen;color: white',
+            receipt.transactionHash,
+          )
+
+          setLiveStatus(OrderStatus.Cancelled)
+          refetchUserLimitOrders()
+          refetchAmountsReceived()
+        }
       }
     } catch (error: any) {
       toastError(t('Failed'), error.message || error.details || error)
     }
-  }, [contract, account, order.order_id, fetchWithCatchTxError])
+  }, [contract, account, order.order_id, fetchWithCatchTxError, refetchUserLimitOrders])
 
   const handleWithdrawOrder = useCallback(async () => {
     if (!account) return
@@ -143,19 +155,26 @@ export const useOrder = (order: ResponseOrder) => {
         })
       })
       if (receipt?.status) {
-        console.log(
-          `%c [Order ${order.order_id}][Withdraw Order Transaction successful]`,
-          'background:lightgreen;color: white',
-          receipt.transactionHash,
-        )
+        if (receipt.status === 'success') {
+          console.log(
+            `%c [Order ${order.order_id}][Withdraw Order Transaction successful]`,
+            'background:lightgreen;color: white',
+            receipt.transactionHash,
+          )
+
+          setLiveStatus(OrderStatus.Withdrawn)
+          refetchUserLimitOrders()
+          refetchAmountsReceived()
+        }
       }
     } catch (error: any) {
       toastError(t('Failed'), error.message || error.details || error)
     }
-  }, [contract, account, order.order_id, fetchWithCatchTxError])
+  }, [contract, account, order.order_id, fetchWithCatchTxError, refetchUserLimitOrders])
 
   return {
     pool,
+    liveStatus,
     currencyA,
     currencyB,
     limitPrice,

@@ -1,4 +1,4 @@
-import { Button, FlexGap, IconButton, ScanLink, SwapHorizIcon, Table, Td, Text } from '@pancakeswap/uikit'
+import { Button, FlexGap, IconButton, ScanLink, SwapHorizIcon, Table, Td, Text, Toggle } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 import { OrderStatus, ResponseOrder } from 'views/PCSLimitOrders/types/orders.types'
@@ -33,13 +33,14 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
   const { t } = useTranslation()
 
   const {
+    liveStatus,
     currencyA,
     currencyB,
     limitPrice,
     isInverted,
-    setIsInverted,
-    amountAReceived,
     amountBReceived,
+    amountAReceived,
+    setIsInverted,
     handleCancelOrder,
     handleWithdrawOrder,
   } = useOrder(order)
@@ -62,7 +63,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
         </FlexGap>
       </Td>
       <Td>
-        <OrderStatusDisplay status={order.status} />
+        <OrderStatusDisplay status={liveStatus} />
       </Td>
       <Td>-</Td>
       <Td>
@@ -72,12 +73,12 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
       <Td>
         <FlexGap gap="8px" alignItems="center">
           <ScanLink color="primary60" size="24px" href={getBlockExploreLink(order.transaction_hash, 'transaction')} />
-          {order.status === OrderStatus.Open && (
+          {liveStatus === OrderStatus.Open && (
             <Button variant="dangerOutline" onClick={handleCancelOrder}>
               {t('Cancel')}
             </Button>
           )}
-          {order.status === OrderStatus.Filled && (
+          {liveStatus === OrderStatus.Filled && (
             <Button variant="primary60Outline" onClick={handleWithdrawOrder}>
               {t('Withdraw')}
             </Button>
@@ -91,7 +92,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
 export const OrdersTable = () => {
   const { t } = useTranslation()
 
-  const { data } = useUserLimitOrders()
+  const { data, toggleOpenFilter, filterOrderStatus } = useUserLimitOrders()
 
   return (
     <>
@@ -104,7 +105,12 @@ export const OrdersTable = () => {
             <Th>{t('Status')}</Th>
             <Th>{t('Filled')}</Th>
             <Th>{t('Amount Received')}</Th>
-            <Th>-</Th>
+            <Th>
+              <FlexGap alignItems="center" gap="4px">
+                <span>{t('View Pending Only')}</span>
+                <Toggle checked={filterOrderStatus === OrderStatus.Open} onChange={toggleOpenFilter} scale="sm" />
+              </FlexGap>
+            </Th>
           </tr>
         </Thead>
         <tbody>
