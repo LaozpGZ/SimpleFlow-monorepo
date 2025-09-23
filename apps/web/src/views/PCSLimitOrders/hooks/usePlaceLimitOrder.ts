@@ -123,9 +123,9 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
     })
 
     try {
-      const estimatedGas = await contract.estimateGas.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
-        account,
-      })
+      // const estimatedGas = await contract.estimateGas.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
+      //   account,
+      // })
 
       // console.log('placeOrder: estimatedGas', estimatedGas)
 
@@ -137,7 +137,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
           account,
           chain: contract.chain,
           value,
-          gas: calculateGasMargin(estimatedGas),
+          // gas: calculateGasMargin(estimatedGas),
         })
       })
 
