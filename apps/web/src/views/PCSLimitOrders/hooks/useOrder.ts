@@ -58,6 +58,37 @@ export const useOrder = (order: ResponseOrder) => {
     return formatPrice(finalPrice, 6, 'en-US')
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
+  // TODO: Check for fees calculation? At least quoted amount should be the same
+  const [originalAmountA, originalAmountB] = useMemo(() => {
+    if (!currency0 || !currency1 || !pool) return [undefined, undefined]
+
+    const liquidity = BigInt(order.liquidity)
+
+    // Contract handles tick range as [tickLower, tickLower + tickSpacing]
+    const tickLower = order.tick_lower
+    const tickUpper = order.tick_lower + pool.parameters.tickSpacing
+
+    const token0Amount = SqrtPriceMath.getAmount0Delta(
+      TickMath.getSqrtRatioAtTick(tickLower),
+      TickMath.getSqrtRatioAtTick(tickUpper),
+      liquidity,
+      false,
+    )
+
+    const token1Amount = SqrtPriceMath.getAmount1Delta(
+      TickMath.getSqrtRatioAtTick(tickLower),
+      TickMath.getSqrtRatioAtTick(tickUpper),
+      liquidity,
+      false,
+    )
+
+    const result = order.zero_for_one
+      ? [formatUnits(token0Amount, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
+      : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
+
+    return result
+  }, [currency0, currency1, order.liquidity, order.tick_lower, pool?.parameters.tickSpacing])
+
   // Amounts Received
   const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
     queryKey: ['order-amounts-received', account, chainId, order.order_id, order.pool_id],
@@ -96,59 +127,31 @@ export const useOrder = (order: ResponseOrder) => {
 
       // TODO: How to get amount if Withdrawn or Cancelled.
       // BE says will return liquidity value for Withdrawn case
+
       return [0n, 0n]
     },
     initialData: [0n, 0n],
   })
 
   const amountAReceived = useMemo(() => {
+    // Return original amounts if Withdrawn or Cancelled. May need to add fees calculation too
+    if (!order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
+      return originalAmountA
+    }
     if (!currencyA?.decimals || !currencyB?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount0Received, currencyA?.decimals)
     return formatUnits(amount1Received, currencyB?.decimals)
-  }, [order.zero_for_one, amount0Received, amount1Received, currencyA?.decimals, currencyB?.decimals])
+  }, [order.zero_for_one, amount0Received, amount1Received, currencyA?.decimals, currencyB?.decimals, originalAmountA])
 
   const amountBReceived = useMemo(() => {
+    // Return original amounts if Withdrawn or Cancelled. May need to add fees calculation too
+    if (order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
+      return originalAmountB
+    }
     if (!currencyB?.decimals || !currencyA?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount1Received, currencyB?.decimals)
     return formatUnits(amount0Received, currencyA?.decimals)
-  }, [order.zero_for_one, amount1Received, amount0Received])
-
-  console.log(`%c [Order ${order.order_id}][amountAReceived]`, 'background:#feeede;color: black', amountAReceived)
-  console.log(`%c [Order ${order.order_id}][amountBReceived]`, 'background:#feeede;color: black', amountBReceived)
-
-  // TODO: Check for fees calculation? At least quoted amount should be the same
-  const [originalAmountA, originalAmountB] = useMemo(() => {
-    if (!currency0 || !currency1 || !pool) return [undefined, undefined]
-
-    const liquidity = BigInt(order.liquidity)
-
-    // Contract handles tick range as [tickLower, tickLower + tickSpacing]
-    const tickLower = order.tick_lower
-    const tickUpper = order.tick_lower + pool.parameters.tickSpacing
-
-    const token0Amount = SqrtPriceMath.getAmount0Delta(
-      TickMath.getSqrtRatioAtTick(tickLower),
-      TickMath.getSqrtRatioAtTick(tickUpper),
-      liquidity,
-      false,
-    )
-
-    const token1Amount = SqrtPriceMath.getAmount1Delta(
-      TickMath.getSqrtRatioAtTick(tickLower),
-      TickMath.getSqrtRatioAtTick(tickUpper),
-      liquidity,
-      false,
-    )
-
-    const result = order.zero_for_one
-      ? [formatUnits(token0Amount, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
-      : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
-
-    return result
-  }, [currency0, currency1, order.liquidity, pool?.tick, order.tick_lower, pool?.parameters.tickSpacing])
-
-  console.log(`%c [Order ${order.order_id}][originalAmountA]`, 'background:red;color: black', originalAmountA)
-  console.log(`%c [Order ${order.order_id}][originalAmountB]`, 'background:red;color: black', originalAmountB)
+  }, [order.zero_for_one, amount1Received, amount0Received, originalAmountB])
 
   // Actions
   const handleCancelOrder = useCallback(async () => {
