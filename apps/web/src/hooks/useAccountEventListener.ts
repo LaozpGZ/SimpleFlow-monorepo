@@ -45,13 +45,12 @@ export const useChainIdListener = () => {
 const useAddressListener = () => {
   const config = useConfig()
   const dispatch = useAppDispatch()
-  const { chainId } = useAccount()
 
   useEffect(() => {
     return watchAccount(config as any, {
       onChange(data, prevData) {
         if (prevData.status === 'connected' && data.status === 'connected' && prevData.chainId === data.chainId) {
-          clearUserStates(dispatch, { chainId })
+          clearUserStates(dispatch, { chainId: data.chainId })
         }
 
         if (prevData.address !== data.address) {
@@ -66,7 +65,7 @@ const useAddressListener = () => {
         }
       },
     })
-  }, [config, dispatch, chainId])
+  }, [config, dispatch])
 }
 
 export const useAccountEventListener = () => {
