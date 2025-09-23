@@ -4233,5 +4233,13 @@
   "Commit.prediction": "உறுதிப்படுத்தப்பட்ட",
   "Total.tabOverall": "மொத்தம்",
   "Unstaked.toast": "ஸ்டேக்கிங் நீக்கப்பட்டது",
-  "Earn.label": "சம்பாதிப்பு"
+  "Earn.label": "சம்பாதிப்பு",
+  "Failed!": "தோல்வியடைந்தது!",
+  "Successfully!": "வெற்றிகரமாக!",
+  "Amount of liquidity to add": "சேர்க்க வேண்டிய லிக்விடிட்டியின் அளவு",
+  "Max": "அதிகபட்சம்",
+  "New Balance": "புதிய இருப்பு",
+  "total position value (USD)": "மொத்த நிலை மதிப்பு (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "அடுத்த முறை தடையின்றி நிலையைச் சேர்க்க, உங்கள் டோக்கன்கள் அனைத்தையும் அகற்றிவிட்டு, உங்கள் நிலையைத் திறந்து வைத்திருக்கலாம்.",
+  "LP Fees": "LP கட்டணங்கள்"
 }

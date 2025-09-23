@@ -4233,5 +4233,13 @@
   "Commit.prediction": "投入",
   "Total.tabOverall": "总览",
   "Unstaked.toast": "解押成功",
-  "Earn.label": "收益"
+  "Earn.label": "收益",
+  "Failed!": "失败！",
+  "Successfully!": "成功！",
+  "Amount of liquidity to add": "要添加的流动性数量",
+  "Max": "最大",
+  "New Balance": "新余额",
+  "total position value (USD)": "仓位总价值 (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "您可以提取所有代币，但仍保持仓位开启，以便下次可以无缝地再次添加流动性。",
+  "LP Fees": "LP 手续费"
 }

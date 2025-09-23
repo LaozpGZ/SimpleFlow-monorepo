@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Inzet",
   "Total.tabOverall": "Totaal",
   "Unstaked.toast": "Ontstaked",
-  "Earn.label": "Opbrengst"
+  "Earn.label": "Opbrengst",
+  "Failed!": "Mislukt!",
+  "Successfully!": "Geslaagd!",
+  "Amount of liquidity to add": "Hoeveelheid liquiditeit om toe te voegen",
+  "Max": "Max",
+  "New Balance": "Nieuw Saldo",
+  "total position value (USD)": "totale positiewaarde (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Je kunt al je tokens verwijderen en je positie open houden, zodat je de volgende keer naadloos liquiditeit kunt toevoegen.",
+  "LP Fees": "LP-vergoedingen"
 }

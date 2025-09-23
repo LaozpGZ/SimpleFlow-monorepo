@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Ставка",
   "Total.tabOverall": "Усього",
   "Unstaked.toast": "Виведено зі стейкінгу",
-  "Earn.label": "Заробіток"
+  "Earn.label": "Заробіток",
+  "Failed!": "Невдало!",
+  "Successfully!": "Успішно!",
+  "Amount of liquidity to add": "Кількість ліквідності для додавання",
+  "Max": "Макс.",
+  "New Balance": "Новий баланс",
+  "total position value (USD)": "загальна вартість позиції (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Ви можете вилучити всі свої токени й при цьому зберегти позицію відкритою, щоб наступного разу безперешкодно додати ліквідність.",
+  "LP Fees": "Комісії LP"
 }

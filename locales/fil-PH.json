@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Nakatuon",
   "Total.tabOverall": "Kabuuan",
   "Unstaked.toast": "Na-unstake",
-  "Earn.label": "Kita"
+  "Earn.label": "Kita",
+  "Failed!": "Nabigo!",
+  "Successfully!": "Matagumpay!",
+  "Amount of liquidity to add": "Halaga ng liquidity na idadagdag",
+  "Max": "Max",
+  "New Balance": "Bagong Balanse",
+  "total position value (USD)": "kabuuang halaga ng posisyon (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Maaari mong alisin ang lahat ng iyong token at panatilihing bukas ang iyong posisyon para makapagdagdag nang maayos sa susunod.",
+  "LP Fees": "LP Fees"
 }

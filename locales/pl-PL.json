@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Zobowiązanie",
   "Total.tabOverall": "Łącznie",
   "Unstaked.toast": "Staking Wycofany",
-  "Earn.label": "Zyski"
+  "Earn.label": "Zyski",
+  "Failed!": "Niepowodzenie!",
+  "Successfully!": "Pomyślnie!",
+  "Amount of liquidity to add": "Ilość płynności do dodania",
+  "Max": "Maks.",
+  "New Balance": "Nowe saldo",
+  "total position value (USD)": "całkowita wartość pozycji (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Możesz usunąć wszystkie swoje tokeny i nadal utrzymywać otwartą pozycję, aby następnym razem bezproblemowo ją zasilić.",
+  "LP Fees": "Opłaty LP"
 }

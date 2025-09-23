@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Elkötelezés",
   "Total.tabOverall": "Összes",
   "Unstaked.toast": "Feloldva",
-  "Earn.label": "Jutalmak"
+  "Earn.label": "Jutalmak",
+  "Failed!": "Sikertelen!",
+  "Successfully!": "Sikeresen!",
+  "Amount of liquidity to add": "Hozzáadandó likviditás összege",
+  "Max": "Max",
+  "New Balance": "Új egyenleg",
+  "total position value (USD)": "pozíció teljes értéke (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Eltávolíthatod az összes tokenedet, de a pozíciód nyitva hagyhatod, hogy legközelebb zökkenőmentesen tudj hozzáadni.",
+  "LP Fees": "LP díjak"
 }

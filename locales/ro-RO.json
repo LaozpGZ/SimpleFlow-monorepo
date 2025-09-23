@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Angajament",
   "Total.tabOverall": "Total",
   "Unstaked.toast": "Deblocat",
-  "Earn.label": "Câștiguri"
+  "Earn.label": "Câștiguri",
+  "Failed!": "Eșuat!",
+  "Successfully!": "Cu succes!",
+  "Amount of liquidity to add": "Cantitatea de lichiditate de adăugat",
+  "Max": "Max",
+  "New Balance": "Sold nou",
+  "total position value (USD)": "valoarea totală a poziției (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Poți elimina toate jetoanele tale și totuși să păstrezi poziția deschisă, pentru a adăuga la poziție fără probleme data viitoare.",
+  "LP Fees": "Comisioane LP"
 }

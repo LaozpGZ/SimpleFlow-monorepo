@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Cam kết",
   "Total.tabOverall": "Tổng quan",
   "Unstaked.toast": "Đã hủy stake",
-  "Earn.label": "Kiếm được"
+  "Earn.label": "Kiếm được",
+  "Failed!": "Thất bại!",
+  "Successfully!": "Thành công!",
+  "Amount of liquidity to add": "Số lượng thanh khoản cần thêm",
+  "Max": "Tối đa",
+  "New Balance": "Số dư mới",
+  "total position value (USD)": "tổng giá trị vị thế (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Bạn có thể rút toàn bộ token mà vẫn giữ vị thế mở để dễ dàng thêm thanh khoản trong lần tiếp theo.",
+  "LP Fees": "Phí LP"
 }

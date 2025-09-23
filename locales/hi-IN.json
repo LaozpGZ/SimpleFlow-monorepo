@@ -4233,5 +4233,13 @@
   "Commit.prediction": "कमिट",
   "Total.tabOverall": "कुल",
   "Unstaked.toast": "अनस्टेक किया गया",
-  "Earn.label": "कमाई"
+  "Earn.label": "कमाई",
+  "Failed!": "असफल!",
+  "Successfully!": "सफलतापूर्वक!",
+  "Amount of liquidity to add": "जोड़ने के लिए लिक्विडिटी की मात्रा",
+  "Max": "अधिकतम",
+  "New Balance": "नया बैलेंस",
+  "total position value (USD)": "कुल पोजीशन मूल्य (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "आप अपने सभी टोकन हटा सकते हैं और अगली बार आसानी से पोजीशन जोड़ने के लिए अपनी पोजीशन खुली रख सकते हैं।",
+  "LP Fees": "LP फीस"
 }

@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Δέσμευση",
   "Total.tabOverall": "Σύνολο",
   "Unstaked.toast": "Αποδεσμεύτηκε",
-  "Earn.label": "Κέρδη"
+  "Earn.label": "Κέρδη",
+  "Failed!": "Αποτυχία!",
+  "Successfully!": "Επιτυχία!",
+  "Amount of liquidity to add": "Ποσό ρευστότητας προς προσθήκη",
+  "Max": "Μέγιστο",
+  "New Balance": "Νέο Υπόλοιπο",
+  "total position value (USD)": "συνολική αξία θέσης (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Μπορείτε να αφαιρέσετε όλα τα token σας και να διατηρήσετε τη θέση σας ανοιχτή για να προσθέσετε ρευστότητα απρόσκοπτα την επόμενη φορά.",
+  "LP Fees": "Προμήθειες LP"
 }

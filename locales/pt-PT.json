@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Compromisso",
   "Total.tabOverall": "Total",
   "Unstaked.toast": "Desaplicado",
-  "Earn.label": "Ganhos"
+  "Earn.label": "Ganhos",
+  "Failed!": "Falhou!",
+  "Successfully!": "Com sucesso!",
+  "Amount of liquidity to add": "Montante de liquidez a adicionar",
+  "Max": "Máx.",
+  "New Balance": "Novo Saldo",
+  "total position value (USD)": "valor total da posição (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Pode remover todos os seus tokens e manter a posição aberta para adicionar liquidez facilmente da próxima vez.",
+  "LP Fees": "Taxas de LP"
 }

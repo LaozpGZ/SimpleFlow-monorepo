@@ -4233,5 +4233,13 @@
   "Commit.prediction": "Размещение",
   "Total.tabOverall": "Всего",
   "Unstaked.toast": "Выведено из стейкинга",
-  "Earn.label": "Доход"
+  "Earn.label": "Доход",
+  "Failed!": "Не удалось!",
+  "Successfully!": "Успешно!",
+  "Amount of liquidity to add": "Количество ликвидности для добавления",
+  "Max": "Макс.",
+  "New Balance": "Новый баланс",
+  "total position value (USD)": "общая стоимость позиции (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "Вы можете вывести все свои токены, оставив позицию открытой, чтобы в следующий раз легко ее пополнить.",
+  "LP Fees": "Комиссии LP"
 }

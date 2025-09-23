@@ -4233,5 +4233,13 @@
   "Commit.prediction": "التزام",
   "Total.tabOverall": "إجمالي",
   "Unstaked.toast": "تم فك الرهان",
-  "Earn.label": "الربح"
+  "Earn.label": "الربح",
+  "Failed!": "فشل!",
+  "Successfully!": "بنجاح!",
+  "Amount of liquidity to add": "كمية السيولة المراد إضافتها",
+  "Max": "الحد الأقصى",
+  "New Balance": "الرصيد الجديد",
+  "total position value (USD)": "إجمالي قيمة المركز (بالدولار الأمريكي)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "يمكنك إزالة جميع رموزك مع الإبقاء على مركزك مفتوحًا لتتمكن من إضافة السيولة بسلاسة في المرة القادمة.",
+  "LP Fees": "رسوم LP"
 }

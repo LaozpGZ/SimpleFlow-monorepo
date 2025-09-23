@@ -4233,5 +4233,13 @@
   "Commit.prediction": "약정",
   "Total.tabOverall": "전체",
   "Unstaked.toast": "언스테이킹 완료",
-  "Earn.label": "수익"
+  "Earn.label": "수익",
+  "Failed!": "실패!",
+  "Successfully!": "성공!",
+  "Amount of liquidity to add": "추가할 유동성 금액",
+  "Max": "최대",
+  "New Balance": "새 잔액",
+  "total position value (USD)": "총 포지션 가치 (USD)",
+  "You can remove all your tokens and still keep your position open in order to add position seamless next time.": "모든 토큰을 제거해도 포지션을 유지하여 다음에 원활하게 포지션을 추가할 수 있습니다.",
+  "LP Fees": "LP 수수료"
 }
