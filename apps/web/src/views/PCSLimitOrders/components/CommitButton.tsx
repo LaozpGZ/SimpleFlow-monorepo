@@ -37,6 +37,7 @@ import { usePlaceLimitOrder } from '../hooks/usePlaceLimitOrder'
 import { useLimitOrderApproval } from '../hooks/useLimitOrderApproval'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { useLimitOrderUserBalance } from '../hooks/useLimitOrderUserBalance'
+import { differencePercentageAtom } from '../state/form/quickActionAtoms'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
@@ -48,9 +49,12 @@ export const CommitButton = () => {
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
+  const percentage = useAtomValue(differencePercentageAtom)
+
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
 
-  const isEnabled = enabled && isEnoughBalance
+  const showLowPriceWarning = percentage && Number(percentage) < 0
+  const isEnabled = enabled && isEnoughBalance && !showLowPriceWarning
 
   const { refetch } = useAtomValue(selectedPoolAtom)
 
