@@ -1,4 +1,5 @@
 import { CLPoolInfo } from 'state/farmsV4/state/accountPositions/fetcher/infinity/getPoolInfo'
+import { Address } from 'viem/accounts'
 
 export interface OrderHistoryResponse {
   startCursor: string
@@ -20,16 +21,14 @@ export interface PaginationParams {
 
 export interface ResponseOrder {
   order_id: string
-  pool_id: string
-  owner: string
+  pool_id: Address
+  owner: Address
   liquidity: string
   status: OrderStatus
   updated_at: string
   zero_for_one: boolean
   tick_lower: number
   transaction_hash: string
-
-  pool?: CLPoolInfo // TODO: separate to proper type
 }
 
 export enum OrderStatus {
@@ -40,11 +39,11 @@ export enum OrderStatus {
   Withdrawn = 'Withdrawn',
 }
 
-export enum ContractOrderStatus {
-  Open,
-  Pending,
-  Filled,
-}
+// export enum ContractOrderStatus {
+//   Open,
+//   Pending,
+//   Filled,
+// }
 
 export interface Order {
   sell: any

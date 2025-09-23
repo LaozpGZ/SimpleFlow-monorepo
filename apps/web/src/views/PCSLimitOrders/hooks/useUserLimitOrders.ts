@@ -2,11 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { useState, useCallback } from 'react'
-import { useCLLimitOrderHookContract } from 'hooks/useContract'
-import { fetchCLPoolInfo } from 'state/farmsV4/state/accountPositions/fetcher/infinity/getPoolInfo'
 import { PCS_LIMIT_ORDER_HISTORY_URL } from '../constants'
-import { OrderHistoryResponse, OrderStatus, PaginationParams } from '../types/orders.types'
-import { fetchOrderDataById, parseOrders } from '../utils/orders'
+import { OrderHistoryResponse, PaginationParams } from '../types/orders.types'
 
 async function getUserLimitOrders(chainName: string, address: string, pagination?: PaginationParams) {
   const url = new URL(`${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}`)
@@ -32,7 +29,6 @@ async function getUserLimitOrders(chainName: string, address: string, pagination
 }
 
 export const useUserLimitOrders = () => {
-  const contract = useCLLimitOrderHookContract()
   const { account, chainId } = useAccountActiveChain()
   const chainName = chainIdToExplorerInfoChainName[chainId]
 
@@ -56,30 +52,10 @@ export const useUserLimitOrders = () => {
       const data = await getUserLimitOrders(chainName, account, paginationParams)
       const { rows } = data
 
-      const orders = await Promise.all(
-        rows.map(async (row) => {
-          const data = await fetchOrderDataById({
-            account,
-            contract,
-            orderId: row.order_id,
-            isWithdrawn: row.status === OrderStatus.Withdrawn,
-          })
-
-          // fetch order's pool info
-          const pool = await fetchCLPoolInfo(row.pool_id as `0x${string}`, chainId)
-
-          return {
-            ...row,
-            data,
-            pool,
-          }
-        }),
-      )
-
-      console.log('%c [Order History Data]', 'background: green;color: white', orders)
+      console.log('%c [Order History Data]', 'background: green;color: white', rows)
 
       return {
-        orders: parseOrders(orders as any[]),
+        orders: rows,
         paginationInfo: {
           startCursor: data.startCursor,
           endCursor: data.endCursor,
