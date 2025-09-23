@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, CloseIcon, Grid, Heading, IconButton, RowBetween, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCallback, useMemo, useState } from 'react'
-import { useSelectedWallet, useWalletFilter } from 'src/state/hooks'
+import { useSelectedWallet, useWalletFilter } from '../../state/hooks'
 import { ASSET_CDN } from '../../config/url'
 import { ConnectData, WalletAdaptedNetwork, WalletConfigV3, WalletIds } from '../../types'
 import { PreviewSection, PreviewStatus } from '../PreviewSection'
