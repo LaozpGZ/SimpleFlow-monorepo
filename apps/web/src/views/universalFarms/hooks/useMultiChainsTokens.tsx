@@ -1,4 +1,4 @@
-import { ChainId, ERC20Token, Native, SPLToken, UnifiedCurrency } from '@pancakeswap/sdk'
+import { ChainId, ERC20Token, SPLToken } from '@pancakeswap/sdk'
 import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
 import type { TokenInfo } from '@pancakeswap/token-lists'
 import {
@@ -16,7 +16,6 @@ import { useAtom } from 'jotai'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
 import { selectorByUrlsAtom } from 'state/lists/hooks'
-import { useOrderChainIds } from './useMultiChains'
 
 const BSC_URLS = [PANCAKE_EXTENDED]
 const ETH_URLS = [PANCAKE_ETH_DEFAULT]

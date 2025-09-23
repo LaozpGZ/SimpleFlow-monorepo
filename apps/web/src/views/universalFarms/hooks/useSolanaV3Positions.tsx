@@ -75,7 +75,7 @@ export const useSolanaV3PositionItems = ({
   farmsOnly: boolean
 }) => {
   const { publicKey } = useWallet()
-  const walletAddress = publicKey?.toBase58()
+  const walletAddress = useMemo(() => publicKey?.toBase58(), [publicKey])
 
   const { data: positionInfos, isLoading: solanaLoading } = useSolanaPositionsInfoByAccount(walletAddress)
 
@@ -123,7 +123,7 @@ export const useSolanaV3PositionItems = ({
 
       return matchesNetwork && matchesTokens && matchesStatus && matchesFarms
     })
-  }, [v3PositionsWithStatus, selectedNetwork, selectedTokens, positionStatus, farmsOnly])
+  }, [v3PositionsWithStatus, selectedNetwork, selectedTokens, positionStatus, farmsOnly, poolsMap])
 
   // Sort positions by status
   const sortedSolanaPositions = useMemo(
