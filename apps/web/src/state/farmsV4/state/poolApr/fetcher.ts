@@ -147,9 +147,17 @@ export const getMerklApr = async (result: any, chainId: number) => {
   }
 }
 
+// from: https://api.merkl.xyz/v4/chains/
+const merklSupportedChainId = [
+  239, 6900, 2020, 1, 2046399126, 57073, 137, 8453, 146, 59144, 81457, 60808, 1868, 252, 43111, 5000, 167000, 48900,
+  999, 1101, 250, 56, 1135, 1329, 34443, 10, 1923, 534352, 13371, 151, 324, 43114, 42161, 80094, 747474, 30, 130, 122,
+  5464, 98866, 592, 100, 1284, 480, 21000000, 9745, 42793, 42220, 169, 747,
+]
+
 export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
+  const chainIds = supportedChainIdV4.filter((chainId) => merklSupportedChainId.includes(chainId))
   const resp = await fetch(
-    `https://api.merkl.xyz/v4/opportunities/?chainId=${supportedChainIdV4.join(
+    `https://api.merkl.xyz/v4/opportunities/?chainId=${chainIds.join(
       ',',
     )}&test=false&mainProtocolId=pancake-swap&action=POOL,HOLD&status=LIVE`,
     { signal },
@@ -162,7 +170,7 @@ export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
         opportunity?.protocol?.id?.toLowerCase().startsWith('pancake-swap') ||
         opportunity?.protocol?.id?.toLowerCase().startsWith('pancakeswap'),
     )
-    const aprs = await Promise.all(supportedChainIdV4.map((chainId) => getMerklApr(pancakeResult, chainId)))
+    const aprs = await Promise.all(chainIds.map((chainId) => getMerklApr(pancakeResult, chainId)))
     return aprs.reduce((acc, apr) => Object.assign(acc, apr), {})
   }
   throw resp
