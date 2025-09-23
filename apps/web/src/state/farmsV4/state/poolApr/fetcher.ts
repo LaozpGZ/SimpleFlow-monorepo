@@ -1,4 +1,4 @@
-import { Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
+import { Protocol, supportedChainIdV4, merklSupportedChainId } from '@pancakeswap/farms'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { masterChefV3ABI, pancakeV3PoolABI } from '@pancakeswap/v3-sdk'
 import { create, windowedFiniteBatchScheduler } from '@yornaath/batshit'
@@ -146,13 +146,6 @@ export const getMerklApr = async (result: any, chainId: number) => {
     return {}
   }
 }
-
-// from: https://api.merkl.xyz/v4/chains/
-const merklSupportedChainId = [
-  239, 6900, 2020, 1, 2046399126, 57073, 137, 8453, 146, 59144, 81457, 60808, 1868, 252, 43111, 5000, 167000, 48900,
-  999, 1101, 250, 56, 1135, 1329, 34443, 10, 1923, 534352, 13371, 151, 324, 43114, 42161, 80094, 747474, 30, 130, 122,
-  5464, 98866, 592, 100, 1284, 480, 21000000, 9745, 42793, 42220, 169, 747,
-]
 
 export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
   const chainIds = supportedChainIdV4.filter((chainId) => merklSupportedChainId.includes(chainId))
