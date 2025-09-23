@@ -10,6 +10,8 @@ import { formatUnits } from '@pancakeswap/utils/viem/formatUnits'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { SqrtPriceMath, TickMath } from '@pancakeswap/v3-sdk'
+import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { OrderStatus, ResponseOrder } from '../types/orders.types'
 import { simulateLimitOrderContract } from '../utils/orders'
 import { useUserLimitOrders } from './useUserLimitOrders'
@@ -114,6 +116,37 @@ export const useOrder = (order: ResponseOrder) => {
   console.log(`%c [Order ${order.order_id}][amountAReceived]`, 'background:#feeede;color: black', amountAReceived)
   console.log(`%c [Order ${order.order_id}][amountBReceived]`, 'background:#feeede;color: black', amountBReceived)
 
+  // TODO: Check for fees calculation? At least quoted amount should be the same
+  const [originalAmountA, originalAmountB] = useMemo(() => {
+    if (!currency0 || !currency1 || !pool) return [undefined, undefined]
+
+    const liquidity = BigInt(order.liquidity)
+
+    if (order.zero_for_one) {
+      const token0Amount = SqrtPriceMath.getAmount0Delta(
+        TickMath.getSqrtRatioAtTick(order.tick_lower),
+        TickMath.getSqrtRatioAtTick(order.tick_lower + pool?.parameters.tickSpacing),
+        liquidity,
+        false,
+      )
+      const price = tickToPrice(currency0, currency1, order.tick_lower)
+      const amount1 = price.quote(CurrencyAmount.fromRawAmount(currency0, token0Amount))
+      return [formatUnits(token0Amount, currency0?.decimals), formatUnits(amount1.quotient, currency1?.decimals)]
+    }
+    const token1Amount = SqrtPriceMath.getAmount1Delta(
+      TickMath.getSqrtRatioAtTick(order.tick_lower - pool?.parameters.tickSpacing),
+      TickMath.getSqrtRatioAtTick(order.tick_lower),
+      liquidity,
+      false,
+    )
+    const price = tickToPrice(currency0, currency1, order.tick_lower)
+    const amount0 = price.invert().quote(CurrencyAmount.fromRawAmount(currency1, token1Amount))
+    return [formatUnits(amount0.quotient, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
+  }, [currency0, currency1, order.liquidity, pool?.tick, order.tick_lower, pool?.parameters.tickSpacing])
+
+  console.log(`%c [Order ${order.order_id}][originalAmountA]`, 'background:red;color: black', originalAmountA)
+  console.log(`%c [Order ${order.order_id}][originalAmountB]`, 'background:red;color: black', originalAmountB)
+
   // Actions
   const handleCancelOrder = useCallback(async () => {
     if (!account) return
@@ -179,6 +212,8 @@ export const useOrder = (order: ResponseOrder) => {
     currencyB,
     limitPrice,
     isInverted,
+    originalAmountA,
+    originalAmountB,
     amountAReceived,
     amountBReceived,
     setIsInverted,

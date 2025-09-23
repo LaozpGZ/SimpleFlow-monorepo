@@ -38,6 +38,8 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
     currencyB,
     limitPrice,
     isInverted,
+    originalAmountA,
+    originalAmountB,
     amountBReceived,
     amountAReceived,
     setIsInverted,
@@ -47,8 +49,8 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
 
   return (
     <Tr>
-      <Td>{currencyA && <TokenAmountDisplay currency={currencyA} amount="0" />}</Td>
-      <Td>{currencyB && <TokenAmountDisplay currency={currencyB} amount="0" />}</Td>
+      <Td>{currencyA && <TokenAmountDisplay currency={currencyA} amount={originalAmountA ?? '0'} />}</Td>
+      <Td>{currencyB && <TokenAmountDisplay currency={currencyB} amount={originalAmountB ?? '0'} />}</Td>
       <Td>
         <FlexGap alignItems="center" gap="4px">
           <Text small bold>
