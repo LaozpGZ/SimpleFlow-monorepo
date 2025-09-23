@@ -123,11 +123,11 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
     })
 
     try {
-      //   const estimatedGas = await contract.estimateGas.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
-      //     account: account,
-      //   })
+      const estimatedGas = await contract.estimateGas.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
+        account,
+      })
 
-      //   console.log('placeOrder: estimatedGas', estimatedGas)
+      // console.log('placeOrder: estimatedGas', estimatedGas)
 
       // TODO: Add gas fee checks later
       const value = inputCurrency.isNative ? parsedAmountA : 0n
@@ -137,7 +137,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
           account,
           chain: contract.chain,
           value,
-          //   gas: calculateGasMargin(estimatedGas),
+          gas: calculateGasMargin(estimatedGas),
         })
       })
 

@@ -1,11 +1,10 @@
-import { FlexGap, IconButton, SwapHorizIcon, Table, Td, Text } from '@pancakeswap/uikit'
+import { Button, FlexGap, IconButton, ScanLink, SwapHorizIcon, Table, Td, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
-import { CAKE } from '@pancakeswap/tokens'
-import { Native } from '@pancakeswap/sdk'
-import { ResponseOrder } from 'views/PCSLimitOrders/types/orders.types'
+import { OrderStatus, ResponseOrder } from 'views/PCSLimitOrders/types/orders.types'
 import { useOrder } from 'views/PCSLimitOrders/hooks/useOrder'
 import styled from 'styled-components'
+import { getBlockExploreLink } from 'utils'
 import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
 import { TokenAmountDisplay } from './TableItems/TokenAmountDisplay'
 
@@ -31,8 +30,19 @@ interface OrderTableRowProps {
   order: ResponseOrder
 }
 const OrderTableRow = ({ order }: OrderTableRowProps) => {
-  const { currencyA, currencyB, limitPrice, isInverted, setIsInverted, amountAReceived, amountBReceived } =
-    useOrder(order)
+  const { t } = useTranslation()
+
+  const {
+    currencyA,
+    currencyB,
+    limitPrice,
+    isInverted,
+    setIsInverted,
+    amountAReceived,
+    amountBReceived,
+    handleCancelOrder,
+    handleWithdrawOrder,
+  } = useOrder(order)
 
   return (
     <Tr>
@@ -56,10 +66,24 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
       </Td>
       <Td>-</Td>
       <Td>
-        {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '-'} />}
-        {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '-'} />}
+        {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
+        {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
       </Td>
-      <Td>-</Td>
+      <Td>
+        <FlexGap gap="8px" alignItems="center">
+          <ScanLink color="primary60" size="24px" href={getBlockExploreLink(order.transaction_hash, 'transaction')} />
+          {order.status === OrderStatus.Open && (
+            <Button variant="dangerOutline" onClick={handleCancelOrder}>
+              {t('Cancel')}
+            </Button>
+          )}
+          {order.status === OrderStatus.Filled && (
+            <Button variant="primary60Outline" onClick={handleWithdrawOrder}>
+              {t('Withdraw')}
+            </Button>
+          )}
+        </FlexGap>
+      </Td>
     </Tr>
   )
 }
@@ -68,83 +92,6 @@ export const OrdersTable = () => {
   const { t } = useTranslation()
 
   const { data } = useUserLimitOrders()
-
-  // const columns = [
-  //   {
-  //     title: t('Sell'),
-  //     dataIndex: 'sell',
-  //     key: 'sell',
-  //     render: (value) => (
-  //       <div>
-  //         <TokenAmountDisplay currency={value?.order?.data.zeroForOne ? token0 : token1} amount={value.value} />
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     title: t('Buy'),
-  //     dataIndex: 'buy',
-  //     key: 'buy',
-  //     render: (value) => (
-  //       <div>
-  //         <TokenAmountDisplay currency={value?.order?.data.zeroForOne ? token1 : token0} amount={value.value} />
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     title: t('Limit Price'),
-  //     dataIndex: 'limitPrice',
-  //     key: 'limitPrice',
-  //     render: (value) => <div>{value}</div>,
-  //   },
-  //   {
-  //     title: t('Status'),
-  //     dataIndex: 'status',
-  //     key: 'status',
-  //     render: (value) => (
-  //       <div>
-  //         <OrderStatusDisplay status={value} />
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     title: t('Filled'),
-  //     dataIndex: 'filled',
-  //     key: 'filled',
-  //     render: (value) => <div>{value}</div>,
-  //   },
-  //   {
-  //     title: t('Amount Received'),
-  //     dataIndex: 'amountReceived',
-  //     key: 'amountReceived',
-  //     render: (value) => (
-  //       <AutoColumn>
-  //         <TokenAmountDisplay
-  //           currency={value?.order?.data.zeroForOne ? token0 : token1}
-  //           amount={formatUnits(
-  //             value.amount0Received ?? '0',
-  //             (value?.order?.data.zeroForOne ? token0.decimals : token1.decimals) ?? 18,
-  //           )}
-  //         />
-  //         <TokenAmountDisplay
-  //           currency={value?.order?.data.zeroForOne ? token1 : token0}
-  //           amount={formatUnits(
-  //             value.amount1Received ?? '0',
-  //             (value?.order?.data.zeroForOne ? token1.decimals : token0.decimals) ?? 18,
-  //           )}
-  //         />
-  //       </AutoColumn>
-  //     ),
-  //   },
-  //   {
-  //     // title: t('View Pending Only'),
-  //     title: '',
-  //     dataIndex: 'actions',
-  //     key: 'actions',
-  //     render: (value) => <div>{value}</div>,
-  //   },
-  // ]
-
-  // TODO: Add mobile list view
 
   return (
     <>
@@ -166,7 +113,6 @@ export const OrdersTable = () => {
           ))}
         </tbody>
       </Table>
-      {/* <TableView columns={columns} data={data as any[]} getRowKey={(record) => record.order_id} /> */}
       {/* pagination support here for desktop. For mobile, infinite scroll when element interacts */}
     </>
   )
