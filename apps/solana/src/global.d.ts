@@ -26,6 +26,7 @@ export interface Ethereumish {
   isSafePal?: boolean
   isCoin98?: boolean
   isBlocto?: boolean
+  isRabby?: boolean
 
   isStatus?: boolean
   networkVersion: string
