@@ -14,6 +14,7 @@ export const isMetamaskInstalled = () => {
       return !window.ethereum?.isBinance
     }
 
+    // @ts-ignore
     if (window.ethereum?.providers?.some((p) => p.isMetaMask)) {
       return true
     }
