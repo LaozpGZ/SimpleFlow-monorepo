@@ -67,7 +67,12 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
       <Td>
         <OrderStatusDisplay status={liveStatus} />
       </Td>
-      <Td>-</Td>
+      {/* TODO: Handle Partial Filled case. Maybe get data from Position ID */}
+      <Td>
+        <Text small bold>
+          {liveStatus === OrderStatus.Withdrawn || liveStatus === OrderStatus.Filled ? '100%' : '0%'}
+        </Text>
+      </Td>
       <Td>
         {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
         {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
