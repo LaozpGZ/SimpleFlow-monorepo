@@ -9,7 +9,6 @@ import {
   SafePalWalletName,
   SolflareWalletName,
   TokenPocketWalletName,
-  TrustWalletName,
   WalletConnectWalletName,
 } from '@solana/wallet-adapter-wallets'
 
@@ -33,7 +32,7 @@ export const SolanaWalletNames = {
   MetaMask: 'MetaMask' as WalletName<'MetaMask'>,
   Okx: 'OKX Wallet' as WalletName<'OKX Wallet'>,
   BinanceW3W: 'Binance Wallet' as WalletName<'Binance Wallet'>,
-  Trust: TrustWalletName,
+  Trust: 'TrustAccounts' as WalletName<'TrustAccounts'>,
   TokenPocket: TokenPocketWalletName,
   Coin98: Coin98WalletName,
   SafePal: SafePalWalletName,

@@ -13,6 +13,7 @@ import { useSetAtom } from 'jotai'
 import { walletConnectConfig } from './walletConnect.config'
 import { errorSolanaAtom } from '../../state/atom'
 import WalletAccountListener from './WalletAccountListener'
+import { TrustAccountsWalletAdapter } from './TrustAccountsWalletAdapter'
 
 export type SolanaProviderProps = React.PropsWithChildren<{
   endpoint: string
@@ -47,6 +48,7 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
       new SolflareWalletAdapter(),
       ...walletConnectAdapter,
       new GlowWalletAdapter(),
+      new TrustAccountsWalletAdapter(),
       new ExodusWalletAdapter({ endpoint }),
       new CoinbaseWalletAdapter(),
     ],
