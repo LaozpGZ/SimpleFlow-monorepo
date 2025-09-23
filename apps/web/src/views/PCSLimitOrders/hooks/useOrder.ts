@@ -122,9 +122,9 @@ export const useOrder = (order: ResponseOrder) => {
 
     const liquidity = BigInt(order.liquidity)
 
-    const [tickLower, tickUpper] = order.zero_for_one
-      ? [order.tick_lower, order.tick_lower + pool.parameters.tickSpacing]
-      : [order.tick_lower - pool.parameters.tickSpacing, order.tick_lower]
+    // Contract handles tick range as [tickLower, tickLower + tickSpacing]
+    const tickLower = order.tick_lower
+    const tickUpper = order.tick_lower + pool.parameters.tickSpacing
 
     const token0Amount = SqrtPriceMath.getAmount0Delta(
       TickMath.getSqrtRatioAtTick(tickLower),

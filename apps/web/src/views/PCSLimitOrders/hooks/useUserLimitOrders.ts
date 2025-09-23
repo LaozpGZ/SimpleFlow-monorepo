@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { useState, useCallback } from 'react'
+import { SLOW_INTERVAL } from 'config/constants'
 import { PCS_LIMIT_ORDER_HISTORY_URL } from '../constants'
 import { OrderHistoryResponse, PaginationParams, OrderStatus } from '../types/orders.types'
 
@@ -72,6 +73,7 @@ export const useUserLimitOrders = () => {
       }
     },
     enabled: !!account && !!chainName,
+    refetchInterval: SLOW_INTERVAL,
   })
 
   // Navigation methods
