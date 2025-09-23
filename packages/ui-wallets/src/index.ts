@@ -4,6 +4,7 @@ export { type WalletConfigV3, WalletAdaptedNetwork } from './types'
 export { EvmConnectorNames, type SolanaConnectorNames } from './config/connectorNames'
 export { SolanaProvider, SolanaProviderLocalStorageKey } from './components/SolanaProvider'
 export { selectedWalletAtom } from './state/atom'
+export { TrustAccountsWalletAdapter } from './components/SolanaProvider/TrustAccountsWalletAdapter'
 
 // reexport legacy wallet modal
 export { previouslyUsedWalletsAtom as legacyPreviouslyUsedWalletsAtom } from './components/LegacyWalletModal/atom'

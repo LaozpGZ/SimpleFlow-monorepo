@@ -15,11 +15,11 @@ import {
   PhantomWalletAdapter,
   SafePalWalletAdapter,
   SolongWalletAdapter,
-  TokenPocketWalletAdapter,
-  TrustWalletAdapter
+  TokenPocketWalletAdapter
 } from '@solana/wallet-adapter-wallets'
 import { initialize, SolflareWalletAdapter } from '@solflare-wallet/wallet-adapter'
 import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
+import { TrustAccountsWalletAdapter } from '@pancakeswap/ui-wallets'
 import { useEvent } from '@/hooks/useEvent'
 import { logGTMSolErrorLogEvent } from '@/utils/report/curstomGTMEventTracking'
 
@@ -64,7 +64,7 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
       new SlopeWalletAdapter({ endpoint }),
       ..._walletConnect,
       new GlowWalletAdapter(),
-      new TrustWalletAdapter(),
+      new TrustAccountsWalletAdapter(),
       new MathWalletAdapter({ endpoint }),
       new TokenPocketWalletAdapter(),
       new CoinbaseWalletAdapter({ endpoint }),

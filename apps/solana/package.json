@@ -54,6 +54,7 @@
     "@pancakeswap/solana-clmm-sdk": "workspace:*",
     "@pancakeswap/solana-core-sdk": "workspace:*",
     "@pancakeswap/uikit": "workspace:*",
+    "@pancakeswap/ui-wallets": "workspace:*",
     "@pancakeswap/utils": "workspace:*",
     "@pancakeswap/widgets-internal": "workspace:*",
     "@popperjs/core": "^2.11.8",
