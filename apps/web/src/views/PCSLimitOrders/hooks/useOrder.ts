@@ -125,7 +125,7 @@ export const useOrder = (order: ResponseOrder) => {
         return response.result as unknown as [bigint, bigint]
       }
 
-      // TODO: How to get amount if Withdrawn or Cancelled.
+      // TODO: Get amount if Withdrawn or Cancelled.
       // BE says will return liquidity value for Withdrawn case
 
       return [0n, 0n]
@@ -135,9 +135,9 @@ export const useOrder = (order: ResponseOrder) => {
 
   const amountAReceived = useMemo(() => {
     // Return original amounts if Withdrawn or Cancelled. May need to add fees calculation too
-    if (!order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
-      return originalAmountA
-    }
+    // if (!order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
+    //   return originalAmountA
+    // }
     if (!currencyA?.decimals || !currencyB?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount0Received, currencyA?.decimals)
     return formatUnits(amount1Received, currencyB?.decimals)
@@ -145,9 +145,9 @@ export const useOrder = (order: ResponseOrder) => {
 
   const amountBReceived = useMemo(() => {
     // Return original amounts if Withdrawn or Cancelled. May need to add fees calculation too
-    if (order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
-      return originalAmountB
-    }
+    // if (order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
+    //   return originalAmountB
+    // }
     if (!currencyB?.decimals || !currencyA?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount1Received, currencyB?.decimals)
     return formatUnits(amount0Received, currencyA?.decimals)
