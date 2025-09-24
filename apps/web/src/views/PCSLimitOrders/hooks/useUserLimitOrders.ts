@@ -39,6 +39,7 @@ async function getUserLimitOrders(
       startCursor: '',
       endCursor: '',
       hasNextPage: false,
+      hasPrevPage: false,
       rows: [],
     }
   }
@@ -82,6 +83,7 @@ export const useUserLimitOrders = () => {
           startCursor: data.startCursor,
           endCursor: data.endCursor,
           hasNextPage: data.hasNextPage,
+          hasPrevPage: data.hasPrevPage,
         },
       }
     },
@@ -126,7 +128,12 @@ export const useUserLimitOrders = () => {
     }
   }, [cursors, setCursors, setCurrentCursor, setPaginationDirection, setCurrentPage])
 
-  const canGoForward = queryResult.data?.paginationInfo?.hasNextPage ?? false
+  // Calculate canGoForward based on pagination direction and API response
+  const paginationInfo = queryResult.data?.paginationInfo
+  const canGoForward =
+    paginationDirection === 'backward'
+      ? paginationInfo?.hasPrevPage ?? false // When going backward, hasPrevPage indicates we can go forward again
+      : paginationInfo?.hasNextPage ?? false // When going forward, hasNextPage indicates we can continue forward
 
   const orders = queryResult.data?.orders || []
 

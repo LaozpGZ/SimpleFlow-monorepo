@@ -192,7 +192,11 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
             <Text color="textSubtle" small>
               {t('Fees Earned')}
             </Text>
-            <Text small>{feesEarnedUSD ? `$${feesEarnedUSD.toFormat(2)}` : '-'}</Text>
+            <Text small>
+              {feesEarnedUSD
+                ? `$${formatNumber(feesEarnedUSD, { maxDecimalDisplayDigits: 4, maximumSignificantDigits: 4 })}`
+                : '-'}
+            </Text>
           </RowBetween>
 
           <RowBetween>

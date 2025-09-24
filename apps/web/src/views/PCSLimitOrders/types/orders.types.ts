@@ -4,14 +4,16 @@ import { Address } from 'viem/accounts'
 export interface OrderHistoryResponse {
   startCursor: string
   endCursor: string
-  hasNextPage: boolean
+  hasNextPage?: boolean
+  hasPrevPage?: boolean
   rows: ResponseOrder[]
 }
 
 export interface PaginationInfo {
   startCursor: string
   endCursor: string
-  hasNextPage: boolean
+  hasNextPage?: boolean
+  hasPrevPage?: boolean
 }
 
 export interface PaginationParams {
