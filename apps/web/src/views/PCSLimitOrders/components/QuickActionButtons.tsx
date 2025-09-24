@@ -13,6 +13,7 @@ import {
 } from '../state/form/quickActionAtoms'
 import { DEFAULT_PERCENTAGE_MAP } from '../constants'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
+import { ticksAtom } from '../state/form/ticksAtom'
 
 // Quick Select Styles
 const ButtonsContainer = styled(FlexGap).attrs({ gap: '8px' })`
@@ -98,7 +99,8 @@ export const QuickActionButtons = () => {
   const setCustomMarketPrice = useSetAtom(customMarketPriceAtom)
   const setPercentDifference = useSetAtom(setPercentDifferenceAtom)
 
-  const showLowPriceWarning = percentage && Number(percentage) < 0
+  const ticksData = useAtomValue(ticksAtom)
+  const { isSellingOrBuyingAtWorsePrice } = ticksData || { isSellingOrBuyingAtWorsePrice: false }
 
   const handleCustomInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
@@ -184,7 +186,7 @@ export const QuickActionButtons = () => {
           </CustomInputContainer>
         </RowBetween>
       )}
-      {showLowPriceWarning && (
+      {isSellingOrBuyingAtWorsePrice && (
         <Message variant="warning" mt="2px">
           <Box>
             <Text as="span" small>
