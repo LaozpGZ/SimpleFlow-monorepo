@@ -1,4 +1,4 @@
-import { Modal, ModalV2 } from '@pancakeswap/uikit'
+import { ModalV2, MotionModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { OrdersTable } from './OrdersTable'
 
@@ -11,15 +11,16 @@ export const OrdersModal = ({ isOpen, onDismiss }: OrdersModalProps) => {
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-      <Modal
+      <MotionModal
         title={t('Limit Orders')}
-        bodyPadding="0 0 16px"
+        bodyPadding="0"
         headerPadding="8px 16px 4px !important"
         headerBorderColor="transparent"
+        minHeight="unset"
         minWidth={[null, null, null, '800px']}
       >
         <OrdersTable />
-      </Modal>
+      </MotionModal>
     </ModalV2>
   )
 }

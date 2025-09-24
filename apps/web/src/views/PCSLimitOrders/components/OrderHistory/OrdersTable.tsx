@@ -1,4 +1,15 @@
-import { Button, FlexGap, IconButton, ScanLink, Skeleton, SwapHorizIcon, Table, Text, Toggle } from '@pancakeswap/uikit'
+import {
+  Box,
+  Button,
+  FlexGap,
+  IconButton,
+  ScanLink,
+  Skeleton,
+  SwapHorizIcon,
+  Table,
+  Text,
+  Toggle,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 import { OrderStatus, ResponseOrder } from 'views/PCSLimitOrders/types/orders.types'
@@ -24,6 +35,7 @@ const Th = styled.th`
 `
 
 const Tr = styled.tr`
+  height: 74px;
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
 
   &:last-child {
@@ -125,7 +137,7 @@ export const OrdersTable = () => {
   const { data, toggleOpenFilter, filterOrderStatus, isLoading } = useUserLimitOrders()
 
   return (
-    <>
+    <Box>
       <Table>
         <Thead>
           <tr>
@@ -149,14 +161,15 @@ export const OrdersTable = () => {
             : data?.map((order) => <OrderTableRow key={order.order_id} order={order} />)}
         </tbody>
       </Table>
+
       <Pagination />
-    </>
+    </Box>
   )
 }
 
 const LoadingRow = () => {
   return (
-    <tr>
+    <Tr>
       <Td>
         <Skeleton width="100px" height="30px" />
       </Td>
@@ -178,6 +191,6 @@ const LoadingRow = () => {
       <Td>
         <Skeleton height="30px" />
       </Td>
-    </tr>
+    </Tr>
   )
 }

@@ -8,13 +8,14 @@ import { PCS_LIMIT_ORDER_HISTORY_URL, ORDERS_PER_PAGE } from '../constants'
 import { OrderHistoryResponse, PaginationParams, OrderStatus } from '../types/orders.types'
 import {
   currentCursorAtom,
-  cursorsAtom,
+  pageCursorsAtom,
   paginationDirectionAtom,
   currentPageAtom,
   filterOrderStatusAtom,
   canGoBackAtom,
   resetPaginationAtom,
   toggleOpenFilterAtom,
+  PageCursor,
 } from '../state/pagination/paginationAtoms'
 
 async function getUserLimitOrders(
@@ -25,9 +26,6 @@ async function getUserLimitOrders(
 ) {
   const url = new URL(`${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}${orderStatus ? `/${orderStatus}` : ''}`)
 
-  if (pagination?.before) {
-    url.searchParams.set('before', pagination.before)
-  }
   if (pagination?.after) {
     url.searchParams.set('after', pagination.after)
   }
@@ -53,7 +51,7 @@ export const useUserLimitOrders = () => {
   // Use atoms for shared state
   const filterOrderStatus = useAtomValue(filterOrderStatusAtom)
   const [currentCursor, setCurrentCursor] = useAtom(currentCursorAtom)
-  const [cursors, setCursors] = useAtom(cursorsAtom)
+  const [pageCursors, setPageCursors] = useAtom(pageCursorsAtom)
   const [paginationDirection, setPaginationDirection] = useAtom(paginationDirectionAtom)
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom)
   const canGoBack = useAtomValue(canGoBackAtom)
@@ -66,16 +64,24 @@ export const useUserLimitOrders = () => {
       if (!account) return { orders: [], paginationInfo: null }
 
       const paginationParams: PaginationParams = {}
-      if (currentCursor && paginationDirection === 'forward') {
+      if (currentCursor) {
         paginationParams.after = currentCursor
-      } else if (currentCursor && paginationDirection === 'backward') {
-        paginationParams.before = currentCursor
       }
 
       const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams)
       const { rows } = data
 
       console.log('%c [Order History Data]', 'background: green;color: white', rows)
+
+      // Store cursors for the current page for consistent navigation
+      setPageCursors((prev) => {
+        const newMap = new Map(prev)
+        newMap.set(currentPage, {
+          startCursor: data.startCursor,
+          endCursor: data.endCursor,
+        })
+        return newMap
+      })
 
       return {
         orders: rows,
@@ -96,44 +102,36 @@ export const useUserLimitOrders = () => {
   const nextPage = useCallback(() => {
     const paginationInfo = queryResult.data?.paginationInfo
     if (paginationInfo?.hasNextPage && paginationInfo.endCursor) {
-      // Save current cursor for backward navigation
-      if (currentCursor) {
-        setCursors((prev) => [...prev, currentCursor])
-      }
+      // Navigate using the current page's endCursor
       setCurrentCursor(paginationInfo.endCursor)
       setPaginationDirection('forward')
       setCurrentPage((prev) => prev + 1)
     }
-  }, [
-    queryResult.data?.paginationInfo,
-    currentCursor,
-    setCursors,
-    setCurrentCursor,
-    setPaginationDirection,
-    setCurrentPage,
-  ])
+  }, [queryResult.data?.paginationInfo, setCurrentCursor, setPaginationDirection, setCurrentPage])
 
   const previousPage = useCallback(() => {
-    if (cursors.length > 0) {
-      const previousCursor = cursors[cursors.length - 1]
-      setCursors((prev) => prev.slice(0, -1))
-      setCurrentCursor(previousCursor)
-      setPaginationDirection('backward')
-      setCurrentPage((prev) => prev - 1)
-    } else {
-      // Go to first page
-      setCurrentCursor(null)
-      setPaginationDirection(null)
-      setCurrentPage(1)
+    if (currentPage > 1) {
+      const targetPage = currentPage - 1
+      if (targetPage === 1) {
+        // Go to first page - no cursor needed
+        setCurrentCursor(null)
+        setPaginationDirection(null)
+        setCurrentPage(1)
+      } else {
+        // Use the endCursor from the page before the target page
+        const previousPageCursor = pageCursors.get(targetPage - 1)
+        if (previousPageCursor?.endCursor) {
+          setCurrentCursor(previousPageCursor.endCursor)
+          setPaginationDirection('backward')
+          setCurrentPage(targetPage)
+        }
+      }
     }
-  }, [cursors, setCursors, setCurrentCursor, setPaginationDirection, setCurrentPage])
+  }, [currentPage, pageCursors, setCurrentCursor, setPaginationDirection, setCurrentPage])
 
-  // Calculate canGoForward based on pagination direction and API response
+  // Calculate canGoForward based on API response
   const paginationInfo = queryResult.data?.paginationInfo
-  const canGoForward =
-    paginationDirection === 'backward'
-      ? paginationInfo?.hasPrevPage ?? false // When going backward, hasPrevPage indicates we can go forward again
-      : paginationInfo?.hasNextPage ?? false // When going forward, hasNextPage indicates we can continue forward
+  const canGoForward = paginationInfo?.hasNextPage ?? false
 
   const orders = queryResult.data?.orders || []
 
