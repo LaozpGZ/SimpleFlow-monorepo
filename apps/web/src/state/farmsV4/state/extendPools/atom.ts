@@ -32,7 +32,7 @@ export type ExtendPoolsQuery = FetchPoolsProps & {
 export const DEFAULT_QUERIES = {
   protocols: Object.values(Protocol),
   orderBy: PoolSortBy.VOL,
-  chains: [...supportedChainIdV4],
+  chains: [...supportedChainIdV4.filter((id) => isEvm(id))] as ChainId[],
   pools: [],
   tokens: [],
   before: '',
