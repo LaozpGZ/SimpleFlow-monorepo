@@ -168,7 +168,7 @@ export const QuickActionButtons = () => {
       </ButtonsContainer>
       {isSmallScreen && (
         <RowBetween mt="8px" alignItems="center">
-          <Text>{t('Custom')}</Text>
+          <Text color="textSubtle">{t('Custom')}</Text>
           <CustomInputContainer $small>
             <StyledInput
               value={localPercent}

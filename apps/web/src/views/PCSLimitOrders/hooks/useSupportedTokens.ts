@@ -14,31 +14,27 @@ export const useSupportedTokens = () => {
   const supportedPoolsList = useAtomValue(supportedPoolsListAtom)
 
   // Supported tokens bi-directional map
-  // TODO: Memoize without losing native token in output (Bug)
   const tokenMap = useMemo(
     () => getTokensMap(supportedPoolsList.filter((pool) => pool.chainId === chainId)),
     [supportedPoolsList, chainId],
   )
 
-  // console.log('tokenMap', {
-  //   supportedPoolsList: supportedPoolsList.filter((pool) => pool.chainId === chainId),
-  //   tokenMap,
-  // })
-
   const supportedTokens = useMemo(() => {
     let isNativeInputSupported = false
     let isNativeOutputSupported = false
 
-    const inputTokenAddresses = Object.keys(tokenMap) ?? []
-    const outputTokenAddresses = inputCurrency ? tokenMap[getCurrencyAddress(inputCurrency)] ?? [] : []
+    let inputTokenAddresses = Object.keys(tokenMap) ?? []
+    let outputTokenAddresses = inputCurrency ? tokenMap[getCurrencyAddress(inputCurrency)] ?? [] : []
 
-    if (inputTokenAddresses.includes(ZERO_ADDRESS)) {
-      inputTokenAddresses.splice(inputTokenAddresses.indexOf(ZERO_ADDRESS), 1)
+    const zeroAddressInputIndex = inputTokenAddresses.indexOf(ZERO_ADDRESS)
+    if (zeroAddressInputIndex !== -1) {
+      inputTokenAddresses = inputTokenAddresses.toSpliced(zeroAddressInputIndex, 1)
       isNativeInputSupported = true
     }
 
-    if (outputTokenAddresses.includes(ZERO_ADDRESS)) {
-      outputTokenAddresses.splice(outputTokenAddresses.indexOf(ZERO_ADDRESS), 1)
+    const zeroAddressOutputIndex = outputTokenAddresses.indexOf(ZERO_ADDRESS)
+    if (zeroAddressOutputIndex !== -1) {
+      outputTokenAddresses = outputTokenAddresses.toSpliced(zeroAddressOutputIndex, 1)
       isNativeOutputSupported = true
     }
 
