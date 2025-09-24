@@ -10,13 +10,19 @@ export { useBlockExploreName, useBlockExploreLink } from '../hooks/useBlockExplo
 
 // returns the checksummed address if the address is valid, otherwise returns undefined
 
-function getSolExplorerLink(
+export function getSolExplorerLink(
   data: string | number | undefined | null,
-  type: 'transaction' | 'token' | 'address' | 'block' | 'countdown' | 'nft',
+  type: 'transaction' | 'token' | 'account' | 'address' | 'block' | 'countdown' | 'nft',
+  explorerHost = 'https://solscan.io',
 ) {
   switch (type) {
     case 'transaction':
-      return `https://solscan.io/tx/${data}`
+      return `${explorerHost}/tx/${data}`
+    case 'token':
+      return `${explorerHost}/token/${data}`
+    case 'account':
+    case 'address':
+      return `${explorerHost}/account/${data}`
     default:
       throw new Error(`Unsupported Solana explorer type: ${type}`)
   }
