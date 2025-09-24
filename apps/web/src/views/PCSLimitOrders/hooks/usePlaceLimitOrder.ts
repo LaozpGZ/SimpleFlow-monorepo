@@ -9,6 +9,7 @@ import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { stringify } from 'viem/utils'
 import { Hex } from 'viem'
+import { calculateGasMargin } from 'utils'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
 import { parsedAmountsAtom } from '../state/form/inputAtoms'
@@ -57,28 +58,12 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
     const encodedPoolKey = encodePoolKey(poolKey)
 
     // Ticks Calculation
-    const {
-      invertedTickLower,
-      invertedTickUpper,
-      invertedTargetTick,
-      zeroForOne,
-      tickLower: tickLower_,
-      tickUpper: tickUpper_,
-    } = ticksData
-
-    // For Limit Orders, the tick direction is opposite to pool's direction
-    // const tickLower = invertedTickLower
-    // const tickUpper = invertedTickUpper
-    // const targetTick = invertedTargetTick
+    const { invertedTickLower, invertedTickUpper, zeroForOne, tickLower: tickLower_, tickUpper: tickUpper_ } = ticksData
 
     // TESTING: Take min/max of ticks for now.
     // ! INVERTED needed only if selling/buying at BAD price
     const tickLower = zeroForOne ? Math.max(tickLower_, invertedTickUpper) : Math.min(tickLower_, invertedTickUpper)
     const tickUpper = zeroForOne ? Math.max(tickUpper_, invertedTickLower) : Math.min(tickUpper_, invertedTickLower)
-
-    // This works!
-    // const tickLower = tickLower_
-    // const tickUpper = tickUpper_
 
     const targetTick = tickLower
 
@@ -119,21 +104,23 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
     })
 
     try {
-      // const estimatedGas = await contract.estimateGas.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
-      //   account,
-      // })
+      // Gas Fees to be paid by user for Limit Order
+      const GAS_FEE = await contract.read.GAS_FEE()
 
-      // console.log('placeOrder: estimatedGas', estimatedGas)
+      // Total amount in native token
+      const value = GAS_FEE + (inputCurrency.isNative ? parsedAmountA : 0n)
 
-      // TODO: Add gas fee checks later
-      const value = inputCurrency.isNative ? parsedAmountA : 0n
+      const estimatedGas = await contract.estimateGas.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
+        account,
+        value,
+      })
 
       const receipt = await fetchWithCatchTxError(async () => {
         return contract.write.placeOrder([encodedPoolKey, targetTick, zeroForOne, liquidity], {
           account,
           chain: contract.chain,
           value,
-          // gas: calculateGasMargin(estimatedGas),
+          gas: calculateGasMargin(estimatedGas),
         })
       })
 
