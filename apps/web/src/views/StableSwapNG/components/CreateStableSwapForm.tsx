@@ -1,6 +1,6 @@
 import { AutoColumn, Card, CardBody, Grid } from '@pancakeswap/uikit'
-import { StableNGFieldSelectCurrencies } from '../components/stableNG/FieldSelectCurrency'
-import { ParamSettingSection } from '../components/stableNG/ParamSettingSection'
+import { StableNGFieldSelectCurrencies } from './FieldSelectCurrency'
+import { ParamSettingSection } from './ParamSettingSection'
 
 export const CreateStableSwapForm = () => {
   return (
