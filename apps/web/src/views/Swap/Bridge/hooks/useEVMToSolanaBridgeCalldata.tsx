@@ -43,6 +43,7 @@ export const useEVMToSolanaBridgeCalldata = ({
   >({
     queryKey: [
       'evm-to-solana-bridge-calldata',
+      order?.bridgeTransactionData?.requestId,
       order?.trade?.inputAmount?.currency?.symbol,
       order?.trade?.inputAmount?.currency?.chainId,
       order?.trade?.outputAmount?.currency?.symbol,
