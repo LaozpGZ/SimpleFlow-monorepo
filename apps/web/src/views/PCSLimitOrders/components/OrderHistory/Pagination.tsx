@@ -1,5 +1,5 @@
 import { PaginationButton } from '@pancakeswap/uikit'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 
 export const Pagination = () => {
@@ -16,6 +16,38 @@ export const Pagination = () => {
     },
     [currentPage, canGoBack, canGoForward, nextPage, previousPage, isLoading],
   )
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (isLoading) return
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault()
+          if (canGoBack) {
+            previousPage()
+          }
+          break
+        case 'ArrowRight':
+          event.preventDefault()
+          if (canGoForward) {
+            nextPage()
+          }
+          break
+        default:
+          break
+      }
+    },
+    [canGoBack, canGoForward, nextPage, previousPage, isLoading],
+  )
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
 
   return (
     <PaginationButton
