@@ -492,7 +492,7 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
               <LiquiditySlippageButton />
             </RowBetween>
             {buttons}
-            {hasZapV3Pool && hasInsufficentBalance && (
+            {ownsNFT && hasZapV3Pool && hasInsufficentBalance && (
               <ZapLiquidityWidget
                 tokenId={tokenId}
                 pool={pool}
