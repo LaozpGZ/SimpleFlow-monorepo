@@ -411,7 +411,7 @@ function CurrencySearch({
           />
         )}
       </AutoColumn>
-      getCurrencyListRows()
+      {getCurrencyListRows()}
     </>
   )
 }
