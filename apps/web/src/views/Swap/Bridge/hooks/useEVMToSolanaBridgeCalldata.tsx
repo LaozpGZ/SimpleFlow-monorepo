@@ -48,6 +48,7 @@ export const useEVMToSolanaBridgeCalldata = ({
       order?.trade?.outputAmount?.currency?.symbol,
       order?.trade?.outputAmount?.currency?.chainId,
       order?.trade?.inputAmount?.quotient?.toString(),
+      order?.trade?.outputAmount?.quotient?.toString(),
       solanaAccount,
       account,
       allowedSlippage,
