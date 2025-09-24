@@ -1,4 +1,4 @@
-import { Button, FlexGap, IconButton, ScanLink, SwapHorizIcon, Table, Td, Text, Toggle } from '@pancakeswap/uikit'
+import { Button, FlexGap, IconButton, ScanLink, Skeleton, SwapHorizIcon, Table, Text, Toggle } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 import { OrderStatus, ResponseOrder } from 'views/PCSLimitOrders/types/orders.types'
@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
 import { TokenAmountDisplay } from './TableItems/TokenAmountDisplay'
+import { Pagination } from './Pagination'
 
 const Thead = styled.thead`
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -24,6 +25,16 @@ const Th = styled.th`
 
 const Tr = styled.tr`
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
+
+  &:last-child {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  }
+`
+
+const Td = styled.td`
+  color: ${({ theme }) => theme.colors.text};
+  padding: 8px 16px;
+  vertical-align: middle;
 `
 
 interface OrderTableRowProps {
@@ -49,7 +60,13 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
 
   return (
     <Tr>
-      <Td>{currencyA && <TokenAmountDisplay currency={currencyA} amount={originalAmountA ?? '0'} />}</Td>
+      <Td>
+        {/* debugging */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontSize: '12px', color: 'gray' }}>[id {order.order_id}]</span>
+          {currencyA && <TokenAmountDisplay currency={currencyA} amount={originalAmountA ?? '0'} />}
+        </div>
+      </Td>
       <Td>{currencyB && <TokenAmountDisplay currency={currencyB} amount={originalAmountB ?? '0'} />}</Td>
       <Td>
         <FlexGap alignItems="center" gap="4px">
@@ -74,8 +91,14 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
         </Text>
       </Td>
       <Td>
-        {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
-        {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
+        {liveStatus === OrderStatus.Cancelled ? (
+          '-'
+        ) : (
+          <>
+            {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
+            {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
+          </>
+        )}
       </Td>
       <Td>
         <FlexGap gap="8px" alignItems="center">
@@ -99,7 +122,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
 export const OrdersTable = () => {
   const { t } = useTranslation()
 
-  const { data, toggleOpenFilter, filterOrderStatus } = useUserLimitOrders()
+  const { data, toggleOpenFilter, filterOrderStatus, isLoading } = useUserLimitOrders()
 
   return (
     <>
@@ -121,12 +144,40 @@ export const OrdersTable = () => {
           </tr>
         </Thead>
         <tbody>
-          {data?.map((order) => (
-            <OrderTableRow key={order.order_id} order={order} />
-          ))}
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, index) => <LoadingRow key={index} />)
+            : data?.map((order) => <OrderTableRow key={order.order_id} order={order} />)}
         </tbody>
       </Table>
-      {/* pagination support here for desktop. For mobile, infinite scroll when element interacts */}
+      <Pagination />
     </>
+  )
+}
+
+const LoadingRow = () => {
+  return (
+    <tr>
+      <Td>
+        <Skeleton width="100px" height="30px" />
+      </Td>
+      <Td>
+        <Skeleton width="100px" height="30px" />
+      </Td>
+      <Td>
+        <Skeleton width="150px" height="30px" />
+      </Td>
+      <Td>
+        <Skeleton width="80px" height="30px" />
+      </Td>
+      <Td>
+        <Skeleton height="30px" />
+      </Td>
+      <Td>
+        <Skeleton height="30px" />
+      </Td>
+      <Td>
+        <Skeleton height="30px" />
+      </Td>
+    </tr>
   )
 }

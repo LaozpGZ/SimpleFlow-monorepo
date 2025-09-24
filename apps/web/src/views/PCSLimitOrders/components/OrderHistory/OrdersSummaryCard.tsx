@@ -21,14 +21,14 @@ const StyledCard = styled(LightCard)`
 export const OrdersSummaryCard = () => {
   const { t } = useTranslation()
 
-  const { data } = useUserLimitOrders()
+  const { data, isLoading } = useUserLimitOrders()
 
   const numOpenOrders = data?.filter((order) => order && order.status === OrderStatus.Open).length
   const totalOrders = data?.length
 
   const { isOpen, onOpen, onDismiss } = useModalV2()
 
-  if (!totalOrders) return null
+  if (!totalOrders && !isLoading) return null
 
   return (
     <>

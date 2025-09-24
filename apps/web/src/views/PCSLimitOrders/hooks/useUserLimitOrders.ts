@@ -1,10 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { SLOW_INTERVAL } from 'config/constants'
-import { PCS_LIMIT_ORDER_HISTORY_URL } from '../constants'
+import { PCS_LIMIT_ORDER_HISTORY_URL, ORDERS_PER_PAGE } from '../constants'
 import { OrderHistoryResponse, PaginationParams, OrderStatus } from '../types/orders.types'
+import {
+  currentCursorAtom,
+  cursorsAtom,
+  paginationDirectionAtom,
+  currentPageAtom,
+  filterOrderStatusAtom,
+  canGoBackAtom,
+  resetPaginationAtom,
+  toggleOpenFilterAtom,
+} from '../state/pagination/paginationAtoms'
 
 async function getUserLimitOrders(
   chainName: string,
@@ -38,13 +49,15 @@ export const useUserLimitOrders = () => {
   const { account, chainId } = useAccountActiveChain()
   const chainName = chainIdToExplorerInfoChainName[chainId]
 
-  // Order status filter state
-  const [filterOrderStatus, setFilterOrderStatus] = useState<OrderStatus | undefined>(undefined)
-
-  // Cursor-based pagination state
-  const [currentCursor, setCurrentCursor] = useState<string | null>(null)
-  const [cursors, setCursors] = useState<string[]>([]) // Stack of cursors for backward navigation
-  const [paginationDirection, setPaginationDirection] = useState<'forward' | 'backward' | null>(null)
+  // Use atoms for shared state
+  const filterOrderStatus = useAtomValue(filterOrderStatusAtom)
+  const [currentCursor, setCurrentCursor] = useAtom(currentCursorAtom)
+  const [cursors, setCursors] = useAtom(cursorsAtom)
+  const [paginationDirection, setPaginationDirection] = useAtom(paginationDirectionAtom)
+  const [currentPage, setCurrentPage] = useAtom(currentPageAtom)
+  const canGoBack = useAtomValue(canGoBackAtom)
+  const resetPagination = useSetAtom(resetPaginationAtom)
+  const toggleOpenFilter = useSetAtom(toggleOpenFilterAtom)
 
   const queryResult = useQuery({
     queryKey: ['userLimitOrders', chainId, account, filterOrderStatus, currentCursor, paginationDirection],
@@ -74,6 +87,7 @@ export const useUserLimitOrders = () => {
     },
     enabled: !!account && !!chainName,
     refetchInterval: SLOW_INTERVAL,
+    staleTime: 100, // 100ms
   })
 
   // Navigation methods
@@ -86,8 +100,16 @@ export const useUserLimitOrders = () => {
       }
       setCurrentCursor(paginationInfo.endCursor)
       setPaginationDirection('forward')
+      setCurrentPage((prev) => prev + 1)
     }
-  }, [queryResult.data?.paginationInfo, currentCursor])
+  }, [
+    queryResult.data?.paginationInfo,
+    currentCursor,
+    setCursors,
+    setCurrentCursor,
+    setPaginationDirection,
+    setCurrentPage,
+  ])
 
   const previousPage = useCallback(() => {
     if (cursors.length > 0) {
@@ -95,34 +117,22 @@ export const useUserLimitOrders = () => {
       setCursors((prev) => prev.slice(0, -1))
       setCurrentCursor(previousCursor)
       setPaginationDirection('backward')
+      setCurrentPage((prev) => prev - 1)
     } else {
       // Go to first page
       setCurrentCursor(null)
       setPaginationDirection(null)
+      setCurrentPage(1)
     }
-  }, [cursors])
+  }, [cursors, setCursors, setCurrentCursor, setPaginationDirection, setCurrentPage])
 
-  const resetPagination = useCallback(() => {
-    setCurrentCursor(null)
-    setCursors([])
-    setPaginationDirection(null)
-  }, [])
-
-  // Toggle function for order status filter
-  const toggleOpenFilter = useCallback(() => {
-    setFilterOrderStatus((prev) => (prev === OrderStatus.Open ? undefined : OrderStatus.Open))
-    // Reset pagination when filter changes
-    setCurrentCursor(null)
-    setCursors([])
-    setPaginationDirection(null)
-  }, [])
-
-  const canGoBack = cursors.length > 0 || currentCursor !== null
   const canGoForward = queryResult.data?.paginationInfo?.hasNextPage ?? false
+
+  const orders = queryResult.data?.orders || []
 
   return {
     ...queryResult,
-    data: queryResult.data?.orders || [],
+    data: orders,
     paginationInfo: queryResult.data?.paginationInfo || null,
     filterOrderStatus,
     nextPage,
@@ -131,5 +141,7 @@ export const useUserLimitOrders = () => {
     toggleOpenFilter,
     canGoBack,
     canGoForward,
+    currentPage,
+    ordersPerPage: ORDERS_PER_PAGE,
   }
 }
