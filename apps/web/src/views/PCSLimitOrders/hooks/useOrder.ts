@@ -95,7 +95,7 @@ export const useOrder = (order: ResponseOrder) => {
     queryFn: async () => {
       if (!account) return undefined
 
-      if (order.status === OrderStatus.Open) {
+      if (order.status === OrderStatus.Open || order.status === OrderStatus.PartiallyFilled) {
         const response = await simulateLimitOrderContract(
           contract,
           'cancelOrder',
@@ -110,7 +110,7 @@ export const useOrder = (order: ResponseOrder) => {
         return response.result as unknown as [bigint, bigint]
       }
 
-      if (order.status === OrderStatus.Filled || order.status === OrderStatus.PartiallyFilled) {
+      if (order.status === OrderStatus.Filled) {
         const response = await simulateLimitOrderContract(
           contract,
           'withdraw',

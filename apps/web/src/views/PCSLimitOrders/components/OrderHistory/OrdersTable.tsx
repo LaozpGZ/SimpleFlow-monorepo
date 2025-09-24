@@ -80,7 +80,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
       <Td>
         <FlexGap gap="8px" alignItems="center">
           <ScanLink color="primary60" size="24px" href={getBlockExploreLink(order.transaction_hash, 'transaction')} />
-          {liveStatus === OrderStatus.Open && (
+          {(liveStatus === OrderStatus.Open || liveStatus === OrderStatus.PartiallyFilled) && (
             <Button variant="dangerOutline" onClick={handleCancelOrder}>
               {t('Cancel')}
             </Button>
