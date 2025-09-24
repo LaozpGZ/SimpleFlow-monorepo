@@ -26,7 +26,11 @@ export const TradeDetails = (props: BoxProps) => {
             <DottedHelpText>{t('Fees Earned')}</DottedHelpText>
           </QuestionHelperV2>
 
-          <Text small>{feesEarnedUSD ? `$${feesEarnedUSD.toFormat(2)}` : '-'}</Text>
+          <Text small>
+            {feesEarnedUSD
+              ? `$${formatNumber(feesEarnedUSD, { maxDecimalDisplayDigits: 4, maximumSignificantDigits: 4 })}`
+              : '-'}
+          </Text>
         </RowBetween>
         <RowBetween>
           <QuestionHelperV2 text={t('Amount you will receive on order fill')}>

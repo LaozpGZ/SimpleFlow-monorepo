@@ -15,7 +15,15 @@ export const useSupportedTokens = () => {
 
   // Supported tokens bi-directional map
   // TODO: Memoize without losing native token in output (Bug)
-  const tokenMap = useMemo(() => getTokensMap(supportedPoolsList), [supportedPoolsList])
+  const tokenMap = useMemo(
+    () => getTokensMap(supportedPoolsList.filter((pool) => pool.chainId === chainId)),
+    [supportedPoolsList, chainId],
+  )
+
+  // console.log('tokenMap', {
+  //   supportedPoolsList: supportedPoolsList.filter((pool) => pool.chainId === chainId),
+  //   tokenMap,
+  // })
 
   const supportedTokens = useMemo(() => {
     let isNativeInputSupported = false
