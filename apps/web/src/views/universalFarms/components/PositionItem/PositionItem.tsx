@@ -1,4 +1,4 @@
-import { Box, Column, Flex, useMatchBreakpoints, useTooltip, TokenImage, TokenLogo } from '@pancakeswap/uikit'
+import { Box, Column, Flex, useMatchBreakpoints, useTooltip, TokenLogo } from '@pancakeswap/uikit'
 import { getCurrencyLogoSrcs, TokenPairLogo } from 'components/TokenImage'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { PERSIST_CHAIN_KEY } from 'config/constants'

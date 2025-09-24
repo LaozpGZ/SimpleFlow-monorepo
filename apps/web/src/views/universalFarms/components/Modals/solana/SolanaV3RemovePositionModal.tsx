@@ -163,7 +163,7 @@ export default function SolanaV3RemovePositionModal({
       console.error(e)
       setIsSending(false)
     }
-  }, [onClose, percent, poolInfo, position, removeLiquidity, amount0, amount1])
+  }, [onClose, percent, poolInfo, position, removeLiquidity, amount0, amount1, closePosition])
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onClose} closeOnOverlayClick>

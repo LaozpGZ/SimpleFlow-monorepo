@@ -121,7 +121,7 @@ export const SolanaV3AddPositionModal: React.FC<SolanaV3AddPositionModalProps> =
     if (focusSide === 0 && amount1AddWithSlippage?.toExact() !== field1) {
       setFields((prev) => [prev[0], amount1AddWithSlippage?.toExact() ?? ''])
     }
-  }, [amount0AddWithSlippage, amount1AddWithSlippage, fields[0], fields[1]])
+  }, [amount0AddWithSlippage, amount1AddWithSlippage, fields[0], fields[1], focusSide])
 
   const handleConfirm = useCallback(async () => {
     if (!liquidityAdd || !amount0AddWithSlippage || !amount1AddWithSlippage) return
@@ -153,7 +153,7 @@ export const SolanaV3AddPositionModal: React.FC<SolanaV3AddPositionModalProps> =
       console.error(e)
       setIsSending(false)
     }
-  }, [addLiquidity, poolInfo, position, liquidityAdd, amount0Add, amount1Add, onClose])
+  }, [addLiquidity, poolInfo, position, liquidityAdd, amount0AddWithSlippage, amount1AddWithSlippage, onClose])
 
   const handleFieldAInput = useCallback(
     (value: string) => {
@@ -300,10 +300,7 @@ const PriceRangeCard: React.FC<{
   position: SolanaV3PositionDetail
 }> = ({ poolInfo, position }) => {
   const { theme } = useTheme()
-  const {
-    t,
-    currentLanguage: { locale },
-  } = useTranslation()
+  const { t } = useTranslation()
   const [baseIn, setBaseIn] = useState(true)
 
   const currency0 = useMemo(() => convertRawTokenInfoIntoSPLToken(poolInfo?.mintA as TokenInfo), [poolInfo?.mintA])
