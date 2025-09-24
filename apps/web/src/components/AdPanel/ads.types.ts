@@ -119,4 +119,6 @@ export interface RemoteAds {
     external?: boolean
     style?: CSSProperties
   }>
+  startTime?: string
+  endTime?: string
 }
