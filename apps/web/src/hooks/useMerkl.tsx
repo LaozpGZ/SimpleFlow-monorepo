@@ -46,7 +46,7 @@ export function useMerklInfo(poolAddress?: string): {
     queryKey: [`fetchMerklPools`],
     queryFn: async () => {
       const responsev4 = await fetch(
-        `${MERKL_API_V4}/opportunities?${chainIds.join(
+        `${MERKL_API_V4}/opportunities?chainId=${chainIds.join(
           ',',
         )}&test=false&mainProtocolId=pancake-swap&action=POOL,HOLD&status=LIVE`,
       )
