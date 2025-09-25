@@ -81,6 +81,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
     originalAmountB,
     amountBReceived,
     amountAReceived,
+    filledPercentage,
     setIsInverted,
     handleCancelOrder,
     handleWithdrawOrder,
@@ -112,10 +113,9 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
       <Td>
         <OrderStatusDisplay status={liveStatus} />
       </Td>
-      {/* TODO: Handle Partial Filled case. Maybe get data from Position ID */}
       <Td>
         <Text small bold>
-          {liveStatus === OrderStatus.Withdrawn || liveStatus === OrderStatus.Filled ? '100%' : '0%'}
+          {filledPercentage || '0'}%
         </Text>
       </Td>
       <Td>
@@ -163,6 +163,7 @@ const MobileOrder = ({ order }: MobileOrderProps) => {
     originalAmountB,
     amountBReceived,
     amountAReceived,
+    filledPercentage,
     setIsInverted,
     handleCancelOrder,
     handleWithdrawOrder,
@@ -199,7 +200,7 @@ const MobileOrder = ({ order }: MobileOrderProps) => {
         </FlexGap>
         <FlexGap alignItems="center" justifyContent="space-between">
           <Text color="textSubtle">{t('Filled')}</Text>
-          <Text>{liveStatus === OrderStatus.Filled ? '100%' : '0%'}</Text>
+          <Text>{filledPercentage || '0'}%</Text>
         </FlexGap>
         <FlexGap alignItems="center" justifyContent="space-between">
           <Text color="textSubtle">{t('Amount Received')}</Text>

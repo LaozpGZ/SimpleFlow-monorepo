@@ -11,7 +11,8 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { SqrtPriceMath, TickMath } from '@pancakeswap/v3-sdk'
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { FAST_INTERVAL } from 'config/constants'
+import { BigNumber as BN } from 'bignumber.js'
 import { OrderStatus, ResponseOrder } from '../types/orders.types'
 import { simulateLimitOrderContract } from '../utils/orders'
 import { useUserLimitOrders } from './useUserLimitOrders'
@@ -34,7 +35,8 @@ export const useOrder = (order: ResponseOrder) => {
   // Pool
   const { data: pool } = useQuery({
     queryKey: ['order-pool', order.pool_id],
-    queryFn: () => fetchCLPoolInfo(order.pool_id, chainId),
+    queryFn: async () => fetchCLPoolInfo(order.pool_id, chainId),
+    refetchInterval: FAST_INTERVAL,
   })
 
   // Currencies
@@ -58,7 +60,7 @@ export const useOrder = (order: ResponseOrder) => {
     return formatPrice(finalPrice, 6, 'en-US')
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
-  // TODO: Check for fees calculation? At least quoted amount should be the same
+  // TODO: For partial filled, get amounts from position ID perhaps
   const [originalAmountA, originalAmountB] = useMemo(() => {
     if (!currency0 || !currency1 || !pool) return [undefined, undefined]
 
@@ -90,6 +92,7 @@ export const useOrder = (order: ResponseOrder) => {
   }, [currency0, currency1, order.liquidity, order.tick_lower, pool?.parameters.tickSpacing])
 
   // Amounts Received
+  // TODO: For Withdrawn case, get amounts from BE API
   const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
     queryKey: ['order-amounts-received', account, chainId, order.order_id, order.pool_id],
     queryFn: async () => {
@@ -125,33 +128,48 @@ export const useOrder = (order: ResponseOrder) => {
         return response.result as unknown as [bigint, bigint]
       }
 
-      // TODO: Get amount if Withdrawn or Cancelled.
-      // BE says will return liquidity value for Withdrawn case
-
       return [0n, 0n]
     },
     initialData: [0n, 0n],
   })
 
   const amountAReceived = useMemo(() => {
-    // Return original amounts if Withdrawn or Cancelled. May need to add fees calculation too
-    // if (!order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
-    //   return originalAmountA
-    // }
     if (!currencyA?.decimals || !currencyB?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount0Received, currencyA?.decimals)
     return formatUnits(amount1Received, currencyB?.decimals)
   }, [order.zero_for_one, amount0Received, amount1Received, currencyA?.decimals, currencyB?.decimals, originalAmountA])
 
   const amountBReceived = useMemo(() => {
-    // Return original amounts if Withdrawn or Cancelled. May need to add fees calculation too
-    // if (order.zero_for_one && (order.status === OrderStatus.Withdrawn || order.status === OrderStatus.Cancelled)) {
-    //   return originalAmountB
-    // }
     if (!currencyB?.decimals || !currencyA?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount1Received, currencyB?.decimals)
     return formatUnits(amount0Received, currencyA?.decimals)
   }, [order.zero_for_one, amount1Received, amount0Received, originalAmountB])
+
+  // Check for partial fill case
+  const isPartialFill = useMemo(() => {
+    if (order.status !== OrderStatus.Open || !pool) return false
+
+    // If tickLower < tickCurrent < tickLower + tickSpacing
+    if (pool.tick > order.tick_lower && pool.tick < order.tick_lower + pool.parameters.tickSpacing) {
+      return true
+    }
+
+    // If zeroForOne is false, then tickCurrent === tickLower is partial fill (Special case)
+    if (order.zero_for_one === false && pool.tick === order.tick_lower) {
+      return true
+    }
+
+    return false
+  }, [order.status, pool, order.tick_lower])
+
+  const filledPercentage = useMemo(() => {
+    if (isPartialFill && originalAmountB && amountBReceived) {
+      const expectedOutput = BN(originalAmountB)
+      const filledOutput = BN(amountBReceived)
+      return filledOutput.dividedBy(expectedOutput).multipliedBy(100).toFixed(0)
+    }
+    return liveStatus === OrderStatus.Filled || liveStatus === OrderStatus.Withdrawn ? '100' : '0'
+  }, [isPartialFill, liveStatus, originalAmountB, amountBReceived])
 
   // Actions
   const handleCancelOrder = useCallback(async () => {
@@ -213,7 +231,7 @@ export const useOrder = (order: ResponseOrder) => {
 
   return {
     pool,
-    liveStatus,
+    liveStatus: isPartialFill ? OrderStatus.PartiallyFilled : liveStatus,
     currencyA,
     currencyB,
     limitPrice,
@@ -222,6 +240,7 @@ export const useOrder = (order: ResponseOrder) => {
     originalAmountB,
     amountAReceived,
     amountBReceived,
+    filledPercentage,
     setIsInverted,
     handleCancelOrder,
     handleWithdrawOrder,
