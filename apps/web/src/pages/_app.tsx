@@ -171,7 +171,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const ShowMenu = Component.mp ? SharedComponentWithOutMenu : Menu
   const isShowScrollToTopButton = Component.isShowScrollToTopButton || true
   const shouldScreenWallet = Component.screen || false
-  const isBridge = typeof window !== 'undefined' && window.location.pathname.includes('/bridge')
 
   return (
     <Suspense>
