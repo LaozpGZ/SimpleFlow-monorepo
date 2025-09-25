@@ -2,8 +2,11 @@ import {
   AutoColumn,
   Box,
   Button,
+  DottedHelpText,
   FlexGap,
   IconButton,
+  QuestionHelper,
+  QuestionHelperV2,
   ScanLink,
   Skeleton,
   SwapHorizIcon,
@@ -204,7 +207,13 @@ const MobileOrder = ({ order }: MobileOrderProps) => {
           <Text>{filledPercentage || '0'}%</Text>
         </FlexGap>
         <FlexGap alignItems="center" justifyContent="space-between">
-          <Text color="textSubtle">{t('Amount Received')}</Text>
+          <QuestionHelperV2
+            text={t(
+              'Amount received includes fees earned and order fills. Pending orders may also show amounts if fees were earned during partial fills.',
+            )}
+          >
+            <DottedHelpText style={{ fontSize: '16px' }}>{t('Amount Received')}</DottedHelpText>
+          </QuestionHelperV2>
 
           <AutoColumn gap="4px" justifyItems="flex-end">
             {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
@@ -258,7 +267,17 @@ export const OrdersTable = () => {
             <Th>{t('Limit Price')}</Th>
             <Th>{t('Status')}</Th>
             <Th>{t('Filled')}</Th>
-            <Th>{t('Amount Received')}</Th>
+            <Th>
+              <FlexGap alignItems="center" gap="4px">
+                <span>{t('Amount Received')}</span>
+                <QuestionHelper
+                  color="secondary"
+                  text={t(
+                    'Amount received includes fees earned and order fills. Pending orders may also show amounts if fees were earned during partial fills.',
+                  )}
+                />
+              </FlexGap>
+            </Th>
             <Th>
               <OpenOrdersToggle />
             </Th>
