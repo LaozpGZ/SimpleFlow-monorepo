@@ -16,6 +16,7 @@ import { BigNumber as BN } from 'bignumber.js'
 import { OrderStatus, ResponseOrder } from '../types/orders.types'
 import { simulateLimitOrderContract } from '../utils/orders'
 import { useUserLimitOrders } from './useUserLimitOrders'
+import { bigNumberToPrice } from '../utils/price'
 
 export const useOrder = (order: ResponseOrder) => {
   const { t } = useTranslation()
@@ -56,8 +57,18 @@ export const useOrder = (order: ResponseOrder) => {
   const limitPrice = useMemo(() => {
     if (!pool || !currencyA || !currencyB) return undefined
     const price = tickToPrice(currencyA, currencyB, order.tick_lower)
-    const finalPrice = isInverted ? price.invert() : price
-    return formatPrice(finalPrice, 6, 'en-US')
+    const priceUpper = tickToPrice(currencyA, currencyB, order.tick_lower + pool.parameters.tickSpacing)
+
+    const sqrtPrice = isInverted
+      ? BN(price.invert().toFixed(18))
+          .multipliedBy(BN(priceUpper.invert().toFixed(18)))
+          .sqrt()
+      : BN(price.toFixed(18))
+          .multipliedBy(BN(priceUpper.toFixed(18)))
+          .sqrt()
+
+    const parsedSqrtPrice = bigNumberToPrice(sqrtPrice, currencyA, currencyB)
+    return formatPrice(parsedSqrtPrice, 6, 'en-US')
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
   // TODO: For partial filled, get amounts from position ID perhaps
