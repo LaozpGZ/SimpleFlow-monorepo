@@ -102,11 +102,15 @@ export const useOrder = (order: ResponseOrder) => {
   }, [currency0, currency1, order.liquidity, order.tick_lower, pool?.parameters.tickSpacing])
 
   // Amounts Received
-  // TODO: For Withdrawn case, get amounts from BE API
   const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
     queryKey: ['order-amounts-received', account, chainId, order.order_id, order.pool_id],
     queryFn: async () => {
       if (!account) return undefined
+
+      // Use amounts returned from API
+      if (order.status === OrderStatus.Withdrawn) {
+        return [BigInt(order.amount0), BigInt(order.amount1)]
+      }
 
       if (order.status === OrderStatus.Open || order.status === OrderStatus.PartiallyFilled) {
         const response = await simulateLimitOrderContract(
@@ -114,11 +118,6 @@ export const useOrder = (order: ResponseOrder) => {
           'cancelOrder',
           [BigInt(order.order_id), account],
           account,
-        )
-        console.log(
-          `%c [Order ${order.order_id}][Simulate Cancel Response]`,
-          'background: #fad7b6;color: black',
-          response,
         )
         return response.result as unknown as [bigint, bigint]
       }
@@ -129,11 +128,6 @@ export const useOrder = (order: ResponseOrder) => {
           'withdraw',
           [BigInt(order.order_id), account],
           account,
-        )
-        console.log(
-          `%c [Order ${order.order_id}][Simulate Withdraw Response]`,
-          'background: #fad7b6;color: black',
-          response,
         )
         return response.result as unknown as [bigint, bigint]
       }

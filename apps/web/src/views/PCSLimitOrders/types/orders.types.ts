@@ -31,6 +31,8 @@ export interface ResponseOrder {
   zero_for_one: boolean
   tick_lower: number
   transaction_hash: string
+  amount0: string
+  amount1: string
 }
 
 export enum OrderStatus {
