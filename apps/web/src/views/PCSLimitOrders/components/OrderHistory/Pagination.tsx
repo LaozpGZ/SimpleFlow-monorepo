@@ -1,8 +1,8 @@
-import { PaginationButton } from '@pancakeswap/uikit'
+import { Box, BoxProps, PaginationButton } from '@pancakeswap/uikit'
 import { useCallback, useEffect } from 'react'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 
-export const Pagination = () => {
+export const Pagination = (props: BoxProps) => {
   const { canGoBack, canGoForward, nextPage, previousPage, currentPage, isLoading } = useUserLimitOrders()
 
   const setCurrentPage = useCallback(
@@ -50,10 +50,12 @@ export const Pagination = () => {
   }, [handleKeyDown])
 
   return (
-    <PaginationButton
-      currentPage={currentPage}
-      setCurrentPage={setCurrentPage}
-      maxPage={!canGoForward ? currentPage : undefined}
-    />
+    <Box background="background" {...props}>
+      <PaginationButton
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        maxPage={!canGoForward ? currentPage : undefined}
+      />
+    </Box>
   )
 }

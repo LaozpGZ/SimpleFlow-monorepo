@@ -1,4 +1,5 @@
 import {
+  AutoColumn,
   Box,
   Button,
   FlexGap,
@@ -9,6 +10,7 @@ import {
   Table,
   Text,
   Toggle,
+  useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
@@ -19,6 +21,7 @@ import { getBlockExploreLink } from 'utils'
 import { OrderStatusDisplay } from './TableItems/OrderStatusDisplay'
 import { TokenAmountDisplay } from './TableItems/TokenAmountDisplay'
 import { Pagination } from './Pagination'
+import { OpenOrdersToggle } from './OpenOrdersToggle'
 
 const Thead = styled.thead`
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -47,6 +50,19 @@ const Td = styled.td`
   color: ${({ theme }) => theme.colors.text};
   padding: 8px 16px;
   vertical-align: middle;
+`
+
+const MobileOrderCard = styled(Box)`
+  padding: 16px;
+  border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
+
+  &:first-child {
+    border-top: none;
+  }
+
+  &:last-child {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  }
 `
 
 interface OrderTableRowProps {
@@ -131,10 +147,109 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
   )
 }
 
-export const OrdersTable = () => {
+interface MobileOrderProps {
+  order: ResponseOrder
+}
+const MobileOrder = ({ order }: MobileOrderProps) => {
   const { t } = useTranslation()
 
-  const { data, toggleOpenFilter, filterOrderStatus, isLoading } = useUserLimitOrders()
+  const {
+    liveStatus,
+    currencyA,
+    currencyB,
+    limitPrice,
+    isInverted,
+    originalAmountA,
+    originalAmountB,
+    amountBReceived,
+    amountAReceived,
+    setIsInverted,
+    handleCancelOrder,
+    handleWithdrawOrder,
+  } = useOrder(order)
+
+  return (
+    <MobileOrderCard>
+      <AutoColumn gap="8px">
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <OrderStatusDisplay status={liveStatus} />
+          <ScanLink color="primary60" size="24px" href={getBlockExploreLink(order.transaction_hash, 'transaction')} />
+        </FlexGap>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle">{t('Sell')}</Text>
+          {currencyA && <TokenAmountDisplay currency={currencyA} amount={originalAmountA ?? '0'} />}
+        </FlexGap>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle">{t('Buy')}</Text>
+          {currencyB && <TokenAmountDisplay currency={currencyB} amount={originalAmountB ?? '0'} />}
+        </FlexGap>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle">{t('Limit Price')}</Text>
+          <FlexGap alignItems="center" gap="4px">
+            <Text small bold>
+              1 {isInverted ? currencyB?.symbol : currencyA?.symbol}{' '}
+            </Text>
+            <IconButton onClick={() => setIsInverted(!isInverted)} variant="text" scale="xs">
+              <SwapHorizIcon width="18px" height="18px" color="primary60" />
+            </IconButton>{' '}
+            <Text small bold>
+              {limitPrice || '-'} {isInverted ? currencyA?.symbol : currencyB?.symbol}
+            </Text>
+          </FlexGap>
+        </FlexGap>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle">{t('Filled')}</Text>
+          <Text>{liveStatus === OrderStatus.Filled ? '100%' : '0%'}</Text>
+        </FlexGap>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle">{t('Amount Received')}</Text>
+
+          <AutoColumn gap="4px" justifyItems="flex-end">
+            {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
+            {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
+          </AutoColumn>
+        </FlexGap>
+
+        {(liveStatus === OrderStatus.Open || liveStatus === OrderStatus.PartiallyFilled) && (
+          <Button variant="dangerOutline" onClick={handleCancelOrder} width="100%">
+            {t('Cancel')}
+          </Button>
+        )}
+        {liveStatus === OrderStatus.Filled && (
+          <Button variant="primary60Outline" onClick={handleWithdrawOrder} width="100%">
+            {t('Withdraw')}
+          </Button>
+        )}
+      </AutoColumn>
+    </MobileOrderCard>
+  )
+}
+
+export const OrdersTable = () => {
+  const { t } = useTranslation()
+  const { isMobile, isTablet } = useMatchBreakpoints()
+  const isSmallScreen = isMobile || isTablet
+
+  const { data, isLoading } = useUserLimitOrders()
+
+  if (isSmallScreen) {
+    return (
+      <Box>
+        <Pagination
+          borderTop="1px solid"
+          borderBottom="1px solid"
+          borderColor="cardBorder"
+          position="sticky"
+          top="0"
+          zIndex="100"
+        />
+
+        {data?.map((order) => (
+          <MobileOrder key={order.order_id} order={order} />
+        ))}
+      </Box>
+    )
+  }
 
   return (
     <Box>
@@ -148,10 +263,7 @@ export const OrdersTable = () => {
             <Th>{t('Filled')}</Th>
             <Th>{t('Amount Received')}</Th>
             <Th>
-              <FlexGap alignItems="center" gap="4px">
-                <span>{t('View Pending Only')}</span>
-                <Toggle checked={filterOrderStatus === OrderStatus.Open} onChange={toggleOpenFilter} scale="sm" />
-              </FlexGap>
+              <OpenOrdersToggle />
             </Th>
           </tr>
         </Thead>
