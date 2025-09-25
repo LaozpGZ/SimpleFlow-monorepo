@@ -148,9 +148,9 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
             type: 'place-limit-order',
             summary: `Sell ${formattedAmounts[Field.CURRENCY_A]} ${inputCurrency.symbol} for ${
               formattedAmounts[Field.CURRENCY_B]
-            } ${outputCurrency.symbol} at ${formattedPrice} ${inputCurrency.symbol} per ${outputCurrency.symbol}`,
+            } ${outputCurrency.symbol} at ${formattedPrice} ${outputCurrency.symbol} per ${inputCurrency.symbol}`,
             translatableSummary: {
-              text: 'Sell %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% at %price% %inputSymbol% per %outputSymbol%',
+              text: 'Sell %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% at %price% %outputSymbol% per %inputSymbol%',
               data: {
                 inputAmount: formattedAmounts[Field.CURRENCY_A],
                 inputSymbol: inputCurrency.symbol,
