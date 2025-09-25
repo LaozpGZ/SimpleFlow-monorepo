@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { ApiTransaction, Transaction, TransactionType } from 'state/info/types'
 import { safeGetAddress } from 'utils/safeGetAddress'
+import { Percent } from '@pancakeswap/swap-sdk-core'
 
 export function shortenAddress(address: string, chars = 4): string {
   const parsed = safeGetAddress(address)
@@ -10,7 +11,7 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
 }
 export function feeTierPercent(fee: number): string {
-  return `${(fee / 10_000).toFixed(2)}%`
+  return `${new Percent(fee, 1000000).toSignificant(2)}%`
 }
 
 export const currentTimestamp = () => new Date().getTime()
