@@ -20,6 +20,8 @@ import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { useUserLimitOrders } from './useUserLimitOrders'
 import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
+import { OrderStatus } from '../types/orders.types'
+import { MAX_PENDING_ORDERS } from '../constants'
 
 interface UsePlaceLimitOrder {
   onError?: (error: any) => void
@@ -35,7 +37,8 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
   const { toastError } = useToast()
   const addTransaction = useTransactionAdder()
 
-  const { refetch: refetchUserLimitOrders } = useUserLimitOrders()
+  // Refetch user limit orders in OrdersSummaryCard
+  const { refetch: refetchUserLimitOrders } = useUserLimitOrders(OrderStatus.Open, MAX_PENDING_ORDERS)
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)

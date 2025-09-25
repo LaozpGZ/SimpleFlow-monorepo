@@ -9,3 +9,6 @@ export const DEFAULT_PERCENTAGE_MAP = {
 }
 
 export const ORDERS_PER_PAGE = 4
+
+// From contract documentation, we can have up to 50 pending orders
+export const MAX_PENDING_ORDERS = 50

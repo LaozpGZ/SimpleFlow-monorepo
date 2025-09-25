@@ -23,8 +23,13 @@ async function getUserLimitOrders(
   address: string,
   orderStatus?: OrderStatus,
   pagination?: PaginationParams,
+  limit?: number,
 ) {
-  const url = new URL(`${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}${orderStatus ? `/${orderStatus}` : ''}`)
+  const url = new URL(
+    `${PCS_LIMIT_ORDER_HISTORY_URL}/${chainName}/${address}${orderStatus ? `/${orderStatus}` : ''}${
+      limit ? `?limit=${limit}` : ''
+    }`,
+  )
 
   if (pagination?.after) {
     url.searchParams.set('after', pagination.after)
@@ -44,12 +49,14 @@ async function getUserLimitOrders(
   return (await response.json()) as OrderHistoryResponse
 }
 
-export const useUserLimitOrders = () => {
+export const useUserLimitOrders = (orderStatus?: OrderStatus, limit?: number) => {
   const { account, chainId } = useAccountActiveChain()
   const chainName = chainIdToExplorerInfoChainName[chainId]
 
   // Use atoms for shared state
-  const filterOrderStatus = useAtomValue(filterOrderStatusAtom)
+  const filterOrderStatusFromState = useAtomValue(filterOrderStatusAtom)
+  const filterOrderStatus = orderStatus || filterOrderStatusFromState
+
   const [currentCursor, setCurrentCursor] = useAtom(currentCursorAtom)
   const [pageCursors, setPageCursors] = useAtom(pageCursorsAtom)
   const [paginationDirection, setPaginationDirection] = useAtom(paginationDirectionAtom)
@@ -59,7 +66,7 @@ export const useUserLimitOrders = () => {
   const toggleOpenFilter = useSetAtom(toggleOpenFilterAtom)
 
   const queryResult = useQuery({
-    queryKey: ['userLimitOrders', chainId, account, filterOrderStatus, currentCursor, paginationDirection],
+    queryKey: ['userLimitOrders', chainId, account, filterOrderStatus, limit, currentCursor, paginationDirection],
     queryFn: async () => {
       if (!account) return { orders: [], paginationInfo: null }
 
@@ -68,7 +75,7 @@ export const useUserLimitOrders = () => {
         paginationParams.after = currentCursor
       }
 
-      const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams)
+      const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams, limit)
       const { rows } = data
 
       console.log('%c [Order History Data]', 'background: green;color: white', rows)
