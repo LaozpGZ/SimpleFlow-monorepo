@@ -243,7 +243,12 @@ export const useOrder = (order: ResponseOrder) => {
 
   return {
     pool,
-    liveStatus: isPartialFill ? OrderStatus.PartiallyFilled : liveStatus,
+    liveStatus: isPartialFill
+      ? OrderStatus.PartiallyFilled
+      : // Ignore PartiallyFilled status from BE
+      liveStatus === OrderStatus.PartiallyFilled
+      ? OrderStatus.Open
+      : liveStatus,
     currencyA,
     currencyB,
     limitPrice,
