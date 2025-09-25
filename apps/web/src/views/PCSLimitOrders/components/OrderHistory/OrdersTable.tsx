@@ -56,13 +56,14 @@ const MobileOrderCard = styled(Box)`
   padding: 16px;
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
 
-  &:first-child {
+  &:first-of-type {
     border-top: none;
   }
+`
 
-  &:last-child {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  }
+const ScrollableContainer = styled(Box)`
+  max-height: 550px;
+  overflow-y: auto;
 `
 
 interface OrderTableRowProps {
@@ -236,18 +237,13 @@ export const OrdersTable = () => {
   if (isSmallScreen) {
     return (
       <Box>
-        <Pagination
-          borderTop="1px solid"
-          borderBottom="1px solid"
-          borderColor="cardBorder"
-          position="sticky"
-          top="0"
-          zIndex="100"
-        />
+        <Pagination borderTop="1px solid" borderBottom="1px solid" borderColor="cardBorder" />
 
-        {data?.map((order) => (
-          <MobileOrder key={order.order_id} order={order} />
-        ))}
+        <ScrollableContainer>
+          {data?.map((order) => (
+            <MobileOrder key={order.order_id} order={order} />
+          ))}
+        </ScrollableContainer>
       </Box>
     )
   }

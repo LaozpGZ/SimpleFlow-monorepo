@@ -50,7 +50,7 @@ export const Pagination = (props: BoxProps) => {
   }, [handleKeyDown])
 
   return (
-    <Box background="background" {...props}>
+    <Box background="backgroundAlt" {...props}>
       <PaginationButton
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
