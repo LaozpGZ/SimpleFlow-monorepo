@@ -71,7 +71,6 @@ export const useOrder = (order: ResponseOrder) => {
     return formatPrice(parsedSqrtPrice, 6, 'en-US')
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
-  // TODO: For partial filled, get amounts from position ID perhaps
   const [originalAmountA, originalAmountB] = useMemo(() => {
     if (!currency0 || !currency1 || !pool) return [undefined, undefined]
 
@@ -158,7 +157,7 @@ export const useOrder = (order: ResponseOrder) => {
 
   // Check for partial fill case
   const isPartialFill = useMemo(() => {
-    if (order.status !== OrderStatus.Open || !pool) return false
+    if (order.status === OrderStatus.Filled || order.status === OrderStatus.Withdrawn || !pool) return false
 
     // If tickLower < tickCurrent < tickLower + tickSpacing
     if (pool.tick > order.tick_lower && pool.tick < order.tick_lower + pool.parameters.tickSpacing) {
@@ -170,17 +169,25 @@ export const useOrder = (order: ResponseOrder) => {
       return true
     }
 
+    // Lastly, if we have some value in amountBReceived, then consider a partial fill
+    // Note: technically it could collect fees and move back, but amountB will be there to show
+    if (amountBReceived && BN(amountBReceived).gt(0)) {
+      return true
+    }
+
     return false
-  }, [order.status, pool, order.tick_lower])
+  }, [order, pool, amountBReceived])
 
   const filledPercentage = useMemo(() => {
     if (isPartialFill && originalAmountB && amountBReceived) {
       const expectedOutput = BN(originalAmountB)
       const filledOutput = BN(amountBReceived)
-      return filledOutput.dividedBy(expectedOutput).multipliedBy(100).toFixed(0)
+      const result = filledOutput.dividedBy(expectedOutput).multipliedBy(100)
+      return result.lt(1) ? '< 1' : result.toFixed(0)
     }
+
     return liveStatus === OrderStatus.Filled || liveStatus === OrderStatus.Withdrawn ? '100' : '0'
-  }, [isPartialFill, liveStatus, originalAmountB, amountBReceived])
+  }, [isPartialFill, liveStatus, originalAmountB, amountBReceived, order.order_id])
 
   // Actions
   const handleCancelOrder = useCallback(async () => {
