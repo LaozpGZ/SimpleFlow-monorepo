@@ -17,11 +17,9 @@ import { Field } from '../types/limitOrder.types'
 import { formattedAmountsAtom, parsedAmountsAtom } from '../state/form/inputAtoms'
 import { ticksAtom } from '../state/form/ticksAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
-import { useUserLimitOrders } from './useUserLimitOrders'
+import { useUserOpenLimitOrders } from './useUserLimitOrders'
 import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
-import { OrderStatus } from '../types/orders.types'
-import { MAX_PENDING_ORDERS } from '../constants'
 
 interface UsePlaceLimitOrder {
   onError?: (error: any) => void
@@ -38,7 +36,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
   const addTransaction = useTransactionAdder()
 
   // Refetch user limit orders in OrdersSummaryCard
-  const { refetch: refetchUserLimitOrders } = useUserLimitOrders(OrderStatus.Open, MAX_PENDING_ORDERS)
+  const { refetch: refetchUserLimitOrders } = useUserOpenLimitOrders()
 
   const [isPlacingOrder, setIsPlacingOrder] = useState(false)
 

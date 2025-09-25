@@ -4,7 +4,7 @@ import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { useCallback } from 'react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { SLOW_INTERVAL } from 'config/constants'
-import { PCS_LIMIT_ORDER_HISTORY_URL, ORDERS_PER_PAGE } from '../constants'
+import { PCS_LIMIT_ORDER_HISTORY_URL, ORDERS_PER_PAGE, MAX_PENDING_ORDERS } from '../constants'
 import { OrderHistoryResponse, PaginationParams, OrderStatus } from '../types/orders.types'
 import {
   currentCursorAtom,
@@ -49,13 +49,30 @@ async function getUserLimitOrders(
   return (await response.json()) as OrderHistoryResponse
 }
 
-export const useUserLimitOrders = (orderStatus?: OrderStatus, limit?: number) => {
+export const useUserOpenLimitOrders = () => {
+  const { account, chainId } = useAccountActiveChain()
+  const chainName = chainIdToExplorerInfoChainName[chainId]
+
+  return useQuery({
+    queryKey: ['userOpenLimitOrders', chainId, account],
+    queryFn: async () => {
+      if (!account || !chainId) return []
+
+      const data = await getUserLimitOrders(chainName, account, OrderStatus.Open, undefined, MAX_PENDING_ORDERS)
+      return data.rows
+    },
+    enabled: !!account && !!chainId,
+    refetchInterval: SLOW_INTERVAL,
+    staleTime: 100, // 100ms
+  })
+}
+
+export const useUserLimitOrders = () => {
   const { account, chainId } = useAccountActiveChain()
   const chainName = chainIdToExplorerInfoChainName[chainId]
 
   // Use atoms for shared state
-  const filterOrderStatusFromState = useAtomValue(filterOrderStatusAtom)
-  const filterOrderStatus = orderStatus || filterOrderStatusFromState
+  const filterOrderStatus = useAtomValue(filterOrderStatusAtom)
 
   const [currentCursor, setCurrentCursor] = useAtom(currentCursorAtom)
   const [pageCursors, setPageCursors] = useAtom(pageCursorsAtom)
@@ -66,7 +83,7 @@ export const useUserLimitOrders = (orderStatus?: OrderStatus, limit?: number) =>
   const toggleOpenFilter = useSetAtom(toggleOpenFilterAtom)
 
   const queryResult = useQuery({
-    queryKey: ['userLimitOrders', chainId, account, filterOrderStatus, limit, currentCursor, paginationDirection],
+    queryKey: ['userLimitOrders', chainId, account, filterOrderStatus, currentCursor, paginationDirection],
     queryFn: async () => {
       if (!account) return { orders: [], paginationInfo: null }
 
@@ -75,7 +92,7 @@ export const useUserLimitOrders = (orderStatus?: OrderStatus, limit?: number) =>
         paginationParams.after = currentCursor
       }
 
-      const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams, limit)
+      const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams)
       const { rows } = data
 
       console.log('%c [Order History Data]', 'background: green;color: white', rows)

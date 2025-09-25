@@ -1,10 +1,8 @@
-import { FlexGap, TimerIcon, Text, ArrowForwardIcon, WaitIcon, useModalV2 } from '@pancakeswap/uikit'
+import { FlexGap, Text, ArrowForwardIcon, WaitIcon, useModalV2 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { LightCard } from '@pancakeswap/widgets-internal'
-import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
-import { OrderStatus } from 'views/PCSLimitOrders/types/orders.types'
-import { MAX_PENDING_ORDERS } from 'views/PCSLimitOrders/constants'
+import { useUserOpenLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 import { OrdersModal } from './OrdersModal'
 
 const StyledCard = styled(LightCard)`
@@ -23,7 +21,7 @@ export const OrdersSummaryCard = () => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onDismiss } = useModalV2()
 
-  const { data: openOrders, isLoading } = useUserLimitOrders(OrderStatus.Open, MAX_PENDING_ORDERS)
+  const { data: openOrders, isLoading } = useUserOpenLimitOrders()
 
   if (!openOrders && !isLoading) return null
 
@@ -34,7 +32,7 @@ export const OrdersSummaryCard = () => {
           <FlexGap gap="8px">
             <WaitIcon color="textSubtle" />
             <Text color="textSubtle" small bold>
-              {t('%number% Open Limit Orders', { number: openOrders.length })}
+              {t('%number% Open Limit Orders', { number: openOrders?.length || 0 })}
             </Text>
           </FlexGap>
 
