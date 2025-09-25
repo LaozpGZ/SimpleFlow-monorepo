@@ -4,5 +4,5 @@ export const SOLANA_SUPPORTED_PATH = [
   /^\/swap(\/.*)?$/,
   /^\/home(\/.*)?$/,
   /^\/liquidity\/positions(\/.*)?$/,
-  /^\/liquidity\/position\/solanaV3(\/.*)?$/,
+  /^\/liquidity\/position\/v3(\/.*)?$/,
 ]
