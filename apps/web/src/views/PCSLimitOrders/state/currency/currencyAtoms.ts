@@ -5,8 +5,7 @@ import { atomFamily } from 'jotai/utils'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import isEqual from 'lodash/isEqual'
 import { currencyAtom } from 'hooks/Tokens'
-import { Field } from 'views/PCSLimitOrders/types/limitOrder.types'
-import { independentFieldAtom } from '../form/fieldAtoms'
+import { createLoadableAtom } from 'views/PCSLimitOrders/utils/createLoadableAtom'
 
 // TODO: Sync with Query State (inputCurrency & outputCurrency, like swap). Idea: Create -> locationAtom and atomWithUrlQuery
 const inputCurrencyFamily = atomFamily((chainId: number) => atom(Native.onChain(chainId).symbol), isEqual)
@@ -39,11 +38,6 @@ export const outputCurrencyIdAtom = atom(
 export const inputCurrencyAtom = atom((get) => get(currencyAtom(get(inputCurrencyIdAtom))))
 export const outputCurrencyAtom = atom((get) => get(currencyAtom(get(outputCurrencyIdAtom))))
 
-// base currency may not be being used. consider removing. quote also can be replaced
-export const baseCurrencyAtom = atom((get) =>
-  get(independentFieldAtom) === Field.CURRENCY_A ? get(inputCurrencyAtom) : get(outputCurrencyAtom),
-)
-
-export const quoteCurrencyAtom = atom((get) =>
-  get(independentFieldAtom) === Field.CURRENCY_A ? get(outputCurrencyAtom) : get(inputCurrencyAtom),
-)
+// Loadable versions of currency atoms
+export const inputCurrencyLoadableAtom = createLoadableAtom(inputCurrencyAtom)
+export const outputCurrencyLoadableAtom = createLoadableAtom(outputCurrencyAtom)

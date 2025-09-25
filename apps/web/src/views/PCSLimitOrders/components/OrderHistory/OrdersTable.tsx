@@ -171,22 +171,22 @@ const LoadingRow = () => {
   return (
     <Tr>
       <Td>
-        <Skeleton width="100px" height="30px" />
+        <Skeleton height="30px" width="120px" />
       </Td>
       <Td>
-        <Skeleton width="100px" height="30px" />
+        <Skeleton height="30px" width="120px" />
       </Td>
       <Td>
-        <Skeleton width="150px" height="30px" />
+        <Skeleton height="30px" width="150px" />
       </Td>
       <Td>
-        <Skeleton width="80px" height="30px" />
-      </Td>
-      <Td>
-        <Skeleton height="30px" />
+        <Skeleton height="30px" width="100px" />
       </Td>
       <Td>
         <Skeleton height="30px" />
+      </Td>
+      <Td>
+        <Skeleton height="30px" width="120px" />
       </Td>
       <Td>
         <Skeleton height="30px" />

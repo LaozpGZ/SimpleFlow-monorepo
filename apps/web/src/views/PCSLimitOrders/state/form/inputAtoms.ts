@@ -6,7 +6,7 @@ import { Token } from '@pancakeswap/sdk'
 import { BigNumber as BN } from 'bignumber.js'
 import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
-import { quoteCurrencyAtom, inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
+import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { customMarketPriceAtom } from './customMarketPriceAtom'
 import { currentMarketPriceAtom } from './currentMarketPriceAtom'
 import { ticksAtom } from './ticksAtom'
@@ -28,7 +28,9 @@ const dependentAmountAtom = atom(async (get) => {
 
   const independentField = get(independentFieldAtom)
   const independentAmount = await get(independentAmountAtom)
-  const quoteCurrency = await get(quoteCurrencyAtom)
+
+  const quoteCurrency =
+    independentField === Field.CURRENCY_A ? await get(outputCurrencyAtom) : await get(inputCurrencyAtom)
 
   if (!independentAmount || !quoteCurrency || (!currentMarketPrice && !customMarketPrice)) return undefined
 

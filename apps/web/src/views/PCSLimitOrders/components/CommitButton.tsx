@@ -194,7 +194,7 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
             </Text>
             <Text small>
               {feesEarnedUSD
-                ? `$${formatNumber(feesEarnedUSD, { maxDecimalDisplayDigits: 4, maximumSignificantDigits: 4 })}`
+                ? `$${formatNumber(feesEarnedUSD, { maxDecimalDisplayDigits: 4, maximumSignificantDigits: 8 })}`
                 : '-'}
             </Text>
           </RowBetween>
@@ -205,7 +205,7 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
             </Text>
             <Text small>
               {amountReceived
-                ? `${formatNumber(amountReceived, { maxDecimalDisplayDigits: 6, maximumSignificantDigits: 6 })} ${
+                ? `${formatNumber(amountReceived, { maxDecimalDisplayDigits: 6, maximumSignificantDigits: 8 })} ${
                     outputCurrency?.symbol
                   }`
                 : '-'}
