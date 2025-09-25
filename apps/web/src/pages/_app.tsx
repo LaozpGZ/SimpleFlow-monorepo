@@ -113,21 +113,23 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
       <DefaultSeo {...SEO} />
       {/* <LoadVConsole /> */}
       <Providers store={store} dehydratedState={pageProps.dehydratedState}>
-        <PageMeta />
-        {(Component as NextPageWithLayout).Meta && (
-          // @ts-ignore
-          <Component.Meta {...pageProps} />
-        )}
-        <Suspense>
-          <GlobalHooks />
-        </Suspense>
-        <ResetCSS />
-        <GlobalStyle />
-        <GlobalCheckClaimStatus excludeLocations={[]} />
-        <PersistGate loading={null} persistor={persistor}>
-          <Updaters />
-          <App {...props} />
-        </PersistGate>
+        <ProductionErrorBoundary>
+          <PageMeta />
+          {(Component as NextPageWithLayout).Meta && (
+            // @ts-ignore
+            <Component.Meta {...pageProps} />
+          )}
+          <Suspense>
+            <GlobalHooks />
+          </Suspense>
+          <ResetCSS />
+          <GlobalStyle />
+          <GlobalCheckClaimStatus excludeLocations={[]} />
+          <PersistGate loading={null} persistor={persistor}>
+            <Updaters />
+            <App {...props} />
+          </PersistGate>
+        </ProductionErrorBoundary>
       </Providers>
       <Script
         strategy="afterInteractive"
@@ -172,30 +174,28 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const isBridge = typeof window !== 'undefined' && window.location.pathname.includes('/bridge')
 
   return (
-    <ProductionErrorBoundary>
-      <Suspense>
-        <ShowMenu>
-          <Layout>
-            <Component {...pageProps} />
-            <MobileCard shouldRender={!shouldRenderOnPages(layoutMobileAdIgnoredPages)} mt="4px" mb="12px" />
-            <DesktopCard shouldRender={!shouldRenderOnPages(layoutDesktopAdIgnoredPages)} />
-          </Layout>
-        </ShowMenu>
-        <EasterEgg iterations={2} />
-        <ToastListener />
-        <FixedSubgraphHealthIndicator />
-        <NetworkModal pageSupportedChains={Component.chains} />
-        <TransactionsDetailModal />
-        {isShowScrollToTopButton && <ScrollToTopButtonV2 />}
-        {shouldScreenWallet && <Blocklist />}
-        <ZKSyncAirdropModalWithAutoPopup />
-        <SimpleStakingSunsetModal />
-        <VercelToolbar />
-        <Cb1Membership />
-        {/* {(chainId === NonEVMChainId.SOLANA || isBridge) && <SolanaWalletModal />} */}
-        <WalletModalManager isOpen={isOpen} onDismiss={() => setIsOpen(false)} />
-      </Suspense>
-    </ProductionErrorBoundary>
+    <Suspense>
+      <ShowMenu>
+        <Layout>
+          <Component {...pageProps} />
+          <MobileCard shouldRender={!shouldRenderOnPages(layoutMobileAdIgnoredPages)} mt="4px" mb="12px" />
+          <DesktopCard shouldRender={!shouldRenderOnPages(layoutDesktopAdIgnoredPages)} />
+        </Layout>
+      </ShowMenu>
+      <EasterEgg iterations={2} />
+      <ToastListener />
+      <FixedSubgraphHealthIndicator />
+      <NetworkModal pageSupportedChains={Component.chains} />
+      <TransactionsDetailModal />
+      {isShowScrollToTopButton && <ScrollToTopButtonV2 />}
+      {shouldScreenWallet && <Blocklist />}
+      <ZKSyncAirdropModalWithAutoPopup />
+      <SimpleStakingSunsetModal />
+      <VercelToolbar />
+      <Cb1Membership />
+      {/* {(chainId === NonEVMChainId.SOLANA || isBridge) && <SolanaWalletModal />} */}
+      <WalletModalManager isOpen={isOpen} onDismiss={() => setIsOpen(false)} />
+    </Suspense>
   )
 }
 
