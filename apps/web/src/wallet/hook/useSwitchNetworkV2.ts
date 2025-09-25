@@ -194,7 +194,8 @@ const useProcessSwitchChainRequest = () => {
         }
 
         // Solana
-        if (!SOLANA_SUPPORTED_PATH.includes(path)) {
+        const isSolanaPathSupported = SOLANA_SUPPORTED_PATH.some((regex) => regex.test(path))
+        if (!isSolanaPathSupported) {
           window.open('https://solana.pancakeswap.finance', '_self')
           return true
         }
