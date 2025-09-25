@@ -63,7 +63,7 @@ export default function Transaction({ tx, chainId }: { tx: TransactionDetails; c
           {title} ({getFullChainNameById(chainId)})
         </TransactionListItemTitle>
       }
-      action={<ScanLink useBscCoinFallback={ChainLinkSupportChains.includes(chainId)} href={link} />}
+      action={<ScanLink color="primary60" useBscCoinFallback={ChainLinkSupportChains.includes(chainId)} href={link} />}
     >
       <TransactionListItemDesc>{summary ?? tx.hash}</TransactionListItemDesc>
     </TransactionListItem>

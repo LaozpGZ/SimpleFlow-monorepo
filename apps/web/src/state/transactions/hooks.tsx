@@ -373,6 +373,7 @@ export const getReadableTransactionType = (t, type?: TransactionType) => {
     case 'limit-order-approval':
     case 'limit-order-submission':
     case 'limit-order-cancellation':
+    case 'place-limit-order':
       return t('Limit Order')
     case 'cross-chain-farm':
       return t('Farming')
@@ -382,6 +383,15 @@ export const getReadableTransactionType = (t, type?: TransactionType) => {
       return t('IFO')
     case 'claim-liquid-staking':
       return t('Liquid Staking')
+    case 'add-liquidity-infinity-cl':
+      return t('Add Liquidity Infinity CLAMM')
+    case 'remove-liquidity-infinity-cl':
+      return t('Remove Liquidity Infinity CLAMM')
+    case 'add-liquidity-infinity-bin':
+      return t('Add Liquidity Infinity LBAMM')
+    case 'remove-liquidity-infinity-bin':
+      return t('Remove Liquidity Infinity LBAMM')
+
     default:
       return type
   }

@@ -10,12 +10,16 @@ import { useTranslation } from '@pancakeswap/localization'
 import { stringify } from 'viem/utils'
 import { Hex } from 'viem'
 import { calculateGasMargin } from 'utils'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { BigNumber as BN } from 'bignumber.js'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
-import { parsedAmountsAtom } from '../state/form/inputAtoms'
+import { formattedAmountsAtom, parsedAmountsAtom } from '../state/form/inputAtoms'
 import { ticksAtom } from '../state/form/ticksAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { useUserLimitOrders } from './useUserLimitOrders'
+import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
+import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 
 interface UsePlaceLimitOrder {
   onError?: (error: any) => void
@@ -25,10 +29,12 @@ interface UsePlaceLimitOrder {
 export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = {}) => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
-  const { toastError } = useToast()
 
   const contract = useCLLimitOrderHookContract()
   const { fetchWithCatchTxError } = useCatchTxError()
+  const { toastError } = useToast()
+  const addTransaction = useTransactionAdder()
+
   const { refetch: refetchUserLimitOrders } = useUserLimitOrders()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
@@ -36,6 +42,12 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
 
   const parsedAmounts = useAtomValue(parsedAmountsAtom)
   const ticksData = useAtomValue(ticksAtom)
+
+  // For storing txn data in list
+  const formattedAmounts = useAtomValue(formattedAmountsAtom)
+  const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
+  const customMarketPrice = useAtomValue(customMarketPriceAtom)
+
   const { data: selectedPool, refetch: refetchSelectedPool } = useAtomValue(selectedPoolAtom)
 
   // TODO: Handle passing native amounts
@@ -127,6 +139,28 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
       if (receipt?.status) {
         console.log('placeOrder: Transaction successful', receipt.transactionHash)
         onSuccess?.(receipt.transactionHash)
+
+        const formattedPrice = BN(customMarketPrice || currentMarketPrice || 0).toPrecision(6)
+
+        addTransaction(
+          { hash: receipt.transactionHash },
+          {
+            type: 'place-limit-order',
+            summary: `Sell ${formattedAmounts[Field.CURRENCY_A]} ${inputCurrency.symbol} for ${
+              formattedAmounts[Field.CURRENCY_B]
+            } ${outputCurrency.symbol} at ${formattedPrice} ${inputCurrency.symbol} per ${outputCurrency.symbol}`,
+            translatableSummary: {
+              text: 'Sell %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% at %price% %inputSymbol% per %outputSymbol%',
+              data: {
+                inputAmount: formattedAmounts[Field.CURRENCY_A],
+                inputSymbol: inputCurrency.symbol,
+                outputAmount: formattedAmounts[Field.CURRENCY_B],
+                outputSymbol: outputCurrency.symbol,
+                price: formattedPrice,
+              },
+            },
+          },
+        )
 
         // Wait 2 seconds to refetch
         setTimeout(() => {

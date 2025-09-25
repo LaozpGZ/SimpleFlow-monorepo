@@ -25,6 +25,7 @@ export type TransactionType =
   | 'bridge-icake'
   | 'bridge'
   | 'claim-liquid-staking'
+  | 'place-limit-order'
 
 export interface SerializableTransactionReceipt {
   to: string
