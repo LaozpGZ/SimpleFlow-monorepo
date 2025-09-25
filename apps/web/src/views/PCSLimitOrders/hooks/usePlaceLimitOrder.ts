@@ -1,7 +1,7 @@
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCLLimitOrderHookContract } from 'hooks/useContract'
 import { useAtomValue } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { encodePoolKey, PoolKey } from '@pancakeswap/infinity-sdk'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
@@ -39,6 +39,8 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
 
   // Refetch user limit orders in OrdersSummaryCard
   const { refetch: refetchUserLimitOrders } = useUserLimitOrders(OrderStatus.Open, MAX_PENDING_ORDERS)
+
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false)
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
@@ -119,6 +121,8 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
     })
 
     try {
+      setIsPlacingOrder(true)
+
       // Gas Fees to be paid by user for Limit Order
       const GAS_FEE = await contract.read.GAS_FEE()
 
@@ -138,6 +142,8 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
           gas: calculateGasMargin(estimatedGas),
         })
       })
+
+      setIsPlacingOrder(false)
 
       if (receipt?.status) {
         console.log('placeOrder: Transaction successful', receipt.transactionHash)
@@ -175,6 +181,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
       console.error('placeOrder: Unable to place limit order', error)
       toastError(t('Failed'), error.message || error.details || error)
       onError?.(error)
+      setIsPlacingOrder(false)
     }
   }, [
     contract,
@@ -191,5 +198,6 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
 
   return {
     placeOrder,
+    isPlacingOrder,
   }
 }

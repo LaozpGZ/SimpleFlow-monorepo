@@ -141,7 +141,7 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
   const amountReceived = useAtomValue(amountReceivedAtom)
 
   // TODO: Handle success and error inside modal content
-  const { placeOrder } = usePlaceLimitOrder({ onError: onDismiss, onSuccess: onDismiss })
+  const { placeOrder, isPlacingOrder } = usePlaceLimitOrder({ onError: onDismiss, onSuccess: onDismiss })
 
   const [isInverted, setIsInverted] = useState(false)
   const quotePrice = useMemo(() => {
@@ -227,8 +227,8 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
         </Text>
       </Message>
 
-      <Button mt="16px" width="100%" onClick={placeOrder}>
-        {t('Confirm')}
+      <Button mt="16px" width="100%" onClick={placeOrder} disabled={isPlacingOrder}>
+        {isPlacingOrder ? `${t('Confirming')}...` : t('Confirm')}
       </Button>
     </Box>
   )
