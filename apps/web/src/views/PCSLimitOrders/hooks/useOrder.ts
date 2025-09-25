@@ -169,12 +169,6 @@ export const useOrder = (order: ResponseOrder) => {
       return true
     }
 
-    // Lastly, if we have some value in amountBReceived, then consider a partial fill
-    // Note: technically it could collect fees and move back, but amountB will be there to show
-    if (amountBReceived && BN(amountBReceived).gt(0)) {
-      return true
-    }
-
     return false
   }, [order, pool, amountBReceived])
 
