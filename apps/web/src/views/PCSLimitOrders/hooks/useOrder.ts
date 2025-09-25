@@ -164,7 +164,7 @@ export const useOrder = (order: ResponseOrder) => {
     }
 
     return false
-  }, [order, pool, amountBReceived])
+  }, [order, pool])
 
   const filledPercentage = useMemo(() => {
     if (isPartialFill && originalAmountB && amountBReceived) {

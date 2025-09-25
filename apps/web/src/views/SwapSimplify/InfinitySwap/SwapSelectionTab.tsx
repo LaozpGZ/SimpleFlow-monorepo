@@ -141,7 +141,8 @@ export const SwapSelection = ({
   }, [chainId, theme.colors.textDisabled, isSmartAccount])
 
   const limitProps = useMemo(() => {
-    const isLimitSupported = !isSmartAccount && isEvm(chainId)
+    // const isLimitSupported = !isSmartAccount && isEvm(chainId)
+    const isLimitSupported = isEvm(chainId)
     return {
       disabled: !isLimitSupported,
       style: {
@@ -151,7 +152,8 @@ export const SwapSelection = ({
         userSelect: 'none',
       } as React.CSSProperties,
     }
-  }, [theme.colors.textDisabled, isSmartAccount, chainId])
+  }, [theme.colors.textDisabled, chainId])
+  // }, [theme.colors.textDisabled, isSmartAccount, chainId])
 
   return (
     <SwapSelectionWrapper style={style}>

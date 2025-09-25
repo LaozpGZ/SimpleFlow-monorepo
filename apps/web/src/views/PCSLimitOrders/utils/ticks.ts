@@ -23,8 +23,8 @@ export function getTickAdjustedPrice(
   quoteCurrency: Currency,
   zeroForOne?: boolean,
 ) {
-  // manual check, tick to price failing for tickCurrent = 0
-  if (price === '0') return { tick: 0, price: new Price(baseCurrency, quoteCurrency, '1', '1') }
+  // manual check, tick to price failing for tickCurrent = 0 / price = 1
+  if (BN(price).eq(1)) return { tick: 0, price: new Price(baseCurrency, quoteCurrency, '1', '1') }
 
   const price_ = tryParsePrice(baseCurrency, quoteCurrency, price)
   if (!price_) {
@@ -97,12 +97,29 @@ export function getSqrtPriceFromMarketPrice(
 ) {
   if (!marketPrice) return undefined
 
+  console.log('%c [getSqrtPriceFromMarketPrice] marketPrice', 'color: orange; font-weight: bold;', {
+    marketPrice,
+    baseCurrency: baseCurrency.symbol,
+    quoteCurrency: quoteCurrency.symbol,
+    tickSpacing,
+    tickCurrent,
+    zeroForOne,
+  })
+
   // Get limit order tick from price
   const parsedPrice = tryParsePrice(baseCurrency, quoteCurrency, marketPrice)
   if (!parsedPrice) return undefined
 
+  console.log('%c [getSqrtPriceFromMarketPrice] parsedPrice', 'color: orange; font-weight: bold;', {
+    parsedPrice: parsedPrice.toFixed(18),
+  })
+
   let targetTick = tryParseTick(parsedPrice, tickSpacing)
   if (!targetTick) return undefined
+
+  console.log('%c [getSqrtPriceFromMarketPrice] targetTick', 'color: orange; font-weight: bold;', {
+    targetTick,
+  })
 
   // If current tick is between targetTick and its next tick, adjust it depending on direction
   if (targetTick <= tickCurrent && targetTick + tickSpacing >= tickCurrent) {
@@ -120,10 +137,19 @@ export function getSqrtPriceFromMarketPrice(
   const priceLower = tickToPrice(baseCurrency, quoteCurrency, tickLower)
   const priceUpper = tickToPrice(baseCurrency, quoteCurrency, tickUpper)
 
+  console.log('%c [getSqrtPriceFromMarketPrice] priceLower & priceUpper', 'color: orange; font-weight: bold;', {
+    priceLower,
+    priceUpper,
+  })
+
   // Sqrt price = sqrt(priceLower * priceUpper)
   const sqrtPrice = BN(priceLower.toFixed(18))
     .multipliedBy(BN(priceUpper.toFixed(18)))
     .sqrt()
+
+  console.log('%c [getSqrtPriceFromMarketPrice] sqrtPrice', 'color: orange; font-weight: bold;', {
+    sqrtPrice,
+  })
 
   return { sqrtPrice, isSellingOrBuyingAtWorsePrice, tickLower, tickUpper, targetTick, priceLower, priceUpper }
 }
