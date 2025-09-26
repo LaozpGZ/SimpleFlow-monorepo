@@ -120,7 +120,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
     const chainName = chainNames[Number(option?.value)]
     if (chainName) {
       // Create new query object without the token parameter so it defaults to the new chain's first token
-      const { token, ...queryWithoutToken } = router.query
+      const { token: _, ...queryWithoutToken } = router.query
       const newQuery = { ...queryWithoutToken, chain: chainName }
 
       router.replace(
