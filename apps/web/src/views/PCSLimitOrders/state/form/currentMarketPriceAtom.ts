@@ -1,7 +1,6 @@
 import { atom } from 'jotai'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import { getSqrtPriceFromMarketPrice, getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
-import { tickToPrice } from 'hooks/infinity/utils'
+import { getSqrtPriceFromCurrentTick } from 'views/PCSLimitOrders/utils/ticks'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 
@@ -19,32 +18,15 @@ export const currentMarketPriceAtom = atom(async (get) => {
     zeroForOne,
   } = selectedPool
 
-  // Get Current Market Price from Pool's tick
-  const tickCurrentPrice = tickToPrice(inputCurrency, outputCurrency, tickCurrent)
-  const tickAdjustedPrice = getTickAdjustedPrice(
-    tickCurrentPrice.toFixed(18),
-    tickSpacing,
-    inputCurrency,
-    outputCurrency,
+  const { sqrtPrice } = getSqrtPriceFromCurrentTick({
     zeroForOne,
-  )
-  const currentMarketPrice = tickAdjustedPrice.price?.toFixed(18)
-
-  if (!currentMarketPrice) return undefined
-
-  const sqrtPriceData = getSqrtPriceFromMarketPrice(
-    currentMarketPrice,
-    inputCurrency,
-    outputCurrency,
-    tickSpacing,
     tickCurrent,
-    zeroForOne,
-  )
-  if (!sqrtPriceData) return undefined
+    tickSpacing,
+    inputCurrency,
+    outputCurrency,
+  })
 
-  const { sqrtPrice } = sqrtPriceData
-
-  if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return undefined
+  if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return '0'
 
   return formatNumber(sqrtPrice, {
     maxDecimalDisplayDigits: 6,

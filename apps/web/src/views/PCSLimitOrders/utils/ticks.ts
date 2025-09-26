@@ -5,6 +5,7 @@ import { BigNumber as BN } from 'bignumber.js'
 import { nearestUsableTick } from '@pancakeswap/v3-sdk'
 import { bigNumberToPrice } from './price'
 
+// TODO: Check if needed anymore
 export function invertTickForLimitOrder(tick: number, currentTick: number) {
   return 2 * currentTick - tick
 }
@@ -161,4 +162,53 @@ export function getSqrtPriceFromMarketPrice(
   })
 
   return { sqrtPrice, isSellingOrBuyingAtWorsePrice, tickLower, tickUpper, targetTick, priceLower, priceUpper }
+}
+
+export function getSqrtPriceFromCurrentTick({
+  zeroForOne,
+  tickCurrent,
+  tickSpacing,
+  inputCurrency,
+  outputCurrency,
+}: {
+  zeroForOne: boolean
+  tickCurrent: number
+  tickSpacing: number
+  inputCurrency: Currency
+  outputCurrency: Currency
+}) {
+  let tickLower: number
+  let tickUpper: number
+
+  if (zeroForOne) {
+    // Adjust ticks above the current tick
+    tickLower = nearestUsableTick(tickCurrent + tickSpacing, tickSpacing)
+    if (tickLower <= tickCurrent) {
+      tickLower += tickSpacing
+    }
+    tickUpper = nearestUsableTick(tickCurrent + tickSpacing * 2, tickSpacing)
+    if (tickUpper <= tickCurrent) {
+      tickUpper += tickSpacing
+    }
+  } else {
+    // zeroForOne is false
+    // Adjust ticks below the current tick
+    tickLower = nearestUsableTick(tickCurrent - tickSpacing, tickSpacing)
+    if (tickLower >= tickCurrent) {
+      tickLower -= tickSpacing
+    }
+    tickUpper = nearestUsableTick(tickCurrent - tickSpacing * 2, tickSpacing)
+    if (tickUpper >= tickCurrent) {
+      tickUpper -= tickSpacing
+    }
+  }
+
+  const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
+  const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper)
+
+  const sqrtPrice = BN(priceLower.toFixed(18))
+    .multipliedBy(BN(priceUpper.toFixed(18)))
+    .sqrt()
+
+  return { sqrtPrice, tickLower, tickUpper, priceLower, priceUpper }
 }

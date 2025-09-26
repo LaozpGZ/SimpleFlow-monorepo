@@ -15,8 +15,6 @@ const TickVisualization = ({ ticksData, selectedPool }: { ticksData: any; select
       { value: ticksData.tickLower, type: 'bounds', label: 'Lower' },
       { value: ticksData.tickUpper, type: 'bounds', label: 'Upper' },
       { value: tickCurrent, type: 'current', label: 'Current' },
-      { value: ticksData.invertedTickLower, type: 'inverted', label: 'Inv Lower' },
-      { value: ticksData.invertedTickUpper, type: 'inverted', label: 'Inv Upper' },
     ].filter((tick) => tick.value !== undefined)
 
     // Sort by tick value for proper positioning
@@ -35,8 +33,6 @@ const TickVisualization = ({ ticksData, selectedPool }: { ticksData: any; select
         return '#1FC7D4' // Cyan for tickLower and tickUpper
       case 'current':
         return '#ED4B9E' // Pink for tickCurrent
-      case 'inverted':
-        return '#FFB237' // Orange for inverted ticks
       default:
         return '#666'
     }
@@ -152,8 +148,6 @@ export const TestingArea = () => {
                 tickLower: ticksData?.tickLower,
                 tickUpper: ticksData?.tickUpper,
                 tickCurrent: selectedPool?.pool?.tickCurrent,
-                invertedTickLower: ticksData?.invertedTickLower,
-                invertedTickUpper: ticksData?.invertedTickUpper,
                 zeroForOne: ticksData?.zeroForOne,
                 targetTick: ticksData?.targetTick,
                 priceLower: ticksData?.priceLower.toSignificant(6),
