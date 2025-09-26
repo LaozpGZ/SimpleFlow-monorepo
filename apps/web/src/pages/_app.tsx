@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import { SentryErrorBoundary } from 'components/ErrorBoundary'
 import GlobalCheckClaimStatus from 'components/GlobalCheckClaimStatus'
 import { PageMeta } from 'components/Layout/Page'
-import { SimpleStakingSunsetModal } from 'components/Modal/SimpleStakingSunsetModal'
 import { NetworkModal } from 'components/NetworkModal'
 import { FixedSubgraphHealthIndicator } from 'components/SubgraphHealthIndicator/FixedSubgraphHealthIndicator'
 import TransactionsDetailModal from 'components/TransactionDetailModal'
@@ -189,7 +188,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         {isShowScrollToTopButton && <ScrollToTopButtonV2 />}
         {shouldScreenWallet && <Blocklist />}
         <ZKSyncAirdropModalWithAutoPopup />
-        <SimpleStakingSunsetModal />
         <VercelToolbar />
         <Cb1Membership />
         {/* {(chainId === NonEVMChainId.SOLANA || isBridge) && <SolanaWalletModal />} */}
