@@ -2,6 +2,7 @@ import { Currency, Price } from '@pancakeswap/sdk'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { BigNumber as BN } from 'bignumber.js'
+import { nearestUsableTick } from '@pancakeswap/v3-sdk'
 import { bigNumberToPrice } from './price'
 
 export function invertTickForLimitOrder(tick: number, currentTick: number) {
@@ -122,8 +123,16 @@ export function getSqrtPriceFromMarketPrice(
   })
 
   // If current tick is between targetTick and its next tick, adjust it depending on direction
+
+  // Visualize: targetTick < tickCurrent < targetTick + tickSpacing
   if (targetTick <= tickCurrent && targetTick + tickSpacing >= tickCurrent) {
     if (zeroForOne) targetTick += tickSpacing
+    else targetTick -= tickSpacing * 2
+  }
+
+  // Visualize: targetTick - tickSpacing < tickCurrent < targetTick
+  if (targetTick - tickSpacing <= tickCurrent && targetTick >= tickCurrent) {
+    if (zeroForOne) targetTick += tickSpacing * 2
     else targetTick -= tickSpacing
   }
 

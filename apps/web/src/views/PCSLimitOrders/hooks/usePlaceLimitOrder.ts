@@ -75,11 +75,12 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
     // Ticks Calculation
     const { invertedTickLower, invertedTickUpper, zeroForOne, tickLower: tickLower_, tickUpper: tickUpper_ } = ticksData
 
-    // TESTING: Take min/max of ticks for now.
-    // ! INVERTED needed only if selling/buying at BAD price
-    const tickLower = zeroForOne ? Math.max(tickLower_, invertedTickUpper) : Math.min(tickLower_, invertedTickUpper)
-    const tickUpper = zeroForOne ? Math.max(tickUpper_, invertedTickLower) : Math.min(tickUpper_, invertedTickLower)
+    // INVERTED needed only if selling/buying at BAD price
+    // const tickLower = zeroForOne ? Math.max(tickLower_, invertedTickUpper) : Math.min(tickLower_, invertedTickUpper)
+    // const tickUpper = zeroForOne ? Math.max(tickUpper_, invertedTickLower) : Math.min(tickUpper_, invertedTickLower)
 
+    const tickLower = tickLower_
+    const tickUpper = tickUpper_
     const targetTick = tickLower
 
     // Liquidity calculation using both token amounts
