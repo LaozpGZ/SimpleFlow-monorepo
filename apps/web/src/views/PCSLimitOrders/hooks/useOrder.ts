@@ -151,7 +151,13 @@ export const useOrder = (order: ResponseOrder) => {
 
   // Check for partial fill case
   const isPartialFill = useMemo(() => {
-    if (order.status === OrderStatus.Filled || order.status === OrderStatus.Withdrawn || !pool) return false
+    if (
+      order.status === OrderStatus.Filled ||
+      order.status === OrderStatus.Withdrawn ||
+      order.status === OrderStatus.Cancelled ||
+      !pool
+    )
+      return false
 
     // If tickLower < tickCurrent < tickLower + tickSpacing
     if (pool.tick > order.tick_lower && pool.tick < order.tick_lower + pool.parameters.tickSpacing) {
