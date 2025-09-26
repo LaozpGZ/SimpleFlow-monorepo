@@ -84,6 +84,11 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo, ...props }) =>
     if (protocol === 'stable') {
       link = `/stable/add/${token0Token1}`
     }
+
+    if (protocol === 'stableNg') {
+      link = `/stableNg/add/${poolInfo.poolId}`
+    }
+
     if (isInfinityProtocol(protocol)) {
       link = getAddInfinityLiquidityURL({
         chainId: poolInfo.chainId,
