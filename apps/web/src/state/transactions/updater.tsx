@@ -36,7 +36,7 @@ import { TransactionDetails } from './reducer'
 
 export function shouldCheck(
   fetchedTransactions: { [txHash: string]: TransactionDetails },
-  tx: TransactionDetails,
+  tx: TransactionDetails | undefined | null,
   forEvm = true,
 ): boolean {
   if (!tx) return false
