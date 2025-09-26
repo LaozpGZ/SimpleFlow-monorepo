@@ -55,19 +55,14 @@ export const setPercentDifferenceAtom = atom(null, async (get, set, percent: num
     tickCurrent,
     zeroForOne,
   )
+
   if (!sqrtPriceData) return
 
   const { sqrtPrice } = sqrtPriceData
 
   if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return
 
-  set(
-    customMarketPriceAtom,
-    formatNumber(sqrtPrice, {
-      maxDecimalDisplayDigits: 6,
-      maximumSignificantDigits: 6,
-    }),
-  )
+  set(customMarketPriceAtom, sqrtPrice.toFixed(6))
 })
 
 // Preset percentage values
@@ -111,12 +106,7 @@ export const presetPercentMapAtom = atom(async (get) => {
 
     if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return
 
-    const newPriceFormatted = formatNumber(sqrtPrice, {
-      maxDecimalDisplayDigits: 6,
-      maximumSignificantDigits: 6,
-    })
-
-    const difference = BN(newPriceFormatted).minus(currentMarketPrice)
+    const difference = sqrtPrice.minus(BN(currentMarketPrice))
     const newPercentage = BN(difference).dividedBy(currentMarketPrice).multipliedBy(100)
 
     percentMap[percent] = newPercentage.toFormat(2)

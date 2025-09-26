@@ -99,15 +99,6 @@ export function getSqrtPriceFromMarketPrice(
 ) {
   if (!marketPrice) return undefined
 
-  console.log('%c [getSqrtPriceFromMarketPrice] marketPrice', 'color: orange; font-weight: bold;', {
-    marketPrice,
-    baseCurrency: baseCurrency.symbol,
-    quoteCurrency: quoteCurrency.symbol,
-    tickSpacing,
-    tickCurrent,
-    zeroForOne,
-  })
-
   // Get limit order tick from price
   const parsedPrice = tryParsePrice(baseCurrency, quoteCurrency, marketPrice)
   if (!parsedPrice) return undefined
