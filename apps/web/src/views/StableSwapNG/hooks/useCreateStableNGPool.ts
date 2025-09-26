@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Currency } from '@pancakeswap/sdk'
-import { useSendTransaction, useWalletClient } from 'wagmi'
+import { useSendTransaction, useWaitForTransactionReceipt, useWalletClient } from 'wagmi'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { calculateGasMargin } from 'utils'
@@ -71,15 +71,6 @@ export const useCreateStableNGPool = () => {
           ...txn,
           gas: calculateGasMargin(estimatedGas),
         })
-
-        // Add to transaction list
-        addTransaction(
-          { hash },
-          {
-            type: 'add-liquidity-v3',
-            summary: `Create ${tokenA.symbol}-${tokenB.symbol} StableNG Pool`,
-          },
-        )
 
         setAttemptingTxn(false)
 

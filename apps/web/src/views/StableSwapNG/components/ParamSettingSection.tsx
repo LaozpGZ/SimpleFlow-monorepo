@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   ArrowDropDownIcon,
@@ -17,8 +17,13 @@ import {
 } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
-import { useCreateStableNGPool } from '../hooks/useCreateStableNGPool'
+import { useWaitForTransactionReceipt } from 'wagmi'
+import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
+import { useRouter } from 'next/router'
+
+import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { type PoolPreset, percentageToFee } from '../sdk'
+import { useCreateStableNGPool } from '../hooks/useCreateStableNGPool'
 
 type PresetType = PoolPreset
 
@@ -100,6 +105,36 @@ export const ParamSettingSection = () => {
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const { createStableNGPool, attemptingTxn } = useCreateStableNGPool()
 
+  const router = useRouter()
+  const { chainId } = useAccountActiveChain()
+
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined)
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    data: receipt,
+  } = useWaitForTransactionReceipt({
+    chainId,
+    hash: txHash,
+  })
+
+  useEffect(() => {
+    if (isConfirmed) {
+      // NOTE: spefic last log is the PoolCreated event, contain poolId in topics[2]
+      // if not, return undefined. Don't use arbitary index here.
+      const lastLog = receipt?.logs?.length && receipt.logs.length === 4 ? receipt.logs[3] : undefined
+      const poolId = lastLog?.topics[2]
+
+      if (!poolId) {
+        console.error('Pool ID not found')
+        return
+      }
+
+      // router to pool detail page
+      router.push(`/liquidity/pool/${chainIdToExplorerInfoChainName[chainId]}/${poolId}`)
+    }
+  }, [isConfirmed, receipt])
+
   const getPresetLabel = (preset: PresetType | undefined) => {
     switch (preset) {
       case 'fiat':
@@ -123,12 +158,18 @@ export const ParamSettingSection = () => {
       // Convert swap fee to the correct format if provided
       const customFee = swapFee ? percentageToFee(parseFloat(swapFee) / 100) : undefined
 
-      await createStableNGPool({
+      const hash = await createStableNGPool({
         tokenA: baseCurrency,
         tokenB: quoteCurrency,
         preset: selectedPreset,
         ...(customFee && { fee: customFee }), // Override fee if custom fee is provided
       })
+
+      if (!hash) {
+        throw new Error('Failed to create pool')
+      }
+
+      setTxHash(hash)
     } catch (error) {
       console.error('Failed to create pool:', error)
       // Error handling is already done in the hook
@@ -168,7 +209,7 @@ export const ParamSettingSection = () => {
         disabled={!baseCurrency || !quoteCurrency || attemptingTxn}
         isLoading={attemptingTxn}
       >
-        {attemptingTxn ? t('Creating Pool...') : t('Preview Pool')}
+        {attemptingTxn || isConfirming ? t('Creating Pool...') : t('Preview Pool')}
       </Button>
 
       {/* Preset Modal */}
