@@ -110,6 +110,9 @@ declare module "@@@next-typesafe-url" {
     "/stable/[address]": StaticRoute;
     "/stable/add/[[...currency]]": StaticRoute;
     "/stable/remove/[[...currency]]": StaticRoute;
+    "/stableNg/[poolId]": StaticRoute;
+    "/stableNg/add/[poolId]": StaticRoute;
+    "/stableNg/remove/[poolId]": StaticRoute;
     "/swap": StaticRoute;
     "/swap/limit-v1": StaticRoute;
     "/swap/limit": StaticRoute;
