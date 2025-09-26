@@ -1,4 +1,3 @@
-import { ChainId } from '@pancakeswap/chains'
 import {
   CLPoolManagerAbi,
   INFI_CL_POOL_MANAGER_ADDRESSES,
@@ -8,20 +7,16 @@ import {
   getPoolId,
   isInfinitySupported,
 } from '@pancakeswap/infinity-sdk'
-import { multicallByGasLimit } from '@pancakeswap/multicall'
 import { Native } from '@pancakeswap/sdk'
 import { BigintIsh, Currency, getCurrencyAddress, sortCurrencies } from '@pancakeswap/swap-sdk-core'
-import { Address, Hex, decodeFunctionResult, encodeFunctionData } from 'viem'
+import { Address, Hex } from 'viem'
 
-import { Tick } from '@pancakeswap/v3-sdk'
-import { infinityCLTickLensAbi } from '../../abis/IInfinityCLTickLens'
 import { CL_HOOK_PRESETS_BY_CHAIN, CL_PRESETS_BY_CHAIN } from '../../constants'
-import { INFI_CL_TICK_LENS_ADDRESSES } from '../../constants/infinity'
 import { getPairCombinations } from '../../v3-router/functions'
 import { createOnChainPoolFactory } from '../../v3-router/providers'
 import { PoolMeta } from '../../v3-router/providers/poolProviders/internalTypes'
 import { InfinityClPool, OnChainProvider, PoolType } from '../../v3-router/types'
-import { getV3PoolFetchConfig } from '../constants'
+import { fetchTickLenPoolsTick } from '../../utils/tickLenQuery.helper'
 import { GetInfinityCandidatePoolsParams } from '../types'
 
 type WithMulticallGasLimit = {
@@ -169,29 +164,6 @@ export const getInfinityClPoolsWithoutTicks = createOnChainPoolFactory<InfinityC
   },
 })
 
-function getBitmapIndex(tick: number, tickSpacing: number) {
-  return Math.floor(tick / tickSpacing / 256)
-}
-
-type GetBitmapIndexListParams = {
-  currentTick: number
-  tickSpacing: number
-}
-
-function createBitmapIndexListBuilder(tickRange: number) {
-  return function buildBitmapIndexList<T>({ currentTick, tickSpacing, ...rest }: GetBitmapIndexListParams & T) {
-    const minIndex = getBitmapIndex(currentTick - tickRange, tickSpacing)
-    const maxIndex = getBitmapIndex(currentTick + tickRange, tickSpacing)
-    return Array.from(Array(maxIndex - minIndex + 1), (_, i) => ({
-      bitmapIndex: minIndex + i,
-      ...rest,
-    }))
-  }
-}
-
-// only allow 10% slippage
-const buildBitmapIndexList = createBitmapIndexListBuilder(10)
-
 type FillPoolsWithTicksParams = {
   pools: InfinityClPool[]
 } & WithClientProvider &
@@ -205,66 +177,26 @@ export async function fillClPoolsWithTicks({
   if (pools.length === 0) {
     return []
   }
-  const chainId: ChainId = pools[0]?.currency0.chainId
-  const tickLensAddress = INFI_CL_TICK_LENS_ADDRESSES[chainId]
-  const client = clientProvider?.({ chainId })
-  if (!client || !tickLensAddress) {
-    throw new Error('Fill pools with ticks failed. No valid public client or tick lens found.')
-  }
-  const { gasLimit: gasLimitPerCall, retryGasMultiplier } = getV3PoolFetchConfig(chainId)
-  const bitmapIndexes = pools
-    .map(({ tick, tickSpacing }, i) =>
-      buildBitmapIndexList<{ poolIndex: number }>({ currentTick: tick, tickSpacing, poolIndex: i }),
-    )
-    .reduce<{ bitmapIndex: number; poolIndex: number }[]>((acc, cur) => {
-      acc.push(...cur)
-      return acc
-    }, [])
-  const res = await multicallByGasLimit(
-    bitmapIndexes.map(({ poolIndex, bitmapIndex }) => ({
-      target: tickLensAddress as Address,
-      callData: encodeFunctionData({
-        abi: infinityCLTickLensAbi,
-        args: [pools[poolIndex].id, bitmapIndex],
-        functionName: 'getPopulatedTicksInWord',
-      }),
-      gasLimit: gasLimitPerCall,
-    })),
-    {
-      chainId,
-      client,
-      gasLimit,
-      retryFailedCallsWithGreaterLimit: {
-        gasLimitMultiplier: retryGasMultiplier,
-      },
-    },
-  )
-  const poolsWithTicks = pools.map((p) => ({ ...p }))
-  for (const [index, result] of res.results.entries()) {
-    const { poolIndex } = bitmapIndexes[index]
-    const pool = poolsWithTicks[poolIndex]
-    const data = result.success
-      ? (decodeFunctionResult({
-          abi: infinityCLTickLensAbi,
-          functionName: 'getPopulatedTicksInWord',
-          data: result.result as `0x${string}`,
-        }) as { tick: number; liquidityNet: bigint; liquidityGross: bigint }[])
-      : undefined
-    const newTicks = data
-      ?.map(
-        ({ tick, liquidityNet, liquidityGross }: { tick: number; liquidityNet: bigint; liquidityGross: bigint }) =>
-          new Tick({
-            index: tick,
-            liquidityNet,
-            liquidityGross,
-          }),
-      )
-      .reverse()
-    if (!newTicks) {
-      continue
-    }
-    pool.ticks = [...(pool.ticks || []), ...newTicks]
-  }
-  // Filter those pools with no ticks found
-  return poolsWithTicks.filter((p) => p.ticks?.length)
+
+  const ticksByPool = await fetchTickLenPoolsTick({
+    pools,
+    clientProvider,
+    gasLimit,
+  })
+
+  return pools
+    .map((pool) => {
+      const ticks = ticksByPool[pool.id.toLowerCase()]
+      const combinedTicks = ticks?.length ? [...(pool.ticks ?? []), ...ticks] : pool.ticks
+
+      if (!combinedTicks?.length) {
+        return null
+      }
+
+      return {
+        ...pool,
+        ticks: combinedTicks,
+      }
+    })
+    .filter((pool): pool is InfinityClPool => Boolean(pool))
 }
