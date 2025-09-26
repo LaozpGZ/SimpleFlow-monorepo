@@ -3,6 +3,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { LightCard } from '@pancakeswap/widgets-internal'
 import { useUserOpenLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { OrdersModal } from './OrdersModal'
 
 const StyledCard = styled(LightCard)`
@@ -20,10 +22,13 @@ const StyledCard = styled(LightCard)`
 export const OrdersSummaryCard = () => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onDismiss } = useModalV2()
+  const { chainId } = useAccountActiveChain()
 
   const { data: openOrders, isLoading } = useUserOpenLimitOrders()
 
-  if (!openOrders && !isLoading) return null
+  const isWrongNetwork = !LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId)
+
+  if (isWrongNetwork || (!openOrders && !isLoading)) return null
 
   return (
     <>

@@ -26,6 +26,8 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS } from 'config/constants/supportChains'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field, ValidationError } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
@@ -42,7 +44,10 @@ import { ticksAtom } from '../state/form/ticksAtom'
 export const CommitButton = () => {
   const { t } = useTranslation()
   const { isOpen, onDismiss, onOpen } = useModalV2()
-  const { account } = useAccountActiveChain()
+
+  const { account, chainId } = useAccountActiveChain()
+  const { switchNetwork } = useSwitchNetwork()
+  const isWrongNetwork = !LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId)
 
   const { approvalState, approveCallback } = useLimitOrderApproval()
   const { isEnoughBalance } = useLimitOrderUserBalance()
@@ -79,6 +84,10 @@ export const CommitButton = () => {
 
   if (!account) {
     return <ConnectWalletButton />
+  }
+
+  if (isWrongNetwork) {
+    return <Button onClick={() => switchNetwork(LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS[0])}>{t('Switch Network')}</Button>
   }
 
   return (

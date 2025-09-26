@@ -4,6 +4,7 @@ import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { useCallback } from 'react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { SLOW_INTERVAL } from 'config/constants'
+import { LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { PCS_LIMIT_ORDER_HISTORY_URL, ORDERS_PER_PAGE, MAX_PENDING_ORDERS } from '../constants'
 import { OrderHistoryResponse, PaginationParams, OrderStatus } from '../types/orders.types'
 import {
@@ -61,7 +62,7 @@ export const useUserOpenLimitOrders = () => {
       const data = await getUserLimitOrders(chainName, account, OrderStatus.Open, undefined, MAX_PENDING_ORDERS)
       return data.rows
     },
-    enabled: !!account && !!chainId,
+    enabled: !!account && !!chainId && LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId),
     refetchInterval: SLOW_INTERVAL,
     staleTime: 100, // 100ms
   })
@@ -117,7 +118,7 @@ export const useUserLimitOrders = () => {
         },
       }
     },
-    enabled: !!account && !!chainName,
+    enabled: !!account && !!chainName && LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId),
     refetchInterval: SLOW_INTERVAL,
     staleTime: 100, // 100ms
   })
