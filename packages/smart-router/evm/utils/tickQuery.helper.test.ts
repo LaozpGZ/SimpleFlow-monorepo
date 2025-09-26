@@ -19,10 +19,7 @@ vi.mock('viem', async () => {
   }
 })
 
-const decodeFunctionResultMock = decodeFunctionResult as unknown as Mock<
-  [Parameters<typeof decodeFunctionResult>[0]],
-  Hex
->
+const decodeFunctionResultMock = decodeFunctionResult as unknown as Mock
 
 const SHIFT = 128n
 

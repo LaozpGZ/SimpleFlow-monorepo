@@ -4,6 +4,7 @@ import { getPairCombinations } from '../../v3-router/functions'
 import { getV3PoolsWithoutTicksOnChain } from '../../v3-router/providers'
 import { OnChainProvider, V3Pool } from '../../v3-router/types'
 import { fetchCompactPoolsTick } from '../../utils/compactTickQuery.helper'
+import { fetchTickLenPoolsTick } from '../../utils/tickLenQuery.helper'
 
 type WithMulticallGasLimit = {
   gasLimit?: BigintIsh
@@ -58,7 +59,8 @@ async function fillPoolsWithTicks({
   disableFilterNoTicks,
 }: FillPoolsWithTicksParams): Promise<V3Pool[]> {
   console.log(`[pools]`, pools.length)
-  const ticksByPool = await fetchCompactPoolsTick({ pools, clientProvider, gasLimit })
+  // const ticksByPool = await fetchCompactPoolsTick({ pools, clientProvider, gasLimit })
+  const ticksByPool = await fetchTickLenPoolsTick({ pools, clientProvider, gasLimit })
   console.log(`[ticks]`, Object.keys(ticksByPool).length)
   const poolsWithTicks = pools.map((p) => ({
     ...p,

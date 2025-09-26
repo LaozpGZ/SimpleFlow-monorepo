@@ -165,21 +165,21 @@ export async function fetchCompactPoolsTick({
     calls: pools.length,
     chunkCount: res.chunkCount,
     avgCallPerChunk: BigInt(pools.length) / BigInt(res.chunkCount),
-    gasPerCall: fg(gasLimitPerCall),
-    maxSingleCallGasUsage: fg(res.maxSingleCallGasUsage),
-    avgGasUsagePerCall: fg(res.avgGasUsagePerCall),
-    gasLimitPerChunk: fg(res.gasLimit),
+    gasPerCall: formatGas(gasLimitPerCall),
+    maxSingleCallGasUsage: formatGas(res.maxSingleCallGasUsage),
+    avgGasUsagePerCall: formatGas(res.avgGasUsagePerCall),
+    gasLimitPerChunk: formatGas(res.gasLimit),
   })
 
   return ticksByPool
 }
 
-function fg(gas: bigint) {
-  if (gas > 1_000_000n) {
-    return `${(Number(gas) / 1_000_000).toFixed(2)}M`
+export function formatGas(gasUnits: bigint): string {
+  if (gasUnits > 1_000_000n) {
+    return `${(Number(gasUnits) / 1_000_000).toFixed(2)}M`
   }
-  if (gas > 1_000n) {
-    return `${(Number(gas) / 1_000).toFixed(2)}K`
+  if (gasUnits > 1_000n) {
+    return `${(Number(gasUnits) / 1_000).toFixed(2)}K`
   }
-  return gas.toString()
+  return gasUnits.toString()
 }
