@@ -155,7 +155,7 @@ const OpenRoundCard: React.FC<React.PropsWithChildren<OpenRoundCardProps>> = ({
         logger.info('bet-placed', {
           address: account,
           position: positionDisplay,
-          token: config.predictionCurrency.symbol,
+          predictedToken: config.predictionCurrency.symbol,
         })
 
         handleBack()
