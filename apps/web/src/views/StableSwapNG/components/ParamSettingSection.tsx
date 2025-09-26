@@ -16,8 +16,11 @@ import {
   Text,
 } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
+import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
+import { useCreateStableNGPool } from '../hooks/useCreateStableNGPool'
+import { type PoolPreset, percentageToFee } from '../sdk'
 
-type PresetType = 'fiat' | 'crypto' | 'lrt'
+type PresetType = PoolPreset
 
 interface PresetModalProps {
   isOpen: boolean
@@ -94,6 +97,8 @@ export const ParamSettingSection = () => {
   const [isPresetModalOpen, setIsPresetModalOpen] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState<PresetType>()
   const [swapFee, setSwapFee] = useState('')
+  const { baseCurrency, quoteCurrency } = useCurrencies()
+  const { createStableNGPool, attemptingTxn } = useCreateStableNGPool()
 
   const getPresetLabel = (preset: PresetType | undefined) => {
     switch (preset) {
@@ -108,9 +113,26 @@ export const ParamSettingSection = () => {
     }
   }
 
-  const handlePreviewPool = () => {
-    // Handle preview pool logic
-    console.log('Preview pool clicked', { selectedPreset, swapFee })
+  const handlePreviewPool = async () => {
+    if (!baseCurrency || !quoteCurrency) {
+      console.error('Missing currencies for pool creation')
+      return
+    }
+
+    try {
+      // Convert swap fee to the correct format if provided
+      const customFee = swapFee ? percentageToFee(parseFloat(swapFee) / 100) : undefined
+
+      await createStableNGPool({
+        tokenA: baseCurrency,
+        tokenB: quoteCurrency,
+        preset: selectedPreset,
+        ...(customFee && { fee: customFee }), // Override fee if custom fee is provided
+      })
+    } catch (error) {
+      console.error('Failed to create pool:', error)
+      // Error handling is already done in the hook
+    }
   }
 
   return (
@@ -140,8 +162,13 @@ export const ParamSettingSection = () => {
       </Box>
 
       {/* Preview Pool Button */}
-      <Button width="100%" onClick={handlePreviewPool} disabled={!swapFee}>
-        {t('Preview Pool')}
+      <Button
+        width="100%"
+        onClick={handlePreviewPool}
+        disabled={!baseCurrency || !quoteCurrency || attemptingTxn}
+        isLoading={attemptingTxn}
+      >
+        {attemptingTxn ? t('Creating Pool...') : t('Preview Pool')}
       </Button>
 
       {/* Preset Modal */}
