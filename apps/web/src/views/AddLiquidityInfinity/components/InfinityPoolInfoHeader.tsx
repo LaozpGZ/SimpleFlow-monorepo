@@ -13,8 +13,7 @@ import {
   InfinityCLPoolDerivedAprButton,
 } from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
 
-export const InfinityPoolInfoHeader = () => {
-  const { chainId, poolId } = useInfinityPoolIdRouteParams()
+export const InfinityPoolInfoHeader = ({ poolId, chainId }: { poolId: `0x${string}`; chainId: number }) => {
   const { isMobile } = useMatchBreakpoints()
   const poolInfo = usePoolInfo({ poolAddress: poolId, chainId })
   const hookData = useHookByPoolId(chainId, poolId)

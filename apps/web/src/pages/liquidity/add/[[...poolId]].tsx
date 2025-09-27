@@ -26,7 +26,7 @@ const AddLiquiditySelectorPage = () => {
     return <NotFoundPage />
   }
 
-  if (!routeParams) {
+  if (!routeParams || !chainId || !poolId) {
     return <PageLoader />
   }
 
@@ -46,7 +46,7 @@ const AddLiquiditySelectorPage = () => {
         </FlexGap>
       </Breadcrumbs>
       <FlexGap flexDirection="column" gap={isLg ? '24px' : '16px'} mt={['16px', '24px', '24px', '24px']}>
-        <InfinityPoolInfoHeader />
+        <InfinityPoolInfoHeader poolId={poolId} chainId={chainId} />
         <AddLiquidityInfinityForm />
       </FlexGap>
     </Container>
