@@ -1,4 +1,8 @@
-import { Box, Spinner } from '@pancakeswap/uikit'
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, Breadcrumbs, Spinner, FlexGap, Text, Container } from '@pancakeswap/uikit'
+import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { LinkText } from 'components/Liquidity/LinkText'
+import { CHAIN_QUERY_NAME } from 'config/chains'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import dynamic from 'next/dynamic'
@@ -13,7 +17,7 @@ import { PageWithoutFAQ } from 'views/Page'
 const AddStableNGLiquidityPage = () => {
   const router = useRouter()
   const { chainId } = useActiveChainId()
-
+  const { t } = useTranslation()
   const { poolId } = router.query
 
   const { data: poolInfo } = usePoolKeyByPoolId(poolId as `0x${string}`, chainId)
@@ -42,13 +46,26 @@ const AddStableNGLiquidityPage = () => {
 
   return (
     <AddLiquidityV2FormProvider>
-      <AddLiquidityV3Layout>
+      <Container mx="auto" my="24px" maxWidth="1200px">
+        <Breadcrumbs>
+          <NextLinkFromReactRouter to="/liquidity/pools">
+            <LinkText>{t('Farms')}</LinkText>
+          </NextLinkFromReactRouter>
+          {chainId && poolId && (
+            <NextLinkFromReactRouter to={`/liquidity/pool/${CHAIN_QUERY_NAME[chainId]}/${poolId}`}>
+              <LinkText>{t('Pool Detail')}</LinkText>
+            </NextLinkFromReactRouter>
+          )}
+          <FlexGap alignItems="center" gap="4px">
+            <Text>{t('Add Liquidity')}</Text>
+          </FlexGap>
+        </Breadcrumbs>
         <UniversalAddLiquidity
           preferredSelectType={SELECTOR_TYPE.STABLE}
           currencyIdA={currencyIdA}
           currencyIdB={currencyIdB}
         />
-      </AddLiquidityV3Layout>
+      </Container>
     </AddLiquidityV2FormProvider>
   )
 }

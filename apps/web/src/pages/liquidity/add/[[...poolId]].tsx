@@ -1,26 +1,17 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Breadcrumbs, Container, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { LinkText } from 'components/Liquidity/LinkText'
 import PageLoader from 'components/Loader/PageLoader'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { PoolIdRoute } from 'dynamicRoute'
 import { useInfinityPoolIdRouteParams, usePoolIdRoute } from 'hooks/dynamicRoute/usePoolIdRoute'
 import dynamic from 'next/dynamic'
 import NotFoundPage from 'pages/404'
-import styled from 'styled-components'
 import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import { AddLiquidityInfinityForm } from 'views/AddLiquidityInfinity'
 import { InfinityPoolInfoHeader } from 'views/AddLiquidityInfinity/components/InfinityPoolInfoHeader'
-
-const LinkText = styled(Text)`
-  color: ${({ theme }) => theme.colors.primary60};
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`
 
 export type RouteType = typeof PoolIdRoute
 
