@@ -13,6 +13,8 @@ import { StyledCardHeader } from '../style'
 type PositionHeaderProps = LiquidityDetailHeaderProps & {
   poolId?: Hex | undefined
   isOwner?: boolean
+  lowerTick?: number
+  upperTick?: number
 }
 
 const FlexContainer: React.FC<PropsWithChildren> = ({ children }) => {
@@ -33,6 +35,8 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
   poolId,
   tokenId,
   isOwner = true,
+  lowerTick,
+  upperTick,
   ...props
 }) => {
   const { t } = useTranslation()
@@ -100,6 +104,24 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
     return ''
   }, [poolId, protocol, tokenId, chainId])
 
+  const copyPath = useMemo(() => {
+    if (!poolId || typeof lowerTick !== 'number' || typeof upperTick !== 'number') return ''
+
+    return $path({
+      route: '/liquidity/add/[[...poolId]]',
+      routeParams: {
+        poolId: [chainId, 'infinity', poolId],
+      },
+      // @ts-ignore
+      searchParams: {
+        chain: CHAIN_QUERY_NAME[chainId],
+        [PERSIST_CHAIN_KEY]: 1,
+        lowerTick,
+        upperTick,
+      },
+    })
+  }, [poolId, protocol])
+
   return (
     <StyledCardHeader variant="pale">
       <LiquidityTitle
@@ -121,6 +143,11 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
             <Button variant="secondary" width="100%" disabled={!isOwner}>
               {t('Remove')}
             </Button>
+          </NextLinkFromReactRouter>
+        ) : null}
+        {typeof lowerTick === 'number' && typeof upperTick === 'number' ? (
+          <NextLinkFromReactRouter to={copyPath}>
+            <Button width="100%">{t('Copy')}</Button>
           </NextLinkFromReactRouter>
         ) : null}
       </FlexContainer>

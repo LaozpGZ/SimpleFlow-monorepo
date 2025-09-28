@@ -348,6 +348,8 @@ export const InfinityCLPosition = () => {
                   hookData={hookData}
                   poolId={poolId}
                   tokenId={tokenId ? Number(tokenId) : undefined}
+                  lowerTick={tickLower}
+                  upperTick={tickUpper}
                 />
               ) : null}
               <CardBody>
