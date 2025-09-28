@@ -184,13 +184,13 @@ export function getSqrtPriceFromCurrentTick({
   } else {
     // zeroForOne is false
     // Adjust ticks below the current tick
-    tickLower = nearestUsableTick(tickCurrent - tickSpacing, tickSpacing)
-    if (tickLower >= tickCurrent) {
-      tickLower -= tickSpacing
-    }
-    tickUpper = nearestUsableTick(tickCurrent - tickSpacing * 2, tickSpacing)
+    tickUpper = nearestUsableTick(tickCurrent - tickSpacing, tickSpacing)
     if (tickUpper >= tickCurrent) {
       tickUpper -= tickSpacing
+    }
+    tickLower = nearestUsableTick(tickCurrent - tickSpacing * 2, tickSpacing)
+    if (tickLower >= tickCurrent) {
+      tickLower -= tickSpacing
     }
   }
 
