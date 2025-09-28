@@ -5,6 +5,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
 import { BigNumber as BN } from 'bignumber.js'
 import currencyId from 'utils/currencyId'
+import { Trans } from 'components/CustomTrans'
 import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 import {
   differencePercentageAtom,
@@ -190,24 +191,25 @@ export const QuickActionButtons = () => {
         <Message variant="warning" mt="2px">
           <Box>
             <Text as="span" small>
-              <span>
-                {t(
-                  'Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use',
-                  { percent: Math.abs(Number(percentage ?? 0)) },
+              <Trans
+                text={t(
+                  'Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use %swap% instead.',
                 )}
-              </span>
-              <span>
-                <Link
-                  href={`/swap?inputCurrencyId=${currencyId(inputCurrency)}&outputCurrencyId=${currencyId(
-                    outputCurrency,
-                  )}`}
-                  color="primary60"
-                  small
-                >
-                  {t('Swap')}
-                </Link>
-              </span>
-              <span>{t('instead.')}</span>
+                data={{
+                  percent: Math.abs(Number(percentage ?? 0)),
+                  swap: (
+                    <Link
+                      href={`/swap?inputCurrencyId=${currencyId(inputCurrency)}&outputCurrencyId=${currencyId(
+                        outputCurrency,
+                      )}`}
+                      color="primary60"
+                      small
+                    >
+                      {t('Swap')}
+                    </Link>
+                  ),
+                }}
+              />
             </Text>
           </Box>
         </Message>
