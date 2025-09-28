@@ -50,7 +50,7 @@ export const CommitButton = () => {
   const isWrongNetwork = !LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId)
 
   const { approvalState, approveCallback } = useLimitOrderApproval()
-  const { isEnoughBalance } = useLimitOrderUserBalance()
+  const { isEnoughBalance, showMinimumUSDWarning } = useLimitOrderUserBalance()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
@@ -59,7 +59,7 @@ export const CommitButton = () => {
 
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
 
-  const isEnabled = enabled && isEnoughBalance && !isSellingOrBuyingAtWorsePrice
+  const isEnabled = enabled && isEnoughBalance && !showMinimumUSDWarning && !isSellingOrBuyingAtWorsePrice
 
   const { refetch } = useAtomValue(selectedPoolAtom)
 
@@ -73,7 +73,7 @@ export const CommitButton = () => {
     if (errorReason === ValidationError.NO_LIQUIDITY) return t('Insufficient Liquidity')
 
     return t('Place Limit Order')
-  }, [errorReason, t, isEnoughBalance, inputCurrency?.symbol, formattedAmounts])
+  }, [errorReason, t, isEnoughBalance, showMinimumUSDWarning, inputCurrency?.symbol, formattedAmounts])
 
   const handleOpen = useCallback(() => {
     // Refetch pool to get latest market price

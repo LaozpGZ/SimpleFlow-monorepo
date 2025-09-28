@@ -6,9 +6,12 @@ import { BigNumber as BN } from 'bignumber.js'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { Rounding } from '@pancakeswap/swap-sdk-core'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { useUnifiedUSDPriceAmount } from 'hooks/useStablecoinPrice'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
+import { MIN_USD_VALUE } from '../constants'
 
 /**
  * Check token balance for Limit Order
@@ -22,6 +25,12 @@ export const useLimitOrderUserBalance = () => {
   const [inputBalance] = useCurrencyBalances(account, [inputCurrency ?? undefined])
   const [outputBalance] = useCurrencyBalances(account, [outputCurrency ?? undefined])
 
+  const amountUSD = useUnifiedUSDPriceAmount(
+    inputCurrency ?? undefined,
+    BN(formattedAmounts[Field.CURRENCY_A]).toNumber(),
+  )
+  const showMinimumUSDWarning = amountUSD ? amountUSD < MIN_USD_VALUE : false
+
   const maxInputBalance = useMemo(() => {
     return inputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN)
   }, [inputBalance])
@@ -33,9 +42,6 @@ export const useLimitOrderUserBalance = () => {
     if (!inputBalance) return false
     const inputBalanceAmount = formatAmount(inputBalance, inputCurrency?.decimals)
     if (!inputBalanceAmount) return false
-
-    // Add some dust to account for gas
-    // const dust = inputCurrency?.isNative ? baseDust : '0'
 
     const requiredAmount = BN(formattedAmounts[Field.CURRENCY_A])
 
@@ -62,6 +68,7 @@ export const useLimitOrderUserBalance = () => {
     isEnoughBalance,
     maxInputBalance,
     maxOutputBalance,
+    showMinimumUSDWarning,
     getPercentInputCurrency,
     getPercentOutputCurrency,
   }

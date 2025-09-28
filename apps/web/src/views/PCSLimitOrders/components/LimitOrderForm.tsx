@@ -27,8 +27,7 @@ export const LimitOrderForm = () => {
   const setCurrency = useSetAtom(setCurrencyAtom)
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
 
-  // TODO: Implement in separate atom
-  const showMinimumUSDWarning = false
+  const { showMinimumUSDWarning } = useLimitOrderUserBalance()
 
   const handleInput = useCallback(
     (field: Field, value: string | undefined) => {
