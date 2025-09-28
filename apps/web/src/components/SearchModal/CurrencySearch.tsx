@@ -186,9 +186,10 @@ function CurrencySearch({
 
   const showNative: boolean = useMemo(() => {
     if (tokensToShow && !showNativeProp) return false
+    if (!showNativeProp) return false
     const s = debouncedQuery.toLowerCase().trim()
-    return native && native.symbol?.toLowerCase?.()?.indexOf(s) !== -1
-  }, [debouncedQuery, native, tokensToShow])
+    return native && (s === '' || native.symbol?.toLowerCase?.()?.indexOf(s) !== -1)
+  }, [debouncedQuery, native, tokensToShow, showNativeProp])
 
   const filteredTokens = useMemo(() => {
     if (isSolana) {
@@ -206,7 +207,7 @@ function CurrencySearch({
     const filterToken = createFilterToken(debouncedQuery, (address) => isAddress(address))
     // Only EVM tokens here
     return Object.values(tokensToShow || allTokens).filter(filterToken) as Token[]
-  }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens, otherSelectedCurrency])
+  }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens, otherSelectedCurrency, showNative, native])
 
   const queryTokens = useSortedTokensByQuery(filteredTokens as Token[], debouncedQuery)
 
@@ -302,7 +303,7 @@ function CurrencySearch({
       )
     }
 
-    return Boolean(filteredSortedTokens?.length) || hasFilteredInactiveTokens ? (
+    return Boolean(filteredSortedTokens?.length) || hasFilteredInactiveTokens || showNative ? (
       <Box mx="-24px" mt="20px" height="100%">
         <CurrencyList
           height={isMobile ? (showCommonBases ? height || 250 : height ? height + 80 : 350) : 340}
