@@ -1,7 +1,7 @@
-import { useDebounce } from '@pancakeswap/hooks'
 import { UnifiedCurrency } from '@pancakeswap/sdk'
-import { tokens } from '@pancakeswap/uikit'
+import { useDebounce, useLastUpdated } from '@pancakeswap/hooks'
 import useTheme from 'hooks/useTheme'
+import { tokens } from '@pancakeswap/uikit'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { styled } from 'styled-components'
 import type { TradingViewWidget, TradingViewWidgetOptions } from './lib/pancakeswap-charting-library.d.ts'
@@ -66,6 +66,36 @@ const setSymbolInfo = (
   update24HPriceData(on24HPriceDataChange)
 }
 
+const getWidgetOverrides = (isDark) => ({
+  'mainSeriesProperties.candleStyle.upColor': isDark ? tokens.colors.dark.success : tokens.colors.light.success,
+  'mainSeriesProperties.candleStyle.downColor': isDark
+    ? tokens.colors.dark.destructive
+    : tokens.colors.light.destructive,
+  'mainSeriesProperties.candleStyle.borderUpColor': isDark ? tokens.colors.dark.success : tokens.colors.light.success,
+  'mainSeriesProperties.candleStyle.borderDownColor': isDark
+    ? tokens.colors.dark.destructive
+    : tokens.colors.light.destructive,
+  'mainSeriesProperties.candleStyle.wickUpColor': isDark ? tokens.colors.dark.success : tokens.colors.light.success,
+  'mainSeriesProperties.candleStyle.wickDownColor': isDark
+    ? tokens.colors.dark.destructive
+    : tokens.colors.light.destructive,
+  'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
+  'paneProperties.backgroundType': 'solid',
+  'paneProperties.grid.color': isDark ? '#ffffff' : '#e0e0e0',
+  'paneProperties.grid.style': 0,
+  'paneProperties.vertGrid.color': isDark ? '#ffffff' : '#e0e0e0',
+  'paneProperties.vertGrid.style': 0,
+  'paneProperties.horzGrid.color': isDark ? '#ffffff' : '#e0e0e0',
+  'paneProperties.horzGrid.style': 0,
+  headerToolbarBg: isDark ? tokens.colors.dark.backgroundAlt : tokens.colors.light.backgroundAlt,
+  custom_font_family: `'Kanit', sans-serif`,
+  'scalesProperties.fontFamily': `'Kanit', sans-serif`,
+  'scalesProperties.fontSize': 12,
+  'scalesProperties.textColor': isDark ? '#ffffff' : '#1a1a1a',
+  'legendProperties.fontFamily': `'Kanit', sans-serif`,
+  'legendProperties.fontSize': 12,
+})
+
 const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency1, on24HPriceDataChange }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetRef = useRef<TradingViewWidget | null>(null)
@@ -77,7 +107,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
   const initializationTimeout = useRef<NodeJS.Timeout | null>(null)
   const customButtonRef = useRef<HTMLButtonElement | null>(null)
   const { isDark, theme } = useTheme()
-
+  const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   const modalRef = useRef<HTMLButtonElement | null>(null)
 
   // Debounce currency changes to prevent frequent widget recreation
@@ -216,41 +246,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
             const options: TradingViewWidgetOptions = {
               symbol,
               theme: isDark ? 'Dark' : 'Light',
-              overrides: {
-                'mainSeriesProperties.candleStyle.upColor': isDark
-                  ? tokens.colors.dark.success
-                  : tokens.colors.light.success,
-                'mainSeriesProperties.candleStyle.downColor': isDark
-                  ? tokens.colors.dark.destructive
-                  : tokens.colors.light.destructive,
-                'mainSeriesProperties.candleStyle.borderUpColor': isDark
-                  ? tokens.colors.dark.success
-                  : tokens.colors.light.success,
-                'mainSeriesProperties.candleStyle.borderDownColor': isDark
-                  ? tokens.colors.dark.destructive
-                  : tokens.colors.light.destructive,
-                'mainSeriesProperties.candleStyle.wickUpColor': isDark
-                  ? tokens.colors.dark.success
-                  : tokens.colors.light.success,
-                'mainSeriesProperties.candleStyle.wickDownColor': isDark
-                  ? tokens.colors.dark.destructive
-                  : tokens.colors.light.destructive,
-                'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
-                'paneProperties.backgroundType': 'solid',
-                'paneProperties.grid.color': isDark ? '#ffffff' : '#e0e0e0',
-                'paneProperties.grid.style': 0,
-                'paneProperties.vertGrid.color': isDark ? '#ffffff' : '#e0e0e0',
-                'paneProperties.vertGrid.style': 0,
-                'paneProperties.horzGrid.color': isDark ? '#ffffff' : '#e0e0e0',
-                'paneProperties.horzGrid.style': 0,
-                headerToolbarBg: isDark ? tokens.colors.dark.backgroundAlt : tokens.colors.light.backgroundAlt,
-                custom_font_family: `'Kanit', sans-serif`,
-                'scalesProperties.fontFamily': `'Kanit', sans-serif`,
-                'scalesProperties.fontSize': 12,
-                'scalesProperties.textColor': isDark ? '#ffffff' : '#1a1a1a',
-                'legendProperties.fontFamily': `'Kanit', sans-serif`,
-                'legendProperties.fontSize': 12,
-              },
+              overrides: getWidgetOverrides(isDark),
               disabled_features: [
                 'left_toolbar',
                 // 'header_widget',
@@ -336,6 +332,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
             if (widgetRef.current && widgetRef.current.onChartReady) {
               widgetRef.current.onChartReady(() => {
                 isWidgetReady.current = true
+                refresh()
                 // Create custom button after widget is ready
                 setTimeout(() => {
                   createCustomButton()
@@ -345,6 +342,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
               // If no onChartReady method, set as ready after delay
               setTimeout(() => {
                 isWidgetReady.current = true
+                refresh()
                 // Create custom button after widget is ready
                 setTimeout(() => {
                   createCustomButton()
@@ -375,46 +373,14 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
       if (widgetRef.current && isInitialized.current && isWidgetReady.current) {
         try {
           await widgetRef.current.changeTheme(isDark ? 'Dark' : 'Light')
-          widgetRef.current.applyOverrides({
-            'mainSeriesProperties.candleStyle.upColor': isDark
-              ? tokens.colors.dark.success
-              : tokens.colors.light.success,
-            'mainSeriesProperties.candleStyle.downColor': isDark
-              ? tokens.colors.dark.destructive
-              : tokens.colors.light.destructive,
-            'mainSeriesProperties.candleStyle.borderUpColor': isDark
-              ? tokens.colors.dark.success
-              : tokens.colors.light.success,
-            'mainSeriesProperties.candleStyle.borderDownColor': isDark
-              ? tokens.colors.dark.destructive
-              : tokens.colors.light.destructive,
-            'mainSeriesProperties.candleStyle.wickUpColor': isDark
-              ? tokens.colors.dark.success
-              : tokens.colors.light.success,
-            'mainSeriesProperties.candleStyle.wickDownColor': isDark
-              ? tokens.colors.dark.destructive
-              : tokens.colors.light.destructive,
-            'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
-            'paneProperties.backgroundType': 'solid',
-            'paneProperties.grid.color': isDark ? '#ffffff' : '#e0e0e0',
-            'paneProperties.grid.style': 0,
-            'paneProperties.vertGrid.color': isDark ? '#ffffff' : '#e0e0e0',
-            'paneProperties.vertGrid.style': 0,
-            'paneProperties.horzGrid.color': isDark ? '#ffffff' : '#e0e0e0',
-            'paneProperties.horzGrid.style': 0,
-            'scalesProperties.fontFamily': `'Kanit', sans-serif`,
-            'scalesProperties.fontSize': 12,
-            'scalesProperties.textColor': isDark ? '#ffffff' : '#1a1a1a',
-            'legendProperties.fontFamily': `'Kanit', sans-serif`,
-            'legendProperties.fontSize': 12,
-          })
+          widgetRef.current.applyOverrides(getWidgetOverrides(isDark))
         } catch (error) {
           console.error('Error changing theme:', error)
         }
       }
     }
     changeTheme()
-  }, [isDark, theme])
+  }, [isDark, theme, lastUpdated])
 
   useEffect(() => {
     return () => {
