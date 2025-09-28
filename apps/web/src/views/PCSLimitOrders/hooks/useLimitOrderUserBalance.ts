@@ -8,6 +8,7 @@ import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { Rounding } from '@pancakeswap/swap-sdk-core'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useUnifiedUSDPriceAmount } from 'hooks/useStablecoinPrice'
+import { useRouter } from 'next/router'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
@@ -17,6 +18,7 @@ import { MIN_USD_VALUE } from '../constants'
  * Check token balance for Limit Order
  */
 export const useLimitOrderUserBalance = () => {
+  const router = useRouter()
   const { account } = useAccountActiveChain()
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
@@ -29,7 +31,7 @@ export const useLimitOrderUserBalance = () => {
     inputCurrency ?? undefined,
     BN(formattedAmounts[Field.CURRENCY_A]).toNumber(),
   )
-  const showMinimumUSDWarning = amountUSD ? amountUSD < MIN_USD_VALUE : false
+  const showMinimumUSDWarning = amountUSD && router.query.disableWarnings !== 'true' ? amountUSD < MIN_USD_VALUE : false
 
   const maxInputBalance = useMemo(() => {
     return inputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN)
