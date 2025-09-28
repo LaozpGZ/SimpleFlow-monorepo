@@ -1,11 +1,10 @@
 import { ISortOrder } from '@pancakeswap/uikit'
-import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
-import { useTokenListPrepared } from 'hooks/useTokenListPrepared'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'
-import { farmsSearchV2Atom } from 'views/universalFarms/atom/farmsSearchAtom'
+import { PoolSearcherState } from 'views/universalFarms/atom/PoolSearcher'
 import { searchQueryAtom, updateSortAtom } from 'views/universalFarms/atom/searchQueryAtom'
+import { useFarmSearch } from 'views/universalFarms/hooks/useFarmSearch'
 
 interface UseMiniPoolsDataReturn {
   pools: PoolInfo[]
@@ -15,23 +14,11 @@ interface UseMiniPoolsDataReturn {
 }
 
 export const useMiniPoolsData = (): UseMiniPoolsDataReturn => {
-  // Prepare token lists
-  const listPrepared = useTokenListPrepared(DEFAULT_ACTIVE_LIST_URLS)
-
-  const query = useAtomValue(searchQueryAtom)
-
   // Use existing Universal Farms atoms
-  const [page, setPage] = useState(0)
-  const farmSearchResult = useAtomValue(farmsSearchV2Atom({ ...query, page }))
-
-  const pools = useMemo(() => farmSearchResult.list.unwrapOr([]), [farmSearchResult])
+  const { pools, state, setPage } = useFarmSearch()
+  const isLoading = state === PoolSearcherState.SEARCHING
 
   const updateSort = useSetAtom(updateSortAtom)
-
-  const isLoading = useMemo(
-    () => pools.length === 0 && (farmSearchResult.isLoading || listPrepared.isPending()),
-    [pools, farmSearchResult, listPrepared],
-  )
 
   const loadMore = useCallback(() => {
     setPage((prev) => (prev ?? 0) + 1)
@@ -44,7 +31,7 @@ export const useMiniPoolsData = (): UseMiniPoolsDataReturn => {
         dataIndex,
       })
     },
-    [query, updateSort],
+    [updateSort],
   )
 
   return {

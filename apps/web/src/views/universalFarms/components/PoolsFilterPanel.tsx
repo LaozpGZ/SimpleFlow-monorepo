@@ -98,7 +98,7 @@ export const PoolsFilterPanel: React.FC<React.PropsWithChildren<IPoolsFilterPane
 
   const [searchText, setSearchText] = useState(value.search ?? '')
   const focusRef = useRef<boolean>(false)
-  const debouncedOnChange = useMemo(() => debounce((val: string) => onChange({ search: val }), 500), [onChange])
+  const debouncedOnChange = useMemo(() => debounce((val: string) => onChange({ search: val }), 1000), [onChange])
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       focusRef.current = true

@@ -21,11 +21,10 @@ import { getHookByAddress } from 'utils/getHookByAddress'
 import { isInfinityProtocol } from 'utils/protocols'
 
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useTokenByChainId, useUnifiedToken } from 'hooks/Tokens'
+import { useUnifiedToken } from 'hooks/Tokens'
 import { getFarmAprInfo, getFarmHookData } from 'state/farmsV4/search/farm.util'
 import { getCurrencySymbol } from 'utils/getTokenAlias'
 import { useAtomValue } from 'jotai'
-import { isWSol } from '@pancakeswap/sdk'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
 import { getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
@@ -79,7 +78,7 @@ export const useAPRConfig = () => {
         render: (value, info) => {
           return value ? (
             <Box style={{ maxWidth: '220px', overflow: 'hidden' }}>
-              <PoolGlobalAprButton pool={info} aprInfo={getFarmAprInfo(info.farm)} />
+              <PoolGlobalAprButton pool={info} {...getFarmAprInfo(info.farm)} />
             </Box>
           ) : (
             <Skeleton width={60} />

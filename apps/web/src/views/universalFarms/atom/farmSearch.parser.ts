@@ -1,3 +1,4 @@
+import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
 import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
 
@@ -6,20 +7,12 @@ const SOL_ADDRESS_REG = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
 
 const isAddressKeyword = (keyword: string) => HEX_ADDRESS_REG.test(keyword) || SOL_ADDRESS_REG.test(keyword)
 
-export interface ExtendSearchParam {
-  protocols: Protocol[]
-  chains: FarmV4SupportedChainId[]
-  tokens?: string[]
-  symbols?: string[]
-  sortBy?: FarmQuery['sortBy']
-}
-
 function parseTokenExtendSearch(
   keywords: string,
   protocols: Protocol[],
   chains: FarmV4SupportedChainId[],
   sortBy: FarmQuery['sortBy'],
-): ExtendSearchParam[] {
+): FarmQuery[] {
   const symbols = keywords
     .trim()
     .split(/(\s+|,|-|\/)/)
@@ -42,13 +35,16 @@ const parseFarmSearchAddress = (
   protocols: Protocol[],
   chains: FarmV4SupportedChainId[],
   sortBy: FarmQuery['sortBy'],
-): ExtendSearchParam[] => {
+): FarmQuery[] => {
   const trimmedKeyword = keywords.trim()
   if (isAddressKeyword(trimmedKeyword)) {
+    const filteredChains = SOL_ADDRESS_REG.test(keywords)
+      ? [NonEVMChainId.SOLANA]
+      : chains.filter((chain) => isEvm(chain))
     return [
       {
         protocols,
-        tokens: chains.map((chain) => `${chain}:${trimmedKeyword}`),
+        tokens: filteredChains.map((chain) => `${chain}:${trimmedKeyword}`),
         chains,
         sortBy,
       },
@@ -61,7 +57,7 @@ const parseQueryChain = (
   chains: FarmV4SupportedChainId[],
   protocols: Protocol[],
   sortBy: FarmQuery['sortBy'],
-): ExtendSearchParam[] => {
+): FarmQuery[] => {
   if (chains.length === 0) {
     return []
   }

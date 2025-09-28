@@ -25,12 +25,12 @@ const searchAtom = atomFamily((query: FarmQuery) => {
         return false
       }
       return true
-    })
+    }) as FarmV4SupportedChainId[]
     if (queryChains.length === 0 && activeChainId) {
       queryChains.push(activeChainId as FarmV4SupportedChainId)
     }
 
-    const extendSearchList = parseExtendSearchParams(keywords, protocols, queryChains, sortBy)
+    const extendSearchList = parseExtendSearchParams(keywords || '', protocols, queryChains, sortBy)
 
     const baseList = get(
       baseFarmListAtom({
@@ -45,9 +45,9 @@ const searchAtom = atomFamily((query: FarmQuery) => {
 
     function buildFarmList(list: FarmInfo[]) {
       return list.map((farm) => {
-        const { pool, chainId, vol24hUsd, ...rest } = farm
+        const { pool, chainId, ...rest } = farm
         const farmInfo = {
-          chainId: farm.chainId,
+          chainId,
           tvlUsd: 0,
           ...rest,
           feeTierBase: 1e6,
@@ -72,7 +72,7 @@ const searchAtom = atomFamily((query: FarmQuery) => {
 
     const filtered = farmFilters.search(
       fullList.filter(farmFilters.chainFilter(queryChains)).filter(farmFilters.protocolFilter(protocols)),
-      query.keywords,
+      query.keywords || '',
     )
     // const sorted = farmFilters.sortFunction(filtered, sortBy, activeChainId, sortOrder)
 
@@ -90,8 +90,7 @@ export const farmsWithPagingAtom = atomFamily((query: FarmQuery) => {
     const { page } = query
     const sorted = get(searchAtom(query))
     const r = await sorted.mapAsync(async (farms) => {
-      const sliced = farms.slice(0, 20 * (page + 1))
-      console.log(`[farm]`, 'sliced', sliced.length)
+      const sliced = farms.slice(0, 20 * ((page || 0) + 1))
 
       const filled = await Promise.all(sliced.map(fillOnchainPoolData))
       return filled.map((x) => {

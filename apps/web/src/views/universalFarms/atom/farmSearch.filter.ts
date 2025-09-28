@@ -40,7 +40,7 @@ const extractSortMetrics = (farm: SortableFarm): SortMetrics => {
   if (isPoolInfo(farm)) {
     const underlying = farm.farm
     const lpApr = Number(farm.lpApr ?? underlying?.lpApr ?? underlying?.apr24h ?? 0)
-    const cakeApr = Number(underlying?.cakeApr.value ?? 0)
+    const cakeApr = Number(underlying?.cakeApr?.value ?? 0)
     const totalApr = lpApr + cakeApr
     const aprSource = totalApr
     const tvlSource = farm.tvlUsd ?? underlying?.tvlUSD
@@ -277,7 +277,7 @@ interface Weighted<T> {
 
 const sortFunction = <T extends SortableFarm>(
   farms: T[],
-  sortField: keyof PoolInfo | null,
+  sortField: string,
   activeChainId?: ChainId,
   sortOrder: SORT_ORDER = SORT_ORDER.DESC,
 ): T[] => {

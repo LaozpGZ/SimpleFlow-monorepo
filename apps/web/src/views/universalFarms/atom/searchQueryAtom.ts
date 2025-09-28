@@ -19,7 +19,6 @@ export const searchQueryAtom = atom((get) => {
   return {
     ...query,
     activeChainId: isEvm(chainId as number) ? (chainId as ChainId) : ChainId.BSC,
-    page: 0,
   }
 })
 
@@ -37,9 +36,19 @@ export const updateFilterAtom = atom(null, (_, set, filter: UpdateFilterParams) 
   set(_searchQueryAtom, (prev) => {
     return {
       ...prev,
+      page: 0,
       keywords: typeof search === 'undefined' ? prev.keywords : search || '',
       protocols: typeof selectedProtocolIndex === 'undefined' ? prev.protocols : protocols,
       chains: typeof selectedNetwork === 'undefined' ? prev.chains : chains,
+    }
+  })
+})
+
+export const setPageAtom = atom(null, (_, set, page: (x: number) => number) => {
+  set(_searchQueryAtom, (prev) => {
+    return {
+      ...prev,
+      page: page(prev.page || 0),
     }
   })
 })

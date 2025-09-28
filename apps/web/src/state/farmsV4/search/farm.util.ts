@@ -38,16 +38,6 @@ export type FarmInfo = FarmProps & {
   cakeApr: CakeAprValue
 }
 
-type CakeAprItem = {
-  value: `${number}`
-  // boost apr
-  boost?: `${number}`
-  poolWeight?: string
-  cakePerYear?: string
-  userTvlUsd?: string
-  totalSupply?: string
-}
-
 export type FarmProps = {
   id: string
   chainId: FarmV4SupportedChainId
@@ -65,6 +55,7 @@ export type FarmProps = {
   pid?: number
   isDynamicFee?: boolean
   inWhitelist?: boolean
+  aprLoading?: boolean
 }
 
 export const getFarmTokens = (farm: FarmInfo): Currency[] => {
@@ -148,7 +139,7 @@ export const getFarmAprInfo = (farm?: FarmInfo) => {
     merklApr: farm.merklApr || '0',
     incentraApr: farm.incentraApr || '0',
   }
-  return aprInfo
+  return { aprInfo, loading: Boolean(farm.aprLoading) }
 }
 
 export const safeGetAddress = (address: string) => {
@@ -179,8 +170,10 @@ export const normalizeAddress = (pool: InfinityRouter.RemotePoolBase) => {
     }
     const id = safeGetAddress(pool.id)
     if (id) {
-      // eslint-disable-next-line no-param-reassign
-      pool.id = id as `0x${string}`
+      return {
+        ...pool,
+        id: id as `0x${string}`,
+      }
     }
   }
   return pool
