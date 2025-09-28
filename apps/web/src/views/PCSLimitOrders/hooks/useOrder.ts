@@ -99,7 +99,7 @@ export const useOrder = (order: ResponseOrder) => {
       : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
 
     return result
-  }, [currency0, currency1, order.liquidity, order.tick_lower, pool?.parameters.tickSpacing])
+  }, [currency0, currency1, order.liquidity, order.tick_lower, pool])
 
   // Amounts Received
   const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
@@ -141,13 +141,13 @@ export const useOrder = (order: ResponseOrder) => {
     if (!currencyA?.decimals || !currencyB?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount0Received, currencyA?.decimals)
     return formatUnits(amount1Received, currencyB?.decimals)
-  }, [order.zero_for_one, amount0Received, amount1Received, currencyA?.decimals, currencyB?.decimals, originalAmountA])
+  }, [order.zero_for_one, amount0Received, amount1Received, currencyA?.decimals, currencyB?.decimals])
 
   const amountBReceived = useMemo(() => {
     if (!currencyB?.decimals || !currencyA?.decimals) return undefined
     if (order.zero_for_one) return formatUnits(amount1Received, currencyB?.decimals)
     return formatUnits(amount0Received, currencyA?.decimals)
-  }, [order.zero_for_one, amount1Received, amount0Received, originalAmountB])
+  }, [order.zero_for_one, amount1Received, amount0Received, currencyB?.decimals, currencyA?.decimals])
 
   // Check for partial fill case
   const isPartialFill = useMemo(() => {
@@ -159,13 +159,16 @@ export const useOrder = (order: ResponseOrder) => {
     )
       return false
 
-    // If tickLower < tickCurrent < tickLower + tickSpacing
-    if (pool.tick > order.tick_lower && pool.tick < order.tick_lower + pool.parameters.tickSpacing) {
+    const sqrtPriceX96Lower = TickMath.getSqrtRatioAtTick(order.tick_lower)
+    const sqrtPriceX96Upper = TickMath.getSqrtRatioAtTick(order.tick_lower + pool.parameters.tickSpacing)
+    const sqrtPriceX96Current = TickMath.getSqrtRatioAtTick(pool.tick)
+
+    if (sqrtPriceX96Current > sqrtPriceX96Lower && sqrtPriceX96Current < sqrtPriceX96Upper) {
       return true
     }
 
-    // If zeroForOne is false, then tickCurrent === tickLower is partial fill (Special case)
-    if (order.zero_for_one === false && pool.tick === order.tick_lower) {
+    // If zeroForOne is false, then sqrtPriceX96Current === sqrtPriceX96Lower is partial fill (Special case)
+    if (order.zero_for_one === false && sqrtPriceX96Current === sqrtPriceX96Lower) {
       return true
     }
 
@@ -176,8 +179,11 @@ export const useOrder = (order: ResponseOrder) => {
     if (isPartialFill && originalAmountB && amountBReceived) {
       const expectedOutput = BN(originalAmountB)
       const filledOutput = BN(amountBReceived)
-      const result = filledOutput.dividedBy(expectedOutput).multipliedBy(100)
-      return result.lt(1) ? '< 1' : result.toFixed(0)
+      const percentage = filledOutput.dividedBy(expectedOutput).multipliedBy(100)
+      const result = percentage.lt(1) ? '< 1' : percentage.toFixed(0)
+      // Special case: usually 100% in partial fill means close to 100% but not exact, so show 99.99% instead
+      if (result === '100') return '99.99'
+      return result
     }
 
     return liveStatus === OrderStatus.Filled || liveStatus === OrderStatus.Withdrawn ? '100' : '0'

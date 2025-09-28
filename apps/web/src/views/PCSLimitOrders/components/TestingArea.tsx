@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { ticksAtom } from '../state/form/ticksAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
+import { presetPercentMapAtom } from '../state/form/quickActionAtoms'
 
 const TickVisualization = ({ ticksData, selectedPool }: { ticksData: any; selectedPool: any }) => {
   const ticks = useMemo(() => {
@@ -132,6 +133,8 @@ export const TestingArea = () => {
   const { data: selectedPool } = useAtomValue(selectedPoolAtom)
   const ticksData = useAtomValue(ticksAtom)
 
+  const presetPercentMap = useAtomValue(presetPercentMapAtom)
+
   return (
     <Card style={{ width: '100%' }}>
       <CardBody>
@@ -158,6 +161,8 @@ export const TestingArea = () => {
             )}
           </pre>
         </Text>
+
+        <Text>{JSON.stringify(presetPercentMap, null, 2)}</Text>
 
         <TickVisualization ticksData={ticksData} selectedPool={selectedPool} />
       </CardBody>
