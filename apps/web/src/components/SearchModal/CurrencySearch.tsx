@@ -171,8 +171,8 @@ function CurrencySearch({
     enabled: isSolana && tokenAddressesWithBalance.length > 0,
   })
 
-  const solanaSearchToken = useSolanaTokenInfo(isSolana ? debouncedQuery : undefined)
-  const evmSearchToken = useToken(debouncedQuery, selectedChainId)
+  const solanaSearchToken = useSolanaTokenInfo(isSolana && !tokensToShow ? debouncedQuery : undefined)
+  const evmSearchToken = useToken(!tokensToShow ? debouncedQuery : undefined, selectedChainId)
   const searchToken = isSolana ? solanaSearchToken : evmSearchToken
 
   // if they input an address, use it
@@ -181,8 +181,8 @@ function CurrencySearch({
     ? !!solanaTokens.find((t) => t.address === (searchToken as SPLToken | undefined)?.address)
     : evmSearchTokenIsAdded
 
-  // if no results on main list, show option to expand into inactive
-  const filteredInactiveTokens = useSearchInactiveTokenLists(debouncedQuery)
+  // if no results on main list, show option to expand into inactive (only when tokensToShow is not set)
+  const filteredInactiveTokens = useSearchInactiveTokenLists(!tokensToShow ? debouncedQuery : undefined)
 
   const showNative: boolean = useMemo(() => {
     if (tokensToShow && !showNativeProp) return false
@@ -289,7 +289,8 @@ function CurrencySearch({
   const hasFilteredInactiveTokens = Boolean(filteredInactiveTokens?.length)
 
   const getCurrencyListRows = useCallback(() => {
-    if (searchToken && !searchTokenIsAdded && !hasFilteredInactiveTokens) {
+    // Don't show import functionality when tokensToShow is provided
+    if (!tokensToShow && searchToken && !searchTokenIsAdded && !hasFilteredInactiveTokens) {
       return (
         <Column style={{ padding: '20px 0', height: '100%' }}>
           <ImportRow
@@ -355,6 +356,7 @@ function CurrencySearch({
     showChainLogo,
     selectedChainId,
     isSolana,
+    tokensToShow,
   ])
 
   return (

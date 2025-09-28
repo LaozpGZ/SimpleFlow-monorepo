@@ -115,8 +115,8 @@ function CurrencySearchV2({
 
   const allTokens = useAllTokens(chainId)
 
-  // if they input an address, use it
-  const searchToken = useTokenByChainId(debouncedQuery, chainId)
+  // if they input an address, use it (only when tokensToShow is not set)
+  const searchToken = useTokenByChainId(!tokensToShow ? debouncedQuery : undefined, chainId)
   const searchTokenIsAdded = useIsUserAddedToken(searchToken, chainId)
 
   const { isMobile } = useMatchBreakpoints()
@@ -186,13 +186,14 @@ function CurrencySearchV2({
     [debouncedQuery, filteredSortedTokens, handleCurrencySelect, native],
   )
 
-  // if no results on main list, show option to expand into inactive
-  const filteredInactiveTokens = useSearchInactiveTokenLists(debouncedQuery, chainId)
+  // if no results on main list, show option to expand into inactive (only when tokensToShow is not set)
+  const filteredInactiveTokens = useSearchInactiveTokenLists(!tokensToShow ? debouncedQuery : undefined, chainId)
 
   const hasFilteredInactiveTokens = Boolean(filteredInactiveTokens?.length)
 
   const getCurrencyListRows = useCallback(() => {
-    if (searchToken && !searchTokenIsAdded && !hasFilteredInactiveTokens) {
+    // Don't show import functionality when tokensToShow is provided
+    if (!tokensToShow && searchToken && !searchTokenIsAdded && !hasFilteredInactiveTokens) {
       return (
         <Column style={{ padding: '20px 0', height: '100%' }}>
           <ImportRow
@@ -248,6 +249,7 @@ function CurrencySearchV2({
     isMobile,
     height,
     chainId,
+    tokensToShow,
   ])
 
   return (
