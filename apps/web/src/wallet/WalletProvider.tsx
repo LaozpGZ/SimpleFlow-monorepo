@@ -1,6 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
 import { useAtom, useAtomValue } from 'jotai'
 import { usePrivy } from '@privy-io/react-auth'
 import { atomWithStorage } from 'jotai/utils'
@@ -102,7 +101,6 @@ const usePrivyProvider = () => {
 
 export const WalletProvider = (props: WalletProviderProps) => {
   const { children } = props
-  const router = useRouter()
   const endpoint = useAtomValue(rpcUrlAtom)
   usePrivyProvider()
 
