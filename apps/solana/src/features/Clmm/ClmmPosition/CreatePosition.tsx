@@ -436,7 +436,7 @@ export default function CreatePosition() {
     })
   }
 
-  const hasLockedLiquidity = currentPool && currentPool?.burnPercent > 0
+  const hasLockedLiquidity = currentPool && (currentPool?.burnPercent ?? 0) > 0
 
   return (
     <Grid
