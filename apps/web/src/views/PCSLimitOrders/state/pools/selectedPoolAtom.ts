@@ -14,8 +14,8 @@ export const selectedPoolAtom = atomWithQuery((get) => {
     queryKey: ['selectedPool', chainId, get(inputCurrencyAtom), get(outputCurrencyAtom)],
     refetchInterval: FAST_INTERVAL,
     queryFn: async () => {
-      const inputCurrency = await get(inputCurrencyAtom)
-      const outputCurrency = await get(outputCurrencyAtom)
+      const inputCurrency = get(inputCurrencyAtom)
+      const outputCurrency = get(outputCurrencyAtom)
 
       if (!inputCurrency || !outputCurrency) return null
 

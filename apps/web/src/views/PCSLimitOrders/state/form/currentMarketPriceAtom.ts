@@ -3,9 +3,9 @@ import { getSqrtPriceFromCurrentTick } from 'views/PCSLimitOrders/utils/ticks'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 
-export const currentMarketPriceAtom = atom(async (get) => {
-  const inputCurrency = await get(inputCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
+export const currentMarketPriceAtom = atom((get) => {
+  const inputCurrency = get(inputCurrencyAtom)
+  const outputCurrency = get(outputCurrencyAtom)
 
   if (!inputCurrency || !outputCurrency) return undefined
 

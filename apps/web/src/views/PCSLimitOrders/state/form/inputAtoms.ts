@@ -11,30 +11,29 @@ import { customMarketPriceAtom } from './customMarketPriceAtom'
 import { currentMarketPriceAtom } from './currentMarketPriceAtom'
 import { ticksAtom } from './ticksAtom'
 
-const independentAmountAtom = atom(async (get) => {
+const independentAmountAtom = atom((get) => {
   const value = get(typedValueAtom)
   const independentField = get(independentFieldAtom)
 
-  const inputCurrency = await get(inputCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
+  const inputCurrency = get(inputCurrencyAtom)
+  const outputCurrency = get(outputCurrencyAtom)
 
   const currency = independentField === Field.CURRENCY_A ? inputCurrency : outputCurrency
   return tryParseAmount<Token>(value, currency as Token)
 })
 
-const dependentAmountAtom = atom(async (get) => {
+const dependentAmountAtom = atom((get) => {
   const customMarketPrice = get(customMarketPriceAtom)
-  const currentMarketPrice = await get(currentMarketPriceAtom)
+  const currentMarketPrice = get(currentMarketPriceAtom)
 
   const independentField = get(independentFieldAtom)
-  const independentAmount = await get(independentAmountAtom)
+  const independentAmount = get(independentAmountAtom)
 
-  const quoteCurrency =
-    independentField === Field.CURRENCY_A ? await get(outputCurrencyAtom) : await get(inputCurrencyAtom)
+  const quoteCurrency = independentField === Field.CURRENCY_A ? get(outputCurrencyAtom) : get(inputCurrencyAtom)
 
   if (!independentAmount || !quoteCurrency || (!currentMarketPrice && !customMarketPrice)) return undefined
 
-  const tickData = await get(ticksAtom)
+  const tickData = get(ticksAtom)
   if (!tickData) return undefined
 
   // Get sqrt price from lower and upper ticks
@@ -46,7 +45,7 @@ const dependentAmountAtom = atom(async (get) => {
   return tryParseAmount<Token>(amount.toString(), quoteCurrency as Token)
 })
 
-export const formattedAmountsAtom = atom(async (get) => {
+export const formattedAmountsAtom = atom((get) => {
   const typedValue = get(typedValueAtom)
 
   if (!typedValue) {
@@ -57,7 +56,7 @@ export const formattedAmountsAtom = atom(async (get) => {
   }
 
   const independentField = get(independentFieldAtom)
-  const dependentAmount = await get(dependentAmountAtom)
+  const dependentAmount = get(dependentAmountAtom)
   const formattedDependentAmount = formatAmount(dependentAmount) || ''
 
   // Use current independent field for both normal and custom market price scenarios

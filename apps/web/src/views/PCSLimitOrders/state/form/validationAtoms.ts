@@ -4,13 +4,13 @@ import { BigNumber as BN } from 'bignumber.js'
 import { formattedAmountsAtom } from './inputAtoms'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 
-export const commitButtonEnabledAtom = atom(async (get) => {
-  const inputCurrency = await get(inputCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
+export const commitButtonEnabledAtom = atom((get) => {
+  const inputCurrency = get(inputCurrencyAtom)
+  const outputCurrency = get(outputCurrencyAtom)
 
   if (!inputCurrency || !outputCurrency) return { enabled: false, errorReason: null }
 
-  const formattedAmounts = await get(formattedAmountsAtom)
+  const formattedAmounts = get(formattedAmountsAtom)
   const amountA = formattedAmounts[Field.CURRENCY_A]
   const amountB = formattedAmounts[Field.CURRENCY_B]
   const amountABN = BN(amountA)

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { SLOW_INTERVAL } from 'config/constants'
 import { atom } from 'jotai'
-import { atomFamily } from 'jotai/utils'
+import { atomFamily, unwrap } from 'jotai/utils'
 import { usdPriceBatcher } from 'utils/batcher'
 
 type Config = {
@@ -37,6 +37,25 @@ export const currencyUSDPriceAtom = atomFamily(
       }
       return usdPriceBatcher.fetch(currency)
     })
+  },
+  (a, b) => {
+    if (a === b) {
+      return true
+    }
+    if (!a || !b) {
+      return false
+    }
+    return getCurrencyAddress(a) === getCurrencyAddress(b)
+  },
+)
+export const currencyUSDPriceUnwrapAtom = atomFamily(
+  (currency?: Currency) => {
+    return unwrap(
+      atom((get) => {
+        return get(currencyUSDPriceAtom(currency))
+      }),
+      (prev) => prev ?? 0,
+    )
   },
   (a, b) => {
     if (a === b) {

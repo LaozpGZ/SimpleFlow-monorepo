@@ -1,7 +1,7 @@
 import { Native } from '@pancakeswap/sdk'
 import { CAKE } from '@pancakeswap/tokens'
 import { atom } from 'jotai'
-import { atomFamily } from 'jotai/utils'
+import { atomFamily, unwrap } from 'jotai/utils'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import isEqual from 'lodash/isEqual'
 import { currencyAtom } from 'hooks/Tokens'
@@ -35,8 +35,14 @@ export const outputCurrencyIdAtom = atom(
 )
 
 // Currency Atoms
-export const inputCurrencyAtom = atom((get) => get(currencyAtom(get(inputCurrencyIdAtom))))
-export const outputCurrencyAtom = atom((get) => get(currencyAtom(get(outputCurrencyIdAtom))))
+export const inputCurrencyAtom = unwrap(
+  atom((get) => get(currencyAtom(get(inputCurrencyIdAtom)))),
+  (prev) => prev,
+)
+export const outputCurrencyAtom = unwrap(
+  atom((get) => get(currencyAtom(get(outputCurrencyIdAtom)))),
+  (prev) => prev,
+)
 
 // Loadable versions of currency atoms
 export const inputCurrencyLoadableAtom = createLoadableAtom(inputCurrencyAtom)

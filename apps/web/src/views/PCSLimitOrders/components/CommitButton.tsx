@@ -92,22 +92,22 @@ export const CommitButton = () => {
 
   return (
     <>
-      <Suspense>
-        {showApproveButton && (
-          <Button onClick={approveCallback} disabled={approvalState === ApprovalState.PENDING}>
-            {approvalState === ApprovalState.PENDING
-              ? t('Approving...')
-              : t('Approve %symbol%', { symbol: inputCurrency?.symbol ?? '' })}
-          </Button>
-        )}
+      {showApproveButton && (
+        <Button onClick={approveCallback} disabled={approvalState === ApprovalState.PENDING}>
+          {approvalState === ApprovalState.PENDING
+            ? t('Approving...')
+            : t('Approve %symbol%', { symbol: inputCurrency?.symbol ?? '' })}
+        </Button>
+      )}
 
-        {!showApproveButton && (
-          <Button onClick={handleOpen} disabled={!isEnabled}>
-            {buttonText}
-          </Button>
-        )}
+      {!showApproveButton && (
+        <Button onClick={handleOpen} disabled={!isEnabled}>
+          {buttonText}
+        </Button>
+      )}
+      <Suspense>
+        <PreviewModal isOpen={isOpen} onDismiss={onDismiss} />
       </Suspense>
-      <PreviewModal isOpen={isOpen} onDismiss={onDismiss} />
     </>
   )
 }
@@ -127,7 +127,9 @@ const PreviewModal = ({ isOpen, onDismiss }: PreviewModalProps) => {
         bodyPadding="0 24px 24px"
         maxWidth={[null, null, null, '440px']}
       >
-        <ConfirmOrderContent onDismiss={onDismiss} />
+        <Suspense>
+          <ConfirmOrderContent onDismiss={onDismiss} />
+        </Suspense>
       </MotionModal>
     </ModalV2>
   )
