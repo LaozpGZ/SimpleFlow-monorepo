@@ -28,7 +28,7 @@ export const LimitOrderForm = () => {
   const setCurrency = useSetAtom(setCurrencyAtom)
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
 
-  const { showMinimumUSDWarning } = useLimitOrderUserBalance()
+  const { showMinimumUSDWarning, showMinimumBNBWarning } = useLimitOrderUserBalance()
 
   const handleInput = useCallback(
     (field: Field, value: string | undefined) => {
@@ -72,7 +72,9 @@ export const LimitOrderForm = () => {
             icon={<ErrorIcon color="destructive" width="24px" height="24px" />}
           >
             <Text lineHeight="1.8" small>
-              {t('Order Size must meet a minimum of 50 USD')}
+              {showMinimumBNBWarning
+                ? t('Order Size must meet a minimum of 0.05 BNB')
+                : t('Order Size must meet a minimum of 50 USD')}
             </Text>
           </Message>
         )}

@@ -31,7 +31,17 @@ export const useLimitOrderUserBalance = () => {
     inputCurrency ?? undefined,
     BN(formattedAmounts[Field.CURRENCY_A]).toNumber(),
   )
-  const showMinimumUSDWarning = amountUSD && router.query.disableWarnings !== 'true' ? amountUSD < MIN_USD_VALUE : false
+  // const showMinimumUSDWarning = amountUSD && router.query.disableWarnings !== 'true' ? amountUSD < MIN_USD_VALUE : false
+
+  const showMinimumBNBWarning =
+    inputCurrency?.isNative &&
+    !!formattedAmounts[Field.CURRENCY_A] &&
+    BN(formattedAmounts[Field.CURRENCY_A] || '0').lt(BN(0.05))
+  const showMinimumUSDWarning =
+    // As a fallback, set minimum native currency required to 0.05 BNB (only release on BSC)
+    showMinimumBNBWarning ||
+    // Main check
+    (amountUSD && router.query.disableWarnings !== 'true' ? amountUSD < MIN_USD_VALUE : false)
 
   const maxInputBalance = useMemo(() => {
     return inputBalance?.toFixed(6, undefined, Rounding.ROUND_DOWN)
@@ -70,6 +80,7 @@ export const useLimitOrderUserBalance = () => {
     isEnoughBalance,
     maxInputBalance,
     maxOutputBalance,
+    showMinimumBNBWarning,
     showMinimumUSDWarning,
     getPercentInputCurrency,
     getPercentOutputCurrency,
