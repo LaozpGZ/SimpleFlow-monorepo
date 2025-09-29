@@ -194,6 +194,7 @@ export const QuickActionButtons = () => {
                 i18nTemplate="Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use <0>Swap</0> instead."
                 components={[
                   <Link
+                    style={{ display: 'inline-block' }}
                     key="swap"
                     href={`/swap?inputCurrencyId=${currencyId(inputCurrency)}&outputCurrencyId=${currencyId(
                       outputCurrency,
