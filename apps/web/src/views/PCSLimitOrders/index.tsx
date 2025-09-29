@@ -4,7 +4,7 @@ import { SwapType } from 'views/Swap/types'
 import { SwapSelection } from 'views/SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPanel'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
-import { Link } from '@pancakeswap/uikit'
+import { Link, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { Suspense } from 'react'
 import { LimitOrderForm } from './components/LimitOrderForm'
@@ -12,7 +12,6 @@ import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
 import { QuickActionButtons } from './components/QuickActionButtons'
 import { TradeDetails } from './components/TradeDetails'
-import { TestingArea } from './components/TestingArea'
 import { OrdersSummaryCard } from './components/OrderHistory/OrdersSummaryCard'
 
 export const PCSLimitOrdersView = () => {
@@ -24,25 +23,25 @@ export const PCSLimitOrdersView = () => {
         <SwapUIV2.SwapFormWrapper>
           <SwapUIV2.SwapTabAndInputPanelWrapper>
             <SwapSelection swapType={SwapType.LIMIT} withToolkit />
-            <Suspense>
+            <Suspense fallback={<Skeleton width="100%" height="332px" />}>
               <LimitOrderForm />
             </Suspense>
 
             <FormContainer>
-              <Suspense>
+              <Suspense fallback={<Skeleton width="100%" height="100px" />}>
                 <MarketPriceInput />
               </Suspense>
-              <Suspense>
+              <Suspense fallback={<Skeleton width="100%" height="46px" />}>
                 <QuickActionButtons />
               </Suspense>
             </FormContainer>
           </SwapUIV2.SwapTabAndInputPanelWrapper>
 
           <PanelWrapper>
-            <Suspense>
+            <Suspense fallback={<Skeleton width="100%" height="48px" />}>
               <CommitButton />
             </Suspense>
-            <Suspense>
+            <Suspense fallback={<Skeleton width="100%" height="50px" />}>
               <TradeDetails mt="2px" />
             </Suspense>
           </PanelWrapper>
