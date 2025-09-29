@@ -60,9 +60,9 @@ export class PoolSearcher extends Emitter<PoolSearchEvent> {
 
   private all: FarmInfo[] = []
 
-  private currentQuery!: FarmQuery
+  private currentQuery?: FarmQuery
 
-  private currentHash!: string
+  private currentHash?: string
 
   private aprs: Record<string, Apr> = {}
 
@@ -79,6 +79,14 @@ export class PoolSearcher extends Emitter<PoolSearchEvent> {
     }
   }
 
+  private clearStates() {
+    this.all = []
+    this.aprs = {}
+    this.currentQuery = undefined
+    this.currentHash = undefined
+    this.emit(PoolSearchEvent.POOLS_UPDATED, [])
+  }
+
   public async search(query: FarmQuery, useShowTestnet: boolean = false) {
     const { queryUpdated, pageUpdated } = this.checkQuery(query)
     if (!queryUpdated && !pageUpdated) {
@@ -92,8 +100,7 @@ export class PoolSearcher extends Emitter<PoolSearchEvent> {
     try {
       const page = query.page || 0
       if (queryUpdated) {
-        this.all = []
-        this.emit(PoolSearchEvent.POOLS_UPDATED, [])
+        this.clearStates()
         await this.updatePools(query, useShowTestnet)
       } else {
         const total = this.all.slice(0, 20 * (query.page || 0 + 1))
