@@ -58,9 +58,6 @@ export const PCSLimitOrdersView = () => {
 
         {/* TODO: add ad panel here */}
       </Page>
-
-      {/* TESTING */}
-      <TestingArea />
     </>
   )
 }
