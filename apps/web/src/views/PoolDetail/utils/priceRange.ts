@@ -1,7 +1,7 @@
 import { getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
 import { FeeAmount, nearestUsableTick, TICK_SPACINGS, TickMath, tickToPrice } from '@pancakeswap/v3-sdk'
 import { Bound } from '@pancakeswap/widgets-internal'
-import { MAX_TICK, MIN_TICK, TickUtils } from '@pancakeswap/solana-core-sdk'
+import { MAX_TICK, MIN_TICK, SqrtPriceMath as SolanaSqrtPriceMath, TickUtils } from '@pancakeswap/solana-core-sdk'
 import { formatPercentage } from './formatting'
 
 /**
@@ -57,6 +57,116 @@ export const calculateSolanaTickLimits = (
   return {
     [Bound.LOWER]: tickSpacing ? TickUtils.nearestUsableTick(MIN_TICK, tickSpacing) : undefined,
     [Bound.UPPER]: tickSpacing ? TickUtils.nearestUsableTick(MAX_TICK, tickSpacing) : undefined,
+  }
+}
+
+/**
+ * Solana: safely converts tick to price using Solana Core SDK with maximum precision
+ */
+export const getSolanaTickPrice = (tick: number, token0: any, token1: any, isFlipped?: boolean): number => {
+  try {
+    if (tick >= MAX_TICK) return Infinity
+    if (tick <= MIN_TICK) return 0
+
+    if (token0 && token1) {
+      const sqrt = SolanaSqrtPriceMath.getSqrtPriceX64FromTick(tick)
+      const priceDecimal = SolanaSqrtPriceMath.sqrtPriceX64ToPrice(sqrt, token0?.decimals ?? 0, token1?.decimals ?? 0)
+      const priceValue = parseFloat(priceDecimal.toString())
+      return isFlipped ? 1 / priceValue : priceValue
+    }
+
+    const basePrice = 1.0001 ** tick
+    return isFlipped ? 1 / basePrice : basePrice
+  } catch (error) {
+    console.error('Error calculating Solana tick price:', error)
+    const basePrice = 1.0001 ** tick
+    return isFlipped ? 1 / basePrice : basePrice
+  }
+}
+
+/**
+ * Solana: Calculates price range data for tick-based positions
+ * Aligns with calculateTickBasedPriceRange but uses Solana tick/price logic and limits
+ */
+export const calculateSolanaTickBasedPriceRange = (
+  tickLower: number,
+  tickUpper: number,
+  token0: any,
+  token1: any,
+  isTickAtLimit: { [bound in Bound]: boolean },
+  isFlipped?: boolean,
+  currentPrice?: number,
+): PriceRangeData => {
+  let minPriceFormatted = '-'
+  let maxPriceFormatted = '-'
+  let minPercentage = ''
+  let maxPercentage = ''
+  let rangePosition = 50
+  let showPercentages = false
+  let currentPriceString: string | undefined
+
+  // Swap ticks in flipped mode to maintain range order
+  const actualTickLower = isFlipped ? tickUpper : tickLower
+  const actualTickUpper = isFlipped ? tickLower : tickUpper
+  const actualIsTickAtLimit = isFlipped
+    ? { [Bound.LOWER]: isTickAtLimit[Bound.UPPER], [Bound.UPPER]: isTickAtLimit[Bound.LOWER] }
+    : isTickAtLimit
+
+  // Calculate min/max prices at ticks
+  const minPrice = getSolanaTickPrice(actualTickLower, token0, token1, isFlipped)
+  const maxPrice = getSolanaTickPrice(actualTickUpper, token0, token1, isFlipped)
+
+  // Format with special handling at limits
+  minPriceFormatted = actualIsTickAtLimit[Bound.LOWER] ? '0' : minPrice.toString() || '-'
+  maxPriceFormatted = actualIsTickAtLimit[Bound.UPPER] ? '∞' : maxPrice.toString() || '-'
+
+  // Handle full range
+  if (actualIsTickAtLimit[Bound.LOWER] && actualIsTickAtLimit[Bound.UPPER]) {
+    rangePosition = 50
+    showPercentages = true
+    minPercentage = '0%'
+    maxPercentage = '100%'
+    minPriceFormatted = '0'
+    maxPriceFormatted = '∞'
+  } else if (currentPrice !== undefined && actualTickLower > MIN_TICK && actualTickUpper < MAX_TICK) {
+    try {
+      const cp = Number(currentPrice)
+      if (
+        cp > 0 &&
+        maxPrice > minPrice &&
+        Number.isFinite(minPrice) &&
+        Number.isFinite(maxPrice) &&
+        Number.isFinite(cp)
+      ) {
+        const minPercent = ((minPrice - cp) / cp) * 100
+        const maxPercent = ((maxPrice - cp) / cp) * 100
+
+        if (
+          Number.isFinite(minPercent) &&
+          Number.isFinite(maxPercent) &&
+          Math.abs(minPercent) < 10000 &&
+          Math.abs(maxPercent) < 10000
+        ) {
+          minPercentage = formatPercentage(minPercent)
+          maxPercentage = formatPercentage(maxPercent)
+          rangePosition = Math.max(0, Math.min(100, ((cp - minPrice) / (maxPrice - minPrice)) * 100))
+          showPercentages = true
+          currentPriceString = cp.toFixed(18)
+        }
+      }
+    } catch (error) {
+      console.warn('Solana price calculation error:', error)
+    }
+  }
+
+  return {
+    minPriceFormatted,
+    maxPriceFormatted,
+    minPercentage,
+    maxPercentage,
+    rangePosition,
+    showPercentages,
+    currentPrice: currentPriceString,
   }
 }
 

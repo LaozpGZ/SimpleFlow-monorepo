@@ -3,18 +3,17 @@ import { NonEVMChainId } from '@pancakeswap/chains'
 import { Box, Text, Tag, FlexGap } from '@pancakeswap/uikit'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import BN from 'bn.js'
-import {
-  MAX_TICK,
-  MIN_TICK,
-  SqrtPriceMath as SolSqrtPriceMath,
-  LiquidityMath,
-  SqrtPriceMath,
-} from '@pancakeswap/solana-core-sdk'
+import { LiquidityMath, SqrtPriceMath } from '@pancakeswap/solana-core-sdk'
 import { PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
 import { PoolInfo, SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import { useBirdeyeTokenPrice } from 'hooks/solana/useBirdeyeTokenPrice'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
-import { formatPercentage, formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
+import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
+import {
+  calculateSolanaTickBasedPriceRange,
+  calculateSolanaTickLimits,
+  getTickAtLimitStatus,
+} from 'views/PoolDetail/utils/priceRange'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useQueryClient } from '@tanstack/react-query'
 import { displayApr } from '@pancakeswap/utils/displayApr'
@@ -187,90 +186,30 @@ export const SolanaV3PositionsTable: FC<V3PositionsTableProps> = ({ poolInfo }) 
       const amountADec = Number(amountA.toString()) / 10 ** poolInfo.token0.decimals
       const amountBDec = Number(amountB.toString()) / 10 ** poolInfo.token1.decimals
 
-      // Price range from ticks
-      let minPriceStr = '0'
-      let maxPriceStr = '∞'
-      const isFullRange = p.tickLower <= MIN_TICK && p.tickUpper >= MAX_TICK
-      try {
-        if (!isFullRange && p.tickLower > MIN_TICK) {
-          const sqrtLower2 = SolSqrtPriceMath.getSqrtPriceX64FromTick(p.tickLower)
-          const minPrice = SolSqrtPriceMath.sqrtPriceX64ToPrice(
-            sqrtLower2,
-            poolInfo.token0.decimals,
-            poolInfo.token1.decimals,
-          )
-          minPriceStr = minPrice.toString()
-        }
-        if (!isFullRange && p.tickUpper < MAX_TICK) {
-          const sqrtUpper2 = SolSqrtPriceMath.getSqrtPriceX64FromTick(p.tickUpper)
-          const maxPrice = SolSqrtPriceMath.sqrtPriceX64ToPrice(
-            sqrtUpper2,
-            poolInfo.token0.decimals,
-            poolInfo.token1.decimals,
-          )
-          maxPriceStr = maxPrice.toString()
-        }
-      } catch (e) {
-        // keep defaults
-      }
+      // Price range from ticks using Solana-specific util
+      const tickLimits = calculateSolanaTickLimits(poolInfo?.rawPool?.config?.tickSpacing)
+      const isTickAtLimit = getTickAtLimitStatus(p.tickLower, p.tickUpper, tickLimits)
+      const priceRangeData = calculateSolanaTickBasedPriceRange(
+        p.tickLower,
+        p.tickUpper,
+        poolInfo.token0,
+        poolInfo.token1,
+        isTickAtLimit,
+        flipCurrentPrice,
+        currentPriceNum,
+      )
 
       // Determine out-of-range using tick comparison to avoid flip-induced errors
       const tickCurrent = poolOnchain?.computePoolInfo?.tickCurrent
       const outOfRange =
         typeof tickCurrent === 'number'
           ? tickCurrent < p.tickLower || tickCurrent >= p.tickUpper
-          : currentPriceRaw !== undefined &&
-            (currentPriceRaw < Number(minPriceStr) || currentPriceRaw > Number(maxPriceStr))
+          : currentPriceRaw !== undefined && priceRangeData.currentPrice
+          ? Number(priceRangeData.currentPrice) < Number(priceRangeData.minPriceFormatted.replace('∞', 'Infinity')) ||
+            Number(priceRangeData.currentPrice) > Number(priceRangeData.maxPriceFormatted.replace('∞', 'Infinity'))
+          : false
 
-      // If flipping, invert min/max prices when both are finite
-      if (flipCurrentPrice) {
-        const minFinite = minPriceStr !== '0'
-        const maxFinite = maxPriceStr !== '∞'
-        if (minFinite && maxFinite) {
-          const minNum = Number(minPriceStr)
-          const maxNum = Number(maxPriceStr)
-          if (Number.isFinite(minNum) && Number.isFinite(maxNum) && minNum > 0 && maxNum > 0) {
-            const flippedMin = 1 / maxNum
-            const flippedMax = 1 / minNum
-            minPriceStr = String(flippedMin)
-            maxPriceStr = String(flippedMax)
-          }
-        } else if (!minFinite && maxFinite) {
-          // original min was 0, after flip max becomes ∞ and min becomes 1/max
-          const maxNum = Number(maxPriceStr)
-          if (Number.isFinite(maxNum) && maxNum > 0) {
-            minPriceStr = String(1 / maxNum)
-            maxPriceStr = '∞'
-          }
-        } else if (minFinite && !maxFinite) {
-          // original max was ∞, after flip min becomes 0 and max becomes 1/min
-          const minNum = Number(minPriceStr)
-          if (Number.isFinite(minNum) && minNum > 0) {
-            minPriceStr = '0'
-            maxPriceStr = String(1 / minNum)
-          }
-        }
-      }
-
-      // When full range, force 0 - ∞ and hide percentages
-      if (isFullRange) {
-        minPriceStr = '0'
-        maxPriceStr = '∞'
-      }
-
-      const showPercentagesBase =
-        currentPriceNum && Number.isFinite(currentPriceNum) && minPriceStr !== '0' && maxPriceStr !== '∞'
-      const showPercentages = Boolean(showPercentagesBase && !isFullRange)
-      let minPct = ''
-      let maxPct = ''
-      let rangePosition = 50
-      if (showPercentages) {
-        const minNum = Number(minPriceStr)
-        const maxNum = Number(maxPriceStr)
-        minPct = formatPercentage(((minNum - currentPriceNum!) / currentPriceNum!) * 100)
-        maxPct = formatPercentage(((maxNum - currentPriceNum!) / currentPriceNum!) * 100)
-        rangePosition = Math.max(0, Math.min(100, ((currentPriceNum! - minNum) / (maxNum - minNum)) * 100))
-      }
+      const { showPercentages } = priceRangeData
 
       const tokenInfo = (
         <FlexGap flexDirection="column" gap="4px">
@@ -368,12 +307,12 @@ export const SolanaV3PositionsTable: FC<V3PositionsTableProps> = ({ poolInfo }) 
           aprValue: aprRes,
           priceRange: (
             <PriceRangeDisplay
-              minPrice={minPriceStr}
-              maxPrice={maxPriceStr}
-              currentPrice={currentPriceNum ? String(currentPriceNum) : undefined}
-              minPercentage={minPct}
-              maxPercentage={maxPct}
-              rangePosition={rangePosition}
+              minPrice={priceRangeData.minPriceFormatted}
+              maxPrice={priceRangeData.maxPriceFormatted}
+              currentPrice={priceRangeData.currentPrice || (currentPriceNum ? String(currentPriceNum) : undefined)}
+              minPercentage={priceRangeData.minPercentage}
+              maxPercentage={priceRangeData.maxPercentage}
+              rangePosition={priceRangeData.rangePosition}
               outOfRange={outOfRange}
               removed={(p.liquidity as BN).isZero()}
               showPercentages={showPercentages}
