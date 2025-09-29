@@ -28355,18 +28355,6 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  '@binance/w3w-qrcode-modal@1.1.5(ts-node@10.9.1(@types/node@18.0.4)(typescript@5.7.3))':
-    dependencies:
-      '@binance/w3w-types': 1.1.4
-      '@binance/w3w-utils': 1.1.4
-      qrcode: 1.5.4
-      qrcode.react: 3.1.0(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      tailwindcss: 3.3.3(ts-node@10.9.1(@types/node@18.0.4)(typescript@5.7.3))
-    transitivePeerDependencies:
-      - ts-node
-
   '@binance/w3w-qrcode-modal@1.1.7(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))':
     dependencies:
       '@binance/w3w-types': 1.1.4
@@ -55885,12 +55873,6 @@ snapshots:
 
   jose@6.1.0: {}
 
-  jose@6.1.0: {}
-
-  jose@6.1.0: {}
-
-  jose@6.1.0: {}
-
   jotai-tanstack-query@0.11.0(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.52.1(react@18.2.0))(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0))(react@18.2.0):
     dependencies:
       '@tanstack/query-core': 5.69.0
@@ -58707,14 +58689,6 @@ snapshots:
     optionalDependencies:
       postcss: 8.5.3
       ts-node: 10.9.1(@types/node@18.19.75)(typescript@4.9.5)
-
-  postcss-load-config@4.0.2(postcss@8.5.3)(ts-node@10.9.1(@types/node@18.7.23)(typescript@5.7.3)):
-    dependencies:
-      lilconfig: 3.0.0
-      yaml: 2.3.4
-    optionalDependencies:
-      postcss: 8.5.3
-      ts-node: 10.9.1(@types/node@18.7.23)(typescript@5.7.3)
 
   postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.5.3)(tsx@4.7.1):
     dependencies:
@@ -64664,4 +64638,3 @@ snapshots:
     dependencies:
       '@types/emscripten': 1.39.10
       type-fest: 4.41.0
-      
