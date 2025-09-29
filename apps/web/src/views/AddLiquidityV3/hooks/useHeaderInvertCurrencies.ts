@@ -35,7 +35,11 @@ export const useHeaderInvertCurrencies = ({ currencyIdA, currencyIdB, feeAmount 
           currency: feeAmount ? [currencyIdB!, currencyIdA!, feeAmount?.toString()] : [currencyIdB!, currencyIdA!],
         },
       })
-      router.events.on('routeChangeComplete', triggerInversionEvent)
+      if (router.isReady) {
+        triggerInversionEvent()
+      } else {
+        router.events.on('routeChangeComplete', triggerInversionEvent)
+      }
     }
   }, [triggerInversionEvent, currencyIdA, currencyIdB, feeAmount, router])
 
