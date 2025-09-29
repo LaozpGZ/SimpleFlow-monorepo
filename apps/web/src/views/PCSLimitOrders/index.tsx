@@ -6,7 +6,7 @@ import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPa
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { Box, Link, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { Suspense } from 'react'
+import { Suspense, useTransition } from 'react'
 import styled from 'styled-components'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
@@ -22,13 +22,25 @@ const CardFallback = styled(Box)`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
+const LimitOrderFormWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  max-width: 480px;
+  margin: 0 auto 32px;
+`
+
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
+  const [isPending, startTransition] = useTransition()
 
   return (
     <>
       <Page style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 0 }}>
-        <SwapUIV2.SwapFormWrapper>
+        <LimitOrderFormWrapper>
           <SwapUIV2.SwapTabAndInputPanelWrapper>
             <SwapSelection swapType={SwapType.LIMIT} withToolkit />
             <Suspense fallback={<CardFallback height="332px" />}>
@@ -57,7 +69,7 @@ export const PCSLimitOrdersView = () => {
           <Suspense>
             <OrdersSummaryCard />
           </Suspense>
-        </SwapUIV2.SwapFormWrapper>
+        </LimitOrderFormWrapper>
 
         <Link href="/swap/limit-v1" color="primary60" textAlign="center" mx="auto">
           {t('Manage old Limit Orders (Deprecated)')} &raquo;
