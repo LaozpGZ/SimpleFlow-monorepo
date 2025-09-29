@@ -6,6 +6,7 @@ import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPa
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { Link } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { Suspense } from 'react'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
@@ -23,20 +24,32 @@ export const PCSLimitOrdersView = () => {
         <SwapUIV2.SwapFormWrapper>
           <SwapUIV2.SwapTabAndInputPanelWrapper>
             <SwapSelection swapType={SwapType.LIMIT} withToolkit />
-            <LimitOrderForm />
+            <Suspense>
+              <LimitOrderForm />
+            </Suspense>
 
             <FormContainer>
-              <MarketPriceInput />
-              <QuickActionButtons />
+              <Suspense>
+                <MarketPriceInput />
+              </Suspense>
+              <Suspense>
+                <QuickActionButtons />
+              </Suspense>
             </FormContainer>
           </SwapUIV2.SwapTabAndInputPanelWrapper>
 
           <PanelWrapper>
-            <CommitButton />
-            <TradeDetails mt="2px" />
+            <Suspense>
+              <CommitButton />
+            </Suspense>
+            <Suspense>
+              <TradeDetails mt="2px" />
+            </Suspense>
           </PanelWrapper>
 
-          <OrdersSummaryCard />
+          <Suspense>
+            <OrdersSummaryCard />
+          </Suspense>
         </SwapUIV2.SwapFormWrapper>
 
         <Link href="/swap/limit-v1" color="primary60" textAlign="center" mx="auto">

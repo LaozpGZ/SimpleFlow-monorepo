@@ -1,11 +1,10 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Button, useMatchBreakpoints, RowBetween, Text, Box, Input, Message, Link } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
 import { BigNumber as BN } from 'bignumber.js'
 import currencyId from 'utils/currencyId'
-import { Trans } from 'components/CustomTrans'
 import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 import {
   differencePercentageAtom,
@@ -192,22 +191,19 @@ export const QuickActionButtons = () => {
           <Box>
             <Text as="span" small>
               <Trans
-                text={t(
-                  'Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use %swap% instead.',
-                )}
-                data={{
+                i18nTemplate="Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use <0>Swap<0> instead."
+                components={[
+                  <Link
+                    key="swap"
+                    href={`/swap?inputCurrencyId=${currencyId(inputCurrency)}&outputCurrencyId=${currencyId(
+                      outputCurrency,
+                    )}`}
+                    color="primary60"
+                    small
+                  />,
+                ]}
+                values={{
                   percent: Math.abs(Number(percentage ?? 0)),
-                  swap: (
-                    <Link
-                      href={`/swap?inputCurrencyId=${currencyId(inputCurrency)}&outputCurrencyId=${currencyId(
-                        outputCurrency,
-                      )}`}
-                      color="primary60"
-                      small
-                    >
-                      {t('Swap')}
-                    </Link>
-                  ),
                 }}
               />
             </Text>
