@@ -229,6 +229,24 @@ export const bscHooksList: HookData[] = [
     hookType: HookType.PerPool,
     defaultFee: 500, // 0.05%
   },
+  {
+    address: '0x6AdC560aF85377f9a73d17c658D798c9B39186e8',
+    name: 'Limit Order',
+    poolType: POOL_TYPE.CLAMM,
+    description:
+      'Fee Earning Limit Orders let you set a target price to buy or sell tokens automatically, while earning fees.',
+    github: 'https://github.com/pancakeswap/limit-order-hook-contract',
+    category: [HOOK_CATEGORY.OrderType],
+    isVerified: true,
+    isUpgradable: false,
+    hooksRegistration: {
+      beforeInitialize: true,
+      afterInitialize: true,
+      beforeSwap: true,
+      afterSwap: true,
+    },
+    hookType: HookType.Universal,
+  },
 ]
 
 /**
