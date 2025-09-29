@@ -66,10 +66,10 @@ export const formattedAmountsAtom = atom((get) => {
   }
 })
 
-export const parsedAmountsAtom = atom(async (get) => {
-  const inputCurrency = await get(inputCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
-  const formattedAmounts = await get(formattedAmountsAtom)
+export const parsedAmountsAtom = atom((get) => {
+  const inputCurrency = get(inputCurrencyAtom)
+  const outputCurrency = get(outputCurrencyAtom)
+  const formattedAmounts = get(formattedAmountsAtom)
 
   if (!inputCurrency || !outputCurrency)
     return {
