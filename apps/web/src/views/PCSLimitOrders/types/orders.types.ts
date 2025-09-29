@@ -33,6 +33,8 @@ export interface ResponseOrder {
   transaction_hash: string
   amount0: string
   amount1: string
+  original_amount_0: string
+  original_amount_1: string
 }
 
 export enum OrderStatus {

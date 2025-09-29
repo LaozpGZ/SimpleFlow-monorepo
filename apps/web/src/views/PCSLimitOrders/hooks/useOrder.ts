@@ -72,34 +72,39 @@ export const useOrder = (order: ResponseOrder) => {
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
   const [originalAmountA, originalAmountB] = useMemo(() => {
-    if (!currency0 || !currency1 || !pool) return [undefined, undefined]
+    if (!currencyA || !currencyB || !order.original_amount_0 || !order.original_amount_1) return [undefined, undefined]
 
-    const liquidity = BigInt(order.liquidity)
+    return [
+      formatUnits(BigInt(order.original_amount_0), currencyA?.decimals),
+      formatUnits(BigInt(order.original_amount_1), currencyB?.decimals),
+    ]
 
-    // Contract handles tick range as [tickLower, tickLower + tickSpacing]
-    const tickLower = order.tick_lower
-    const tickUpper = order.tick_lower + pool.parameters.tickSpacing
+    // const liquidity = BigInt(order.liquidity)
 
-    const token0Amount = SqrtPriceMath.getAmount0Delta(
-      TickMath.getSqrtRatioAtTick(tickLower),
-      TickMath.getSqrtRatioAtTick(tickUpper),
-      liquidity,
-      false,
-    )
+    // // Contract handles tick range as [tickLower, tickLower + tickSpacing]
+    // const tickLower = order.tick_lower
+    // const tickUpper = order.tick_lower + pool.parameters.tickSpacing
 
-    const token1Amount = SqrtPriceMath.getAmount1Delta(
-      TickMath.getSqrtRatioAtTick(tickLower),
-      TickMath.getSqrtRatioAtTick(tickUpper),
-      liquidity,
-      false,
-    )
+    // const token0Amount = SqrtPriceMath.getAmount0Delta(
+    //   TickMath.getSqrtRatioAtTick(tickLower),
+    //   TickMath.getSqrtRatioAtTick(tickUpper),
+    //   liquidity,
+    //   false,
+    // )
 
-    const result = order.zero_for_one
-      ? [formatUnits(token0Amount, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
-      : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
+    // const token1Amount = SqrtPriceMath.getAmount1Delta(
+    //   TickMath.getSqrtRatioAtTick(tickLower),
+    //   TickMath.getSqrtRatioAtTick(tickUpper),
+    //   liquidity,
+    //   false,
+    // )
 
-    return result
-  }, [currency0, currency1, order.liquidity, order.tick_lower, pool])
+    // const result = order.zero_for_one
+    //   ? [formatUnits(token0Amount, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
+    //   : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
+
+    // return result
+  }, [currencyA, currencyB, order.original_amount_0, order.original_amount_1])
 
   // Amounts Received
   const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
