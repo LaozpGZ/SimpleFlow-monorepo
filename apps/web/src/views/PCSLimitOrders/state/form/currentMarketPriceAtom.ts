@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { getSqrtPriceFromCurrentTick } from 'views/PCSLimitOrders/utils/ticks'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 
@@ -28,8 +28,5 @@ export const currentMarketPriceAtom = atom(async (get) => {
 
   if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return '0'
 
-  return formatNumber(sqrtPrice, {
-    maxDecimalDisplayDigits: 6,
-    maximumSignificantDigits: 6,
-  })
+  return sqrtPrice.toFixed(6)
 })
