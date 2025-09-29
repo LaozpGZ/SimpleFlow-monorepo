@@ -46,21 +46,27 @@ export const SolanaPoolDerivedAprText: React.FC<{ pool: SolanaV3PoolInfo; fontSi
     tokenPrices,
   })
 
-  const combinedApr = Number(aprData?.apr || 0)
-  const feeApr = Number(aprData?.fee?.apr || 0)
+  const { combinedApr, feeApr, rewardApr } = useMemo(
+    () => ({
+      combinedApr: Number(aprData?.apr || 0) / 100,
+      feeApr: Number(aprData?.fee?.apr || 0) / 100,
+      rewardApr: { value: aprData?.rewards.reduce((acc, r) => acc + Number(r.apr) / 100, 0) ?? 0 },
+    }),
+    [aprData],
+  )
   const display = useMemo(() => {
     return Number.isFinite(combinedApr) && combinedApr > 0
-      ? `${combinedApr.toLocaleString(undefined, { maximumFractionDigits: 2 })}%`
+      ? `${(combinedApr * 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}%`
       : '-'
   }, [combinedApr])
 
   const { tooltip, targetRef, tooltipVisible } = useTooltip(
-    <AprTooltipContent combinedApr={combinedApr} lpFeeApr={feeApr} showDesc />,
+    <AprTooltipContent cakeApr={rewardApr} combinedApr={combinedApr} lpFeeApr={feeApr} showDesc />,
   )
 
   return (
     <>
-      <Text ref={targetRef as any} fontSize={fontSize ?? '24px'} bold>
+      <Text ref={targetRef} fontSize={fontSize ?? '24px'} bold>
         {display}
       </Text>
       {tooltipVisible && tooltip}

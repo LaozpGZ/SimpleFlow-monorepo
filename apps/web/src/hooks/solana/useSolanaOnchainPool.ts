@@ -19,7 +19,7 @@ export function useSolanaOnchainClmmPool(poolId?: string) {
       if (!poolId || !raydium) throw new Error('poolId and raydium client required')
       return getSolanaOnchainClmmPool(raydium, poolId)
     },
-    staleTime: 30_000,
+    staleTime: 10_000,
   })
 
   return useMemo(() => ({ data, isLoading, error }), [data, isLoading, error])

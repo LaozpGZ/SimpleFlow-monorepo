@@ -96,7 +96,7 @@ export function AddSolanaLiquidityV3Layout({ children }: { children: React.React
         price={poolOnChain?.computePoolInfo.currentPrice}
         overrideAprDisplay={{
           aprDisplay: poolInfo ? (
-            <SolanaPoolDerivedAprText pool={poolInfo as any} fontSize={isMobile ? '20px' : '24px'} />
+            <SolanaPoolDerivedAprText pool={poolInfo} fontSize={isMobile ? '20px' : '24px'} />
           ) : (
             <></>
           ),
