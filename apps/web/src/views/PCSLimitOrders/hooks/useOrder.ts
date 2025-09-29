@@ -87,7 +87,7 @@ export const useOrder = (order: ResponseOrder) => {
       .multipliedBy(BN(priceUpper.toFixed(18)))
       .sqrt()
 
-    const buyAmount = BN(sellAmount).multipliedBy(sqrtLimitPrice).toString()
+    const buyAmount = BN(sellAmount).multipliedBy(sqrtLimitPrice).toFormat(18)
 
     return [sellAmount, buyAmount]
   }, [currencyA, currencyB, order.original_amount_0, order.original_amount_1, pool, order.tick_lower])
