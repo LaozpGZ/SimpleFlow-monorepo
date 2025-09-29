@@ -11,9 +11,20 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import styled, { useTheme } from 'styled-components'
+import useResolvedTheme from 'hooks/useTheme'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
-import { useMemo } from 'react'
-import { Bar, BarChart, ResponsiveContainer, XAxis, ReferenceLine, ReferenceArea, Label } from 'recharts'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  ReferenceLine,
+  ReferenceArea,
+  Label,
+  Rectangle,
+  YAxis,
+} from 'recharts'
 import { useSolanaV3PositionIdRouteParams } from 'hooks/dynamicRoute/usePositionIdRoute'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { usePriceRange, usePriceRangeData } from 'hooks/solana/usePriceRange'
@@ -21,6 +32,8 @@ import { POSITION_STATUS, SolanaV3PositionDetail } from 'state/farmsV4/state/acc
 import { SolanaV3Pool } from 'state/pools/solana'
 import { TickUtils } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
+import { useIsMounted } from '@pancakeswap/hooks'
+import { distanceToNowStrict } from 'utils/timeHelper'
 import { usePoolCurrencies } from '../hooks/usePoolCurrencies'
 import { usePoolChartData, ChartEntry } from '../hooks/usePoolChartData'
 
@@ -70,6 +83,7 @@ export const PositionChart = ({
   }, [poolInfo, baseIn])
   const { formattedData: chartData, isLoading, error } = usePoolChartData(poolId, baseIn)
   const theme = useTheme()
+  const { isDark } = useResolvedTheme()
   const [lower, upper] = useMemo(() => {
     const lower = Number(priceLower?.toFixed(18)) < price ? priceLower : price
     const upper = Number(priceUpper?.toFixed(18)) > price ? priceUpper : price
@@ -114,6 +128,20 @@ export const PositionChart = ({
     return position.status === POSITION_STATUS.ACTIVE ? theme.colors.success : theme.colors.failure
   }, [position.status, theme.colors.success, theme.colors.failure])
 
+  const maxY = useMemo(() => {
+    let max = 0
+    for (const item of formattedData) {
+      if (item.liquidity > max) {
+        max = item.liquidity
+      }
+    }
+    return max
+  }, [formattedData])
+
+  const [x1, setX1] = useState<number | undefined>(undefined)
+  const [x2, setX2] = useState<number | undefined>(undefined)
+  const [x0, setX0] = useState<number | undefined>(undefined)
+
   if (isLoading) {
     return (
       <Card>
@@ -141,19 +169,13 @@ export const PositionChart = ({
   return (
     <Card>
       <CardBody p={32}>
-        <RangeBar
-          lower={xLower}
-          upper={xUpper}
-          current={xCurrent}
-          formattedData={formattedData}
-          position={position}
-          poolInfo={poolInfo}
-          baseIn={baseIn}
-        />
+        <RangeBar x0={x0} x1={x1} x2={x2} position={position} poolInfo={poolInfo} baseIn={baseIn} />
         <div style={{ position: 'relative', height: `${chartHeight}px` }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={formattedData}
+              barCategoryGap={0}
+              barGap={0}
               margin={{
                 top: 20,
                 right: 0,
@@ -163,8 +185,16 @@ export const PositionChart = ({
             >
               <defs>
                 <linearGradient id="liquidityGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="rgba(118, 69, 217, 0.8)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="rgba(118, 69, 217, 0.3)" stopOpacity={0.8} />
+                  <stop
+                    offset="5%"
+                    stopColor={isDark ? 'rgba(168, 129, 252, 0.8)' : 'rgba(118, 69, 217, 0.8)'}
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor={isDark ? 'rgba(168, 129, 252, 0.3)' : 'rgba(118, 69, 217, 0.3)'}
+                    stopOpacity={0.8}
+                  />
                 </linearGradient>
               </defs>
               <XAxis
@@ -174,17 +204,51 @@ export const PositionChart = ({
                 tick={{ fontSize: 12, fill: theme.colors.textSubtle }}
                 tickFormatter={(value) => formatAmount(value, { precision: 2 }) ?? ''}
               />
+              <YAxis hide axisLine={false} tickLine={false} domain={[0, maxY]} />
 
               {xCurrent && (
-                <ReferenceLine x={xCurrent} stroke={theme.colors.secondary} strokeWidth={2}>
-                  <Label
-                    value={formatAmount(xCurrent, { precision: 2 }) ?? ''}
-                    position="top"
-                    style={{ fill: theme.colors.secondary, fontSize: '12px', fontWeight: 'bold' }}
+                <>
+                  <Rectangle x={xCurrent - 2.5} y={0} width={5} height={12} fill={theme.colors.secondary} radius={16} />
+                  <ReferenceLine x={xCurrent} stroke={theme.colors.secondary} strokeWidth={2}>
+                    <Label
+                      value={formatAmount(xCurrent, { precision: 2 }) ?? ''}
+                      position="top"
+                      style={{ fill: theme.colors.secondary, fontSize: '12px', fontWeight: 'bold' }}
+                    />
+                  </ReferenceLine>
+                  <ReferenceLine
+                    x={xCurrent}
+                    stroke={theme.colors.secondary}
+                    strokeWidth={1}
+                    shape={(props) => <ComputeX1 x1={props.x1} onEffect={setX0} />}
                   />
-                </ReferenceLine>
+                </>
               )}
               {xLower && xUpper && <ReferenceArea x1={xLower} x2={xUpper} fill={rangeColor} fillOpacity={0.1} />}
+              {xLower && xUpper && (
+                <>
+                  <ReferenceLine
+                    segment={[
+                      { x: xLower, y: maxY },
+                      { x: xUpper, y: maxY },
+                    ]}
+                    stroke={rangeColor}
+                    position="start"
+                    strokeWidth={0}
+                    shape={(props) => <ComputeX1 x1={props.x1} onEffect={setX1} />}
+                  />
+                  <ReferenceLine
+                    segment={[
+                      { x: xLower, y: maxY },
+                      { x: xUpper, y: maxY },
+                    ]}
+                    stroke={rangeColor}
+                    position="end"
+                    strokeWidth={0}
+                    shape={(props) => <ComputeX2 x2={props.x2} onEffect={setX2} />}
+                  />
+                </>
+              )}
               {xLower && (
                 <ReferenceLine position="start" x={xLower} stroke={rangeColor} strokeWidth={2}>
                   {/* <Label
@@ -244,34 +308,34 @@ export const PositionChart = ({
   )
 }
 
-const RangeBar = ({ lower, upper, current, formattedData, position, poolInfo, baseIn }) => {
-  const min = formattedData[0].price0
-  const max = formattedData[formattedData.length - 1].price0
-  const scaled = formattedData.length > maxRenderCount
-  const [xLower, xCurrent, xUpper] = useMemo(() => {
-    const { tickSpacing } = poolInfo.config
-    return [
-      formattedData.findIndex((item) => item.tick === TickUtils.nearestUsableTick(position.tickLower, tickSpacing)),
-      formattedData.findIndex(
-        (item) => item.tick === TickUtils.nearestUsableTick(poolInfo.tickCurrent ?? 0, tickSpacing),
-      ),
-      formattedData.findIndex((item) => item.tick === TickUtils.nearestUsableTick(position.tickUpper, tickSpacing)),
-    ]
-  }, [formattedData, poolInfo.tickCurrent, poolInfo.config.tickSpacing])
+const ComputeX1 = ({ x1, onEffect }) => {
+  useEffect(() => {
+    onEffect(x1)
+  }, [x1])
+  return <></>
+}
 
-  const currentLeft = useMemo(() => {
-    if (scaled) return ((current - min) / (max - min)) * 100
-    return (xCurrent / formattedData.length) * 100
-  }, [current, min, max, scaled, xCurrent])
-  const lowerLeft = useMemo(() => {
-    if (scaled) return ((lower - min) / (max - min)) * 100
-    return (Math.max(0, xLower) / formattedData.length) * 100
-  }, [lower, min, max, scaled, xLower])
-  const upperRight = useMemo(() => {
-    if (scaled) return ((upper - min) / (max - min)) * 100
-    return (Math.min(formattedData.length, xUpper + 1) / formattedData.length) * 100
-  }, [upper, min, max, scaled, xUpper])
+const ComputeX2 = ({ x2, onEffect }) => {
+  useEffect(() => {
+    onEffect(x2)
+  }, [x2])
+  return <></>
+}
 
+const RangeBar = ({ position, poolInfo, baseIn, x1, x2, x0 }) => {
+  return (
+    <AutoColumn width="100%" py="8px" gap="4px">
+      <PriceRangeLabel x1={x1} x2={x2} position={position} baseIn={baseIn} poolInfo={poolInfo} />
+      <Box width="100%" position="relative">
+        <TrackerBar />
+        {x1 && x2 && <PriceRangeBar left={x1} right={x2} inRange={position.status === POSITION_STATUS.ACTIVE} />}
+        {x0 && <CurrentPin left={x0} />}
+      </Box>
+    </AutoColumn>
+  )
+}
+
+const PriceRangeLabel = ({ x1, x2, position, baseIn, poolInfo }) => {
   const {
     minPriceFormatted: minPrice,
     minPercentage,
@@ -297,39 +361,52 @@ const RangeBar = ({ lower, upper, current, formattedData, position, poolInfo, ba
           Number(maxPrice) < 1 ? { maximumDecimalTrailingZeroes: 4 } : { maxDecimalDisplayDigits: 4 },
         )
       : '∞'
-  const { isMobile } = useMatchBreakpoints()
+
+  const leftRef = useRef<HTMLDivElement>(null)
+  const rightRef = useRef<HTMLDivElement>(null)
+  const isMounted = useIsMounted()
+  const [leftWidth, setLeftWidth] = useState<number | undefined>(undefined)
+  const [rightWidth, setRightWidth] = useState<number | undefined>(undefined)
+  const intersected = useMemo(() => {
+    if (!leftWidth || !rightWidth) return false
+    return rightWidth + leftWidth > x2 - x1
+  }, [leftWidth, rightWidth, x1, x2])
+
+  useEffect(() => {
+    if (isMounted) {
+      setLeftWidth(leftRef.current?.clientWidth)
+      setRightWidth(rightRef.current?.clientWidth)
+    }
+  }, [isMounted])
 
   return (
-    <AutoColumn width="100%" py="8px" gap="4px">
-      <Box width="100%" position="relative" height="30px">
-        <PriceRangeContainer left={lowerLeft} right={upperRight} expanded={isMobile}>
-          <AutoRow justifyContent="space-between" flexWrap="nowrap">
-            <AutoColumn alignItems="flex-start">
-              <Text fontSize="12px" lineHeight={1.5} fontWeight={600}>
+    <Box width="100%" position="relative" height="30px">
+      <PriceRangeContainer left={x1} right={x2} expanded={false}>
+        <AutoRow justifyContent="space-between" flexWrap="nowrap">
+          <AutoColumn alignItems="flex-start">
+            <Transform distance={-(leftWidth ?? 0) / 2} enabled={intersected}>
+              <Text fontSize="12px" lineHeight={1.5} fontWeight={600} ref={leftRef}>
                 {displayMinPrice}
               </Text>
               <Text fontSize="10px" color="textSubtle">
                 {minPercentage}
               </Text>
-            </AutoColumn>
+            </Transform>
+          </AutoColumn>
 
-            <AutoColumn alignItems="flex-end">
-              <Text fontSize="12px" lineHeight={1.5} fontWeight={600}>
+          <AutoColumn alignItems="flex-end">
+            <Transform distance={(rightWidth ?? 0) / 2} enabled={intersected}>
+              <Text fontSize="12px" lineHeight={1.5} fontWeight={600} ref={rightRef}>
                 {displayMaxPrice}
               </Text>
               <Text fontSize="10px" color="textSubtle" textAlign="right">
                 {maxPercentage}
               </Text>
-            </AutoColumn>
-          </AutoRow>
-        </PriceRangeContainer>
-      </Box>
-      <Box width="100%" position="relative">
-        <TrackerBar />
-        <PriceRangeBar left={lowerLeft} right={upperRight} inRange={position.status === POSITION_STATUS.ACTIVE} />
-        <CurrentPin left={currentLeft} />
-      </Box>
-    </AutoColumn>
+            </Transform>
+          </AutoColumn>
+        </AutoRow>
+      </PriceRangeContainer>
+    </Box>
   )
 }
 
@@ -347,7 +424,7 @@ const TrackerBar = styled.div`
 const CurrentPin = styled.div<{ left: number }>`
   position: absolute;
   top: -2px;
-  left: ${({ left }) => left + 1}%;
+  left: ${({ left }) => left - 2.5}px;
   width: 5px;
   height: 12px;
   border-radius: 16px;
@@ -369,8 +446,8 @@ const CurrentPin = styled.div<{ left: number }>`
 const PriceRangeBar = styled.div<{ left: number; right: number; inRange: boolean }>`
   position: absolute;
   top: 0;
-  left: ${({ left }) => left + 1}%;
-  width: ${({ right, left }) => right - left}%;
+  left: ${({ left }) => left}px;
+  width: ${({ right, left }) => right - left}px;
   height: 5px;
   border-radius: 8px;
   background: ${({ theme, inRange }) => (inRange ? theme.colors.success : theme.colors.failure)};
@@ -387,7 +464,14 @@ const PriceRangeContainer = styled.div<{ left: number; right: number; expanded: 
   position: absolute;
   height: 30px;
   top: 0;
-  left: ${left + 1}%;
-  width: ${right - left}%;
+  left: ${left}px;
+  width: ${right - left}px;
+  `}
+`
+const Transform = styled.div<{ distance: number; enabled: boolean }>`
+  ${({ distance, enabled }) =>
+    enabled &&
+    `
+    transform: translateX(${distance}px);
   `}
 `
