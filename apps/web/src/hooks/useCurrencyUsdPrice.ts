@@ -1,29 +1,27 @@
 import { isTestnetChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress } from '@pancakeswap/sdk'
-import { useQuery } from '@tanstack/react-query'
-
-import { SLOW_INTERVAL } from 'config/constants'
 import { atom } from 'jotai'
 import { atomFamily, unwrap } from 'jotai/utils'
 import { usdPriceBatcher } from 'utils/batcher'
+import { useMemo } from 'react'
+import { useStablecoinPrice } from './useStablecoinPrice'
 
 type Config = {
   enabled?: boolean
 }
 
-export function useCurrencyUsdPrice(currency: Currency | undefined | null, { enabled = true }: Config = {}) {
-  return useQuery<number>({
-    queryKey: ['currencyPrice', currency?.chainId, currency?.wrapped.address],
-    queryFn: async () => {
-      if (!currency) {
-        throw new Error('No currency provided')
-      }
-      return usdPriceBatcher.fetch(currency)
-    },
-    staleTime: SLOW_INTERVAL,
-    refetchInterval: SLOW_INTERVAL,
-    enabled: Boolean(enabled && currency),
-  })
+export function useCurrencyUsdPrice(
+  currency: Currency | undefined | null,
+  { enabled = true }: Config = {},
+): { data: number | undefined; isLoading: boolean } {
+  const price = useStablecoinPrice(currency, { enabled })
+  return useMemo(() => {
+    if (!price) return { data: undefined, isLoading: true }
+    return {
+      data: parseFloat(price.greaterThan(1) ? price.toSignificant(6) : price.toSignificant(9)),
+      isLoading: false,
+    }
+  }, [price])
 }
 
 export const currencyUSDPriceAtom = atomFamily(
