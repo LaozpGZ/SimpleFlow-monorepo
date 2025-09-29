@@ -191,7 +191,7 @@ export const QuickActionButtons = () => {
           <Box>
             <Text as="span" small>
               <Trans
-                i18nTemplate="Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use <0>Swap<0> instead."
+                i18nTemplate="Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use <0>Swap</0> instead."
                 components={[
                   <Link
                     key="swap"
