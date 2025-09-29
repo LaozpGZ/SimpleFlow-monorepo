@@ -39,6 +39,7 @@ export default function useSolanaTxError() {
         } else if (message.includes('timeout')) {
           errorMessage = t('Transaction timeout. Please try again')
         } else {
+          console.error('Solana transaction error:', error)
           errorMessage = t('Send didn’t go through. Please try again.')
         }
       }
