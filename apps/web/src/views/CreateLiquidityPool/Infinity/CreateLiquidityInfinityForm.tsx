@@ -28,7 +28,7 @@ import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
 
-  const { isBin, isCl, startPrice, feeLevel } = useInfinityCreateFormQueryState()
+  const { isBin, isCl, startPrice, feeLevel, isDynamic } = useInfinityCreateFormQueryState()
 
   const { lowerBinId, upperBinId } = useInfinityBinQueryState()
   const { lowerTick, upperTick } = useInfinityCLQueryState()
@@ -71,7 +71,7 @@ export const CreateLiquidityInfinityForm = () => {
       </Card>
       <Card>
         <CardBody>
-          <DynamicSection disabled={poolInitialized || isUndefinedOrNull(feeLevel)}>
+          <DynamicSection disabled={poolInitialized || (!isDynamic && isUndefinedOrNull(feeLevel))}>
             <AutoColumn gap={['16px', null, null, '24px']}>
               <FieldStartingPrice />
               <DynamicSection disabled={!startPrice}>
