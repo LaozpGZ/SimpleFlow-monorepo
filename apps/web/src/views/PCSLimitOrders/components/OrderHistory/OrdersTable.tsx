@@ -93,13 +93,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
 
   return (
     <Tr>
-      <Td>
-        {/* debugging */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <span style={{ fontSize: '12px', color: 'gray' }}>[id {order.order_id}]</span>
-          {currencyA && <TokenAmountDisplay currency={currencyA} amount={originalAmountA ?? '0'} />}
-        </div>
-      </Td>
+      <Td>{currencyA && <TokenAmountDisplay currency={currencyA} amount={originalAmountA ?? '0'} />}</Td>
       <Td>{currencyB && <TokenAmountDisplay currency={currencyB} amount={originalAmountB ?? '0'} />}</Td>
       <Td>
         <FlexGap alignItems="center" gap="4px">

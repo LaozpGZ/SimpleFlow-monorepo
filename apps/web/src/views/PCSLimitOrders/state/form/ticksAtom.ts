@@ -15,9 +15,9 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms
 /**
  * Ticks derived from current/custom market price
  */
-export const ticksAtom = atom(async (get) => {
-  const inputCurrency = await get(inputCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
+export const ticksAtom = atom((get) => {
+  const inputCurrency = get(inputCurrencyAtom)
+  const outputCurrency = get(outputCurrencyAtom)
 
   if (!inputCurrency || !outputCurrency) return undefined
 
