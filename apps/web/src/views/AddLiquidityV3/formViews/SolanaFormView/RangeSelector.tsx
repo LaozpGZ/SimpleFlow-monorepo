@@ -60,7 +60,6 @@ const QuickActionButton = styled(Button).attrs(({ $isActive }) => ({
 }>`
   height: 56px;
   font-size: 16px;
-  padding: 0 12px;
   font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
 `
 
