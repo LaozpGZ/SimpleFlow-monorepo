@@ -32,7 +32,8 @@ const LinkText = styled(Text)`
     opacity: 0.8;
   }
 `
-const selectTypeAtom = atom(SELECTOR_TYPE.V3)
+export const selectTypeAtom = atom(SELECTOR_TYPE.V3)
+
 export function AddEVMLiquidityV3Layout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()

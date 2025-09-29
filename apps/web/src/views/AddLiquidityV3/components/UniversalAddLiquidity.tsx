@@ -21,6 +21,7 @@ import V3FormView from '../formViews/V3FormView'
 import { SELECTOR_TYPE } from '../types'
 import { SolanaFormView } from '../formViews/SolanaFormView/SolanaFormView'
 import { useFeeAmountFromQuery } from '../hooks/useCurrencyParams'
+import { selectTypeAtom } from './AddEVMLiquidityV3Layout'
 
 /* two-column layout where DepositAmount is moved at the very end on mobile. */
 export const ResponsiveTwoColumns = styled.div<{ $singleColumn?: boolean }>`
@@ -36,8 +37,6 @@ export const ResponsiveTwoColumns = styled.div<{ $singleColumn?: boolean }>`
     grid-template-columns: ${({ $singleColumn }) => ($singleColumn ? '1fr' : '3fr 2fr')};
   }
 `
-
-const selectTypeAtom = atom(SELECTOR_TYPE.V3)
 
 interface UniversalAddLiquidityPropsType {
   currencyIdA?: string
