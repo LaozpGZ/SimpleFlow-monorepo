@@ -123,6 +123,8 @@ export const QuickActionButtons = () => {
     setLocalPercent(percentage || '')
   }, [percentage])
 
+  if (!inputCurrency || !outputCurrency) return null
+
   return (
     <Suspense>
       <ButtonsContainer>

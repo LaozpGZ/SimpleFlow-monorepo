@@ -4,16 +4,18 @@ import { SwapType } from 'views/Swap/types'
 import { SwapSelection } from 'views/SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPanel'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
-import { Box, Link, Skeleton } from '@pancakeswap/uikit'
+import { Box, Link } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { Suspense, useTransition } from 'react'
+import { Suspense } from 'react'
 import styled from 'styled-components'
+import { useAtomValue } from 'jotai'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
 import { QuickActionButtons } from './components/QuickActionButtons'
 import { TradeDetails } from './components/TradeDetails'
 import { OrdersSummaryCard } from './components/OrderHistory/OrdersSummaryCard'
+import { inputCurrencyAtom, outputCurrencyAtom } from './state/currency/currencyAtoms'
 
 const CardFallback = styled(Box)`
   padding: 16px;
@@ -36,6 +38,9 @@ const LimitOrderFormWrapper = styled.div`
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
 
+  const inputCurrency = useAtomValue(inputCurrencyAtom)
+  const outputCurrency = useAtomValue(outputCurrencyAtom)
+
   return (
     <>
       <Page style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 0 }}>
@@ -46,14 +51,16 @@ export const PCSLimitOrdersView = () => {
               <LimitOrderForm />
             </Suspense>
 
-            <FormContainer>
-              <Suspense fallback={<CardFallback height="100px" />}>
-                <MarketPriceInput />
-              </Suspense>
-              <Suspense fallback={<CardFallback height="46px" />}>
-                <QuickActionButtons />
-              </Suspense>
-            </FormContainer>
+            {inputCurrency && outputCurrency && (
+              <FormContainer>
+                <Suspense fallback={<CardFallback height="100px" />}>
+                  <MarketPriceInput />
+                </Suspense>
+                <Suspense fallback={<CardFallback height="46px" />}>
+                  <QuickActionButtons />
+                </Suspense>
+              </FormContainer>
+            )}
           </SwapUIV2.SwapTabAndInputPanelWrapper>
 
           <PanelWrapper>
