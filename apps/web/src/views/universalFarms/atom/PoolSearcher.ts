@@ -82,8 +82,6 @@ export class PoolSearcher extends Emitter<PoolSearchEvent> {
   private clearStates() {
     this.all = []
     this.aprs = {}
-    this.currentQuery = undefined
-    this.currentHash = undefined
     this.emit(PoolSearchEvent.POOLS_UPDATED, [])
   }
 

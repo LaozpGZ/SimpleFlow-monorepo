@@ -68,12 +68,12 @@ export const createListsAtom = (storeName: string, reducer: any, initialState: a
     return noopStorage
   }
 
-  const listsStorageAtom = atomWithStorage<ListsState | typeof EMPTY>('lists', EMPTY, IndexedDBStorage('lists'))
+  const listsStorageAtom = atomWithStorage<ListsState>('lists', initialState, IndexedDBStorage('lists'))
 
   const defaultStateAtom = atom<ListsState, any, void>(
     (get) => {
       const value = get(loadable(listsStorageAtom))
-      if (value.state === 'hasData' && value.data !== EMPTY) {
+      if (value.state === 'hasData') {
         return value.data
       }
       return initialState
@@ -117,7 +117,7 @@ export const createListsAtom = (storeName: string, reducer: any, initialState: a
 
   function useListStateReady() {
     const value = useAtomValue(isReadyAtom)
-    return value.state === 'hasData' && value.data !== EMPTY
+    return value.state === 'hasData'
   }
 
   return {
