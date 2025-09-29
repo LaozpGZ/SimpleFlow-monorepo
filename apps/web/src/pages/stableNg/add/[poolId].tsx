@@ -1,3 +1,4 @@
+import { PoolKey } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Spinner, Text, Breadcrumbs, FlexGap, Container, SkeletonV2 } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
@@ -11,9 +12,7 @@ import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import AddLiquidityV2FormProvider from 'views/AddLiquidity/AddLiquidityV2FormProvider'
 import { InfinityPoolInfoHeader } from 'views/AddLiquidityInfinity/components/InfinityPoolInfoHeader'
-import { AddLiquidityV3Layout, UniversalAddLiquidity } from 'views/AddLiquidityV3'
-import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
-import { PageWithoutFAQ } from 'views/Page'
+import StableNGAddLiquidityProvider from 'views/StableSwapNG/components/StableNGAddLiquidityProvider'
 
 const AddStableNGLiquidityPage = () => {
   const router = useRouter()
@@ -23,6 +22,8 @@ const AddStableNGLiquidityPage = () => {
   const { t } = useTranslation()
 
   const { data: poolKey } = usePoolKeyByPoolId(poolId as `0x${string}`, chainId)
+
+  console.log('poolKey', poolKey)
 
   // TODO: should handle native token with returned Wrapped token
   const currencyIdA = poolKey?.currency0
@@ -50,11 +51,7 @@ const AddStableNGLiquidityPage = () => {
           <InfinityPoolInfoHeader poolId={poolId as `0x${string}`} chainId={chainId} />
         </SkeletonV2>
         <SkeletonV2 isDataReady={Boolean(poolId && currencyIdA && currencyIdB)}>
-          <UniversalAddLiquidity
-            preferredSelectType={SELECTOR_TYPE.STABLE}
-            currencyIdA={currencyIdA}
-            currencyIdB={currencyIdB}
-          />
+          <StableNGAddLiquidityProvider poolKey={poolKey as PoolKey} />
         </SkeletonV2>
       </Container>
     </AddLiquidityV2FormProvider>

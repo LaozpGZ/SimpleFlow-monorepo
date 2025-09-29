@@ -3,7 +3,7 @@ import { Address } from 'viem'
 /**
  * StableNG Pool Factory contract address
  */
-export const STABLE_NG_POOL_FACTORY_ADDRESS = '0x403894B21EC18877931E6A98C8eD3D3f00Bfc0C6' as Address
+export const STABLE_NG_POOL_FACTORY_ADDRESS = '0xA5297FC8479F12A956AeD3A2af0703b845d99A70' as Address
 
 /**
  * Zero address constant
