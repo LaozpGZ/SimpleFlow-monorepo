@@ -1,7 +1,3 @@
-import { Breadcrumbs, FlexGap, Text } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
-import { LinkText } from 'components/Liquidity/LinkText'
-import { CHAIN_QUERY_NAME } from 'config/chains'
 import { Protocol } from '@pancakeswap/farms'
 import { PositionHeader } from 'views/PositionInfinity/components/PositionHeader'
 import { PoolKey } from '@pancakeswap/infinity-sdk'

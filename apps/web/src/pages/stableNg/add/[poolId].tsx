@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Spinner, Text, Breadcrumbs, FlexGap, Container } from '@pancakeswap/uikit'
+import { Box, Spinner, Text, Breadcrumbs, FlexGap, Container, SkeletonV2 } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { LinkText } from 'components/Liquidity/LinkText'
 import { CHAIN_QUERY_NAME } from 'config/chains'
@@ -28,24 +28,6 @@ const AddStableNGLiquidityPage = () => {
   const currencyIdA = poolKey?.currency0
   const currencyIdB = poolKey?.currency1
 
-  if (!currencyIdA || !currencyIdB || !poolId) {
-    return (
-      <PageWithoutFAQ>
-        <AddLiquidityV3Layout>
-          <Box
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Spinner />
-          </Box>
-        </AddLiquidityV3Layout>
-      </PageWithoutFAQ>
-    )
-  }
-
   return (
     <AddLiquidityV2FormProvider>
       <Container mx="auto" my="24px" maxWidth="1200px">
@@ -64,12 +46,16 @@ const AddStableNGLiquidityPage = () => {
             </FlexGap>
           </Breadcrumbs>
         </Box>
-        <InfinityPoolInfoHeader poolId={poolId} chainId={chainId} />
-        <UniversalAddLiquidity
-          preferredSelectType={SELECTOR_TYPE.STABLE}
-          currencyIdA={currencyIdA}
-          currencyIdB={currencyIdB}
-        />
+        <SkeletonV2 isDataReady={Boolean(poolId && chainId)}>
+          <InfinityPoolInfoHeader poolId={poolId as `0x${string}`} chainId={chainId} />
+        </SkeletonV2>
+        <SkeletonV2 isDataReady={Boolean(poolId && currencyIdA && currencyIdB)}>
+          <UniversalAddLiquidity
+            preferredSelectType={SELECTOR_TYPE.STABLE}
+            currencyIdA={currencyIdA}
+            currencyIdB={currencyIdB}
+          />
+        </SkeletonV2>
       </Container>
     </AddLiquidityV2FormProvider>
   )
