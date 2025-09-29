@@ -75,7 +75,9 @@ export const LimitOrderForm = () => {
             </Text>
           </Message>
         )}
-        <FlipButton onFlip={flipCurrencies} />
+        <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="40px" />}>
+          <FlipButton onFlip={flipCurrencies} />
+        </Suspense>
         <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
           <CurrencyInputPanelSimplify
             id="limit-order-output"

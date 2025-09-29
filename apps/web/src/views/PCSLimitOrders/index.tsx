@@ -4,15 +4,23 @@ import { SwapType } from 'views/Swap/types'
 import { SwapSelection } from 'views/SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPanel'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
-import { Link, Skeleton } from '@pancakeswap/uikit'
+import { Box, Link, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { Suspense } from 'react'
+import styled from 'styled-components'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
 import { QuickActionButtons } from './components/QuickActionButtons'
 import { TradeDetails } from './components/TradeDetails'
 import { OrdersSummaryCard } from './components/OrderHistory/OrdersSummaryCard'
+
+const CardFallback = styled(Box)`
+  padding: 16px;
+  width: 100%;
+  border-radius: 24px;
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+`
 
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
@@ -23,25 +31,25 @@ export const PCSLimitOrdersView = () => {
         <SwapUIV2.SwapFormWrapper>
           <SwapUIV2.SwapTabAndInputPanelWrapper>
             <SwapSelection swapType={SwapType.LIMIT} withToolkit />
-            <Suspense fallback={<Skeleton width="100%" height="332px" />}>
+            <Suspense fallback={<CardFallback height="332px" />}>
               <LimitOrderForm />
             </Suspense>
 
             <FormContainer>
-              <Suspense fallback={<Skeleton width="100%" height="100px" />}>
+              <Suspense fallback={<CardFallback height="100px" />}>
                 <MarketPriceInput />
               </Suspense>
-              <Suspense fallback={<Skeleton width="100%" height="46px" />}>
+              <Suspense fallback={<CardFallback height="46px" />}>
                 <QuickActionButtons />
               </Suspense>
             </FormContainer>
           </SwapUIV2.SwapTabAndInputPanelWrapper>
 
           <PanelWrapper>
-            <Suspense fallback={<Skeleton width="100%" height="48px" />}>
+            <Suspense fallback={<CardFallback height="48px" />}>
               <CommitButton />
             </Suspense>
-            <Suspense fallback={<Skeleton width="100%" height="50px" />}>
+            <Suspense fallback={<CardFallback height="50px" />}>
               <TradeDetails mt="2px" />
             </Suspense>
           </PanelWrapper>
