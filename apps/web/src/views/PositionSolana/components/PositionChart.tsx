@@ -11,6 +11,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import styled, { useTheme } from 'styled-components'
+import useResolvedTheme from 'hooks/useTheme'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -82,6 +83,7 @@ export const PositionChart = ({
   }, [poolInfo, baseIn])
   const { formattedData: chartData, isLoading, error } = usePoolChartData(poolId, baseIn)
   const theme = useTheme()
+  const { isDark } = useResolvedTheme()
   const [lower, upper] = useMemo(() => {
     const lower = Number(priceLower?.toFixed(18)) < price ? priceLower : price
     const upper = Number(priceUpper?.toFixed(18)) > price ? priceUpper : price
@@ -183,8 +185,16 @@ export const PositionChart = ({
             >
               <defs>
                 <linearGradient id="liquidityGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="rgba(118, 69, 217, 0.8)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="rgba(118, 69, 217, 0.3)" stopOpacity={0.8} />
+                  <stop
+                    offset="5%"
+                    stopColor={isDark ? 'rgba(168, 129, 252, 0.8)' : 'rgba(118, 69, 217, 0.8)'}
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor={isDark ? 'rgba(168, 129, 252, 0.3)' : 'rgba(118, 69, 217, 0.3)'}
+                    stopOpacity={0.8}
+                  />
                 </linearGradient>
               </defs>
               <XAxis
