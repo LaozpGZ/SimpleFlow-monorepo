@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components'
 import { ChangeEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@pancakeswap/localization'
 import { BigNumber as BN } from 'bignumber.js'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
@@ -13,6 +13,7 @@ import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { getTickAdjustedPrice } from '../utils/ticks'
 import { ticksAtom } from '../state/form/ticksAtom'
+import { getSymbolDecimals } from '../constants/decimalConfig'
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -95,8 +96,12 @@ export const MarketPriceInput = () => {
   // Instead of displaying currentMarketPrice or customMarketPrice,
   // use sqrt price from the decided tick range
   const ticksData = useAtomValue(ticksAtom)
-  const currentMarketPrice = ticksData ? ticksData.sqrtPrice.toFixed(6) : currentMarketPrice_
-  const customMarketPrice = ticksData ? ticksData.sqrtPrice.toFixed(6) : customMarketPrice_
+  const currentMarketPrice = ticksData
+    ? ticksData.sqrtPrice.toFixed(getSymbolDecimals(outputCurrency?.symbol))
+    : currentMarketPrice_
+  const customMarketPrice = ticksData
+    ? ticksData.sqrtPrice.toFixed(getSymbolDecimals(outputCurrency?.symbol))
+    : customMarketPrice_
 
   const [localPrice, setLocalPrice] = useState(currentMarketPrice)
   const [isFocused, setIsFocused] = useState(false)
@@ -152,8 +157,8 @@ export const MarketPriceInput = () => {
     const { price } = getTickAdjustedPrice(localPrice, tickSpacing, inputCurrency, outputCurrency, zeroForOne)
     if (!price) return
 
-    setCustomMarketPrice(price.toFixed(6))
-    setLocalPrice(price.toFixed(6))
+    setCustomMarketPrice(price.toFixed(getSymbolDecimals(outputCurrency?.symbol)))
+    setLocalPrice(price.toFixed(getSymbolDecimals(outputCurrency?.symbol)))
   }, [pool, inputCurrency, outputCurrency, localPrice, setLocalPrice, setCustomMarketPrice])
 
   if (!inputCurrency || !outputCurrency) return null
@@ -163,11 +168,13 @@ export const MarketPriceInput = () => {
       <InputContainer>
         <InputTopLeft>
           <Text color="textSubtle" small>
-            {t('Sell when')} 1{' '}
-            <Text as="span" color="textSubtle" small bold>
-              {truncateString(inputCurrency.symbol, 15)}
-            </Text>{' '}
-            {t('is worth')}:
+            <Trans
+              i18nTemplate="Sell when 1 <0>%inputSymbol%</0> is worth:"
+              values={{
+                inputSymbol: truncateString(inputCurrency.symbol, 15),
+              }}
+              components={[<Text as="span" color="textSubtle" small bold />]}
+            />
           </Text>
         </InputTopLeft>
         <InputTopRight>

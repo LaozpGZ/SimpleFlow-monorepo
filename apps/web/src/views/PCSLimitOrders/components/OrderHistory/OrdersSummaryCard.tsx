@@ -28,7 +28,7 @@ export const OrdersSummaryCard = () => {
 
   const isWrongNetwork = !LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId)
 
-  if (isWrongNetwork || (!openOrders && !isLoading)) return null
+  if (isWrongNetwork || (!openOrders?.length && !isLoading)) return null
 
   return (
     <>
