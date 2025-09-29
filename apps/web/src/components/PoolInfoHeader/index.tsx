@@ -333,7 +333,7 @@ export const PoolInfoHeader = ({
                             pool={poolInfo as unknown as PoolInfo}
                             showApyText={false}
                             color="text"
-                            aprInfo={getFarmAprInfo(poolInfo.farm)}
+                            {...getFarmAprInfo(poolInfo.farm)}
                             fontSize={isMobile ? '20px' : '24px'}
                           />
                         ))}
@@ -345,7 +345,7 @@ export const PoolInfoHeader = ({
                           pool={poolInfo as unknown as PoolInfo}
                           showApyButton={false}
                           color="text"
-                          aprInfo={getFarmAprInfo(poolInfo.farm)}
+                          {...getFarmAprInfo(poolInfo.farm)}
                           fontSize={isMobile ? '20px' : '24px'}
                         />
                       ))}

@@ -68,7 +68,7 @@ export const ListView = <T extends PoolInfo>({ data, getItemKey, onRowClick }: I
         <ListItemContainer key={getListItemKey(item)} onClick={() => onRowClick?.(item)}>
           <Column gap="12px" onClick={() => handleItemClick(item)}>
             <PoolTokenOverview data={item} />
-            <PoolGlobalAprButton pool={item} aprInfo={getFarmAprInfo(item.farm)} />
+            <PoolGlobalAprButton pool={item} aprInfo={getFarmAprInfo(item.farm)?.aprInfo} />
           </Column>
 
           <Column>

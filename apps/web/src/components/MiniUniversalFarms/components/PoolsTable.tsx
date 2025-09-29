@@ -223,7 +223,7 @@ const ListItem = ({ pool, onPoolClick }: { pool: PoolInfo; onPoolClick?: (pool: 
         <Text color="textSubtle" fontSize="14px">
           {t('APR')}
         </Text>
-        <PoolGlobalAprButton pool={pool} aprInfo={getFarmAprInfo(pool.farm)} />
+        <PoolGlobalAprButton pool={pool} {...getFarmAprInfo(pool.farm)} />
       </MobileRow>
 
       <MobileRow>
@@ -289,7 +289,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
         key: 'apr',
         minWidth: '125px',
         sorter: true,
-        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} aprInfo={getFarmAprInfo(item.farm)} />,
+        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} {...getFarmAprInfo(item.farm)} />,
       },
       {
         title: t('TVL'),
@@ -392,7 +392,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
             onSort={handleSort}
             onRowClick={(pool) => onPoolClick?.(pool)}
             sortOrder={query.sortOrder}
-            sortField={query.sortBy}
+            sortField={query.sortBy as keyof PoolInfo}
           />
         )}
 
