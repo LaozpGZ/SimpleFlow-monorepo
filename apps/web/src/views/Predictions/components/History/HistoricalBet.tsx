@@ -16,14 +16,8 @@ import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useState } from 'react'
 import { fetchLedgerData, markAsCollected } from 'state/predictions'
-import { Result, getHasRoundFailed, getRoundResult } from 'state/predictions/helpers'
-import {
-  useGetBufferSeconds,
-  useGetCurrentEpoch,
-  useGetIsClaimable,
-  useGetPredictionsStatus,
-  useGetSortedRoundsCurrentEpoch,
-} from 'state/predictions/hooks'
+import { Result, getRoundResult } from 'state/predictions/helpers'
+import { useGetCurrentEpoch, useGetIsClaimable, useGetPredictionsStatus } from 'state/predictions/hooks'
 import { Bet } from 'state/types'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'

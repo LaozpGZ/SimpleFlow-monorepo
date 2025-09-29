@@ -464,14 +464,15 @@ export const logGTMPredictionBetEvent = (position: BetPosition, address?: string
   })
 }
 
-export const logGTMPredictionBetPlacedEvent = (position: string, address?: string) => {
-  console.info('---PredictionBetPlaced---', address)
+export const logGTMPredictionBetPlacedEvent = (position: string, address?: string, predictedToken?: string) => {
+  console.info('---PredictionBetPlaced---', { address, predictedToken })
   window?.dataLayer?.push({
     event: GTMEvent.PredictionBetPlaced,
     action: GTMAction.PredictionBetPlaced,
     category: GTMCategory.Prediction,
     label: `Position: ${position}`,
     desc: address,
+    predictedToken,
   })
 }
 

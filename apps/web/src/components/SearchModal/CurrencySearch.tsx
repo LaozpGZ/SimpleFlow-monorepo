@@ -357,7 +357,6 @@ function CurrencySearch({
   return (
     <>
       {selectedChainId ? <UpdaterByChainId chainId={selectedChainId} /> : null}
-
       {showSearchHeader && (
         <ModalTitle my="12px" display="flex" flexDirection="column">
           <Flex justifyContent="space-between" alignItems="center" width="100%">
@@ -412,13 +411,7 @@ function CurrencySearch({
           />
         )}
       </AutoColumn>
-      {account && isLoadingBalances ? (
-        <Flex width="100%" justifyContent="center" alignItems="center" pt="24px">
-          <Spinner />
-        </Flex>
-      ) : (
-        getCurrencyListRows()
-      )}
+      {getCurrencyListRows()}
     </>
   )
 }

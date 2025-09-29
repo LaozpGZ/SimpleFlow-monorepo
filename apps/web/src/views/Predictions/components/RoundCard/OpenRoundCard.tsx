@@ -148,13 +148,14 @@ const OpenRoundCard: React.FC<React.PropsWithChildren<OpenRoundCardProps>> = ({
 
   const handleSuccess = useCallback(
     async (hash: string) => {
-      if (account && chainId) {
+      if (account && chainId && config) {
         await dispatch(fetchLedgerData({ account, chainId, epochs: [round.epoch] }))
 
-        logGTMPredictionBetPlacedEvent(positionDisplay, account)
+        logGTMPredictionBetPlacedEvent(positionDisplay, account, config.predictionCurrency.symbol)
         logger.info('bet-placed', {
           address: account,
           position: positionDisplay,
+          predictedToken: config.predictionCurrency.symbol,
         })
 
         handleBack()
@@ -169,7 +170,7 @@ const OpenRoundCard: React.FC<React.PropsWithChildren<OpenRoundCardProps>> = ({
         )
       }
     },
-    [account, chainId, dispatch, round?.epoch, handleBack, positionDisplay, t, toastSuccess],
+    [account, chainId, dispatch, round?.epoch, handleBack, positionDisplay, t, toastSuccess, config],
   )
 
   return (

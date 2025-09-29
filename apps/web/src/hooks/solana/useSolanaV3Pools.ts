@@ -1,4 +1,3 @@
-import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'
 import { useAtomValue, useSetAtom } from 'jotai'

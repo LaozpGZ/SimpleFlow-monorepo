@@ -134,10 +134,10 @@ const ActionPanelContainer = styled(Flex)<{ $detailMode?: boolean }>`
   ${({ $detailMode }) =>
     $detailMode &&
     `
-      #sol-v3-remove-btn, #sol-v3-add-btn {
-        width: 48px;
-        height: 48px;
-        flex: none;
-      }
+     #sol-v3-remove-btn, #sol-v3-add-btn {
+       width: 48px;
+       height: 48px;
+       flex: none;
+    }
   `}
 `

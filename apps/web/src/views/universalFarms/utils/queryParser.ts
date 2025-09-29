@@ -34,7 +34,8 @@ export function parseUrlToSearchQuery(): FarmQuery {
 
   const chains = (() => {
     const nets = url.getAll('network').map((n) => Number(n))
-    return nets.length ? nets : DEFAULT_CHAINS
+    // @NOTE: remove solana from default chains in pools list page
+    return nets.length ? nets : DEFAULT_CHAINS.filter((c) => !isSolana(c))
   })()
 
   const [sortOrder, sortBy] = (() => {

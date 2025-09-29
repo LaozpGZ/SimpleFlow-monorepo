@@ -36,11 +36,13 @@ import { TransactionDetails } from './reducer'
 
 export function shouldCheck(
   fetchedTransactions: { [txHash: string]: TransactionDetails },
-  tx: TransactionDetails,
+  tx: TransactionDetails | undefined | null,
   forEvm = true,
 ): boolean {
+  if (!tx) return false
   if (!forEvm && tx.addedTime < Date.now() - 100 * 1000) return false // only check non-evm tx for first 100s
   if (tx.receipt) return false
+  if (!tx.hash || typeof tx.hash !== 'string') return false
   if (forEvm && !tx.hash.startsWith('0x')) return false // only check evm tx
   return !fetchedTransactions[tx.hash]
 }

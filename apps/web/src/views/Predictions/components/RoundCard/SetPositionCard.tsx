@@ -108,8 +108,10 @@ const SetPositionCard: React.FC<React.PropsWithChildren<SetPositionCardProps>> =
     return balanceRaw ? balanceRaw.quotient : 0n
   }, [balanceRaw])
 
-  const dust = parseUnits('0.001', config?.betCurrency.decimals ?? 18)
-  const maxBalance = useMemo(() => (balance > dust ? balance - dust : 0n), [balance])
+  const maxBalance = useMemo(() => {
+    const dust = parseUnits('0.001', config?.betCurrency.decimals ?? 18)
+    return balance > dust ? balance - dust : 0n
+  }, [balance, config?.betCurrency.decimals])
   const balanceDisplay = formatBigInt(balance, config?.betCurrency?.decimals, config?.betCurrency?.decimals)
 
   const valueAsBn = getValueAsEthersBn(value)
