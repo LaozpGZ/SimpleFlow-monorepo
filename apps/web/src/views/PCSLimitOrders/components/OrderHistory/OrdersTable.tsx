@@ -216,8 +216,14 @@ const MobileOrder = ({ order }: MobileOrderProps) => {
           </QuestionHelperV2>
 
           <AutoColumn gap="4px" justifyItems="flex-end">
-            {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
-            {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
+            {liveStatus === OrderStatus.Cancelled || liveStatus === OrderStatus.Open ? (
+              '-'
+            ) : (
+              <>
+                {currencyA && <TokenAmountDisplay currency={currencyA} amount={amountAReceived ?? '0'} />}
+                {currencyB && <TokenAmountDisplay currency={currencyB} amount={amountBReceived ?? '0'} />}
+              </>
+            )}
           </AutoColumn>
         </FlexGap>
 
