@@ -12,6 +12,7 @@ import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { getTickAdjustedPrice } from '../utils/ticks'
+import { ticksAtom } from '../state/form/ticksAtom'
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -87,9 +88,15 @@ export const MarketPriceInput = () => {
 
   const { data: pool } = useAtomValue(selectedPoolAtom)
 
-  const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
+  const currentMarketPrice_ = useAtomValue(currentMarketPriceAtom)
+  const [customMarketPrice_, setCustomMarketPrice] = useAtom(customMarketPriceAtom)
 
-  const [customMarketPrice, setCustomMarketPrice] = useAtom(customMarketPriceAtom)
+  // Testing better way to display accurate price
+  // Instead of displaying currentMarketPrice or customMarketPrice,
+  // use sqrt price from the decided tick range
+  const ticksData = useAtomValue(ticksAtom)
+  const currentMarketPrice = ticksData ? ticksData.sqrtPrice.toFixed(6) : currentMarketPrice_
+  const customMarketPrice = ticksData ? ticksData.sqrtPrice.toFixed(6) : customMarketPrice_
 
   const [localPrice, setLocalPrice] = useState(currentMarketPrice)
   const [isFocused, setIsFocused] = useState(false)
@@ -145,8 +152,8 @@ export const MarketPriceInput = () => {
     const { price } = getTickAdjustedPrice(localPrice, tickSpacing, inputCurrency, outputCurrency, zeroForOne)
     if (!price) return
 
-    setCustomMarketPrice(price.toSignificant(6))
-    setLocalPrice(price.toSignificant(6))
+    setCustomMarketPrice(price.toFixed(6))
+    setLocalPrice(price.toFixed(6))
   }, [pool, inputCurrency, outputCurrency, localPrice, setLocalPrice, setCustomMarketPrice])
 
   if (!inputCurrency || !outputCurrency) return null

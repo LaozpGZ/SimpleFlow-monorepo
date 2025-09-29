@@ -142,14 +142,19 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
   const amountADisplay = formatNumber(BN(formattedAmounts[Field.CURRENCY_A]).toNumber(), { maxDecimalDisplayDigits: 6 })
   const amountBDisplay = formatNumber(BN(formattedAmounts[Field.CURRENCY_B]).toNumber(), { maxDecimalDisplayDigits: 6 })
 
-  const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
-  const customMarketPrice = useAtomValue(customMarketPriceAtom)
+  const currentMarketPrice_ = useAtomValue(currentMarketPriceAtom)
+  const customMarketPrice_ = useAtomValue(customMarketPriceAtom)
+
+  // Display accurate price from ticks data
+  const ticksData = useAtomValue(ticksAtom)
+  const currentMarketPrice = ticksData ? ticksData.sqrtPrice.toFixed(6) : currentMarketPrice_
+  const customMarketPrice = ticksData ? ticksData.sqrtPrice.toFixed(6) : customMarketPrice_
 
   const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
   const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
   const amountReceived = useAtomValue(amountReceivedAtom)
 
-  // TODO: Handle success and error inside modal content
+  // TODO in future: Handle success and error inside modal content
   const { placeOrder, isPlacingOrder } = usePlaceLimitOrder({ onError: onDismiss, onSuccess: onDismiss })
 
   const [isInverted, setIsInverted] = useState(false)
@@ -160,9 +165,9 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
     if (!price || priceBN.isZero()) return undefined
 
     if (isInverted) {
-      return BN(1).dividedBy(priceBN).toPrecision(6)
+      return BN(1).dividedBy(priceBN).toFixed(6)
     }
-    return priceBN.toPrecision(6)
+    return priceBN.toFixed(6)
   }, [customMarketPrice, currentMarketPrice, isInverted])
 
   return (
