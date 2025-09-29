@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { type PoolPreset, percentageToFee } from '../sdk'
 import { useCreateStableNGPool } from '../hooks/useCreateStableNGPool'
+import { CreatePoolPreviewModal } from './CreatePoolPreviewModal'
 
 type PresetType = PoolPreset
 
@@ -100,6 +101,7 @@ const PresetModal: React.FC<PresetModalProps> = ({ isOpen, onDismiss, selectedPr
 export const ParamSettingSection = () => {
   const { t } = useTranslation()
   const [isPresetModalOpen, setIsPresetModalOpen] = useState(false)
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState<PresetType>()
   const [swapFee, setSwapFee] = useState('')
   const { baseCurrency, quoteCurrency } = useCurrencies()
@@ -148,7 +150,11 @@ export const ParamSettingSection = () => {
     }
   }
 
-  const handlePreviewPool = async () => {
+  const handlePreviewPool = () => {
+    setIsPreviewModalOpen(true)
+  }
+
+  const handleCreatePool = async () => {
     if (!baseCurrency || !quoteCurrency) {
       console.error('Missing currencies for pool creation')
       return
@@ -170,6 +176,7 @@ export const ParamSettingSection = () => {
       }
 
       setTxHash(hash)
+      setIsPreviewModalOpen(false)
     } catch (error) {
       console.error('Failed to create pool:', error)
       // Error handling is already done in the hook
@@ -219,6 +226,18 @@ export const ParamSettingSection = () => {
         onDismiss={() => setIsPresetModalOpen(false)}
         selectedPreset={selectedPreset}
         onSelectPreset={setSelectedPreset}
+      />
+
+      {/* Create Pool Preview Modal */}
+      <CreatePoolPreviewModal
+        isOpen={isPreviewModalOpen}
+        onDismiss={() => setIsPreviewModalOpen(false)}
+        tokenA={baseCurrency}
+        tokenB={quoteCurrency}
+        preset={selectedPreset}
+        poolOptions={swapFee ? { fee: percentageToFee(parseFloat(swapFee) / 100) } : undefined}
+        onCreatePool={handleCreatePool}
+        isCreating={attemptingTxn || isConfirming}
       />
     </Box>
   )
