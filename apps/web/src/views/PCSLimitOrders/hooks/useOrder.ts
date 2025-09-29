@@ -72,39 +72,25 @@ export const useOrder = (order: ResponseOrder) => {
   }, [pool, currencyA, currencyB, order.tick_lower, isInverted, order.zero_for_one, currencyA, currencyB])
 
   const [originalAmountA, originalAmountB] = useMemo(() => {
-    if (!currencyA || !currencyB || !order.original_amount_0 || !order.original_amount_1) return [undefined, undefined]
+    if (!currencyA || !currencyB || !order.original_amount_0 || !order.original_amount_1 || !limitPrice || !pool)
+      return [undefined, undefined]
 
-    return [
-      formatUnits(BigInt(order.original_amount_0), currencyA?.decimals),
-      formatUnits(BigInt(order.original_amount_1), currencyB?.decimals),
-    ]
+    const originalAmount0 = formatUnits(BigInt(order.original_amount_0), currencyA?.decimals)
+    const originalAmount1 = formatUnits(BigInt(order.original_amount_1), currencyB?.decimals)
 
-    // const liquidity = BigInt(order.liquidity)
+    const sellAmount = order.zero_for_one ? originalAmount0 : originalAmount1
 
-    // // Contract handles tick range as [tickLower, tickLower + tickSpacing]
-    // const tickLower = order.tick_lower
-    // const tickUpper = order.tick_lower + pool.parameters.tickSpacing
+    // Get limit price
+    const price = tickToPrice(currencyA, currencyB, order.tick_lower)
+    const priceUpper = tickToPrice(currencyA, currencyB, order.tick_lower + pool.parameters.tickSpacing)
+    const sqrtLimitPrice = BN(price.toFixed(18))
+      .multipliedBy(BN(priceUpper.toFixed(18)))
+      .sqrt()
 
-    // const token0Amount = SqrtPriceMath.getAmount0Delta(
-    //   TickMath.getSqrtRatioAtTick(tickLower),
-    //   TickMath.getSqrtRatioAtTick(tickUpper),
-    //   liquidity,
-    //   false,
-    // )
+    const buyAmount = BN(sellAmount).multipliedBy(sqrtLimitPrice).toString()
 
-    // const token1Amount = SqrtPriceMath.getAmount1Delta(
-    //   TickMath.getSqrtRatioAtTick(tickLower),
-    //   TickMath.getSqrtRatioAtTick(tickUpper),
-    //   liquidity,
-    //   false,
-    // )
-
-    // const result = order.zero_for_one
-    //   ? [formatUnits(token0Amount, currency0?.decimals), formatUnits(token1Amount, currency1?.decimals)]
-    //   : [formatUnits(token1Amount, currency1?.decimals), formatUnits(token0Amount, currency0?.decimals)]
-
-    // return result
-  }, [currencyA, currencyB, order.original_amount_0, order.original_amount_1])
+    return [sellAmount, buyAmount]
+  }, [currencyA, currencyB, order.original_amount_0, order.original_amount_1, pool, order.tick_lower])
 
   // Amounts Received
   const { data: [amount0Received, amount1Received] = [0n, 0n], refetch: refetchAmountsReceived } = useQuery({
