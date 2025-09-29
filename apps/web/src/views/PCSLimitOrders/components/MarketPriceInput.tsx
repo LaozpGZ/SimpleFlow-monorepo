@@ -103,7 +103,6 @@ export const MarketPriceInput = () => {
       : 0
   }, [localPrice, tokenPriceUSD])
 
-  // TODO: Check market price flipping logic according to lower/upper ticks
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
 
   // Sync market price to local price input

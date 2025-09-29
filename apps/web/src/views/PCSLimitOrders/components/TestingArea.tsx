@@ -6,6 +6,7 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currenc
 import { ticksAtom } from '../state/form/ticksAtom'
 import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { presetPercentMapAtom } from '../state/form/quickActionAtoms'
+import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 
 const TickVisualization = ({ ticksData, selectedPool }: { ticksData: any; selectedPool: any }) => {
   const ticks = useMemo(() => {
@@ -135,6 +136,8 @@ export const TestingArea = () => {
 
   const presetPercentMap = useAtomValue(presetPercentMapAtom)
 
+  const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
+
   return (
     <Card style={{ width: '100%' }}>
       <CardBody>
@@ -155,6 +158,8 @@ export const TestingArea = () => {
                 targetTick: ticksData?.targetTick,
                 priceLower: ticksData?.priceLower.toSignificant(6),
                 priceUpper: ticksData?.priceUpper.toSignificant(6),
+                sqrtPriceFromTick: ticksData?.sqrtPrice.toFormat(6),
+                currentMarketPrice,
               },
               null,
               2,

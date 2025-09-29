@@ -37,7 +37,7 @@ export const useOrder = (order: ResponseOrder) => {
   const { data: pool } = useQuery({
     queryKey: ['order-pool', order.pool_id],
     queryFn: async () => fetchCLPoolInfo(order.pool_id, chainId),
-    refetchInterval: FAST_INTERVAL,
+    refetchInterval: 5000,
   })
 
   // Currencies

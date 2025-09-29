@@ -271,6 +271,7 @@ export default {
   },
   clLimitOrderHook: {
     [ChainId.BSC]: '0x647a995b00b4DC23791F543516075BFfd9bb87B3',
+    // [ChainId.BSC]: '0x6AdC560aF85377f9a73d17c658D798c9B39186e8', // Prod Contract
     [ChainId.BSC_TESTNET]: '0x5F1076A98a1b9AA8584DaC02F38C616C3A431794',
   },
 

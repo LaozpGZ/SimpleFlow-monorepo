@@ -1,6 +1,5 @@
 import { atom } from 'jotai'
 import { getSqrtPriceFromCurrentTick } from 'views/PCSLimitOrders/utils/ticks'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/selectedPoolAtom'
 
