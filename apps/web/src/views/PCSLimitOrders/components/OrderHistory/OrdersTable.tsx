@@ -123,7 +123,7 @@ const OrderTableRow = ({ order }: OrderTableRowProps) => {
         </Text>
       </Td>
       <Td>
-        {liveStatus === OrderStatus.Cancelled ? (
+        {liveStatus === OrderStatus.Cancelled || liveStatus === OrderStatus.Open ? (
           '-'
         ) : (
           <>
