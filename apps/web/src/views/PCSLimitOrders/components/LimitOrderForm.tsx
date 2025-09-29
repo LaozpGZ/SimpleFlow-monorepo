@@ -6,6 +6,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { Suspense, useCallback } from 'react'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { formattedAmountsAtom, setInputAtom } from 'views/PCSLimitOrders/state/form/inputAtoms'
+import { Currency } from '@pancakeswap/sdk'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
 import { flipCurrenciesAtom, setCurrencyAtom } from '../state/currency/setCurrencyAtoms'
@@ -54,7 +55,7 @@ export const LimitOrderForm = () => {
             }
             defaultValue={formattedAmounts[Field.CURRENCY_A]}
             onUserInput={(value) => handleInput(Field.CURRENCY_A, value)}
-            onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_A, newCurrency: c })}
+            onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_A, newCurrency: c as Currency })}
             showCommonBases={false}
             supportCrossChain={false}
             showUSDPrice
@@ -92,7 +93,7 @@ export const LimitOrderForm = () => {
             }
             defaultValue={formattedAmounts[Field.CURRENCY_B]}
             onUserInput={(value) => handleInput(Field.CURRENCY_B, value)}
-            onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_B, newCurrency: c })}
+            onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_B, newCurrency: c as Currency })}
             showCommonBases={false}
             supportCrossChain={false}
             showUSDPrice

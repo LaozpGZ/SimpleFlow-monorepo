@@ -35,7 +35,6 @@ const LimitOrderFormWrapper = styled.div`
 
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
-  const [isPending, startTransition] = useTransition()
 
   return (
     <>
