@@ -50,7 +50,7 @@ export function parseUrlToSearchQuery(): FarmQuery {
     keywords: url.get('search') || '',
     chains,
     protocols: getProtocolsByIndex(selectedProtocolIndex),
-    sortBy,
+    sortBy: sortBy || '',
     sortOrder,
     page: 0,
   }
