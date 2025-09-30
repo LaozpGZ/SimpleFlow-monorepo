@@ -195,7 +195,7 @@ export default function StandardPoolRowItem({ pool, isLoading, position, stakedF
 
   if (!pool) return isLoading ? <Skeleton w="full" height="140px" rounded="lg" /> : null
 
-  const hasFarm = pool?.farmOngoingCount > 0 || pool?.farmUpcomingCount > 0
+  const hasFarm = (pool?.farmOngoingCount ?? 0) > 0 || (pool?.farmUpcomingCount ?? 0) > 0
   let positionStatus = ''
   if (!stakedFarms.length && pool && hasFarm) {
     positionStatus = 'unstaked'
