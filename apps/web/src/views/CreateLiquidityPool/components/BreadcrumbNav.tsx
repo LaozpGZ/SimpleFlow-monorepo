@@ -30,7 +30,7 @@ export const BreadcrumbNav: React.FC = () => {
   const protocolFromQuery = routeParams?.selectId?.[1]
 
   const handleProtocolChange = useCallback(
-    (tab: { value: 'infinity' | 'v3' | 'v2' | 'stableNg'; label: string; disabled?: boolean }) => {
+    (tab: { value: 'infinity' | 'v3' | 'v2' | 'stableNG'; label: string; disabled?: boolean }) => {
       const protocol = tab.value
 
       if (protocol === 'infinity' && !isInfinitySupported) return
@@ -59,10 +59,10 @@ export const BreadcrumbNav: React.FC = () => {
             { value: 'infinity', label: 'Infinity', disabled: !isInfinitySupported },
             { value: 'v3', label: 'V3' },
             { value: 'v2', label: 'V2', disabled: !isV2Supported(chainId) },
-            { value: 'stableNg', label: 'SS' },
+            { value: 'stableNG', label: 'SS' },
           ]}
           defaultTab={{
-            value: protocolName as 'infinity' | 'v3' | 'v2' | 'stableNg',
+            value: protocolName as 'infinity' | 'v3' | 'v2' | 'stableNG',
             label: protocolName,
             disabled: !isInfinitySupported,
           }}

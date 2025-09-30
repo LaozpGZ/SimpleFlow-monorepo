@@ -23,8 +23,6 @@ const AddStableNGLiquidityPage = () => {
 
   const { data: poolKey } = usePoolKeyByPoolId(poolId as `0x${string}`, chainId)
 
-  console.log('poolKey', poolKey)
-
   // TODO: should handle native token with returned Wrapped token
   const currencyIdA = poolKey?.currency0
   const currencyIdB = poolKey?.currency1
