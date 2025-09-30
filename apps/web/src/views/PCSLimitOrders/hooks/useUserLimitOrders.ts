@@ -113,8 +113,6 @@ export const useUserLimitOrders = () => {
       const data = await getUserLimitOrders(chainName, account, filterOrderStatus, paginationParams)
       const { rows } = data
 
-      console.log('%c [Order History Data]', 'background: green;color: white', rows)
-
       // Store cursors for the current page for consistent navigation
       setPageCursors((prev) => {
         const newMap = new Map(prev)

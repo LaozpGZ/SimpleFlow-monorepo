@@ -91,7 +91,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
       true, // useFullPrecision
     )
 
-    console.log('placeOrder', {
+    console.debug('placeOrder', {
       poolKey,
       parsedAmountA,
       targetTick,
@@ -140,7 +140,7 @@ export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = 
       setIsPlacingOrder(false)
 
       if (receipt?.status) {
-        console.log('placeOrder: Transaction successful', receipt.transactionHash)
+        console.debug('placeOrder: Transaction successful', receipt.transactionHash)
         onSuccess?.(receipt.transactionHash)
 
         const formattedPrice = BN(customMarketPrice || currentMarketPrice || 0).toPrecision(6)
