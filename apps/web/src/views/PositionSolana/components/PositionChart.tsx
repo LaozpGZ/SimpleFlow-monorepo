@@ -89,10 +89,16 @@ export const PositionChart = ({ position, poolInfo }: PositionChartProps) => {
     const dUpper = formattedData.find((item) => item.tick === tick2)
     if (!dCurrent) {
       // try to find the closest tick
-      dCurrent = formattedData.find((item) => item.tick === tick0 + tickSpacing)
-      if (!dCurrent) {
-        dCurrent = formattedData.find((item) => item.tick === tick0 - tickSpacing)
-      }
+      const closestData = formattedData.reduce((acc, item) => {
+        if (item.tick < tick0) {
+          return item.tick > acc.tick ? item : acc
+        }
+        if (item.tick > tick0) {
+          return item.tick - tick0 < acc.tick - tick0 ? item : acc
+        }
+        return acc
+      }, formattedData[0])
+      dCurrent = closestData
     }
     return [
       baseIn ? dLower?.price0 : dUpper?.price1,
