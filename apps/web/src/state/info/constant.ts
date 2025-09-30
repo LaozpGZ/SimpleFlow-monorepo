@@ -5,7 +5,7 @@ import { ChainId, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@panca
 import { STABLE_SUPPORTED_CHAIN_IDS } from '@pancakeswap/stable-swap-sdk'
 import { mapValues } from '@pancakeswap/utils/fns'
 import { BSC_TOKEN_WHITELIST, ETH_TOKEN_BLACKLIST, ETH_TOKEN_WHITELIST, TOKEN_BLACKLIST } from 'config/constants/info'
-import { arbitrum, base, bsc, bscTestnet, linea, mainnet, opBNB, polygonZkEvm, zkSync } from 'wagmi/chains'
+import { arbitrum, base, bsc, bscTestnet, linea, mainnet, opBNB, zkSync } from 'wagmi/chains'
 
 export type MultiChainName = 'BSC_TESTNET' | 'BSC' | 'ETH' | 'ZKSYNC' | 'ARB' | 'LINEA' | 'BASE' | 'OPBNB' | 'SOLANA'
 export type MultiChainNameExtend = MultiChainName | 'BSC_TESTNET' | 'ZKSYNC_TESTNET'

@@ -8,7 +8,6 @@ const chainIdToChainName = {
   1: 'ethereum',
   56: 'bsc',
   324: 'zksync',
-  1101: 'polygon zkevm',
   8453: 'base',
   42161: 'arbitrum',
   59144: 'linea',

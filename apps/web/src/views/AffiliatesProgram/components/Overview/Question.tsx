@@ -128,15 +128,6 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-polygon-zkevm-default.json"
-                >
-                  <Text color="primary" ml="4px" as="span">
-                    {t('Polygon zkEVM')},
-                  </Text>
-                </Link>
-                <Link
-                  external
-                  style={{ display: 'inline-block' }}
                   href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-zksync-default.json"
                 >
                   <Text color="primary" ml="4px" as="span">

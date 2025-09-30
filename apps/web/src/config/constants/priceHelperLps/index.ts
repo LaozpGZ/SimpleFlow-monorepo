@@ -12,8 +12,6 @@ import PoolsBasePriceHelper from './pools/8453'
 import PoolsBaseTestnetPriceHelper from './pools/84531'
 import PoolsLineaPriceHelper from './pools/59144'
 import PoolsLineaTestnetPriceHelper from './pools/59140'
-import PoolsPolygonZkEvmPriceHelper from './pools/1101'
-import PoolsPolygonZkEvmTestnetPriceHelper from './pools/1442'
 
 export { getFarmsPriceHelperLpFiles }
 

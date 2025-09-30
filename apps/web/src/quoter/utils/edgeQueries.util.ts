@@ -115,17 +115,7 @@ export function getEdgeChainName(chainId: UnifiedChainId): APIChain {
   }
 }
 
-export type APIChain =
-  | 'bsc'
-  | 'bsc-testnet'
-  | 'ethereum'
-  | 'base'
-  | 'opbnb'
-  | 'zksync'
-  | 'polygon-zkevm'
-  | 'linea'
-  | 'arbitrum'
-  | 'sol'
+export type APIChain = 'bsc' | 'bsc-testnet' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'linea' | 'arbitrum' | 'sol'
 
 export const safeGetAddress = (address: Address) => {
   try {
