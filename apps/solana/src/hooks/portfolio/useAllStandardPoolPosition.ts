@@ -105,7 +105,7 @@ export default function useAllStandardPoolPosition<T>({ type }: { type?: T }) {
           const pool = poolList.find((p) => p.lpMint.address === lpMint.address.toString())
           return (
             pool &&
-            pool.farmOngoingCount > 0 &&
+            (pool.farmOngoingCount ?? 0) > 0 &&
             !getTokenBalanceUiAmount({
               mint: pool.lpMint.address,
               decimals: pool.lpMint.decimals
