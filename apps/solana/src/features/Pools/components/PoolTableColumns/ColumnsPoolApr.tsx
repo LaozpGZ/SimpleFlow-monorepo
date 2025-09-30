@@ -69,9 +69,9 @@ export const ColumnPoolApr: React.FC<{
           <Tooltip usePortal variant="card" placement="top-end" label={aprToolTipLabel}>
             <VStack justifyContent="space-between" h="100%" w="100%">
               <HStack gap={1} justifyContent="center">
-                {pool.burnPercent > 5 && (
+                {(pool.burnPercent ?? 0) > 5 && (
                   <LockPercentCircle
-                    value={pool.burnPercent}
+                    value={pool.burnPercent ?? 0}
                     circularProps={{
                       size: '16px'
                     }}
