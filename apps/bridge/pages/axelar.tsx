@@ -1,9 +1,13 @@
 import { useMemo } from 'react'
-import { SquidWidget } from '@0xsquid/widget'
+import dynamic from 'next/dynamic'
 import { AppConfig } from '@0xsquid/widget/widget/core/types/config'
 import { Box, PancakeTheme } from '@pancakeswap/uikit'
 import { useTheme } from 'styled-components'
 import PageContainer from 'components/Page'
+
+const SquidWidget = dynamic(() => import('@0xsquid/widget').then((mod) => ({ default: mod.SquidWidget })), {
+  ssr: false,
+})
 
 const lightStyle = {
   neutralContent: '#7a6eaa',
