@@ -8,7 +8,13 @@ import { tryParsePrice } from 'hooks/v3/utils'
 import { V3SubmitButton } from 'views/AddLiquidityV3/components/V3SubmitButton'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  isUnifiedCurrencySorted,
+  NativeCurrency,
+  UnifiedCurrency,
+} from '@pancakeswap/swap-sdk-core'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
@@ -119,10 +125,10 @@ export const useV3CreateForm = () => {
     ticksAtLimit,
     tickSpaceLimits,
   } = useV3DerivedInfo(
-    baseCurrency ?? undefined,
-    quoteCurrency ?? undefined,
+    (baseCurrency as Currency) ?? undefined,
+    (quoteCurrency as Currency) ?? undefined,
     feeAmount,
-    baseCurrency ?? undefined,
+    (baseCurrency as Currency) ?? undefined,
     undefined,
     formState,
   )
@@ -186,9 +192,11 @@ export const useV3CreateForm = () => {
   const { [Bound.LOWER]: priceLower, [Bound.UPPER]: priceUpper } = pricesAtTicks
 
   // Left and Right values for displaying in Preview Modal
-  const tokenA = (baseCurrency ?? undefined)?.wrapped
-  const tokenB = (quoteCurrency ?? undefined)?.wrapped
-  const isSorted = tokenA && tokenB && tokenA.sortsBefore(tokenB)
+  const isSorted = Boolean(
+    baseCurrency &&
+      quoteCurrency &&
+      isUnifiedCurrencySorted(baseCurrency as unknown as UnifiedCurrency, quoteCurrency as unknown as UnifiedCurrency),
+  )
 
   const rangeLeftPrice = isSorted ? priceLower : priceUpper?.invert()
   const rangeRightPrice = isSorted ? priceUpper : priceLower?.invert()
@@ -268,7 +276,14 @@ export const useV3CreateForm = () => {
 
   // Range Inputs
   const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper, getSetFullRange } =
-    useRangeHopCallbacks(baseCurrency ?? undefined, quoteCurrency ?? undefined, feeAmount, tickLower, tickUpper, pool)
+    useRangeHopCallbacks(
+      (baseCurrency as Currency) ?? undefined,
+      (quoteCurrency as Currency) ?? undefined,
+      feeAmount,
+      tickLower,
+      tickUpper,
+      pool,
+    )
 
   const onBothRangePriceInput = useCallback(
     (leftRangeValue: string, rightRangeValue: string) => {
@@ -364,7 +379,11 @@ export const useV3CreateForm = () => {
       return
     }
 
-    const useNative = baseCurrency.isNative ? baseCurrency : quoteCurrency.isNative ? quoteCurrency : undefined
+    const useNative = baseCurrency?.isNative
+      ? (baseCurrency as NativeCurrency)
+      : quoteCurrency?.isNative
+      ? (quoteCurrency as NativeCurrency)
+      : undefined
 
     const { calldata, value } = NonfungiblePositionManager.addCallParameters(position, {
       slippageTolerance: basisPointsToPercent(allowedSlippage),

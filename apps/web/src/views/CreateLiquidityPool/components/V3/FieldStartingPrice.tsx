@@ -22,7 +22,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useInverted } from 'state/infinity/shared'
 import styled from 'styled-components'
-import { Currency } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/swap-sdk-core'
 import { truncateText } from 'utils'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useCurrencies } from '../../hooks/useCurrencies'
@@ -76,9 +76,11 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({
 
   useEffect(() => {
     if (isMounted && prevInverted !== inverted && startPrice !== null) {
+      const b = baseCurrency ? (baseCurrency as unknown as Currency) : undefined
+      const q = quoteCurrency ? (quoteCurrency as unknown as Currency) : undefined
       const newPrice = prevInverted
-        ? tryParsePrice(quoteCurrency, baseCurrency, startPrice.toString())
-        : tryParsePrice(baseCurrency, quoteCurrency, startPrice.toString())
+        ? tryParsePrice(q, b, startPrice.toString())
+        : tryParsePrice(b, q, startPrice.toString())
       const revertPrice = newPrice?.invert()
       updatePrice(revertPrice?.denominator ? revertPrice.toFixed(8) : null)
     }
@@ -132,7 +134,12 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({
           </FlexGap>
         )}
       </FlexGap>
-      <StartingPriceInput value={startPrice} onUserInput={updatePrice} unit={unit} currency={quoteCurrency} />
+      <StartingPriceInput
+        value={startPrice}
+        onUserInput={updatePrice}
+        unit={unit}
+        currency={quoteCurrency as unknown as Currency}
+      />
     </Box>
   )
 }

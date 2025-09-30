@@ -8,7 +8,6 @@ export interface SmartRouterTrade<TTradeType extends TradeType> {
   outputAmount: CurrencyAmount<Currency>
   outputAmountWithGasAdjusted?: CurrencyAmount<Currency>
 
-  // todo:@eric
   routes: any[]
 
   gasEstimate: bigint

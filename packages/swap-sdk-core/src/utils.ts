@@ -1,8 +1,10 @@
 import invariant from 'tiny-invariant'
 import { ONE, THREE, TWO, VMType, VM_TYPE_MAXIMA, ZERO, ZERO_ADDRESS } from './constants'
-import { Currency } from './currency'
+import { Currency, UnifiedCurrency } from './currency'
 import { CurrencyAmount, Percent, Price } from './fractions'
 import { Token } from './token'
+import { SPLNativeCurrency } from './splNativeCurrency'
+import { SPLToken } from './splToken'
 
 export function validateVMTypeInstance(value: bigint, vmType: VMType): void {
   invariant(value >= ZERO, `${value} is not a ${vmType}.`)
@@ -129,14 +131,48 @@ export function sortCurrencies<T extends Currency>(currencies: T[]): T[] {
   })
 }
 
+export function sortUnifiedCurrencies<T extends UnifiedCurrency>(currencies: T[]): T[] {
+  return currencies.sort((a, b) => {
+    // SPLToken use the sortsBefore first, dont treat native as the first
+    if (a instanceof SPLToken && a.chainId === b.chainId) {
+      return a.sortsBefore(b.wrapped as SPLToken) ? -1 : 1
+    }
+    if (b instanceof SPLToken && a.chainId === b.chainId) {
+      return b.sortsBefore(a.wrapped as SPLToken) ? 1 : -1
+    }
+    if (a.isNative) {
+      return -1
+    }
+    if (b.isNative) {
+      return 1
+    }
+    if (a instanceof Token && b instanceof Token) {
+      return a.sortsBefore(b) ? -1 : 1
+    }
+    return 0
+  })
+}
+
 export const isCurrencySorted = (currencyA: Currency, currencyB: Currency): boolean => {
   const [currency0] = sortCurrencies([currencyA, currencyB])
+  return currency0 === currencyA
+}
+
+export const isUnifiedCurrencySorted = (currencyA: UnifiedCurrency, currencyB: UnifiedCurrency): boolean => {
+  const [currency0] = sortUnifiedCurrencies([currencyA, currencyB])
   return currency0 === currencyA
 }
 
 export function getCurrencyAddress(currency: Currency) {
   if (currency.isNative) {
     return ZERO_ADDRESS
+  }
+  return currency.address
+}
+
+export function getUnifiedCurrencyAddress(currency: UnifiedCurrency) {
+  if (currency.isNative) {
+    return currency instanceof SPLNativeCurrency ? currency.address : ZERO_ADDRESS
   }
   return currency.address
 }

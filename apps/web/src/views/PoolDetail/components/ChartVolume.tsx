@@ -53,6 +53,7 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
   // NOTE: Remove first item due to API returning extraordinarily large value. See PAN-6994.
   const data = useMemo(() => {
     if (!initialData) return []
+    if (initialData.length === 1) return initialData
     return initialData.slice(1)
   }, [initialData])
 

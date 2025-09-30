@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { EpochInfo } from '@solana/web3.js'
 import { useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'

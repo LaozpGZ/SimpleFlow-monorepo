@@ -61,3 +61,5 @@ scripts/dev/**
 
 # cursor
 .cursor/rules/personal/**
+
+AGENTS.md

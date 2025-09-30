@@ -8,8 +8,12 @@ import {
   enableList,
   disableList,
   updateListVersion,
+  batchFetchTokenListPending,
+  batchFetchTokenListFulfilled,
+  batchFetchTokenListRejected,
 } from './actions'
-import { getVersionUpgrade, VersionUpgrade, TokenList } from '../src'
+import { TokenList } from '../src/types'
+import { setPendingTokenList, setFulfilledTokenList, setRejectedTokenList, batchActivateUrls } from './reducerHelpers'
 
 export interface ListsState {
   readonly byUrl: {
@@ -44,62 +48,13 @@ export const createTokenListReducer = (
   createReducer(initialState, (builder) =>
     builder
       .addCase(fetchTokenList.pending, (state, { payload: { requestId, url } }) => {
-        const current = state.byUrl[url]?.current ?? null
-        const pendingUpdate = state.byUrl[url]?.pendingUpdate ?? null
-
-        state.byUrl[url] = {
-          current,
-          pendingUpdate,
-          loadingRequestId: requestId,
-          error: null,
-        }
+        setPendingTokenList(state, url, requestId)
       })
       .addCase(fetchTokenList.fulfilled, (state, { payload: { requestId, tokenList, url } }) => {
-        const current = state.byUrl[url]?.current
-        const loadingRequestId = state.byUrl[url]?.loadingRequestId
-
-        // no-op if update does nothing
-        if (current) {
-          const upgradeType = getVersionUpgrade(current.version, tokenList.version)
-
-          if (upgradeType === VersionUpgrade.NONE) return
-          if (loadingRequestId === null || loadingRequestId === requestId) {
-            state.byUrl[url] = {
-              ...state.byUrl[url],
-              loadingRequestId: null,
-              error: null,
-              current,
-              pendingUpdate: tokenList,
-            }
-          }
-        } else {
-          // activate if on default active
-          if (DEFAULT_ACTIVE_LIST_URLS.includes(url) && state.activeListUrls && !state.activeListUrls.includes(url)) {
-            state.activeListUrls.push(url)
-          }
-
-          state.byUrl[url] = {
-            ...state.byUrl[url],
-            loadingRequestId: null,
-            error: null,
-            current: tokenList,
-            pendingUpdate: null,
-          }
-        }
+        setFulfilledTokenList(state, url, tokenList, requestId, DEFAULT_ACTIVE_LIST_URLS)
       })
       .addCase(fetchTokenList.rejected, (state, { payload: { url, requestId, errorMessage } }) => {
-        if (state.byUrl[url]?.loadingRequestId !== requestId) {
-          // no-op since it's not the latest request
-          return
-        }
-
-        state.byUrl[url] = {
-          ...state.byUrl[url],
-          loadingRequestId: null,
-          error: errorMessage,
-          current: null,
-          pendingUpdate: null,
-        }
+        setRejectedTokenList(state, url, requestId, errorMessage)
       })
       .addCase(addList, (state, { payload: url }) => {
         if (!state.byUrl[url]) {
@@ -182,5 +137,31 @@ export const createTokenListReducer = (
             return true
           })
         }
+      })
+      .addCase(batchFetchTokenListPending, (state, { payload: { urls, requestId } }) => {
+        // Batch update multiple lists to pending state in a single update cycle
+        urls.forEach((url) => {
+          setPendingTokenList(state, url, requestId)
+        })
+      })
+      .addCase(batchFetchTokenListFulfilled, (state, { payload: { results } }) => {
+        // Batch update multiple lists to fulfilled state in a single update cycle
+        const urlsToActivate: string[] = []
+
+        results.forEach(({ url, tokenList, requestId }) => {
+          const isNewList = setFulfilledTokenList(state, url, tokenList, requestId, DEFAULT_ACTIVE_LIST_URLS)
+          if (isNewList && DEFAULT_ACTIVE_LIST_URLS.includes(url)) {
+            urlsToActivate.push(url)
+          }
+        })
+
+        // Batch activate URLs if needed
+        batchActivateUrls(state, urlsToActivate)
+      })
+      .addCase(batchFetchTokenListRejected, (state, { payload: { errors } }) => {
+        // Batch update multiple lists to rejected state in a single update cycle
+        errors.forEach(({ url, requestId, errorMessage }) => {
+          setRejectedTokenList(state, url, requestId, errorMessage)
+        })
       }),
   )

@@ -3,7 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'
+import { getFarmAprInfo, getFarmKey } from 'state/farmsV4/search/farm.util'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
@@ -11,6 +11,8 @@ import { isInfinityProtocol } from 'utils/protocols'
 import { searchQueryAtom } from 'views/universalFarms/atom/searchQueryAtom'
 import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
 import { FeeTierComponent } from 'views/universalFarms/components/useColumnConfig'
+import { useUnifiedToken } from 'hooks/Tokens'
+import { getCurrencyAddress, getUnifiedCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import { useMiniPoolsData } from '../hooks'
 
 const PoolPairCell = styled(Flex)`
@@ -121,8 +123,16 @@ const prepareTokenForLogo = (token: any, poolChainId: number) => {
 
 // Pool Token Overview Component (similar to universal farms)
 const PoolTokenOverview = ({ data }: { data: PoolInfo }) => {
-  const token0 = useMemo(() => prepareTokenForLogo(data.token0, data.chainId), [data.token0, data.chainId])
-  const token1 = useMemo(() => prepareTokenForLogo(data.token1, data.chainId), [data.token1, data.chainId])
+  const _token0 =
+    useUnifiedToken(getUnifiedCurrencyAddress(data.token0), data.chainId, {
+      unwrapWSol: true,
+    }) || data.token0
+  const _token1 =
+    useUnifiedToken(getCurrencyAddress(data.token1), data.chainId, {
+      unwrapWSol: true,
+    }) || data.token1
+  const token0 = useMemo(() => prepareTokenForLogo(_token0, data.chainId), [_token0, data.chainId])
+  const token1 = useMemo(() => prepareTokenForLogo(_token1, data.chainId), [_token1, data.chainId])
 
   if (!token0 || !token1) {
     return null
@@ -143,7 +153,7 @@ const PoolTokenOverview = ({ data }: { data: PoolInfo }) => {
 const PoolFeatures = ({ data }: { data: PoolInfo }) => {
   const hookData = useHookByPoolId(
     data.chainId,
-    isInfinityProtocol(data.protocol) ? (data as InfinityPoolInfo)?.poolId : undefined,
+    isInfinityProtocol(data.protocol) ? ((data as InfinityPoolInfo)?.poolId as `0x${string}`) : undefined,
   )
 
   return (
@@ -164,12 +174,20 @@ const PoolFeatures = ({ data }: { data: PoolInfo }) => {
 // Mobile Pool Item Component
 const ListItem = ({ pool, onPoolClick }: { pool: PoolInfo; onPoolClick?: (pool: PoolInfo) => void }) => {
   const { t } = useTranslation()
-  const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
-  const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
+  const _token0 =
+    useUnifiedToken(getUnifiedCurrencyAddress(pool.token0), pool.chainId, {
+      unwrapWSol: true,
+    }) || pool.token0
+  const _token1 =
+    useUnifiedToken(getCurrencyAddress(pool.token1), pool.chainId, {
+      unwrapWSol: true,
+    }) || pool.token1
+  const token0 = useMemo(() => prepareTokenForLogo(_token0, pool.chainId), [_token0, pool.chainId])
+  const token1 = useMemo(() => prepareTokenForLogo(_token1, pool.chainId), [_token1, pool.chainId])
 
   const hookData = useHookByPoolId(
     pool.chainId,
-    isInfinityProtocol(pool.protocol) ? (pool as InfinityPoolInfo)?.poolId : undefined,
+    isInfinityProtocol(pool.protocol) ? ((pool as InfinityPoolInfo)?.poolId as `0x${string}`) : undefined,
   )
 
   if (!token0 || !token1) {
@@ -177,7 +195,10 @@ const ListItem = ({ pool, onPoolClick }: { pool: PoolInfo; onPoolClick?: (pool: 
   }
 
   return (
-    <MobileCard key={`${pool.chainId}-${pool.lpAddress}`} onClick={() => onPoolClick?.(pool)}>
+    <MobileCard
+      key={pool.farm ? getFarmKey(pool.farm) : `${pool.chainId}-${pool.lpAddress}`}
+      onClick={() => onPoolClick?.(pool)}
+    >
       <MobileRow>
         <PoolPairCell>
           <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
@@ -202,7 +223,7 @@ const ListItem = ({ pool, onPoolClick }: { pool: PoolInfo; onPoolClick?: (pool: 
         <Text color="textSubtle" fontSize="14px">
           {t('APR')}
         </Text>
-        <PoolGlobalAprButton pool={pool} aprInfo={getFarmAprInfo(pool.farm)} />
+        <PoolGlobalAprButton pool={pool} {...getFarmAprInfo(pool.farm)} />
       </MobileRow>
 
       <MobileRow>
@@ -220,7 +241,11 @@ const ListView = ({ pools, onPoolClick }: { pools: PoolInfo[]; onPoolClick?: (po
   return (
     <Box>
       {pools.map((pool) => (
-        <ListItem key={`${pool.chainId}-${pool.lpAddress}`} pool={pool} onPoolClick={onPoolClick} />
+        <ListItem
+          key={pool.farm ? getFarmKey(pool.farm) : `${pool.chainId}-${pool.lpAddress}`}
+          pool={pool}
+          onPoolClick={onPoolClick}
+        />
       ))}
     </Box>
   )
@@ -264,7 +289,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
         key: 'apr',
         minWidth: '125px',
         sorter: true,
-        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} aprInfo={getFarmAprInfo(item.farm)} />,
+        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} {...getFarmAprInfo(item.farm)} />,
       },
       {
         title: t('TVL'),
@@ -367,7 +392,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
             onSort={handleSort}
             onRowClick={(pool) => onPoolClick?.(pool)}
             sortOrder={query.sortOrder}
-            sortField={query.sortBy}
+            sortField={query.sortBy as keyof PoolInfo}
           />
         )}
 

@@ -33,6 +33,7 @@ import { useSolanaV3RewardInfoFromSimulation } from 'views/universalFarms/hooks/
 import { SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import { useRemoveLiquidityCallback } from 'hooks/solana/useRemoveLiquidityCallback'
 import { useLiquidityAmount } from 'hooks/solana/useLiquidityAmount'
+import { useRouter } from 'next/router'
 import { SolanaV3Earnings } from '../../PositionItem/PositionInfo/SolanaV3Earnings'
 import { SolanaV3PoolInfoHeader } from './PooInfoHeader'
 
@@ -49,6 +50,7 @@ export default function SolanaV3RemovePositionModal({
 }) {
   const poolInfo = pool.rawPool
   const { t } = useTranslation()
+  const route = useRouter()
   const [percent, setPercent] = useState(50)
   const [closePosition, setClosePosition] = useState(true)
   const [closePositionOpen, setClosePositionOpen] = useState(false)
@@ -147,6 +149,10 @@ export default function SolanaV3RemovePositionModal({
           setIsSending(false)
           setPercent(0)
           onClose()
+          // close position in detail page
+          if (percent === 100 && closePosition && route.pathname === '/liquidity/position/[[...positionId]]') {
+            route.push('/liquidity/positions')
+          }
         },
         onError: (e: any) => {
           // logGTMSolErrorLogEvent({

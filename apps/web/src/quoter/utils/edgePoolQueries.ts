@@ -353,7 +353,7 @@ type FetchAllPoolsParams = {
   orderBy?: 'tvlUSD' | 'volumeUSD24h' | 'apr24h'
   protocols: Array<'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'>
   chains: Array<
-    'bsc' | 'bsc-testnet' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'polygon-zkevm' | 'linea' | 'arbitrum'
+    'bsc' | 'bsc-testnet' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'polygon-zkevm' | 'linea' | 'arbitrum' | 'sol'
   >
   pools?: string[]
   tokens?: string[]
@@ -436,6 +436,7 @@ async function fetchAllPools({
           ...(typeof window === 'undefined' ? { 'x-api-key': process.env.EXPLORER_API_KEY || '' } : {}),
           'Content-Type': 'application/json',
         },
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       })
 
       if (!response.ok) {
@@ -454,6 +455,11 @@ async function fetchAllPools({
       pageCount++
     } catch (error) {
       console.error('Error fetching data:', error)
+      // If it's a timeout error, return empty results instead of throwing
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        console.warn('Request timed out, returning empty results')
+        break
+      }
       throw error
     }
   }

@@ -73,7 +73,7 @@ export default function Increase() {
   const mutateRpc = isCpmm ? mutateCpmm : mutateAmm
 
   const { formattedData: farms } = useFetchFarmByLpMint({
-    shouldFetch: !!pool && pool.farmOngoingCount === 0,
+    shouldFetch: !!pool && (pool.farmOngoingCount ?? 0) === 0,
     poolLp: pool?.lpMint.address
   })
   const isPoolNotFound = !!tokenPair.base && !!tokenPair.quote && !isLoading && !pool
@@ -86,7 +86,9 @@ export default function Increase() {
   const stakedData = new Decimal(pool ? lpBasedData.get(pool.lpMint.address)?.totalLpAmount || '0' : '0')
     .div(10 ** (pool?.lpMint.decimals ?? 0))
     .toString()
-  const hasFarmInfo = pool ? pool.farmOngoingCount > 0 || pool.farmUpcomingCount > 0 || !!farms.find((f) => f.isOngoing) : false
+  const hasFarmInfo = pool
+    ? (pool.farmOngoingCount ?? 0) > 0 || (pool.farmUpcomingCount ?? 0) > 0 || !!farms.find((f) => f.isOngoing)
+    : false
 
   increaseTabOptions[1].disabled = !hasFarmInfo
   increaseTabOptions[1].tooltipProps = !hasFarmInfo ? { label: t('There is no active farm for this pool.'), hasArrow: false } : undefined
@@ -98,7 +100,7 @@ export default function Increase() {
 
   const feeApr = pool?.allApr.week.find((s) => s.isTradingFee)
   const rewardApr = pool?.allApr.week.filter((s) => !s.isTradingFee && !!s.token) || []
-  const hasLockedLiquidity = pool && pool.burnPercent > 0
+  const hasLockedLiquidity = pool && (pool.burnPercent ?? 0) > 0
   const aprData = useMemo(
     () => ({
       fee: {

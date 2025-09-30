@@ -1,5 +1,6 @@
+import { isSolana } from '@pancakeswap/chains'
 import { Protocol } from '@pancakeswap/farms'
-import { Currency, isCurrencySorted } from '@pancakeswap/swap-sdk-core'
+import { Currency, isUnifiedCurrencySorted, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import { QUERY_SETTINGS_IMMUTABLE, QUERY_SETTINGS_WITHOUT_INTERVAL_REFETCH } from 'config/constants'
 import { InfinityProtocol } from 'config/constants/protocols'
@@ -9,18 +10,17 @@ import { tryParsePrice } from 'hooks/v3/utils'
 import { useCallback, useMemo } from 'react'
 import { chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'
 import type { components as APISchema } from 'state/info/api/schema'
-import type { Address } from 'viem/accounts'
 
 interface IRateDataProps {
   period: APISchema['schemas']['ChartPeriod']
-  poolId?: Address
+  poolId?: string
   protocol: InfinityProtocol | Protocol.V3
   chainId?: number
 }
 
 interface ITokenRateProps extends IRateDataProps {
-  baseCurrency?: Currency
-  quoteCurrency?: Currency
+  baseCurrency?: UnifiedCurrency
+  quoteCurrency?: UnifiedCurrency
 }
 
 export type PriceChartEntryFromAPI = {
@@ -93,12 +93,12 @@ export const useTokenRateData = ({
   const { data: rateData, isLoading } = usePoolRateData({ chainId, poolId, protocol, period })
 
   const isSorted = useMemo(
-    () => baseCurrency && quoteCurrency && isCurrencySorted(baseCurrency, quoteCurrency),
+    () => baseCurrency && quoteCurrency && isUnifiedCurrencySorted(baseCurrency, quoteCurrency),
     [baseCurrency, quoteCurrency],
   )
   const parsePrice = useCallback(
     (priceValue?: number) => {
-      const basePrice = tryParsePrice(baseCurrency, quoteCurrency, priceValue?.toString())
+      const basePrice = tryParsePrice(baseCurrency as Currency, quoteCurrency as Currency, priceValue?.toFixed(18))
       const price = isSorted ? basePrice?.invert() : basePrice
       return price && price?.denominator !== 0n ? parseFloat(price.toFixed(18)) : 0
     },

@@ -12,7 +12,7 @@ export const supportedChainIdV4 = [
   ChainId.LINEA,
   ChainId.ARBITRUM_ONE,
   NonEVMChainId.SOLANA,
-] as const
+] as const satisfies readonly (ChainId | NonEVMChainId)[]
 
 // from: https://api.merkl.xyz/v4/chains/
 export const merklSupportedChainId = [

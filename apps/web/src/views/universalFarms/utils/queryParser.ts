@@ -34,8 +34,7 @@ export function parseUrlToSearchQuery(): FarmQuery {
 
   const chains = (() => {
     const nets = url.getAll('network').map((n) => Number(n))
-    // @NOTE: remove solana from default chains in pools list page
-    return nets.length ? nets : DEFAULT_CHAINS.filter((c) => !isSolana(c))
+    return nets.length ? nets : DEFAULT_CHAINS
   })()
 
   const [sortOrder, sortBy] = (() => {
@@ -51,8 +50,9 @@ export function parseUrlToSearchQuery(): FarmQuery {
     keywords: url.get('search') || '',
     chains,
     protocols: getProtocolsByIndex(selectedProtocolIndex),
-    sortBy,
+    sortBy: sortBy || '',
     sortOrder,
+    page: 0,
   }
 }
 

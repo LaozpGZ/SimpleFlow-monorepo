@@ -13,8 +13,7 @@ import { SORT_ORDER } from '@pancakeswap/uikit'
 import uniqBy from '@pancakeswap/utils/uniqBy'
 import { computePoolAddress, DEPLOYER_ADDRESSES } from '@pancakeswap/v3-sdk'
 import { edgeQueries } from 'quoter/utils/edgePoolQueries'
-import { APIChain, getEdgeChainName } from 'quoter/utils/edgeQueries.util'
-import { PoolInfo } from 'state/farmsV4/state/type'
+import { getEdgeChainName } from 'quoter/utils/edgeQueries.util'
 import { explorerApiClient } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
 import chunk from '@pancakeswap/utils/chunk'
@@ -22,13 +21,16 @@ import { FarmInfo, normalizeAddress, safeGetAddress } from './farm.util'
 
 const DEFAULT_PROTOCOLS: Protocol[] = Object.values(Protocol)
 export interface FarmQuery {
-  keywords: string
-  chains: ChainId[]
+  keywords?: string
+  chains: FarmV4SupportedChainId[]
   protocols: Protocol[]
-  sortBy: keyof PoolInfo | null
-  sortOrder: SORT_ORDER
+  sortBy: string
+  sortOrder?: SORT_ORDER
   activeChainId?: ChainId
   symbols?: string[]
+  tokens?: string[]
+  page?: number
+  abort?: boolean
 }
 
 function getPoolId(farm: UniversalFarmConfig) {
@@ -57,13 +59,15 @@ function getPoolId(farm: UniversalFarmConfig) {
 
 export type ChainNameKebab = (typeof chainNamesInKebabCase)[keyof typeof chainNamesInKebabCase]
 
-async function fetchExplorerFarmPools(protocols: Protocol[], chainIds: FarmV4SupportedChainId[]) {
-  const chains = chainIds.filter((id) => isEvm(id)).map((chainId) => getEdgeChainName(chainId as ChainId))
+async function fetchExplorerFarmPools(query: FarmQuery) {
+  const { protocols, chains } = query
+  const chainIds = chains.length > 0 ? chains : supportedChainIdV4
+  const chainNames = chainIds.map((chainId) => getEdgeChainName(chainId)).filter((x) => x !== 'sol')
   const resp = await explorerApiClient.GET('/cached/pools/farming', {
     params: {
       query: {
-        protocols: protocols ?? DEFAULT_PROTOCOLS,
-        chains,
+        protocols: protocols.length > 0 ? protocols : DEFAULT_PROTOCOLS,
+        chains: chainNames,
       },
     },
     headers: {
@@ -111,51 +115,34 @@ function toRemotePool(farm: UniversalFarmConfig) {
 
 async function mergePromiseList<T>(promises: Promise<T[]>[]): Promise<T[]> {
   const results = await Promise.allSettled(promises)
-  return results.flatMap((r, i) => {
+  return results.flatMap((r) => {
     if (r.status === 'fulfilled') return r.value
     return []
   })
 }
 
-async function fetchFarms(query: {
-  extend: boolean
-  protocols: Protocol[]
-  chains: FarmV4SupportedChainId[]
-  tokens?: string[]
-  symbols?: string[]
-}) {
-  // const protocols = DEFAULT_PROTOCOLS
-  const { extend, protocols: _protocols, tokens, symbols, chains } = query
+async function fetchFarms(query: FarmQuery, extend: boolean) {
+  const { protocols: _protocols, tokens, symbols, chains, sortBy } = query
   const protocols = _protocols.length > 0 ? _protocols : DEFAULT_PROTOCOLS
   const chainIds = chains.length > 0 ? chains : supportedChainIdV4
   if (!extend) {
-    return mergePromiseList([
-      fetchExplorerFarmPools(protocols, Array.from(chainIds)),
-      fetchAllExplorerPools(protocols, Array.from(chainIds)),
-    ])
+    return mergePromiseList([fetchExplorerFarmPools(query), fetchAllExplorerPools(query)])
   }
   if (tokens && tokens.length > 0) {
-    const byTokenAddress = fetchAllExplorerPoolsByAddress(Array.from(chainIds), tokens, protocols, true)
-    const byPoolAddress = fetchAllExplorerPoolsByAddress(Array.from(chainIds), tokens, protocols)
+    const byTokenAddress = fetchAllExplorerPoolsByAddress(query, true)
+    const byPoolAddress = fetchAllExplorerPoolsByAddress(query, false)
     return mergePromiseList([byTokenAddress, byPoolAddress])
   }
 
   if (symbols && symbols.length > 0) {
-    return fetchAllExplorerPoolsBySymbols(Array.from(chainIds), symbols, protocols)
+    return fetchAllExplorerPoolsBySymbols(Array.from(chainIds), symbols, protocols, sortBy)
   }
-  return fetchAllExplorerPools(protocols, Array.from(chainIds))
+  return fetchAllExplorerPools(query)
 }
 
-async function queryFarms(query: {
-  extend: boolean
-  protocols: Protocol[]
-  chains: FarmV4SupportedChainId[]
-  tokens?: string[]
-  symbols?: string[]
-}) {
+async function queryFarms(query: FarmQuery, extend: boolean) {
   try {
-    const { extend } = query
-    const [pools, universalFarms] = await Promise.all([fetchFarms(query), fetchAllUniversalFarms()])
+    const [pools, universalFarms] = await Promise.all([fetchFarms(query, extend), fetchAllUniversalFarms()])
 
     const farmMaps = universalFarms.reduce((acc, farm) => {
       const id = getPoolId(farm)
@@ -205,40 +192,52 @@ async function queryFarms(query: {
   }
 }
 
-async function fetchAllExplorerPools(protocols: Protocol[], chains: FarmV4SupportedChainId[]) {
+function getOrder(sortBy?: FarmQuery['sortBy']): 'tvlUSD' | 'volumeUSD24h' {
+  if (sortBy === 'tvlUsd') {
+    return 'tvlUSD'
+  }
+  if (sortBy === 'vol24hUsd') {
+    return 'volumeUSD24h'
+  }
+  return 'volumeUSD24h'
+}
+
+async function fetchAllExplorerPools(query: FarmQuery) {
+  const { protocols, chains, sortBy } = query
+  const chainIds = chains.length > 0 ? chains : supportedChainIdV4
   const poolQuery = {
     baseUrl: `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`,
-    protocols,
-    chains: chains.filter((id) => isEvm(id)).map((chain) => getEdgeChainName(chain as ChainId)),
+    protocols: protocols.length > 0 ? protocols : DEFAULT_PROTOCOLS,
+    chains: chainIds.map((chain) => getEdgeChainName(chain as ChainId)),
     maxPages: 2,
-    orderBy: 'volumeUSD24h' as const,
+    orderBy: getOrder(sortBy),
   }
   const pools = await edgeQueries.fetchAllPools(poolQuery)
   return pools.map(normalizeAddress).filter((x) => x) as InfinityRouter.RemotePoolBase[]
 }
 
-async function fetchAllExplorerPoolsByAddress(
-  chains: FarmV4SupportedChainId[],
-  addresses: string[],
-  protocols: Protocol[],
-  isPool: boolean = false,
-) {
-  if (!protocols.length) return []
+async function fetchAllExplorerPoolsByAddress(query: FarmQuery, isPool: boolean = false) {
+  const { protocols, chains, tokens, sortBy } = query
+  const chainIds = chains.length > 0 ? chains : supportedChainIdV4
+  const protocolList = protocols.length > 0 ? protocols : DEFAULT_PROTOCOLS
+
+  if (!protocolList.length) return []
   const baseUrl = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`
-  const chainNames = chains.filter((id) => isEvm(id)).map((chain) => getEdgeChainName(chain as ChainId))
+  const chainNames = chainIds.map((chain) => getEdgeChainName(chain as ChainId))
 
-  if (!addresses.length) return []
+  if (!tokens || !tokens.length) return []
 
-  const chunks = chunk(addresses, 20)
+  const chunks = chunk(tokens, 20)
   const allPools = await mergePromiseList(
     chunks.map((addrChunk) => {
       return edgeQueries.fetchAllPools({
         baseUrl,
-        protocols,
+        protocols: protocolList,
         chains: chainNames,
         pools: isPool ? addrChunk : undefined,
         tokens: !isPool ? addrChunk : undefined,
         maxPages: 1,
+        orderBy: getOrder(sortBy),
       })
     }),
   )
@@ -252,12 +251,13 @@ async function fetchAllExplorerPoolsBySymbols(
   chains: FarmV4SupportedChainId[],
   symbols: string[],
   protocols: Protocol[],
+  sortBy?: FarmQuery['sortBy'],
 ) {
   if (!protocols.length) return []
   if (!symbols.length) return []
 
   const baseUrl = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`
-  const chainNames = chains.filter((id) => isEvm(id)).map((chain) => getEdgeChainName(chain as ChainId))
+  const chainNames = chains.map((chain) => getEdgeChainName(chain as ChainId))
 
   const chunks = chunk(symbols, 20)
   const allPools = await mergePromiseList(
@@ -267,7 +267,8 @@ async function fetchAllExplorerPoolsBySymbols(
         protocols,
         chains: chainNames,
         symbols: symbolChunk,
-        maxPages: 1,
+        maxPages: 3,
+        orderBy: getOrder(sortBy),
       })
     }),
   )

@@ -1,4 +1,5 @@
 import { createListsAtom, createTokenListReducer, NEW_LIST_STATE } from '@pancakeswap/token-lists/react'
+import { useAtom, useAtomValue } from 'jotai'
 import { DEFAULT_ACTIVE_LIST_URLS, DEFAULT_LIST_OF_LISTS, UNSUPPORTED_LIST_URLS } from 'config/constants/lists'
 
 export const initialState = {
@@ -14,8 +15,18 @@ export const initialState = {
 
 const listReducer = createTokenListReducer(initialState, DEFAULT_LIST_OF_LISTS, DEFAULT_ACTIVE_LIST_URLS)
 
-export const { listsAtom, tokenBySymbolAtom, useListState, useListStateReady, fetchListAtom } = createListsAtom(
-  'listInfinity',
-  listReducer,
-  initialState,
-)
+export const {
+  listsAtom,
+  updateListStateAtom,
+  tokenBySymbolAtom,
+  useListStateReady,
+  fetchListAtom,
+  fetchListBatchAtom,
+} = createListsAtom('listInfinity', listReducer, initialState)
+
+// Hook that provides both state and dispatch function for backward compatibility
+export function useListState() {
+  const listState = useAtomValue(listsAtom)
+  const [, dispatch] = useAtom(updateListStateAtom)
+  return [listState, dispatch] as const
+}

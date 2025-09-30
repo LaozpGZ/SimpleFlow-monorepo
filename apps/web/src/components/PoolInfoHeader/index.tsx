@@ -1,7 +1,8 @@
+import Decimal from 'decimal.js'
 import { Protocol } from '@pancakeswap/farms'
 import { HookData } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Percent } from '@pancakeswap/sdk'
+import { Percent, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
 import {
   AutoColumn,
   Box,
@@ -23,7 +24,7 @@ import { CurrencyLogo, DoubleCurrencyLogo, FeeTierTooltip, Liquidity } from '@pa
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { LinkType, MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
 import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'
-import { PoolInfo } from 'state/farmsV4/state/type'
+import { PoolInfo, UnifiedPoolInfo } from 'state/farmsV4/state/type'
 import { getBlockExploreLink } from 'utils'
 import { isInfinityProtocol } from 'utils/protocols'
 import { Tooltips } from 'components/Tooltips'
@@ -31,10 +32,10 @@ import { PoolFeaturesModal } from 'views/PoolDetail/components/PoolFeaturesModal
 import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
 
 interface PoolInfoHeaderProps {
-  poolId?: `0x${string}`
-  poolInfo: PoolInfo | null | undefined
-  currency0?: Currency
-  currency1?: Currency
+  poolId?: string
+  poolInfo: UnifiedPoolInfo | null | undefined
+  currency0?: UnifiedCurrency
+  currency1?: UnifiedCurrency
   chainId?: number
   isInverted?: boolean
   hookData?: HookData
@@ -49,6 +50,7 @@ interface PoolInfoHeaderProps {
   symbol0?: string
   /** Optional override for currency1.symbol */
   symbol1?: string
+  price?: Decimal
 }
 export const PoolInfoHeader = ({
   poolInfo,
@@ -63,6 +65,7 @@ export const PoolInfoHeader = ({
   onInvertPrices,
   overrideAprDisplay,
   linkType,
+  price,
 }: PoolInfoHeaderProps) => {
   const { t } = useTranslation()
 
@@ -213,9 +216,11 @@ export const PoolInfoHeader = ({
                   {poolInfo?.protocol ? (
                     <AutoColumn rowGap="4px">
                       <Box>
-                        {isInfinityProtocol(poolInfo.protocol) ? (
+                        {isInfinityProtocol(poolInfo.protocol) &&
+                        typeof poolId === 'string' &&
+                        poolId.startsWith('0x') ? (
                           <InfinityFeeTierBreakdown
-                            poolId={poolId}
+                            poolId={poolId as `0x${string}`}
                             chainId={chainId}
                             hookData={hookData}
                             infoIconVisible={false}
@@ -279,7 +284,14 @@ export const PoolInfoHeader = ({
                   <SwapHorizIcon color="primary60" onClick={onInvertPrices} style={{ cursor: 'pointer' }} />
                 </FlexGap>
                 <FlexGap gap="8px" alignItems="center" width="100%">
-                  {poolInfo && poolInfo.token0Price && poolInfo.token1Price ? (
+                  {price ? (
+                    <Text fontSize={isMobile ? 20 : 24} bold width="max-content">
+                      {formatNumber((isInverted ? new Decimal(1).div(price) : price).toNumber(), {
+                        maximumSignificantDigits: 6,
+                        maxDecimalDisplayDigits: 6,
+                      })}
+                    </Text>
+                  ) : poolInfo && poolInfo.token0Price && poolInfo.token1Price ? (
                     <Text fontSize={isMobile ? 20 : 24} bold width="max-content">
                       {formatNumber(Number(isInverted ? poolInfo.token0Price : poolInfo.token1Price), {
                         maximumSignificantDigits: 6,
@@ -315,20 +327,20 @@ export const PoolInfoHeader = ({
                     </Text>
                     {overrideAprDisplay?.roiCalculator || (
                       <PoolGlobalAprButtonV3
-                        pool={poolInfo}
+                        pool={poolInfo as unknown as PoolInfo}
                         showApyText={false}
                         color="text"
-                        aprInfo={getFarmAprInfo(poolInfo.farm)}
+                        {...getFarmAprInfo(poolInfo.farm)}
                         fontSize={isMobile ? '20px' : '24px'}
                       />
                     )}
                   </FlexGap>
                   {overrideAprDisplay?.aprDisplay || (
                     <PoolGlobalAprButtonV3
-                      pool={poolInfo}
+                      pool={poolInfo as unknown as PoolInfo}
                       showApyButton={false}
                       color="text"
-                      aprInfo={getFarmAprInfo(poolInfo.farm)}
+                      {...getFarmAprInfo(poolInfo.farm)}
                       fontSize={isMobile ? '20px' : '24px'}
                     />
                   )}

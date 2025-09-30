@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { useSolanaTokenList } from 'hooks/useSolanaTokenList'
+import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
 import { useMemo } from 'react'
 import {
   getMultipleAccountsInfo,
@@ -75,7 +75,7 @@ export const useSolanaPositionsInfoByAccount = (walletAddress?: string | null) =
     queryKey: [SOLANA_POSITION_INFO_QUERY_KEY, walletAddress, latestTxReceipt?.blockHash],
     queryFn: () => solanaPositionInfoFetcher(rpc, getSolanaPositionMints(nfts)),
     enabled: Boolean(walletAddress) && nfts.length > 0,
-    staleTime: SLOW_INTERVAL,
+    staleTime: 0,
     refetchInterval: SLOW_INTERVAL,
     refetchOnWindowFocus: true,
   })

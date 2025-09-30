@@ -23,3 +23,14 @@ export const acceptListUpdate = createAction<string>('lists/acceptListUpdate')
 export const rejectVersionUpdate = createAction<Version>('lists/rejectVersionUpdate')
 
 export const updateListVersion = createAction('lists/updateListVersion')
+
+// Batch actions for reducing update cycles
+export const batchFetchTokenListPending = createAction<{ urls: string[]; requestId: string }>(
+  'lists/batchFetchTokenList/pending',
+)
+export const batchFetchTokenListFulfilled = createAction<{
+  results: Array<{ url: string; tokenList: TokenList; requestId: string }>
+}>('lists/batchFetchTokenList/fulfilled')
+export const batchFetchTokenListRejected = createAction<{
+  errors: Array<{ url: string; errorMessage: string; requestId: string }>
+}>('lists/batchFetchTokenList/rejected')

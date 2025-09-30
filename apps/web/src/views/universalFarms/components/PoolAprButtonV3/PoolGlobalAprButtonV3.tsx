@@ -5,10 +5,11 @@ import BigNumber from 'bignumber.js'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useEffect, useMemo } from 'react'
 import { AprInfo, usePoolApr } from 'state/farmsV4/hooks'
-import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
+import { InfinityPoolInfo, PoolInfo, SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import { isInfinityProtocol } from 'utils/protocols'
 import { useMyPositions } from 'views/PoolDetail/components/MyPositionsContext'
 
+import { SolanaV3Pool } from 'state/pools/solana'
 import { APRBreakdownModal } from './AprBreakdownModal'
 import { PoolAprButtonV3 } from './PoolAprButtonV3'
 
@@ -20,6 +21,7 @@ type PoolGlobalAprButtonProps = {
   showApyButton?: boolean
   fontSize?: string
   color?: string
+  clickable?: boolean
 }
 
 export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
@@ -30,6 +32,7 @@ export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
   showApyButton,
   fontSize,
   color = 'secondary',
+  clickable = true,
 }) => {
   const key = useMemo(() => `${pool.chainId}:${pool.lpAddress}` as const, [pool.chainId, pool.lpAddress])
 
@@ -86,6 +89,7 @@ export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
         showApyButton={showApyButton}
         fontSize={fontSize}
         color={color}
+        clickable={clickable}
       />
     )
   }
@@ -103,6 +107,7 @@ export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
         showApyText={showApyText}
         fontSize={fontSize}
         color={color}
+        clickable={clickable}
       />
       {APRBreakdownModalState.isOpen ? (
         <APRBreakdownModal

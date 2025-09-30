@@ -29,6 +29,7 @@ import { useV2FarmActions } from 'views/universalFarms/hooks/useV2FarmActions'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { V2_MIGRATE_PAGE_SUPPORTED_CHAINS } from 'config/constants/supportChains'
+import { StopPropagation } from 'views/universalFarms/components/StopPropagation'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { PositionsTable } from './PositionsTable'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
@@ -167,19 +168,21 @@ const V2PositionWithApr: React.FC<{
     const handleMigrate = () => router.push(migrateUrl)
 
     const actions = (
-      <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
-        <ActionButton isIcon onClick={handleRemove}>
-          <MinusIcon />
-        </ActionButton>
+      <StopPropagation>
+        <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
+          <ActionButton isIcon onClick={handleRemove}>
+            <MinusIcon />
+          </ActionButton>
 
-        <ActionButton isIcon onClick={handleAdd}>
-          <AddIcon />
-        </ActionButton>
+          <ActionButton isIcon onClick={handleAdd}>
+            <AddIcon />
+          </ActionButton>
 
-        {poolInfo.protocol === 'v2' && V2_MIGRATE_PAGE_SUPPORTED_CHAINS.includes(poolInfo.chainId) && (
-          <ActionButton onClick={handleMigrate}>{t('Migrate')}</ActionButton>
-        )}
-      </FlexGap>
+          {poolInfo.protocol === 'v2' && V2_MIGRATE_PAGE_SUPPORTED_CHAINS.includes(poolInfo.chainId) && (
+            <ActionButton onClick={handleMigrate}>{t('Migrate')}</ActionButton>
+          )}
+        </FlexGap>
+      </StopPropagation>
     )
 
     return {
@@ -230,7 +233,7 @@ export const V2OrSSPositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo
   )
 
   // V2 farm actions and earnings
-  const { onHarvest } = useV2FarmActions(poolInfo.lpAddress, poolInfo.bCakeWrapperAddress)
+  const { onHarvest } = useV2FarmActions(poolInfo.lpAddress!, poolInfo.bCakeWrapperAddress)
   const { earningsBusd } = useV2CakeEarning(poolInfo)
 
   const handleHarvestAll = useCallback(async () => {

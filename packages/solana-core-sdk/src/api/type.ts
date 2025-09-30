@@ -204,7 +204,7 @@ export interface ApiV3PoolInfoCountItem {
   rewardApr: number[];
 }
 
-type PoolTypeItem = "StablePool" | "OpenBookMarket";
+export type PoolTypeItem = "StablePool" | "OpenBookMarket";
 
 type FarmRewardInfoOld = {
   mint: ApiV3Token;
@@ -242,11 +242,11 @@ export interface ApiV3PoolInfoBaseItem {
   month: ApiV3PoolInfoCountItem;
   pooltype: PoolTypeItem[];
 
-  farmUpcomingCount: number;
-  farmOngoingCount: number;
-  farmFinishedCount: number;
+  farmUpcomingCount?: number;
+  farmOngoingCount?: number;
+  farmFinishedCount?: number;
 
-  burnPercent: number;
+  burnPercent?: number;
 }
 export type ApiV3PoolInfoConcentratedItem = ApiV3PoolInfoBaseItem & {
   type: "Concentrated";

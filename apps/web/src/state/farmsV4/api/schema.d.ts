@@ -1,4 +1,3 @@
-// todo: @eric mock temporary, replaced when BE schema done
 export interface operations {
   verifyContract: {
     parameters: {

@@ -1,6 +1,7 @@
+import { type Address } from 'viem'
 import { BinLiquidityShape, getIdSlippage, getPoolId } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { isCurrencySorted } from '@pancakeswap/swap-sdk-core'
+import { Currency, isCurrencySorted } from '@pancakeswap/swap-sdk-core'
 import { useToast } from '@pancakeswap/uikit'
 import { Permit2Signature } from '@pancakeswap/universal-router-sdk'
 import { useUserSlippage, useUserSlippagePercent } from '@pancakeswap/utils/user'
@@ -80,16 +81,16 @@ export const useFormSubmitCallback = () => {
   const { addCLLiquidity } = useAddCLPoolAndPosition(
     chainId ?? 0,
     account ?? '0x',
-    currency0?.isNative ? zeroAddress : currency0?.wrapped.address ?? '0x',
-    currency1?.isNative ? zeroAddress : currency1?.wrapped.address ?? '0x',
+    currency0?.isNative ? zeroAddress : (currency0?.wrapped.address as Address) ?? '0x',
+    currency1?.isNative ? zeroAddress : (currency1?.wrapped.address as Address) ?? '0x',
     redirectToPoolDetailPage,
   )
 
   const { addBinLiquidity } = useAddBinLiquidity(
     chainId ?? 0,
     account ?? '0x',
-    currency0?.isNative ? zeroAddress : currency0?.wrapped.address ?? '0x',
-    currency1?.isNative ? zeroAddress : currency1?.wrapped.address ?? '0x',
+    currency0?.isNative ? zeroAddress : (currency0?.wrapped.address as Address) ?? '0x',
+    currency1?.isNative ? zeroAddress : (currency1?.wrapped.address as Address) ?? '0x',
     redirectToPoolDetailPage,
   )
 
@@ -145,8 +146,8 @@ export const useFormSubmitCallback = () => {
           amount0Max,
           amount1Max,
           recipient: account,
-          currency0,
-          currency1,
+          currency0: currency0 as Currency,
+          currency1: currency1 as Currency,
           deadline: deadline || BigInt(Math.floor(Date.now() / 1000) + 60 * 20), // 20 minutes
           modifyPositionHookData: '0x',
           token0Permit2Signature: permit2Signature0,
@@ -179,8 +180,8 @@ export const useFormSubmitCallback = () => {
           amount1Max,
           recipient: account,
           deadline: deadline || BigInt(Math.floor(Date.now() / 1000) + 60 * 20), // 20 minutes
-          currency0,
-          currency1,
+          currency0: currency0 as Currency,
+          currency1: currency1 as Currency,
           token0Permit2Signature: permit2Signature0,
           token1Permit2Signature: permit2Signature1,
         }

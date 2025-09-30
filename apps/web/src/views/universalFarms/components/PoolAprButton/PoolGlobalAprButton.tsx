@@ -1,3 +1,4 @@
+import { isSolana } from '@pancakeswap/chains'
 import { getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import { useModalV2 } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
@@ -16,11 +17,12 @@ type PoolGlobalAprButtonProps = {
   pool: PoolInfo
   detailMode?: boolean
   aprInfo?: AprInfo
+  loading?: boolean
 }
 
-export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, detailMode, aprInfo }) => {
+export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, detailMode, aprInfo, loading }) => {
   if (aprInfo) {
-    return <PoolGlobalAprButtonDisplay pool={pool} aprInfo={aprInfo} detailMode={detailMode} />
+    return <PoolGlobalAprButtonDisplay pool={pool} aprInfo={aprInfo} detailMode={detailMode} loading={loading} />
   }
   return <PoolGlobalAprButtonWithLoadApr pool={pool} detailMode={detailMode} />
 }
@@ -63,7 +65,7 @@ const PoolGlobalAprButtonWithLoadApr: React.FC<PoolGlobalAprButtonProps> = ({ po
   return <PoolGlobalAprButtonDisplay pool={pool} aprInfo={hookAprInfo} detailMode={detailMode} />
 }
 
-const PoolGlobalAprButtonDisplay: React.FC<PoolGlobalAprButtonProps> = ({ pool, aprInfo }) => {
+const PoolGlobalAprButtonDisplay: React.FC<PoolGlobalAprButtonProps> = ({ pool, aprInfo, loading }) => {
   const { lpApr, cakeApr, merklApr, incentraApr } = aprInfo!
 
   const { chainId, token0, token1 } = pool
@@ -73,6 +75,7 @@ const PoolGlobalAprButtonDisplay: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   const APRBreakdownModalState = useModalV2()
 
   const poolWithFarming = useMemo(() => ({ ...pool, isFarming: Number(cakeApr?.value) > 0 }), [pool, cakeApr])
+  const isSolanaChain = isSolana(chainId)
 
   if (!isInfinityProtocol(pool.protocol)) {
     return (
@@ -82,6 +85,8 @@ const PoolGlobalAprButtonDisplay: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
         incentraApr={parseFloat(incentraApr) ?? 0}
+        showApyButton={!isSolanaChain}
+        loading={loading}
       />
     )
   }
@@ -96,6 +101,7 @@ const PoolGlobalAprButtonDisplay: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
         incentraApr={parseFloat(incentraApr) ?? 0}
         onAPRTextClick={APRBreakdownModalState.onOpen}
         showApyButton={false}
+        loading={loading}
       />
       {APRBreakdownModalState.isOpen ? (
         <APRBreakdownModal

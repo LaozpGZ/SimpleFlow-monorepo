@@ -11,7 +11,7 @@ import { Address } from 'viem'
 
 interface FetchCampaignsProps {
   chainId?: number
-  poolIds?: Address[]
+  poolIds?: string[]
   includeInactive?: boolean
   page?: number
   fetchAll?: boolean

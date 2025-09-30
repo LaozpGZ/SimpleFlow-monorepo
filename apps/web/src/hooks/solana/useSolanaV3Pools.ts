@@ -1,4 +1,3 @@
-import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -75,6 +74,10 @@ export function useSolanaV3Pools(poolIds: (string | undefined)[]): (SolanaV3Pool
 
 export function useSolanaV3Pool(poolId: string | undefined): SolanaV3Pool | null {
   const poolIds = useMemo(() => [poolId], [poolId])
+  const pools = useSolanaV3Pools(poolIds)
 
-  return useSolanaV3Pools(poolIds)[0]
+  return useMemo(() => {
+    if (!poolId) return null
+    return pools.find((pool) => pool?.id === poolId) || null
+  }, [poolId, pools])
 }

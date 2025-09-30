@@ -3,15 +3,24 @@ import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, Card, CardBody, FlexGap, Grid, Text } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import React, { useCallback, useEffect, useState } from 'react'
-import { InfinityBinPoolInfo, InfinityCLPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
+import {
+  InfinityBinPoolInfo,
+  InfinityCLPoolInfo,
+  PoolInfo,
+  SolanaV3PoolInfo,
+  StablePoolInfo,
+  V2PoolInfo,
+} from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { getRewardProvider } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 
 import { useAtom } from 'jotai'
 import { positionEarningAmountAtom } from 'views/universalFarms/hooks/usePositionEarningAmount'
+import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
 
 import { useAccount } from 'wagmi'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { MyPositionsProvider } from './MyPositionsContext'
 import {
   InfinityBinPositionsTable,
@@ -19,6 +28,7 @@ import {
   V2OrSSPositionsTable,
   V3PositionsTable,
 } from './ProtocolPositionsTables'
+import { SolanaV3PositionsTable } from './ProtocolPositionsTables/SolanaV3PositionsTable'
 
 export const MyPositions: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   return (
@@ -30,7 +40,7 @@ export const MyPositions: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
 const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { solanaAccount, account } = useAccountActiveChain()
   const chainId = useChainIdByQuery()
   const provider = getRewardProvider(poolInfo.chainId, poolInfo.lpAddress)
   const hasPoolReward = !!provider
@@ -62,7 +72,10 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
 
-  if (!account) {
+  const isSolanaChain = isSolana(chainId)
+  const isUnconnected = isSolanaChain ? !solanaAccount : !account
+
+  if (isUnconnected) {
     return (
       <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr']}>
         <Box>
@@ -80,21 +93,25 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   }
   return (
     <AutoColumn gap="lg">
-      {(() => {
-        switch (poolInfo.protocol) {
-          case 'v3':
-            return <V3PositionsTable poolInfo={poolInfo} />
-          case Protocol.InfinityCLAMM:
-            return <InfinityCLPositionsTable poolInfo={poolInfo as InfinityCLPoolInfo} />
-          case Protocol.InfinityBIN:
-            return <InfinityBinPositionsTable poolInfo={poolInfo as InfinityBinPoolInfo} />
-          case 'v2':
-          case 'stable':
-            return <V2OrSSPositionsTable poolInfo={poolInfo as V2PoolInfo | StablePoolInfo} />
-          default:
-            return <div>{t('Unsupported protocol: %protocol%', { protocol: poolInfo.protocol })}</div>
-        }
-      })()}
+      {isSolanaChain ? (
+        <SolanaV3PositionsTable poolInfo={poolInfo as SolanaV3PoolInfo} />
+      ) : (
+        (() => {
+          switch (poolInfo.protocol) {
+            case 'v3':
+              return <V3PositionsTable poolInfo={poolInfo} />
+            case Protocol.InfinityCLAMM:
+              return <InfinityCLPositionsTable poolInfo={poolInfo as InfinityCLPoolInfo} />
+            case Protocol.InfinityBIN:
+              return <InfinityBinPositionsTable poolInfo={poolInfo as InfinityBinPoolInfo} />
+            case 'v2':
+            case 'stable':
+              return <V2OrSSPositionsTable poolInfo={poolInfo as V2PoolInfo | StablePoolInfo} />
+            default:
+              return <div>{t('Unsupported protocol: %protocol%', { protocol: poolInfo.protocol })}</div>
+          }
+        })()
+      )}
     </AutoColumn>
   )
 }

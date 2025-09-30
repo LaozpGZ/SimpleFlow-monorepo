@@ -1,4 +1,4 @@
-import { Currency, Price, Token } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price, Token, UnifiedCurrency, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 import {
   encodeSqrtRatioX96,
   FeeAmount,
@@ -8,7 +8,7 @@ import {
   TickMath,
 } from '@pancakeswap/v3-sdk'
 
-export function tryParsePrice(baseToken?: Token | Currency, quoteToken?: Token | Currency, value?: string) {
+export function tryParsePrice(baseToken?: UnifiedCurrency, quoteToken?: UnifiedCurrency, value?: string) {
   if (!baseToken || !quoteToken || !value) {
     return undefined
   }
@@ -23,8 +23,8 @@ export function tryParsePrice(baseToken?: Token | Currency, quoteToken?: Token |
   const withoutDecimals = BigInt((whole ?? '') + (fraction ?? ''))
 
   return new Price(
-    baseToken,
-    quoteToken,
+    baseToken as unknown as Currency,
+    quoteToken as unknown as Currency,
     BigInt(10 ** decimals) * BigInt(10 ** baseToken.decimals),
     withoutDecimals * BigInt(10 ** quoteToken.decimals),
   )

@@ -13,10 +13,12 @@ test('exports', () => {
       "SOL",
       "tryParsePublicKey",
       "validateAndParsePublicKey",
-      "isSolWSol",
+      "isSolWSolToken",
       "isSol",
       "isWSol",
+      "isSolWSol",
       "solToWSol",
+      "wSolToSol",
     ]
   `)
 })
