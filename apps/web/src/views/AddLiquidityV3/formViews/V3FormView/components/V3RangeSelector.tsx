@@ -104,7 +104,9 @@ export default function V3RangeSelector({
   const { isMobile, isTablet } = useMatchBreakpoints()
   const isSmallScreen = isMobile || isTablet
 
-  const isSorted = Boolean(currencyA && currencyB && isUnifiedCurrencySorted(currencyA, currencyB))
+  const tokenA = (currencyA ?? undefined)?.wrapped
+  const tokenB = (currencyB ?? undefined)?.wrapped
+  const isSorted = Boolean(tokenA && tokenB && isUnifiedCurrencySorted(tokenA, tokenB))
 
   const leftPrice = isSorted ? priceLower : priceUpper?.invert()
   const rightPrice = isSorted ? priceUpper : priceLower?.invert()
