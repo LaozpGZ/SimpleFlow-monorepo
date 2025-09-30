@@ -49,7 +49,6 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
         }
         uiStore.theme.setConfig(newTheme)
       }
-      console.log(Bridge)
 
       if (isCake) {
         setTimeout(async () => {
