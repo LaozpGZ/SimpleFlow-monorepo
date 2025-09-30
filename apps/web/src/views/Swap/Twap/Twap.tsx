@@ -236,7 +236,6 @@ const TokenPanelInput = ({
 
 const useCurrencySelect = () => {
   const { onCurrencySelection } = useSwapActionHandlers()
-  const warningSwapHandler = useWarningImport()
   const { canSwitchToChain, switchNetwork } = useSwitchNetwork()
   const router = useRouter()
 
@@ -249,7 +248,6 @@ const useCurrencySelect = () => {
     async (newCurrency: Currency, field: Field) => {
       return handleCurrencySelectFn({
         onCurrencySelection,
-        warningSwapHandler,
         canSwitchToChain,
         switchNetwork,
         outputChainId,
@@ -264,7 +262,6 @@ const useCurrencySelect = () => {
     },
     [
       onCurrencySelection,
-      warningSwapHandler,
       canSwitchToChain,
       switchNetwork,
       outputChainId,
@@ -278,6 +275,7 @@ const useCurrencySelect = () => {
 
 export function TWAPPanel({ limit }: { limit?: boolean }) {
   const { isDesktop } = useMatchBreakpoints()
+  const warningSwapHandler = useWarningImport()
   const { chainId } = useActiveChainId()
   const tokens = useAllTokens()
   const { connector, address } = useAccount()
@@ -310,6 +308,15 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
 
   const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
   const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
+
+  useEffect(() => {
+    if (inputCurrency) {
+      warningSwapHandler(inputCurrency)
+    }
+    if (outputCurrency) {
+      warningSwapHandler(outputCurrency)
+    }
+  }, [warningSwapHandler, inputCurrency, outputCurrency])
 
   const { t } = useTranslation()
 
