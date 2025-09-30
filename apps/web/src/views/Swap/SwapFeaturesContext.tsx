@@ -33,7 +33,6 @@ const CHART_SUPPORT_CHAIN_IDS: ChainId[] = [
   // ChainId.ARBITRUM_ONE,
   // ChainId.BASE,
   // ChainId.LINEA,
-  // ChainId.POLYGON_ZKEVM,
   // ChainId.OPBNB,
   // ChainId.ZKSYNC,
 ]

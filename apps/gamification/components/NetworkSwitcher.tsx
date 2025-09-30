@@ -141,8 +141,6 @@ export const SHORT_SYMBOL = {
   [ChainId.GOERLI]: 'GOR',
   [ChainId.ARBITRUM_ONE]: 'ARB',
   [ChainId.ARBITRUM_GOERLI]: 'tARB',
-  [ChainId.POLYGON_ZKEVM]: 'Polygon zkEVM',
-  [ChainId.POLYGON_ZKEVM_TESTNET]: 'tZkEVM',
   [ChainId.ZKSYNC]: 'zkSync',
   [ChainId.ZKSYNC_TESTNET]: 'tZkSync',
   [ChainId.LINEA]: 'Linea',

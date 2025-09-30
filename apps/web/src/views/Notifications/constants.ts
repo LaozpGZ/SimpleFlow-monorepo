@@ -116,7 +116,6 @@ export const Events: { [event in keyof typeof ResponseEvents]: EventInformation 
 export const CHAIN_NAME_TO_CHAIN_ID = {
   bsc: ChainId.BSC,
   ethereum: ChainId.ETHEREUM,
-  polygon_zkevm: ChainId.POLYGON_ZKEVM,
   era: ChainId.ZKSYNC,
   arbitrum: ChainId.ARBITRUM_ONE,
   linea: ChainId.LINEA,

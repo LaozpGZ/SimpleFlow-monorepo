@@ -7,24 +7,13 @@ import { mapValues } from '@pancakeswap/utils/fns'
 import { BSC_TOKEN_WHITELIST, ETH_TOKEN_BLACKLIST, ETH_TOKEN_WHITELIST, TOKEN_BLACKLIST } from 'config/constants/info'
 import { arbitrum, base, bsc, bscTestnet, linea, mainnet, opBNB, polygonZkEvm, zkSync } from 'wagmi/chains'
 
-export type MultiChainName =
-  | 'BSC_TESTNET'
-  | 'BSC'
-  | 'ETH'
-  | 'POLYGON_ZKEVM'
-  | 'ZKSYNC'
-  | 'ARB'
-  | 'LINEA'
-  | 'BASE'
-  | 'OPBNB'
-  | 'SOLANA'
+export type MultiChainName = 'BSC_TESTNET' | 'BSC' | 'ETH' | 'ZKSYNC' | 'ARB' | 'LINEA' | 'BASE' | 'OPBNB' | 'SOLANA'
 export type MultiChainNameExtend = MultiChainName | 'BSC_TESTNET' | 'ZKSYNC_TESTNET'
 
 export const multiChainName: Record<number | string, MultiChainNameExtend> = {
   [ChainId.BSC]: 'BSC',
   [ChainId.ETHEREUM]: 'ETH',
   [ChainId.BSC_TESTNET]: 'BSC_TESTNET',
-  [ChainId.POLYGON_ZKEVM]: 'POLYGON_ZKEVM',
   [ChainId.ZKSYNC]: 'ZKSYNC',
   [ChainId.LINEA]: 'LINEA',
   [ChainId.BASE]: 'BASE',
@@ -32,15 +21,12 @@ export const multiChainName: Record<number | string, MultiChainNameExtend> = {
   [ChainId.ARBITRUM_ONE]: 'ARB',
 }
 
-export const multiChainShortName: Record<number, string> = {
-  [ChainId.POLYGON_ZKEVM]: 'zkEVM',
-}
+export const multiChainShortName: Record<number, string> = {}
 
 export const multiChainQueryMainToken: Record<MultiChainName, string> = {
   BSC_TESTNET: 'BSC_TESTNET',
   BSC: 'BNB',
   ETH: 'ETH',
-  POLYGON_ZKEVM: 'ETH',
   ZKSYNC: 'ETH',
   ARB: 'ETH',
   LINEA: 'ETH',
@@ -52,7 +38,6 @@ export const multiChainQueryMainToken: Record<MultiChainName, string> = {
 export const multiChainId: Record<MultiChainNameExtend, UnifiedChainId> = {
   BSC: ChainId.BSC,
   ETH: ChainId.ETHEREUM,
-  POLYGON_ZKEVM: ChainId.POLYGON_ZKEVM,
   ZKSYNC: ChainId.ZKSYNC,
   ARB: ChainId.ARBITRUM_ONE,
   LINEA: ChainId.LINEA,
@@ -67,7 +52,6 @@ export const multiChainPaths = {
   [ChainId.BSC_TESTNET]: '/bsc-testnet',
   [ChainId.BSC]: '',
   [ChainId.ETHEREUM]: '/eth',
-  [ChainId.POLYGON_ZKEVM]: '/polygon-zkevm',
   [ChainId.ZKSYNC]: '/zksync',
   [ChainId.ARBITRUM_ONE]: '/arb',
   [ChainId.LINEA]: '/linea',
@@ -86,7 +70,6 @@ export const multiChainQueryStableClient = STABLE_SUPPORTED_CHAIN_IDS.reduce((ac
 export const infoChainNameToExplorerChainName = {
   BSC: 'bsc',
   ETH: 'ethereum',
-  POLYGON_ZKEVM: 'polygon-zkevm',
   ZKSYNC: 'zksync',
   ARB: 'arbitrum',
   LINEA: 'linea',
@@ -102,7 +85,6 @@ export const multiChainScan: Record<MultiChainName, string> = {
   BSC_TESTNET: bscTestnet.blockExplorers.default.name,
   BSC: bsc.blockExplorers.default.name,
   ETH: mainnet.blockExplorers.default.name,
-  POLYGON_ZKEVM: polygonZkEvm.blockExplorers.default.name,
   ZKSYNC: zkSync.blockExplorers.default.name,
   ARB: arbitrum.blockExplorers.default.name,
   LINEA: linea.blockExplorers.default.name,
@@ -123,7 +105,6 @@ export const multiChainTokenBlackList: Record<MultiChainName, string[]> = mapVal
   {
     BSC: TOKEN_BLACKLIST,
     ETH: ETH_TOKEN_BLACKLIST,
-    POLYGON_ZKEVM: ['0x'],
     ZKSYNC: ['0x'],
     ARB: ['0x'],
     LINEA: ['0x'],
@@ -139,7 +120,6 @@ export const multiChainTokenWhiteList: Record<MultiChainName, string[]> = mapVal
   {
     BSC: BSC_TOKEN_WHITELIST,
     ETH: ETH_TOKEN_WHITELIST,
-    POLYGON_ZKEVM: [],
     ZKSYNC: [],
     ARB: [],
     LINEA: [],

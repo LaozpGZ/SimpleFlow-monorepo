@@ -50,8 +50,6 @@ export const USDT = {
 export const USDC = {
   ...MockToken,
   ...Tokens.USDC,
-  // @notice: temporary ignore missed testnet address
-  [ChainId.POLYGON_ZKEVM_TESTNET]: new ERC20Token(ChainId.POLYGON_ZKEVM_TESTNET, zeroAddress, 6, '_USDC'),
 }
 
 export const BUSD = {

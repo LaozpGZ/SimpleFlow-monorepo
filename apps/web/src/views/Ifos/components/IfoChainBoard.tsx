@@ -8,7 +8,6 @@ import { useChainName } from '../hooks/useChainNames'
 import { getChainBasedImageUrl } from '../helpers'
 
 const BACKGROUND = {
-  [ChainId.POLYGON_ZKEVM]: 'linear-gradient(180deg, #9132D2 0%, #803DE1 100%)',
   [ChainId.BSC]: '#D8A70A',
   [ChainId.BSC_TESTNET]: '#D8A70A',
   [ChainId.ETHEREUM]: '#627AD8',

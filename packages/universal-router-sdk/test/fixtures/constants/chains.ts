@@ -101,8 +101,6 @@ export const linea = {
 export const L2_CHAIN_IDS: ChainId[] = [
   ChainId.ARBITRUM_ONE,
   ChainId.ARBITRUM_GOERLI,
-  ChainId.POLYGON_ZKEVM,
-  ChainId.POLYGON_ZKEVM_TESTNET,
   ChainId.ZKSYNC,
   ChainId.ZKSYNC_TESTNET,
   ChainId.LINEA_TESTNET,

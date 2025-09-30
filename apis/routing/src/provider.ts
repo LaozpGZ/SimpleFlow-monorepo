@@ -56,7 +56,6 @@ export const viemProviders: OnChainProvider = ({ chainId }: { chainId?: ChainId 
 
 export const v3SubgraphClients: Record<SupportedChainId, GraphQLClient> = {
   [ChainId.ETHEREUM]: new GraphQLClient(V3_SUBGRAPHS[ChainId.ETHEREUM], { fetch }),
-  [ChainId.POLYGON_ZKEVM]: new GraphQLClient(V3_SUBGRAPHS[ChainId.POLYGON_ZKEVM], { fetch }),
   [ChainId.ZKSYNC]: new GraphQLClient(V3_SUBGRAPHS[ChainId.ZKSYNC], { fetch }),
   [ChainId.LINEA_TESTNET]: new GraphQLClient(V3_SUBGRAPHS[ChainId.LINEA_TESTNET], { fetch }),
   [ChainId.GOERLI]: new GraphQLClient(V3_SUBGRAPHS[ChainId.GOERLI], { fetch }),
@@ -71,5 +70,5 @@ export const v3SubgraphClients: Record<SupportedChainId, GraphQLClient> = {
 } as const
 
 export const v3SubgraphProvider: SubgraphProvider = ({ chainId = ChainId.BSC }: { chainId?: ChainId }) => {
-  return v3SubgraphClients[chainId as SupportedChainId] || v3SubgraphClients[ChainId.BSC]
+  return (v3SubgraphClients[chainId as SupportedChainId] || v3SubgraphClients[ChainId.BSC]) as any
 }

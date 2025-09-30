@@ -104,8 +104,6 @@ export function getEdgeChainName(chainId: UnifiedChainId): APIChain {
       return 'opbnb'
     case ChainId.ZKSYNC:
       return 'zksync'
-    case ChainId.POLYGON_ZKEVM:
-      return 'polygon-zkevm'
     case ChainId.LINEA:
       return 'linea'
     case ChainId.ARBITRUM_ONE:

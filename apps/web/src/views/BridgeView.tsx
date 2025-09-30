@@ -9,7 +9,7 @@ import Page from 'views/Page'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
-const DISABLED_TO_CHAINS = [ChainId.POLYGON_ZKEVM]
+const DISABLED_TO_CHAINS: ChainId[] = []
 
 // Fix portal conflicts between Privy and Chakra portals
 function usePortalConflictFix() {

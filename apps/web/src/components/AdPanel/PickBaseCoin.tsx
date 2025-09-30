@@ -132,7 +132,6 @@ export const BaseCoinSvg = ({ color, index }: { color: string; index: string }) 
 
 const chainMap: Record<string, string> = {
   eth: 'ETH',
-  'polygon-zkevm': 'POLYGON_ZKEVM',
   zksync: 'ZKSYNC',
   arb: 'ARB',
   linea: 'LINEA',

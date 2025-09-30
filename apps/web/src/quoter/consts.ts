@@ -26,8 +26,6 @@ export const QUOTE_TIMEOUT = {
   // Other fast L1/L2
   [ChainId.OPBNB]: 9_000,
   [ChainId.OPBNB_TESTNET]: 9_000,
-  [ChainId.POLYGON_ZKEVM]: 9_000,
-  [ChainId.POLYGON_ZKEVM_TESTNET]: 9_000,
   [ChainId.SCROLL_SEPOLIA]: 9_000,
 
   // Misc
@@ -69,8 +67,6 @@ export const QUOTE_SUCC_REVALIDATE = {
   // Other fast L1/L2
   [ChainId.OPBNB]: 12,
   [ChainId.OPBNB_TESTNET]: 12,
-  [ChainId.POLYGON_ZKEVM]: 12,
-  [ChainId.POLYGON_ZKEVM_TESTNET]: 12,
   [ChainId.SCROLL_SEPOLIA]: 12,
 
   // Misc
@@ -109,8 +105,6 @@ export const QUOTE_FAIL_REVALIDATE = {
   // Other fast L1/L2
   [ChainId.OPBNB]: 5,
   [ChainId.OPBNB_TESTNET]: 5,
-  [ChainId.POLYGON_ZKEVM]: 5,
-  [ChainId.POLYGON_ZKEVM_TESTNET]: 5,
   [ChainId.SCROLL_SEPOLIA]: 5,
 
   // Misc

@@ -24,11 +24,6 @@ export const getNodeRealUrl = (chainId: number, key?: string) => {
         host = `opbnb-mainnet.nodereal.io/v1/${key}`
       }
       break
-    case ChainId.POLYGON_ZKEVM:
-      if (key) {
-        host = `open-platform.nodereal.io/${key}/polygon-zkevm-rpc`
-      }
-      break
     case ChainId.ARBITRUM_ONE:
       if (key) {
         host = `open-platform.nodereal.io/${key}/arbitrum-nitro`

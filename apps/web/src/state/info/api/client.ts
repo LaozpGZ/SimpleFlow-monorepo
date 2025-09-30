@@ -98,7 +98,6 @@ export const chainIdToExplorerInfoChainName = {
   [ChainId.BSC_TESTNET]: 'bsc-testnet',
   [ChainId.BSC]: 'bsc',
   [ChainId.ETHEREUM]: 'ethereum',
-  [ChainId.POLYGON_ZKEVM]: 'polygon-zkevm',
   [ChainId.ZKSYNC]: 'zksync',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.LINEA]: 'linea',

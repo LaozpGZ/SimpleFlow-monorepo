@@ -5,7 +5,6 @@ const pocketPrefix = {
   [ChainId.BASE]: 'base-mainnet',
   [ChainId.BSC]: 'bsc-mainnet',
   [ChainId.ETHEREUM]: 'eth-mainnet',
-  [ChainId.POLYGON_ZKEVM]: 'polygon-zkevm-mainnet',
 } as const
 
 export const getPoktUrl = (chainId: keyof typeof pocketPrefix, key?: string) => {

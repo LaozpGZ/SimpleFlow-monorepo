@@ -27,7 +27,6 @@ export enum ConnectorNames {
 export const TOP_WALLET_MAP: { [chainId: number]: LegacyWalletIds[] } = {
   [ChainId.BSC]: [LegacyWalletIds.Metamask, LegacyWalletIds.Trust, LegacyWalletIds.Okx, LegacyWalletIds.BinanceW3W],
   [ChainId.ETHEREUM]: [LegacyWalletIds.Metamask, LegacyWalletIds.Trust, LegacyWalletIds.Okx],
-  [ChainId.POLYGON_ZKEVM]: [LegacyWalletIds.Metamask, LegacyWalletIds.Trust, LegacyWalletIds.Okx],
   [ChainId.ZKSYNC]: [LegacyWalletIds.Metamask, LegacyWalletIds.Trust, LegacyWalletIds.Okx],
   [ChainId.ARBITRUM_ONE]: [LegacyWalletIds.Metamask, LegacyWalletIds.Trust, LegacyWalletIds.Okx],
   [ChainId.BASE]: [LegacyWalletIds.Metamask, LegacyWalletIds.Trust, LegacyWalletIds.Okx],

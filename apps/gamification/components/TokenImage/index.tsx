@@ -18,7 +18,6 @@ interface TokenPairImageProps extends Omit<UIKitTokenPairImageProps, 'primarySrc
 export const tokenImageChainNameMapping: { [key: string]: string } = {
   [ChainId.BSC]: '',
   [ChainId.ETHEREUM]: 'eth/',
-  [ChainId.POLYGON_ZKEVM]: 'polygon-zkevm/',
   [ChainId.ZKSYNC]: 'zksync/',
   [ChainId.ARBITRUM_ONE]: 'arbitrum/',
   [ChainId.LINEA]: 'linea/',

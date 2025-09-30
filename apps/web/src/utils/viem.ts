@@ -29,7 +29,7 @@ export function createViemPublicClients({ transportSignal }: CreatePublicClientP
         ),
         batch: {
           multicall: {
-            batchSize: cur.id === ChainId.POLYGON_ZKEVM ? 128 : 1024 * 25,
+            batchSize: 1024 * 25,
             wait: 16,
           },
         },

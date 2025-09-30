@@ -19,8 +19,6 @@ export enum OnRampChainId {
   ZKSYNC = 324,
   OPBNB_TESTNET = 5611,
   OPBNB = 204,
-  POLYGON_ZKEVM = 1101,
-  POLYGON_ZKEVM_TESTNET = 1442,
   ARBITRUM_ONE = 42161,
   ARBITRUM_GOERLI = 421613,
   ARBITRUM_SEPOLIA = 421614,
@@ -83,8 +81,6 @@ export const getNetworkDisplay = (chainId: number | undefined): string => {
       return 'zkSync Era'
     case OnRampChainId.ARBITRUM_ONE:
       return 'arbitrum'
-    case OnRampChainId.POLYGON_ZKEVM:
-      return 'zkEvm'
     case OnRampChainId.LINEA:
       return 'linea'
     case OnRampChainId.BASE:
@@ -106,8 +102,6 @@ export const getNetworkFullName = (chainId: number | undefined): string => {
       return 'ZkSync Era'
     case OnRampChainId.ARBITRUM_ONE:
       return 'Arbitrum One'
-    case OnRampChainId.POLYGON_ZKEVM:
-      return 'Polygon ZkEvm'
     case OnRampChainId.LINEA:
       return 'Linea Mainnet'
     case OnRampChainId.BASE:
@@ -124,7 +118,6 @@ export const chainIdToMercuryoNetworkId: { [id: number]: string } = {
   [OnRampChainId.BSC]: 'BINANCESMARTCHAIN',
   [OnRampChainId.ARBITRUM_ONE]: 'ARBITRUM',
   [OnRampChainId.ZKSYNC]: 'ZKSYNC',
-  [OnRampChainId.POLYGON_ZKEVM]: 'ZKEVM',
   [OnRampChainId.LINEA]: 'LINEA',
   [OnRampChainId.BASE]: 'BASE',
   [OnRampChainId.BTC]: 'BITCOIN',
@@ -135,7 +128,6 @@ export const chainIdToMoonPayNetworkId: { [id: number]: string } = {
   [OnRampChainId.BSC]: '_bsc',
   [OnRampChainId.ARBITRUM_ONE]: '_arbitrum',
   [OnRampChainId.ZKSYNC]: '_zksync',
-  [OnRampChainId.POLYGON_ZKEVM]: '_polygonzkevm',
   [OnRampChainId.LINEA]: '_linea',
   [OnRampChainId.BASE]: '_base',
   [OnRampChainId.BTC]: '',
@@ -146,7 +138,6 @@ export const chainIdToTransakNetworkId: { [id: number]: string } = {
   [OnRampChainId.BSC]: 'bsc',
   [OnRampChainId.ARBITRUM_ONE]: 'arbitrum',
   [OnRampChainId.ZKSYNC]: 'zksync',
-  [OnRampChainId.POLYGON_ZKEVM]: 'polygonzkevm',
   [OnRampChainId.LINEA]: 'linea',
   [OnRampChainId.BASE]: 'base',
   [OnRampChainId.BTC]: 'mainnet',
@@ -243,7 +234,6 @@ export const onRampCurrenciesMap: { [tokenSymbol: string]: Currency } = {
   ETH_1: Native.onChain(OnRampChainId.ETHEREUM),
   BNB_56: Native.onChain(OnRampChainId.BSC),
   ETH_42161: Native.onChain(OnRampChainId.ARBITRUM_ONE),
-  // ETH_1101: Native.onChain(OnRampChainId.POLYGON_ZKEVM),
   ETH_324: Native.onChain(OnRampChainId.ZKSYNC),
   ETH_59144: Native.onChain(OnRampChainId.LINEA),
   ETH_8453: Native.onChain(OnRampChainId.BASE),

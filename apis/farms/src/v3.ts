@@ -16,7 +16,6 @@ export const V3_SUBGRAPH_CLIENTS_CHAIN_IDS = [
   ChainId.ETHEREUM,
   ChainId.GOERLI,
   ChainId.BSC,
-  ChainId.POLYGON_ZKEVM,
   ChainId.ZKSYNC,
   ChainId.ARBITRUM_ONE,
   ChainId.LINEA,
@@ -142,7 +141,11 @@ const handler_ = async (req: Request, event: FetchEvent) => {
 
   const address = address_.toLowerCase()
 
-  const masterChefV3Address = masterChefV3Addresses[chainId]
+  const masterChefV3Address = masterChefV3Addresses[chainId as keyof typeof masterChefV3Addresses]
+
+  if (!masterChefV3Address) {
+    return error(400, { error: 'Unsupported chain' })
+  }
 
   const client = viemProviders({ chainId })
 

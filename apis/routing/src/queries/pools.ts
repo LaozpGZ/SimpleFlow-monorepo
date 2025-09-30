@@ -5,7 +5,6 @@ const CHAIN_TO_QUERY = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.BSC]: 'bsc',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
-  [ChainId.POLYGON_ZKEVM]: 'polygon-zkevm',
   [ChainId.ZKSYNC]: 'zksync',
   [ChainId.LINEA]: 'linea',
   [ChainId.BASE]: 'base',
