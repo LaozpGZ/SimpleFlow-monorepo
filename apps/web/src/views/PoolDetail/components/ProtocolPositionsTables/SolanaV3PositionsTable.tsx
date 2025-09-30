@@ -151,7 +151,10 @@ export const SolanaV3PositionsTable: FC<V3PositionsTableProps> = ({ poolInfo }) 
   const { data: priceMap } = useBirdeyeTokenPrice({ mintList: tokenMints, enabled: chainId === NonEVMChainId.SOLANA })
 
   const poolForAction = useMemo(
-    () => ({ ...poolInfo, rawPool: { ...poolInfo.rawPool, price: 1 / poolInfo.rawPool.price } }),
+    () => ({
+      ...poolInfo,
+      rawPool: { ...poolInfo.rawPool, price: poolInfo.rawPool.price ? 1 / poolInfo.rawPool.price : 0 },
+    }),
     [poolInfo],
   )
   // Earnings map fed by per-row earnings cell
@@ -210,6 +213,11 @@ export const SolanaV3PositionsTable: FC<V3PositionsTableProps> = ({ poolInfo }) 
           : false
 
       const { showPercentages } = priceRangeData
+      const isFarming =
+        poolInfo.isFarming ||
+        poolInfo.rawPool.rewardDefaultInfos.some(
+          (reward) => Number(reward.endTime ?? 0) * 1000 > Date.now() && reward.perSecond > 0,
+        )
 
       const tokenInfo = (
         <FlexGap flexDirection="column" gap="4px">
@@ -220,9 +228,7 @@ export const SolanaV3PositionsTable: FC<V3PositionsTableProps> = ({ poolInfo }) 
                 #{truncateHash(nft)}
               </Text>
             </Text>
-            {(poolInfo.isFarming || poolInfo.rawPool.rewardDefaultInfos.length > 0) &&
-            !(p.liquidity as BN).isZero() &&
-            !outOfRange ? (
+            {isFarming && !(p.liquidity as BN).isZero() && !outOfRange ? (
               <Tag variant="primary60" scale="sm" px="6px">
                 {t('Farming')}
               </Tag>

@@ -27,7 +27,7 @@ export const normalizeSolanaPoolInfo = (
     token0,
     token1,
     token0Price: String(solanaPoolInfo.price) as `${number}`,
-    token1Price: String(1 / solanaPoolInfo.price) as `${number}`,
+    token1Price: (solanaPoolInfo.price ? String(1 / solanaPoolInfo.price) : '0') as `${number}`,
     tvlToken0: String(solanaPoolInfo.mintAmountA) as `${number}`,
     tvlToken1: String(solanaPoolInfo.mintAmountB) as `${number}`,
     tvlUsd: String(solanaPoolInfo.tvlUSD) as `${number}`,
