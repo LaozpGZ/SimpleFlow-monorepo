@@ -13,7 +13,6 @@ import getTokenLogoURL from './getTokenLogoURL'
 export const tokenImageChainNameMapping = {
   [ChainId.BSC]: '',
   [ChainId.ETHEREUM]: 'eth/',
-  [ChainId.POLYGON_ZKEVM]: 'polygon-zkevm/',
   [ChainId.ZKSYNC]: 'zksync/',
   [ChainId.ARBITRUM_ONE]: 'arbitrum/',
   [ChainId.LINEA]: 'linea/',

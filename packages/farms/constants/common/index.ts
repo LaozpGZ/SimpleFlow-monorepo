@@ -8,7 +8,6 @@ import {
   ethereumTokens,
   lineaTokens,
   opBnbTokens,
-  polygonZkEvmTokens,
   zkSyncTestnetTokens,
   zksyncTokens,
 } from '@pancakeswap/tokens'
@@ -35,9 +34,6 @@ export const priceHelperTokens = {
       bscTokens.solvBTCena,
       bscTokens.boxy,
     ],
-  },
-  [ChainId.POLYGON_ZKEVM]: {
-    list: [polygonZkEvmTokens.weth, polygonZkEvmTokens.usdc, polygonZkEvmTokens.usdt, polygonZkEvmTokens.matic],
   },
   [ChainId.ZKSYNC]: {
     list: [zksyncTokens.weth, zksyncTokens.usdc, zksyncTokens.usdt],
@@ -77,9 +73,7 @@ export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> =
   [ChainId.ZKSYNC_TESTNET]: {
     [zkSyncTestnetTokens.mock.address]: '10',
   },
-  [ChainId.POLYGON_ZKEVM]: {},
   [ChainId.ZKSYNC]: {},
-  [ChainId.POLYGON_ZKEVM_TESTNET]: {},
   [ChainId.ARBITRUM_ONE]: {},
   [ChainId.LINEA]: {},
   [ChainId.BASE]: {},

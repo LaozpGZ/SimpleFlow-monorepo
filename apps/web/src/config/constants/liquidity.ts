@@ -18,11 +18,7 @@ export const DISABLED_ADD_LIQUIDITY_CHAINS: {
   [chainId in ChainId]?: {
     sunsetDate: number
   }
-} = {
-  [ChainId.POLYGON_ZKEVM]: {
-    sunsetDate: 1759183200,
-  },
-}
+} = {}
 
 export const getCreateInfinityPoolPageURL = ({
   chainId,

@@ -8,7 +8,6 @@ import { CurrencyInfo } from "./types";
 const mapping: { [key: number]: string } = {
   [ChainId.BSC]: "smartchain",
   [ChainId.ETHEREUM]: "ethereum",
-  [ChainId.POLYGON_ZKEVM]: "polygonzkevm",
   [ChainId.ARBITRUM_ONE]: "arbitrum",
   [ChainId.ZKSYNC]: "zksync",
   [ChainId.BASE]: "base",
@@ -43,7 +42,6 @@ export const getTokenLogoURLByAddress = memoize(
 export const chainName: { [key: number]: string } = {
   [ChainId.BSC]: "",
   [ChainId.ETHEREUM]: "eth",
-  [ChainId.POLYGON_ZKEVM]: "polygon-zkevm",
   [ChainId.ARBITRUM_ONE]: "arbitrum",
   [ChainId.ZKSYNC]: "zksync",
   [ChainId.LINEA]: "linea",

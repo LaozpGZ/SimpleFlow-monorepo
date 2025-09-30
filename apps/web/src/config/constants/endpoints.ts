@@ -35,7 +35,6 @@ export const CELER_API = 'https://api.celerscan.com/scan'
 
 export const V2_SUBGRAPH_URLS = {
   ...V2_SUBGRAPHS,
-  [ChainId.POLYGON_ZKEVM]: `${THE_GRAPH_PROXY_API}/exchange-v2-polygon-zkevm`,
   [ChainId.BASE]: `${THE_GRAPH_PROXY_API}/exchange-v2-base`,
   [ChainId.ETHEREUM]: `${THE_GRAPH_PROXY_API}/exchange-v2-eth`,
   [ChainId.BSC]: `${THE_GRAPH_PROXY_API}/exchange-v2-bsc`,
@@ -49,7 +48,6 @@ export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.pa
 
 export const V3_SUBGRAPH_URLS = {
   ...V3_SUBGRAPHS,
-  [ChainId.POLYGON_ZKEVM]: `${THE_GRAPH_PROXY_API}/exchange-v3-polygon-zkevm`,
   [ChainId.BASE]: `${THE_GRAPH_PROXY_API}/exchange-v3-base`,
   [ChainId.ETHEREUM]: `${THE_GRAPH_PROXY_API}/exchange-v3-eth`,
   [ChainId.BSC]: `${THE_GRAPH_PROXY_API}/exchange-v3-bsc`,
