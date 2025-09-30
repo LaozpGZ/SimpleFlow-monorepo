@@ -62,7 +62,7 @@ export type ChainNameKebab = (typeof chainNamesInKebabCase)[keyof typeof chainNa
 async function fetchExplorerFarmPools(query: FarmQuery) {
   const { protocols, chains } = query
   const chainIds = chains.length > 0 ? chains : supportedChainIdV4
-  const chainNames = chainIds.map((chainId) => getEdgeChainName(chainId)).filter((x) => x !== 'sol')
+  const chainNames = chainIds.map((chainId) => getEdgeChainName(chainId))
   const resp = await explorerApiClient.GET('/cached/pools/farming', {
     params: {
       query: {
