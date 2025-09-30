@@ -15,6 +15,39 @@ interface UseCalcTokenAmountReturn {
   error: Error | null
 }
 
+export const useTotalSupply = ({ poolAddress }: { poolAddress: string }): bigint | null => {
+  const [totalSupply, setTotalSupply] = useState<bigint | null>(null)
+
+  const publicClient = usePublicClient()
+  const { data: walletClient } = useWalletClient()
+
+  const stableNGHook = useMemo(() => {
+    if (!publicClient || !poolAddress) return null
+    return new StableNGHook(poolAddress, publicClient, walletClient)
+  }, [poolAddress, publicClient, walletClient])
+
+  useEffect(() => {
+    if (!stableNGHook) {
+      setTotalSupply(null)
+      return
+    }
+
+    const fetchTotalSupply = async () => {
+      try {
+        const result = await stableNGHook.totalSupply()
+        setTotalSupply(result)
+      } catch (err) {
+        console.error('Error fetching total supply:', err)
+        setTotalSupply(null)
+      }
+    }
+
+    fetchTotalSupply()
+  }, [stableNGHook])
+
+  return totalSupply
+}
+
 export const useCalcTokenAmount = ({
   poolAddress,
   amounts,

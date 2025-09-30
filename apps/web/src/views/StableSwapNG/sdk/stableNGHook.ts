@@ -36,6 +36,25 @@ export class StableNGHook {
   }
 
   /**
+   * Get the total supply of LP tokens
+   * @returns Promise<bigint> Total supply of LP tokens
+   */
+  async totalSupply(): Promise<bigint> {
+    try {
+      const result = await this.publicClient.readContract({
+        address: this.contractAddress as `0x${string}`,
+        abi: stableNGHookABI,
+        functionName: 'totalSupply',
+        args: [],
+      })
+      return result as bigint
+    } catch (error) {
+      console.error('Error getting total supply:', error)
+      throw error
+    }
+  }
+
+  /**
    * Add liquidity to the stable swap pool
    * @param amount0 Amount of token0 to add
    * @param amount1 Amount of token1 to add
