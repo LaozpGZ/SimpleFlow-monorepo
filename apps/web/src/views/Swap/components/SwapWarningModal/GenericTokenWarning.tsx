@@ -25,7 +25,7 @@ const GenericTokenWarning: React.FC<GenericTokenWarningProps> = ({ token, status
       <Text>{t('Caution - %symbol% Token', { symbol: token.symbol })}</Text>
       <Text>
         <Trans
-          i18nKey="Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>"
+          i18nTemplate="Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>"
           values={{ symbol: token.symbol, name: token.name }}
           components={components}
         />
