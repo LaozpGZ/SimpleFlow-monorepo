@@ -7,7 +7,6 @@ import { polygonZkEVMTestnetFarmConfig } from './polygonZkEVMTestnet'
 import { zkSyncTestnetFarmConfig } from './zkSyncTestnet'
 
 const chainIds: ChainId[] = [
-  ChainId.BSC_TESTNET,
   ChainId.BSC,
   ChainId.ETHEREUM,
   ChainId.POLYGON_ZKEVM,
@@ -21,7 +20,11 @@ const chainIds: ChainId[] = [
 export const fetchAllUniversalFarms = async (): Promise<UniversalFarmConfig[]> => {
   try {
     const farmPromises = chainIds.map((chainId) => fetchUniversalFarms(chainId))
-    const allFarms = await Promise.all(farmPromises)
+    const results = await Promise.allSettled(farmPromises)
+    const allFarms = results.flatMap((result) => {
+      if (result.status === 'fulfilled') return result.value
+      return []
+    })
     const combinedFarms = allFarms.flat()
 
     return combinedFarms
