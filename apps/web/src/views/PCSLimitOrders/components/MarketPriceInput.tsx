@@ -6,6 +6,7 @@ import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { Trans, useTranslation } from '@pancakeswap/localization'
 import { BigNumber as BN } from 'bignumber.js'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
 import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
@@ -14,6 +15,8 @@ import { selectedPoolAtom } from '../state/pools/selectedPoolAtom'
 import { getTickAdjustedPrice } from '../utils/ticks'
 import { ticksAtom } from '../state/form/ticksAtom'
 import { getSymbolDecimals } from '../constants/decimalConfig'
+
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -129,7 +132,11 @@ export const MarketPriceInput = () => {
 
   const handleCustomMarketPriceInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target
+      if (!inputRegex.test(escapeRegExp(e.target.value))) return
+
+      // Replace commas with periods, because we exclusively use period as the decimal separator
+      const value = e.target.value.replace(/,/g, '.')
+
       if (value === currentMarketPrice) return
 
       setLocalPrice(value)
@@ -188,7 +195,8 @@ export const MarketPriceInput = () => {
           </Text>
         </InputLeftBox>
         <StyledInput
-          type="number"
+          type="text"
+          inputMode="decimal"
           value={localPrice}
           onChange={handleCustomMarketPriceInput}
           onFocus={() => setIsFocused(true)}
@@ -202,6 +210,12 @@ export const MarketPriceInput = () => {
             }
           }}
           placeholder="0.00"
+          pattern="^[0-9]*[.,]?[0-9]*$"
+          minLength={1}
+          maxLength={79}
+          spellCheck="false"
+          autoComplete="off"
+          autoCorrect="off"
         />
         {usdValue ? (
           <InputBottomBar>
