@@ -4521,7 +4521,6 @@ export interface operations {
           | ('v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable')[]
         /** @description Array of chain names */
         chains:
-          | ('bsc' | 'bsc-testnet' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'polygon-zkevm' | 'linea' | 'arbitrum')
           | (
               | 'bsc'
               | 'bsc-testnet'
@@ -4532,6 +4531,19 @@ export interface operations {
               | 'polygon-zkevm'
               | 'linea'
               | 'arbitrum'
+              | 'sol'
+            )
+          | (
+              | 'bsc'
+              | 'bsc-testnet'
+              | 'ethereum'
+              | 'base'
+              | 'opbnb'
+              | 'zksync'
+              | 'polygon-zkevm'
+              | 'linea'
+              | 'arbitrum'
+              | 'sol'
             )[]
       }
       header?: never
