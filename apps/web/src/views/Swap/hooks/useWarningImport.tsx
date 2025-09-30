@@ -1,4 +1,4 @@
-import { Currency, Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useModal } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
