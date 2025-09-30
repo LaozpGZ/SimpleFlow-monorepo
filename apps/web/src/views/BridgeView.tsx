@@ -6,7 +6,6 @@ import { PUBLIC_NODES } from 'config/nodes'
 import { Suspense, useEffect, useMemo } from 'react'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const DISABLED_TO_CHAINS: ChainId[] = []
@@ -106,10 +105,7 @@ export const BridgeView = () => {
               }),
               [],
             )}
-            supportedChainIds={[
-              ...CHAIN_IDS.filter((x) => x !== ChainId.POLYGON_ZKEVM && x !== ChainId.POLYGON_ZKEVM_TESTNET),
-              7565164,
-            ]}
+            supportedChainIds={[...CHAIN_IDS, 7565164]}
             rpcConfig={PUBLIC_NODES}
             disabledToChains={DISABLED_TO_CHAINS}
             deBridgeAccessToken={process.env.NEXT_PUBLIC_DEBRIDGE_ACCESS_TOKEN}
