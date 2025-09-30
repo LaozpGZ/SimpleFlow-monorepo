@@ -46,11 +46,13 @@ export const fetchExplorerFarmPools = async (
       params: {
         query: {
           protocols: args.protocols ?? DEFAULT_PROTOCOLS,
-          chains: chains.reduce((acc, cur) => {
-            if (cur) {
-              acc.push(getMainnetChainNameInKebabCase(cur))
+          chains: chains.reduce((requestChainIds, currentChainId) => {
+            const chainName = currentChainId ? getMainnetChainNameInKebabCase(currentChainId) : undefined
+            if (chainName) {
+              requestChainIds.push(chainName)
             }
-            return acc
+
+            return requestChainIds
           }, [] as any[]),
         },
       },
