@@ -97,7 +97,7 @@ export default function useWarningImport() {
       return
     }
 
-    setSwapWarningCurrency(undefined)
+    setSwapWarningCurrency(null)
   }, [chainId, loadedInputCurrency, loadedOutputCurrency, prevInputCurrency, prevOutputCurrency])
 
   useEffect(() => {
