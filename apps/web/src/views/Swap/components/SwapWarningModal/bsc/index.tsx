@@ -15,9 +15,26 @@ import RugPullWarning from './RugPullWarning'
 import SafemoonWarning from './SafemoonWarning'
 import XCADWarning from './XCADWarning'
 import GAINWarning from './GAINWarning'
+import GenericTokenWarning from './GenericTokenWarning'
 
-const { safemoon, bondly, itam, ccar, bttold, pokemoney, free, gala, abnbc, xcad, metis, lusd, nfp, pundiai, gain } =
-  SwapWarningTokensConfig[ChainId.BSC]
+const {
+  safemoon,
+  bondly,
+  itam,
+  ccar,
+  bttold,
+  pokemoney,
+  free,
+  gala,
+  abnbc,
+  xcad,
+  metis,
+  lusd,
+  nfp,
+  pundiai,
+  gain,
+  town,
+} = SwapWarningTokensConfig[ChainId.BSC]
 
 const BSC_WARNING_LIST = {
   [safemoon.address]: {
@@ -79,6 +96,16 @@ const BSC_WARNING_LIST = {
   [gain.address]: {
     symbol: gain.symbol,
     component: <GAINWarning />,
+  },
+  [town.address]: {
+    symbol: town.symbol,
+    component: (
+      <GenericTokenWarning
+        token={town}
+        statusHref="https://x.com/alttownofficial/status/1972853816652710317"
+        profileHref="https://x.com/AlttownOfficial"
+      />
+    ),
   },
 }
 

@@ -6,7 +6,7 @@ import { bscWarningTokens } from 'config/constants/warningTokens/bscWarningToken
 
 const { alETH } = ethereumTokens
 const { bondly, itam, ccar, bttold, abnbc, metis, gain } = bscTokens
-const { pokemoney, free, safemoon, gala, xcad, lusd, nfp, pundiai } = bscWarningTokens
+const { pokemoney, free, safemoon, gala, xcad, lusd, nfp, pundiai, town } = bscWarningTokens
 const { usdPlus } = zksyncTokens
 const { ath } = baseWarningTokens
 
@@ -36,6 +36,7 @@ const SwapWarningTokens = <WarningTokenList>{
     nfp,
     pundiai,
     gain,
+    town,
   },
   [ChainId.ZKSYNC]: {
     usdPlus,
