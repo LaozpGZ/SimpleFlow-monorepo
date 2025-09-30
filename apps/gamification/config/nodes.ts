@@ -13,8 +13,6 @@ import {
   monadTestnet,
   opBNB,
   opBNBTestnet,
-  polygonZkEvm,
-  polygonZkEvmTestnet,
   scrollSepolia,
   sepolia,
   zkSync,
@@ -54,15 +52,6 @@ export const SERVER_NODES = {
   ].filter(Boolean),
   [ChainId.ARBITRUM_ONE]: ARBITRUM_NODES,
   [ChainId.ARBITRUM_GOERLI]: arbitrumGoerli.rpcUrls.default.http,
-  [ChainId.POLYGON_ZKEVM]: [
-    'https://f2562de09abc5efbd21eefa083ff5326.zkevm-rpc.com/',
-    process.env.NEXT_PUBLIC_NODIES_POLYGON_ZKEVM || '',
-    ...polygonZkEvm.rpcUrls.default.http,
-  ].filter(Boolean),
-  [ChainId.POLYGON_ZKEVM_TESTNET]: [
-    'https://polygon-zkevm-testnet.rpc.thirdweb.com',
-    ...polygonZkEvmTestnet.rpcUrls.default.http,
-  ],
   [ChainId.ZKSYNC]: [
     ...zkSync.rpcUrls.default.http,
     getNodeRealUrl(ChainId.ZKSYNC, process.env.SERVER_NODE_REAL_API_ETH) || '',
@@ -130,16 +119,6 @@ export const PUBLIC_NODES = {
     getGroveUrl(ChainId.ARBITRUM_ONE, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
   ].filter(Boolean),
   [ChainId.ARBITRUM_GOERLI]: arbitrumGoerli.rpcUrls.default.http,
-  [ChainId.POLYGON_ZKEVM]: [
-    process.env.NEXT_PUBLIC_NODIES_POLYGON_ZKEVM || '',
-    ...polygonZkEvm.rpcUrls.default.http,
-    'https://f2562de09abc5efbd21eefa083ff5326.zkevm-rpc.com/',
-    getGroveUrl(ChainId.POLYGON_ZKEVM, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
-  ].filter(Boolean),
-  [ChainId.POLYGON_ZKEVM_TESTNET]: [
-    ...polygonZkEvmTestnet.rpcUrls.default.http,
-    'https://polygon-zkevm-testnet.rpc.thirdweb.com',
-  ],
   [ChainId.ZKSYNC]: [
     ...zkSync.rpcUrls.default.http,
     getNodeRealUrl(ChainId.ZKSYNC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',

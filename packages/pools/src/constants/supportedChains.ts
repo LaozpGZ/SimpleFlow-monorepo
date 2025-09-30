@@ -11,7 +11,6 @@ export const SUPPORTED_CHAIN_IDS = [
   ChainId.BASE,
   ChainId.LINEA_TESTNET,
   ChainId.BASE_TESTNET,
-  ChainId.POLYGON_ZKEVM_TESTNET,
   ChainId.OPBNB,
   ChainId.BASE,
 ] as const

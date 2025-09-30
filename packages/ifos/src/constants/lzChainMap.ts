@@ -4,7 +4,6 @@ import { ChainId } from '@pancakeswap/chains'
 export const LZ_CHAIN_MAP = {
   [ChainId.ETHEREUM]: 101,
   [ChainId.BSC]: 102,
-  [ChainId.POLYGON_ZKEVM]: 158,
   [ChainId.ZKSYNC]: 165,
   [ChainId.ARBITRUM_ONE]: 110,
 
@@ -16,7 +15,6 @@ export const LZ_CHAIN_MAP = {
 export const LZ_CHAIN_MAP_V2 = {
   [ChainId.ETHEREUM]: 30101,
   [ChainId.BSC]: 30102,
-  [ChainId.POLYGON_ZKEVM]: 30158,
   [ChainId.ZKSYNC]: 30165,
   [ChainId.ARBITRUM_ONE]: 30110,
   [ChainId.BASE]: 30184,

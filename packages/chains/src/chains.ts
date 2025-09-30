@@ -35,12 +35,6 @@ export const Chains: Chain[] = [
   { id: ChainId.LINEA, name: chainNames[ChainId.LINEA], fullName: chainFullNames[ChainId.LINEA], isEVM: true },
   { id: ChainId.OPBNB, name: chainNames[ChainId.OPBNB], fullName: chainFullNames[ChainId.OPBNB], isEVM: true },
   {
-    id: ChainId.POLYGON_ZKEVM,
-    name: chainNames[ChainId.POLYGON_ZKEVM],
-    fullName: chainFullNames[ChainId.POLYGON_ZKEVM],
-    isEVM: true,
-  },
-  {
     id: ChainId.BSC_TESTNET,
     name: chainNames[ChainId.BSC_TESTNET],
     fullName: chainFullNames[ChainId.BSC_TESTNET],
@@ -49,13 +43,6 @@ export const Chains: Chain[] = [
   },
   { id: ChainId.GOERLI, name: chainNames[ChainId.GOERLI], fullName: chainFullNames[ChainId.GOERLI], isEVM: true },
   { id: ChainId.SEPOLIA, name: chainNames[ChainId.SEPOLIA], fullName: chainFullNames[ChainId.SEPOLIA], isEVM: true },
-  {
-    id: ChainId.POLYGON_ZKEVM_TESTNET,
-    name: chainNames[ChainId.POLYGON_ZKEVM_TESTNET],
-    fullName: chainFullNames[ChainId.POLYGON_ZKEVM_TESTNET],
-    isEVM: true,
-    testnet: true,
-  },
   {
     id: ChainId.ARBITRUM_GOERLI,
     name: chainNames[ChainId.ARBITRUM_GOERLI],

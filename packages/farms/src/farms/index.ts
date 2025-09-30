@@ -3,13 +3,11 @@ import { fetchUniversalFarms } from '../fetchUniversalFarms'
 import { UniversalFarmConfig } from '../types'
 import { getFarmConfigKey } from '../utils'
 import { bscTestnetFarmConfig } from './bscTestnet'
-import { polygonZkEVMTestnetFarmConfig } from './polygonZkEVMTestnet'
 import { zkSyncTestnetFarmConfig } from './zkSyncTestnet'
 
 const chainIds: ChainId[] = [
   ChainId.BSC,
   ChainId.ETHEREUM,
-  ChainId.POLYGON_ZKEVM,
   ChainId.ZKSYNC,
   ChainId.ARBITRUM_ONE,
   ChainId.LINEA,
@@ -49,8 +47,4 @@ export const fetchAllUniversalFarmsMap = async (): Promise<Record<string, Univer
   }
 }
 
-export const UNIVERSAL_FARMS_WITH_TESTNET: UniversalFarmConfig[] = [
-  ...bscTestnetFarmConfig,
-  ...polygonZkEVMTestnetFarmConfig,
-  ...zkSyncTestnetFarmConfig,
-]
+export const UNIVERSAL_FARMS_WITH_TESTNET: UniversalFarmConfig[] = [...bscTestnetFarmConfig, ...zkSyncTestnetFarmConfig]

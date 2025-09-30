@@ -43,10 +43,6 @@ export const getPoolsPriceHelperLpFiles = (chainId: ChainId) => {
       return PoolsLineaPriceHelper
     case ChainId.LINEA_TESTNET:
       return PoolsLineaTestnetPriceHelper
-    case ChainId.POLYGON_ZKEVM:
-      return PoolsPolygonZkEvmPriceHelper
-    case ChainId.POLYGON_ZKEVM_TESTNET:
-      return PoolsPolygonZkEvmTestnetPriceHelper
     default:
       return []
   }

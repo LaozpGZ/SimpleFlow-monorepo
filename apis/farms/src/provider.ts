@@ -1,24 +1,12 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Chain, createPublicClient, http, PublicClient } from 'viem'
-import {
-  arbitrum,
-  bsc,
-  bscTestnet,
-  goerli,
-  mainnet,
-  opBNB,
-  opBNBTestnet,
-  polygonZkEvm,
-  zkSync,
-  zkSyncTestnet,
-} from 'viem/chains'
+import { arbitrum, bsc, bscTestnet, goerli, mainnet, opBNB, opBNBTestnet, zkSync, zkSyncTestnet } from 'viem/chains'
 
 const requireCheck = [
   ETH_NODE,
   GOERLI_NODE,
   BSC_NODE,
   BSC_TESTNET_NODE,
-  POLYGON_ZKEVM_NODE,
   ZKSYNC_NODE,
   ARBITRUM_ONE_NODE,
   LINEA_NODE,
@@ -176,26 +164,6 @@ const zksyncTestnetClient = createPublicClient({
   pollingInterval: 6_000,
 })
 
-const polygonZkEvmClient = createPublicClient({
-  chain: {
-    ...polygonZkEvm,
-    contracts: {
-      multicall3: {
-        address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-        blockCreated: 57746,
-      },
-    },
-  },
-  transport: http(POLYGON_ZKEVM_NODE),
-  batch: {
-    multicall: {
-      batchSize: 1024 * 200,
-      wait: 16,
-    },
-  },
-  pollingInterval: 6_000,
-})
-
 const zksyncClient = createPublicClient({
   chain: zkSync as Chain,
   transport: http(ZKSYNC_NODE),
@@ -278,8 +246,6 @@ export const viemProviders = ({ chainId }: { chainId?: ChainId }): PublicClient 
       return goerliClient
     case ChainId.ZKSYNC_TESTNET:
       return zksyncTestnetClient
-    case ChainId.POLYGON_ZKEVM:
-      return polygonZkEvmClient
     case ChainId.ZKSYNC:
       return zksyncClient
     case ChainId.ARBITRUM_ONE:

@@ -8,7 +8,6 @@ declare global {
   const GOERLI_NODE: string
   const BSC_NODE: string
   const BSC_TESTNET_NODE: string
-  const POLYGON_ZKEVM_NODE: string
   const ZKSYNC_NODE: string
   const ARBITRUM_ONE_NODE: string
   const LINEA_NODE: string
