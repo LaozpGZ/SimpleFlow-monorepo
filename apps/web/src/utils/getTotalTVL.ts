@@ -114,6 +114,12 @@ const getStats = async (type: 'v2' | 'v3' | 'stable', chainIds: number[]) => {
   const rawResults = (
     await Promise.all(
       chainIds.map(async (chainId) => {
+        const chainName = chainIdToExplorerInfoChainName[chainId]
+
+        if (!chainName) {
+          return undefined
+        }
+
         let result: { data?: StatsRes } | undefined
         try {
           result = await explorerApiClient.GET('/cached/protocol/{protocol}/{chainName}/stats', {
@@ -121,7 +127,7 @@ const getStats = async (type: 'v2' | 'v3' | 'stable', chainIds: number[]) => {
             params: {
               path: {
                 protocol: type,
-                chainName: chainIdToExplorerInfoChainName[chainId],
+                chainName,
               },
             },
           })
