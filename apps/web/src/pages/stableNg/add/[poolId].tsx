@@ -1,6 +1,6 @@
 import { PoolKey } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Spinner, Text, Breadcrumbs, FlexGap, Container, SkeletonV2 } from '@pancakeswap/uikit'
+import { Box, Text, Breadcrumbs, FlexGap, Container, SkeletonV2, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { LinkText } from 'components/Liquidity/LinkText'
 import { CHAIN_QUERY_NAME } from 'config/chains'
@@ -18,7 +18,7 @@ const AddStableNGLiquidityPage = () => {
   const router = useRouter()
   const { chainId } = useActiveChainId()
   const poolId = router.query.poolId as `0x${string}` | undefined
-
+  const { isLg } = useMatchBreakpoints()
   const { t } = useTranslation()
 
   const { data: poolKey } = usePoolKeyByPoolId(poolId as `0x${string}`, chainId)
@@ -47,12 +47,14 @@ const AddStableNGLiquidityPage = () => {
             </FlexGap>
           </Breadcrumbs>
         </Box>
-        <SkeletonV2 isDataReady={Boolean(poolId && chainId)}>
-          <InfinityPoolInfoHeader poolId={poolId as `0x${string}`} chainId={chainId} />
-        </SkeletonV2>
-        <SkeletonV2 isDataReady={Boolean(poolId && currencyIdA && currencyIdB)}>
-          <StableNGAddLiquidityProvider poolKey={poolKey as PoolKey} />
-        </SkeletonV2>
+        <FlexGap flexDirection="column" gap={isLg ? '24px' : '16px'} mt={['16px', '24px', '24px', '24px']}>
+          <SkeletonV2 isDataReady={Boolean(poolId && chainId)}>
+            <InfinityPoolInfoHeader poolId={poolId as `0x${string}`} chainId={chainId} />
+          </SkeletonV2>
+          <SkeletonV2 isDataReady={Boolean(poolId && currencyIdA && currencyIdB)}>
+            <StableNGAddLiquidityProvider poolKey={poolKey as PoolKey} />
+          </SkeletonV2>
+        </FlexGap>
       </Container>
     </AddLiquidityV2FormProvider>
   )

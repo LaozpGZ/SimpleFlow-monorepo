@@ -71,7 +71,7 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
     poolAddress,
     amounts,
     deposit: true,
-    enabled: isReady && !!(amounts[0] || amounts[1]),
+    enabled: isReady && (amounts[0] > 0n || amounts[1] > 0n),
   })
 
   // Get total supply using the dedicated hook
@@ -118,7 +118,7 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
   const shouldShowApprovalGroup = showFieldAApproval || showFieldBApproval
 
   const handleAddLiquidity = useCallback(async () => {
-    if (!currencyA || !currencyB || !parsedAmountA || !parsedAmountB || !expectedLP) return
+    if (!currencyA || !currencyB || (!parsedAmountA && !parsedAmountB) || !expectedLP) return
 
     try {
       // Calculate minimum mint amount using user's slippage tolerance
@@ -126,8 +126,10 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
       const slippagePercent = BigInt(userSlippageTolerance)
       const minMintAmount = (expectedLP * (10000n - slippagePercent)) / 10000n
 
-      // Add liquidity
-      const txHash = await addLiquidityStableNGPool(parsedAmountA.quotient, parsedAmountB.quotient, minMintAmount)
+      // Add liquidity - use 0 for amounts that are not provided
+      const amountAToAdd = parsedAmountA?.quotient ?? 0n
+      const amountBToAdd = parsedAmountB?.quotient ?? 0n
+      const txHash = await addLiquidityStableNGPool(amountAToAdd, amountBToAdd, minMintAmount)
       console.log('Add liquidity successful, tx hash:', txHash)
     } catch (error) {
       console.error('Add liquidity failed:', error)
@@ -147,8 +149,7 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
         }}
         buttonDisabled={
           !isReady ||
-          !amountA ||
-          !amountB ||
+          (!amountA && !amountB) ||
           isCalculating ||
           !expectedLP ||
           !!calcError ||
@@ -162,8 +163,8 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
         errorText={
           !isReady
             ? 'Pool not ready'
-            : !amountA || !amountB
-            ? 'Please enter amounts'
+            : !amountA && !amountB
+            ? 'Please enter at least one amount'
             : isCalculating
             ? 'Calculating LP tokens...'
             : calcError
