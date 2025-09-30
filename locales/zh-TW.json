@@ -4277,5 +4277,7 @@
   "POSITION": "部位",
   "EARNINGS": "收益",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "注意：%token% 目前未經驗證。在與此流動性池進行交易或互動之前，請務必確認地址並做好您自己的研究。",
-  "CAKE Emission Projection": "CAKE 釋放預測"
+  "CAKE Emission Projection": "CAKE 釋放預測",
+  "Caution - %symbol% Token": "注意 - %symbol% 代幣",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "交易或為 %symbol% 代幣提供流動性時請務必謹慎。該協議最近遭遇了<0>安全漏洞。</0>欲了解更多資訊，請參考<1>%name% X</1>"
 }
