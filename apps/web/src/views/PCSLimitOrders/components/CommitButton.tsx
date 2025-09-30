@@ -175,7 +175,7 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
       return BN(1).dividedBy(priceBN).toFixed(getSymbolDecimals(outputCurrency?.symbol))
     }
     return priceBN.toFixed(getSymbolDecimals(outputCurrency?.symbol))
-  }, [customMarketPrice, currentMarketPrice, isInverted])
+  }, [customMarketPrice, currentMarketPrice, isInverted, outputCurrency])
 
   return (
     <Box mt="4px">

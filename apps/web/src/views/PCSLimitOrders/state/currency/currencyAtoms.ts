@@ -29,9 +29,11 @@ export const inputCurrencyIdAtom = atom(
     }
     return get(inputCurrencyFamily(chainId))
   },
-  (get, set, newValue: string) => {
-    const { chainId } = get(accountActiveChainAtom)
-    set(inputCurrencyFamily(chainId), newValue)
+  (get, set, newValue: string | undefined) => {
+    if (newValue !== undefined) {
+      const { chainId } = get(accountActiveChainAtom)
+      set(inputCurrencyFamily(chainId), newValue)
+    }
   },
 )
 
@@ -44,9 +46,11 @@ export const outputCurrencyIdAtom = atom(
     }
     return get(outputCurrencyFamily(chainId))
   },
-  (get, set, newValue: string) => {
-    const { chainId } = get(accountActiveChainAtom)
-    set(outputCurrencyFamily(chainId), newValue)
+  (get, set, newValue: string | undefined) => {
+    if (newValue !== undefined) {
+      const { chainId } = get(accountActiveChainAtom)
+      set(outputCurrencyFamily(chainId), newValue)
+    }
   },
 )
 
