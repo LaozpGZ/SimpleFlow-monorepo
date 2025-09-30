@@ -52,6 +52,7 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
         }
         uiStore.theme.setConfig(newTheme)
       }
+      console.log(Bridge)
 
       if (isCake) {
         setTimeout(async () => {
@@ -59,12 +60,14 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
             await customElements.whenDefined('lz-bridge')
             const app: any = customElements.get('lz-bridge')
             const length = app?.bridgeStore?.currencies?.length
+
             if (length !== null || length !== undefined) {
               const currencies = app?.bridgeStore?.currencies?.slice()
-              // @ts-ignore
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               app!.bridgeStore!.currencies.length = 0
-              app?.bridgeStore?.addCurrencies(currencies?.filter((i: any) => i.symbol.toLowerCase() === 'cake'))
+
+              const list = currencies?.filter((i: any) => i.symbol.toLowerCase() === 'cake' && i.chainId !== 158)
+              app?.bridgeStore?.addCurrencies(list)
               const srcCake = app?.bridgeStore?.currencies?.find(
                 (i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId === 102,
               )
