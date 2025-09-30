@@ -4277,5 +4277,7 @@
   "POSITION": "ПОЗИЦІЯ",
   "EARNINGS": "ЗАРОБІТОК",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Обережно: токен %token% наразі не верифіковано. Завжди перевіряйте адресу та проводьте власне дослідження перед торгівлею або взаємодією з цим пулом.",
-  "CAKE Emission Projection": "Прогноз емісії CAKE"
+  "CAKE Emission Projection": "Прогноз емісії CAKE",
+  "Caution - %symbol% Token": "Обережно: токен %symbol%",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Будь ласка, будьте обережні під час торгівлі / надання ліквідності для токена %symbol%. Нещодавно в протоколі сталося <0>порушення безпеки.</0> Для отримання додаткової інформації перегляньте <1>%name% у X</1>."
 }

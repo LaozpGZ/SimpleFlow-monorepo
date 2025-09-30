@@ -4277,5 +4277,7 @@
   "POSITION": "POZÍCIÓ",
   "EARNINGS": "BEVÉTELEK",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Figyelem: A(z) %token% jelenleg nincs ellenőrizve. Mindig ellenőrizd a címet, és végezz saját kutatást, mielőtt kereskednél vagy interakcióba lépnél ezzel a poollal.",
-  "CAKE Emission Projection": "CAKE kibocsátási előrejelzés"
+  "CAKE Emission Projection": "CAKE kibocsátási előrejelzés",
+  "Caution - %symbol% Token": "Figyelem – %symbol% Token",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Kérjük, járjon el kellő körültekintéssel a(z) %symbol% tokennel való kereskedés / likviditás biztosítása során. A protokollnál nemrégiben <0>biztonsági incidens</0> történt. További információkért tekintse meg a(z) <1>%name% X-et</1>."
 }

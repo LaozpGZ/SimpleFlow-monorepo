@@ -4277,5 +4277,7 @@
   "POSITION": "পজিশন",
   "EARNINGS": "উপার্জন",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "সতর্কতা: %token% বর্তমানে যাচাই করা হয়নি। এই পুলের সাথে ট্রেড বা ইন্টারঅ্যাক্ট করার আগে সর্বদা ঠিকানাটি নিশ্চিত করুন এবং আপনার নিজের গবেষণা করুন।",
-  "CAKE Emission Projection": "CAKE এমিশন প্রজেকশন"
+  "CAKE Emission Projection": "CAKE এমিশন প্রজেকশন",
+  "Caution - %symbol% Token": "সতর্কতা - %symbol% টোকেন",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "অনুগ্রহ করে %symbol% টোকেনের ট্রেড / লিকুইডিটি প্রদান করার সময় যথাযথ সতর্কতা অবলম্বন করুন। প্রোটোকলটি সম্প্রতি একটি <0>নিরাপত্তা লঙ্ঘনের</0> সম্মুখীন হয়েছে। আরও তথ্যের জন্য, অনুগ্রহ করে <1>%name% X</1> দেখুন।"
 }

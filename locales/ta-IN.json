@@ -4277,5 +4277,7 @@
   "POSITION": "நிலை",
   "EARNINGS": "வருவாய்",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "எச்சரிக்கை: %token% தற்போது சரிபார்க்கப்படவில்லை. இந்தப் பூலில் வர்த்தகம் செய்வதற்கு அல்லது ஊடாடுவதற்கு முன், முகவரியை எப்போதும் உறுதிசெய்து, உங்கள் சொந்த ஆராய்ச்சியைச் செய்யவும்.",
-  "CAKE Emission Projection": "CAKE வெளியீட்டுக் கணிப்பு"
+  "CAKE Emission Projection": "CAKE வெளியீட்டுக் கணிப்பு",
+  "Caution - %symbol% Token": "எச்சரிக்கை - %symbol% டோக்கன்",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% டோக்கனை வர்த்தகம் செய்யும் போதோ அல்லது பணப்புழக்கம் வழங்கும் போதோ மிகுந்த எச்சரிக்கையுடன் செயல்படவும். இந்த புரோட்டோகால் சமீபத்தில் ஒரு <0>பாதுகாப்பு அத்துமீறலை</0> எதிர்கொண்டது. மேலும் தகவல்களுக்கு, <1>%name% X</1> ஐப் பார்க்கவும்."
 }

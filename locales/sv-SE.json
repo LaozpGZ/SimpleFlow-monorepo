@@ -4277,5 +4277,7 @@
   "POSITION": "POSITION",
   "EARNINGS": "INTÄKTER",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Varning: %token% är för närvarande overifierad. Bekräfta alltid adressen och gör din egen research innan du handlar eller interagerar med denna pool.",
-  "CAKE Emission Projection": "CAKE Emissionsprognos"
+  "CAKE Emission Projection": "CAKE Emissionsprognos",
+  "Caution - %symbol% Token": "Varning - %symbol% Token",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Var extra försiktig när du handlar med / tillhandahåller likviditet för %symbol%-tokenen. Protokollet drabbades nyligen av en <0>säkerhetskompromiss.</0> För mer information, se <1>%name% X</1>."
 }

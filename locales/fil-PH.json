@@ -4277,5 +4277,7 @@
   "POSITION": "POSITION",
   "EARNINGS": "EARNINGS",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Babala: Ang %token% ay kasalukuyang hindi pa na-verify. Palaging kumpirmahin ang address at gawin ang iyong sariling pananaliksik bago mag-trade o makipag-ugnayan sa pool na ito.",
-  "CAKE Emission Projection": "CAKE Emission Projection"
+  "CAKE Emission Projection": "CAKE Emission Projection",
+  "Caution - %symbol% Token": "Pag-iingat - %symbol% Token",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Mangyaring mag-ingat nang husto sa pag-trade / pag-provide ng liquidity para sa %symbol% token. Ang protocol ay kamakailan lang nagkaroon ng isang <0>security compromise.</0> Para sa karagdagang impormasyon, mangyaring sumangguni sa <1>%name% X</1>"
 }

@@ -4277,5 +4277,7 @@
   "POSITION": "POZIȚIE",
   "EARNINGS": "CÂȘTIGURI",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Atenție: %token% este momentan neverificat. Confirmați întotdeauna adresa și documentați-vă pe cont propriu înainte de a tranzacționa sau de a interacționa cu acest pool.",
-  "CAKE Emission Projection": "Proiecție emisie CAKE"
+  "CAKE Emission Projection": "Proiecție emisie CAKE",
+  "Caution - %symbol% Token": "Atenție - Jeton %symbol%",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Vă rugăm să acționați cu prudență atunci când tranzacționați / furnizați lichidități pentru jetonul %symbol%. Protocolul a întâmpinat recent o <0>compromitere a securității.</0> Pentru mai multe informații, vă rugăm să consultați <1>%name% X</1>."
 }

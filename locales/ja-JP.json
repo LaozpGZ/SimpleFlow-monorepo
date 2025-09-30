@@ -4277,5 +4277,7 @@
   "POSITION": "ポジション",
   "EARNINGS": "収益",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "注意: %token% は現在未検証です。このプールで取引または操作する前に、必ずアドレスを確認し、ご自身で調査を行ってください。",
-  "CAKE Emission Projection": "CAKE排出量予測"
+  "CAKE Emission Projection": "CAKE排出量予測",
+  "Caution - %symbol% Token": "注意 - %symbol% トークン",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% トークンの取引/流動性提供を行う際には、十分にご注意ください。このプロトコルでは最近、<0>セキュリティ侵害</0>が発生しました。詳細については、<1>%name% のX</1>をご参照ください。"
 }

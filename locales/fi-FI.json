@@ -4277,5 +4277,7 @@
   "POSITION": "POSITIO",
   "EARNINGS": "TUOTOT",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Varoitus: %token% on tällä hetkellä vahvistamaton. Vahvista aina osoite ja tee oma tutkimuksesi, ennen kuin käyt kauppaa tai olet vuorovaikutuksessa tämän poolin kanssa.",
-  "CAKE Emission Projection": "CAKE-emission ennuste"
+  "CAKE Emission Projection": "CAKE-emission ennuste",
+  "Caution - %symbol% Token": "Varoitus - %symbol%-token",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Noudata erityistä varovaisuutta, kun treidaat tai tarjoat likviditeettiä %symbol%-tokenille. Protokollassa tapahtui hiljattain <0>tietoturvaloukkaus.</0> Lisätietoja saat <1>%name%n X-tililtä</1>."
 }

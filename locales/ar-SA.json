@@ -4277,5 +4277,7 @@
   "POSITION": "المركز",
   "EARNINGS": "الأرباح",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "تنبيه: رمز %token% غير موثق حاليًا. تحقق دائمًا من العنوان وقم بإجراء بحثك الخاص قبل التداول أو التفاعل مع هذا المجمع.",
-  "CAKE Emission Projection": "توقعات إصدار CAKE"
+  "CAKE Emission Projection": "توقعات إصدار CAKE",
+  "Caution - %symbol% Token": "تحذير - رمز %symbol%",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "يرجى توخي الحذر عند تداول / توفير السيولة لرمز %symbol%. واجه البروتوكول مؤخرًا <0>اختراقًا أمنيًا.</0> لمزيد من المعلومات، يرجى الرجوع إلى <1>%name% على X</1>"
 }

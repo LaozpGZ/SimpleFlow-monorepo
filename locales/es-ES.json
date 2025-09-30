@@ -4277,5 +4277,7 @@
   "POSITION": "POSICIÓN",
   "EARNINGS": "GANANCIAS",
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Precaución: El token %token% no está verificado actualmente. Confirma siempre la dirección y haz tu propia investigación antes de operar o interactuar con este pool.",
-  "CAKE Emission Projection": "Proyección de Emisiones de CAKE"
+  "CAKE Emission Projection": "Proyección de Emisiones de CAKE",
+  "Caution - %symbol% Token": "Precaución - Token %symbol%",
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Tenga la debida precaución al operar o aportar liquidez para el token %symbol%. El protocolo ha sufrido recientemente un <0>compromiso de seguridad.</0> Para más información, consulte el <1>X de %name%</1>"
 }
