@@ -71,22 +71,6 @@ export const WETH9 = {
     'Wrapped Ether',
     'https://weth.io',
   ),
-  [ChainId.POLYGON_ZKEVM]: new ERC20Token(
-    ChainId.POLYGON_ZKEVM,
-    '0x4F9A0e7FD2Bf6067db6994CF12E4495Df938E6e9',
-    18,
-    'WETH',
-    'Wrapped Ether',
-    'https://weth.io',
-  ),
-  [ChainId.POLYGON_ZKEVM_TESTNET]: new ERC20Token(
-    ChainId.POLYGON_ZKEVM_TESTNET,
-    '0x30ec47F7DFae72eA79646e6cf64a8A7db538915b',
-    18,
-    'WETH',
-    'Wrapped Ether',
-    'https://weth.io',
-  ),
   [ChainId.LINEA]: new ERC20Token(
     ChainId.LINEA,
     '0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f',
@@ -227,8 +211,6 @@ export const WNATIVE = {
   [ChainId.BSC_TESTNET]: WBNB[ChainId.BSC_TESTNET],
   [ChainId.ARBITRUM_ONE]: WETH9[ChainId.ARBITRUM_ONE],
   [ChainId.ARBITRUM_GOERLI]: WETH9[ChainId.ARBITRUM_GOERLI],
-  [ChainId.POLYGON_ZKEVM]: WETH9[ChainId.POLYGON_ZKEVM],
-  [ChainId.POLYGON_ZKEVM_TESTNET]: WETH9[ChainId.POLYGON_ZKEVM_TESTNET],
   [ChainId.ZKSYNC]: WETH9[ChainId.ZKSYNC],
   [ChainId.ZKSYNC_TESTNET]: WETH9[ChainId.ZKSYNC_TESTNET],
   [ChainId.LINEA]: WETH9[ChainId.LINEA],
@@ -242,7 +224,7 @@ export const WNATIVE = {
   [ChainId.ARBITRUM_SEPOLIA]: WETH9[ChainId.ARBITRUM_SEPOLIA],
   [ChainId.BASE_SEPOLIA]: WETH9[ChainId.BASE_SEPOLIA],
   [ChainId.MONAD_TESTNET]: WETH9[ChainId.MONAD_TESTNET],
-} satisfies Record<ChainId, ERC20Token>
+} satisfies Partial<Record<ChainId, ERC20Token>>
 
 const ETHER = { name: 'Ether', symbol: 'ETH', decimals: 18 } as const
 
@@ -267,8 +249,6 @@ export const NATIVE = {
     symbol: 'AGOR',
     decimals: 18,
   },
-  [ChainId.POLYGON_ZKEVM]: ETHER,
-  [ChainId.POLYGON_ZKEVM_TESTNET]: ETHER,
   [ChainId.ZKSYNC]: ETHER,
   [ChainId.ZKSYNC_TESTNET]: ETHER,
   [ChainId.LINEA]: ETHER,
@@ -302,11 +282,13 @@ export const NATIVE = {
     symbol: 'MON',
     decimals: 18,
   },
-} satisfies Record<
-  ChainId,
-  {
-    name: string
-    symbol: string
-    decimals: number
-  }
+} satisfies Partial<
+  Record<
+    ChainId,
+    {
+      name: string
+      symbol: string
+      decimals: number
+    }
+  >
 >

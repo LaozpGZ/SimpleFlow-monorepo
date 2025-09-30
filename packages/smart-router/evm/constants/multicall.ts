@@ -21,28 +21,6 @@ export const BATCH_MULTICALL_CONFIGS: ChainMap<BatchMulticallConfigs> = {
   [ChainId.GOERLI]: DEFAULT,
   [ChainId.ARBITRUM_ONE]: DEFAULT,
   [ChainId.ARBITRUM_GOERLI]: DEFAULT,
-  [ChainId.POLYGON_ZKEVM]: {
-    defaultConfig: {
-      gasLimitPerCall: 500_000,
-    },
-    gasErrorFailureOverride: {
-      gasLimitPerCall: 1_500_000,
-    },
-    successRateFailureOverrides: {
-      gasLimitPerCall: 1_500_000,
-    },
-  },
-  [ChainId.POLYGON_ZKEVM_TESTNET]: {
-    defaultConfig: {
-      gasLimitPerCall: 500_000,
-    },
-    gasErrorFailureOverride: {
-      gasLimitPerCall: 1_500_000,
-    },
-    successRateFailureOverrides: {
-      gasLimitPerCall: 1_500_000,
-    },
-  },
   [ChainId.ZKSYNC]: {
     defaultConfig: {
       gasLimitPerCall: 1_000_000,
