@@ -60,6 +60,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         // enable Solana
         .filter((e) => [...supportedChainIds, 7565164].includes(e.id))
         .filter((e) => !(connector?.id === 'BinanceW3WSDK' && e.id === 1101))
+        .filter((e) => e.id !== 1101 && e.id !== 1442) // Disable zkevm for sunsetting
         .map((chain) => ({
           ...chain,
           rpcUrls: { default: { http: rpcConfig?.[chain.id] ?? chain.rpcUrls.default.http } },
