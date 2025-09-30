@@ -40,26 +40,34 @@ export const fetchExplorerFarmPools = async (
   let chains = Array.isArray(args?.chainId) ? args.chainId ?? [] : [args?.chainId]
   chains = chains.filter(Boolean)
 
-  const resp = await explorerApiClient.GET('/cached/pools/farming', {
-    signal,
-    params: {
-      query: {
-        protocols: args.protocols ?? DEFAULT_PROTOCOLS,
-        chains: chains.reduce((acc, cur) => {
-          if (cur) {
-            acc.push(getChainNameInKebabCase(cur as ChainId))
-          }
-          return acc
-        }, [] as any[]),
+  try {
+    const resp = await explorerApiClient.GET('/cached/pools/farming', {
+      signal,
+      params: {
+        query: {
+          protocols: args.protocols ?? DEFAULT_PROTOCOLS,
+          chains: chains.reduce((acc, cur) => {
+            if (cur) {
+              acc.push(getChainNameInKebabCase(cur as ChainId))
+            }
+            return acc
+          }, [] as any[]),
+        },
       },
-    },
-  })
+    })
 
-  if (!resp.data) {
+    if (!resp.data) {
+      return []
+    }
+
+    return parseFarmPools(resp.data, { isFarming: true })
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw error
+    }
+    console.log(`ERROR GET /cached/pools/farming:`, error)
     return []
   }
-
-  return parseFarmPools(resp.data, { isFarming: true })
 
   // TODO: @chef-eric this tvl & vol data is not correct
   // const tvlAndVolume = await fetchTvlVolumeFromSubgraph(resp.data)
