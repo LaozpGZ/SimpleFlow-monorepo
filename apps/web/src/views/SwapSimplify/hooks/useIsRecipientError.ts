@@ -27,7 +27,7 @@ export const useIsRecipientError = () => {
     const address = safeGetAddress(recipient) ? recipient : safeGetAddress(recipientENSAddress)
 
     return address
-  }, [recipient, allowRecipient, recipientENSAddress])
+  }, [recipient, allowRecipient, recipientENSAddress, outputChainId])
 
   const isRecipientEmpty = useMemo(() => {
     if (!allowRecipient || recipient === null) return false
