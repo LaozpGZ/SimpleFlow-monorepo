@@ -13,6 +13,7 @@ import { useSwapState } from 'state/swap/hooks'
 import { safeGetAddress } from 'utils'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { usePreviousValue } from '@pancakeswap/hooks'
 import SwapWarningModal from '../components/SwapWarningModal'
 
 export default function useWarningImport() {
@@ -33,6 +34,9 @@ export default function useWarningImport() {
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => Boolean(c?.isToken)) ?? [],
     [loadedInputCurrency, loadedOutputCurrency],
   )
+
+  const prevInputCurrency = usePreviousValue(loadedInputCurrency)
+  const prevOutputCurrency = usePreviousValue(loadedOutputCurrency)
 
   const defaultTokens = useAllTokens()
 
@@ -75,12 +79,26 @@ export default function useWarningImport() {
   )
 
   useEffect(() => {
-    if (loadedInputCurrency && shouldShowSwapWarning(chainId, loadedInputCurrency)) {
+    if (
+      loadedInputCurrency &&
+      loadedInputCurrency !== prevInputCurrency &&
+      shouldShowSwapWarning(chainId, loadedInputCurrency)
+    ) {
       setSwapWarningCurrency(loadedInputCurrency)
-    } else if (loadedOutputCurrency && shouldShowSwapWarning(chainId, loadedOutputCurrency)) {
-      setSwapWarningCurrency(loadedOutputCurrency)
+      return
     }
-  }, [chainId, loadedInputCurrency, loadedOutputCurrency])
+
+    if (
+      loadedOutputCurrency &&
+      loadedOutputCurrency !== prevOutputCurrency &&
+      shouldShowSwapWarning(chainId, loadedOutputCurrency)
+    ) {
+      setSwapWarningCurrency(loadedOutputCurrency)
+      return
+    }
+
+    setSwapWarningCurrency(undefined)
+  }, [chainId, loadedInputCurrency, loadedOutputCurrency, prevInputCurrency, prevOutputCurrency])
 
   useEffect(() => {
     if (importTokensNotInDefault.length > 0) {
