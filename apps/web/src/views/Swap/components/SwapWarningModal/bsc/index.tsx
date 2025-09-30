@@ -15,7 +15,7 @@ import RugPullWarning from './RugPullWarning'
 import SafemoonWarning from './SafemoonWarning'
 import XCADWarning from './XCADWarning'
 import GAINWarning from './GAINWarning'
-import GenericTokenWarning from './GenericTokenWarning'
+import GenericTokenWarning from '../GenericTokenWarning'
 
 const {
   safemoon,
