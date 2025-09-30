@@ -32,6 +32,10 @@ export const inputCurrencyIdAtom = atom(
   (get, set, newValue: string | undefined) => {
     if (newValue !== undefined) {
       const { chainId } = get(accountActiveChainAtom)
+
+      // Do nothing for unsupported chains
+      if (!chainId || !LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId)) return
+
       set(inputCurrencyFamily(chainId), newValue)
     }
   },
@@ -49,6 +53,10 @@ export const outputCurrencyIdAtom = atom(
   (get, set, newValue: string | undefined) => {
     if (newValue !== undefined) {
       const { chainId } = get(accountActiveChainAtom)
+
+      // Do nothing for unsupported chains
+      if (!chainId || !LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS.includes(chainId)) return
+
       set(outputCurrencyFamily(chainId), newValue)
     }
   },
