@@ -139,7 +139,6 @@ export const handleCurrencySelectFn = async ({
 
 export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsufficientBalance }: Props) {
   const { t } = useTranslation()
-  const warningSwapHandler = useWarningImport()
   const { solanaAccount, account } = useAccountActiveChain()
 
   const {
@@ -191,14 +190,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const router = useRouter()
 
-  useEffect(() => {
-    if (inputCurrency) {
-      warningSwapHandler(inputCurrency)
-    }
-    if (outputCurrency) {
-      warningSwapHandler(outputCurrency)
-    }
-  }, [warningSwapHandler, inputCurrency, outputCurrency])
+  useWarningImport()
 
   const handleCurrencySelect = useCallback(
     async (newCurrency: UnifiedCurrency, field: Field) => {

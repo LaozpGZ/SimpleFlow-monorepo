@@ -20,7 +20,6 @@ import { useRouter } from 'next/router'
 import { swapReducerAtom } from 'state/swap/reducer'
 import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { getDefaultToken } from 'views/Swap/utils'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isSolana } from '@pancakeswap/chains'
 
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -38,7 +37,7 @@ interface Props {
 
 export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }: Props) {
   const { t } = useTranslation()
-  const warningSwapHandler = useWarningImport()
+  useWarningImport()
   const { isMobile } = useMatchBreakpoints()
 
   const {
@@ -87,9 +86,8 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
       }
 
       onCurrencySelection(field, newCurrency)
-      warningSwapHandler(newCurrency)
     },
-    [onCurrencySelection, warningSwapHandler, outputChainId, supportedBridgeChains, canSwitch, switchNetwork],
+    [onCurrencySelection, outputChainId, supportedBridgeChains, canSwitch, switchNetwork],
   )
   const handleInputSelect = useCallback(
     (newCurrency: UnifiedCurrency) => handleCurrencySelect(newCurrency, Field.INPUT),

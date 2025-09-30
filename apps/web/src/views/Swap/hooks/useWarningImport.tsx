@@ -75,6 +75,14 @@ export default function useWarningImport() {
   )
 
   useEffect(() => {
+    if (loadedInputCurrency && shouldShowSwapWarning(chainId, loadedInputCurrency)) {
+      setSwapWarningCurrency(loadedInputCurrency)
+    } else if (loadedOutputCurrency && shouldShowSwapWarning(chainId, loadedOutputCurrency)) {
+      setSwapWarningCurrency(loadedOutputCurrency)
+    }
+  }, [chainId, loadedInputCurrency, loadedOutputCurrency])
+
+  useEffect(() => {
     if (importTokensNotInDefault.length > 0) {
       onPresentImportTokenWarningModal()
     }

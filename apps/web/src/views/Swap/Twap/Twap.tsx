@@ -275,7 +275,6 @@ const useCurrencySelect = () => {
 
 export function TWAPPanel({ limit }: { limit?: boolean }) {
   const { isDesktop } = useMatchBreakpoints()
-  const warningSwapHandler = useWarningImport()
   const { chainId } = useActiveChainId()
   const tokens = useAllTokens()
   const { connector, address } = useAccount()
@@ -309,14 +308,7 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
   const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
   const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
 
-  useEffect(() => {
-    if (inputCurrency) {
-      warningSwapHandler(inputCurrency)
-    }
-    if (outputCurrency) {
-      warningSwapHandler(outputCurrency)
-    }
-  }, [warningSwapHandler, inputCurrency, outputCurrency])
+  useWarningImport()
 
   const { t } = useTranslation()
 
