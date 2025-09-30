@@ -41,9 +41,6 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
               feeBps: FEE_TENTH_BPS,
             },
           },
-          chains: {
-            disabled: [1101, 1442],
-          },
         })
 
         const newTheme = {
