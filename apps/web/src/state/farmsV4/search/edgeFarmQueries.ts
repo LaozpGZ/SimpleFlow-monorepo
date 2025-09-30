@@ -58,7 +58,7 @@ function getPoolId(farm: UniversalFarmConfig) {
 export type ChainNameKebab = (typeof chainNamesInKebabCase)[keyof typeof chainNamesInKebabCase]
 
 async function fetchExplorerFarmPools(protocols: Protocol[], chainIds: FarmV4SupportedChainId[]) {
-  const chains = chainIds.filter((id) => isEvm(id)).map((chainId) => getEdgeChainName(chainId as ChainId))
+  const chains = chainIds.map((chainId) => getEdgeChainName(chainId as ChainId))
   const resp = await explorerApiClient.GET('/cached/pools/farming', {
     params: {
       query: {
