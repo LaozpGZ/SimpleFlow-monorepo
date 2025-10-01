@@ -52,6 +52,7 @@ import { NextPageWithLayout } from '../utils/page.types'
 import 'core-js/features/array/to-sorted'
 import 'core-js/features/array/to-reversed'
 import 'core-js/features/array/find-last'
+import 'core-js/features/array/to-spliced'
 import 'core-js/features/string/replace-all'
 import 'utils/abortcontroller-polyfill'
 
