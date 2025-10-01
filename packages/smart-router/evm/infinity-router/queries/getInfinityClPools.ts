@@ -70,7 +70,7 @@ export async function getInfinityClCandidatePoolsWithoutTicks({
   return getInfinityClPoolsWithoutTicks(pairsWithNative, clientProvider)
 }
 
-type InfinityClPoolMeta = PoolMeta & {
+export type InfinityClPoolMeta = PoolMeta & {
   fee: number
   protocolFee?: number
   poolManager: Address
