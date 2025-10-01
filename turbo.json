@@ -4,7 +4,23 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "env": ["RISK_APP_SECRET", "SERVER_NODE_REAL_API_ETH", "SERVER_NODE_REAL_API_GOERLI"],
+      "env": [
+        "RISK_APP_SECRET",
+        "SERVER_NODE_REAL_API_ETH",
+        "SERVER_NODE_REAL_API_GOERLI",
+        "CRON_SECRET",
+        "R2_ENDPOINT",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "CF_CACHE_ZONE_ID",
+        "CF_CACHE_API_TOKEN",
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_CLIENT_EMAIL",
+        "FIREBASE_PRIVATE_KEY",
+        "DISCORD_CLIENT_SECRET",
+        "DISCORD_REDIRECT_URI",
+        "TELEGRAM_BOT_TOKEN"
+      ],
       "outputs": ["dist/**", ".next/**/*", "!.next/cache/**", "!.vercel/**/*"]
     },
     "test": {

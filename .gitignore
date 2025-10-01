@@ -62,4 +62,6 @@ scripts/dev/**
 # cursor
 .cursor/rules/personal/**
 
+.envrc
+
 AGENTS.md
