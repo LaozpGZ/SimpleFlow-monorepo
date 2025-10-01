@@ -188,7 +188,6 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
 
     requireApprove: requireApproveA,
     requireRevoke: requireRevokeA,
-    requirePermit: requirePermitA,
   } = usePermit2(
     currency0?.isNative ? undefined : depositCurrencyAmount0?.wrapped,
     getInfinityPositionManagerAddress(poolType, chainId),
@@ -205,7 +204,6 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
 
     requireApprove: requireApproveB,
     requireRevoke: requireRevokeB,
-    requirePermit: requirePermitB,
   } = usePermit2(
     currency1?.isNative ? undefined : depositCurrencyAmount1?.wrapped,
     getInfinityPositionManagerAddress(poolType, chainId),

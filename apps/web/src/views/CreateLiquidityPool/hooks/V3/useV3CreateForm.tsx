@@ -467,6 +467,8 @@ export const useV3CreateForm = () => {
     sendTransactionAsync,
     signer,
     t,
+    router,
+    toastError,
   ])
 
   // Button Submit, with handle expert mode
@@ -652,6 +654,10 @@ export const useV3CreateForm = () => {
     baseCurrency,
     quoteCurrency,
     t,
+    invertPrice,
+    rangeLeftValue,
+    rangeRightValue,
+    switchCurrencies,
   ])
 
   return {

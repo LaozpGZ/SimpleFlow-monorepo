@@ -165,7 +165,7 @@ export const useAddBinLiquidity = (
     true,
     'infinity-bin-add-liquidity-modal',
   )
-  const [onPresentErrorModal, onDismissErrorModal] = useModal(
+  const [onPresentErrorModal] = useModal(
     <ErrorModal title={t('Add Liquidity')} subTitle={txnErrorMessage} />,
     true,
     true,
@@ -224,6 +224,7 @@ export const useAddBinLiquidity = (
     },
     [
       onPresentConfirmationModal,
+      onPresentErrorModal,
       sendTransactionAsync,
       positionManagerContract.address,
       chainId,
@@ -237,6 +238,7 @@ export const useAddBinLiquidity = (
       waitForTransaction,
       addTransaction,
       onError,
+      publicClient,
     ],
   )
   return { addBinLiquidity: addLiquidity, txHash, attemptingTx, txnErrorMessage }
