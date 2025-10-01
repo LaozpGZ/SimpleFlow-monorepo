@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import { getUnifiedNativeCurrency } from 'utils/getUnifiedNativeCurrency'
 import { isSupportedProtocol } from 'utils/protocols'
+import { LIQUIDITY_TYPES } from 'utils/types'
 import { useProtocolSupported } from 'views/CreateLiquidityPool/hooks/useProtocolSupported'
 import { z } from 'zod'
 
@@ -88,21 +89,33 @@ export const useSelectIdRouteParams = () => {
     return { chainId, protocol, currencyIdA, currencyIdB }
   }, [routeParams])
 
-  const { isV2Supported } = useProtocolSupported()
+  const { isV2Supported, isInfinitySupported, isStableSwapSupported, isV3Supported } = useProtocolSupported()
 
   const fallbackToSupportedProtocol = useCallback(
     (protocol?: 'infinity' | 'v3' | 'v2' | 'stableSwap', chainId?: number) => {
-      if (!protocol || !chainId) {
-        return protocol
-      }
-      if (protocol === Protocol.V2) {
-        if (isV2Supported(chainId)) {
-          return protocol
+      if (!protocol || !chainId) return protocol
+
+      const isSupported = (p: (typeof LIQUIDITY_TYPES)[number]): boolean => {
+        switch (p) {
+          case 'infinity':
+            return isInfinitySupported(chainId)
+          case 'v3':
+            return isV3Supported(chainId)
+          case 'v2':
+            return isV2Supported(chainId)
+          case 'stableSwap':
+            return isStableSwapSupported(chainId)
+          default:
+            return false
         }
       }
-      return Protocol.V3
+
+      if (protocol && isSupported(protocol)) return protocol
+
+      const firstSupported = LIQUIDITY_TYPES.find(isSupported)
+      return firstSupported ?? 'v3'
     },
-    [isV2Supported],
+    [isV2Supported, isInfinitySupported, isStableSwapSupported, isV3Supported],
   )
 
   const updateParams = useCallback(
