@@ -68,7 +68,7 @@ export const chainNamesInKebabCase = {
   [ChainId.ARBITRUM_SEPOLIA]: 'arbitrum-sepolia',
   [ChainId.BASE_SEPOLIA]: 'base-sepolia',
   [ChainId.MONAD_TESTNET]: 'monad-testnet',
-  [NonEVMChainId.SOLANA]: 'solana',
+  [NonEVMChainId.SOLANA]: 'sol',
   [NonEVMChainId.APTOS]: 'aptos',
 } as const
 
