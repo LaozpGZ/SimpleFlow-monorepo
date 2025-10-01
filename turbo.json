@@ -19,7 +19,20 @@
         "FIREBASE_PRIVATE_KEY",
         "DISCORD_CLIENT_SECRET",
         "DISCORD_REDIRECT_URI",
-        "TELEGRAM_BOT_TOKEN"
+        "TELEGRAM_BOT_TOKEN",
+        "ENABLE_EXPERIMENTAL_COREPACK",
+        "AFFILIATE_PROGRAM_API_URL",
+        "SENTRY_ORG",
+        "SENTRY_PROJECT",
+        "SENTRY_AUTH_TOKEN",
+        "NODE_REAL_SUBGRAPH_API_KEY",
+        "FLAGS_SECRET",
+        "ZYFI_API_KEY",
+        "ISR_REVALIDATE_TOKEN",
+        "NOVU_SECRET_KEY",
+        "NOVU_CLIENT_APP_ID",
+        "SOLANA_SWAP_PAGE",
+        "DUNE_API_KEY"
       ],
       "outputs": ["dist/**", ".next/**/*", "!.next/cache/**", "!.vercel/**/*"]
     },
