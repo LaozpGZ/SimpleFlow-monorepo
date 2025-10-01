@@ -32,7 +32,7 @@ export type SiteStats = {
 }
 
 export type HomePagePoolInfo = {
-  id: `0x${string}`
+  id: string
   token0: TokenBase
   token1: TokenBase
   chainId: ChainId
