@@ -10,7 +10,7 @@ const config: Options = {
   sourcemap: true,
   external: ['react', 'react-dom', '@solana/web3.js'],
   format: ['esm'],
-  target: 'es2020',
+  target: 'es6',
   cjsInterop: true,
   tsconfig: './tsconfig.npm.json',
   esbuildPlugins: [

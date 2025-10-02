@@ -11,7 +11,7 @@ export default defineConfig((options) => ({
   treeshake: true,
   splitting: true,
   external: ['react', 'react-dom', '@solana/web3.js'],
-  target: 'es2020',
+  target: 'es6',
   cjsInterop: true,
   onSuccess: async () => {
     exec('tsc --emitDeclarationOnly --declaration', (err, stdout) => {
