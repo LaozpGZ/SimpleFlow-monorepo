@@ -1,5 +1,5 @@
 import { SPLToken } from '@pancakeswap/swap-sdk-core'
-import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import type { TokenInfo, JupRawTokenData } from '@pancakeswap/solana-core-sdk'
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
 
@@ -8,15 +8,6 @@ export const USER_ADDED_KEY = 'solana-user-added-tokens'
 // NOTE: since Parser input will be different for each api, we use any type here
 // but data input include TokenInfo type in its structure
 type Parser = (data: any) => SPLToken[]
-
-interface RawTokenData {
-  id: string
-  name: string
-  symbol: string
-  decimals: number
-  tokenProgram: string
-  icon: string
-}
 
 export enum TokenListKey {
   PANCAKESWAP = 'pancakeswap',
@@ -98,7 +89,7 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
     logoURI: 'https://jup.ag/_next/image?url=%2Fsvg%2Fjupiter-logo.png&w=96&q=75',
     description: 'Jupiter Token List',
     apiUrl: 'https://lite-api.jup.ag/tokens/v2/tag?query=verified',
-    parser: (data: RawTokenData[]) => {
+    parser: (data: JupRawTokenData[]) => {
       const tokenList: TokenInfo[] =
         data?.map((t) => ({
           chainId: NonEVMChainId.SOLANA,
@@ -106,7 +97,8 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
           name: t.name,
           decimals: t.decimals,
           symbol: t.symbol,
-          logoURI: t.icon,
+          logoURI: t.icon || '',
+          tags: t.tags || [],
           programId: t.tokenProgram,
           priority: 1,
         })) || []

@@ -167,6 +167,16 @@ export type ApiV3Token = {
   mintAuthority?: string;
 };
 
+export type JupRawTokenData = {
+  id: string
+  name: string
+  symbol: string
+  decimals: number
+  tokenProgram: string
+  tags?: string[]
+  icon?: string
+}
+
 export type JupToken = {
   address: string;
   name: string;

@@ -15,7 +15,7 @@ import {
   FormatFarmKeyOut,
   AvailabilityCheckAPI3,
   PoolFetchType,
-  ExtensionsItem,
+  JupRawTokenData,
   JupToken,
 } from "./type";
 import { API_URLS, API_URL_CONFIG } from "./url";
@@ -190,9 +190,26 @@ export class Api {
       minted_at: string;
     })[]
   > {
-    const r: JupToken[] = await this.api.get("", {
-      baseURL: this.urlConfigs.JUP_TOKEN_LIST || API_URLS.JUP_TOKEN_LIST,
-    });
+const rawTokens: JupRawTokenData[] = await this.api.get("", {
+  baseURL: this.urlConfigs.JUP_TOKEN_LIST || API_URLS.JUP_TOKEN_LIST,
+});
+
+const r: JupToken[] = rawTokens.map((t) => ({
+  address: t.id,
+  name: t.name,
+  symbol: t.symbol,
+  decimals: t.decimals,
+  logoURI: t.icon || '',
+  tags: t.tags || [],
+  daily_volume: 0,
+  created_at: new Date().toISOString(),
+  freeze_authority: null,
+  mint_authority: null, 
+  permanent_delegate: null, 
+  minted_at: new Date().toISOString(), 
+  extensions: {},
+}));
+
     return r.map((t) => ({
       ...t,
       chainId: 101,
