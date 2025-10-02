@@ -10,6 +10,7 @@ export const supportedChainIdV4 = [
   ChainId.ZKSYNC,
   ChainId.LINEA,
   ChainId.ARBITRUM_ONE,
+  ChainId.MONAD_MAINNET,
   NonEVMChainId.SOLANA,
 ] as const satisfies readonly (ChainId | NonEVMChainId)[]
 
@@ -26,6 +27,7 @@ export const supportedChainIdV2 = [
   ChainId.BSC_TESTNET,
   ChainId.ETHEREUM,
   ChainId.ARBITRUM_ONE,
+  ChainId.MONAD_MAINNET,
   ChainId.MONAD_TESTNET,
 ] as const
 export const supportedChainIdV3 = [
@@ -40,6 +42,7 @@ export const supportedChainIdV3 = [
   ChainId.BASE,
   ChainId.OPBNB,
   ChainId.OPBNB_TESTNET,
+  ChainId.MONAD_MAINNET,
   ChainId.MONAD_TESTNET,
 ] as const
 export const supportedChainId = Array.from(new Set<ChainId>([...supportedChainIdV2, ...supportedChainIdV3]))
@@ -78,6 +81,7 @@ export const masterChefV3Addresses = {
   [ChainId.BASE]: '0xC6A2Db661D5a5690172d8eB0a7DEA2d3008665A3',
   [ChainId.OPBNB]: '0x05ddEDd07C51739d2aE21F6A9d97a8d69C2C3aaA',
   [ChainId.OPBNB_TESTNET]: '0x236e713bFF45adb30e25D1c29A887aBCb0Ea7E21',
+  [ChainId.MONAD_MAINNET]: '0x',
   [ChainId.MONAD_TESTNET]: '0x',
 } as const satisfies Record<FarmV3SupportedChainId, string>
 
