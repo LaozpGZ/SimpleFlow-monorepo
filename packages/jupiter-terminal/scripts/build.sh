@@ -3,7 +3,7 @@
 # Create temp directory for Jupiter terminal
 TEMP_DIR="temp-jupiter"
 BUNDLE_DEST="./dist"
-COMMIT="dc9973a7b8890a92e80be2bc004dee829a68172e"
+COMMIT="1ff3ace162b47e6478e52d6556aca155127066fb"
 
 # 1. Clone and prepare Jupiter terminal repo
 if [ -d "$TEMP_DIR" ]; then
