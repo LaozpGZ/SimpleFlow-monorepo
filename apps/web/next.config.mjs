@@ -123,10 +123,14 @@ const config = {
           source: '/.well-known/vercel/flags',
           destination: '/api/vercel/flags',
         },
-        // {
-        //   source: '/perp/:path*',
-        //   destination: 'https://perp.pancakeswap.finance/perp/:path*',
-        // },
+        {
+          source: '/perp/v2/:symbol.rsc',
+          destination: 'https://perp.pancakeswap.finance/perp/v2/:symbol',
+        },
+        {
+          source: '/perp/:path*',
+          destination: 'https://perp.pancakeswap.finance/perp/:path*',
+        },
       ],
     }
   },
