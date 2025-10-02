@@ -9,6 +9,17 @@ export const USER_ADDED_KEY = 'solana-user-added-tokens'
 // but data input include TokenInfo type in its structure
 type Parser = (data: any) => SPLToken[]
 
+interface RawTokenData {
+  id: string
+  name: string
+  symbol: string
+  decimals: number
+  tokenProgram: string
+  icon: string
+  tags?: string[]
+  coingeckoId?: string
+}
+
 export enum TokenListKey {
   PANCAKESWAP = 'pancakeswap',
   RAYDIUM = 'raydium',
@@ -89,8 +100,23 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
     logoURI: 'https://jup.ag/_next/image?url=%2Fsvg%2Fjupiter-logo.png&w=96&q=75',
     description: 'Jupiter Token List',
     apiUrl: 'https://lite-api.jup.ag/tokens/v2/tag?query=verified',
-    parser: (data: TokenInfo[]) => {
-      return (data ?? []).map(convertRawTokenInfoIntoSPLToken)
+    parser: (data: RawTokenData[]) => {
+      const tokenList: TokenInfo[] =
+        data?.map((t) => ({
+          chainId: 101,
+          address: t.id,
+          name: t.name,
+          decimals: t.decimals,
+          symbol: t.symbol,
+          logoURI: t.icon,
+          tags: t.tags,
+          programId: t.tokenProgram,
+          priority: 1,
+          extensions: {
+            coingeckoId: t.coingeckoId,
+          },
+        })) || []
+      return tokenList.map(convertRawTokenInfoIntoSPLToken)
     },
   },
 }
