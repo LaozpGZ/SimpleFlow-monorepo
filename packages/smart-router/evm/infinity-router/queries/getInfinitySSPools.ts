@@ -1,13 +1,94 @@
-import { Currency, CurrencyAmount, getCurrencyAddress, Native, Percent, sortCurrencies } from '@pancakeswap/sdk'
-import { getPoolId, INFI_CL_POOL_MANAGER_ADDRESSES, isInfinitySupported, PoolKey } from '@pancakeswap/infinity-sdk'
-import { Address } from 'viem'
+import { Currency, CurrencyAmount, Native, Percent } from '@pancakeswap/sdk'
+import { isInfinitySupported } from '@pancakeswap/infinity-sdk'
+import { Address, PublicClient } from 'viem'
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { getPairCombinations } from '../../v3-router/functions'
 import { createOnChainPoolFactory } from '../../v3-router/providers'
-import { InfinityClPool, PoolType, StablePool } from '../../v3-router/types'
-import { InfinityClPoolMeta } from './getInfinityClPools'
+import { PoolType, StablePool } from '../../v3-router/types'
 import { PoolMeta } from '../../v3-router/providers/poolProviders/internalTypes'
-import { stableSwapPairABI } from '../../abis/StableSwapPair'
+import { stableNGHookABI } from './abi'
+
+// find_pool_for_coins(_from: address, _to: address, i: uint256 = 0) -> address:
+const stableNGHookFactoryABI = [
+  {
+    stateMutability: 'view',
+    type: 'function',
+    name: 'pool_list',
+    inputs: [
+      {
+        name: 'arg0',
+        type: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+      },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    name: 'pool_count',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+  },
+]
+
+/**
+ * Mock Hook Factory for Stable Swap
+ * This should eventually call the actual hook factory contract
+ */
+class StableNGHookFactory {
+  constructor(private readonly contractAddress: Address, private readonly publicClient: PublicClient) {
+    this.contractAddress = contractAddress
+    this.publicClient = publicClient
+  }
+
+  // implement getPools
+  async getPools(): Promise<any[]> {
+    console.log('calling getPools')
+    // call pool_count
+    // call pool_list for each index
+    // return the results
+    const poolCountResult = await this.publicClient.readContract({
+      address: this.contractAddress,
+      abi: stableNGHookFactoryABI,
+      functionName: 'pool_count',
+    })
+
+    const poolCount = Number(poolCountResult?.toString())
+
+    if (poolCount === 0) {
+      return []
+    }
+
+    // TODO: optimize this to use a single call
+    const pools = []
+    for (let i = 0; i < poolCount; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      const pool = await this.publicClient.readContract({
+        address: this.contractAddress,
+        abi: stableNGHookFactoryABI,
+        functionName: 'pool_list',
+        args: [i],
+      })
+      pools.push(pool)
+    }
+
+    return pools
+  }
+
+  get address(): Address {
+    return this.contractAddress
+  }
+}
 
 export async function getInfinitySSCandidatePools({
   currencyA,
@@ -32,77 +113,34 @@ export async function getInfinitySSCandidatePools({
   return getInfinitySSPools(pairsWithNative, clientProvider)
 }
 
-/**
- * Default param from hook factory contract
- *         // fee and tickSpacing will not be used
-        bytes32 parameters = bytes32(uint256(IHooks(address(hook)).getHooksRegistrationBitmap()));
-        parameters = parameters.setTickSpacing(1);
-        Currency currency0 = Currency.wrap(_coins[0]);
-        Currency currency1 = Currency.wrap(_coins[1]);
-        PoolKey memory key = PoolKey({
-            currency0: currency0,
-            currency1: currency1,
-            hooks: IHooks(address(hook)),
-            poolManager: poolManager,
-            fee: uint24(0),
-            parameters: parameters
-        });
-
- */
-
 export const getInfinitySSPools = createOnChainPoolFactory<StablePool, PoolMeta>({
-  abi: stableSwapPairABI,
-  getPossiblePoolMetas: async ([currencyA, currencyB]) => {
+  abi: stableNGHookABI,
+  getPossiblePoolMetas: async ([currencyA, currencyB], client) => {
     const { chainId } = currencyA
     if (!isInfinitySupported(chainId))
-      throw new Error(`Failed to get cl pools. Infinity not supported on chain ${chainId}`)
-    const [currency0, currency1] = sortCurrencies([currencyA, currencyB])
-    const poolIdList = new Set<string>()
+      throw new Error(`Failed to get stable infinity pools. Stable Infinity not supported on chain ${chainId}`)
 
-    // await find_pool_for_coins from HookFactory contract
-    const ssHookAddresses: Address[] = []
+    if (!client) {
+      throw new Error(`No client provided for getInfinitySSPools on chain ${chainId}`)
+    }
 
-    return ssHookAddresses
-      .map((hookAddress) => {
-        const tickSpacing = 1
-        const fee = 0
-        const hooks = hookAddress
-        // TODO: should get hook.getHooksRegistrationBitmap?
-        const hooksRegistration = undefined
+    // Get hook addresses from HookFactory contract
+    const mockHookFactoryAddress = '0x515Fa220d115f69EDEb5f7544705C3f4437A7a84' as Address
+    const hookFactory = new StableNGHookFactory(mockHookFactoryAddress, client)
 
-        const hooksRegistrationBitmap = undefined
+    const ssHookAddresses: Address[] = await hookFactory.getPools()
 
-        const poolKey: PoolKey<'CL'> = {
-          currency0: getCurrencyAddress(currency0),
-          currency1: getCurrencyAddress(currency1),
-          fee,
-          parameters: {
-            tickSpacing,
-            hooksRegistration,
-          },
-          poolManager: INFI_CL_POOL_MANAGER_ADDRESSES[chainId],
-          hooks: hookAddress,
-        }
+    console.log('calling ssHookAddressesMetas')
 
-        const id = getPoolId(poolKey)
-        if (poolIdList.has(id)) {
-          return undefined
-        }
+    const ssHookAddressesMetas = ssHookAddresses.map((hookAddress) => {
+      return {
+        currencyA,
+        currencyB,
+        id: hookAddress,
+      }
+    })
 
-        poolIdList.add(id)
-
-        return {
-          currencyA,
-          currencyB,
-          fee,
-          tickSpacing,
-          hooks,
-          poolManager: poolKey.poolManager,
-          id,
-          hooksRegistrationBitmap,
-        }
-      })
-      .filter((meta) => meta !== undefined)
+    return ssHookAddressesMetas
   },
   buildPoolInfoCalls: ({ id: address }) => [
     {
@@ -125,16 +163,17 @@ export const getInfinitySSPools = createOnChainPoolFactory<StablePool, PoolMeta>
       functionName: 'fee',
       args: [],
     },
-    {
-      address,
-      functionName: 'FEE_DENOMINATOR',
-      args: [],
-    },
   ],
-  buildPool: ({ currencyA, currencyB, id: address }, [balance0, balance1, a, fee, feeDenominator]) => {
-    if (!balance0 || !balance1 || !a || !fee || !feeDenominator) {
+  buildPool: ({ currencyA, currencyB, id: address }, [balance0, balance1, a, fee]) => {
+    console.log('building pool', { currencyA, currencyB, address, balance0, balance1, a, fee })
+
+    if (!balance0 || !balance1 || !a || !fee) {
       return null
     }
+
+    // From Hook Smart Contract
+    const FEE_DENOMINATOR = 10 ** 10
+
     const [token0, token1] = currencyA.wrapped.sortsBefore(currencyB.wrapped)
       ? [currencyA, currencyB]
       : [currencyB, currencyA]
@@ -146,7 +185,7 @@ export const getInfinitySSPools = createOnChainPoolFactory<StablePool, PoolMeta>
         CurrencyAmount.fromRawAmount(token1, balance1.toString()),
       ],
       amplifier: BigInt(a.toString()),
-      fee: new Percent(BigInt(fee.toString()), BigInt(feeDenominator.toString())),
+      fee: new Percent(BigInt(fee.toString()), BigInt(FEE_DENOMINATOR.toString())),
     }
   },
 })

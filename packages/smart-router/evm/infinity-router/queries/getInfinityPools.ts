@@ -30,6 +30,7 @@ async function fetchPoolsOnChain(params: GetInfinityCandidatePoolsParams) {
     getInfinityClCandidatePoolsWithoutTicks(params),
     getInfinityBinCandidatePoolsWithoutBins(params),
   ])
+
   const pools = [...clPools, ...binPools]
   const poolsWithTvl: InfinityPoolWithTvl[] = pools.map((pool) => {
     return {

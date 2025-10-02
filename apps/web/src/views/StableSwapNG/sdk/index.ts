@@ -1,5 +1,5 @@
 // Core classes
-export { StableSwapNGPoolFactory } from './stableSwapNGPoolFactory'
+export { StableNGPoolFactory } from './stableNGPoolFactory'
 
 // Types and interfaces
 export type { CreateStableNGPoolOptions, PoolPreset } from './types'

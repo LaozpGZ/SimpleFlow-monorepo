@@ -2,7 +2,7 @@ import { Currency } from '@pancakeswap/sdk'
 import { Address, Hex, encodeFunctionData, toHex } from 'viem'
 import invariant from 'tiny-invariant'
 
-import { stableNGPoolFactoryABI } from './abi'
+import { stableNGPoolFactoryABI } from './abis/stableNGPoolFactoryABI'
 import {
   STABLE_NG_POOL_FACTORY_ADDRESS,
   ADDRESS_ZERO,
@@ -30,7 +30,7 @@ function sortCurrencies(tokenA: Currency, tokenB: Currency): [Currency, Currency
 /**
  * StableSwapNG Pool Factory for creating and managing stable swap pools
  */
-export abstract class StableSwapNGPoolFactory {
+export abstract class StableNGPoolFactory {
   public static ABI = stableNGPoolFactoryABI
 
   public static ADDRESS = STABLE_NG_POOL_FACTORY_ADDRESS
@@ -64,7 +64,7 @@ export abstract class StableSwapNGPoolFactory {
     const methodIds = options.methodIds ?? ([NULL_METHOD_ID, NULL_METHOD_ID] as const)
     const oracles = options.oracles ?? ([ADDRESS_ZERO, ADDRESS_ZERO] as const)
 
-    console.info('[debug] StableSwapNGPoolFactory.encodeCreatePool call parameters', {
+    console.info('[debug] StableNGPoolFactory.encodeCreatePool call parameters', {
       name,
       symbol,
       coins,
@@ -79,7 +79,7 @@ export abstract class StableSwapNGPoolFactory {
     })
 
     return encodeFunctionData({
-      abi: StableSwapNGPoolFactory.ABI,
+      abi: StableNGPoolFactory.ABI,
       functionName: 'createPool',
       args: [
         name,

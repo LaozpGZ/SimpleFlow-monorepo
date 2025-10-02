@@ -1,5 +1,5 @@
 import { PublicClient, WalletClient } from 'viem'
-import { stableNGHookABI } from './stableNGHookABI'
+import { stableNGHookABI } from './abis/stableNGHookABI'
 
 export class StableNGHook {
   private contractAddress: string

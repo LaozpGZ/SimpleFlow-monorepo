@@ -76,6 +76,7 @@ async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, cha
     throw new Error(`Error fetching infinity pools: ${response.statusText}`)
   }
   const data = (await response.json()) as (RemotePoolCL | RemotePoolBIN)[]
+
   const hooksMap = await getHooksMap(type, data, chainId)
 
   const localPools = data
@@ -212,7 +213,16 @@ const fetchSSPool = async (addressA: Address, addressB: Address, chainId: ChainI
     onChainProvider: getProvider(),
     blockNumber,
   })
-  return pools
+
+  const ssPools = await InfinityRouter.getInfinitySSCandidatePools({
+    currencyA,
+    currencyB,
+    clientProvider: getProvider(),
+  })
+
+  // console.log('ssPools', ssPools)
+
+  return [...pools, ...ssPools]
 }
 
 const querySingleType = async (

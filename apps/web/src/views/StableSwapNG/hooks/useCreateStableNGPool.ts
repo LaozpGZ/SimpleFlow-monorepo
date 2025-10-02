@@ -11,7 +11,7 @@ import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import {
-  StableSwapNGPoolFactory,
+  StableNGPoolFactory,
   STABLE_NG_POOL_FACTORY_ADDRESS,
   type CreateStableNGPoolOptions,
   type PoolPreset,
@@ -46,8 +46,8 @@ export const useCreateStableNGPool = () => {
 
         // Generate call parameters using the SDK
         const { calldata } = preset
-          ? StableSwapNGPoolFactory.createPoolWithPresetCallParameters(tokenA, tokenB, preset)
-          : StableSwapNGPoolFactory.createPoolCallParameters({
+          ? StableNGPoolFactory.createPoolWithPresetCallParameters(tokenA, tokenB, preset)
+          : StableNGPoolFactory.createPoolCallParameters({
               tokenA,
               tokenB,
               ...options,
