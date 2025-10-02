@@ -16,4 +16,12 @@ export const monadTokens = {
     'Wrapped Monad',
     'https://www.monad.xyz/',
   ),
+  mcake: new ERC20Token(
+    ChainId.MONAD_TESTNET,
+    '0xcf05Fc31A6B693DD0bEB76e958ae4BCD490dc985',
+    18,
+    'MCake',
+    'Monad Cake',
+    'https://www.monad.xyz/',
+  ),
 }
