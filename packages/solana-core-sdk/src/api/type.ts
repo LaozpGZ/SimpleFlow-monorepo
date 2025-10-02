@@ -168,14 +168,14 @@ export type ApiV3Token = {
 };
 
 export type JupRawTokenData = {
-  id: string
-  name: string
-  symbol: string
-  decimals: number
-  tokenProgram: string
-  tags?: string[]
-  icon?: string
-}
+  id: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  tokenProgram: string;
+  tags?: string[];
+  icon?: string;
+};
 
 export type JupToken = {
   address: string;
