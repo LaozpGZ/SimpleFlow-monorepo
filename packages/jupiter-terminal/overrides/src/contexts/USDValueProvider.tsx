@@ -42,7 +42,7 @@ export function useUSDValueProvider(): USDValueState {
 }
 
 interface JupPriceResponse {
-  [id: string]: { id: string; mintSymbol: string; vsToken: string; vsTokenSymbol: string; price: number }
+  [id: string]: { usdPrice: number }
 }
 
 const hasExpired = (timestamp: number) => {
@@ -93,8 +93,8 @@ export const USDValueProvider: FC<PropsWithChildren<IInit>> = ({ children }) => 
           ...accValue,
           result: {
             ...accValue.result,
-            [priceForAddress.id]: {
-              usd: priceForAddress.price,
+            [address]: {
+              usd: priceForAddress.usdPrice,
               timestamp: nowTimestamp,
             },
           },
