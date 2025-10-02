@@ -16,8 +16,6 @@ interface RawTokenData {
   decimals: number
   tokenProgram: string
   icon: string
-  tags?: string[]
-  coingeckoId?: string
 }
 
 export enum TokenListKey {
@@ -103,18 +101,14 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
     parser: (data: RawTokenData[]) => {
       const tokenList: TokenInfo[] =
         data?.map((t) => ({
-          chainId: 101,
+          chainId: NonEVMChainId.SOLANA,
           address: t.id,
           name: t.name,
           decimals: t.decimals,
           symbol: t.symbol,
           logoURI: t.icon,
-          tags: t.tags,
           programId: t.tokenProgram,
           priority: 1,
-          extensions: {
-            coingeckoId: t.coingeckoId,
-          },
         })) || []
       return tokenList.map(convertRawTokenInfoIntoSPLToken)
     },
