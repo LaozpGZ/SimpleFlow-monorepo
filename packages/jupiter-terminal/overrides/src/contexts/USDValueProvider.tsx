@@ -74,9 +74,9 @@ export const USDValueProvider: FC<PropsWithChildren<IInit>> = ({ children }) => 
   )
 
   const getPriceFromJupAPI = useCallback(async (addresses: string[]) => {
-    const { data }: { data: JupPriceResponse } = await fetch(
-      `https://lite-api.jup.ag/price/v3?ids=${addresses.join(',')}`,
-    ).then((res) => res.json())
+    const data: JupPriceResponse = await fetch(`https://lite-api.jup.ag/price/v3?ids=${addresses.join(',')}`).then(
+      (res) => res.json(),
+    )
 
     const nowTimestamp = new Date().getTime()
     const result = addresses.reduce<{ result: Record<string, CacheUSDValue>; failed: string[] }>(
