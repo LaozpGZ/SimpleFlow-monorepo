@@ -25,7 +25,7 @@ export const API_URLS = {
   PCS_TOKEN_LIST: "https://tokens.pancakeswap.finance/pancakeswap-solana-default.json",
   MINT_INFO_ID: "/mint/ids",
 
-  JUP_TOKEN_LIST: "https://lite-api.jup.ag/tokens/v1/tagged/verified",
+  JUP_TOKEN_LIST: "https://lite-api.jup.ag/tokens/v2/tag?query=verified",
   /**
    * poolType: {all, concentrated, standard, allFarm, concentratedFarm, standardFarm}
    * poolSortField: {liquidity | volume_24h / 7d / 30d | fee_24h / 7d / 30d | apr_24h / 7d / 30d}

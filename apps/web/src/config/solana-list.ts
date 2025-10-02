@@ -88,7 +88,7 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
     name: 'Jupiter',
     logoURI: 'https://jup.ag/_next/image?url=%2Fsvg%2Fjupiter-logo.png&w=96&q=75',
     description: 'Jupiter Token List',
-    apiUrl: 'https://lite-api.jup.ag/tokens/v1/tagged/verified',
+    apiUrl: 'https://lite-api.jup.ag/tokens/v2/tag?query=verified',
     parser: (data: TokenInfo[]) => {
       return (data ?? []).map(convertRawTokenInfoIntoSPLToken)
     },
