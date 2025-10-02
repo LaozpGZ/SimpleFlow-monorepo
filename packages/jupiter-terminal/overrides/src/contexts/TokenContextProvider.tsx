@@ -45,7 +45,35 @@ const fetchTokens = async () => {
       : tokenMap.set(t.id, t)
   })
 
-  return [...tokenMap.values()]
+  const tokenList: TokenInfo[] = Array.from(tokenMap.values()).map((t) => ({
+    chainId: 101,
+    address: t.id,
+    name: t.name,
+    decimals: t.decimals,
+    symbol: t.symbol,
+    logoURI: t.icon,
+    tags: t.tags,
+    extensions: {
+      website: t.website,
+      bridgeContract: t.bridgeContract,
+      assetContract: t.assetContract,
+      address: t.address,
+      explorer: t.explorer,
+      twitter: t.twitter,
+      github: t.github,
+      medium: t.medium,
+      tgann: t.tgann || t.telegram,
+      tggroup: t.tggroup,
+      discord: t.discord,
+      serumV3Usdt: t.serumV3Usdt,
+      serumV3Usdc: t.serumV3Usdc,
+      coingeckoId: t.coingeckoId,
+      imageUrl: t.icon,
+      description: t.description,
+    },
+  }))
+
+  return tokenList
 }
 
 export function TokenContextProvider({ formProps, children }: IInit & { children: ReactNode }) {
