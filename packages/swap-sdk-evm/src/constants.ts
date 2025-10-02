@@ -153,7 +153,7 @@ export const WETH9 = {
   ),
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0x4200000000000000000000000000000000000006',
+    '0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A',
     18,
     'WMON',
     'Wrapped Monad',
