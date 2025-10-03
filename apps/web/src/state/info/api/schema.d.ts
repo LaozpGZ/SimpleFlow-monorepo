@@ -1630,6 +1630,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -1878,6 +1879,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -1916,6 +1918,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -2024,6 +2027,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Ethereum address */
@@ -2068,6 +2072,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -2110,6 +2115,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Ethereum address */
@@ -2151,6 +2157,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Ethereum address */
@@ -2192,6 +2199,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -2363,6 +2371,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -2396,6 +2405,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -2638,6 +2648,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -2700,6 +2711,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -3041,7 +3053,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
-          | 'sol'
+          | 'monad'
         /** @description Pool ID */
         address: string
       }
@@ -3083,6 +3095,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Pool ID */
         address: string
       }
@@ -3162,7 +3175,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
-          | 'sol'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Pool ID */
@@ -3204,7 +3217,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
-          | 'sol'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Pool ID */
@@ -3293,6 +3306,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -3326,6 +3340,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -3389,6 +3404,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -3420,6 +3436,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -4928,6 +4945,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Ethereum address */
         address: string
       }
@@ -5080,6 +5098,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -5688,6 +5707,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -5783,6 +5803,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
       }
       cookie?: never
     }
@@ -5914,7 +5935,7 @@ export interface operations {
       query?: never
       header?: never
       path: {
-        chainName: 'bsc' | 'arbitrum' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'polygon-zkevm' | 'linea'
+        chainName: 'bsc' | 'arbitrum' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'polygon-zkevm' | 'linea' | 'monad'
         timestamp: string | number
       }
       cookie?: never
@@ -5983,6 +6004,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -6022,6 +6044,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -6060,6 +6083,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -6125,6 +6149,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
