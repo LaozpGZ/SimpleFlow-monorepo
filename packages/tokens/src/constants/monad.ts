@@ -17,7 +17,7 @@ export const monadTokens = {
     'https://www.monad.xyz/',
   ),
   mcake: new ERC20Token(
-    ChainId.MONAD_TESTNET,
+    ChainId.MONAD_MAINNET,
     '0xcf05Fc31A6B693DD0bEB76e958ae4BCD490dc985',
     18,
     'MCake',
