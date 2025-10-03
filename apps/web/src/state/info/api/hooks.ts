@@ -31,9 +31,6 @@ export const useExplorerChainNameByQuery = (): ExplorerApiQueryChain => {
         return 'opbnb'
       case 'monad':
         return chainIdToExplorerInfoChainName[ChainId.MONAD_MAINNET]
-      case 'monadTestnet':
-      case 'monad-testnet':
-        return chainIdToExplorerInfoChainName[ChainId.MONAD_TESTNET]
       case 'solana':
         // Not all APIs currently support the 'sol' chainName.
         // We can't modify the chainName type to include 'sol'.

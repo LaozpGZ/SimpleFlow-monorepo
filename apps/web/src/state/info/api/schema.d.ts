@@ -1290,7 +1290,17 @@ export interface components {
      * @description Chain name
      * @enum {string}
      */
-    ChainName: 'bsc' | 'bsc-testnet' | 'ethereum' | 'base' | 'opbnb' | 'zksync' | 'polygon-zkevm' | 'linea' | 'arbitrum'
+    ChainName:
+      | 'bsc'
+      | 'bsc-testnet'
+      | 'ethereum'
+      | 'base'
+      | 'opbnb'
+      | 'zksync'
+      | 'polygon-zkevm'
+      | 'linea'
+      | 'arbitrum'
+      | 'monad'
     /**
      * @description Protocol version
      * @enum {string}
