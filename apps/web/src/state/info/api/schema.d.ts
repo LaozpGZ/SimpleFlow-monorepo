@@ -2825,6 +2825,7 @@ export interface operations {
           | 'polygon-zkevm'
           | 'linea'
           | 'arbitrum'
+          | 'monad'
         /** @description Pool address */
         pool: string
       }
@@ -3054,6 +3055,7 @@ export interface operations {
           | 'linea'
           | 'arbitrum'
           | 'monad'
+          | 'sol'
         /** @description Pool ID */
         address: string
       }
