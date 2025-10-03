@@ -2,8 +2,9 @@ import { ChainId, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@panca
 
 import { Address } from './types/common'
 
-const WALLET_API = 'https://wallet-api.pancakeswap.com/v1/prices/list/'
-const getWalletPriceUrl = (chainName: string) => `https://wallet-api.pancakeswap.com/${chainName}/v1/prices/list/`
+const WALLET_API = 'https://wallet-staging-9rdnm.ondigitalocean.app/v1/prices/list/'
+const getWalletPriceUrl = (chainName: string) =>
+  `https://wallet-staging-9rdnm.ondigitalocean.app/${chainName}/v1/prices/list/`
 
 export const zeroAddress = '0x0000000000000000000000000000000000000000' as const
 
