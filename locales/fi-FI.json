@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Likviditeetti lisätään lähimpään tikkiin määrittelemästäsi rajahinnasta. Rajatoimeksiantoa ei välttämättä suoriteta tarkalleen silloin, kun tokenin hinta saavuttaa määrittelemäsi arvon ulkoisilla markkinoilla.",
   "Order Size must meet a minimum of 0.05 BNB": "Toimeksiannon koon on oltava vähintään 0,05 BNB",
   "Order Size must meet a minimum of 50 USD": "Toimeksiannon koon on oltava vähintään 50 USD",
-  "Sell when": "Myy, kun",
-  "is worth": "on arvoltaan",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Rajahinta pyöristetään lähimpään tikkiin, koska toimeksiannot asetetaan lisäämällä likviditeettiä CLAMM-pooliin.",
   "View Pending Only": "Näytä vain odottavat",
   "%number% Open Limit Orders": "%number% avointa rajatoimeksiantoa",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Varoitus: %token% on tällä hetkellä vahvistamaton. Vahvista aina osoite ja tee oma tutkimuksesi, ennen kuin käyt kauppaa tai olet vuorovaikutuksessa tämän poolin kanssa.",
   "CAKE Emission Projection": "CAKE-emission ennuste",
   "Caution - %symbol% Token": "Varoitus - %symbol%-token",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Noudata erityistä varovaisuutta, kun treidaat tai tarjoat likviditeettiä %symbol%-tokenille. Protokollassa tapahtui hiljattain <0>tietoturvaloukkaus.</0> Lisätietoja saat <1>%name%n X-tililtä</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Noudata erityistä varovaisuutta, kun treidaat tai tarjoat likviditeettiä %symbol%-tokenille. Protokollassa tapahtui hiljattain <0>tietoturvaloukkaus.</0> Lisätietoja saat <1>%name%n X-tililtä</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Myy, kun 1 <0>%inputSymbol%</0> on arvoltaan:",
+  "No orders found": "Ei toimeksiantoja löytynyt",
+  "Order Placed": "Toimeksianto asetettu",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Toimeksiannon lähettäminen epäonnistui hintaliikkeen vuoksi. Yritä uudelleen päivitetyllä rajahinnalla!"
 }

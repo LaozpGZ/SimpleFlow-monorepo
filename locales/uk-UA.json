@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Ліквідність буде додано до найближчого тіку до вказаної вами лімітної ціни. Лімітний ордер може не виконатися точно, коли ціна токена досягне вказаного вами значення на зовнішніх ринках.",
   "Order Size must meet a minimum of 0.05 BNB": "Розмір ордера має бути не менше 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Розмір ордера має бути не менше 50 USD",
-  "Sell when": "Продати, коли",
-  "is worth": "коштує",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Лімітна ціна буде округлена до найближчого тіку, оскільки ордери розміщуються шляхом додавання ліквідності до пулу CLAMM.",
   "View Pending Only": "Переглянути лише очікувані",
   "%number% Open Limit Orders": "%number% відкритих лімітних ордерів",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Обережно: токен %token% наразі не верифіковано. Завжди перевіряйте адресу та проводьте власне дослідження перед торгівлею або взаємодією з цим пулом.",
   "CAKE Emission Projection": "Прогноз емісії CAKE",
   "Caution - %symbol% Token": "Обережно: токен %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Будь ласка, будьте обережні під час торгівлі / надання ліквідності для токена %symbol%. Нещодавно в протоколі сталося <0>порушення безпеки.</0> Для отримання додаткової інформації перегляньте <1>%name% у X</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Будь ласка, будьте обережні під час торгівлі / надання ліквідності для токена %symbol%. Нещодавно в протоколі сталося <0>порушення безпеки.</0> Для отримання додаткової інформації перегляньте <1>%name% у X</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Продати, коли 1 <0>%inputSymbol%</0> коштує:",
+  "No orders found": "Ордери не знайдено",
+  "Order Placed": "Ордер розміщено",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Не вдалося розмістити ордер через зміну ціни. Будь ласка, спробуйте ще раз з оновленою лімітною ціною!"
 }

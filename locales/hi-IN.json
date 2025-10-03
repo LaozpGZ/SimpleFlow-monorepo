@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "आपकी तय की गई लिमिट कीमत के सबसे करीबी टिक पर लिक्विडिटी जोड़ी जाएगी। बाहरी बाजारों पर जब टोकन की कीमत आपके तय किए गए मूल्य तक पहुंचती है तो हो सकता है कि लिमिट ऑर्डर ठीक उसी समय निष्पादित न हो।",
   "Order Size must meet a minimum of 0.05 BNB": "ऑर्डर का आकार कम से कम 0.05 BNB होना चाहिए",
   "Order Size must meet a minimum of 50 USD": "ऑर्डर का आकार कम से कम 50 USD होना चाहिए",
-  "Sell when": "बेचें जब",
-  "is worth": "का मूल्य हो",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "लिमिट प्राइस को निकटतम टिक पर राउंड ऑफ किया जाएगा क्योंकि CLAMM पूल में लिक्विडिटी जोड़कर ऑर्डर दिए जाते हैं।",
   "View Pending Only": "केवल लंबित देखें",
   "%number% Open Limit Orders": "%number% खुले लिमिट ऑर्डर",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "सावधानी: %token% फ़िलहाल अनवेरिफ़ाइड है। इस पूल के साथ ट्रेड या इंटरैक्ट करने से पहले हमेशा पता कन्फ़र्म करें और अपनी ख़ुद की रिसर्च करें।",
   "CAKE Emission Projection": "CAKE इमिशन का अनुमान",
   "Caution - %symbol% Token": "सावधानी - %symbol% टोकन",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% टोकन के लिए ट्रेडिंग / लिक्विडिटी प्रदान करते समय कृपया उचित सावधानी बरतें। प्रोटोकॉल में हाल ही में एक <0>सुरक्षा समझौता</0> हुआ है। अधिक जानकारी के लिए, कृपया <1>%name% X</1> देखें।"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% टोकन के लिए ट्रेडिंग / लिक्विडिटी प्रदान करते समय कृपया उचित सावधानी बरतें। प्रोटोकॉल में हाल ही में एक <0>सुरक्षा समझौता</0> हुआ है। अधिक जानकारी के लिए, कृपया <1>%name% X</1> देखें।",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "बेचें जब 1 <0>%inputSymbol%</0> की कीमत हो:",
+  "No orders found": "कोई ऑर्डर नहीं मिला",
+  "Order Placed": "ऑर्डर दे दिया गया है",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "कीमत में उतार-चढ़ाव के कारण ऑर्डर सबमिशन असफल रहा। कृपया अपडेट की गई लिमिट कीमत के साथ फिर से प्रयास करें!"
 }

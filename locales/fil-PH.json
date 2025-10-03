@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Idadagdag ang liquidity sa tick na pinakamalapit sa iyong itinakdang limit price. Maaaring hindi ma-execute ang limit order sa eksaktong oras na maabot ng presyo ng token ang iyong itinakdang halaga sa mga external market.",
   "Order Size must meet a minimum of 0.05 BNB": "Ang Laki ng Order ay dapat may minimum na 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Ang Laki ng Order ay dapat may minimum na 50 USD",
-  "Sell when": "Ibenta kapag",
-  "is worth": "ay katumbas ng",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "I-ro-round off ang limit price sa pinakamalapit na tick dahil inilalagay ang mga order sa pamamagitan ng pagdaragdag ng liquidity sa isang CLAMM pool.",
   "View Pending Only": "Tingnan ang mga Pending Lang",
   "%number% Open Limit Orders": "%number% na Nakabukas na Limit Order",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Babala: Ang %token% ay kasalukuyang hindi pa na-verify. Palaging kumpirmahin ang address at gawin ang iyong sariling pananaliksik bago mag-trade o makipag-ugnayan sa pool na ito.",
   "CAKE Emission Projection": "CAKE Emission Projection",
   "Caution - %symbol% Token": "Pag-iingat - %symbol% Token",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Mangyaring mag-ingat nang husto sa pag-trade / pag-provide ng liquidity para sa %symbol% token. Ang protocol ay kamakailan lang nagkaroon ng isang <0>security compromise.</0> Para sa karagdagang impormasyon, mangyaring sumangguni sa <1>%name% X</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Mangyaring mag-ingat nang husto sa pag-trade / pag-provide ng liquidity para sa %symbol% token. Ang protocol ay kamakailan lang nagkaroon ng isang <0>security compromise.</0> Para sa karagdagang impormasyon, mangyaring sumangguni sa <1>%name% X</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Magbenta kapag ang 1 <0>%inputSymbol%</0> ay nagkakahalaga ng:",
+  "No orders found": "Walang nahanap na order",
+  "Order Placed": "Nailagay na ang Order",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Hindi matagumpay ang pagsumite ng order dahil sa paggalaw ng presyo. Pakisubukang muli gamit ang na-update na limit price!"
 }

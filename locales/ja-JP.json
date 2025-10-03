@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "流動性は、指定された指値に最も近いティックで追加されます。外部市場でトークン価格が指定した値に達しても、指値注文がその通りに実行されない場合があります。",
   "Order Size must meet a minimum of 0.05 BNB": "注文サイズは最低 0.05 BNB 必要です",
   "Order Size must meet a minimum of 50 USD": "注文サイズは最低 50 USD 必要です",
-  "Sell when": "売却条件",
-  "is worth": "の価格が",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "注文はCLAMMプールに流動性を追加することで行われるため、指値は最も近いティックに丸められます。",
   "View Pending Only": "保留中のみ表示",
   "%number% Open Limit Orders": "未約定の指値注文 %number% 件",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "注意: %token% は現在未検証です。このプールで取引または操作する前に、必ずアドレスを確認し、ご自身で調査を行ってください。",
   "CAKE Emission Projection": "CAKE排出量予測",
   "Caution - %symbol% Token": "注意 - %symbol% トークン",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% トークンの取引/流動性提供を行う際には、十分にご注意ください。このプロトコルでは最近、<0>セキュリティ侵害</0>が発生しました。詳細については、<1>%name% のX</1>をご参照ください。"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% トークンの取引/流動性提供を行う際には、十分にご注意ください。このプロトコルでは最近、<0>セキュリティ侵害</0>が発生しました。詳細については、<1>%name% のX</1>をご参照ください。",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "1 <0>%inputSymbol%</0> の価格が次の場合に売却：",
+  "No orders found": "注文が見つかりませんでした",
+  "Order Placed": "注文が発注されました",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "価格変動のため、注文の送信に失敗しました。指値価格を更新してもう一度お試しください！"
 }

@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "நீங்கள் குறிப்பிட்ட லிமிட் விலைக்கு மிக அருகாமையில் உள்ள டிக்கில் லிக்விடிட்டி சேர்க்கப்படும். வெளிப்புற சந்தைகளில் டோக்கன் விலை நீங்கள் குறிப்பிட்ட மதிப்பை எட்டும் போது, லிமிட் ஆர்டர் சரியாகச் செயல்படுத்தப்படாமல் போகலாம்.",
   "Order Size must meet a minimum of 0.05 BNB": "ஆர்டரின் அளவு குறைந்தபட்சம் 0.05 BNB ஆக இருக்க வேண்டும்.",
   "Order Size must meet a minimum of 50 USD": "ஆர்டரின் அளவு குறைந்தபட்சம் 50 USD ஆக இருக்க வேண்டும்.",
-  "Sell when": "எப்போது விற்க வேண்டும்",
-  "is worth": "மதிப்புடையது",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "CLAMM பூலில் லிக்விடிட்டியைச் சேர்ப்பதன் மூலம் ஆர்டர்கள் செய்யப்படுவதால், லிமிட் விலை மிக அருகிலுள்ள டிக்கிற்கு ரவுண்ட் செய்யப்படும்.",
   "View Pending Only": "நிலுவையில் உள்ளவை மட்டும்",
   "%number% Open Limit Orders": "%number% செயலில் உள்ள லிமிட் ஆர்டர்கள்",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "எச்சரிக்கை: %token% தற்போது சரிபார்க்கப்படவில்லை. இந்தப் பூலில் வர்த்தகம் செய்வதற்கு அல்லது ஊடாடுவதற்கு முன், முகவரியை எப்போதும் உறுதிசெய்து, உங்கள் சொந்த ஆராய்ச்சியைச் செய்யவும்.",
   "CAKE Emission Projection": "CAKE வெளியீட்டுக் கணிப்பு",
   "Caution - %symbol% Token": "எச்சரிக்கை - %symbol% டோக்கன்",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% டோக்கனை வர்த்தகம் செய்யும் போதோ அல்லது பணப்புழக்கம் வழங்கும் போதோ மிகுந்த எச்சரிக்கையுடன் செயல்படவும். இந்த புரோட்டோகால் சமீபத்தில் ஒரு <0>பாதுகாப்பு அத்துமீறலை</0> எதிர்கொண்டது. மேலும் தகவல்களுக்கு, <1>%name% X</1> ஐப் பார்க்கவும்."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% டோக்கனை வர்த்தகம் செய்யும் போதோ அல்லது பணப்புழக்கம் வழங்கும் போதோ மிகுந்த எச்சரிக்கையுடன் செயல்படவும். இந்த புரோட்டோகால் சமீபத்தில் ஒரு <0>பாதுகாப்பு அத்துமீறலை</0> எதிர்கொண்டது. மேலும் தகவல்களுக்கு, <1>%name% X</1> ஐப் பார்க்கவும்.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "1 <0>%inputSymbol%</0> இந்த மதிப்புக்கு வரும்போது விற்கவும்:",
+  "No orders found": "ஆர்டர்கள் எதுவும் காணப்படவில்லை",
+  "Order Placed": "ஆர்டர் வைக்கப்பட்டது",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "விலை நகர்வு காரணமாக ஆர்டரைச் சமர்ப்பிக்க முடியவில்லை. புதுப்பிக்கப்பட்ட வரம்பு விலையுடன் மீண்டும் முயற்சிக்கவும்!"
 }

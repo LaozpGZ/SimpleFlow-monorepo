@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Thanh khoản sẽ được thêm vào tick gần nhất với giá giới hạn bạn đã chỉ định. Lệnh giới hạn có thể không được thực hiện chính xác khi giá token đạt đến giá trị bạn chỉ định trên các thị trường bên ngoài.",
   "Order Size must meet a minimum of 0.05 BNB": "Khối lượng lệnh phải đạt tối thiểu 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Khối lượng lệnh phải đạt tối thiểu 50 USD",
-  "Sell when": "Bán khi",
-  "is worth": "có giá trị",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Giá giới hạn sẽ được làm tròn đến tick gần nhất vì các lệnh được đặt bằng cách thêm thanh khoản vào bể CLAMM.",
   "View Pending Only": "Chỉ xem lệnh đang chờ",
   "%number% Open Limit Orders": "%number% Lệnh Giới Hạn Mở",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Thận trọng: %token% hiện chưa được xác minh. Luôn xác nhận địa chỉ và tự mình nghiên cứu trước khi giao dịch hoặc tương tác với pool này.",
   "CAKE Emission Projection": "Dự phóng phát hành CAKE",
   "Caution - %symbol% Token": "Thận trọng - Token %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Vui lòng hết sức thận trọng khi giao dịch / cung cấp thanh khoản cho token %symbol%. Giao thức này gần đây đã gặp phải một <0>sự cố bảo mật.</0> Để biết thêm thông tin, vui lòng tham khảo tại <1>%name% X</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Vui lòng hết sức thận trọng khi giao dịch / cung cấp thanh khoản cho token %symbol%. Giao thức này gần đây đã gặp phải một <0>sự cố bảo mật.</0> Để biết thêm thông tin, vui lòng tham khảo tại <1>%name% X</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Bán khi 1 <0>%inputSymbol%</0> có giá trị là:",
+  "No orders found": "Không tìm thấy lệnh nào",
+  "Order Placed": "Đặt lệnh thành công",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Gửi lệnh không thành công do biến động giá. Vui lòng thử lại với mức giá giới hạn được cập nhật!"
 }

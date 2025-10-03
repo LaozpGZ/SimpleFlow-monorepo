@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Liquiditeit wordt toegevoegd aan de tick die het dichtst bij uw opgegeven limietprijs ligt. De limietorder wordt mogelijk niet exact uitgevoerd wanneer de tokenprijs uw opgegeven waarde op externe markten bereikt.",
   "Order Size must meet a minimum of 0.05 BNB": "De ordergrootte moet minimaal 0,05 BNB zijn",
   "Order Size must meet a minimum of 50 USD": "De ordergrootte moet minimaal 50 USD zijn",
-  "Sell when": "Verkopen wanneer",
-  "is worth": "waard is",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "De limietprijs wordt afgerond naar de dichtstbijzijnde tick, omdat orders worden geplaatst door liquiditeit toe te voegen aan een CLAMM-pool.",
   "View Pending Only": "Alleen in behandeling bekijken",
   "%number% Open Limit Orders": "%number% openstaande limietorders",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Let op: %token% is momenteel niet geverifieerd. Controleer altijd het adres en doe je eigen onderzoek voordat je handelt of interactie aangaat met deze pool.",
   "CAKE Emission Projection": "CAKE Emissieprojectie",
   "Caution - %symbol% Token": "Waarschuwing - %symbol% token",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Wees extra voorzichtig bij het handelen / verschaffen van liquiditeit voor de %symbol% token. Het protocol is onlangs getroffen door een <0>beveiligingsincident.</0> Raadpleeg voor meer informatie <1>%name% X</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Wees extra voorzichtig bij het handelen / verschaffen van liquiditeit voor de %symbol% token. Het protocol is onlangs getroffen door een <0>beveiligingsincident.</0> Raadpleeg voor meer informatie <1>%name% X</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Verkoop wanneer 1 <0>%inputSymbol%</0> waard is:",
+  "No orders found": "Geen orders gevonden",
+  "Order Placed": "Order geplaatst",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Order indienen mislukt door prijsbewegingen. Probeer het opnieuw met een bijgewerkte limietprijs!"
 }

@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "A likviditás a megadott limitárhoz legközelebbi ticken kerül hozzáadásra. Lehet, hogy a limit megbízás nem pontosan akkor teljesül, amikor a token ára eléri a megadott értéket a külső piacokon.",
   "Order Size must meet a minimum of 0.05 BNB": "A megbízás méretének el kell érnie a minimum 0,05 BNB-t",
   "Order Size must meet a minimum of 50 USD": "A megbízás méretének el kell érnie a minimum 50 USD-t",
-  "Sell when": "Eladás, amikor",
-  "is worth": "értéke",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "A limitár a legközelebbi tickre lesz kerekítve, mert a megbízások egy CLAMM poolhoz történő likviditás-hozzáadással kerülnek elhelyezésre.",
   "View Pending Only": "Csak a függőben lévők megtekintése",
   "%number% Open Limit Orders": "%number% nyitott limit megbízás",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Figyelem: A(z) %token% jelenleg nincs ellenőrizve. Mindig ellenőrizd a címet, és végezz saját kutatást, mielőtt kereskednél vagy interakcióba lépnél ezzel a poollal.",
   "CAKE Emission Projection": "CAKE kibocsátási előrejelzés",
   "Caution - %symbol% Token": "Figyelem – %symbol% Token",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Kérjük, járjon el kellő körültekintéssel a(z) %symbol% tokennel való kereskedés / likviditás biztosítása során. A protokollnál nemrégiben <0>biztonsági incidens</0> történt. További információkért tekintse meg a(z) <1>%name% X-et</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Kérjük, járjon el kellő körültekintéssel a(z) %symbol% tokennel való kereskedés / likviditás biztosítása során. A protokollnál nemrégiben <0>biztonsági incidens</0> történt. További információkért tekintse meg a(z) <1>%name% X-et</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Eladás, ha 1 <0>%inputSymbol%</0> értéke:",
+  "No orders found": "Nem található megbízás",
+  "Order Placed": "Megbízás leadva",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "A megbízás leadása sikertelen az árfolyammozgás miatt. Kérjük, próbálja újra egy frissített limit árral!"
 }

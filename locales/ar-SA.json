@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "ستتم إضافة السيولة عند أقرب علامة سعرية لسعرك الحدي المحدد. قد لا يتم تنفيذ الأمر الحدي تمامًا عندما يصل سعر الرمز المميز إلى القيمة المحددة في الأسواق الخارجية.",
   "Order Size must meet a minimum of 0.05 BNB": "يجب أن يكون حجم الأمر 0.05 BNB كحد أدنى",
   "Order Size must meet a minimum of 50 USD": "يجب أن يكون حجم الأمر 50 USD كحد أدنى",
-  "Sell when": "بيع عندما",
-  "is worth": "قيمته",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "سيتم تقريب السعر الحدي إلى أقرب علامة سعرية لأن الأوامر يتم تنفيذها عن طريق إضافة سيولة إلى مجمع CLAMM.",
   "View Pending Only": "عرض المعلقة فقط",
   "%number% Open Limit Orders": "%number% أوامر حدية مفتوحة",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "تنبيه: رمز %token% غير موثق حاليًا. تحقق دائمًا من العنوان وقم بإجراء بحثك الخاص قبل التداول أو التفاعل مع هذا المجمع.",
   "CAKE Emission Projection": "توقعات إصدار CAKE",
   "Caution - %symbol% Token": "تحذير - رمز %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "يرجى توخي الحذر عند تداول / توفير السيولة لرمز %symbol%. واجه البروتوكول مؤخرًا <0>اختراقًا أمنيًا.</0> لمزيد من المعلومات، يرجى الرجوع إلى <1>%name% على X</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "يرجى توخي الحذر عند تداول / توفير السيولة لرمز %symbol%. واجه البروتوكول مؤخرًا <0>اختراقًا أمنيًا.</0> لمزيد من المعلومات، يرجى الرجوع إلى <1>%name% على X</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "بيع عندما تساوي 1 <0>%inputSymbol%</0>:",
+  "No orders found": "لم يتم العثور على طلبات",
+  "Order Placed": "تم وضع الطلب",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "فشل تقديم الطلب بسبب حركة السعر. يرجى المحاولة مرة أخرى بسعر حدي محدّث!"
 }

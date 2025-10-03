@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "유동성은 지정된 지정가에 가장 가까운 틱에 추가됩니다. 외부 시장에서 토큰 가격이 지정된 값에 도달하더라도 지정가 주문이 정확하게 체결되지 않을 수 있습니다.",
   "Order Size must meet a minimum of 0.05 BNB": "주문 규모는 최소 0.05 BNB 이상이어야 합니다.",
   "Order Size must meet a minimum of 50 USD": "주문 규모는 최소 50 USD 이상이어야 합니다.",
-  "Sell when": "판매 조건",
-  "is worth": "가격",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "주문은 CLAMM 풀에 유동성을 추가하여 체결되므로 지정가는 가장 가까운 틱으로 반올림됩니다.",
   "View Pending Only": "대기 중인 주문만 보기",
   "%number% Open Limit Orders": "미체결 지정가 주문 %number%개",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "주의: %token%은(는) 현재 인증되지 않았습니다. 이 풀에서 거래하거나 상호작용하기 전에 항상 주소를 확인하고 직접 조사하시기 바랍니다.",
   "CAKE Emission Projection": "CAKE 예상 방출량",
   "Caution - %symbol% Token": "주의 - %symbol% 토큰",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% 토큰을 거래하거나 유동성을 공급할 때 각별히 주의해 주세요. 해당 프로토콜에서 최근 <0>보안 침해</0>가 발생했습니다. 자세한 내용은 <1>%name% X</1>를 참고해 주세요."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "%symbol% 토큰을 거래하거나 유동성을 공급할 때 각별히 주의해 주세요. 해당 프로토콜에서 최근 <0>보안 침해</0>가 발생했습니다. 자세한 내용은 <1>%name% X</1>를 참고해 주세요.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "1 <0>%inputSymbol%</0>의 가치가 다음과 같을 때 매도:",
+  "No orders found": "주문을 찾을 수 없습니다",
+  "Order Placed": "주문 완료",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "가격 변동으로 인해 주문 제출에 실패했습니다. 업데이트된 지정가로 다시 시도해 주세요!"
 }

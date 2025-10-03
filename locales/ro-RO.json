@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Lichiditatea va fi adăugată la cel mai apropiat tick de prețul limită specificat. Este posibil ca ordinul limită să nu se execute exact în momentul în care prețul tokenului atinge valoarea specificată pe piețele externe.",
   "Order Size must meet a minimum of 0.05 BNB": "Dimensiunea Ordinului trebuie să fie de minim 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Dimensiunea Ordinului trebuie să fie de minim 50 USD",
-  "Sell when": "Vinde când",
-  "is worth": "valorează",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Prețul limită va fi rotunjit la cel mai apropiat tick, deoarece ordinele sunt plasate prin adăugarea de lichiditate într-un pool CLAMM.",
   "View Pending Only": "Vezi Doar cele în Așteptare",
   "%number% Open Limit Orders": "%number% Ordine Limită Deschise",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Atenție: %token% este momentan neverificat. Confirmați întotdeauna adresa și documentați-vă pe cont propriu înainte de a tranzacționa sau de a interacționa cu acest pool.",
   "CAKE Emission Projection": "Proiecție emisie CAKE",
   "Caution - %symbol% Token": "Atenție - Jeton %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Vă rugăm să acționați cu prudență atunci când tranzacționați / furnizați lichidități pentru jetonul %symbol%. Protocolul a întâmpinat recent o <0>compromitere a securității.</0> Pentru mai multe informații, vă rugăm să consultați <1>%name% X</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Vă rugăm să acționați cu prudență atunci când tranzacționați / furnizați lichidități pentru jetonul %symbol%. Protocolul a întâmpinat recent o <0>compromitere a securității.</0> Pentru mai multe informații, vă rugăm să consultați <1>%name% X</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Vinde când 1 <0>%inputSymbol%</0> valorează:",
+  "No orders found": "Niciun ordin găsit",
+  "Order Placed": "Ordin plasat",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Plasarea ordinului a eșuat din cauza mișcării prețului. Te rugăm să încerci din nou cu un preț limită actualizat!"
 }

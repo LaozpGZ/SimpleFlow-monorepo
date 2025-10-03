@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "আপনার নির্দিষ্ট লিমিট মূল্যের সবচেয়ে কাছের টিকে তারল্য যোগ করা হবে। বাহ্যিক মার্কেটে টোকেনের মূল্য আপনার নির্দিষ্ট মানে পৌঁছানোর সাথে সাথে লিমিট অর্ডারটি সঠিকভাবে কার্যকর নাও হতে পারে।",
   "Order Size must meet a minimum of 0.05 BNB": "অর্ডারের আকার অবশ্যই সর্বনিম্ন 0.05 BNB হতে হবে",
   "Order Size must meet a minimum of 50 USD": "অর্ডারের আকার অবশ্যই সর্বনিম্ন 50 USD হতে হবে",
-  "Sell when": "বিক্রি করুন যখন",
-  "is worth": "এর মূল্য",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "লিমিট মূল্য নিকটতম টিকে রাউন্ড করা হবে, কারণ CLAMM পুলে তারল্য যোগ করে অর্ডারগুলো দেওয়া হয়।",
   "View Pending Only": "শুধু অপেক্ষারত দেখুন",
   "%number% Open Limit Orders": "%number% টি খোলা লিমিট অর্ডার",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "সতর্কতা: %token% বর্তমানে যাচাই করা হয়নি। এই পুলের সাথে ট্রেড বা ইন্টারঅ্যাক্ট করার আগে সর্বদা ঠিকানাটি নিশ্চিত করুন এবং আপনার নিজের গবেষণা করুন।",
   "CAKE Emission Projection": "CAKE এমিশন প্রজেকশন",
   "Caution - %symbol% Token": "সতর্কতা - %symbol% টোকেন",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "অনুগ্রহ করে %symbol% টোকেনের ট্রেড / লিকুইডিটি প্রদান করার সময় যথাযথ সতর্কতা অবলম্বন করুন। প্রোটোকলটি সম্প্রতি একটি <0>নিরাপত্তা লঙ্ঘনের</0> সম্মুখীন হয়েছে। আরও তথ্যের জন্য, অনুগ্রহ করে <1>%name% X</1> দেখুন।"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "অনুগ্রহ করে %symbol% টোকেনের ট্রেড / লিকুইডিটি প্রদান করার সময় যথাযথ সতর্কতা অবলম্বন করুন। প্রোটোকলটি সম্প্রতি একটি <0>নিরাপত্তা লঙ্ঘনের</0> সম্মুখীন হয়েছে। আরও তথ্যের জন্য, অনুগ্রহ করে <1>%name% X</1> দেখুন।",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "যখন 1 <0>%inputSymbol%</0> এর মূল্য হবে তখন বিক্রি করুন:",
+  "No orders found": "কোনো অর্ডার পাওয়া যায়নি",
+  "Order Placed": "অর্ডার দেওয়া হয়েছে",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "মূল্যের পরিবর্তনের কারণে অর্ডার জমা দেওয়া অসফল হয়েছে। অনুগ্রহ করে একটি আপডেট করা লিমিট মূল্য দিয়ে আবার চেষ্টা করুন!"
 }

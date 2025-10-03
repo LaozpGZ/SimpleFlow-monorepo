@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Likuiditas akan ditambahkan pada tick terdekat dengan harga limit yang Anda tentukan. Pesanan limit mungkin tidak dieksekusi tepat saat harga token mencapai nilai yang Anda tentukan di pasar eksternal.",
   "Order Size must meet a minimum of 0.05 BNB": "Ukuran Pesanan harus memenuhi minimum 0,05 BNB",
   "Order Size must meet a minimum of 50 USD": "Ukuran Pesanan harus memenuhi minimum 50 USD",
-  "Sell when": "Jual ketika",
-  "is worth": "bernilai",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Harga limit akan dibulatkan ke tick terdekat karena pesanan ditempatkan dengan menambahkan likuiditas ke pool CLAMM.",
   "View Pending Only": "Lihat yang Tertunda Saja",
   "%number% Open Limit Orders": "%number% Pesanan Limit Terbuka",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Perhatian: %token% saat ini belum terverifikasi. Selalu konfirmasi alamat dan lakukan riset Anda sendiri sebelum berdagang atau berinteraksi dengan pool ini.",
   "CAKE Emission Projection": "Proyeksi Emisi CAKE",
   "Caution - %symbol% Token": "Waspada - Token %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Harap berhati-hati saat melakukan trading / menyediakan likuiditas untuk token %symbol%. Protokol baru-baru ini mengalami <0>kompromi keamanan.</0> Untuk informasi lebih lanjut, silakan merujuk ke <1>%name% X</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Harap berhati-hati saat melakukan trading / menyediakan likuiditas untuk token %symbol%. Protokol baru-baru ini mengalami <0>kompromi keamanan.</0> Untuk informasi lebih lanjut, silakan merujuk ke <1>%name% X</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Jual saat 1 <0>%inputSymbol%</0> bernilai:",
+  "No orders found": "Tidak ada order ditemukan",
+  "Order Placed": "Order Ditempatkan",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Pengajuan order gagal karena pergerakan harga. Silakan coba lagi dengan harga limit yang diperbarui!"
 }

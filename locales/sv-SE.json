@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Likviditet kommer att läggas till vid den tick som är närmast ditt angivna limitpris. Limitordern kanske inte exekveras exakt när tokenpriset når ditt angivna värde på externa marknader.",
   "Order Size must meet a minimum of 0.05 BNB": "Orderstorleken måste vara minst 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Orderstorleken måste vara minst 50 USD",
-  "Sell when": "Sälj när",
-  "is worth": "är värd",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Limitpriset kommer att avrundas till närmaste tick eftersom ordrar placeras genom att lägga till likviditet i en CLAMM-pool.",
   "View Pending Only": "Visa endast väntande",
   "%number% Open Limit Orders": "%number% öppna limitordrar",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Varning: %token% är för närvarande overifierad. Bekräfta alltid adressen och gör din egen research innan du handlar eller interagerar med denna pool.",
   "CAKE Emission Projection": "CAKE Emissionsprognos",
   "Caution - %symbol% Token": "Varning - %symbol% Token",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Var extra försiktig när du handlar med / tillhandahåller likviditet för %symbol%-tokenen. Protokollet drabbades nyligen av en <0>säkerhetskompromiss.</0> För mer information, se <1>%name% X</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Var extra försiktig när du handlar med / tillhandahåller likviditet för %symbol%-tokenen. Protokollet drabbades nyligen av en <0>säkerhetskompromiss.</0> För mer information, se <1>%name% X</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Sälj när 1 <0>%inputSymbol%</0> är värd:",
+  "No orders found": "Inga order hittades",
+  "Order Placed": "Order lagd",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Orderläggningen misslyckades på grund av prisrörelser. Försök igen med ett uppdaterat limitpris!"
 }

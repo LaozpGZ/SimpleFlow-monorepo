@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Ликвидность будет добавлена по тику, ближайшему к указанной вами лимитной цене. Лимитный ордер может не исполниться в точности в тот момент, когда цена токена достигнет указанного вами значения на внешних рынках.",
   "Order Size must meet a minimum of 0.05 BNB": "Размер ордера должен составлять не менее 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Размер ордера должен составлять не менее 50 USD",
-  "Sell when": "Продать, когда",
-  "is worth": "стоит",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Лимитная цена будет округлена до ближайшего тика, поскольку ордера размещаются путем добавления ликвидности в пул CLAMM.",
   "View Pending Only": "Показывать только ожидающие",
   "%number% Open Limit Orders": "%number% открытых лимитных ордеров",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Внимание: %token% в настоящее время не проверен. Всегда проверяйте адрес и проводите собственное исследование, прежде чем торговать или взаимодействовать с этим пулом.",
   "CAKE Emission Projection": "Прогноз эмиссии CAKE",
   "Caution - %symbol% Token": "Внимание — токен %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Соблюдайте особую осторожность при торговле / предоставлении ликвидности для токена %symbol%. Протокол недавно столкнулся с <0>нарушением безопасности.</0> Для получения дополнительной информации обратитесь к <1>%name% в X</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Соблюдайте особую осторожность при торговле / предоставлении ликвидности для токена %symbol%. Протокол недавно столкнулся с <0>нарушением безопасности.</0> Для получения дополнительной информации обратитесь к <1>%name% в X</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Продать, когда 1 <0>%inputSymbol%</0> будет стоить:",
+  "No orders found": "Ордера не найдены",
+  "Order Placed": "Ордер размещен",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Не удалось отправить ордер из-за движения цены. Попробуйте еще раз с обновленной лимитной ценой!"
 }

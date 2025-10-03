@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Liquidität wird am Tick hinzugefügt, der deinem angegebenen Limitpreis am nächsten liegt. Die Limit-Order wird möglicherweise nicht genau ausgeführt, wenn der Token-Preis deinen angegebenen Wert auf externen Märkten erreicht.",
   "Order Size must meet a minimum of 0.05 BNB": "Die Ordergröße muss mindestens 0,05 BNB betragen",
   "Order Size must meet a minimum of 50 USD": "Die Ordergröße muss mindestens 50 USD betragen",
-  "Sell when": "Verkaufen, wenn",
-  "is worth": "wert ist",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Der Limitpreis wird auf den nächsten Tick gerundet, da Orders durch Hinzufügen von Liquidität zu einem CLAMM-Pool platziert werden.",
   "View Pending Only": "Nur ausstehende anzeigen",
   "%number% Open Limit Orders": "%number% offene Limit-Orders",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Achtung: %token% ist derzeit nicht verifiziert. Überprüfe immer die Adresse und recherchiere selbst, bevor du mit diesem Pool handelst oder interagierst.",
   "CAKE Emission Projection": "CAKE Emissionsprojektion",
   "Caution - %symbol% Token": "Vorsicht – %symbol%-Token",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Bitte sei besonders vorsichtig, wenn du mit dem %symbol%-Token handelst oder Liquidität bereitstellst. Das Protokoll war kürzlich von einer <0>Sicherheitskompromittierung</0> betroffen. Weitere Informationen findest du auf <1>%name% X</1>."
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Bitte sei besonders vorsichtig, wenn du mit dem %symbol%-Token handelst oder Liquidität bereitstellst. Das Protokoll war kürzlich von einer <0>Sicherheitskompromittierung</0> betroffen. Weitere Informationen findest du auf <1>%name% X</1>.",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Verkaufen, wenn 1 <0>%inputSymbol%</0> wert ist:",
+  "No orders found": "Keine Orders gefunden",
+  "Order Placed": "Order platziert",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Order-Übermittlung aufgrund von Preisbewegungen fehlgeschlagen. Bitte versuchen Sie es erneut mit einem aktualisierten Limitpreis!"
 }

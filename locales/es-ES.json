@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "La liquidez se añadirá en el tick más cercano al precio límite especificado. Es posible que la orden limitada no se ejecute exactamente cuando el precio del token alcance el valor especificado en los mercados externos.",
   "Order Size must meet a minimum of 0.05 BNB": "El tamaño de la orden debe ser de un mínimo de 0,05 BNB",
   "Order Size must meet a minimum of 50 USD": "El tamaño de la orden debe ser de un mínimo de 50 USD",
-  "Sell when": "Vender cuando",
-  "is worth": "valga",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "El precio límite se redondeará al tick más cercano porque las órdenes se crean añadiendo liquidez a un pool CLAMM.",
   "View Pending Only": "Ver solo pendientes",
   "%number% Open Limit Orders": "%number% órdenes limitadas abiertas",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Precaución: El token %token% no está verificado actualmente. Confirma siempre la dirección y haz tu propia investigación antes de operar o interactuar con este pool.",
   "CAKE Emission Projection": "Proyección de Emisiones de CAKE",
   "Caution - %symbol% Token": "Precaución - Token %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Tenga la debida precaución al operar o aportar liquidez para el token %symbol%. El protocolo ha sufrido recientemente un <0>compromiso de seguridad.</0> Para más información, consulte el <1>X de %name%</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Tenga la debida precaución al operar o aportar liquidez para el token %symbol%. El protocolo ha sufrido recientemente un <0>compromiso de seguridad.</0> Para más información, consulte el <1>X de %name%</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Vender cuando 1 <0>%inputSymbol%</0> valga:",
+  "No orders found": "No se encontraron órdenes",
+  "Order Placed": "Orden colocada",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "No se pudo enviar la orden debido al movimiento del precio. ¡Por favor, inténtelo de nuevo con un precio límite actualizado!"
 }

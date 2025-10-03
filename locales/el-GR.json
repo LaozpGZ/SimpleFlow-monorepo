@@ -4251,8 +4251,6 @@
   "Liquidity will be added at the tick closest to your specified limit price. The limit order may not execute exactly when the token price reaches your specified value on external markets.": "Η ρευστότητα θα προστεθεί στο πλησιέστερο tick στην καθορισμένη οριακή τιμή σας. Η οριακή εντολή ενδέχεται να μην εκτελεστεί ακριβώς όταν η τιμή του token φτάσει στην καθορισμένη τιμή σας σε εξωτερικές αγορές.",
   "Order Size must meet a minimum of 0.05 BNB": "Το μέγεθος της εντολής πρέπει να είναι τουλάχιστον 0.05 BNB",
   "Order Size must meet a minimum of 50 USD": "Το μέγεθος της εντολής πρέπει να είναι τουλάχιστον 50 USD",
-  "Sell when": "Πώληση όταν",
-  "is worth": "αξίζει",
   "Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.": "Η οριακή τιμή θα στρογγυλοποιηθεί στο πλησιέστερο tick, επειδή οι εντολές τοποθετούνται με την προσθήκη ρευστότητας σε ένα CLAMM pool.",
   "View Pending Only": "Προβολή μόνο των εκκρεμών",
   "%number% Open Limit Orders": "%number% ανοιχτές οριακές εντολές",
@@ -4278,5 +4276,9 @@
   "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Προσοχή: Το %token% δεν είναι προς το παρόν επαληθευμένο. Επιβεβαιώνετε πάντα τη διεύθυνση και κάνετε τη δική σας έρευνα πριν από τις συναλλαγές ή την αλληλεπίδραση με αυτό το pool.",
   "CAKE Emission Projection": "Πρόβλεψη έκδοσης CAKE",
   "Caution - %symbol% Token": "Προσοχή - Token %symbol%",
-  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Παρακαλούμε να είστε ιδιαίτερα προσεκτικοί κατά τις συναλλαγές / την παροχή ρευστότητας για το token %symbol%. Το πρωτόκολλο αντιμετώπισε πρόσφατα μια <0>παραβίαση ασφαλείας.</0> Για περισσότερες πληροφορίες, ανατρέξτε στο <1>%name% X</1>"
+  "Please exercise due caution when trading / providing liquidity for the %symbol% token. The protocol recently encountered a <0>security compromise.</0> For more information, please refer to <1>%name% X</1>": "Παρακαλούμε να είστε ιδιαίτερα προσεκτικοί κατά τις συναλλαγές / την παροχή ρευστότητας για το token %symbol%. Το πρωτόκολλο αντιμετώπισε πρόσφατα μια <0>παραβίαση ασφαλείας.</0> Για περισσότερες πληροφορίες, ανατρέξτε στο <1>%name% X</1>",
+  "Sell when 1 <0>%inputSymbol%</0> is worth:": "Πουλήστε όταν 1 <0>%inputSymbol%</0> αξίζει:",
+  "No orders found": "Δεν βρέθηκαν εντολές",
+  "Order Placed": "Τοποθετήθηκε εντολή",
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Αποτυχία υποβολής εντολής λόγω κίνησης της τιμής. Δοκιμάστε ξανά με ενημερωμένη οριακή τιμή!"
 }
