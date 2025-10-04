@@ -6,7 +6,16 @@ import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { Pool as SDKV3Pool, computePoolAddress } from '@pancakeswap/v3-sdk'
 import { Address } from 'viem'
 
-import { InfinityBinPool, InfinityClPool, Pool, PoolType, StablePool, V2Pool, V3Pool } from '../types'
+import {
+  InfinityBinPool,
+  InfinityClPool,
+  InfinityStablePool,
+  Pool,
+  PoolType,
+  StablePool,
+  V2Pool,
+  V3Pool,
+} from '../types'
 
 export function isV2Pool(pool: Pool): pool is V2Pool {
   return pool.type === PoolType.V2
@@ -26,6 +35,10 @@ export function isInfinityBinPool(pool: Pool): pool is InfinityBinPool {
 
 export function isInfinityClPool(pool: Pool): pool is InfinityClPool {
   return pool.type === PoolType.InfinityCL
+}
+
+export function isInfinityStablePool(pool: Pool): pool is InfinityStablePool {
+  return pool.type === PoolType.InfinityStable
 }
 
 export function involvesCurrency(pool: Pool, currency: Currency) {

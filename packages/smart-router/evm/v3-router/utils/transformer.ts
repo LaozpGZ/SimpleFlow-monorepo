@@ -5,6 +5,7 @@ import { Address } from 'viem'
 import {
   InfinityBinPool,
   InfinityClPool,
+  InfinityStablePool,
   Pool,
   PoolType,
   Route,
@@ -13,7 +14,7 @@ import {
   V2Pool,
   V3Pool,
 } from '../types'
-import { isInfinityBinPool, isInfinityClPool, isStablePool, isV2Pool, isV3Pool } from './pool'
+import { isInfinityBinPool, isInfinityClPool, isInfinityStablePool, isStablePool, isV2Pool, isV3Pool } from './pool'
 
 const ONE_HUNDRED = 100n
 
@@ -86,6 +87,12 @@ export interface SerializedInfinityBinPool
   reserve1?: SerializedCurrencyAmount
 }
 
+export interface SerializedInfinityStablePool
+  extends Omit<InfinityStablePool, 'currency0' | 'currency1' | 'reserve0' | 'reserve1'> {
+  currency0: SerializedCurrency
+  currency1: SerializedCurrency
+}
+
 export type SerializedBinReserves = {
   reserveX: string
   reserveY: string
@@ -103,6 +110,7 @@ export type SerializedPool =
   | SerializedStablePool
   | SerializedInfinityClPool
   | SerializedInfinityBinPool
+  | SerializedInfinityStablePool
 
 export interface SerializedRoute
   extends Omit<Route, 'pools' | 'path' | 'input' | 'output' | 'inputAmount' | 'outputAmount'> {
@@ -177,6 +185,21 @@ export function serializePool(pool: Pool): SerializedPool {
       fee: pool.fee.toSignificant(6),
     }
   }
+
+  if (isInfinityStablePool(pool)) {
+    return {
+      currency0: serializeCurrency(pool.currency0),
+      currency1: serializeCurrency(pool.currency1),
+      hooks: pool.hooks,
+      hooksRegistrationBitmap: pool.hooksRegistrationBitmap,
+      id: pool.id,
+      poolManager: pool.poolManager,
+      fee: pool.fee,
+      type: PoolType.InfinityStable,
+      tickSpacing: pool.tickSpacing,
+    }
+  }
+
   if (isInfinityClPool(pool)) {
     return {
       ...pool,

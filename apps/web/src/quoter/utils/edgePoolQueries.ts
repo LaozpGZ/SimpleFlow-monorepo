@@ -1,5 +1,5 @@
 import { ChainId, getChainName } from '@pancakeswap/chains'
-import { findHook, findHookByAddress, type HookData, hooksList } from '@pancakeswap/infinity-sdk'
+import { findHookByAddress, type HookData, hooksList } from '@pancakeswap/infinity-sdk'
 import {
   getPoolAddress,
   InfinityBinPool,
@@ -88,6 +88,7 @@ async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, cha
     mockCurrency(addressB, chainId, getProvider()),
   ])
 
+  // Filter pools by TVL, and return Pools omitted tvlUSD field
   const filtered = SmartRouter.infinityPoolTvlSelector(currencyA, currencyB, localPools)
   return filtered
 }
@@ -115,7 +116,8 @@ const fetchInfinityPoolsLight = async (
   chainId: ChainId,
   type: 'full' | 'light',
 ) => {
-  const call = createAsyncCallWithFallbacks(getInfinityPoolsFromApi, {
+  // NOTE: getInfinityPoolsFromApi replaced
+  const call = createAsyncCallWithFallbacks(getInfinityPoolsOnChain, {
     fallbacks: [getInfinityPoolsOnChain],
     fallbackTimeout: 5_000,
   })
@@ -123,7 +125,14 @@ const fetchInfinityPoolsLight = async (
 }
 const fetchInfinityPools = async (addressA: Address, addressB: Address, chainId: ChainId, type: 'full' | 'light') => {
   const pools = await fetchInfinityPoolsLight(addressA, addressB, chainId, type)
-  return fillTicksAndBins(pools as (InfinityClPool | InfinityBinPool)[])
+
+  const infinityStablePools = pools.filter((pool) => pool.type === PoolType.InfinityStable)
+
+  const restPools = pools.filter((pool) => pool.type !== PoolType.InfinityStable)
+
+  const fillTicksPools = await fillTicksAndBins(restPools)
+
+  return [...fillTicksPools, ...infinityStablePools]
 }
 
 const getInfinityPoolsOnChain = async (addressA: Address, addressB: Address, chainId: ChainId) => {
@@ -207,22 +216,12 @@ const fetchSSPool = async (addressA: Address, addressB: Address, chainId: ChainI
   const client = getProvider()
   const blockNumber = await client({ chainId })?.getBlockNumber()
 
-  const pools = await SmartRouter.getStableCandidatePools({
+  return SmartRouter.getStableCandidatePools({
     currencyA,
     currencyB,
     onChainProvider: getProvider(),
     blockNumber,
   })
-
-  const ssPools = await InfinityRouter.getInfinitySSCandidatePools({
-    currencyA,
-    currencyB,
-    clientProvider: getProvider(),
-  })
-
-  // console.log('ssPools', ssPools)
-
-  return [...pools, ...ssPools]
 }
 
 const querySingleType = async (
@@ -310,18 +309,6 @@ const fetchAllCandidatePoolsLite = async (
   })
 }
 
-function fillTvl(tvlMap: Record<`0x${string}`, string>, pools: Pool[]) {
-  return pools.map((pool) => {
-    const id = getPoolAddress(pool)
-    const tvlUSD: string = tvlMap[id] || '0'
-    const bigIntTvlUSD = BigInt(Math.floor(Number(tvlUSD)))
-    if ('tvlUSD' in pool) {
-      return { ...pool, tvlUSD: bigIntTvlUSD }
-    }
-    return pool as Pool & WithTvl
-  })
-}
-
 export const poolTvlMap = async (protocols: Protocol[], chain: APIChain) => {
   try {
     const remotePools = await fetchAllPools({
@@ -349,13 +336,6 @@ type PaginatedResponse = {
   hasNextPage: boolean
   hasPrevPage: boolean
   rows: RemotePoolBase[]
-}
-
-type Token = {
-  id: string
-  symbol: string
-  name: string
-  decimals: number
 }
 
 type FetchAllPoolsParams = {
