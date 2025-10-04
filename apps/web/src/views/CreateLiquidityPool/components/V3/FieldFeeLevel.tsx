@@ -154,14 +154,13 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({
 
   // Auto-select a default Solana fee tier when none selected
   useEffect(() => {
-    if (!isSolanaChain || feeLevel || feeAmount || !options.length) return
+    if (!isSolanaChain || feeLevel || feeAmount || !options.length) return undefined
     if (!router.isReady) {
       router.events.on('routeChangeComplete', updateFee)
-      return
+      return undefined
     }
     updateFee()
 
-    // eslint-disable-next-line consistent-return
     return () => {
       router.events.off('routeChangeComplete', updateFee)
     }
@@ -183,32 +182,6 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({
     }
   }, [feeLevel, setFeeLevel, feeAmount])
 
-  const renderSolanaDropdown = () => {
-    return (
-      <Card>
-        <Flex p="16px" flexDirection="row" justifyContent="space-between" alignItems="center">
-          <Text>{t('Pick a fee tier')}</Text>
-          <ScrollableDropdown trigger="click" items={renderItems}>
-            <MenuItem hoverColor="white">
-              <Flex
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                width="148px"
-                borderRadius="8px"
-                border={`1px solid ${theme.colors.cardBorder}`}
-                p="8px"
-              >
-                <Text lineHeight="1.2">{feeLevel ? parseFeeAsReadable(feeLevel) : ''}</Text>
-                <ArrowDropDownIcon color="text" />
-              </Flex>
-            </MenuItem>
-          </ScrollableDropdown>
-        </Flex>
-      </Card>
-    )
-  }
-
   return (
     <Box {...boxProps}>
       <FlexGap gap="4px">
@@ -222,7 +195,27 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({
       </FlexGap>
 
       {chainId === NonEVMChainId.SOLANA ? (
-        renderSolanaDropdown()
+        <Card>
+          <Flex p="16px" flexDirection="row" justifyContent="space-between" alignItems="center">
+            <Text>{t('Pick a fee tier')}</Text>
+            <ScrollableDropdown trigger="click" items={renderItems}>
+              <MenuItem hoverColor="backgroundAlt">
+                <Flex
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="148px"
+                  borderRadius="8px"
+                  border={`1px solid ${theme.colors.cardBorder}`}
+                  p="8px"
+                >
+                  <Text lineHeight="1.2">{feeLevel ? parseFeeAsReadable(feeLevel) : ''}</Text>
+                  <ArrowDropDownIcon color="text" />
+                </Flex>
+              </MenuItem>
+            </ScrollableDropdown>
+          </Flex>
+        </Card>
       ) : (
         <ButtonMenu
           activeIndex={activeIndex}
