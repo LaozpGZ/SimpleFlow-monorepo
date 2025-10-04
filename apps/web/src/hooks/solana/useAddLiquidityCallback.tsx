@@ -1,12 +1,10 @@
 import { SolanaV3PositionDetail } from 'state/farmsV4/state/accountPositions/type'
-import { useSolanaUserSlippage } from '@pancakeswap/utils/user'
 import { useCallback } from 'react'
 import { SolanaV3Pool } from 'state/pools/solana'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { TxVersion } from '@pancakeswap/solana-core-sdk'
 import { useSolanaPriorityFee } from 'components/WalletModalV2/hooks/useSolanaPriorityFee'
-import { useTranslation } from '@pancakeswap/localization'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import useSolanaTxError from '../../components/WalletModalV2/hooks/useSolanaTxError'
 import { useRaydium } from './useRaydium'
@@ -27,12 +25,11 @@ export type AddLiquidityCallbackProps = {
 
 export const useAddLiquidityCallback = () => {
   const raydium = useRaydium()
-  const { t } = useTranslation()
   const { computeBudgetConfig } = useSolanaPriorityFee()
   const { executeSolanaTransaction, handleSolanaError } = useSolanaTxError()
 
   return useCallback(
-    async ({ params, onSent, onError, onFinally, onConfirmed }: AddLiquidityCallbackProps) => {
+    async ({ params, onSent, onError, onFinally }: AddLiquidityCallbackProps) => {
       const { poolInfo, position, liquidity, amountMaxA, amountMaxB } = params
       if (!raydium || !position) return
 
@@ -57,7 +54,7 @@ export const useAddLiquidityCallback = () => {
       })
       const executeAdd = async () => {
         try {
-          const { txId, signedTx } = await execute()
+          const { txId } = await execute()
           onSent?.(txId)
           return { hash: txId }
         } catch (e) {

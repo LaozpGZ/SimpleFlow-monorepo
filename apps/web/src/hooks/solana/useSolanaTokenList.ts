@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { solanaTokenListAtom, solanaListSettingsAtom } from 'state/token/solanaTokenAtoms'
@@ -78,28 +78,34 @@ export function useSolanaTokenList(enabled = true) {
   // Loading state: true if any enabled query is still loading
 
   // Add a user token and persist
-  const addUserToken = useCallback((token: TokenInfo) => {
-    setUserTokens((prev) => {
-      const next = prev.some((t) => t.address === token.address) ? prev : [...prev, token]
+  const addUserToken = useCallback(
+    (token: TokenInfo) => {
+      setUserTokens((prev) => {
+        const next = prev.some((t) => t.address === token.address) ? prev : [...prev, token]
 
-      return next
-    })
-  }, [])
+        return next
+      })
+    },
+    [setUserTokens],
+  )
 
   // Remove a user token and persist
-  const removeUserToken = useCallback((addresses: string[] | string) => {
-    setUserTokens((prev) => {
-      const addressesToRemove = Array.isArray(addresses) ? addresses : [addresses]
-      const next = prev.filter((t) => !addressesToRemove.includes(t.address))
-      return next
-    })
-  }, [])
+  const removeUserToken = useCallback(
+    (addresses: string[] | string) => {
+      setUserTokens((prev) => {
+        const addressesToRemove = Array.isArray(addresses) ? addresses : [addresses]
+        const next = prev.filter((t) => !addressesToRemove.includes(t.address))
+        return next
+      })
+    },
+    [setUserTokens],
+  )
 
   const removeAllUserTokens = useCallback(() => {
     if (userTokens.length > 0) {
       setUserTokens([])
     }
-  }, [userTokens])
+  }, [userTokens, setUserTokens])
 
   const tokenCountsByList = useMemo(() => {
     return {

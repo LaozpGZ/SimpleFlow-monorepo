@@ -35,7 +35,7 @@ export const useRemoveLiquidityCallback = () => {
   const { executeSolanaTransaction, handleSolanaError } = useSolanaTxError()
 
   return useCallback(
-    async ({ params, harvest, onSent, onError, onFinally, onConfirmed }: RemoveLiquidityCallbackProps) => {
+    async ({ params, harvest, onSent, onError, onFinally }: RemoveLiquidityCallbackProps) => {
       const { poolInfo, position, liquidity, amountA, amountB, closePosition: _closePosition } = params
       if (!raydium || !position) return
 
@@ -86,7 +86,7 @@ export const useRemoveLiquidityCallback = () => {
 
       const executeRemove = async () => {
         try {
-          const { txId, signedTx } = await execute()
+          const { txId } = await execute()
           onSent?.(txId)
           return { hash: txId }
         } catch (e) {

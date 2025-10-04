@@ -72,5 +72,5 @@ export const useAddLiquidityAmount = ({ poolInfo, tickLower, tickUpper, side, am
         liquidity: undefined,
       }
     }
-  }, [poolInfo, tickLower, tickUpper, side, amount, slippage, currency0, currency1])
+  }, [poolInfo, tickLower, tickUpper, side, amount, slippage, currency0, currency1, connection, epochInfo])
 }

@@ -90,7 +90,7 @@ export const useRaydium = () => {
       // console.log('Wallet connected:', wallet?.adapter.name)
       if (walletRef.current) localStorage.setItem(WALLET_STORAGE_KEY, `"${wallet?.adapter.name}"`)
     }
-  }, [publicKey, connected])
+  }, [publicKey, connected, wallet?.adapter.name])
 
   return raydium
 }

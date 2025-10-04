@@ -102,7 +102,7 @@ export const useSolanaV3PoolsUpdater = (
     return () => {
       subs.forEach((sub) => connection.removeProgramAccountChangeListener(sub))
     }
-  }, [connection, poolInfos, updateSolanaV3Pool])
+  }, [connection, poolInfos, updateSolanaV3Pool, enabledSubscribe])
 
   return {
     loading,
