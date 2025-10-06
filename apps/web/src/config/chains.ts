@@ -92,6 +92,7 @@ export const L2_CHAIN_IDS: ChainId[] = [
   ChainId.OPBNB_TESTNET,
   ChainId.ARBITRUM_SEPOLIA,
   ChainId.BASE_SEPOLIA,
+  ChainId.MONAD_MAINNET,
 ]
 
 export const CHAINS: [Chain, ...Chain[]] = [

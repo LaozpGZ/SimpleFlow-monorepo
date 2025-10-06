@@ -70,6 +70,7 @@ export const multiChainPaths = {
   [ChainId.LINEA]: '/linea',
   [ChainId.BASE]: '/base',
   [ChainId.OPBNB]: '/opbnb',
+  [ChainId.MONAD_MAINNET]: '/monad',
 }
 
 export const multiChainQueryStableClient = STABLE_SUPPORTED_CHAIN_IDS.reduce((acc, chainId) => {
