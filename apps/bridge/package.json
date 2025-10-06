@@ -33,7 +33,7 @@
     "@pancakeswap/uikit": "workspace:*",
     "@pancakeswap/utils": "workspace:*",
     "@vanilla-extract/next-plugin": "^2.3.0",
-    "@wagmi/core": "^0.10.11",
+    "@wagmi/core": "catalog:",
     "@wormhole-foundation/wormhole-connect": "0.1.7",
     "ethers": "^5.0.0",
     "jotai": "catalog:",

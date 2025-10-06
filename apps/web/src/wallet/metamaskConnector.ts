@@ -20,7 +20,7 @@ export const customMetaMaskConnector = createConnector(() => ({
   name: 'metaMask',
   type: 'metaMask',
 
-  async connect({ chainId } = {}) {
+  async connect({ chainId, withCapabilities } = {}) {
     const provider = getMMProvider()
     if (!provider) throw new Error('MetaMask not found')
 
@@ -28,7 +28,9 @@ export const customMetaMaskConnector = createConnector(() => ({
     const currentChainId = await provider.request({ method: 'eth_chainId' })
 
     return {
-      accounts: accounts as readonly `0x${string}`[],
+      accounts: accounts.map((account) => {
+        return withCapabilities ? { address: account, capabilities: {} } : account
+      }) as never,
       chainId: chainId ?? parseInt(currentChainId, 16),
     }
   },

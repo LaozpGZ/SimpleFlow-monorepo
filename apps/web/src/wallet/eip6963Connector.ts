@@ -68,7 +68,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
     type: 'injected',
     icon: info.icon,
 
-    async connect({ chainId } = {}) {
+    async connect({ chainId, withCapabilities } = {}) {
       const accounts = await provider.request({ method: 'eth_requestAccounts' })
       let currentChainId = await this.getChainId()
 
@@ -81,7 +81,9 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
       }
 
       return {
-        accounts: accounts as readonly `0x${string}`[],
+        accounts: accounts.map((account) => {
+          return withCapabilities ? { address: account, capabilities: {} } : account
+        }) as never,
         chainId: currentChainId,
       }
     },

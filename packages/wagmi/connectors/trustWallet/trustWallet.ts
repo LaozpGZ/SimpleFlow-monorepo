@@ -76,7 +76,7 @@ export function trustWalletConnect() {
     id: 'trustWalletConnect',
     name: 'TrustWallet',
     type: trustWalletConnect.type,
-    async connect({ chainId } = {}) {
+    async connect({ chainId, withCapabilities } = {}) {
       try {
         const provider = await this.getProvider({ chainId })
 
@@ -89,7 +89,12 @@ export function trustWalletConnect() {
         const accounts = await this.getAccounts()
         const _chainId = await this.getChainId()
 
-        return { accounts, chainId: _chainId }
+        return {
+          accounts: accounts.map((account) => {
+            return withCapabilities ? { address: account, capabilities: {} } : account
+          }) as never,
+          chainId: _chainId,
+        }
       } catch (error: unknown) {
         handleConnectReset()
         throw error
