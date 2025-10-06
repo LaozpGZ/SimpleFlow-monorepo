@@ -210,14 +210,12 @@ const useConfirmActions = (
     setErrorMessage(undefined)
     setPermit2Signature(undefined)
     resumeQuoting()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [resumeQuoting])
 
   const showError = useCallback((error: string) => {
     setErrorMessage(error)
     setTxHash(undefined)
     setPermit2Signature(undefined)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const retryWaitForTransaction = useCallback(
@@ -528,10 +526,10 @@ const useConfirmActions = (
     safeTxHashTransformer,
     sendTransactionAsync,
     showError,
-    t,
     error?.code,
     error?.message,
     refetch,
+    resetState,
   ])
 
   const recipient = recipientAddress === null ? (isOutputSolana ? solanaAccount : account) : recipientAddress
@@ -753,7 +751,6 @@ const useConfirmActions = (
           : undefined,
     }
   }, [
-    solanaAccount,
     account,
     order,
     retryWaitForTransaction,
@@ -768,6 +765,8 @@ const useConfirmActions = (
     permit2Signature,
     allowedSlippage,
     bridgeSolanaSwapCalldata,
+    refreshOrder,
+    resetState,
   ])
 
   const swapStep = useMemo(() => {
