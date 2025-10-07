@@ -23,6 +23,7 @@ import { updateReqHistory } from "./utils";
 import { PublicKey } from "@solana/web3.js";
 import { solToWSol } from "../common";
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { ENV as ChainID } from "@solana/spl-token-registry";
 
 const logger = createLogger("Raydium_Api");
 const poolKeysCache: Map<string, PoolKeys> = new Map();
@@ -212,7 +213,7 @@ export class Api {
 
     return r.map((t) => ({
       ...t,
-      chainId: 101,
+      chainId: ChainID.MainnetBeta,
       programId: t.tags.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58(),
     }));
   }

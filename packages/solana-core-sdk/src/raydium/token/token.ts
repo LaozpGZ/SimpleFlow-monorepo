@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { MintLayout, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { ENV as ChainID } from "@solana/spl-token-registry";
 
 import { ApiV3Token, JupTokenType } from "@/api/type";
 import ModuleBase, { ModuleBaseProps } from "../moduleBase";
@@ -135,7 +136,7 @@ export default class TokenModule extends ModuleBase {
     const data = MintLayout.decode(onlineInfo.data);
     const mintSymbol = mintStr.toString().substring(0, 6);
     const fullInfo = {
-      chainId: 101,
+      chainId: ChainID.MainnetBeta,
       address: mintStr,
       programId: onlineInfo.owner.toBase58(),
       logoURI: "",

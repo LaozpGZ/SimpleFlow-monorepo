@@ -46,7 +46,7 @@ const fetchTokens = async () => {
   })
 
   const tokenList: TokenInfo[] = Array.from(tokenMap.values()).map((t) => ({
-    chainId: 101,
+    chainId: ChainID.MainnetBeta,
     address: t.id,
     name: t.name,
     decimals: t.decimals,

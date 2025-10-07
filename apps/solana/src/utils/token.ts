@@ -1,5 +1,6 @@
 import { TOKEN_WSOL, WSOLMint, SOLMint, USDCMint, USDTMint, ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
+import { ENV as ChainID } from '@solana/spl-token-registry'
 import { sortItems } from '@/utils/sortItems'
 
 export const wSolToSol = (key?: string): string | undefined => (key === WSOLMint.toBase58() ? SOLMint.toBase58() : key)
@@ -42,7 +43,7 @@ export const getMintSymbol = ({ mint, transformSol }: { mint: ApiV3Token; transf
 export const getMintName = ({ mint }: { mint: ApiV3Token }) => mint.name || mint.address.slice(0, 12)
 
 export const RAY_TOKEN_INFO = {
-  chainId: 101,
+  chainId: ChainID.MainnetBeta,
   address: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
   programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
   logoURI: 'https://img-v1.raydium.io/icon/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R.png',
