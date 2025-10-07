@@ -86,9 +86,7 @@ export const WalletBalanceUpdater: React.FC = () => {
         case 'collect-fee':
         case 'remove-liquidity':
         case 'limit-order-cancellation':
-        case 'cross-chain-farm':
         case 'claim-liquid-staking':
-        case 'place-limit-order':
         case 'other': {
           if (chainId === NonEVMChainId.SOLANA) {
             if (!isSolanaPending) {
