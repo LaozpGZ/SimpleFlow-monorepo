@@ -28,10 +28,10 @@ export const WalletBalanceUpdater: React.FC = () => {
   const { account, solanaAccount } = useAccountActiveChain()
 
   // Use BSC just to fetch EVM balances
-  const { balances: evmBalances, refresh: refreshEvmBalances } = useAddressBalance(account, ChainId.BSC, {
+  const { isPending: isEvmPending, refresh: refreshEvmBalances } = useAddressBalance(account, ChainId.BSC, {
     enabled: false,
   })
-  const { balances: solanaBalances, refresh: refreshSolanaBalances } = useAddressBalance(
+  const { isPending: isSolanaPending, refresh: refreshSolanaBalances } = useAddressBalance(
     solanaAccount,
     NonEVMChainId.SOLANA,
     { enabled: false },
@@ -68,10 +68,10 @@ export const WalletBalanceUpdater: React.FC = () => {
           const isToSolana = transaction.outputChainId === NonEVMChainId.SOLANA
 
           if (isToSolana) {
-            if (solanaBalances?.length > 0) {
+            if (!isSolanaPending) {
               refreshSolana()
             }
-          } else if (evmBalances?.length > 0) {
+          } else if (!isEvmPending) {
             refreshEvm()
           }
           break
@@ -89,10 +89,10 @@ export const WalletBalanceUpdater: React.FC = () => {
         case 'claim-liquid-staking':
         case 'place-limit-order':
         case 'other': {
-          if (chainId !== NonEVMChainId.SOLANA && evmBalances?.length > 0) {
+          if (chainId !== NonEVMChainId.SOLANA && !isEvmPending) {
             refreshEvm()
           }
-          if (chainId === NonEVMChainId.SOLANA && solanaBalances?.length > 0) {
+          if (chainId === NonEVMChainId.SOLANA && !isSolanaPending) {
             refreshSolana()
           }
           break
@@ -109,7 +109,7 @@ export const WalletBalanceUpdater: React.FC = () => {
       if (evmTimeoutRef.current) clearTimeout(evmTimeoutRef.current)
       if (solanaTimeoutRef.current) clearTimeout(solanaTimeoutRef.current)
     }
-  }, [refreshEvmBalances, refreshSolanaBalances, evmBalances?.length, solanaBalances?.length])
+  }, [refreshEvmBalances, refreshSolanaBalances, isEvmPending, isSolanaPending])
 
   return null
 }

@@ -92,6 +92,7 @@ export const useAddressBalance = (
 
   const {
     data: balances,
+    isPending,
     isLoading,
     error,
     refetch,
@@ -212,6 +213,7 @@ export const useAddressBalance = (
 
   return {
     balances: filteredBalances,
+    isPending,
     isLoading,
     error,
     totalBalanceUsd: filteredTotalBalanceUsd,
