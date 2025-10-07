@@ -224,6 +224,7 @@ function Remove({ tokenId }: { tokenId?: bigint }) {
         })
     })
   }, [
+    masterchefV3,
     tokenIdsInMCv3Loading,
     interfaceManager,
     manager,

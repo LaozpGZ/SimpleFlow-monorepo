@@ -210,8 +210,12 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const showApprovalB = approvalB !== ApprovalState.APPROVED && !!parsedAmounts[Field.CURRENCY_B]
 
   const onIncrease = useCallback(async () => {
+    // Skip MasterChef V3 loading check if MasterChef V3 is not deployed on this chain
+    const masterChefV3Address = masterchefV3?.address
+    const isMasterChefV3Available = masterChefV3Address && masterChefV3Address !== '0x'
+
     if (
-      tokenIdsInMCv3Loading ||
+      (isMasterChefV3Available && tokenIdsInMCv3Loading) ||
       !chainId ||
       !sendTransactionAsync ||
       !account ||
@@ -298,6 +302,7 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
     chainId,
     deadline,
     hasExistingPosition,
+    masterchefV3,
     interfaceManager,
     manager,
     noLiquidity,

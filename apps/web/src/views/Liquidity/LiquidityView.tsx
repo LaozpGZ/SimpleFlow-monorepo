@@ -347,8 +347,12 @@ export const LiquidityView = () => {
   }, [])
 
   const collect = useCallback(() => {
+    // Skip MasterChef V3 loading check if MasterChef V3 is not deployed on this chain
+    const masterChefV3Address = masterchefV3?.address
+    const isMasterChefV3Available = masterChefV3Address && masterChefV3Address !== '0x'
+
     if (
-      tokenIdsInMCv3Loading ||
+      (isMasterChefV3Available && tokenIdsInMCv3Loading) ||
       !currency0ForFeeCollectionPurposes ||
       !currency1ForFeeCollectionPurposes ||
       !chainId ||
@@ -413,6 +417,7 @@ export const LiquidityView = () => {
         console.error(error)
       })
   }, [
+    masterchefV3,
     tokenIdsInMCv3Loading,
     currency0ForFeeCollectionPurposes,
     currency1ForFeeCollectionPurposes,
