@@ -131,7 +131,6 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     monadTokens.busd,
     monadTokens.usdt,
     monadTokens.mcake,
-    monadTokens.musdt,
     monadTokens.mbnb,
   ],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.weth, monadTestnetTokens.usdc, monadTestnetTokens.busd],

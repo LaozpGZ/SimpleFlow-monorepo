@@ -438,12 +438,21 @@ export const USDT = {
     'Tether USDT',
     'https://tether.to/',
   ),
+  // [ChainId.MONAD_MAINNET]: new ERC20Token(
+  //   ChainId.MONAD_MAINNET,
+  //   '0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D',
+  //   18,
+  //   'USDT',
+  //   'Tether USD',
+  //   'https://tether.to/',
+  // ),
+  // TODO: Remove Mock USDT after QA testing
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D',
+    '0xF05266b1B1759D3A2746cd3b031b802C2496b278',
     18,
-    'USDT',
-    'Tether USD',
+    'MUSDT',
+    'Mock USDT',
     'https://tether.to/',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
