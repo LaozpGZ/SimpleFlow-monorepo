@@ -78,7 +78,7 @@ export default function CurrencySearchModalV2({
   showSearchInput,
   tokensToShow,
   chainId,
-  showNative,
+  showNative = true,
 }: CurrencySearchModalV2Props) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.search)
 

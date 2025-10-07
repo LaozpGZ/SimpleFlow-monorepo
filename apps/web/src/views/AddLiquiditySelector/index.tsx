@@ -212,7 +212,7 @@ export const AddLiquiditySelector = () => {
                 commonBasesType={CommonBasesType.LIQUIDITY}
                 tokensToShow={baseTokensToSelect}
                 hideBalance
-                showNative
+                showNative={protocol !== 'stableSwap'}
               />
               <AddIcon color="textSubtle" />
               <CurrencySelectV2
@@ -224,7 +224,7 @@ export const AddLiquiditySelector = () => {
                 showCommonBases={protocol !== 'stableSwap'}
                 commonBasesType={CommonBasesType.LIQUIDITY}
                 hideBalance
-                showNative
+                showNative={protocol !== 'stableSwap'}
               />
             </TokenFilterContainer>
           </FlexGap>

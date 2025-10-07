@@ -252,7 +252,6 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           showUSDPrice
           showMaxButton
           showCommonBases
-          showNative
           inputLoading={!isWrapping && inputLoading}
           currencyLoading={!loadedUrlParams}
           label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
@@ -297,7 +296,6 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           id="swap-currency-output"
           showUSDPrice
           showCommonBases
-          showNative
           showMaxButton={false}
           inputLoading={!isWrapping && outputLoading}
           currencyLoading={!loadedUrlParams}

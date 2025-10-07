@@ -91,7 +91,7 @@ export default function CurrencySearchModal({
   showCurrencyInHeader = false,
   showSearchHeader,
   mode,
-  showNative,
+  showNative = true,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.search)
   const [selectedChainId, setSelectedChainId] = useState<UnifiedChainId | undefined>(selectedCurrency?.chainId)
