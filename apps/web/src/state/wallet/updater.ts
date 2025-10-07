@@ -77,6 +77,7 @@ export const WalletBalanceUpdater: React.FC = () => {
           break
         }
 
+        // List of transaction types that may introduce new tokens to the user's account
         case 'swap':
         case 'wrap':
         case 'remove-liquidity-infinity-bin':
