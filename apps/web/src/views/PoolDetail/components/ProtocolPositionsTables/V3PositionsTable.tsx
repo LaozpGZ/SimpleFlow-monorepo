@@ -149,9 +149,11 @@ const V3Actions = ({
 
           <ActionButton
             as="a"
-            href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
+            href={`/increase/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
               poolInfo.token1.wrapped,
-            )}/${poolInfo.feeTier.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`}
+            )}/${poolInfo.feeTier.toString()}/${position.tokenId.toString()}?chain=${
+              CHAIN_QUERY_NAME[poolInfo.chainId]
+            }&${[PERSIST_CHAIN_KEY]}=1`}
             disabled={removed}
             isIcon
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
