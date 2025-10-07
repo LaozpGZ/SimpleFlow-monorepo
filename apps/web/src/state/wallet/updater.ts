@@ -50,16 +50,16 @@ export const WalletBalanceUpdater: React.FC = () => {
       const refreshEvm = () => {
         if (evmTimeoutRef.current) clearTimeout(evmTimeoutRef.current)
         evmTimeoutRef.current = setTimeout(() => {
-          refreshEvmBalances()
           evmTimeoutRef.current = null
+          refreshEvmBalances()
         }, delay)
       }
 
       const refreshSolana = () => {
         if (solanaTimeoutRef.current) clearTimeout(solanaTimeoutRef.current)
         solanaTimeoutRef.current = setTimeout(() => {
-          refreshSolanaBalances()
           solanaTimeoutRef.current = null
+          refreshSolanaBalances()
         }, delay)
       }
 
