@@ -169,6 +169,7 @@ export const useBatchSwapTransaction = ({
               addTransaction(
                 { hash },
                 {
+                  outputChainId: order?.trade?.outputAmount?.currency?.chainId,
                   summary: `Bridge ${order.trade.inputAmount.toSignificant(3)} ${
                     order.trade.inputAmount.currency.symbol
                   } to ${order.trade.outputAmount.currency.symbol}`,

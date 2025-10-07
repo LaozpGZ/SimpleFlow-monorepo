@@ -26,6 +26,7 @@ export type TransactionType =
   | 'bridge'
   | 'claim-liquid-staking'
   | 'place-limit-order'
+  | 'other'
 
 export interface SerializableTransactionReceipt {
   to: string
@@ -86,6 +87,7 @@ export const addTransaction = createAction<{
   translatableSummary?: { text: string; data?: Record<string, string | number | undefined> }
   type?: TransactionType
   order?: Order
+  outputChainId?: number
   crossChainFarm?: CrossChainFarmTransactionType
   receipt?: SerializableTransactionReceipt
 }>('transactions/addTransaction')

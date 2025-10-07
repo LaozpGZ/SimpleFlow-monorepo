@@ -6,7 +6,7 @@ import { CHAINS } from 'config/chains'
 import { PUBLIC_NODES } from 'config/nodes'
 import memoize from 'lodash/memoize'
 import { useCallback } from 'react'
-import { RetryableError, retry, retryExp } from 'state/multicall/retry'
+import { RetryableError, retryExp } from 'state/multicall/retry'
 import { fallbackWithRank } from 'utils/fallbackWithRank'
 import {
   BlockNotFoundError,
@@ -23,6 +23,7 @@ import {
 } from 'viem'
 import { usePublicClient } from 'wagmi'
 import { useW3WConfig } from 'wallet/W3WConfigContext'
+import { createWalletTransactionEvent } from 'state/wallet/updater'
 import { useActiveChainId } from './useActiveChainId'
 
 export const getViemClientsPublicNodes = memoize((w3WConfig = false) => {
@@ -70,6 +71,7 @@ export function usePublicNodeWaitForTransaction(chainId_?: number) {
             })
             if (receipt.status === 'success') {
               refetchBlockData()
+              window.dispatchEvent(createWalletTransactionEvent(selectedChain, { type: 'other' }))
             }
             return receipt
           }
@@ -79,6 +81,7 @@ export function usePublicNodeWaitForTransaction(chainId_?: number) {
           const receipt = await provider.getTransactionReceipt({ hash: opts.hash })
           if (receipt.status === 'success') {
             refetchBlockData()
+            window.dispatchEvent(createWalletTransactionEvent(selectedChain, { type: 'other' }))
           }
           return receipt
         } catch (error) {

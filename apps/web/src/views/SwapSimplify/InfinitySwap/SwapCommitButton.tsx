@@ -1,6 +1,5 @@
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AutoColumn, Button, Dots, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
-import { useAddressBalance } from 'hooks/useAddressBalance'
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useTranslation } from '@pancakeswap/localization'
@@ -169,10 +168,9 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   beforeCommit,
   afterCommit,
 }: SwapCommitButtonPropsType & CommitButtonProps) {
-  const { account, solanaAccount } = useAccountActiveChain()
+  const { account, solanaAccount, chainId } = useAccountActiveChain()
 
   const { t } = useTranslation()
-  const { chainId } = useAccountActiveChain()
   const handleBridgeTradeErrorMessage = useBridgeTradeErrorHandler()
   // form data
   const { independentField, typedValue } = useSwapState()
@@ -288,11 +286,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     inputCurrency && outputCurrency && parsedIndependentFieldAmount?.greaterThan(BIG_INT_ZERO),
   )
 
-  // Get the refresh function from useAddressBalance to update balances after swap
-  const { refresh: refreshBalances } = useAddressBalance(isSolana(chainId) ? solanaAccount : account, chainId, {
-    enabled: false,
-  })
-
   const onConfirm = useCallback(() => {
     beforeCommit?.()
     logGTMClickSwapConfirmEvent({
@@ -393,16 +386,8 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
       // Add this txHash to the processed list
       processedTxHashesRef.current.push(txHash)
-
-      // Refresh balances
-      if (refreshBalances) {
-        // delay refresh balances
-        setTimeout(() => {
-          refreshBalances()
-        }, 15000)
-      }
     }
-  }, [confirmState, txHash, refreshBalances])
+  }, [confirmState, txHash])
 
   // Use quote tracking state machine hook to ensure proper order: start -> success/fail
   // if any quote logic is changed, please update the hook

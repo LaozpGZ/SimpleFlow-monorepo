@@ -23,6 +23,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { TxVersion } from '@pancakeswap/solana-core-sdk'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
+import { createWalletTransactionEvent } from 'state/wallet/updater'
 import {
   FarmTransactionStatus,
   MsgStatus,
@@ -88,6 +89,12 @@ export const Updater: React.FC<{ chainId: number }> = ({ chainId }) => {
             const toast = receipt.status === 'success' ? toastSuccess : toastError
             if (receipt.status === 'success') {
               refetchBlockData()
+              window.dispatchEvent(
+                createWalletTransactionEvent(chainId, {
+                  type: transaction?.type,
+                  outputChainId: transaction?.outputChainId,
+                }),
+              )
             }
             toast(
               t('Transaction receipt'),

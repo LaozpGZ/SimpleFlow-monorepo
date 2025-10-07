@@ -70,7 +70,6 @@ export const useAddressBalance = (
   chainId?: number,
   options: UseAddressBalanceOptions = {},
 ) => {
-  // const { chainId } = useActiveChainId()
   const { includeSpam = false, onlyWithPrice = false, filterByChainId, enabled = true } = options
   const list = useCombinedActiveList()
 
@@ -89,7 +88,7 @@ export const useAddressBalance = (
     const data = (await response.json()) || []
 
     return data
-  }, [address])
+  }, [address, chainId])
 
   const {
     data: balances,
@@ -108,13 +107,6 @@ export const useAddressBalance = (
   const filteredBalances = useMemo(() => {
     return balances
       ? balances
-          .map((b) => ({
-            ...b,
-            token: {
-              ...b.token,
-              logoURI: b.token.logoURI ?? list[b.chainId]?.[safeGetAddress(b.token.address)]?.token.logoURI,
-            },
-          }))
           .filter((balance) => {
             // Filter out spam tokens if includeSpam is false
             if (!includeSpam && balance.token.isSpam) {
@@ -133,6 +125,13 @@ export const useAddressBalance = (
 
             return true
           })
+          .map((b) => ({
+            ...b,
+            token: {
+              ...b.token,
+              logoURI: b.token.logoURI ?? list[b.chainId]?.[safeGetAddress(b.token.address)]?.token.logoURI,
+            },
+          }))
           .sort((a, b) => {
             const aListed = isListedToken(a.chainId, a.token.address)
             const bListed = isListedToken(b.chainId, b.token.address)
@@ -176,7 +175,7 @@ export const useAddressBalance = (
   // Get the top balances by USD value
   const getTopBalances = useCallback(
     (limit: number = 5) => {
-      return [...filteredBalances]
+      return filteredBalances
         .filter((balance) => balance.price?.totalUsd)
         .sort((a, b) => {
           const aValue = a.price?.totalUsd || 0
@@ -262,7 +261,15 @@ export const useMultichainAddressBalance = () => {
       isLoading: isEvmLoading || isSolanaLoading,
       totalBalanceUsd: (evmTotalBalanceUsd ?? 0) + (solanaTotalBalanceUsd ?? 0),
     }
-  }, [evmBalances, solanaBalances, isEvmLoading, isSolanaLoading, evmTotalBalanceUsd, solanaTotalBalanceUsd])
+  }, [
+    evmBalances,
+    solanaBalances,
+    isEvmLoading,
+    isSolanaLoading,
+    evmTotalBalanceUsd,
+    solanaTotalBalanceUsd,
+    isListedToken,
+  ])
 }
 
 export default useAddressBalance
