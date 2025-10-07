@@ -1,7 +1,7 @@
 import { ChainId, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useAddressBalance from 'hooks/useAddressBalance'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { TransactionDetails } from 'state/transactions/reducer'
 
 export const WALLET_TRX_EVENT_NAME = 'pcs:transaction-success'
@@ -37,6 +37,9 @@ export const WalletBalanceUpdater: React.FC = () => {
     { enabled: false },
   )
 
+  const evmTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const solanaTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
   useEffect(() => {
     const handleWalletTransaction = (event: WalletTransactionEvent) => {
       const { transaction, chainId } = event.detail
@@ -44,20 +47,32 @@ export const WalletBalanceUpdater: React.FC = () => {
 
       const delay = 15000
 
+      const refreshEvm = () => {
+        if (evmTimeoutRef.current) clearTimeout(evmTimeoutRef.current)
+        evmTimeoutRef.current = setTimeout(() => {
+          refreshEvmBalances()
+          evmTimeoutRef.current = null
+        }, delay)
+      }
+
+      const refreshSolana = () => {
+        if (solanaTimeoutRef.current) clearTimeout(solanaTimeoutRef.current)
+        solanaTimeoutRef.current = setTimeout(() => {
+          refreshSolanaBalances()
+          solanaTimeoutRef.current = null
+        }, delay)
+      }
+
       switch (transaction.type) {
         case 'bridge': {
           const isToSolana = transaction.outputChainId === NonEVMChainId.SOLANA
 
           if (chainId !== NonEVMChainId.SOLANA && evmBalances) {
-            setTimeout(() => {
-              refreshEvmBalances()
-            }, delay)
+            refreshEvm()
           }
 
           if (isToSolana && solanaBalances) {
-            setTimeout(() => {
-              refreshSolanaBalances()
-            }, delay)
+            refreshSolana()
           }
           break
         }
@@ -75,14 +90,10 @@ export const WalletBalanceUpdater: React.FC = () => {
         case 'place-limit-order':
         case 'other': {
           if (chainId !== NonEVMChainId.SOLANA && evmBalances) {
-            setTimeout(() => {
-              refreshEvmBalances()
-            }, delay)
+            refreshEvm()
           }
           if (chainId === NonEVMChainId.SOLANA && solanaBalances) {
-            setTimeout(() => {
-              refreshSolanaBalances()
-            }, delay)
+            refreshSolana()
           }
           break
         }
@@ -93,7 +104,11 @@ export const WalletBalanceUpdater: React.FC = () => {
     }
 
     window.addEventListener(WALLET_TRX_EVENT_NAME, handleWalletTransaction as EventListener)
-    return () => window.removeEventListener(WALLET_TRX_EVENT_NAME, handleWalletTransaction as EventListener)
+    return () => {
+      window.removeEventListener(WALLET_TRX_EVENT_NAME, handleWalletTransaction as EventListener)
+      if (evmTimeoutRef.current) clearTimeout(evmTimeoutRef.current)
+      if (solanaTimeoutRef.current) clearTimeout(solanaTimeoutRef.current)
+    }
   }, [refreshEvmBalances, refreshSolanaBalances, evmBalances, solanaBalances])
 
   return null
