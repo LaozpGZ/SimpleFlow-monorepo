@@ -68,10 +68,10 @@ export const WalletBalanceUpdater: React.FC = () => {
           const isToSolana = transaction.outputChainId === NonEVMChainId.SOLANA
 
           if (isToSolana) {
-            if (solanaBalances) {
+            if (solanaBalances?.length > 0) {
               refreshSolana()
             }
-          } else if (evmBalances) {
+          } else if (evmBalances?.length > 0) {
             refreshEvm()
           }
           break
@@ -89,10 +89,10 @@ export const WalletBalanceUpdater: React.FC = () => {
         case 'claim-liquid-staking':
         case 'place-limit-order':
         case 'other': {
-          if (chainId !== NonEVMChainId.SOLANA && evmBalances) {
+          if (chainId !== NonEVMChainId.SOLANA && evmBalances?.length > 0) {
             refreshEvm()
           }
-          if (chainId === NonEVMChainId.SOLANA && solanaBalances) {
+          if (chainId === NonEVMChainId.SOLANA && solanaBalances?.length > 0) {
             refreshSolana()
           }
           break
@@ -109,7 +109,7 @@ export const WalletBalanceUpdater: React.FC = () => {
       if (evmTimeoutRef.current) clearTimeout(evmTimeoutRef.current)
       if (solanaTimeoutRef.current) clearTimeout(solanaTimeoutRef.current)
     }
-  }, [refreshEvmBalances, refreshSolanaBalances, evmBalances, solanaBalances])
+  }, [refreshEvmBalances, refreshSolanaBalances, evmBalances?.length, solanaBalances?.length])
 
   return null
 }
