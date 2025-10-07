@@ -89,11 +89,12 @@ export const WalletBalanceUpdater: React.FC = () => {
         case 'claim-liquid-staking':
         case 'place-limit-order':
         case 'other': {
-          if (chainId !== NonEVMChainId.SOLANA && !isEvmPending) {
+          if (chainId === NonEVMChainId.SOLANA) {
+            if (!isSolanaPending) {
+              refreshSolana()
+            }
+          } else if (!isEvmPending) {
             refreshEvm()
-          }
-          if (chainId === NonEVMChainId.SOLANA && !isSolanaPending) {
-            refreshSolana()
           }
           break
         }
