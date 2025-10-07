@@ -64,18 +64,11 @@ export const WalletBalanceUpdater: React.FC = () => {
 
         case 'swap':
         case 'wrap':
-        case 'add-liquidity':
-        case 'increase-liquidity-v3':
-        case 'add-liquidity-v3':
-        case 'add-liquidity-infinity-bin':
-        case 'add-liquidity-infinity-cl':
         case 'remove-liquidity-infinity-bin':
         case 'remove-liquidity-infinity-cl':
-        case 'zap-liquidity-v3':
         case 'remove-liquidity-v3':
         case 'collect-fee':
         case 'remove-liquidity':
-        case 'limit-order-submission':
         case 'limit-order-cancellation':
         case 'cross-chain-farm':
         case 'claim-liquid-staking':
