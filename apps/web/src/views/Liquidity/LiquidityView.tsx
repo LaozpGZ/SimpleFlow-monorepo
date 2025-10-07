@@ -332,8 +332,9 @@ export const LiquidityView = () => {
 
   const positionManager = useV3NFTPositionManagerContract()
   const masterchefV3 = useMasterchefV3()
+  const isMasterChefV3Available = Boolean(masterchefV3?.address && masterchefV3?.address !== '0x')
   const { tokenIds: stakedTokenIds, loading: tokenIdsInMCv3Loading } = useV3TokenIdsByAccount(
-    masterchefV3?.address,
+    isMasterChefV3Available ? masterchefV3?.address : undefined,
     account,
   )
 

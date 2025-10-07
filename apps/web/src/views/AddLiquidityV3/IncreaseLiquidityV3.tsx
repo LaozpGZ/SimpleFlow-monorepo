@@ -68,8 +68,11 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
 
   const masterchefV3 = useMasterchefV3()
+  // Inline availability check to avoid duplicating logic elsewhere
+  const isMasterChefV3Available = Boolean(masterchefV3?.address && masterchefV3?.address !== '0x')
+  // Only fetch staked token IDs if MasterChef V3 is available on this chain
   const { tokenIds: stakedTokenIds, loading: tokenIdsInMCv3Loading } = useV3TokenIdsByAccount(
-    masterchefV3?.address,
+    isMasterChefV3Available ? masterchefV3?.address : undefined,
     account,
   )
 
@@ -166,11 +169,14 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const [allowedSlippage] = useUserSlippage() // custom from users
 
   const isStakedInMCv3 = useMemo(() => {
+    if (!isMasterChefV3Available) {
+      return 'false'
+    }
     if (tokenIdsInMCv3Loading) {
       return 'loading'
     }
     return tokenId && stakedTokenIds.find((id) => id === BigInt(tokenId)) ? 'true' : 'false'
-  }, [tokenIdsInMCv3Loading, tokenId, stakedTokenIds])
+  }, [masterchefV3, tokenIdsInMCv3Loading, tokenId, stakedTokenIds])
 
   const manager =
     isStakedInMCv3 !== 'loading' ? (isStakedInMCv3 === 'true' ? masterchefV3 : positionManager) : undefined
