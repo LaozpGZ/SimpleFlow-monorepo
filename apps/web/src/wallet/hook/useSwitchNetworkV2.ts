@@ -220,7 +220,7 @@ const useProcessSwitchChainRequest = () => {
 
         // Solana
         if (!SOLANA_SUPPORTED_PATH.some((p) => path.startsWith(p))) {
-          window.open('https://solana.pancakeswap.finance', '_self')
+          window.open('https://pancakeswap.finance/swap?chain=sol', '_self')
           return true
         }
         updateAccountState((prev) => ({
