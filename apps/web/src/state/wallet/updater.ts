@@ -67,12 +67,12 @@ export const WalletBalanceUpdater: React.FC = () => {
         case 'bridge': {
           const isToSolana = transaction.outputChainId === NonEVMChainId.SOLANA
 
-          if (chainId !== NonEVMChainId.SOLANA && evmBalances) {
+          if (isToSolana) {
+            if (solanaBalances) {
+              refreshSolana()
+            }
+          } else if (evmBalances) {
             refreshEvm()
-          }
-
-          if (isToSolana && solanaBalances) {
-            refreshSolana()
           }
           break
         }
