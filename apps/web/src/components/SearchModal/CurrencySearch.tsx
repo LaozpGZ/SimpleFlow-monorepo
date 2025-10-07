@@ -14,7 +14,6 @@ import { useAllTokenBalances } from 'state/wallet/hooks'
 import { safeGetAddress } from 'utils'
 import { getTokenAddressFromSymbolAlias } from 'utils/getTokenAlias'
 import { isAddress } from 'viem'
-import { useAccount } from 'wagmi'
 
 import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useDebounce, useSortedTokensByQuery } from '@pancakeswap/hooks'
@@ -31,7 +30,6 @@ import {
   IconButton,
   ModalCloseButton,
   ModalTitle,
-  Spinner,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
@@ -141,7 +139,6 @@ function CurrencySearch({
   onSettingsClick,
 }: CurrencySearchProps) {
   const { t } = useTranslation()
-  const account = useAccount()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const debouncedQuery = useDebounce(getTokenAddressFromSymbolAlias(searchQuery, selectedChainId, searchQuery), 200)
   // refs for fixed size lists
@@ -207,11 +204,11 @@ function CurrencySearch({
     const filterToken = createFilterToken(debouncedQuery, (address) => isAddress(address))
     // Only EVM tokens here
     return Object.values(tokensToShow || allTokens).filter(filterToken) as Token[]
-  }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens, otherSelectedCurrency, showNative, native])
+  }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens, otherSelectedCurrency])
 
   const queryTokens = useSortedTokensByQuery(filteredTokens as Token[], debouncedQuery)
 
-  const { balances, isLoading: isLoadingBalances } = useAllTokenBalances(selectedChainId)
+  const { balances } = useAllTokenBalances(selectedChainId)
 
   const filteredSortedTokens: UnifiedCurrency[] = useMemo(() => {
     if (isSolana) {

@@ -28,6 +28,7 @@ export const FieldSelectCurrencies: React.FC<FieldSelectCurrenciesProps> = ({ ..
           showCommonBases
           commonBasesType={CommonBasesType.LIQUIDITY}
           hideBalance
+          showNative
         />
         <AddIcon color="textSubtle" />
         <CurrencySelectV2
@@ -39,6 +40,7 @@ export const FieldSelectCurrencies: React.FC<FieldSelectCurrenciesProps> = ({ ..
           showCommonBases
           commonBasesType={CommonBasesType.LIQUIDITY}
           hideBalance
+          showNative
         />
       </FlexGap>
     </Box>

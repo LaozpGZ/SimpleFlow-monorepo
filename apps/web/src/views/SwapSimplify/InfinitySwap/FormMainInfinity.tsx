@@ -1,4 +1,4 @@
-import { ChainId as EvmChainId, isSolana, UnifiedChainId } from '@pancakeswap/chains'
+import { isSolana, UnifiedChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Percent, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { Box, FlexGap, Image, Skeleton, Text } from '@pancakeswap/uikit'
@@ -14,7 +14,7 @@ import { useUnifiedCurrencyBalance } from 'hooks/useUnifiedCurrencyBalance'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import { ReactNode, Suspense, useCallback, useEffect, useMemo } from 'react'
+import { ReactNode, Suspense, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { Field } from 'state/swap/actions'
 import { useCurrentWalletIcon } from 'state/wallet/hooks'
@@ -252,6 +252,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           showUSDPrice
           showMaxButton
           showCommonBases
+          showNative
           inputLoading={!isWrapping && inputLoading}
           currencyLoading={!loadedUrlParams}
           label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
@@ -296,6 +297,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           id="swap-currency-output"
           showUSDPrice
           showCommonBases
+          showNative
           showMaxButton={false}
           inputLoading={!isWrapping && outputLoading}
           currencyLoading={!loadedUrlParams}
