@@ -4,7 +4,7 @@ import useAddressBalance from 'hooks/useAddressBalance'
 import { useEffect, useRef } from 'react'
 import { TransactionDetails } from 'state/transactions/reducer'
 
-export const WALLET_TRX_EVENT_NAME = 'pcs:transaction-success'
+const WALLET_TRX_EVENT_NAME = 'pcs:transaction-success'
 
 interface WalletTransactionEvent
   extends CustomEvent<{
