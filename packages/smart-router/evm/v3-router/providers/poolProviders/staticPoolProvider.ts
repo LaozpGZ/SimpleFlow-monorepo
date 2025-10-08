@@ -10,7 +10,13 @@ export function createStaticPoolProvider(pools?: Pool[]): PoolProvider {
         return []
       }
 
+      console.log('createStaticPoolProvider pools', pools, pairs, protocols)
+
       if (!pairs) {
+        console.log(
+          'createStaticPoolProvider pools return',
+          pools.filter((pool) => protocols.includes(pool.type)),
+        )
         return pools.filter((pool) => protocols.includes(pool.type))
       }
 

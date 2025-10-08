@@ -9,7 +9,7 @@ import {
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { fillPoolsWithBins, getInfinityBinCandidatePoolsWithoutBins } from './getInfinityBinPools'
 import { fillClPoolsWithTicks, getInfinityClCandidatePoolsWithoutTicks } from './getInfinityClPools'
-import { getInfinityStableCandidatePools } from './getInfinitySSPools'
+import { getInfinityStableCandidatePools } from './getInfinityStablePools'
 import { getInfinityPoolTvl } from './getPoolTvl'
 
 export const getInfinityCandidatePools = async (params: GetInfinityCandidatePoolsParams) => {
@@ -51,9 +51,16 @@ async function fetchPoolsOnChain(params: GetInfinityCandidatePoolsParams) {
 export const getInfinityCandidatePoolsLite = async (
   params: GetInfinityCandidatePoolsParams,
 ): Promise<(InfinityClPool | InfinityBinPool | InfinityStablePool)[]> => {
-  const pools = await fetchPoolsOnChain(params)
+  console.log('calling fetchPoolsOnChain')
+
+  // TODO: disable fetchPoolsOnChain for faster development
+  const pools = []
+
+  console.log('calling getInfinityStableCandidatePools')
 
   const stableInfinityPools = await getInfinityStableCandidatePools(params)
+
+  console.log('stableInfinityPools: ', stableInfinityPools)
 
   // Filter pools by TVL, and return Pools omitted tvlUSD field
   const filtered = infinityPoolTvlSelector(params.currencyA, params.currencyB, pools)

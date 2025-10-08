@@ -101,10 +101,16 @@ async function getBestRoutes(
     protocols: allowedPoolTypes,
     signal,
   })
+
   logger.debug(`Candidate pools: ${candidatePools.length}, maxSplits=${maxSplits}, maxHops=${maxHops}`)
   logPools(quoteId, candidatePools, 2)
 
+  console.log('done getBestRoutes candidatePools', quoteId || 'no quoteId', candidatePools)
+
   let baseRoutes = computeAllRoutesNew(inputCurrency, outputCurrency, candidatePools, maxHops, quoteId)
+
+  console.log('getBestRoutes baseRoutes', baseRoutes)
+
   // Do not support mix route on exact output
   if (tradeType === TradeType.EXACT_OUTPUT) {
     baseRoutes = baseRoutes.filter(({ type }) => type !== RouteType.MIXED)
@@ -112,6 +118,7 @@ async function getBestRoutes(
   logger.debug(`Discovered ${baseRoutes.length} Base routes, maxShow = 10`)
   logRoutes(quoteId, baseRoutes.slice(0, 10), 2)
 
+  console.log('call createGasModel')
   const gasModel = await createGasModel({
     gasPriceWei,
     poolProvider,
@@ -120,6 +127,8 @@ async function getBestRoutes(
     quoteCurrencyUsdPrice,
     nativeCurrencyUsdPrice,
   })
+
+  console.log('call getRoutesWithValidQuote')
   const routesWithValidQuote = await getRoutesWithValidQuote({
     amount,
     baseRoutes,
@@ -132,6 +141,18 @@ async function getBestRoutes(
     quoteId,
     signal,
   })
+
   logger.debug(`valid route=${routesWithValidQuote.length}, maxShow=100`)
-  return getBestRouteCombinationByQuotes(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
+  console.log('call getBestRouteCombinationByQuotes', routesWithValidQuote)
+
+  const result = getBestRouteCombinationByQuotes(
+    amount,
+    currency,
+    routesWithValidQuote,
+    tradeType,
+    { maxSplits },
+    quoteId,
+  )
+  console.log('done getBestRouteCombinationByQuotes', result)
+  return result
 }

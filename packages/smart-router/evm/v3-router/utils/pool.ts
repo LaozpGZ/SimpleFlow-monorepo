@@ -64,6 +64,12 @@ export function involvesCurrency(pool: Pool, currency: Currency) {
     const { balances } = pool
     return balances.some((b) => b.currency.equals(token))
   }
+
+  if (isInfinityStablePool(pool)) {
+    const { reserve0, reserve1 } = pool
+    return reserve0?.currency.equals(token) || reserve1?.currency.equals(token)
+  }
+
   return false
 }
 
@@ -82,7 +88,7 @@ export function getOutputCurrency(pool: Pool, currencyIn: Currency): Currency {
     const { balances } = pool
     return balances[0].currency.equals(tokenIn) ? balances[1].currency : balances[0].currency
   }
-  if (isInfinityClPool(pool) || isInfinityBinPool(pool)) {
+  if (isInfinityClPool(pool) || isInfinityBinPool(pool) || isInfinityStablePool(pool)) {
     const { currency0, currency1 } = pool
     return currency0.wrapped.equals(tokenIn) ? currency1 : currency0
   }

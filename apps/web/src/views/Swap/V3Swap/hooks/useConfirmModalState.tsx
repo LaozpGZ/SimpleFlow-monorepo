@@ -162,6 +162,7 @@ const useConfirmActions = (
     }
   }, [chainId, amountToApprove?.currency.address, account])
   const [permit2Signature, setPermit2Signature] = useState<Permit2Signature | undefined>(undefined)
+
   const {
     callback: swap,
     error: swapError,
@@ -171,6 +172,10 @@ const useConfirmActions = (
     deadline,
     permitSignature: permit2Signature,
   })
+
+  console.log('useConfirmActions order swap', order)
+
+  console.log('useConfirmActions swapCalls', swapCalls)
 
   const nativeCurrency = useNativeCurrency(order?.trade?.inputAmount.currency.chainId)
   const wrappedBalance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)

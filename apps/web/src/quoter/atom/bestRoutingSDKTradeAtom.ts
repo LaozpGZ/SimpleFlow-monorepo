@@ -39,6 +39,9 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
           fetchCandidatePools(poolQuery, poolOptions),
           get(gasPriceWeiAtom(currency?.chainId)),
         ])
+
+        console.log('bestRoutingSDKTradeAtom candidatePools', candidatePools)
+
         perf.tracker.track('pool_success')
         const result = await worker.getBestTradeOffchain({
           chainId: currency.chainId,
@@ -54,6 +57,9 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
           candidatePools: candidatePools.map(SmartRouter.Transformer.serializePool),
           signal: controller.signal,
         })
+
+        console.log('bestRoutingSDKTradeAtom result', result)
+
         const trade = InfinityRouter.Transformer.parseTrade(currency.chainId, result) ?? null
         const verifiedTrade = await getVerifiedTrade(trade)
 

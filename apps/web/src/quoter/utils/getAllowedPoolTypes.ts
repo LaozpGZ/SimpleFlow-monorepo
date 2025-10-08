@@ -7,6 +7,7 @@ export function getAllowedPoolTypes(options: QuoteQuery) {
   if (infinitySwap) {
     types.push(PoolType.InfinityBIN)
     types.push(PoolType.InfinityCL)
+    types.push(PoolType.InfinityStable)
   }
   if (v2Swap) {
     types.push(PoolType.V2)

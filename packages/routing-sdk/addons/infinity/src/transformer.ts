@@ -15,9 +15,11 @@ import {
   InfinityBinPoolData,
   InfinityCLPool,
   InfinityCLPoolData,
+  InfinityStablePool,
   SerializableBinReserves,
   SerializableInfinityBinPool,
   SerializableInfinityCLPool,
+  SerializableInfinityStablePool,
   SerializableTick,
 } from './types'
 
@@ -54,6 +56,19 @@ export function toSerializableInfinityCLPool(infinityCLPool: InfinityCLPool): Se
     liquidity: pool.liquidity.toString(),
     sqrtRatioX96: pool.sqrtRatioX96.toString(),
     ticks: pool.ticks?.map(toSerializableTick),
+    reserve0: pool.reserve0 && toSerializableCurrencyAmount(pool.reserve0),
+    reserve1: pool.reserve1 && toSerializableCurrencyAmount(pool.reserve1),
+  }
+}
+
+export function toSerializableInfinityStablePool(
+  infinityStablePool: InfinityStablePool,
+): SerializableInfinityStablePool {
+  const pool = infinityStablePool.getPoolData()
+  return {
+    ...pool,
+    currency0: toSerializableCurrency(pool.currency0),
+    currency1: toSerializableCurrency(pool.currency1),
     reserve0: pool.reserve0 && toSerializableCurrencyAmount(pool.reserve0),
     reserve1: pool.reserve1 && toSerializableCurrencyAmount(pool.reserve1),
   }

@@ -120,6 +120,8 @@ function getRoutingStrategy(query: QuoteQuery, tokenSpecificConfig: TokenSpecifi
   const config =
     tokenSpecificConfig[chainId]?.[addressA] || tokenSpecificConfig[chainId]?.[addressB] || defaultRoutingConfig
 
+  console.log('getRoutingStrategy config', config)
+
   return config.map((x) => {
     const strategy = Strategies[x.key]
     if (!strategy) {

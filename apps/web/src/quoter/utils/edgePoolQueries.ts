@@ -128,9 +128,10 @@ const fetchInfinityPools = async (addressA: Address, addressB: Address, chainId:
 
   const infinityStablePools = pools.filter((pool) => pool.type === PoolType.InfinityStable)
 
-  const restPools = pools.filter((pool) => pool.type !== PoolType.InfinityStable)
+  // const restPools = pools.filter((pool) => pool.type !== PoolType.InfinityStable)
 
-  const fillTicksPools = await fillTicksAndBins(restPools)
+  // const fillTicksPools = await fillTicksAndBins(restPools)
+  const fillTicksPools = []
 
   return [...fillTicksPools, ...infinityStablePools]
 }
@@ -310,6 +311,7 @@ const fetchAllCandidatePoolsLite = async (
 }
 
 export const poolTvlMap = async (protocols: Protocol[], chain: APIChain) => {
+  return {}
   try {
     const remotePools = await fetchAllPools({
       baseUrl: 'https://explorer.pancakeswap.com/api/cached/pools/tvl-refs',

@@ -87,8 +87,7 @@ export interface SerializedInfinityBinPool
   reserve1?: SerializedCurrencyAmount
 }
 
-export interface SerializedInfinityStablePool
-  extends Omit<InfinityStablePool, 'currency0' | 'currency1' | 'reserve0' | 'reserve1'> {
+export interface SerializedInfinityStablePool extends Omit<InfinityStablePool, 'currency0' | 'currency1'> {
   currency0: SerializedCurrency
   currency1: SerializedCurrency
 }
@@ -197,6 +196,8 @@ export function serializePool(pool: Pool): SerializedPool {
       fee: pool.fee,
       type: PoolType.InfinityStable,
       tickSpacing: pool.tickSpacing,
+      reserve0: pool.reserve0 && serializeCurrencyAmount(pool.reserve0),
+      reserve1: pool.reserve1 && serializeCurrencyAmount(pool.reserve1),
     }
   }
 
@@ -326,6 +327,17 @@ export function parsePool(chainId: ChainId, pool: SerializedPool): Pool {
       fee: new Percent(parseFloat(pool.fee) * 1000000, ONE_HUNDRED * 1000000n),
     }
   }
+
+  if (pool.type === PoolType.InfinityStable) {
+    return {
+      ...pool,
+      currency0: parseCurrency(chainId, pool.currency0),
+      currency1: parseCurrency(chainId, pool.currency1),
+      reserve0: pool.reserve0 && parseCurrencyAmount(chainId, pool.reserve0),
+      reserve1: pool.reserve1 && parseCurrencyAmount(chainId, pool.reserve1),
+    }
+  }
+
   if (pool.type === PoolType.InfinityCL) {
     return {
       ...pool,

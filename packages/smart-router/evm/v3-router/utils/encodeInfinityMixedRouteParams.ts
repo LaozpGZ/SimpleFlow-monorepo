@@ -9,7 +9,7 @@ import { getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import { Hex, encodeAbiParameters, parseAbiParameters } from 'viem'
 
 import { BaseRoute } from '../types'
-import { isInfinityBinPool, isInfinityClPool, isStablePool, isV2Pool, isV3Pool } from './pool'
+import { isInfinityBinPool, isInfinityClPool, isInfinityStablePool, isStablePool, isV2Pool, isV3Pool } from './pool'
 
 const infinityRouteParamsAbi = [
   {
@@ -34,6 +34,7 @@ const infinityRouteParamsAbi = [
 ] as const
 
 export function encodeInfinityMixedRouteParams(route: BaseRoute): Hex[] {
+  console.log('encodeInfinityMixedRouteParams route', route)
   return route.pools.map((p) => {
     if (isV2Pool(p) || isStablePool(p)) {
       return '0x'
@@ -41,7 +42,7 @@ export function encodeInfinityMixedRouteParams(route: BaseRoute): Hex[] {
     if (isV3Pool(p)) {
       return encodeAbiParameters(parseAbiParameters('uint24'), [p.fee])
     }
-    if (isInfinityClPool(p)) {
+    if (isInfinityClPool(p) || isInfinityStablePool(p)) {
       const poolKey: PoolKey<'CL'> = {
         currency0: getCurrencyAddress(p.currency0),
         currency1: getCurrencyAddress(p.currency1),
@@ -54,6 +55,9 @@ export function encodeInfinityMixedRouteParams(route: BaseRoute): Hex[] {
             p.hooksRegistrationBitmap !== undefined ? decodeHooksRegistration(p.hooksRegistrationBitmap) : undefined,
         },
       }
+
+      console.log('encodeInfinityMixedRouteParams poolKey', poolKey)
+
       return encodeAbiParameters(infinityRouteParamsAbi, [
         {
           poolKey: encodePoolKey(poolKey),

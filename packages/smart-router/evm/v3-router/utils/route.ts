@@ -50,9 +50,11 @@ function getRouteTypeFromPool(pool: Pick<Pool, 'type'>) {
     case PoolType.STABLE:
       return RouteType.STABLE
     case PoolType.InfinityCL:
+    case PoolType.InfinityStable:
       return RouteType.InfinityCL
     case PoolType.InfinityBIN:
       return RouteType.InfinityBIN
+
     default:
       return RouteType.MIXED
   }

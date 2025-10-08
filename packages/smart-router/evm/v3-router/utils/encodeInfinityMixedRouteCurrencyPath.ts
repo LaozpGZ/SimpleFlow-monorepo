@@ -2,7 +2,15 @@ import { Currency, getCurrencyAddress, getMatchedCurrency } from '@pancakeswap/s
 import { Address } from 'viem'
 
 import { BaseRoute, Pool } from '../types'
-import { getOutputCurrency, isInfinityBinPool, isInfinityClPool, isStablePool, isV2Pool, isV3Pool } from './pool'
+import {
+  getOutputCurrency,
+  isInfinityBinPool,
+  isInfinityClPool,
+  isInfinityStablePool,
+  isStablePool,
+  isV2Pool,
+  isV3Pool,
+} from './pool'
 
 function getPoolCurrencies(pool: Pool) {
   if (isV2Pool(pool)) {
@@ -14,7 +22,7 @@ function getPoolCurrencies(pool: Pool) {
   if (isStablePool(pool)) {
     return pool.balances.map((b) => b.currency)
   }
-  if (isInfinityClPool(pool) || isInfinityBinPool(pool)) {
+  if (isInfinityClPool(pool) || isInfinityBinPool(pool) || isInfinityStablePool(pool)) {
     return [pool.currency0, pool.currency1]
   }
   throw new Error('Failed to get pool currencies. Unrecognized pool type')
@@ -26,6 +34,7 @@ function getPoolCurrencies(pool: Pool) {
  * @returns the encoded path keys
  */
 export function encodeInfinityMixedRouteCurrencyPath(route: BaseRoute): Address[] {
+  console.log('encodeInfinityMixedRouteCurrencyPath route', route)
   const { pools } = route
   const currencyStart = route.path[0]
   const pathStart = getMatchedCurrency(currencyStart, getPoolCurrencies(pools[0]))
@@ -47,6 +56,8 @@ export function encodeInfinityMixedRouteCurrencyPath(route: BaseRoute): Address[
     },
     { baseCurrency: pathStart, path: [getCurrencyAddress(pathStart)] },
   )
+
+  console.log('encodeInfinityMixedRouteCurrencyPath path', path)
 
   return path
 }

@@ -14,7 +14,7 @@ import {
 import { ACTIONS, ActionsPlanner, encodePoolKey } from '@pancakeswap/infinity-sdk'
 import first from 'lodash/first'
 import last from 'lodash/last'
-import { Address, zeroAddress } from 'viem'
+import { Address, encodeAbiParameters, keccak256, parseAbiParameters, zeroAddress } from 'viem'
 import { ACTION_CONSTANTS } from '../../constants'
 import {
   EncodedMultiSwapInParams,
@@ -195,7 +195,7 @@ export class TradePlanner extends RoutePlanner {
   private addInfinityMultiHop(actionPlaner: ActionsPlanner, section: SwapSection, amountIn: bigint, amountOut: bigint) {
     const { tradeType } = this.context.trade
     const pool = section.pools[0]
-    const isCL = SmartRouter.isInfinityClPool(pool)
+    const isCL = SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityStablePool(pool)
     if (tradeType === TradeType.EXACT_INPUT) {
       const params: EncodedMultiSwapInParams = {
         currencyIn: currencyAddressInfinity(section.poolIn),
@@ -223,6 +223,7 @@ export class TradePlanner extends RoutePlanner {
   ) {
     const pool = section.pools[0] as InfinityBinPool | InfinityClPool
     const poolKey = getPoolKey(pool)
+
     const _encodedPoolKey = encodePoolKey(poolKey)
 
     const { tradeType } = this.context.trade
@@ -234,7 +235,7 @@ export class TradePlanner extends RoutePlanner {
       hookData: zeroAddress,
     }
 
-    const isCL = SmartRouter.isInfinityClPool(pool)
+    const isCL = SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityStablePool(pool)
 
     if (tradeType === TradeType.EXACT_INPUT) {
       const params: EncodedSingleSwapInParams = {
@@ -242,6 +243,22 @@ export class TradePlanner extends RoutePlanner {
         amountIn,
         amountOutMinimum: amountOut,
       }
+
+      console.log('addInfinitySingleHop params', params)
+
+      const poolKey = keccak256(
+        encodeAbiParameters(parseAbiParameters('address, address, address, address, uint24, bytes32'), [
+          params.poolKey.currency0,
+          params.poolKey.currency1,
+          params.poolKey.hooks,
+          params.poolKey.poolManager,
+          params.poolKey.fee,
+          params.poolKey.parameters,
+        ]),
+      )
+
+      console.log('addInfinitySingleHop poolKey', poolKey)
+
       actionPlaner.add(isCL ? ACTIONS.CL_SWAP_EXACT_IN_SINGLE : ACTIONS.BIN_SWAP_EXACT_IN_SINGLE, [params])
     } else {
       const params: EncodedSingleSwapOutParams = {

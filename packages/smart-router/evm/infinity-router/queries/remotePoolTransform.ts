@@ -164,7 +164,9 @@ export function toLocalInfinityPool(
     hooks: hookAddress ? checksumAddress(hookAddress) : undefined,
     hooksRegistrationBitmap: relatedHook ? encodeHooksRegistration(relatedHook.hooksRegistration) : undefined,
     poolManager:
-      type === PoolType.InfinityCL ? INFI_CL_POOL_MANAGER_ADDRESSES[chainId] : INFI_BIN_POOL_MANAGER_ADDRESSES[chainId],
+      type === PoolType.InfinityBIN
+        ? INFI_BIN_POOL_MANAGER_ADDRESSES[chainId]
+        : INFI_CL_POOL_MANAGER_ADDRESSES[chainId],
     currency0,
     currency1,
     tvlUSD: bnTvlUsd,
