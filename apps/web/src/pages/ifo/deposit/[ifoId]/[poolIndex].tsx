@@ -1,12 +1,12 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useRouter } from 'next/router'
 import { NextPageWithLayout } from 'utils/page.types'
-import IfoLayout from 'views/IfosV2/components/IfoLayout'
-import { IfoV2Provider } from 'views/IfosV2/contexts/IfoV2Provider'
-import Hero from 'views/IfosV2/components/Hero'
-import IfoContainer from 'views/IfosV2/components/IfoContainer'
-import useIfo from 'views/IfosV2/hooks/useIfo'
-import { IfoDeposit } from 'views/IfosV2/components/IfoDeposit'
+import IfoLayout from 'views/Cakepad/components/IfoLayout'
+import { IfoV2Provider } from 'views/Cakepad/contexts/IfoV2Provider'
+import Hero from 'views/Cakepad/components/Hero'
+import IfoContainer from 'views/Cakepad/components/IfoContainer'
+import useIfo from 'views/Cakepad/hooks/useIfo'
+import { IfoDeposit } from 'views/Cakepad/components/IfoDeposit'
 
 const IfoDepositPageContent: React.FC<{ pid: number }> = ({ pid }) => {
   const { config } = useIfo()

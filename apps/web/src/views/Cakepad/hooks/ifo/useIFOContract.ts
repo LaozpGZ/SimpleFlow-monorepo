@@ -3,7 +3,7 @@
 import { getContract } from 'utils/contractHelpers'
 import { Address, createPublicClient, custom, http, isAddress, type WalletClient } from 'viem'
 import { bsc } from 'viem/chains'
-import { ifoConfigs } from 'views/IfosV2/config'
+import { ifoConfigs } from 'views/Cakepad/config'
 import { getViemClients } from 'utils/viem'
 import { ifoV10Abi as ifoABI } from '../../abi/ifoV10Abi'
 

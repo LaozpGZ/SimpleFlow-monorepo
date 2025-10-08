@@ -2,10 +2,10 @@ import { ChainId } from '@pancakeswap/chains'
 
 import IfoProvider from 'views/Ifos/contexts/IfoContext'
 import { NextPageWithLayout } from 'utils/page.types'
-import IfoLayout from 'views/IfosV2/components/IfoLayout'
-import Hero from 'views/IfosV2/components/Hero'
+import IfoLayout from 'views/Cakepad/components/IfoLayout'
+import Hero from 'views/Cakepad/components/Hero'
 import dynamic from 'next/dynamic'
-import IFO from 'views/IfosV2/ifo'
+import IFO from 'views/Cakepad/ifo'
 
 const IFO_SUPPORT_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
 

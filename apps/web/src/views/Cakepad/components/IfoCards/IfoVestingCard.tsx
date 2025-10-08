@@ -4,7 +4,7 @@ import { Button, Card, CardBody, CardHeader, FlexGap, Image, Text } from '@panca
 import useTheme from 'hooks/useTheme'
 import NextLink from 'next/link'
 import { styled } from 'styled-components'
-import { CAKEPAD_HISTORY_URL } from 'views/IfosV2/config/routes'
+import { CAKEPAD_HISTORY_URL } from 'views/Cakepad/config/routes'
 import useIfo from '../../hooks/useIfo'
 import { useIFOClaimCallback } from '../../hooks/ifo/useIFOClaimCallback'
 import { useVestingInfo } from '../../hooks/ifo/useVestingInfo'

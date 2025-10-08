@@ -4,7 +4,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getViemClients } from 'utils/viem'
 import { isAddressEqual, zeroAddress } from 'viem'
 import type { Address } from 'viem/accounts'
-import { useIfoV2Context } from 'views/IfosV2/contexts/useIfoV2Context'
+import { useIfoV2Context } from 'views/Cakepad/contexts/useIfoV2Context'
 
 export type IFOAddresses = {
   lpToken0: Address

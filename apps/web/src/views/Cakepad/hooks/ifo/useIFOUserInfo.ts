@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
-import { ifoVersionAtom } from 'views/IfosV2/atom/ifoVersionAtom'
+import { ifoVersionAtom } from 'views/Cakepad/atom/ifoVersionAtom'
 import { useAtomValue } from 'jotai'
 import { useIfoV2Context } from '../../contexts/useIfoV2Context'
 

@@ -2,7 +2,7 @@ import { Container } from '@pancakeswap/uikit'
 
 import { useInActiveIfoConfigs } from 'hooks/useIfoConfig'
 
-import HistoryIfos from 'views/IfosV2/HistoryIfos'
+import HistoryIfos from 'views/Cakepad/HistoryIfos'
 import IfoCardV1Data from './components/IfoCardV1Data'
 import IfoCardV2Data from './components/IfoCardV2Data'
 import IfoCardV3Data from './components/IfoCardV3Data'
