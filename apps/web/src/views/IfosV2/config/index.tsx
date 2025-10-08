@@ -9,7 +9,7 @@ export const ifoConfigs: IFOConfig[] = [
   {
     id: 'ifo-presale',
     chainId: ChainId.BSC,
-    contractAddress: '0x2b2826CdcC43C20190deCd2198F4736a5c216FDe', // IFO v10 contract address
+    contractAddress: '0xE6BcCF2345F6844DDE06a170e2B783eB59142Cf2', // IFO v10 contract address
 
     icon: `${ASSET_CDN}/web/ifos/v2/whitebridge/logo.png`,
     bannerUrl: `${ASSET_CDN}/web/ifos/v2/whitebridge/bg.png`,
