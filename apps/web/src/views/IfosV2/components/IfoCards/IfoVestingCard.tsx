@@ -4,6 +4,7 @@ import { Button, Card, CardBody, CardHeader, FlexGap, Image, Text } from '@panca
 import useTheme from 'hooks/useTheme'
 import NextLink from 'next/link'
 import { styled } from 'styled-components'
+import { CAKEPAD_HISTORY_URL } from 'views/IfosV2/config/routes'
 import useIfo from '../../hooks/useIfo'
 import { useIFOClaimCallback } from '../../hooks/ifo/useIFOClaimCallback'
 import { useVestingInfo } from '../../hooks/ifo/useVestingInfo'
@@ -128,10 +129,9 @@ export const IfoVestingCard: React.FC = () => {
               >
                 {t('Claim')}
               </Button>
-              {/* TODO: Check if direct way to link to IFO */}
-              <NextLink href="/cakepad" passHref legacyBehavior>
+              <NextLink href={CAKEPAD_HISTORY_URL} passHref legacyBehavior>
                 <Text as="a" color="primary" mt="8px" fontWeight={600} display="block">
-                  {t('View IFO')}
+                  {t('View CAKE.PAD')}
                 </Text>
               </NextLink>
             </>
