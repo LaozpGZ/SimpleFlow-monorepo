@@ -18,10 +18,10 @@ export const IfoSaleDetailCard: React.FC = () => {
           </Box>
           <Text color="primary60">{t('Eligible to join when this event goes live!')}</Text>
         </FlexGap>
-        <FlexGap flexDirection="column" gap="16px" mt="16px">
+        <FlexGap flexDirection="column" gap="16px" mt="22px">
           {pools.map((pool) => (
             <FlexGap key={pool.pid} flexDirection="column" gap="8px">
-              <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
+              <Text fontSize="12px" bold color="secondary" lineHeight="1px" textTransform="uppercase">
                 {pool.stakeCurrency?.symbol} {t('Pool')}
               </Text>
               <IfoPoolInfoDisplay pid={pool.pid} variant="presale" />
