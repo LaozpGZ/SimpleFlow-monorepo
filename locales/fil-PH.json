@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Mga Partner] Paano ako mag-a-apply para sa isang IFO?",
   "IFO v10 Test - USDT Offering": "IFO v10 Test - Pag-aalok ng USDT",
   "Testing on Tenderly Virtual Network": "Pagsusuri sa Tenderly Virtual Network",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Ito ay isang pagsubok na IFO v10 configuration para sa layunin ng pagbuo at pagsubok.",
   "Link your wallet on BNB Chain to get started.": "Ikonekta ang iyong wallet sa BNB Chain para makapagsimula.",
   "During the sale period, commit BNB to buy the offering tokens.": "Sa panahon ng benta, mag-commit ng BNB para bilhin ang mga offering tokens.",
   "After the IFO ends, return to claim your purchased USDT.": "Pagkatapos ng IFO, bumalik para i-claim ang iyong biniling USDT.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Magbenta kapag ang 1 <0>%inputSymbol%</0> ay nagkakahalaga ng:",
   "No orders found": "Walang nahanap na order",
   "Order Placed": "Nailagay na ang Order",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Hindi matagumpay ang pagsumite ng order dahil sa paggalaw ng presyo. Pakisubukang muli gamit ang na-update na limit price!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Hindi matagumpay ang pagsumite ng order dahil sa paggalaw ng presyo. Pakisubukang muli gamit ang na-update na limit price!",
+  "Early access to tokens with CAKE": "Maagang access sa mga token gamit ang CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Magkaroon ng eksklusibong maagang access sa mga bagong token gamit ang CAKE"
 }

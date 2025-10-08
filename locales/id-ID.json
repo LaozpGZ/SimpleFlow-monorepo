@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Mitra] Bagaimana cara saya mengajukan IFO?",
   "IFO v10 Test - USDT Offering": "Tes IFO v10 - Penawaran USDT",
   "Testing on Tenderly Virtual Network": "Pengujian di Tenderly Virtual Network",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Ini adalah konfigurasi IFO v10 uji untuk tujuan pengembangan dan pengujian.",
   "Link your wallet on BNB Chain to get started.": "Hubungkan dompet Anda di BNB Chain untuk memulai.",
   "During the sale period, commit BNB to buy the offering tokens.": "Selama periode penjualan, komit BNB untuk membeli token yang ditawarkan.",
   "After the IFO ends, return to claim your purchased USDT.": "Setelah IFO berakhir, kembali untuk mengklaim USDT yang Anda beli.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Jual saat 1 <0>%inputSymbol%</0> bernilai:",
   "No orders found": "Tidak ada order ditemukan",
   "Order Placed": "Order Ditempatkan",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Pengajuan order gagal karena pergerakan harga. Silakan coba lagi dengan harga limit yang diperbarui!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Pengajuan order gagal karena pergerakan harga. Silakan coba lagi dengan harga limit yang diperbarui!",
+  "Early access to tokens with CAKE": "Akses awal ke token dengan CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Dapatkan akses awal eksklusif ke token baru dengan CAKE"
 }

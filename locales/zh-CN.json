@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[合作伙伴] 我如何申请 IFO？",
   "IFO v10 Test - USDT Offering": "IFO v10 测试 - USDT 认购",
   "Testing on Tenderly Virtual Network": "在 Tenderly 虚拟网络上测试",
-  "This is a test IFO v10 configuration for development and testing purposes.": "这是用于开发和测试目的的 IFO v10 测试配置。",
   "Link your wallet on BNB Chain to get started.": "连接您在 BNB Chain 上的钱包以开始。",
   "During the sale period, commit BNB to buy the offering tokens.": "在认购期内，投入 BNB 购买发售代币。",
   "After the IFO ends, return to claim your purchased USDT.": "IFO 结束后，返回领取您购买的 USDT。",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "当 1 <0>%inputSymbol%</0> 价值为：",
   "No orders found": "未找到订单",
   "Order Placed": "订单已下达",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "由于价格波动，订单提交失败。请更新限价后重试！"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "由于价格波动，订单提交失败。请更新限价后重试！",
+  "Early access to tokens with CAKE": "使用 CAKE 抢先认购新币",
+  "Get exclusive early access to new tokens with CAKE": "使用 CAKE，获取新代币独家优先认购权。"
 }

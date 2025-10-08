@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[পার্টনারদের জন্য] আমি কিভাবে একটি IFO-এর জন্য আবেদন করব?",
   "IFO v10 Test - USDT Offering": "IFO v10 টেস্ট - USDT অফারিং",
   "Testing on Tenderly Virtual Network": "টেন্ডারলি ভার্চুয়াল নেটওয়ার্কে পরীক্ষা করা হচ্ছে",
-  "This is a test IFO v10 configuration for development and testing purposes.": "এটি ডেভেলপমেন্ট এবং টেস্টিংয়ের উদ্দেশ্যে একটি IFO v10 টেস্ট কনফিগারেশন।",
   "Link your wallet on BNB Chain to get started.": "শুরু করতে BNB Chain-এ আপনার ওয়ালেট লিঙ্ক করুন।",
   "During the sale period, commit BNB to buy the offering tokens.": "বিক্রি চলাকালীন, অফার করা টোকেন কিনতে BNB প্রতিশ্রুতিবদ্ধ করুন।",
   "After the IFO ends, return to claim your purchased USDT.": "IFO শেষ হওয়ার পর, আপনার কেনা USDT দাবি করতে ফিরে আসুন।",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "যখন 1 <0>%inputSymbol%</0> এর মূল্য হবে তখন বিক্রি করুন:",
   "No orders found": "কোনো অর্ডার পাওয়া যায়নি",
   "Order Placed": "অর্ডার দেওয়া হয়েছে",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "মূল্যের পরিবর্তনের কারণে অর্ডার জমা দেওয়া অসফল হয়েছে। অনুগ্রহ করে একটি আপডেট করা লিমিট মূল্য দিয়ে আবার চেষ্টা করুন!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "মূল্যের পরিবর্তনের কারণে অর্ডার জমা দেওয়া অসফল হয়েছে। অনুগ্রহ করে একটি আপডেট করা লিমিট মূল্য দিয়ে আবার চেষ্টা করুন!",
+  "Early access to tokens with CAKE": "CAKE দিয়ে টোকেনগুলিতে আর্লি অ্যাক্সেস",
+  "Get exclusive early access to new tokens with CAKE": "CAKE দিয়ে নতুন টোকেনগুলিতে এক্সক্লুসিভ আর্লি অ্যাক্সেস পান"
 }

@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[கூட்டாளர்கள்] நான் IFO-க்கு எப்படி விண்ணப்பிப்பது?",
   "IFO v10 Test - USDT Offering": "IFO v10 சோதனை - USDT வழங்கல்",
   "Testing on Tenderly Virtual Network": "Tenderly மெய்நிகர் பிணையத்தில் சோதனை",
-  "This is a test IFO v10 configuration for development and testing purposes.": "இது மேம்பாடு மற்றும் சோதனை நோக்கங்களுக்காக ஒரு IFO v10 சோதனை கட்டமைப்பு ஆகும்.",
   "Link your wallet on BNB Chain to get started.": "தொடங்குவதற்கு உங்கள் வாலட்டை BNB Chain உடன் இணைக்கவும்.",
   "During the sale period, commit BNB to buy the offering tokens.": "விற்பனை காலத்தில், வழங்கப்பட்ட டோக்கன்களை வாங்க BNB ஐ உறுதிப்படுத்தவும்.",
   "After the IFO ends, return to claim your purchased USDT.": "IFO முடிந்த பிறகு, நீங்கள் வாங்கிய USDT ஐப் பெறத் திரும்பவும்.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "1 <0>%inputSymbol%</0> இந்த மதிப்புக்கு வரும்போது விற்கவும்:",
   "No orders found": "ஆர்டர்கள் எதுவும் காணப்படவில்லை",
   "Order Placed": "ஆர்டர் வைக்கப்பட்டது",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "விலை நகர்வு காரணமாக ஆர்டரைச் சமர்ப்பிக்க முடியவில்லை. புதுப்பிக்கப்பட்ட வரம்பு விலையுடன் மீண்டும் முயற்சிக்கவும்!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "விலை நகர்வு காரணமாக ஆர்டரைச் சமர்ப்பிக்க முடியவில்லை. புதுப்பிக்கப்பட்ட வரம்பு விலையுடன் மீண்டும் முயற்சிக்கவும்!",
+  "Early access to tokens with CAKE": "CAKE மூலம் டோக்கன்களுக்கான முன்கூட்டிய அணுகல்",
+  "Get exclusive early access to new tokens with CAKE": "CAKE மூலம் புதிய டோக்கன்களுக்கான பிரத்யேக முன்கூட்டிய அணுகலைப் பெறுங்கள்"
 }
