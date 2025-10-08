@@ -12,7 +12,7 @@ import { IfoCardFinished } from './IfoCardFinished'
 import { IfoCardIdle } from './IfoCardIdle'
 
 // V2 Header component with IFO v1 style - uses bannerUrl directly
-const Header = styled(CardHeader)<{ $bannerUrl: string; $isCurrent?: boolean }>`
+export const Header = styled(CardHeader)<{ $bannerUrl: string; $isCurrent?: boolean }>`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -31,7 +31,7 @@ const Header = styled(CardHeader)<{ $bannerUrl: string; $isCurrent?: boolean }>`
   }
 `
 
-const StyledCard = styled(Card)`
+export const StyledCard = styled(Card)`
   width: 100%;
   margin: 0 auto;
   border-top-left-radius: 32px;

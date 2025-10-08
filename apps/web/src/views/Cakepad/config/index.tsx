@@ -2,6 +2,8 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Trans } from '@pancakeswap/localization'
 import { ASSET_CDN } from 'config/constants/endpoints'
+import { Token } from '@pancakeswap/swap-sdk-core'
+import { CAKE } from '@pancakeswap/tokens'
 import { IFOConfig } from '../ifov2.types'
 
 export const ifoConfigs: IFOConfig[] = [
@@ -9,7 +11,8 @@ export const ifoConfigs: IFOConfig[] = [
   {
     id: 'ifo-presale',
     chainId: ChainId.BSC,
-    contractAddress: '0xE6BcCF2345F6844DDE06a170e2B783eB59142Cf2', // IFO v10 contract address
+    // contractAddress: '0xE6BcCF2345F6844DDE06a170e2B783eB59142Cf2', // (Dry-run 03) IFO v10 contract address
+    contractAddress: '0x', // IFO v10 contract address. Set to 0x to use preset data until we get the production contract address
 
     icon: `${ASSET_CDN}/web/ifos/v2/whitebridge/logo.png`,
     bannerUrl: `${ASSET_CDN}/web/ifos/v2/whitebridge/bg.png`,
@@ -40,5 +43,23 @@ export const ifoConfigs: IFOConfig[] = [
         content: <Trans>After the IFO ends, return to claim your purchased USDT.</Trans>,
       },
     ],
+
+    // Preset data until we get the production contract address
+    presetData: {
+      startTimestamp: 1760439600,
+      endTimestamp: 1760526000,
+      offeringCurrency: new Token(ChainId.BSC, '0x', 18, 'WBAI', 'Whitebridge'),
+      totalSalesAmount: 20_000_000,
+      stakeCurrency0: CAKE[ChainId.BSC],
+      preSaleDurationText: '1 Day',
+      pools: [
+        {
+          pid: 0,
+          stakeCurrency: CAKE[ChainId.BSC],
+          pricePerToken: '$0.008',
+          raiseAmountText: '$160,000',
+        },
+      ],
+    },
   },
 ]

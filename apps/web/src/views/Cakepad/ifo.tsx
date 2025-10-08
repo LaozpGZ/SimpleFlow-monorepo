@@ -3,9 +3,11 @@ import CurrentIfo from './CurrentIfo'
 
 const Ifo = () => {
   return (
-    <IfoV2Provider>
-      <CurrentIfo />
-    </IfoV2Provider>
+    <>
+      <IfoV2Provider>
+        <CurrentIfo />
+      </IfoV2Provider>
+    </>
   )
 }
 

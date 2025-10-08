@@ -82,6 +82,25 @@ export type IFOConfig = {
   contractAddress: Address
   faqs?: IFOFAQs
   howTo?: HowTo[]
+
+  /**
+   * Preset data to show until we get the production contract address
+   */
+  presetData?: {
+    startTimestamp: number
+    endTimestamp: number
+    offeringCurrency: Currency
+    totalSalesAmount: number
+    stakeCurrency0?: Currency
+    stakeCurrency1?: Currency
+    preSaleDurationText: string
+    pools: {
+      pid: number
+      stakeCurrency: Currency
+      pricePerToken: string
+      raiseAmountText: string
+    }[]
+  }
 }
 
 export type IFOFAQs = Array<{ title: ReactNode; description: ReactNode }>

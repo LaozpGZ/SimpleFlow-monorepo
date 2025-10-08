@@ -6,10 +6,10 @@ import { isAddress } from 'viem'
 import { getIFOContract } from '../hooks/ifo/useIFOContract'
 import { ifoConfigs } from '../config'
 import { ifoLoadingAnimationAtom } from '../atoms'
-import { ifoVersionAtom } from '../atom/ifoVersionAtom'
 
 import { SyncIfoContext } from './SyncIfoContext'
 import { IfoV2Context } from './IfoV2Context'
+import { IfoPresetCard } from '../components/IfoCards/IfoPresetCard/IfoPresetCard'
 
 interface ProviderProps {
   id?: string
@@ -30,6 +30,7 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
   if (!config) {
     return null
   }
+
   const customAddress = query.ca as string | undefined
   const ifoContract = getIFOContract(
     config?.id,
@@ -42,7 +43,12 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
 
   return (
     <IfoV2Context.Provider value={value}>
-      <SyncIfoContext id={config.id}>{children}</SyncIfoContext>
+      {/* If no contract address, use preset data */}
+      {(!config.contractAddress || !isAddress(config.contractAddress)) && config.presetData ? (
+        <IfoPresetCard />
+      ) : (
+        <SyncIfoContext id={config.id}>{children}</SyncIfoContext>
+      )}
     </IfoV2Context.Provider>
   )
 }
