@@ -19,8 +19,7 @@ export const ifoConfigs: IFOConfig[] = [
     projectUrl: 'https://www.whitebridge.network/',
     twitterLink: 'https://x.com/AiWhitebridge',
 
-    tgeTitle: <Trans>IFO v10 Test - USDT Offering</Trans>,
-    tgeSubtitle: <Trans>Testing IFO V10</Trans>,
+    tgeTitle: <Trans>Whitebridge Network</Trans>,
 
     description: (
       <Trans>

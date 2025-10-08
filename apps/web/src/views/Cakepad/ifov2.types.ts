@@ -76,7 +76,6 @@ export type IFOConfig = {
   chainId: ChainId
   bannerUrl: string
   tgeTitle: ReactNode
-  tgeSubtitle: ReactNode
   description: ReactNode
   ineligibleContent?: ReactNode
   contractAddress: Address
