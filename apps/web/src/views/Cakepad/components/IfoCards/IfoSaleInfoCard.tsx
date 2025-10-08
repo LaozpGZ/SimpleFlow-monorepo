@@ -15,7 +15,7 @@ interface SubscribeInfoProps {
 const SubscribeInfo: React.FC<SubscribeInfoProps> = ({ stakeCurrency0, stakeCurrency1 }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  if (!(stakeCurrency0 && stakeCurrency1)) {
+  if (!stakeCurrency0 && !stakeCurrency1) {
     return null
   }
   return (
@@ -23,7 +23,7 @@ const SubscribeInfo: React.FC<SubscribeInfoProps> = ({ stakeCurrency0, stakeCurr
       alignItems="center"
       gap="8px"
       mt="16px"
-      p="8px"
+      p="12px"
       borderRadius="16px"
       border={`1px solid ${theme.colors.cardBorder}`}
       background={theme.colors.cardSecondary}
@@ -33,7 +33,7 @@ const SubscribeInfo: React.FC<SubscribeInfoProps> = ({ stakeCurrency0, stakeCurr
       ) : stakeCurrency0 || stakeCurrency1 ? (
         <CurrencyLogo size="40px" currency={stakeCurrency0 ?? stakeCurrency1} />
       ) : null}
-      <Text color="textSubtle">
+      <Text>
         {stakeCurrency0 && stakeCurrency1 ? (
           <>
             {t('Subscribe to the sale by depositing')}{' '}
