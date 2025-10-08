@@ -127,7 +127,7 @@ const HowToTakePart: React.FC = () => {
           circleFill="secondary"
           items={[
             t('Anyone with %symbol% can take part — no KYC required.', { symbol: commitTokensText }),
-            t('When the IFO sale is live, simply commit your %symbol% tokens.', { symbol: commitTokensText }),
+            t('When the CAKE.PAD sale is live, simply commit your %symbol% tokens.', { symbol: commitTokensText }),
             t(
               'You can commit as much %symbol% as you like. Your final token allocation will depend on how much you commit compared to the total pool.',
               { symbol: commitTokensText },
@@ -140,15 +140,15 @@ const HowToTakePart: React.FC = () => {
           title={t('Claim your tokens')}
           circleFill="inputSecondary"
           items={[
-            t('After the IFO ends, you can claim the IFO tokens you purchased.'),
+            t('After the CAKE.PAD sale ends, you can claim the CAKE.PAD tokens you purchased.'),
             t(
-              'If the IFO is oversubscribed (total committed amount > raise goal), unspent %symbol% will be refunded.',
+              'If the CAKE.PAD sale is oversubscribed (total committed amount > raise goal), unspent %symbol% will be refunded.',
               {
                 symbol: commitTokensText,
               },
             ),
             t(
-              'A participation fee (0.05%–1%) applies only when the IFO is oversubscribed. The fee decreases as the oversubscription % rises and is deducted from your refunded %symbol%.',
+              'A participation fee (0.05%–1%) applies only when the CAKE.PAD sale is oversubscribed. The fee decreases as the oversubscription % rises and is deducted from your refunded %symbol%.',
               { symbol: commitTokensText },
             ),
           ]}

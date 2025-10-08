@@ -13,15 +13,16 @@ export const ifoConfigs: IFOConfig[] = [
 
     icon: `${ASSET_CDN}/web/ifos/v2/whitebridge/logo.png`,
     bannerUrl: `${ASSET_CDN}/web/ifos/v2/whitebridge/bg.png`,
-    projectUrl: 'https://pancakeswap.finance/',
+    projectUrl: 'https://www.whitebridge.network/',
+    twitterLink: 'https://x.com/AiWhitebridge',
 
     tgeTitle: <Trans>IFO v10 Test - USDT Offering</Trans>,
     tgeSubtitle: <Trans>Testing IFO V10</Trans>,
 
     description: (
       <Trans>
-        This is an IFO configured for dry-run purpose. This is an IFO configured for dry-run purpose. This is an IFO
-        configured for dry-run purpose. This is an IFO configured for dry-run purpose.
+        Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and
+        online signals into trustable, ready-to-use insights.
       </Trans>
     ),
 
