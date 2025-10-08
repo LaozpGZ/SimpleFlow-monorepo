@@ -25,6 +25,9 @@ declare module "@@@next-typesafe-url" {
     "/burn-dashboard": StaticRoute;
     "/buy-crypto": StaticRoute;
     "/cake-staking/redeem": StaticRoute;
+    "/cakepad/deposit/[ifoId]/[poolIndex]": StaticRoute;
+    "/cakepad/history": StaticRoute;
+    "/cakepad": StaticRoute;
     "/competition/finished/[competition]": StaticRoute;
     "/competition/finished": StaticRoute;
     "/competition": StaticRoute;

@@ -193,17 +193,17 @@ const config: (
           href: '/burn-dashboard',
         },
         {
-          label: t('IFO'),
-          href: '/ifo',
+          label: t('CAKE.PAD'),
+          href: '/cakepad',
           image: '/images/ifos/ifo-bunny.png',
           overrideSubNavItems: [
             {
               label: t('Latest'),
-              href: '/ifo',
+              href: '/cakepad',
             },
             {
               label: t('Finished'),
-              href: '/ifo/history',
+              href: '/cakepad/history',
             },
           ],
         },

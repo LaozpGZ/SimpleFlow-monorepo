@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { logGTMIfoConnectWalletEvent } from 'utils/customGTMEventTracking'
+import { CAKEPAD_DEPOSIT_URL } from 'views/IfosV2/config/routes'
 import type { IFOStatus } from '../../hooks/ifo/useIFOStatus'
 import useIfo from '../../hooks/useIfo'
 import IfoPoolInfoDisplay from './IfoPoolInfoDisplay'
@@ -57,7 +58,7 @@ const PoolAction: React.FC<{ pid: number }> = ({ pid }) => {
     if (ifoId) {
       const { ifo, ...restQuery } = router.query
       router.push({
-        pathname: '/ifo/deposit/[ifoId]/[poolIndex]',
+        pathname: `${CAKEPAD_DEPOSIT_URL}/[ifoId]/[poolIndex]`,
         query: { ifoId, poolIndex: pid, ...restQuery },
       })
     }

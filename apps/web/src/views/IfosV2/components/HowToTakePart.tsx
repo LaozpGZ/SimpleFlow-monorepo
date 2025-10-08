@@ -107,7 +107,7 @@ const HowToTakePart: React.FC = () => {
       : 'CAKE'
 
   return (
-    <SectionWrapper id="ifo-how-to">
+    <SectionWrapper id="cakepad-how-to">
       <Flex flexDirection="column" alignItems="center" mb="40px">
         <StyledHeading as="h2" textAlign="center">
           {t('How to Take Part')}

@@ -128,7 +128,8 @@ export const IfoVestingCard: React.FC = () => {
               >
                 {t('Claim')}
               </Button>
-              <NextLink href={`/ifov2/${id}`} passHref legacyBehavior>
+              {/* TODO: Check if direct way to link to IFO */}
+              <NextLink href="/cakepad" passHref legacyBehavior>
                 <Text as="a" color="primary" mt="8px" fontWeight={600} display="block">
                   {t('View IFO')}
                 </Text>
