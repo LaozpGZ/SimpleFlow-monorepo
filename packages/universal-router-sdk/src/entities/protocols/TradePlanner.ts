@@ -232,7 +232,9 @@ export class TradePlanner extends RoutePlanner {
     const baseParams: EncodedSingleSwapParams = {
       poolKey: _encodedPoolKey,
       zeroForOne,
-      hookData: zeroAddress,
+      // we are using universal router for slippage check, passing an empty hookData should be fine
+      // if using ZeraAddress, Stable Infinity hook will throw error
+      hookData: '0x',
     }
 
     const isCL = SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityStablePool(pool)
@@ -243,21 +245,6 @@ export class TradePlanner extends RoutePlanner {
         amountIn,
         amountOutMinimum: amountOut,
       }
-
-      console.log('addInfinitySingleHop params', params)
-
-      const poolKey = keccak256(
-        encodeAbiParameters(parseAbiParameters('address, address, address, address, uint24, bytes32'), [
-          params.poolKey.currency0,
-          params.poolKey.currency1,
-          params.poolKey.hooks,
-          params.poolKey.poolManager,
-          params.poolKey.fee,
-          params.poolKey.parameters,
-        ]),
-      )
-
-      console.log('addInfinitySingleHop poolKey', poolKey)
 
       actionPlaner.add(isCL ? ACTIONS.CL_SWAP_EXACT_IN_SINGLE : ACTIONS.BIN_SWAP_EXACT_IN_SINGLE, [params])
     } else {
