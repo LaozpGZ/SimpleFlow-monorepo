@@ -8,19 +8,23 @@ export const ifoConfigs: IFOConfig[] = [
   // TODO: IFO v10 testing configuration on Tenderly Virtual Network
   {
     id: 'ifo-presale',
-    icon: 'https://proofs.pancakeswap.com/cms/uploads/27729a23a3b3e0e5ab75da585f04217c4b036b0f92b54bf6a7393afe1f157be6.png', // TODO: Replace with actual icon
-    projectUrl: 'https://pancakeswap.finance/',
     chainId: ChainId.BSC,
-    bannerUrl: 'https://assets.pancakeswap.finance/web/ifos/bg/krs-bg.png',
     contractAddress: '0x2b2826CdcC43C20190deCd2198F4736a5c216FDe', // IFO v10 contract address
+
+    icon: `${ASSET_CDN}/web/ifos/v2/whitebridge/logo.png`,
+    bannerUrl: `${ASSET_CDN}/web/ifos/v2/whitebridge/bg.png`,
+    projectUrl: 'https://pancakeswap.finance/',
+
     tgeTitle: <Trans>IFO v10 Test - USDT Offering</Trans>,
-    tgeSubtitle: <Trans>Testing on Tenderly Virtual Network</Trans>,
+    tgeSubtitle: <Trans>Testing IFO V10</Trans>,
+
     description: (
-      <div>
+      <Trans>
         This is an IFO configured for dry-run purpose. This is an IFO configured for dry-run purpose. This is an IFO
         configured for dry-run purpose. This is an IFO configured for dry-run purpose.
-      </div>
+      </Trans>
     ),
+
     howTo: [
       {
         title: 'Connect Wallet',
