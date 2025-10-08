@@ -37,7 +37,6 @@ const InfinitySwapInner = () => {
   const { isChartExpanded } = useContext(SwapFeaturesContext)
   const [isChartDisplayed, setIsChartDisplayed] = useAtom(chartDisplayAtom)
   const [isSwapHotTokenDisplay, setIsSwapHotTokenDisplay] = useSwapHotTokenDisplay()
-  // const { t } = useTranslation()
   const [firstTime, setFirstTime] = useState(true)
 
   const {
@@ -96,7 +95,7 @@ const InfinitySwapInner = () => {
               />
             }
             isOpen={isChartDisplayed}
-            setIsOpen={(isOpen) => setIsChartDisplayed(isOpen)}
+            setIsOpen={setIsChartDisplayed}
             hideCloseButton
           />
         )}

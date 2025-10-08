@@ -1,7 +1,6 @@
 import { useDebounce } from '@pancakeswap/hooks'
 import { Currency } from '@pancakeswap/sdk'
 import { tokens } from '@pancakeswap/uikit'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
 import React, { useEffect, useRef } from 'react'
 import { styled } from 'styled-components'
@@ -90,7 +89,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const initializationTimeout = useRef<NodeJS.Timeout | null>(null)
   const customButtonRef = useRef<HTMLButtonElement | null>(null)
   const { isDark, theme } = useTheme()
-  const { chainId } = useActiveChainId()
   const modalRef = useRef<HTMLButtonElement | null>(null)
 
   // Debounce currency changes to prevent frequent widget recreation
