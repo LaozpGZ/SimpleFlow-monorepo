@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Partner] Wie bewerbe ich mich für ein IFO?",
   "IFO v10 Test - USDT Offering": "IFO v10 Test – USDT-Angebot",
   "Testing on Tenderly Virtual Network": "Testen im Tenderly Virtual Network",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Dies ist eine Test-IFO v10-Konfiguration für Entwicklungs- und Testzwecke.",
   "Link your wallet on BNB Chain to get started.": "Verbinden Sie Ihr Wallet mit der BNB Chain, um zu beginnen.",
   "During the sale period, commit BNB to buy the offering tokens.": "Während des Verkaufszeitraums können Sie BNB einsetzen, um die angebotenen Tokens zu kaufen.",
   "After the IFO ends, return to claim your purchased USDT.": "Nach dem Ende des IFO kehren Sie zurück, um Ihre gekauften USDT zu beanspruchen.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Verkaufen, wenn 1 <0>%inputSymbol%</0> wert ist:",
   "No orders found": "Keine Orders gefunden",
   "Order Placed": "Order platziert",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Order-Übermittlung aufgrund von Preisbewegungen fehlgeschlagen. Bitte versuchen Sie es erneut mit einem aktualisierten Limitpreis!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Order-Übermittlung aufgrund von Preisbewegungen fehlgeschlagen. Bitte versuchen Sie es erneut mit einem aktualisierten Limitpreis!",
+  "Early access to tokens with CAKE": "Frühzeitiger Zugang zu Token mit CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Sichere dir exklusiven frühzeitigen Zugang zu neuen Token mit CAKE"
 }

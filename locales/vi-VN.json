@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Đối tác] Làm cách nào để đăng ký IFO?",
   "IFO v10 Test - USDT Offering": "IFO v10 Thử nghiệm - Đợt chào bán USDT",
   "Testing on Tenderly Virtual Network": "Thử nghiệm trên Mạng ảo Tenderly",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Đây là cấu hình IFO v10 thử nghiệm cho mục đích phát triển và kiểm tra.",
   "Link your wallet on BNB Chain to get started.": "Liên kết ví của bạn trên BNB Chain để bắt đầu.",
   "During the sale period, commit BNB to buy the offering tokens.": "Trong thời gian bán, cam kết BNB để mua các token chào bán.",
   "After the IFO ends, return to claim your purchased USDT.": "Sau khi IFO kết thúc, quay lại để nhận USDT bạn đã mua.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Bán khi 1 <0>%inputSymbol%</0> có giá trị là:",
   "No orders found": "Không tìm thấy lệnh nào",
   "Order Placed": "Đặt lệnh thành công",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Gửi lệnh không thành công do biến động giá. Vui lòng thử lại với mức giá giới hạn được cập nhật!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Gửi lệnh không thành công do biến động giá. Vui lòng thử lại với mức giá giới hạn được cập nhật!",
+  "Early access to tokens with CAKE": "Tiếp cận sớm các token với CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Nhận suất mua sớm độc quyền các token mới với CAKE"
 }

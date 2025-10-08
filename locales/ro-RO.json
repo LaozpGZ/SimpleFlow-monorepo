@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Parteneri] Cum aplic pentru un IFO?",
   "IFO v10 Test - USDT Offering": "Test IFO v10 - Ofertă USDT",
   "Testing on Tenderly Virtual Network": "Testare pe rețeaua virtuală Tenderly",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Aceasta este o configurație IFO v10 de test pentru scopuri de dezvoltare și testare.",
   "Link your wallet on BNB Chain to get started.": "Conectează-ți portofelul la BNB Chain pentru a începe.",
   "During the sale period, commit BNB to buy the offering tokens.": "În perioada de vânzare, alocă BNB pentru a cumpăra tokenurile oferite.",
   "After the IFO ends, return to claim your purchased USDT.": "După încheierea IFO, revino pentru a-ți revendica USDT-ul achiziționat.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Vinde când 1 <0>%inputSymbol%</0> valorează:",
   "No orders found": "Niciun ordin găsit",
   "Order Placed": "Ordin plasat",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Plasarea ordinului a eșuat din cauza mișcării prețului. Te rugăm să încerci din nou cu un preț limită actualizat!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Plasarea ordinului a eșuat din cauza mișcării prețului. Te rugăm să încerci din nou cu un preț limită actualizat!",
+  "Early access to tokens with CAKE": "Acces timpuriu la jetoane cu CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Obțineți acces timpuriu exclusiv la jetoane noi cu CAKE"
 }

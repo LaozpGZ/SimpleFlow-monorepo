@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Partners] Hur ansöker jag om en IFO?",
   "IFO v10 Test - USDT Offering": "IFO v10 Test - USDT-erbjudande",
   "Testing on Tenderly Virtual Network": "Testar på Tenderly Virtual Network",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Detta är en testkonfiguration för IFO v10 för utvecklings- och teständamål.",
   "Link your wallet on BNB Chain to get started.": "Länka din plånbok på BNB Chain för att komma igång.",
   "During the sale period, commit BNB to buy the offering tokens.": "Under försäljningsperioden, allokera BNB för att köpa de erbjudna token.",
   "After the IFO ends, return to claim your purchased USDT.": "När IFO:n är slut, återvänd för att hämta dina köpta USDT.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Sälj när 1 <0>%inputSymbol%</0> är värd:",
   "No orders found": "Inga order hittades",
   "Order Placed": "Order lagd",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Orderläggningen misslyckades på grund av prisrörelser. Försök igen med ett uppdaterat limitpris!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Orderläggningen misslyckades på grund av prisrörelser. Försök igen med ett uppdaterat limitpris!",
+  "Early access to tokens with CAKE": "Förtur till tokens med CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Få exklusiv förtur till nya tokens med CAKE"
 }

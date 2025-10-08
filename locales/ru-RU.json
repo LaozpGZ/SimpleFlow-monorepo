@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[Партнеры] Как подать заявку на IFO?",
   "IFO v10 Test - USDT Offering": "Тестовое IFO v10 — Предложение USDT",
   "Testing on Tenderly Virtual Network": "Тестирование в виртуальной сети Tenderly",
-  "This is a test IFO v10 configuration for development and testing purposes.": "Это тестовая конфигурация IFO v10 для целей разработки и тестирования.",
   "Link your wallet on BNB Chain to get started.": "Подключите ваш кошелек к BNB Chain, чтобы начать.",
   "During the sale period, commit BNB to buy the offering tokens.": "В период распродажи внесите BNB для покупки предлагаемых токенов.",
   "After the IFO ends, return to claim your purchased USDT.": "После завершения IFO вернитесь, чтобы забрать приобретенные вами USDT.",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "Продать, когда 1 <0>%inputSymbol%</0> будет стоить:",
   "No orders found": "Ордера не найдены",
   "Order Placed": "Ордер размещен",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Не удалось отправить ордер из-за движения цены. Попробуйте еще раз с обновленной лимитной ценой!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "Не удалось отправить ордер из-за движения цены. Попробуйте еще раз с обновленной лимитной ценой!",
+  "Early access to tokens with CAKE": "Ранний доступ к токенам с CAKE",
+  "Get exclusive early access to new tokens with CAKE": "Получите эксклюзивный ранний доступ к новым токенам с CAKE"
 }

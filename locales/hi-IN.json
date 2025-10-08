@@ -4080,7 +4080,6 @@
   "[Partners] How do I apply for an IFO?": "[साझेदार] मैं IFO के लिए कैसे आवेदन करूं?",
   "IFO v10 Test - USDT Offering": "IFO v10 टेस्ट - USDT ऑफरिंग",
   "Testing on Tenderly Virtual Network": "Tenderly Virtual Network पर परीक्षण",
-  "This is a test IFO v10 configuration for development and testing purposes.": "यह डेवलपमेंट और टेस्टिंग उद्देश्यों के लिए एक टेस्ट IFO v10 कॉन्फ़िगरेशन है।",
   "Link your wallet on BNB Chain to get started.": "शुरू करने के लिए BNB Chain पर अपना वॉलेट लिंक करें।",
   "During the sale period, commit BNB to buy the offering tokens.": "सेल अवधि के दौरान, ऑफ़रिंग टोकन खरीदने के लिए BNB कमिट करें।",
   "After the IFO ends, return to claim your purchased USDT.": "IFO समाप्त होने के बाद, अपने खरीदे गए USDT का दावा करने के लिए वापस आएं।",
@@ -4280,5 +4279,7 @@
   "Sell when 1 <0>%inputSymbol%</0> is worth:": "बेचें जब 1 <0>%inputSymbol%</0> की कीमत हो:",
   "No orders found": "कोई ऑर्डर नहीं मिला",
   "Order Placed": "ऑर्डर दे दिया गया है",
-  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "कीमत में उतार-चढ़ाव के कारण ऑर्डर सबमिशन असफल रहा। कृपया अपडेट की गई लिमिट कीमत के साथ फिर से प्रयास करें!"
+  "Order submission unsuccessful due to price movement. Please try again with an updated limit price!": "कीमत में उतार-चढ़ाव के कारण ऑर्डर सबमिशन असफल रहा। कृपया अपडेट की गई लिमिट कीमत के साथ फिर से प्रयास करें!",
+  "Early access to tokens with CAKE": "CAKE के साथ टोकन्स के लिए शुरुआती पहुँच",
+  "Get exclusive early access to new tokens with CAKE": "CAKE के साथ नए टोकन्स के लिए एक्सक्लूसिव शुरुआती पहुँच पाएं"
 }
