@@ -205,18 +205,14 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>How many tokens will I get?</Trans>,
       description: (
         <>
-          <Trans>
-            <Text as="span" bold>
-              Allocation Rules:
-            </Text>
-          </Trans>
+          <Text as="span" bold>
+            <Trans>Allocation Rules:</Trans>{' '}
+          </Text>
           <Trans>Based on an allocation % based on your committed $CAKE vs total $CAKE committed by all users.</Trans>
           <Box mt="1rem">
-            <Trans>
-              <Text as="span" bold>
-                Overflow Sale:
-              </Text>
-            </Trans>
+            <Text as="span" bold>
+              <Trans>Overflow Sale:</Trans>
+            </Text>
           </Box>
           <Trans>
             <ul>
