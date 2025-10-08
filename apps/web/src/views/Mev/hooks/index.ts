@@ -66,7 +66,7 @@ async function checkWalletSupportAddEthereumChain(connector: Connector) {
 
     let provider = (await connector.getProvider()) as any
 
-    if (provider && provider?.walletProvider) {
+    if (provider?.walletProvider) {
       provider = provider.walletProvider
     }
 
