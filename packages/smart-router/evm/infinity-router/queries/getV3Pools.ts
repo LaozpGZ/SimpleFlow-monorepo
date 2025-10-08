@@ -3,8 +3,7 @@ import { BigintIsh, Currency } from '@pancakeswap/sdk'
 import { getPairCombinations } from '../../v3-router/functions'
 import { getV3PoolsWithoutTicksOnChain } from '../../v3-router/providers'
 import { OnChainProvider, V3Pool } from '../../v3-router/types'
-import { fetchCompactPoolsTick } from '../../utils/compactTickQuery.helper'
-import { fetchTickLenPoolsTick } from '../../utils/tickLenQuery.helper'
+import { fetchCombinedPoolsTick } from '../../utils/combinedTickQuery.helper'
 
 type WithMulticallGasLimit = {
   gasLimit?: BigintIsh
@@ -59,12 +58,18 @@ async function fillPoolsWithTicks({
   disableFilterNoTicks,
 }: FillPoolsWithTicksParams): Promise<V3Pool[]> {
   console.log(`[pools]`, pools.length)
-  // const ticksByPool = await fetchCompactPoolsTick({ pools, clientProvider, gasLimit })
-  const ticksByPool = await fetchTickLenPoolsTick({ pools, clientProvider, gasLimit })
-  console.log(`[ticks]`, Object.keys(ticksByPool).length)
+
+  // Use the combined tick query that tries compact ticks first, then falls back to tickLens
+  const finalTicksByPool = await fetchCombinedPoolsTick({
+    pools,
+    clientProvider,
+    gasLimit,
+    disableFilterNoTicks,
+  })
+
   const poolsWithTicks = pools.map((p) => ({
     ...p,
-    ticks: ticksByPool[p.address.toLowerCase()] ?? [],
+    ticks: finalTicksByPool[p.address.toLowerCase()] ?? [],
   }))
   console.log(`[poolsWithTicks]`, poolsWithTicks.length)
 

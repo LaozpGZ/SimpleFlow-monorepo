@@ -38,6 +38,13 @@ function getBitmapIndex(tick: number, tickSpacing: number) {
   return Math.floor(tick / tickSpacing / 256)
 }
 
+export function getBitmapTickRange(bitmapIndex: number, tickSpacing: number) {
+  return {
+    minTick: bitmapIndex * 256 * tickSpacing,
+    maxTick: (bitmapIndex + 1) * 256 * tickSpacing - 1,
+  }
+}
+
 type BuildBitmapIndexListParams = {
   currentTick: number
   tickSpacing: number
