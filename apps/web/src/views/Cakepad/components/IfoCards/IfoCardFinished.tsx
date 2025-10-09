@@ -90,12 +90,12 @@ export const IfoCardFinished: React.FC<{ ifoStatus0: IFOStatus; ifoStatus1: IFOS
           </>
         )
       ) : (
-        <>
+        <FlexGap flexDirection="column" gap="16px">
           {saleInfo}
           {allocationCard}
           {pool0Card}
           {pool1Card}
-        </>
+        </FlexGap>
       )}
       <IfoVestingCard />
     </>
