@@ -189,7 +189,8 @@ const IfoRibbonEnd: React.FC<{
           fontWeight={['600', '600', '400']}
           color="textSubtle"
         >
-          {t('IFO Ended')} {isClaimed ? <> & {t('Claimed')}</> : hasUserStaked ? <> - {t('Claim available!')}</> : ''}
+          {t('CAKE.PAD Ended')}{' '}
+          {isClaimed ? <> & {t('Claimed')}</> : hasUserStaked ? <> - {t('Claim available!')}</> : ''}
         </Text>
       </RibbonContainer>
     </>
