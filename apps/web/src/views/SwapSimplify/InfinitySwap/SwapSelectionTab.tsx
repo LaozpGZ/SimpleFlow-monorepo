@@ -122,9 +122,9 @@ export const SwapSelection = ({
 
   const isEvmSwap = isEvm(chainId) && isEvm(outputChainId)
 
-  const toggleChartDisplayed = () => {
+  const toggleChartDisplayed = useCallback(() => {
     setIsChartDisplayed((currentIsChartDisplayed) => !currentIsChartDisplayed)
-  }
+  }, [setIsChartDisplayed])
 
   const { theme } = useTheme()
   const tSwapProps = useMemo(() => {
@@ -180,9 +180,7 @@ export const SwapSelection = ({
       {/* NOTE: Commented out until charts are supported again */}
       {withToolkit && isEvmSwap && (
         <ColoredIconButton
-          onClick={() => {
-            toggleChartDisplayed()
-          }}
+          onClick={toggleChartDisplayed}
           variant="text"
           scale="sm"
           data-dd-action-name="Price chart button"
