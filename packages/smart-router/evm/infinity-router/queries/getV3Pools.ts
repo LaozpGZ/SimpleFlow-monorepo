@@ -57,8 +57,6 @@ async function fillPoolsWithTicks({
   gasLimit,
   disableFilterNoTicks,
 }: FillPoolsWithTicksParams): Promise<V3Pool[]> {
-  console.log(`[pools]`, pools.length)
-
   // Use the combined tick query that tries compact ticks first, then falls back to tickLens
   const finalTicksByPool = await fetchCombinedPoolsTick({
     pools,
@@ -71,7 +69,6 @@ async function fillPoolsWithTicks({
     ...p,
     ticks: finalTicksByPool[p.address.toLowerCase()] ?? [],
   }))
-  console.log(`[poolsWithTicks]`, poolsWithTicks.length)
 
   return disableFilterNoTicks ? poolsWithTicks : poolsWithTicks.filter((p) => p.ticks.length)
 }

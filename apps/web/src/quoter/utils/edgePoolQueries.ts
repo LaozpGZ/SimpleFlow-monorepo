@@ -116,7 +116,7 @@ const fetchInfinityPoolsLight = async (
 ) => {
   const call = createAsyncCallWithFallbacks(getInfinityPoolsFromApi, {
     fallbacks: [getInfinityPoolsOnChain],
-    fallbackTimeout: 3_000,
+    fallbackTimeout: 5_000,
   })
   return call(addressA, addressB, chainId, type)
 }

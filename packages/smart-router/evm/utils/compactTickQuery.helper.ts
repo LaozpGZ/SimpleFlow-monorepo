@@ -20,7 +20,7 @@ const LIQUIDITY_NET_MASK = (1n << 128n) - 1n
  * @param maxLen Hard cap to avoid blowing gas (default: 1000)
  * @returns len for queryCompactTicks
  */
-export function decideCompactTickLen(priceRangeBps: number, tickSpacing: number, maxLen: bigint = 100n): bigint {
+export function decideCompactTickLen(priceRangeBps: number, tickSpacing: number, maxLen: bigint = 1n): bigint {
   // how many ticks for desired price coverage
   const targetTicks = Math.log(1 + priceRangeBps / 10000) / Math.log(1.0001)
 
@@ -123,33 +123,24 @@ export async function fetchCompactPoolsTick({
   const { retryGasMultiplier } = getTickQueryFetchConfig()
 
   // const len = decideCompactTickLen(1000, getTickSpacing(pools[0]))
-  const gasLimitPerCall = 25_000_000n
-  const maxLen = 500n
+  const gasLimitPerCall = 10_000_000n
 
   const multiCallArgs = pools.map((pool) => ({
     target: queryHelperAddress as Address,
-    callData: getCompactTickQueryCalldata(pool, decideCompactTickLen(1000, getTickSpacing(pool), maxLen)),
+    callData: getCompactTickQueryCalldata(pool, decideCompactTickLen(1000, getTickSpacing(pool))),
     gasLimit: gasLimitPerCall,
   }))
+
   const res = await multicallByGasLimit(multiCallArgs, {
     chainId,
     client,
     gasLimit,
     retryFailedCallsWithGreaterLimit: { gasLimitMultiplier: retryGasMultiplier },
-    blockConflictTolerance: 30,
   })
 
   const ticksByPool: Record<string, Tick[]> = {}
 
   for (const [i, result] of res.results.entries()) {
-    if (!result.success) {
-      console.error(
-        `[fetchCompactPoolsTick] failed to fetch ticks for pool ${
-          pools[i].type === PoolType.V3 ? pools[i].address : pools[i].id
-        } on chain ${chainId}`,
-        multiCallArgs[i],
-      )
-    }
     if (!result.success || !result.result) continue
     const decoded = decodeCompactTickResult(result.result as Hex, pools[i])
     if (decoded.length) {
@@ -160,17 +151,6 @@ export async function fetchCompactPoolsTick({
       }
     }
   }
-  console.info(`[fetchCompactPoolsTick] ${PoolType[pools[0].type]} Multicall request summary`, {
-    maxLen,
-    chainId,
-    calls: pools.length,
-    chunkCount: res.chunkCount,
-    avgCallPerChunk: BigInt(pools.length) / BigInt(res.chunkCount),
-    gasPerCall: formatGas(gasLimitPerCall),
-    maxSingleCallGasUsage: formatGas(res.maxSingleCallGasUsage),
-    avgGasUsagePerCall: formatGas(res.avgGasUsagePerCall),
-    gasLimitPerChunk: formatGas(res.gasLimit),
-  })
 
   return ticksByPool
 }

@@ -19,6 +19,7 @@ import { PoolMeta } from '../../v3-router/providers/poolProviders/internalTypes'
 import { InfinityClPool, OnChainProvider, PoolType } from '../../v3-router/types'
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { fetchCompactPoolsTick } from '../../utils/compactTickQuery.helper'
+import { fetchCombinedPoolsTick } from '../../utils/combinedTickQuery.helper'
 
 type WithMulticallGasLimit = {
   gasLimit?: BigintIsh
@@ -184,7 +185,7 @@ export async function fillClPoolsWithTicks({
   if (!client) {
     throw new Error('Fill pools with ticks failed. No valid public client found.')
   }
-  const ticksByPool = await fetchCompactPoolsTick({ pools, clientProvider, gasLimit })
+  const ticksByPool = await fetchCombinedPoolsTick({ pools, clientProvider, gasLimit })
   const poolsWithTicks = pools.map((p) => ({
     ...p,
     ticks: ticksByPool[p.id.toLowerCase()] ?? [],

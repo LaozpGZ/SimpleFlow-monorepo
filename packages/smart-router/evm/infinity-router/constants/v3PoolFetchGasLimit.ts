@@ -20,6 +20,11 @@ const TICK_QUERY_FETCH_CONFIG: V3PoolFetchConfig = {
   retryGasMultiplier: 2,
 }
 
+const TICK_LENS_FETCH_CONFIG: V3PoolFetchConfig = {
+  gasLimit: 500_000n,
+  retryGasMultiplier: 2,
+}
+
 const V3_POOL_FETCH_CONFIG: { [key in ChainId]?: V3PoolFetchConfig } = {}
 const INFI_POOL_FETCH_CONFIG: { [key in ChainId]?: V3PoolFetchConfig } = {}
 
@@ -33,4 +38,8 @@ export function getInfinityPoolFetchConfig(chainId: ChainId) {
 
 export function getTickQueryFetchConfig() {
   return TICK_QUERY_FETCH_CONFIG
+}
+
+export function getTickLensFetchConfig() {
+  return TICK_LENS_FETCH_CONFIG
 }

@@ -37,7 +37,7 @@ export const QUOTE_TIMEOUT = {
 
 export const SOLANA_NATIVE_TOKEN_ADDRESS = '11111111111111111111111111111111'
 
-export const POOL_EDGE_API_FETCH_TIMEOUT = 5_000
+export const POOL_EDGE_API_FETCH_TIMEOUT = 6_000
 
 // Revalidate interval after a successful quote in seconds
 export const QUOTE_SUCC_REVALIDATE = {

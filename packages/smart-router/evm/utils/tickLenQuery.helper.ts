@@ -8,7 +8,7 @@ import { infinityCLTickLensAbi } from '../abis/IInfinityCLTickLens'
 import { tickLensAbi } from '../abis/ITickLens'
 import { V3_TICK_LENS_ADDRESSES } from '../constants/v3'
 import { INFI_CL_TICK_LENS_ADDRESSES } from '../constants/infinity'
-import { getV3PoolFetchConfig } from '../infinity-router/constants/v3PoolFetchGasLimit'
+import { getTickLensFetchConfig, getV3PoolFetchConfig } from '../infinity-router/constants/v3PoolFetchGasLimit'
 import { InfinityClPool, OnChainProvider, PoolType, V3Pool } from '../v3-router/types'
 import { formatGas } from './compactTickQuery.helper'
 
@@ -85,6 +85,8 @@ export type FetchTickLenPoolsTickParams = {
 } & WithClientProvider &
   WithMulticallGasLimit
 
+const tickLensGasLimit = 10_000_000n
+
 export async function fetchTickLenPoolsTick({
   pools,
   clientProvider,
@@ -102,7 +104,7 @@ export async function fetchTickLenPoolsTick({
     throw new Error('Fill pools with ticks failed. No valid public client found.')
   }
 
-  const { gasLimit: gasLimitPerCall, retryGasMultiplier } = getV3PoolFetchConfig(chainId)
+  const { gasLimit: gasLimitPerCall, retryGasMultiplier } = getTickLensFetchConfig()
 
   const ticksByPool: Record<string, Tick[]> = {}
 
@@ -141,17 +143,6 @@ export async function fetchTickLenPoolsTick({
           },
         },
       )
-
-      console.info(`[fetchTickLens] ${PoolType[pools[0].type]} Multicall request summary`, {
-        chainId,
-        calls: pools.length,
-        chunkCount: res.chunkCount,
-        avgCallPerChunk: BigInt(pools.length) / BigInt(res.chunkCount),
-        gasPerCall: formatGas(gasLimitPerCall),
-        maxSingleCallGasUsage: formatGas(res.maxSingleCallGasUsage),
-        avgGasUsagePerCall: formatGas(res.avgGasUsagePerCall),
-        gasLimitPerChunk: formatGas(res.gasLimit),
-      })
 
       for (const [index, result] of res.results.entries()) {
         const { pool } = bitmapIndexes[index]
