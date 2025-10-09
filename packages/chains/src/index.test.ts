@@ -24,6 +24,7 @@ test('exports', () => {
       "isTestnetChainId",
       "isEvm",
       "isSolana",
+      "isAptos",
       "isChainSupported",
       "V3_SUBGRAPHS",
       "V2_SUBGRAPHS",
