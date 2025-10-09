@@ -22,6 +22,8 @@ import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { useRouter } from 'next/router'
 
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
+import { isEvm } from '@pancakeswap/chains'
+import { Currency } from '@pancakeswap/swap-sdk-core'
 import { type PoolPreset, percentageToFee } from '../sdk'
 import { useCreateInfinityStablePool } from '../hooks/useCreateInfinityStablePool'
 import { CreatePoolPreviewModal } from './CreatePoolPreviewModal'
@@ -155,7 +157,7 @@ export const ParamSettingSection = () => {
   }
 
   const handleCreatePool = async () => {
-    if (!baseCurrency || !quoteCurrency) {
+    if (!isEvm(baseCurrency?.chainId) || !isEvm(quoteCurrency?.chainId)) {
       console.error('Missing currencies for pool creation')
       return
     }
@@ -165,8 +167,9 @@ export const ParamSettingSection = () => {
       const customFee = swapFee ? percentageToFee(parseFloat(swapFee) / 100) : undefined
 
       const hash = await createInfinityStablePool({
-        tokenA: baseCurrency,
-        tokenB: quoteCurrency,
+        // NOTE: already check isEvm above, safe to cast
+        tokenA: baseCurrency as Currency,
+        tokenB: quoteCurrency as Currency,
         preset: selectedPreset,
         ...(customFee && { fee: customFee }), // Override fee if custom fee is provided
       })
@@ -229,16 +232,18 @@ export const ParamSettingSection = () => {
       />
 
       {/* Create Pool Preview Modal */}
-      <CreatePoolPreviewModal
-        isOpen={isPreviewModalOpen}
-        onDismiss={() => setIsPreviewModalOpen(false)}
-        tokenA={baseCurrency}
-        tokenB={quoteCurrency}
-        preset={selectedPreset}
-        poolOptions={swapFee ? { fee: percentageToFee(parseFloat(swapFee) / 100) } : undefined}
-        onCreatePool={handleCreatePool}
-        isCreating={attemptingTxn || isConfirming}
-      />
+      {isEvm(baseCurrency?.chainId) && isEvm(quoteCurrency?.chainId) && (
+        <CreatePoolPreviewModal
+          isOpen={isPreviewModalOpen}
+          onDismiss={() => setIsPreviewModalOpen(false)}
+          tokenA={baseCurrency as Currency}
+          tokenB={quoteCurrency as Currency}
+          preset={selectedPreset}
+          poolOptions={swapFee ? { fee: percentageToFee(parseFloat(swapFee) / 100) } : undefined}
+          onCreatePool={handleCreatePool}
+          isCreating={attemptingTxn || isConfirming}
+        />
+      )}
     </Box>
   )
 }
