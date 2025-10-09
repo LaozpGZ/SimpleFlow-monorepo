@@ -12,7 +12,7 @@ import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import AddLiquidityV2FormProvider from 'views/AddLiquidity/AddLiquidityV2FormProvider'
 import { InfinityPoolInfoHeader } from 'views/AddLiquidityInfinity/components/InfinityPoolInfoHeader'
-import InfinityStableAddLiquidityProvider from 'views/StableSwapNG/components/InfinityStableAddLiquidityProvider'
+import InfinityStableAddLiquidityProvider from 'views/StableInfinity/components/InfinityStableAddLiquidityProvider'
 
 const AddInfinityStableLiquidityPage = () => {
   const router = useRouter()

@@ -10,7 +10,7 @@ import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquid
 import PageLayout from 'components/Layout/Page'
 import { Box } from '@pancakeswap/uikit'
 import { CreateLiquidityV2Form } from 'views/CreateLiquidityPool/V2/CreateLiquidityV2Form'
-import { CreateStableSwapForm } from 'views/StableSwapNG/components/CreateStableSwapForm'
+import { CreateStableSwapForm } from 'views/StableInfinity/components/CreateStableSwapForm'
 import styled from 'styled-components'
 import { isSolana } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'

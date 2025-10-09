@@ -10,8 +10,8 @@ import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
 import { useAccount } from 'wagmi'
 import StableFormView from 'views/AddLiquidityV3/formViews/StableFormView'
-import { useAddLiquidityInfinityStablePool } from '../hooks/useAddLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useTotalSupply } from '../hooks/useCalcTokenAmount'
+import { useAddLiquidityInfinityStablePool } from '../hooks/useAddLiquidityStableInfinityPool'
 
 export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKey: PoolKey }) {
   const { address: account } = useAccount()

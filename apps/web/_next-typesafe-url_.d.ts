@@ -46,6 +46,9 @@ declare module "@@@next-typesafe-url" {
     "/ifo/v2": StaticRoute;
     "/increase/[[...currency]]": StaticRoute;
     "/": StaticRoute;
+    "/infinityStable/[poolId]": StaticRoute;
+    "/infinityStable/add/[poolId]": StaticRoute;
+    "/infinityStable/remove/[poolId]": StaticRoute;
     "/info/[chainName]": StaticRoute;
     "/info/[chainName]/pairs/[address]": StaticRoute;
     "/info/[chainName]/pairs": StaticRoute;
@@ -110,9 +113,6 @@ declare module "@@@next-typesafe-url" {
     "/stable/[address]": StaticRoute;
     "/stable/add/[[...currency]]": StaticRoute;
     "/stable/remove/[[...currency]]": StaticRoute;
-    "/stableNg/[poolId]": StaticRoute;
-    "/stableNg/add/[poolId]": StaticRoute;
-    "/stableNg/remove/[poolId]": StaticRoute;
     "/swap": StaticRoute;
     "/swap/limit-v1": StaticRoute;
     "/swap/limit": StaticRoute;
