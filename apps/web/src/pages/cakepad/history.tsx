@@ -4,12 +4,16 @@ import IfoProvider from 'views/Ifos/contexts/IfoContext'
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
 import PastIfo from 'views/Ifos/PastIfo'
+import { PageMeta } from 'components/Layout/Page'
 
 const View = () => {
   return (
-    <IfoProvider>
-      <PastIfo isV2 />
-    </IfoProvider>
+    <>
+      <PageMeta />
+      <IfoProvider>
+        <PastIfo isV2 />
+      </IfoProvider>
+    </>
   )
 }
 const PastIfoPage = dynamic(() => Promise.resolve(View), {

@@ -83,7 +83,7 @@ export const VestingScheduleCard: React.FC = () => {
             </Milestone>
           </Timeline>
           <Flex justifyContent="space-between">
-            <Text fontSize="12px" bold>{`${t('IFO ended')} (${ifoEnded})`}</Text>
+            <Text fontSize="12px" bold>{`${t('CAKE.PAD ended')} (${ifoEnded})`}</Text>
             <Text fontSize="12px" bold>{`${t('Cliff')} (${cliff})`}</Text>
             <Text fontSize="12px" bold>{`${t('Vesting end')} (${vestingEnd})`}</Text>
           </Flex>
