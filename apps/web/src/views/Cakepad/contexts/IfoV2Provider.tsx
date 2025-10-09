@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useWalletClient } from 'wagmi'
 import { isAddress } from 'viem'
+import { safeGetAddress } from 'utils'
 import { getIFOContract } from '../hooks/ifo/useIFOContract'
 import { ifoConfigs } from '../config'
 import { ifoLoadingAnimationAtom } from '../atoms'
@@ -43,7 +44,7 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
   return (
     <IfoV2Context.Provider value={value}>
       {/* If no contract address, don't use SyncIfoContext */}
-      {(!config.contractAddress || !isAddress(config.contractAddress)) && config.presetData ? (
+      {(!config.contractAddress || !safeGetAddress(config.contractAddress)) && config.presetData ? (
         <>{children}</>
       ) : (
         <SyncIfoContext id={config.id}>{children}</SyncIfoContext>

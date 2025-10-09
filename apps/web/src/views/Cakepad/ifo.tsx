@@ -1,4 +1,4 @@
-import { isAddress } from 'viem/utils'
+import { safeGetAddress } from 'utils'
 import { IfoV2Provider } from './contexts/IfoV2Provider'
 import CurrentIfo from './CurrentIfo'
 import useIfo from './hooks/useIfo'
@@ -8,7 +8,7 @@ const DisplayIfo = () => {
   const { config } = useIfo()
 
   // If no contract address, use preset data
-  if ((!config.contractAddress || !isAddress(config.contractAddress)) && config.presetData) {
+  if ((!config.contractAddress || !safeGetAddress(config.contractAddress)) && config.presetData) {
     return <IfoPresetPage />
   }
 

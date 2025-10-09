@@ -1,4 +1,5 @@
 import { isAddress } from 'viem/utils'
+import { safeGetAddress } from 'utils'
 import { useIFOPoolInfo } from './ifo/useIFOPoolInfo'
 import { useIFOInfo } from './ifo/useIFOInfo'
 import { useIFOUserStatus } from './ifo/useIFOUserStatus'
@@ -13,7 +14,7 @@ const useIfo = () => {
   const users = useIFOUserStatus()
 
   const { config } = ctx
-  const isValidContract = config.contractAddress && isAddress(config.contractAddress)
+  const isValidContract = config.contractAddress && safeGetAddress(config.contractAddress)
 
   // Return preset pools for FAQ and HowTo if no valid contract address
   const pools = isValidContract ? pools_ : (config.presetData as IFOConfig['presetData'])!.pools
