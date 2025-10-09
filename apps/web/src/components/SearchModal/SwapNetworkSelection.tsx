@@ -104,7 +104,7 @@ export default function SwapNetworkSelection({
     }
 
     return Chains.filter((chain) => {
-      // NOTE: because APtos is using different domain, we cannot show it in the network selector in Search Modal
+      // NOTE: because Aptos is using different domain, we cannot show it in the network selector in Search Modal
       if (chain.id === NonEVMChainId.APTOS) {
         return false
       }

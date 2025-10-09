@@ -42,6 +42,11 @@ export function isSolana(chainId?: UnifiedChainId) {
   return chainId === NonEVMChainId.SOLANA
 }
 
+export function isAptos(chainId?: UnifiedChainId) {
+  if (!chainId) return false
+  return chainId === NonEVMChainId.APTOS
+}
+
 export function isChainSupported(chainId?: UnifiedChainId) {
   if (!chainId) return false
   return (
