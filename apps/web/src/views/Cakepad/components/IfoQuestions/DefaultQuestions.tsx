@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Heading, Container, Link, Text, Box } from 
 import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { safeGetAddress } from 'utils'
+import { useMemo } from 'react'
 import useIfo from '../../hooks/useIfo'
 
 const StyledCardHeader = styled(CardHeader)`
@@ -26,10 +27,16 @@ const InlineLink = styled(Link)`
 const DefaultQuestions: React.FC = () => {
   const { pools: pools_, config } = useIfo()
 
-  const isValidContract = config.contractAddress && safeGetAddress(config.contractAddress)
-  const pools = isValidContract ? pools_ : config.presetData!.pools
+  const pools = useMemo(
+    () => (config.contractAddress && safeGetAddress(config.contractAddress) ? pools_ : config.presetData?.pools ?? []),
+    [pools_, config.presetData],
+  )
 
-  const stakeSymbols = pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[]
+  const stakeSymbols = useMemo(
+    () => pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[],
+    [pools],
+  )
+
   const symbol =
     stakeSymbols.length === 1
       ? `$${stakeSymbols[0]}`

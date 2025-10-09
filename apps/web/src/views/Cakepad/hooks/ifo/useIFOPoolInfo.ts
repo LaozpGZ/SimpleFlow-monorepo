@@ -18,7 +18,7 @@ import { mapToPoolInfo, type RawPoolInfo } from './mapToPoolInfo'
 export const useIFOPoolInfo = () => {
   const { config } = useIfoV2Context()
   const pools = useAtomValue(ifoPoolsAtom(config.id))
-  return pools ?? []
+  return useMemo(() => pools ?? [], [pools])
 }
 
 export const useIFOPoolInfoCtx = (): PoolInfo[] => {

@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Card, CardBody, Flex, Heading, Text } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
+import { useMemo } from 'react'
 import useIfo from '../hooks/useIfo'
 
 const SectionWrapper = styled(Box)`
@@ -99,10 +100,16 @@ const HowToTakePart: React.FC = () => {
   const { t } = useTranslation()
   const { pools: pools_, config } = useIfo()
 
-  const isValidContract = config.contractAddress && safeGetAddress(config.contractAddress)
-  const pools = isValidContract ? pools_ : config.presetData!.pools
+  const pools = useMemo(
+    () => (config.contractAddress && safeGetAddress(config.contractAddress) ? pools_ : config.presetData?.pools ?? []),
+    [pools_, config.presetData],
+  )
 
-  const stakeSymbols = pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[]
+  const stakeSymbols = useMemo(
+    () => pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[],
+    [pools],
+  )
+
   const commitTokensText =
     stakeSymbols.length === 1
       ? `$${stakeSymbols[0]}`
