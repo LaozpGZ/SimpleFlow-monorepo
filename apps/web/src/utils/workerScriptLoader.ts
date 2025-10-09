@@ -1,6 +1,6 @@
 import { WorkerUrlExtractor as Worker } from './workerUrlExtractor'
 
-async function retryFetch(url, retries = 5, baseDelay = 500) {
+async function retryFetch(url, retries = 5, baseDelay = 3000) {
   let attempt = 0
   let lastError
 
