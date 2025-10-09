@@ -30,8 +30,8 @@ const DefaultQuestions: React.FC = () => {
     stakeSymbols.length === 1
       ? stakeSymbols[0]
       : stakeSymbols.length >= 2
-      ? `${stakeSymbols[0]} or ${stakeSymbols[1]}`
-      : 'CAKE'
+      ? `$${stakeSymbols[0]} or $${stakeSymbols[1]}`
+      : '$CAKE'
 
   const faqs = [
     {
@@ -45,7 +45,7 @@ const DefaultQuestions: React.FC = () => {
             <p>
               Users can buy project tokens using{' '}
               <Text as="span" bold>
-                $CAKE
+                {symbol}
               </Text>
               , while projects gain liquidity, visibility, and direct access to our community.
             </p>
@@ -69,7 +69,7 @@ const DefaultQuestions: React.FC = () => {
             <ul>
               <li>
                 <Text as="span" bold>
-                  Participation only requires $CAKE
+                  Participation only requires {symbol}
                 </Text>{' '}
                 – no staking or NFT profile needed.
               </li>
@@ -110,12 +110,12 @@ const DefaultQuestions: React.FC = () => {
             <ol>
               <li>
                 <Text as="span" bold>
-                  Get $CAKE
+                  Get {symbol}
                 </Text>
               </li>
               <li>
                 <Text as="span" bold>
-                  Commit CAKE
+                  Commit {symbol}
                 </Text>{' '}
                 during the CAKE.PAD via the CAKE.PAD page.
               </li>
@@ -151,7 +151,7 @@ const DefaultQuestions: React.FC = () => {
               <li>
                 Fee is applied to{' '}
                 <Text as="span" bold>
-                  excess CAKE
+                  excess {symbol}
                 </Text>{' '}
                 that didn't contribute to your allocation.
               </li>
@@ -208,7 +208,9 @@ const DefaultQuestions: React.FC = () => {
           <Text as="span" bold>
             <Trans>Allocation Rules:</Trans>{' '}
           </Text>
-          <Trans>Based on an allocation % based on your committed $CAKE vs total $CAKE committed by all users.</Trans>
+          <Trans>
+            Based on an allocation % based on your committed {symbol} vs total {symbol} committed by all users.
+          </Trans>
           <Box mt="1rem">
             <Text as="span" bold>
               <Trans>Overflow Sale:</Trans>
@@ -217,7 +219,7 @@ const DefaultQuestions: React.FC = () => {
           <Trans>
             <ul>
               <li>Users get proportional allocation.</li>
-              <li>Any excess CAKE is refunded (minus participation tax if oversubscribed).</li>
+              <li>Any excess {symbol} is refunded (minus participation tax if oversubscribed).</li>
             </ul>
           </Trans>
           <Box mt="1rem">
