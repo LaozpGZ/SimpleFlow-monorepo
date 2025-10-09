@@ -4,7 +4,8 @@ import { AutoRow, Box, Checkbox, Flex, Input, PreTitle, Text } from '@pancakeswa
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { Address, Hex } from 'viem'
+import { useState } from 'react'
+import { Address, Hex, toFunctionSelector } from 'viem'
 import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
 import { useFieldSelectCurrencies } from 'views/CreateLiquidityPool/hooks/useFieldSelectCurrencies'
 import { CurrencyField } from 'utils/types'
@@ -51,6 +52,7 @@ function CardCheckBox({ label, checked, onChange }: { label: string; checked: bo
 export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
   const { t } = useTranslation()
   const { tokenAConfig, tokenBConfig, setTokenAConfig, setTokenBConfig } = useTokenConfig()
+  const [functionSignature, setFunctionSignature] = useState('')
 
   const config = field === CurrencyField.CURRENCY_A ? tokenAConfig : tokenBConfig
   const setConfig = field === CurrencyField.CURRENCY_A ? setTokenAConfig : setTokenBConfig
@@ -64,6 +66,9 @@ export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
         methodId: NULL_METHOD_ID as Hex,
       }),
     })
+    if (type === TokenType.STANDARD) {
+      setFunctionSignature('')
+    }
   }
 
   const handleAddressChange = (address: string) => {
@@ -73,11 +78,28 @@ export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
     })
   }
 
-  const handleMethodIdChange = (methodId: string) => {
-    setConfig({
-      ...config,
-      methodId: (methodId || NULL_METHOD_ID) as Hex,
-    })
+  const handleFunctionSignatureChange = (signature: string) => {
+    setFunctionSignature(signature)
+
+    if (!signature) {
+      setConfig({
+        ...config,
+        methodId: NULL_METHOD_ID as Hex,
+      })
+      return
+    }
+
+    try {
+      // Convert function signature to method ID using viem
+      const methodId = toFunctionSelector(signature)
+      setConfig({
+        ...config,
+        methodId,
+      })
+    } catch (error) {
+      // If conversion fails, keep the previous methodId
+      console.warn('Invalid function signature:', signature, error)
+    }
   }
 
   return (
@@ -106,14 +128,21 @@ export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
             />
           </AutoRow>
           <AutoRow gap="8px">
-            <PreTitle textTransform="uppercase">{t('Function')}</PreTitle>
+            <PreTitle textTransform="uppercase">{t('Function Signature')}</PreTitle>
             <Input
               type="text"
-              placeholder="0x00000000"
-              value={config.methodId === NULL_METHOD_ID ? '' : config.methodId}
-              onChange={(e) => handleMethodIdChange(e.target.value)}
+              placeholder="ExchangeRate()"
+              value={functionSignature}
+              onChange={(e) => handleFunctionSignatureChange(e.target.value)}
             />
           </AutoRow>
+          {functionSignature && config.methodId !== NULL_METHOD_ID && (
+            <AutoRow gap="8px">
+              <Text fontSize="12px" color="textSubtle">
+                {t('Method ID')}: {config.methodId}
+              </Text>
+            </AutoRow>
+          )}
         </>
       )}
     </>
