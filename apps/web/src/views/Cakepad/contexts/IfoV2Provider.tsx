@@ -9,7 +9,6 @@ import { ifoLoadingAnimationAtom } from '../atoms'
 
 import { SyncIfoContext } from './SyncIfoContext'
 import { IfoV2Context } from './IfoV2Context'
-import { IfoPresetCard } from '../components/IfoCards/IfoPresetCard/IfoPresetCard'
 
 interface ProviderProps {
   id?: string
@@ -43,9 +42,9 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
 
   return (
     <IfoV2Context.Provider value={value}>
-      {/* If no contract address, use preset data */}
+      {/* If no contract address, don't use SyncIfoContext */}
       {(!config.contractAddress || !isAddress(config.contractAddress)) && config.presetData ? (
-        <IfoPresetCard />
+        <>{children}</>
       ) : (
         <SyncIfoContext id={config.id}>{children}</SyncIfoContext>
       )}
