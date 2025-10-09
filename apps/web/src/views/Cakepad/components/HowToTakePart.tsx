@@ -123,7 +123,7 @@ const HowToTakePart: React.FC = () => {
       >
         <StepCard
           stepNumber={1}
-          title={t('Commit CAKE')}
+          title={t('Commit %symbol%', { symbol: commitTokensText })}
           circleFill="secondary"
           items={[
             t('Anyone with %symbol% can take part — no KYC required.', { symbol: commitTokensText }),
