@@ -1,3 +1,4 @@
+import { isAddress } from 'viem/utils'
 import { useIFOPoolInfo } from './ifo/useIFOPoolInfo'
 import { useIFOInfo } from './ifo/useIFOInfo'
 import { useIFOUserStatus } from './ifo/useIFOUserStatus'
@@ -7,8 +8,12 @@ const useIfo = () => {
   const ctx = useIfoV2Context()
 
   const info = useIFOInfo()
-  const pools = useIFOPoolInfo()
+  const pools_ = useIFOPoolInfo()
   const users = useIFOUserStatus()
+
+  const { config } = ctx
+  const isValidContract = config.contractAddress && isAddress(config.contractAddress)
+  const pools = isValidContract ? pools_ : config.presetData?.pools
 
   return { ...ctx, info, pools, users }
 }

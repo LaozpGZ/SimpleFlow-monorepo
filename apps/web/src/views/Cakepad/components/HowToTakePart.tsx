@@ -101,10 +101,10 @@ const HowToTakePart: React.FC = () => {
   const stakeSymbols = pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[]
   const commitTokensText =
     stakeSymbols.length === 1
-      ? stakeSymbols[0]
+      ? `$${stakeSymbols[0]}`
       : stakeSymbols.length >= 2
-      ? `${stakeSymbols[0]} or ${stakeSymbols[1]}`
-      : 'CAKE'
+      ? `$${stakeSymbols[0]} or $${stakeSymbols[1]}`
+      : '$CAKE'
 
   return (
     <SectionWrapper id="cakepad-how-to">
