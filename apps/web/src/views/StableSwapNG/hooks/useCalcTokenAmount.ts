@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { usePublicClient, useWalletClient } from 'wagmi'
-import { StableNGHook } from '../sdk/stableNGHook'
+import { InfinityStableHook } from '../sdk/infinityStableHook'
 
 interface UseCalcTokenAmountParams {
   poolAddress: string
@@ -21,20 +21,20 @@ export const useTotalSupply = ({ poolAddress }: { poolAddress: string }): bigint
   const publicClient = usePublicClient()
   const { data: walletClient } = useWalletClient()
 
-  const stableNGHook = useMemo(() => {
+  const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new StableNGHook(poolAddress, publicClient, walletClient)
+    return new InfinityStableHook(poolAddress, publicClient, walletClient)
   }, [poolAddress, publicClient, walletClient])
 
   useEffect(() => {
-    if (!stableNGHook) {
+    if (!infinityStableHook) {
       setTotalSupply(null)
       return
     }
 
     const fetchTotalSupply = async () => {
       try {
-        const result = await stableNGHook.totalSupply()
+        const result = await infinityStableHook.totalSupply()
         setTotalSupply(result)
       } catch (err) {
         console.error('Error fetching total supply:', err)
@@ -43,7 +43,7 @@ export const useTotalSupply = ({ poolAddress }: { poolAddress: string }): bigint
     }
 
     fetchTotalSupply()
-  }, [stableNGHook])
+  }, [infinityStableHook])
 
   return totalSupply
 }
@@ -61,13 +61,13 @@ export const useCalcTokenAmount = ({
   const publicClient = usePublicClient()
   const { data: walletClient } = useWalletClient()
 
-  const stableNGHook = useMemo(() => {
+  const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new StableNGHook(poolAddress, publicClient, walletClient)
+    return new InfinityStableHook(poolAddress, publicClient, walletClient)
   }, [poolAddress, publicClient, walletClient])
 
   useEffect(() => {
-    if (!enabled || !stableNGHook || (amounts[0] === 0n && amounts[1] === 0n)) {
+    if (!enabled || !infinityStableHook || (amounts[0] === 0n && amounts[1] === 0n)) {
       setTokenAmount(null)
       setError(null)
       setIsLoading(false)
@@ -79,7 +79,7 @@ export const useCalcTokenAmount = ({
       setError(null)
 
       try {
-        const result = await stableNGHook.calcTokenAmount(amounts, deposit)
+        const result = await infinityStableHook.calcTokenAmount(amounts, deposit)
         setTokenAmount(result)
       } catch (err) {
         const error = err as Error
@@ -91,7 +91,7 @@ export const useCalcTokenAmount = ({
     }
 
     calculateTokenAmount()
-  }, [stableNGHook, amounts[0], amounts[1], deposit, enabled])
+  }, [infinityStableHook, amounts, deposit, enabled])
 
   return useMemo(
     () => ({

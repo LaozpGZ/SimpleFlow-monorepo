@@ -23,7 +23,7 @@ import { useRouter } from 'next/router'
 
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { type PoolPreset, percentageToFee } from '../sdk'
-import { useCreateStableNGPool } from '../hooks/useCreateStableNGPool'
+import { useCreateInfinityStablePool } from '../hooks/useCreateInfinityStablePool'
 import { CreatePoolPreviewModal } from './CreatePoolPreviewModal'
 
 type PresetType = PoolPreset
@@ -105,7 +105,7 @@ export const ParamSettingSection = () => {
   const [selectedPreset, setSelectedPreset] = useState<PresetType>()
   const [swapFee, setSwapFee] = useState('')
   const { baseCurrency, quoteCurrency } = useCurrencies()
-  const { createStableNGPool, attemptingTxn } = useCreateStableNGPool()
+  const { createInfinityStablePool, attemptingTxn } = useCreateInfinityStablePool()
 
   const router = useRouter()
   const { chainId } = useAccountActiveChain()
@@ -135,7 +135,7 @@ export const ParamSettingSection = () => {
       // router to pool detail page
       router.push(`/liquidity/pool/${chainIdToExplorerInfoChainName[chainId]}/${poolId}`)
     }
-  }, [isConfirmed, receipt])
+  }, [isConfirmed, receipt, chainId, router])
 
   const getPresetLabel = (preset: PresetType | undefined) => {
     switch (preset) {
@@ -164,7 +164,7 @@ export const ParamSettingSection = () => {
       // Convert swap fee to the correct format if provided
       const customFee = swapFee ? percentageToFee(parseFloat(swapFee) / 100) : undefined
 
-      const hash = await createStableNGPool({
+      const hash = await createInfinityStablePool({
         tokenA: baseCurrency,
         tokenB: quoteCurrency,
         preset: selectedPreset,

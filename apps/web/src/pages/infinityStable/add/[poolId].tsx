@@ -12,9 +12,9 @@ import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import AddLiquidityV2FormProvider from 'views/AddLiquidity/AddLiquidityV2FormProvider'
 import { InfinityPoolInfoHeader } from 'views/AddLiquidityInfinity/components/InfinityPoolInfoHeader'
-import StableNGAddLiquidityProvider from 'views/StableSwapNG/components/StableNGAddLiquidityProvider'
+import InfinityStableAddLiquidityProvider from 'views/StableSwapNG/components/InfinityStableAddLiquidityProvider'
 
-const AddStableNGLiquidityPage = () => {
+const AddInfinityStableLiquidityPage = () => {
   const router = useRouter()
   const { chainId } = useActiveChainId()
   const poolId = router.query.poolId as `0x${string}` | undefined
@@ -50,7 +50,7 @@ const AddStableNGLiquidityPage = () => {
             <InfinityPoolInfoHeader poolId={poolId as `0x${string}`} chainId={chainId} />
           </SkeletonV2>
           <SkeletonV2 isDataReady={Boolean(poolId && currencyIdA && currencyIdB)}>
-            <StableNGAddLiquidityProvider poolKey={poolKey as PoolKey} />
+            <InfinityStableAddLiquidityProvider poolKey={poolKey as PoolKey} />
           </SkeletonV2>
         </FlexGap>
       </Container>
@@ -58,7 +58,7 @@ const AddStableNGLiquidityPage = () => {
   )
 }
 
-const Page = dynamic(() => Promise.resolve(AddStableNGLiquidityPage), {
+const Page = dynamic(() => Promise.resolve(AddInfinityStableLiquidityPage), {
   ssr: false,
 }) as NextPageWithLayout
 

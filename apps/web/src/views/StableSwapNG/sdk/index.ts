@@ -1,8 +1,8 @@
 // Core classes
-export { StableNGPoolFactory } from './stableNGPoolFactory'
+export { InfinityStablePoolFactory } from './infinityStablePoolFactory'
 
 // Types and interfaces
-export type { CreateStableNGPoolOptions, PoolPreset } from './types'
+export type { CreateInfinityStablePoolOptions, PoolPreset } from './types'
 
 export { PRESET_CONFIGS, ADDRESS_ZERO } from './types'
 

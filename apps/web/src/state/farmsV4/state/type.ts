@@ -76,7 +76,7 @@ export type StablePoolInfo = BasePoolInfo & {
   token1: Currency
 }
 
-export type InfinityPoolInfo = InfinityBinPoolInfo | InfinityCLPoolInfo | StableNGPoolInfo
+export type InfinityPoolInfo = InfinityBinPoolInfo | InfinityCLPoolInfo | InfinityStablePoolInfo
 
 type InfinityAdditionalPoolInfo = {
   /** @deprecated use poolId instead */
@@ -106,9 +106,9 @@ export type InfinityCLPoolInfo = Prettify<
 
 export type ChainIdAddressKey = `${number}:${string}`
 
-export type StableNGPoolInfo = Prettify<
+export type InfinityStablePoolInfo = Prettify<
   BasePoolInfo &
     InfinityAdditionalPoolInfo & {
-      protocol: Protocol.STABLENG
+      protocol: Protocol.InfinitySTABLE
     }
 >

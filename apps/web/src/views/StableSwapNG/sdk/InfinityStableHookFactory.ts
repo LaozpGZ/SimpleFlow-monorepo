@@ -1,6 +1,6 @@
 // import { Address } from 'viem'
 
-// export class StableNGHookFactory {
+// export class InfinityStableHookFactory {
 //   constructor(private readonly contractAddress: Address) {}
 
 //   /**

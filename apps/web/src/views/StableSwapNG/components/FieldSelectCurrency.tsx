@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, ERC20Token, UnifiedCurrency } from '@pancakeswap/sdk'
-import { AutoRow, Box, PreTitle, Text } from '@pancakeswap/uikit'
+import { AutoRow, Box, PreTitle } from '@pancakeswap/uikit'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
@@ -32,7 +32,7 @@ export const FieldSelectCurrency = ({
   )
 }
 
-export const StableNGFieldSelectCurrencies = () => {
+export const InfinityStableFieldSelectCurrencies = () => {
   const { t } = useTranslation()
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const { handleBaseCurrencySelect, handleQuoteCurrencySelect } = useFieldSelectCurrencies()

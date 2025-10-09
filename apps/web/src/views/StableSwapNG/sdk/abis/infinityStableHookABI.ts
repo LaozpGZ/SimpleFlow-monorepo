@@ -1,4 +1,4 @@
-export const stableNGHookABI = [
+export const infinityStableHookABI = [
   {
     type: 'constructor',
     inputs: [

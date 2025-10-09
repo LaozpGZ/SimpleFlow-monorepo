@@ -10,10 +10,10 @@ import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
 import { useAccount } from 'wagmi'
 import StableFormView from 'views/AddLiquidityV3/formViews/StableFormView'
-import { useAddLiquidityStableNGPool } from '../hooks/useAddLiquidityStableNGPool'
+import { useAddLiquidityInfinityStablePool } from '../hooks/useAddLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useTotalSupply } from '../hooks/useCalcTokenAmount'
 
-export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: PoolKey }) {
+export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKey: PoolKey }) {
   const { address: account } = useAccount()
   const currencyA = useCurrency(poolKey.currency0)
   const currencyB = useCurrency(poolKey.currency1)
@@ -23,7 +23,7 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
 
   // Use the pool hooks address as the pool address
   const poolAddress = poolKey.hooks?.toString() || ''
-  const { addLiquidityStableNGPool, isReady } = useAddLiquidityStableNGPool({ poolAddress })
+  const { addLiquidityInfinityStablePool, isReady } = useAddLiquidityInfinityStablePool({ poolAddress })
 
   // Get user's currency balances
   const [balanceA, balanceB] = useCurrencyBalancesWithChain(account, [currencyA, currencyB], currencyA?.chainId)
@@ -129,12 +129,20 @@ export default function StableNGAddLiquidityProvider({ poolKey }: { poolKey: Poo
       // Add liquidity - use 0 for amounts that are not provided
       const amountAToAdd = parsedAmountA?.quotient ?? 0n
       const amountBToAdd = parsedAmountB?.quotient ?? 0n
-      const txHash = await addLiquidityStableNGPool(amountAToAdd, amountBToAdd, minMintAmount)
+      const txHash = await addLiquidityInfinityStablePool(amountAToAdd, amountBToAdd, minMintAmount)
       console.log('Add liquidity successful, tx hash:', txHash)
     } catch (error) {
       console.error('Add liquidity failed:', error)
     }
-  }, [currencyA, currencyB, parsedAmountA, parsedAmountB, expectedLP, addLiquidityStableNGPool, userSlippageTolerance])
+  }, [
+    currencyA,
+    currencyB,
+    parsedAmountA,
+    parsedAmountB,
+    expectedLP,
+    addLiquidityInfinityStablePool,
+    userSlippageTolerance,
+  ])
 
   return (
     <>

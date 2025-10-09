@@ -1,7 +1,7 @@
 /**
- * StableNG Pool Factory ABI
+ * InfinityStable Pool Factory ABI
  */
-export const stableNGPoolFactoryABI = [
+export const infinityStablePoolFactoryABI = [
   {
     type: 'constructor',
     inputs: [{ name: '_hookFactory', type: 'address', internalType: 'address' }],

@@ -1,7 +1,7 @@
 import { PublicClient, WalletClient } from 'viem'
-import { stableNGHookABI } from './abis/stableNGHookABI'
+import { infinityStableHookABI } from './abis/infinityStableHookABI'
 
-export class StableNGHook {
+export class InfinityStableHook {
   private contractAddress: string
 
   private publicClient: PublicClient
@@ -24,7 +24,7 @@ export class StableNGHook {
     try {
       const result = await this.publicClient.readContract({
         address: this.contractAddress as `0x${string}`,
-        abi: stableNGHookABI,
+        abi: infinityStableHookABI,
         functionName: 'calc_token_amount',
         args: [amounts, deposit],
       })
@@ -43,7 +43,7 @@ export class StableNGHook {
     try {
       const result = await this.publicClient.readContract({
         address: this.contractAddress as `0x${string}`,
-        abi: stableNGHookABI,
+        abi: infinityStableHookABI,
         functionName: 'totalSupply',
         args: [],
       })
@@ -69,7 +69,7 @@ export class StableNGHook {
     try {
       const hash = await this.walletClient.writeContract({
         address: this.contractAddress as `0x${string}`,
-        abi: stableNGHookABI,
+        abi: infinityStableHookABI,
         functionName: 'add_liquidity',
         args: [amount0, amount1, minMintAmount],
         account: this.walletClient.account,

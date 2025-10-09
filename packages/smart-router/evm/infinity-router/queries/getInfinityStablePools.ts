@@ -11,10 +11,10 @@ import { getPairCombinations } from '../../v3-router/functions'
 import { createOnChainPoolFactory } from '../../v3-router/providers'
 import { InfinityStablePool, PoolType } from '../../v3-router/types'
 import { PoolMeta } from '../../v3-router/providers/poolProviders/internalTypes'
-import { stableNGHookABI } from './abi'
+import { infinityStableHookABI } from './abi'
 
 // find_pool_for_coins(_from: address, _to: address, i: uint256 = 0) -> address:
-const stableNGHookFactoryABI = [
+const infinityStableHookFactoryABI = [
   {
     stateMutability: 'view',
     type: 'function',
@@ -53,22 +53,19 @@ const poolsCache = new Map<string, { data: any[]; timestamp: number; poolCount: 
  * Mock Hook Factory for Stable Swap
  * This should eventually call the actual hook factory contract
  */
-class StableNGHookFactory {
-  private static instance: StableNGHookFactory | null = null
-  private readonly CACHE_DURATION = 5 * 60 * 1000 // 5 minutes in milliseconds
+class InfinityStableHookFactory {
+  private static instance: InfinityStableHookFactory | null = null
 
-  private constructor() {
-    // Private constructor for singleton
-  }
+  private readonly CACHE_DURATION = 5 * 60 * 1000 // 5 minutes in milliseconds
 
   /**
    * Get the singleton instance
    */
-  static getInstance(): StableNGHookFactory {
-    if (!StableNGHookFactory.instance) {
-      StableNGHookFactory.instance = new StableNGHookFactory()
+  static getInstance(): InfinityStableHookFactory {
+    if (!InfinityStableHookFactory.instance) {
+      InfinityStableHookFactory.instance = new InfinityStableHookFactory()
     }
-    return StableNGHookFactory.instance
+    return InfinityStableHookFactory.instance
   }
 
   // implement getPools
@@ -79,19 +76,21 @@ class StableNGHookFactory {
     // Check if cache is valid
     const cachedData = poolsCache.get(cacheKey)
     if (cachedData && now - cachedData.timestamp < this.CACHE_DURATION) {
+      // eslint-disable-next-line no-console
       console.log(
-        'StableNGHookFactory: returning cached pools (cache age:',
+        'InfinityStableHookFactory: returning cached pools (cache age:',
         Math.round((now - cachedData.timestamp) / 1000),
         'seconds)',
       )
       return cachedData.data
     }
 
-    console.log('StableNGHookFactory: cache miss, calling getPools from contract')
+    // eslint-disable-next-line no-console
+    console.log('InfinityStableHookFactory: cache miss, calling getPools from contract')
     // First, get the current pool count
     const poolCountResult = await publicClient.readContract({
       address: contractAddress,
-      abi: stableNGHookFactoryABI,
+      abi: infinityStableHookFactoryABI,
       functionName: 'pool_count',
     })
 
@@ -99,7 +98,7 @@ class StableNGHookFactory {
 
     // If we have cached data and pool count hasn't changed, return cached data
     if (cachedData && cachedData.poolCount === poolCount) {
-      console.log('StableNGHookFactory: pool count unchanged, extending cache validity')
+      console.log('InfinityStableHookFactory: pool count unchanged, extending cache validity')
       // Update timestamp to extend cache validity
       const updatedCache = { ...cachedData, timestamp: now }
       poolsCache.set(cacheKey, updatedCache)
@@ -119,7 +118,7 @@ class StableNGHookFactory {
       // eslint-disable-next-line no-await-in-loop
       const pool = await publicClient.readContract({
         address: contractAddress,
-        abi: stableNGHookFactoryABI,
+        abi: infinityStableHookFactoryABI,
         functionName: 'pool_list',
         args: [i],
       })
@@ -129,22 +128,8 @@ class StableNGHookFactory {
     // Cache the result with pool count
     const newCache = { data: pools, timestamp: now, poolCount }
     poolsCache.set(cacheKey, newCache)
-    console.log('StableNGHookFactory: cached', pools.length, 'pools for 5 minutes')
+    console.log('InfinityStableHookFactory: cached', pools.length, 'pools for 5 minutes')
     return pools
-  }
-
-  /**
-   * Clear cache for testing purposes
-   */
-  clearCache(contractAddress?: Address, chainId?: number): void {
-    if (contractAddress && chainId) {
-      const cacheKey = `${contractAddress}-${chainId}`
-      poolsCache.delete(cacheKey)
-      console.log('StableNGHookFactory: cleared cache for', cacheKey)
-    } else {
-      poolsCache.clear()
-      console.log('StableNGHookFactory: cleared all cache')
-    }
   }
 }
 
@@ -172,7 +157,7 @@ export async function getInfinityStableCandidatePools({
 }
 
 const getInfinityStablePools = createOnChainPoolFactory<InfinityStablePool, PoolMeta>({
-  abi: stableNGHookABI,
+  abi: infinityStableHookABI,
   getPossiblePoolMetas: async ([currencyA, currencyB], client) => {
     const { chainId } = currencyA
     if (!isInfinitySupported(chainId))
@@ -184,7 +169,7 @@ const getInfinityStablePools = createOnChainPoolFactory<InfinityStablePool, Pool
 
     // Get hook addresses from HookFactory contract
     const mockHookFactoryAddress = '0x515Fa220d115f69EDEb5f7544705C3f4437A7a84' as Address
-    const hookFactory = StableNGHookFactory.getInstance()
+    const hookFactory = InfinityStableHookFactory.getInstance()
 
     const ssHookAddresses: Address[] = await hookFactory.getPools(mockHookFactoryAddress, client)
 

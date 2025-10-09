@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Currency } from '@pancakeswap/sdk'
-import { useSendTransaction, useWaitForTransactionReceipt, useWalletClient } from 'wagmi'
+import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { calculateGasMargin } from 'utils'
@@ -11,19 +11,19 @@ import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import {
-  StableNGPoolFactory,
+  InfinityStablePoolFactory,
   STABLE_NG_POOL_FACTORY_ADDRESS,
-  type CreateStableNGPoolOptions,
+  type CreateInfinityStablePoolOptions,
   type PoolPreset,
 } from '../sdk'
 
-interface CreateStableNGPoolParams extends Omit<CreateStableNGPoolOptions, 'tokenA' | 'tokenB'> {
+interface CreateInfinityStablePoolParams extends Omit<CreateInfinityStablePoolOptions, 'tokenA' | 'tokenB'> {
   tokenA: Currency
   tokenB: Currency
   preset?: PoolPreset
 }
 
-export const useCreateStableNGPool = () => {
+export const useCreateInfinityStablePool = () => {
   const { t } = useTranslation()
   const { account, chainId } = useAccountActiveChain()
   const { data: signer } = useWalletClient()
@@ -34,8 +34,8 @@ export const useCreateStableNGPool = () => {
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const [txnErrorMessage, setTxnErrorMessage] = useState<string | undefined>()
 
-  const createStableNGPool = useCallback(
-    async ({ tokenA, tokenB, preset, ...options }: CreateStableNGPoolParams) => {
+  const createInfinityStablePool = useCallback(
+    async ({ tokenA, tokenB, preset, ...options }: CreateInfinityStablePoolParams) => {
       if (!chainId || !signer || !account || !tokenA || !tokenB) {
         return undefined
       }
@@ -46,8 +46,8 @@ export const useCreateStableNGPool = () => {
 
         // Generate call parameters using the SDK
         const { calldata } = preset
-          ? StableNGPoolFactory.createPoolWithPresetCallParameters(tokenA, tokenB, preset)
-          : StableNGPoolFactory.createPoolCallParameters({
+          ? InfinityStablePoolFactory.createPoolWithPresetCallParameters(tokenA, tokenB, preset)
+          : InfinityStablePoolFactory.createPoolCallParameters({
               tokenA,
               tokenB,
               ...options,
@@ -76,7 +76,7 @@ export const useCreateStableNGPool = () => {
 
         return hash
       } catch (error) {
-        console.error('Failed to create StableNG pool', error)
+        console.error('Failed to create InfinityStable pool', error)
         setAttemptingTxn(false)
 
         if (!isUserRejected(error)) {
@@ -88,15 +88,15 @@ export const useCreateStableNGPool = () => {
         throw error
       }
     },
-    [account, chainId, signer, sendTransactionAsync, addTransaction, t, toastError],
+    [account, chainId, signer, sendTransactionAsync, t, toastError],
   )
 
   return useMemo(
     () => ({
-      createStableNGPool,
+      createInfinityStablePool,
       attemptingTxn,
       txnErrorMessage,
     }),
-    [createStableNGPool, attemptingTxn, txnErrorMessage],
+    [createInfinityStablePool, attemptingTxn, txnErrorMessage],
   )
 }

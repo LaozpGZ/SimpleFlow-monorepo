@@ -1,7 +1,7 @@
 import { Address } from 'viem'
 
 /**
- * StableNG Pool Factory contract address
+ * InfinityStable Pool Factory contract address
  */
 export const STABLE_NG_POOL_FACTORY_ADDRESS = '0xA5297FC8479F12A956AeD3A2af0703b845d99A70' as Address
 

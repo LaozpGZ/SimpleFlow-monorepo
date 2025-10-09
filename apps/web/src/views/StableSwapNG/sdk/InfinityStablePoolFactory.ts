@@ -2,7 +2,7 @@ import { Currency } from '@pancakeswap/sdk'
 import { Address, Hex, encodeFunctionData, toHex } from 'viem'
 import invariant from 'tiny-invariant'
 
-import { stableNGPoolFactoryABI } from './abis/stableNGPoolFactoryABI'
+import { infinityStablePoolFactoryABI } from './abis/infinityStablePoolFactoryABI'
 import {
   STABLE_NG_POOL_FACTORY_ADDRESS,
   ADDRESS_ZERO,
@@ -10,7 +10,7 @@ import {
   DEFAULT_IMPLEMENTATION_IDX,
   DEFAULT_ASSET_TYPE,
 } from './constants'
-import { CreateStableNGPoolOptions, MethodParameters, PoolPreset, PRESET_CONFIGS } from './types'
+import { CreateInfinityStablePoolOptions, MethodParameters, PoolPreset, PRESET_CONFIGS } from './types'
 
 /**
  * Validates that two currencies are different
@@ -30,8 +30,8 @@ function sortCurrencies(tokenA: Currency, tokenB: Currency): [Currency, Currency
 /**
  * StableSwapNG Pool Factory for creating and managing stable swap pools
  */
-export abstract class StableNGPoolFactory {
-  public static ABI = stableNGPoolFactoryABI
+export abstract class InfinityStablePoolFactory {
+  public static ABI = infinityStablePoolFactoryABI
 
   public static ADDRESS = STABLE_NG_POOL_FACTORY_ADDRESS
 
@@ -44,7 +44,7 @@ export abstract class StableNGPoolFactory {
   /**
    * Encodes the createPool function call
    */
-  private static encodeCreatePool(options: CreateStableNGPoolOptions): Hex {
+  private static encodeCreatePool(options: CreateInfinityStablePoolOptions): Hex {
     const [tokenA, tokenB] = sortCurrencies(options.tokenA, options.tokenB)
 
     // Generate pool name and symbol
@@ -64,7 +64,7 @@ export abstract class StableNGPoolFactory {
     const methodIds = options.methodIds ?? ([NULL_METHOD_ID, NULL_METHOD_ID] as const)
     const oracles = options.oracles ?? ([ADDRESS_ZERO, ADDRESS_ZERO] as const)
 
-    console.info('[debug] StableNGPoolFactory.encodeCreatePool call parameters', {
+    console.info('[debug] InfinityStablePoolFactory.encodeCreatePool call parameters', {
       name,
       symbol,
       coins,
@@ -79,7 +79,7 @@ export abstract class StableNGPoolFactory {
     })
 
     return encodeFunctionData({
-      abi: StableNGPoolFactory.ABI,
+      abi: InfinityStablePoolFactory.ABI,
       functionName: 'createPool',
       args: [
         name,
@@ -100,7 +100,7 @@ export abstract class StableNGPoolFactory {
   /**
    * Creates call parameters for pool creation
    */
-  public static createPoolCallParameters(options: CreateStableNGPoolOptions): MethodParameters {
+  public static createPoolCallParameters(options: CreateInfinityStablePoolOptions): MethodParameters {
     validateCurrencies(options.tokenA, options.tokenB)
 
     return {

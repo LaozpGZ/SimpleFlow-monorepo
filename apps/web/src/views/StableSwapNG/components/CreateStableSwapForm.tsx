@@ -1,5 +1,5 @@
 import { AutoColumn, Card, CardBody, Grid } from '@pancakeswap/uikit'
-import { StableNGFieldSelectCurrencies } from './FieldSelectCurrency'
+import { InfinityStableFieldSelectCurrencies } from './FieldSelectCurrency'
 import { ParamSettingSection } from './ParamSettingSection'
 
 export const CreateStableSwapForm = () => {
@@ -8,7 +8,7 @@ export const CreateStableSwapForm = () => {
       <Card style={{ height: 'fit-content' }}>
         <CardBody>
           <AutoColumn gap="16px">
-            <StableNGFieldSelectCurrencies />
+            <InfinityStableFieldSelectCurrencies />
           </AutoColumn>
         </CardBody>
       </Card>

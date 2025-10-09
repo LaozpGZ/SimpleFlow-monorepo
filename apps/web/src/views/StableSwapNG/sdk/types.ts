@@ -16,9 +16,9 @@ export interface MethodParameters {
 }
 
 /**
- * Options for creating a StableNG pool
+ * Options for creating a InfinityStable pool
  */
-export interface CreateStableNGPoolOptions {
+export interface CreateInfinityStablePoolOptions {
   /**
    * First token in the pool
    */

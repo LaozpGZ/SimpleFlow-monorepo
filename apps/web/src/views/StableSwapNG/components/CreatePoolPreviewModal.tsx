@@ -17,7 +17,7 @@ import {
 import { styled } from 'styled-components'
 import DoubleCurrencyLogo from 'components/Logo/DoubleLogo'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
-import { PRESET_CONFIGS, type PoolPreset, type CreateStableNGPoolOptions } from '../sdk'
+import { PRESET_CONFIGS, type PoolPreset, type CreateInfinityStablePoolOptions } from '../sdk'
 
 const StyledModal = styled(Modal)`
   max-width: 408px;
@@ -64,7 +64,7 @@ interface CreatePoolPreviewModalProps {
   tokenAAmount?: string
   tokenBAmount?: string
   preset?: PoolPreset
-  poolOptions?: Partial<CreateStableNGPoolOptions>
+  poolOptions?: Partial<CreateInfinityStablePoolOptions>
   onCreatePool: () => void
   isCreating?: boolean
 }

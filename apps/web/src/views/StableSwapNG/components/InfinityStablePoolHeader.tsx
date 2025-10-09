@@ -2,10 +2,9 @@ import { Protocol } from '@pancakeswap/farms'
 import { PositionHeader } from 'views/PositionInfinity/components/PositionHeader'
 import { PoolKey } from '@pancakeswap/infinity-sdk'
 import { useCurrency } from 'hooks/Tokens'
-import { useTranslation } from '@pancakeswap/localization'
 import { useMemo } from 'react'
 
-export const StableNgPoolHeader = ({
+export const InfinityStablePoolHeader = ({
   poolKey,
   chainId,
   poolId,
@@ -14,7 +13,6 @@ export const StableNgPoolHeader = ({
   chainId: number
   poolId: `0x${string}`
 }) => {
-  const { t } = useTranslation()
   const isOwnNFT = true
   const inRange = true
   const isFarming = true

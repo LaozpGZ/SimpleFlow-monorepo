@@ -182,7 +182,7 @@ export const CreateLiquiditySelector = () => {
               ) : (
                 <V2Card disabled />
               )}
-              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/${Protocol.STABLENG}`}>
+              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/${Protocol.InfinitySTABLE}`}>
                 <StableSwapCard />
               </NextLinkFromReactRouter>
             </CardBody>

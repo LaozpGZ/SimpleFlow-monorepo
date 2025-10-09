@@ -49,7 +49,7 @@ const CreateLiquidityPage = () => {
             )
           ) : protocolName === 'v2' ? (
             <CreateLiquidityV2Form />
-          ) : protocolName === Protocol.STABLENG ? (
+          ) : protocolName === Protocol.InfinitySTABLE ? (
             <CreateStableSwapForm />
           ) : null}
         </Box>
