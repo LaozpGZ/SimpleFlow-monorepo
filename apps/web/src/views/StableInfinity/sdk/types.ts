@@ -16,6 +16,23 @@ export interface MethodParameters {
 }
 
 /**
+ * Token type for InfinityStable pool
+ */
+export enum TokenType {
+  STANDARD = 'Standard',
+  ORACLE = 'Oracle',
+}
+
+/**
+ * Token configuration for InfinityStable pool
+ */
+export interface TokenConfig {
+  type: TokenType
+  oracleAddress: Address
+  methodId: Hex
+}
+
+/**
  * Options for creating a InfinityStable pool
  */
 export interface CreateInfinityStablePoolOptions {
@@ -108,4 +125,20 @@ export const PRESET_CONFIGS: Record<PoolPreset, PresetConfig> = {
     offpegFeeMultiplier: 50000000000n, // 5
     maExpTime: 866n,
   },
+}
+
+/**
+ * Convert token configs to methodIds and oracles arrays for encodeCreatePool
+ */
+export function tokenConfigsToArrays(
+  tokenAConfig: TokenConfig,
+  tokenBConfig: TokenConfig,
+): {
+  methodIds: readonly [Hex, Hex]
+  oracles: readonly [Address, Address]
+} {
+  return {
+    methodIds: [tokenAConfig.methodId, tokenBConfig.methodId] as const,
+    oracles: [tokenAConfig.oracleAddress, tokenBConfig.oracleAddress] as const,
+  }
 }

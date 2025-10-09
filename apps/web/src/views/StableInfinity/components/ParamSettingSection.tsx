@@ -26,6 +26,7 @@ import { isEvm } from '@pancakeswap/chains'
 import { Currency } from '@pancakeswap/swap-sdk-core'
 import { type PoolPreset, percentageToFee } from '../sdk'
 import { useCreateInfinityStablePool } from '../hooks/useCreateInfinityStablePool'
+import { useTokenConfig } from '../contexts/TokenConfigContext'
 import { CreatePoolPreviewModal } from './CreatePoolPreviewModal'
 
 type PresetType = PoolPreset
@@ -108,6 +109,7 @@ export const ParamSettingSection = () => {
   const [swapFee, setSwapFee] = useState('')
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const { createInfinityStablePool, attemptingTxn } = useCreateInfinityStablePool()
+  const { tokenAConfig, tokenBConfig } = useTokenConfig()
 
   const router = useRouter()
   const { chainId } = useAccountActiveChain()
@@ -242,6 +244,8 @@ export const ParamSettingSection = () => {
           poolOptions={swapFee ? { fee: percentageToFee(parseFloat(swapFee) / 100) } : undefined}
           onCreatePool={handleCreatePool}
           isCreating={attemptingTxn || isConfirming}
+          tokenAConfig={tokenAConfig}
+          tokenBConfig={tokenBConfig}
         />
       )}
     </Box>

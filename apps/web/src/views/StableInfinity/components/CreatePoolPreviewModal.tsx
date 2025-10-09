@@ -18,6 +18,7 @@ import { styled } from 'styled-components'
 import DoubleCurrencyLogo from 'components/Logo/DoubleLogo'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { PRESET_CONFIGS, type PoolPreset, type CreateInfinityStablePoolOptions } from '../sdk'
+import type { TokenConfig } from '../sdk/types'
 
 const StyledModal = styled(Modal)`
   max-width: 408px;
@@ -67,6 +68,8 @@ interface CreatePoolPreviewModalProps {
   poolOptions?: Partial<CreateInfinityStablePoolOptions>
   onCreatePool: () => void
   isCreating?: boolean
+  tokenAConfig?: TokenConfig
+  tokenBConfig?: TokenConfig
 }
 
 export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
@@ -80,6 +83,8 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
   poolOptions,
   onCreatePool,
   isCreating = false,
+  tokenAConfig,
+  tokenBConfig,
 }) => {
   const { t } = useTranslation()
   const [confirmed, setConfirmed] = useState(false)
@@ -236,6 +241,11 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
                 {maExpTime}s
               </Text>
             </ParameterRow>
+
+            {/* TODO: Display oracle information here when needed
+             * tokenAConfig and tokenBConfig are available for display
+             * Example: Show oracle type, address, and methodId for each token
+             */}
           </CardBody>
         </StyledCard>
 

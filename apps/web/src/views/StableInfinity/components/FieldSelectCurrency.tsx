@@ -4,9 +4,13 @@ import { AutoRow, Box, Checkbox, Flex, Input, PreTitle, Text } from '@pancakeswa
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { useState } from 'react'
+import { Address, Hex } from 'viem'
 import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
 import { useFieldSelectCurrencies } from 'views/CreateLiquidityPool/hooks/useFieldSelectCurrencies'
+import { CurrencyField } from 'utils/types'
+import { TokenType } from '../sdk/types'
+import { ADDRESS_ZERO, NULL_METHOD_ID } from '../sdk/constants'
+import { useTokenConfig } from '../contexts/TokenConfigContext'
 
 export const FieldSelectCurrency = ({
   selectedCurrency,
@@ -44,39 +48,70 @@ function CardCheckBox({ label, checked, onChange }: { label: string; checked: bo
   )
 }
 
-function CardCheckRadioGroup() {
+export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
   const { t } = useTranslation()
-  const [selectedType, setSelectedType] = useState<'Standard' | 'Oracle'>('Standard')
-  const [address, setAddress] = useState('')
-  const [functionName, setFunctionName] = useState('')
+  const { tokenAConfig, tokenBConfig, setTokenAConfig, setTokenBConfig } = useTokenConfig()
+
+  const config = field === CurrencyField.CURRENCY_A ? tokenAConfig : tokenBConfig
+  const setConfig = field === CurrencyField.CURRENCY_A ? setTokenAConfig : setTokenBConfig
+
+  const handleTypeChange = (type: TokenType) => {
+    setConfig({
+      ...config,
+      type,
+      ...(type === TokenType.STANDARD && {
+        oracleAddress: ADDRESS_ZERO,
+        methodId: NULL_METHOD_ID as Hex,
+      }),
+    })
+  }
+
+  const handleAddressChange = (address: string) => {
+    setConfig({
+      ...config,
+      oracleAddress: (address || ADDRESS_ZERO) as Address,
+    })
+  }
+
+  const handleMethodIdChange = (methodId: string) => {
+    setConfig({
+      ...config,
+      methodId: (methodId || NULL_METHOD_ID) as Hex,
+    })
+  }
 
   return (
     <>
       <AutoRow gap="16px">
         <CardCheckBox
           label={t('Standard')}
-          checked={selectedType === 'Standard'}
-          onChange={() => setSelectedType('Standard')}
+          checked={config.type === TokenType.STANDARD}
+          onChange={() => handleTypeChange(TokenType.STANDARD)}
         />
         <CardCheckBox
           label={t('Oracle')}
-          checked={selectedType === 'Oracle'}
-          onChange={() => setSelectedType('Oracle')}
+          checked={config.type === TokenType.ORACLE}
+          onChange={() => handleTypeChange(TokenType.ORACLE)}
         />
       </AutoRow>
-      {selectedType === 'Oracle' && (
+      {config.type === TokenType.ORACLE && (
         <>
           <AutoRow gap="8px">
             <PreTitle textTransform="uppercase">{t('Address')}</PreTitle>
-            <Input type="text" placeholder="0x123..." value={address} onChange={(e) => setAddress(e.target.value)} />
+            <Input
+              type="text"
+              placeholder="0x123..."
+              value={config.oracleAddress === ADDRESS_ZERO ? '' : config.oracleAddress}
+              onChange={(e) => handleAddressChange(e.target.value)}
+            />
           </AutoRow>
           <AutoRow gap="8px">
             <PreTitle textTransform="uppercase">{t('Function')}</PreTitle>
             <Input
               type="text"
-              placeholder="ExchangeRate()"
-              value={functionName}
-              onChange={(e) => setFunctionName(e.target.value)}
+              placeholder="0x00000000"
+              value={config.methodId === NULL_METHOD_ID ? '' : config.methodId}
+              onChange={(e) => handleMethodIdChange(e.target.value)}
             />
           </AutoRow>
         </>
@@ -101,7 +136,7 @@ export const InfinityStableFieldSelectCurrencies = () => {
             otherSelectedCurrency={quoteCurrency as Currency | undefined}
             onCurrencySelect={handleBaseCurrencySelect}
           />
-          <CardCheckRadioGroup />
+          <CardCheckRadioGroup field={CurrencyField.CURRENCY_A} />
         </AutoRow>
         <AutoRow gap="8px">
           <PreTitle color="textSubtle">{t('TOKEN B')}</PreTitle>
@@ -110,7 +145,7 @@ export const InfinityStableFieldSelectCurrencies = () => {
             otherSelectedCurrency={baseCurrency as Currency | undefined}
             onCurrencySelect={handleQuoteCurrencySelect}
           />
-          <CardCheckRadioGroup />
+          <CardCheckRadioGroup field={CurrencyField.CURRENCY_B} />
         </AutoRow>
       </AutoRow>
     </Box>
