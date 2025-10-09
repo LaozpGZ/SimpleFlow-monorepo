@@ -6,7 +6,7 @@ import { styled } from 'styled-components'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrencyBalance } from 'state/wallet/hooks'
@@ -46,6 +46,7 @@ interface IfoDepositFormProps {
 export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
+  const safeValue = new BigNumber(value).isFinite() ? value : ''
 
   const { info, pools, users } = useIfo()
   const duration = info?.duration ?? 0
@@ -106,8 +107,11 @@ export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }
   )
 
   const depositAmount =
-    stakeCurrency && value !== ''
-      ? CurrencyAmount.fromRawAmount(stakeCurrency, new BigNumber(value ?? 0).times(tokenBalanceMultiplier).toFixed(0))
+    stakeCurrency && safeValue !== ''
+      ? CurrencyAmount.fromRawAmount(
+          stakeCurrency,
+          new BigNumber(safeValue ?? 0).times(tokenBalanceMultiplier).toFixed(0),
+        )
       : undefined
 
   const totalDepositedAmount = stakeCurrency
@@ -129,9 +133,9 @@ export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }
 
   const amountInDollar = useStablecoinPriceAmount(
     stakeCurrency ?? undefined,
-    value !== undefined && Number.isFinite(+value) ? +value : undefined,
+    safeValue !== undefined && Number.isFinite(+safeValue) ? +safeValue : undefined,
     {
-      enabled: Boolean(value !== undefined && Number.isFinite(+value)),
+      enabled: Boolean(safeValue !== undefined && Number.isFinite(+safeValue)),
     },
   )
   const isInputloading = inputBalance === undefined
@@ -231,7 +235,7 @@ export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }
       />
       <PercentageSelector
         maxAmountInput={maxDepositAmount}
-        value={value}
+        value={safeValue}
         onPercent={handlePercentInput}
         getPercentAmount={getPercentAmount}
       />
@@ -260,7 +264,7 @@ export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }
         <Button
           disabled={
             info?.status !== 'live' ||
-            value === '' ||
+            safeValue === '' ||
             !depositAmount ||
             depositAmount.equalTo(0) ||
             isUserInsufficientBalance ||
