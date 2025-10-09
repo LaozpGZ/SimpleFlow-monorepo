@@ -38,18 +38,14 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>What is a CAKE.PAD Event?</Trans>,
       description: (
         <>
-          <Trans>
-            <p>Evolved from our IFO (Initial Farm Offering), CAKE.PAD is a platform to launch new tokens.</p>
-          </Trans>
-          <Trans>
-            <p>
-              Users can buy project tokens using{' '}
-              <Text as="span" bold>
-                {symbol}
-              </Text>
-              , while projects gain liquidity, visibility, and direct access to our community.
-            </p>
-          </Trans>
+          <Trans>Evolved from our IFO (Initial Farm Offering), CAKE.PAD is a platform to launch new tokens.</Trans>
+          <p>
+            <Trans
+              i18nTemplate="Users can buy project tokens using <0>%symbol%</0>, while projects gain liquidity, visibility, and direct access to our community."
+              values={{ symbol }}
+              components={[<Text as="span" bold key="symbol" />]}
+            />
+          </p>
           <br />
           <Trans
             components={[
@@ -65,28 +61,27 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>What's new in this CAKE.PAD?</Trans>,
       description: (
         <>
-          <Trans>
-            <ul>
-              <li>
-                <Text as="span" bold>
-                  Participation only requires {symbol}
-                </Text>{' '}
-                – no staking or NFT profile needed.
-              </li>
-              <li>
-                <Text as="span" bold>
-                  Tiered fee structure
-                </Text>{' '}
-                replaces flat fees – fees only apply if oversubscribed.
-              </li>
-              <li>
-                <Text as="span" bold>
-                  iCAKE / veCAKE not used
-                </Text>
-                .
-              </li>
-            </ul>
-          </Trans>
+          <ul>
+            <li>
+              <Trans
+                i18nTemplate="<0>Participation only requires %symbol%</0> - no staking or NFT profile needed."
+                values={{ symbol }}
+                components={[<Text as="span" bold key="symbol" />]}
+              />
+            </li>
+            <li>
+              <Trans
+                i18nTemplate="<0>Tiered fee structure</0> replaces flat fees - fees only apply if oversubscribed."
+                components={[<Text as="span" bold key="fees" />]}
+              />
+            </li>
+            <li>
+              <Text as="span" bold>
+                <Trans>iCAKE / veCAKE not used.</Trans>
+              </Text>
+            </li>
+          </ul>
+
           <br />
           <Trans
             components={[
@@ -106,27 +101,28 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>How can I participate?</Trans>,
       description: (
         <>
-          <Trans>
-            <ol>
-              <li>
-                <Text as="span" bold>
-                  Get {symbol}
-                </Text>
-              </li>
-              <li>
-                <Text as="span" bold>
-                  Commit {symbol}
-                </Text>{' '}
-                during the CAKE.PAD via the CAKE.PAD page.
-              </li>
-              <li>
-                <Text as="span" bold>
-                  Claim your tokens
-                </Text>{' '}
-                after the CAKE.PAD ends.
-              </li>
-            </ol>
-          </Trans>
+          <ol>
+            <li>
+              <Text as="span" bold>
+                <Trans i18nTemplate="Get %symbol%" values={{ symbol }} />
+              </Text>
+            </li>
+            <li>
+              <Trans
+                i18nTemplate="<0>Commit %symbol%</0> during the CAKE.PAD event via the CAKE.PAD page."
+                values={{ symbol }}
+                components={[<Text as="span" bold key="symbol" />]}
+              />
+            </li>
+            <li>
+              <Trans
+                i18nTemplate="<0>Claim your tokens</0> after the CAKE.PAD event ends."
+                values={{ symbol }}
+                components={[<Text as="span" bold key="symbol" />]}
+              />
+            </li>
+          </ol>
+
           <Box mt="1rem">
             <Trans
               components={[<InlineLink external href="https://docs.pancakeswap.finance/earn/cakepad/cakepad-guide" />]}
@@ -140,30 +136,28 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>Are there participation fees?</Trans>,
       description: (
         <>
-          <Trans>
-            <ul>
-              <li>
-                <Text as="span" bold>
-                  Only if the CAKE.PAD is oversubscribed
-                </Text>
-                .
-              </li>
-              <li>
-                Fee is applied to{' '}
-                <Text as="span" bold>
-                  excess {symbol}
-                </Text>{' '}
-                that didn't contribute to your allocation.
-              </li>
-              <li>
-                Tiered from{' '}
-                <Text as="span" bold>
-                  1% down to 0.05%
-                </Text>{' '}
-                depending on oversubscription.
-              </li>
-            </ul>
-          </Trans>
+          <ul>
+            <li>
+              <Text as="span" bold>
+                <Trans>Only if the CAKE.PAD is oversubscribed</Trans>
+              </Text>
+              .
+            </li>
+            <li>
+              <Trans
+                i18nTemplate="Fee is applied to <0>excess %symbol%</0> that didn't contribute to your allocation."
+                values={{ symbol }}
+                components={[<Text as="span" bold key="symbol" />]}
+              />
+            </li>
+            <li>
+              <Trans
+                i18nTemplate="Tiered from <0>1% down to 0.05%</0> depending on oversubscription."
+                components={[<Text as="span" bold key="fees" />]}
+              />
+            </li>
+          </ul>
+
           <Box mt="1rem">
             <Trans
               components={[
@@ -182,22 +176,20 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>Where does the participation fee go?</Trans>,
       description: (
         <>
-          <Trans>
-            <ul>
-              <li>
-                <Text as="span" bold>
-                  100% of fees are burned
-                </Text>{' '}
-                as $CAKE.
-              </li>
-              <li>
-                <Text as="span" bold>
-                  The CAKE.PAD project receives 100% of the target raise
-                </Text>
-                .
-              </li>
-            </ul>
-          </Trans>
+          <ul>
+            <li>
+              <Trans
+                i18nTemplate="<0>100% of fees are burned</0> as $CAKE."
+                components={[<Text as="span" bold key="symbol" />]}
+              />
+            </li>
+            <li>
+              <Text as="span" bold>
+                <Trans>The CAKE.PAD project receives 100% of the target raise</Trans>
+              </Text>
+              .
+            </li>
+          </ul>
         </>
       ),
     },
@@ -216,12 +208,17 @@ const DefaultQuestions: React.FC = () => {
               <Trans>Overflow Sale:</Trans>
             </Text>
           </Box>
-          <Trans>
-            <ul>
-              <li>Users get proportional allocation.</li>
-              <li>Any excess {symbol} is refunded (minus participation tax if oversubscribed).</li>
-            </ul>
-          </Trans>
+          <ul>
+            <li>
+              <Trans>Users get proportional allocation.</Trans>
+            </li>
+            <li>
+              <Trans
+                i18nTemplate="Any excess %symbol% is refunded (minus participation tax if oversubscribed)."
+                values={{ symbol }}
+              />
+            </li>
+          </ul>
           <Box mt="1rem">
             <Trans
               components={[
@@ -241,12 +238,10 @@ const DefaultQuestions: React.FC = () => {
       description: (
         <ul>
           <li>
-            <Trans>
-              Supported but{' '}
-              <Text as="span" bold>
-                current CAKE.PAD events run without lockup.
-              </Text>
-            </Trans>
+            <Trans
+              i18nTemplate="Supported but <0>current CAKE.PAD events run without lockup.</0>"
+              components={[<Text as="span" bold key="symbol" />]}
+            />
           </li>
           <li>
             <Trans>If vesting applies, it will be shown on the CAKE.PAD page with a schedule.</Trans>
@@ -268,17 +263,23 @@ const DefaultQuestions: React.FC = () => {
             i18nTemplate="Fill out the <0>Application Form</0>"
           />
           <br />
-          <Trans>
-            <p>Steps after application:</p>
-          </Trans>
-          <Trans>
-            <ol>
-              <li>PancakeSwap team reviews and may conduct further due diligence.</li>
-              <li>Align on tokenomics, marketing, and launch timeline.</li>
-              <li>Marketing and community onboarding begins.</li>
-              <li>Launch CAKE.PAD Event</li>
-            </ol>
-          </Trans>
+          <p>
+            <Trans>Steps after application:</Trans>
+          </p>
+          <ol>
+            <li>
+              <Trans>PancakeSwap team reviews and may conduct further due diligence.</Trans>
+            </li>
+            <li>
+              <Trans>Align on tokenomics, marketing, and launch timeline.</Trans>
+            </li>
+            <li>
+              <Trans>Marketing and community onboarding begins.</Trans>
+            </li>
+            <li>
+              <Trans>Launch CAKE.PAD Event</Trans>
+            </li>
+          </ol>
           <Box mt="1rem">
             <Trans
               components={[
