@@ -136,6 +136,7 @@ export async function fetchCompactPoolsTick({
     client,
     gasLimit,
     retryFailedCallsWithGreaterLimit: { gasLimitMultiplier: retryGasMultiplier },
+    blockConflictTolerance: 30,
   })
 
   const ticksByPool: Record<string, Tick[]> = {}
