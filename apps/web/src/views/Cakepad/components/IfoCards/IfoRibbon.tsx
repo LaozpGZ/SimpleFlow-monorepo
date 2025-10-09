@@ -155,7 +155,7 @@ export const IfoRibbon: React.FC = () => {
         justifyContent="center"
         alignItems="center"
         flexDirection="column"
-        minHeight={['48px', '48px', '48px', '48px']}
+        minHeight={['60px', '60px', '60px', '60px']}
         position="relative"
         overflow="hidden"
         zIndex={1}
@@ -183,12 +183,7 @@ const IfoRibbonEnd: React.FC<{
     <>
       <BigCurve $status="finished" $dark={isDark} style={{ background: theme.colors.input }} />
       <RibbonContainer>
-        <Text
-          fontSize={['16px', '16px', '24px']}
-          fontFamily="Kanit"
-          fontWeight={['600', '600', '400']}
-          color="textSubtle"
-        >
+        <Text fontSize={['16px', '16px', '24px']} fontFamily="Kanit" color="textSubtle" bold>
           {t('CAKE.PAD Ended')}{' '}
           {isClaimed ? <> & {t('Claimed')}</> : hasUserStaked ? <> - {t('Claim available!')}</> : ''}
         </Text>

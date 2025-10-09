@@ -20,16 +20,16 @@ export const IfoAllocationDisplay: React.FC<IfoAllocationCardProps> = ({
   const swapUrl = `https://pancakeswap.finance/swap?chain=bsc&inputCurrency=${tokenAddress}&outputCurrency=BNB`
 
   return (
-    <FlexGap flexDirection="column" alignItems="center" gap="16px">
-      <Text textTransform="uppercase" color="secondary" bold fontSize="12px">
-        {symbol} {t('allocated')}
+    <FlexGap flexDirection="column">
+      <Text textTransform="uppercase" color="textSubtle" bold small>
+        {t('%symbol% allocated', { symbol })}
       </Text>
-      <Text fontSize="20px" bold>
+      <Text fontSize="22px" bold>
         {amount}
       </Text>
-      <FlexGap width="100%" gap="8px">
+      <FlexGap mt="16px" width="100%" gap="8px">
         <AddToWalletButton
-          variant="secondary"
+          variant="primary60Outline"
           wrapperProps={{ flex: 1 }}
           tokenAddress={tokenAddress}
           showTooltip={false}
@@ -64,7 +64,7 @@ export const IfoAllocationCard: React.FC<IfoAllocationCardProps> = (props) => {
 
   return (
     <Card>
-      <CardBody p="24px">
+      <CardBody p="16px">
         <IfoAllocationDisplay {...props} />
       </CardBody>
     </Card>

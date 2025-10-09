@@ -70,7 +70,7 @@ export const IfoSaleInfoDisplay: React.FC = () => {
 
   if (status === 'finished') {
     return (
-      <FlexGap mt="8px" gap="8px" alignItems="center" background={theme.colors.backgroundAlt}>
+      <FlexGap gap="8px" alignItems="center" background={theme.colors.backgroundAlt}>
         {icon && <StyledLogo size="40px" srcs={[icon]} />}
         <FlexGap flexDirection="column">
           <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
@@ -114,8 +114,8 @@ export const IfoSaleInfoDisplay: React.FC = () => {
 export const IfoSaleInfoCard: React.FC = () => {
   const { theme } = useTheme()
   return (
-    <Card background={theme.colors.card} mb="16px">
-      <CardBody>
+    <Card background={theme.colors.card}>
+      <CardBody p="16px">
         <IfoSaleInfoDisplay />
       </CardBody>
     </Card>

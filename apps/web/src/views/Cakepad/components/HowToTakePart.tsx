@@ -29,9 +29,9 @@ const StyledHeading = styled(Heading)`
 `
 
 const StyledCard = styled(Card)`
-  background: ${({ theme }) => theme.colors.backgroundAlt};
+  background: ${({ theme }) => theme.colors.card};
   width: 100%;
-  max-width: 400px;
+  max-width: 460px;
 `
 
 const StepNumber = styled(Box)<{ $fill: string }>`
@@ -70,16 +70,15 @@ const StepCard = ({
   items: string[]
   circleFill: string
 }) => {
-  const textColor = 'invertedContrast'
   return (
     <StyledCard>
       <CardBody p="24px">
         <StepNumber $fill={circleFill}>
-          <Text fontSize="24px" fontWeight="bold" color={textColor}>
+          <Text fontSize="24px" fontWeight="bold" color="invertedContrast">
             {stepNumber}
           </Text>
         </StepNumber>
-        <Heading as="h3" fontSize="24px" mb="16px" color="primary">
+        <Heading as="h3" fontSize="24px" mb="16px" color="secondary">
           {title}
         </Heading>
         <BulletList>
@@ -149,7 +148,7 @@ const HowToTakePart: React.FC = () => {
         <StepCard
           stepNumber={2}
           title={t('Claim your tokens')}
-          circleFill="inputSecondary"
+          circleFill="secondary"
           items={[
             t('After the CAKE.PAD event ends, you can claim the CAKE.PAD tokens you purchased.'),
             t(

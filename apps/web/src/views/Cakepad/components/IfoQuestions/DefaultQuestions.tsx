@@ -1,5 +1,15 @@
 import { Trans } from '@pancakeswap/localization'
-import { Card, CardBody, CardHeader, Heading, Container, Link, Text, Box } from '@pancakeswap/uikit'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Heading,
+  Container,
+  Link,
+  Text,
+  Box,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { safeGetAddress } from 'utils'
@@ -26,6 +36,7 @@ const InlineLink = styled(Link)`
 
 const DefaultQuestions: React.FC = () => {
   const { pools: pools_, config } = useIfo()
+  const { isMobile } = useMatchBreakpoints()
 
   const pools = useMemo(
     () => (config.contractAddress && safeGetAddress(config.contractAddress) ? pools_ : config.presetData?.pools ?? []),
@@ -315,7 +326,13 @@ const DefaultQuestions: React.FC = () => {
         </StyledCardHeader>
         <CardBody>
           {faqs.map(({ title, description }, i, { length }) => (
-            <FoldableText key={i} mb={i + 1 === length ? '' : '24px'} title={title}>
+            <FoldableText
+              key={i}
+              mb={i + 1 === length ? '' : '24px'}
+              expandableLabelProps={{ iconSize: '24px' }}
+              title={title}
+              hideExpandableLabel={isMobile}
+            >
               <Text color="textSubtle" as="div">
                 {description}
               </Text>
