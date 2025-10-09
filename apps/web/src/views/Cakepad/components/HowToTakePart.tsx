@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Card, CardBody, Flex, Heading, Text } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
+import { safeGetAddress } from 'utils'
 import useIfo from '../hooks/useIfo'
 
 const SectionWrapper = styled(Box)`
@@ -96,7 +97,10 @@ const StepCard = ({
 
 const HowToTakePart: React.FC = () => {
   const { t } = useTranslation()
-  const { pools } = useIfo()
+  const { pools: pools_, config } = useIfo()
+
+  const isValidContract = config.contractAddress && safeGetAddress(config.contractAddress)
+  const pools = isValidContract ? pools_ : config.presetData!.pools
 
   const stakeSymbols = pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[]
   const commitTokensText =

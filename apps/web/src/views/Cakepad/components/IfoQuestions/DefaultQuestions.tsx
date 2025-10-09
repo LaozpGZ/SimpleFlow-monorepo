@@ -2,6 +2,7 @@ import { Trans } from '@pancakeswap/localization'
 import { Card, CardBody, CardHeader, Heading, Container, Link, Text, Box } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
+import { safeGetAddress } from 'utils'
 import useIfo from '../../hooks/useIfo'
 
 const StyledCardHeader = styled(CardHeader)`
@@ -23,7 +24,10 @@ const InlineLink = styled(Link)`
 `
 
 const DefaultQuestions: React.FC = () => {
-  const { pools } = useIfo()
+  const { pools: pools_, config } = useIfo()
+
+  const isValidContract = config.contractAddress && safeGetAddress(config.contractAddress)
+  const pools = isValidContract ? pools_ : config.presetData!.pools
 
   const stakeSymbols = pools?.map((pool) => pool.stakeCurrency?.symbol).filter(Boolean) as string[]
   const symbol =
