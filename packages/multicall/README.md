@@ -44,8 +44,6 @@ for (const { success, result, gasUsed } of results) {
     decodeResult(result)
   }
 }
-
-console.log('Chunks used', { chunkCount, chunkSizes })
 ```
 
 ### Advanced usage
