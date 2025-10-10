@@ -100,12 +100,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const symbol =
     debouncedCurrency0 && debouncedCurrency1 ? `${debouncedCurrency0?.symbol}/${debouncedCurrency1?.symbol}` : ''
 
-  console.log(`%c [TradingViewChart] symbol & currencies`, 'background: yellow; font-weight: bold;', {
-    symbol,
-    currency0,
-    currency1,
-  })
-
   // Function to create custom button in TradingView toolbar
   const createCustomButton = () => {
     if (!widgetRef.current || !isWidgetReady.current) return
@@ -349,7 +343,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
             }
             setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, _onLiveDataChanges)
 
-            console.log(`%c Creating TradingView widget`, 'background: yellow; font-weight: bold;', options)
             widgetRef.current = createTradingViewWidget(containerRef.current, options)
 
             // Wait for widget to be ready
