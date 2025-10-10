@@ -97,8 +97,12 @@ export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
         methodId,
       })
     } catch (error) {
-      // If conversion fails, keep the previous methodId
+      // If conversion fails, set methodId to empty
       console.warn('Invalid function signature:', signature, error)
+      setConfig({
+        ...config,
+        methodId: NULL_METHOD_ID as Hex,
+      })
     }
   }
 
@@ -128,7 +132,7 @@ export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
             />
           </AutoRow>
           <AutoRow gap="8px">
-            <PreTitle textTransform="uppercase">{t('Function Signature')}</PreTitle>
+            <PreTitle textTransform="uppercase">{t('Function')}</PreTitle>
             <Input
               type="text"
               placeholder="ExchangeRate()"
@@ -136,13 +140,6 @@ export const CardCheckRadioGroup = ({ field }: { field: CurrencyField }) => {
               onChange={(e) => handleFunctionSignatureChange(e.target.value)}
             />
           </AutoRow>
-          {functionSignature && config.methodId !== NULL_METHOD_ID && (
-            <AutoRow gap="8px">
-              <Text fontSize="12px" color="textSubtle">
-                {t('Method ID')}: {config.methodId}
-              </Text>
-            </AutoRow>
-          )}
         </>
       )}
     </>

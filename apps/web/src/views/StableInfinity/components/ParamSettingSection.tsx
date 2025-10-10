@@ -24,7 +24,8 @@ import { useRouter } from 'next/router'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { isEvm } from '@pancakeswap/chains'
 import { Currency } from '@pancakeswap/swap-sdk-core'
-import { type PoolPreset, percentageToFee } from '../sdk'
+import { type PoolPreset, percentageToFee, TokenType } from '../sdk'
+import { ADDRESS_ZERO, NULL_METHOD_ID } from '../sdk/constants'
 import { useCreateInfinityStablePool } from '../hooks/useCreateInfinityStablePool'
 import { useTokenConfig } from '../contexts/TokenConfigContext'
 import { CreatePoolPreviewModal } from './CreatePoolPreviewModal'
@@ -154,6 +155,21 @@ export const ParamSettingSection = () => {
     }
   }
 
+  // Validate oracle configurations
+  const validateOracleConfig = (config: typeof tokenAConfig, tokenName: string) => {
+    if (config.type === TokenType.ORACLE) {
+      if (config.oracleAddress === ADDRESS_ZERO || !config.oracleAddress) {
+        return t('Please provide oracle address for Token %token%', { token: tokenName })
+      }
+      if (config.methodId === NULL_METHOD_ID || !config.methodId) {
+        return t('Please provide valid function name for Token %token%', { token: tokenName })
+      }
+    }
+    return null
+  }
+
+  const oracleValidationError = validateOracleConfig(tokenAConfig, 'A') || validateOracleConfig(tokenBConfig, 'B')
+
   const handlePreviewPool = () => {
     setIsPreviewModalOpen(true)
   }
@@ -218,10 +234,10 @@ export const ParamSettingSection = () => {
       <Button
         width="100%"
         onClick={handlePreviewPool}
-        disabled={!baseCurrency || !quoteCurrency || attemptingTxn}
+        disabled={!baseCurrency || !quoteCurrency || attemptingTxn || !!oracleValidationError}
         isLoading={attemptingTxn}
       >
-        {attemptingTxn || isConfirming ? t('Creating Pool...') : t('Preview Pool')}
+        {attemptingTxn || isConfirming ? t('Creating Pool...') : oracleValidationError || t('Preview Pool')}
       </Button>
 
       {/* Preset Modal */}
