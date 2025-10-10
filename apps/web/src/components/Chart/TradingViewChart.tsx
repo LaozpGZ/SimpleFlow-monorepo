@@ -1,9 +1,9 @@
 import { useDebounce } from '@pancakeswap/hooks'
-import { Currency } from '@pancakeswap/sdk'
+import { UnifiedCurrency } from '@pancakeswap/sdk'
 import { tokens } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { styled } from 'styled-components'
 import type { TradingViewWidget, TradingViewWidgetOptions } from './lib/pancakeswap-charting-library.d.ts'
 import { createTradingViewWidget, loadTradingViewLibrary } from './lib/pancakeswap-charting-library.es.js'
@@ -15,8 +15,8 @@ interface TradingViewChartProps {
   theme?: 'Light' | 'Dark'
   height?: string
   width?: string
-  currency0?: Currency
-  currency1?: Currency
+  currency0?: UnifiedCurrency
+  currency1?: UnifiedCurrency
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void
   onLiveDataChanges: (price: number) => void
 }
@@ -60,8 +60,8 @@ const update24HPriceData = async (
 }
 
 const setSymbolInfo = (
-  currency0: Currency,
-  currency1: Currency,
+  currency0: UnifiedCurrency,
+  currency1: UnifiedCurrency,
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
   onLiveDataChanges: (price: number) => void,
 ) => {
@@ -90,14 +90,21 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const initializationTimeout = useRef<NodeJS.Timeout | null>(null)
   const customButtonRef = useRef<HTMLButtonElement | null>(null)
   const { isDark, theme } = useTheme()
-  const { chainId } = useActiveChainId()
+
   const modalRef = useRef<HTMLButtonElement | null>(null)
 
   // Debounce currency changes to prevent frequent widget recreation
   const debouncedCurrency0 = useDebounce(currency0, 300)
   const debouncedCurrency1 = useDebounce(currency1, 300)
+
   const symbol =
     debouncedCurrency0 && debouncedCurrency1 ? `${debouncedCurrency0?.symbol}/${debouncedCurrency1?.symbol}` : ''
+
+  console.log(`%c [TradingViewChart] symbol & currencies`, 'background: yellow; font-weight: bold;', {
+    symbol,
+    currency0,
+    currency1,
+  })
 
   // Function to create custom button in TradingView toolbar
   const createCustomButton = () => {
@@ -341,6 +348,8 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               ],
             }
             setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, _onLiveDataChanges)
+
+            console.log(`%c Creating TradingView widget`, 'background: yellow; font-weight: bold;', options)
             widgetRef.current = createTradingViewWidget(containerRef.current, options)
 
             // Wait for widget to be ready

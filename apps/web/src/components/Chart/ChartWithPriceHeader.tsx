@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/sdk'
+import { UnifiedCurrency } from '@pancakeswap/sdk'
 import { Box } from '@pancakeswap/uikit'
 import { useSetAtom } from 'jotai'
 import React, { useCallback, useState } from 'react'
@@ -9,8 +9,8 @@ import TradingViewChart from './TradingViewChart'
 
 interface ChartWithPriceHeaderProps {
   symbol?: string
-  currency0?: Currency
-  currency1?: Currency
+  currency0?: UnifiedCurrency
+  currency1?: UnifiedCurrency
   theme?: 'Light' | 'Dark'
 }
 

@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/sdk'
+import { UnifiedCurrency } from '@pancakeswap/sdk'
 import { Flex, FlexGap, SkeletonV2, SwapHorizIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useAtomValue } from 'jotai'
@@ -8,8 +8,8 @@ import { chartPriceDataAtom } from './atom/chartPriceDataAtom'
 
 interface PriceHeaderProps {
   symbol?: string
-  currency0?: Currency
-  currency1?: Currency
+  currency0?: UnifiedCurrency
+  currency1?: UnifiedCurrency
   isReversed: boolean
   setIsReversed: (isReversed: boolean) => void
 }

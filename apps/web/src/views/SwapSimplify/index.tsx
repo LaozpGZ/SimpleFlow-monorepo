@@ -4,10 +4,10 @@ import { useContext, useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 
 import { MobileCard } from 'components/AdPanel/MobileCard'
-import { useCurrency } from 'hooks/Tokens'
+import { useUnifiedCurrency } from 'hooks/Tokens'
 import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { isEvm, isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@pancakeswap/chains'
 import { AutoSlippageProvider } from 'hooks/useAutoSlippageWithFallback'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
 import dynamic from 'next/dynamic'
@@ -37,7 +37,6 @@ const InfinitySwapInner = () => {
   const { isChartExpanded } = useContext(SwapFeaturesContext)
   const [isChartDisplayed, setIsChartDisplayed] = useAtom(chartDisplayAtom)
   const [isSwapHotTokenDisplay, setIsSwapHotTokenDisplay] = useSwapHotTokenDisplay()
-  // const { t } = useTranslation()
   const [firstTime, setFirstTime] = useState(true)
 
   const {
@@ -45,8 +44,8 @@ const InfinitySwapInner = () => {
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
 
-  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
-  const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
+  const inputCurrency = useUnifiedCurrency(inputCurrencyId, inputChainId)
+  const outputCurrency = useUnifiedCurrency(outputCurrencyId, outputChainId)
 
   // Prefetch Solana tokens when user switches to Solana
   useSolanaTokenList(isSolana(chainId) || isSolana(inputChainId) || isSolana(outputChainId))
@@ -62,8 +61,6 @@ const InfinitySwapInner = () => {
     }
   }, [firstTime, isChartDisplayed, isSwapHotTokenDisplay, query, setIsSwapHotTokenDisplay, setIsChartDisplayed])
 
-  const isEvmSwap = isEvm(inputChainId) && isEvm(outputChainId)
-
   return (
     <Page removePadding hideFooterOnDesktop={isChartExpanded || false} showExternalLink={false} showHelpLink={false}>
       <Flex
@@ -74,7 +71,7 @@ const InfinitySwapInner = () => {
         mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
         p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
       >
-        {isDesktop && isChartDisplayed && isEvmSwap && (
+        {isDesktop && isChartDisplayed && (
           <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
             <ChartWithPriceHeader
               currency0={inputCurrency || undefined}
@@ -85,7 +82,7 @@ const InfinitySwapInner = () => {
           </Flex>
         )}
 
-        {!isDesktop && isEvmSwap && (
+        {!isDesktop && (
           <BottomDrawer
             content={
               <ChartWithPriceHeader

@@ -120,8 +120,6 @@ export const SwapSelection = ({
 
   const [isChartDisplayed, setIsChartDisplayed] = useAtom(chartDisplayAtom)
 
-  const isEvmSwap = isEvm(chainId) && isEvm(outputChainId)
-
   const toggleChartDisplayed = () => {
     setIsChartDisplayed((currentIsChartDisplayed) => !currentIsChartDisplayed)
   }
@@ -141,7 +139,6 @@ export const SwapSelection = ({
   }, [chainId, theme.colors.textDisabled, isSmartAccount])
 
   const limitProps = useMemo(() => {
-    // const isLimitSupported = !isSmartAccount && isEvm(chainId)
     const isLimitSupported = isEvm(chainId)
     return {
       disabled: !isLimitSupported,
@@ -153,7 +150,6 @@ export const SwapSelection = ({
       } as React.CSSProperties,
     }
   }, [theme.colors.textDisabled, chainId])
-  // }, [theme.colors.textDisabled, isSmartAccount, chainId])
 
   return (
     <SwapSelectionWrapper style={style}>
@@ -177,8 +173,7 @@ export const SwapSelection = ({
 
         <StyledButtonMenuItem {...limitProps}>{t('Limit')}</StyledButtonMenuItem>
       </ButtonMenu>
-      {/* NOTE: Commented out until charts are supported again */}
-      {withToolkit && isEvmSwap && (
+      {withToolkit && (
         <ColoredIconButton
           onClick={() => {
             toggleChartDisplayed()
