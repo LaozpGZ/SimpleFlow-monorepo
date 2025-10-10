@@ -13,6 +13,7 @@ import { mainnet } from 'wagmi/chains'
 import { coinbaseWallet, injected, safe, walletConnect } from 'wagmi/connectors'
 import { customMetaMaskConnector } from 'wallet/metamaskConnector'
 import { ASSET_CDN } from 'config/constants/endpoints'
+import { porto } from 'porto/wagmi'
 import { fallbackWithRank } from './fallbackWithRank'
 import { CLIENT_CONFIG, publicClient } from './viem'
 
@@ -92,6 +93,7 @@ export const cyberWalletConnector = isCyberWallet()
   : undefined
 
 export const CONNECTOR_MAP = {
+  [EvmConnectorNames.Porto]: porto(),
   [EvmConnectorNames.Injected]: injectedConnector,
   //  [ConnectorNames.Safe]: safe(),
   [EvmConnectorNames.SafePal]: safePalConnector,
@@ -104,6 +106,7 @@ export const CONNECTOR_MAP = {
 
 export const CONNECTORS = [
   customMetaMaskConnector,
+  porto,
   injectedConnector,
   safe(),
   coinbaseConnector,

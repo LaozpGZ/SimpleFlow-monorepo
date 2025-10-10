@@ -1,5 +1,6 @@
 export enum WalletIds {
   Injected = 'injected',
+  Porto = 'porto',
 
   // Multi-Chain Wallets (EVM + Solana)
   Metamask = 'metamask',
