@@ -1,5 +1,5 @@
 // Core classes
-export { InfinityStablePoolFactory } from './infinityStablePoolFactory'
+export { InfinityStablePoolFactory } from './InfinityStablePoolFactory'
 
 // Types and interfaces
 export type { CreateInfinityStablePoolOptions, PoolPreset, TokenConfig } from './types'
