@@ -26,6 +26,7 @@ import { viemServerClients } from 'utils/viem.server'
 import { v3Clients } from 'utils/graphql'
 import { mockCurrency } from 'utils/mockCurrency'
 import { Address } from 'viem/accounts'
+import { fetchWithLogging } from 'utils/fetchWithLogging'
 import { APIChain, getProvider, Protocol } from './edgeQueries.util'
 
 async function getHooksMap(type: 'light' | 'full', poolWithHooks: (RemotePoolCL | RemotePoolBIN)[], chainId: ChainId) {
@@ -431,7 +432,7 @@ async function fetchAllPools({
 
     try {
       // eslint-disable-next-line no-await-in-loop
-      const response = await fetch(url, {
+      const response = await fetchWithLogging(url, {
         headers: {
           ...(typeof window === 'undefined' ? { 'x-api-key': process.env.EXPLORER_API_KEY || '' } : {}),
           'Content-Type': 'application/json',
