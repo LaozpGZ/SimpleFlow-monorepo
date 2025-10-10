@@ -45,8 +45,14 @@ export const useCreateInfinityStablePool = () => {
         setTxnErrorMessage(undefined)
 
         // Generate call parameters using the SDK
+        // When preset is provided, merge it with custom options (custom options override preset)
         const { calldata } = preset
-          ? InfinityStablePoolFactory.createPoolWithPresetCallParameters(tokenA, tokenB, preset)
+          ? InfinityStablePoolFactory.createPoolCallParameters({
+              tokenA,
+              tokenB,
+              ...InfinityStablePoolFactory.getPresetConfig(preset),
+              ...options, // Override preset values with custom options
+            })
           : InfinityStablePoolFactory.createPoolCallParameters({
               tokenA,
               tokenB,

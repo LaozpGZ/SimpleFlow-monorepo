@@ -9,11 +9,13 @@ import {
   DropDownContainer,
   DropDownHeader,
   Flex,
+  InfoIcon,
   Input,
   Modal,
   ModalV2,
   PreTitle,
   Text,
+  Toggle,
 } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
@@ -24,7 +26,7 @@ import { useRouter } from 'next/router'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { isEvm } from '@pancakeswap/chains'
 import { Currency } from '@pancakeswap/swap-sdk-core'
-import { type PoolPreset, percentageToFee, TokenType } from '../sdk'
+import { type PoolPreset, percentageToFee, TokenType, type CreateInfinityStablePoolOptions } from '../sdk'
 import { ADDRESS_ZERO, NULL_METHOD_ID } from '../sdk/constants'
 import { useCreateInfinityStablePool } from '../hooks/useCreateInfinityStablePool'
 import { useTokenConfig } from '../contexts/TokenConfigContext'
@@ -108,6 +110,10 @@ export const ParamSettingSection = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState<PresetType>()
   const [swapFee, setSwapFee] = useState('')
+  const [isAdvancedEnabled, setIsAdvancedEnabled] = useState(false)
+  const [amplificationParam, setAmplificationParam] = useState('')
+  const [offpegFeeMultiplier, setOffpegFeeMultiplier] = useState('')
+  const [movingAverageTime, setMovingAverageTime] = useState('')
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const { createInfinityStablePool, attemptingTxn } = useCreateInfinityStablePool()
   const { tokenAConfig, tokenBConfig } = useTokenConfig()
@@ -168,7 +174,36 @@ export const ParamSettingSection = () => {
     return null
   }
 
+  // Validate advanced parameters
+  const validateAdvancedParams = () => {
+    if (!isAdvancedEnabled) return null
+
+    if (amplificationParam) {
+      const a = parseInt(amplificationParam.replace(/,/g, ''), 10)
+      if (Number.isNaN(a) || a < 1 || a > 20000) {
+        return t('A parameter must be between 1 and 20000')
+      }
+    }
+
+    if (offpegFeeMultiplier) {
+      const multiplier = parseFloat(offpegFeeMultiplier)
+      if (Number.isNaN(multiplier) || multiplier < 0 || multiplier > 50) {
+        return t('Offpeg fee multiplier must be between 0 and 50')
+      }
+    }
+
+    if (movingAverageTime) {
+      const time = parseInt(movingAverageTime, 10)
+      if (Number.isNaN(time) || time < 60 || time > 3600) {
+        return t('Moving average time must be between 60 and 3600 seconds')
+      }
+    }
+
+    return null
+  }
+
   const oracleValidationError = validateOracleConfig(tokenAConfig, 'A') || validateOracleConfig(tokenBConfig, 'B')
+  const advancedValidationError = validateAdvancedParams()
 
   const handlePreviewPool = () => {
     setIsPreviewModalOpen(true)
@@ -184,12 +219,28 @@ export const ParamSettingSection = () => {
       // Convert swap fee to the correct format if provided
       const customFee = swapFee ? percentageToFee(parseFloat(swapFee) / 100) : undefined
 
+      // Convert advanced parameters if provided
+      const advancedOptions: Partial<CreateInfinityStablePoolOptions> = {}
+
+      if (isAdvancedEnabled) {
+        if (amplificationParam) {
+          advancedOptions.A = BigInt(amplificationParam.replace(/,/g, ''))
+        }
+        if (offpegFeeMultiplier) {
+          advancedOptions.offpegFeeMultiplier = BigInt(Math.floor(parseFloat(offpegFeeMultiplier) * 1e10))
+        }
+        if (movingAverageTime) {
+          advancedOptions.maExpTime = BigInt(Math.floor(parseInt(movingAverageTime, 10) / Math.log(2)))
+        }
+      }
+
       const hash = await createInfinityStablePool({
         // NOTE: already check isEvm above, safe to cast
         tokenA: baseCurrency as Currency,
         tokenB: quoteCurrency as Currency,
         preset: selectedPreset,
         ...(customFee && { fee: customFee }), // Override fee if custom fee is provided
+        ...advancedOptions, // Override advanced parameters if provided
       })
 
       if (!hash) {
@@ -208,7 +259,9 @@ export const ParamSettingSection = () => {
     <Box>
       {/* Pool Parameters Presets */}
       <Box mb="24px">
-        <PreTitle textTransform="uppercase">{t('Pool Parameters Presets')}</PreTitle>
+        <PreTitle textTransform="uppercase" mb="8px">
+          {t('Pool Parameters Presets')}
+        </PreTitle>
         <DropDownContainer p={0} onClick={() => setIsPresetModalOpen(true)}>
           <DropDownHeader justifyContent="space-between">
             <Text id="preset" color={selectedPreset ? 'text' : 'textSubtle'}>
@@ -221,7 +274,9 @@ export const ParamSettingSection = () => {
 
       {/* Fees */}
       <Box mb="24px">
-        <PreTitle textTransform="uppercase">{t('Fees')}</PreTitle>
+        <PreTitle textTransform="uppercase" mb="8px">
+          {t('Fees')}
+        </PreTitle>
         <Input
           type="text"
           placeholder="Swap fee (0% - 1%)"
@@ -230,14 +285,76 @@ export const ParamSettingSection = () => {
         />
       </Box>
 
+      {/* Advanced Settings */}
+      <LightGreyCard mb="24px">
+        <Flex justifyContent="space-between" alignItems="center" mb={isAdvancedEnabled ? '16px' : '0px'}>
+          <Text bold fontSize="16px">
+            {t('Advanced')}
+          </Text>
+          <Toggle checked={isAdvancedEnabled} onChange={() => setIsAdvancedEnabled(!isAdvancedEnabled)} scale="sm" />
+        </Flex>
+
+        {isAdvancedEnabled && (
+          <AutoColumn gap="16px">
+            {/* Amplification Parameter (A) */}
+            <Box>
+              <PreTitle textTransform="uppercase" mb="8px">
+                {t('A (1-20000)')}
+              </PreTitle>
+              <Input
+                type="text"
+                placeholder="1,000"
+                value={amplificationParam}
+                onChange={(e) => setAmplificationParam(e.target.value)}
+              />
+            </Box>
+
+            {/* Offpeg Fee Multiplier */}
+            <Box>
+              <PreTitle textTransform="uppercase" mb="8px">
+                {t('Offpeg fee multiplier (0-50)')}
+              </PreTitle>
+              <Input
+                type="text"
+                placeholder="10"
+                value={offpegFeeMultiplier}
+                onChange={(e) => setOffpegFeeMultiplier(e.target.value)}
+              />
+            </Box>
+
+            {/* Moving Average Time */}
+            <Box>
+              <Flex alignItems="center" mb="8px">
+                <PreTitle textTransform="uppercase" mr="4px">
+                  {t('moving average time (60-3600) seconds')}
+                </PreTitle>
+                <Box style={{ cursor: 'pointer' }}>
+                  <InfoIcon width="16px" color="textSubtle" />
+                </Box>
+              </Flex>
+              <Input
+                type="text"
+                placeholder="60"
+                value={movingAverageTime}
+                onChange={(e) => setMovingAverageTime(e.target.value)}
+              />
+            </Box>
+          </AutoColumn>
+        )}
+      </LightGreyCard>
+
       {/* Preview Pool Button */}
       <Button
         width="100%"
         onClick={handlePreviewPool}
-        disabled={!baseCurrency || !quoteCurrency || attemptingTxn || !!oracleValidationError}
+        disabled={
+          !baseCurrency || !quoteCurrency || attemptingTxn || !!oracleValidationError || !!advancedValidationError
+        }
         isLoading={attemptingTxn}
       >
-        {attemptingTxn || isConfirming ? t('Creating Pool...') : oracleValidationError || t('Preview Pool')}
+        {attemptingTxn || isConfirming
+          ? t('Creating Pool...')
+          : oracleValidationError || advancedValidationError || t('Preview Pool')}
       </Button>
 
       {/* Preset Modal */}
@@ -257,7 +374,18 @@ export const ParamSettingSection = () => {
           tokenA={baseCurrency as Currency}
           tokenB={quoteCurrency as Currency}
           preset={selectedPreset}
-          poolOptions={swapFee ? { fee: percentageToFee(parseFloat(swapFee) / 100) } : undefined}
+          poolOptions={{
+            ...(swapFee && { fee: percentageToFee(parseFloat(swapFee) / 100) }),
+            ...(isAdvancedEnabled && amplificationParam && { A: BigInt(amplificationParam.replace(/,/g, '')) }),
+            ...(isAdvancedEnabled &&
+              offpegFeeMultiplier && {
+                offpegFeeMultiplier: BigInt(Math.floor(parseFloat(offpegFeeMultiplier) * 1e10)),
+              }),
+            ...(isAdvancedEnabled &&
+              movingAverageTime && {
+                maExpTime: BigInt(Math.floor(parseInt(movingAverageTime, 10) / Math.log(2))),
+              }),
+          }}
           onCreatePool={handleCreatePool}
           isCreating={attemptingTxn || isConfirming}
           tokenAConfig={tokenAConfig}

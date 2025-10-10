@@ -126,4 +126,13 @@ export abstract class InfinityStablePoolFactory {
       ...presetConfig,
     })
   }
+
+  /**
+   * Get preset configuration
+   */
+  public static getPresetConfig(preset: PoolPreset): Omit<CreateInfinityStablePoolOptions, 'tokenA' | 'tokenB'> {
+    const presetConfig = PRESET_CONFIGS[preset]
+    invariant(presetConfig, `Unknown preset: ${preset}`)
+    return presetConfig
+  }
 }

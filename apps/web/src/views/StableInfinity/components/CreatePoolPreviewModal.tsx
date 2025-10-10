@@ -91,23 +91,18 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
 
   const presetConfig = preset ? PRESET_CONFIGS[preset] : null
 
+  // Merge preset config with pool options (pool options override preset)
+  const finalConfig = {
+    ...presetConfig,
+    ...poolOptions,
+  }
+
   // Convert bigint values to readable format
-  const swapFee = presetConfig?.fee
-    ? Number(presetConfig.fee) / 100000000
-    : poolOptions?.fee
-    ? Number(poolOptions.fee) / 100000000
-    : 0.01
-  const amplificationParam = presetConfig?.A ? Number(presetConfig.A) : poolOptions?.A ? Number(poolOptions.A) : 500
-  const offpegMultiplier = presetConfig?.offpegFeeMultiplier
-    ? Number(presetConfig.offpegFeeMultiplier) / 10000000000
-    : poolOptions?.offpegFeeMultiplier
-    ? Number(poolOptions.offpegFeeMultiplier) / 10000000000
-    : 10
-  const maExpTime = presetConfig?.maExpTime
-    ? Number(presetConfig.maExpTime)
-    : poolOptions?.maExpTime
-    ? Number(poolOptions.maExpTime)
-    : 600
+  const swapFee = finalConfig.fee ? Number(finalConfig.fee) / 100000000 : 0.01
+  const amplificationParam = finalConfig.A ? Number(finalConfig.A) : 1000
+  const offpegMultiplier = finalConfig.offpegFeeMultiplier ? Number(finalConfig.offpegFeeMultiplier) / 10000000000 : 10
+  // Convert maExpTime back to seconds: maExpTime * log(2)
+  const maExpTimeSeconds = finalConfig.maExpTime ? Math.round(Number(finalConfig.maExpTime) * Math.log(2)) : 600
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
@@ -238,7 +233,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
                 {t('Moving average time')}
               </Text>
               <Text fontSize="14px" color="text">
-                {maExpTime}s
+                {maExpTimeSeconds}s
               </Text>
             </ParameterRow>
 
