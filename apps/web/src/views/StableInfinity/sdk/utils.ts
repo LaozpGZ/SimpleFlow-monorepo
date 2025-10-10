@@ -68,17 +68,25 @@ export function validateAmplification(A: bigint): void {
   invariant(A <= 10000n, 'AMPLIFICATION_TOO_HIGH')
 }
 
+// Fee precision: 10^8 (100,000,000)
+// This means the minimum fee unit is 1e-8 (0.00000001 as decimal rate)
+// Example: 0.00000001 * 100000000 = 1n
+const FEE_PRECISION = 100000000
+
 /**
- * Converts a percentage to fee format (0.01% = 1000000)
+ * Converts a decimal percentage (0-1 range) to fee format
+ * Example: 0.00000001 -> 1n (minimum unit)
+ * Uses Math.round for better precision with small values
  */
 export function percentageToFee(percentage: number): bigint {
   invariant(percentage >= 0 && percentage <= 1, 'INVALID_PERCENTAGE')
-  return BigInt(Math.floor(percentage * 100000000))
+  return BigInt(Math.round(percentage * FEE_PRECISION))
 }
 
 /**
- * Converts fee format to percentage (1000000 = 0.01%)
+ * Converts fee format to decimal percentage (0-1 range)
+ * Example: 1n -> 0.00000001
  */
 export function feeToPercentage(fee: bigint): number {
-  return Number(fee) / 100000000
+  return Number(fee) / FEE_PRECISION
 }

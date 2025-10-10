@@ -16,34 +16,32 @@ import {
 } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import DoubleCurrencyLogo from 'components/Logo/DoubleLogo'
-import CurrencyLogo from 'components/Logo/CurrencyLogo'
-import { PRESET_CONFIGS, type PoolPreset, type CreateInfinityStablePoolOptions } from '../sdk'
-import type { TokenConfig } from '../sdk/types'
+import { PRESET_CONFIGS, type PoolPreset } from '../sdk'
 
 const StyledModal = styled(Modal)`
   max-width: 408px;
   width: 100%;
 `
 
-const TokenRow = styled(Flex)`
-  background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  border-radius: 16px;
-  padding: 8px 16px;
-  align-items: center;
-  justify-content: space-between;
+// const TokenRow = styled(Flex)`
+//   background: ${({ theme }) => theme.colors.background};
+//   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+//   border-radius: 16px;
+//   padding: 8px 16px;
+//   align-items: center;
+//   justify-content: space-between;
 
-  &:first-child {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: none;
-  }
+//   &:first-child {
+//     border-bottom-left-radius: 0;
+//     border-bottom-right-radius: 0;
+//     border-bottom: none;
+//   }
 
-  &:last-child {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-`
+//   &:last-child {
+//     border-top-left-radius: 0;
+//     border-top-right-radius: 0;
+//   }
+// `
 
 const ParameterRow = styled(Flex)`
   justify-content: space-between;
@@ -62,14 +60,13 @@ interface CreatePoolPreviewModalProps {
   onDismiss: () => void
   tokenA?: Currency
   tokenB?: Currency
-  tokenAAmount?: string
-  tokenBAmount?: string
   preset?: PoolPreset
-  poolOptions?: Partial<CreateInfinityStablePoolOptions>
+  swapFee?: string
+  amplificationParam?: string
+  offpegFeeMultiplier?: string
+  movingAverageTime?: string
   onCreatePool: () => void
   isCreating?: boolean
-  tokenAConfig?: TokenConfig
-  tokenBConfig?: TokenConfig
 }
 
 export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
@@ -77,32 +74,24 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
   onDismiss,
   tokenA,
   tokenB,
-  tokenAAmount = '1.25',
-  tokenBAmount = '0.005',
   preset,
-  poolOptions,
+  swapFee,
+  amplificationParam,
+  offpegFeeMultiplier,
+  movingAverageTime,
   onCreatePool,
   isCreating = false,
-  tokenAConfig,
-  tokenBConfig,
 }) => {
   const { t } = useTranslation()
   const [confirmed, setConfirmed] = useState(false)
 
   const presetConfig = preset ? PRESET_CONFIGS[preset] : null
 
-  // Merge preset config with pool options (pool options override preset)
-  const finalConfig = {
-    ...presetConfig,
-    ...poolOptions,
-  }
-
-  // Convert bigint values to readable format
-  const swapFee = finalConfig.fee ? Number(finalConfig.fee) / 100000000 : 0.01
-  const amplificationParam = finalConfig.A ? Number(finalConfig.A) : 1000
-  const offpegMultiplier = finalConfig.offpegFeeMultiplier ? Number(finalConfig.offpegFeeMultiplier) / 10000000000 : 10
-  // Convert maExpTime back to seconds: maExpTime * log(2)
-  const maExpTimeSeconds = finalConfig.maExpTime ? Math.round(Number(finalConfig.maExpTime) * Math.log(2)) : 600
+  // Format display values
+  const displaySwapFee = swapFee || '0.01'
+  const displayA = amplificationParam || (presetConfig?.A ? String(presetConfig.A) : '1000')
+  const displayOffpegMultiplier = offpegFeeMultiplier || '10'
+  const displayMaExpTime = movingAverageTime || '60'
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
@@ -146,7 +135,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
         </Flex>
 
         {/* Token Amounts */}
-        <Box mb="16px">
+        {/* <Box mb="16px">
           <TokenRow>
             <Flex alignItems="center" style={{ gap: '8px' }}>
               {tokenA && <CurrencyLogo currency={tokenA} size="24px" />}
@@ -180,7 +169,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
               </Text>
             </Flex>
           </TokenRow>
-        </Box>
+        </Box> */}
 
         {/* Pool Parameters */}
         <StyledCard mb="16px">
@@ -194,7 +183,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
                 {t('Swap fee')}
               </Text>
               <Text fontSize="14px" color="text">
-                {swapFee.toFixed(3)}%
+                {displaySwapFee}%
               </Text>
             </ParameterRow>
 
@@ -207,7 +196,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
                 A
               </Text>
               <Text fontSize="14px" color="text">
-                {amplificationParam}
+                {displayA}
               </Text>
             </ParameterRow>
 
@@ -220,7 +209,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
                 {t('Offpeg fee multiplier')}
               </Text>
               <Text fontSize="14px" color="text">
-                {offpegMultiplier}
+                {displayOffpegMultiplier}
               </Text>
             </ParameterRow>
 
@@ -233,7 +222,7 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
                 {t('Moving average time')}
               </Text>
               <Text fontSize="14px" color="text">
-                {maExpTimeSeconds}s
+                {displayMaExpTime}s
               </Text>
             </ParameterRow>
 

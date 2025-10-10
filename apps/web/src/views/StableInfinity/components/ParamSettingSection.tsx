@@ -214,30 +214,60 @@ export const ParamSettingSection = () => {
   const oracleValidationError = validateOracleConfig(tokenAConfig, 'A') || validateOracleConfig(tokenBConfig, 'B')
   const advancedValidationError = validateAdvancedParams()
 
-  // Handle number-only input
-  const handleNumberInput = (value: string, allowDecimal = false) => {
+  // Handle number-only input with optional decimal place limit
+  const handleNumberInput = (value: string, allowDecimal = false, maxDecimals?: number) => {
     // Allow empty string
     if (value === '') return ''
 
     // Only allow numbers and optionally decimal point
     const regex = allowDecimal ? /^\d*\.?\d*$/ : /^\d*$/
-    if (regex.test(value)) {
-      return value
+    if (!regex.test(value)) {
+      return null // Invalid input, don't update
     }
-    return null // Invalid input, don't update
+
+    // Check decimal places if maxDecimals is specified
+    if (allowDecimal && maxDecimals !== undefined && value.includes('.')) {
+      const decimalPlaces = value.split('.')[1]?.length || 0
+      if (decimalPlaces > maxDecimals) {
+        return null // Too many decimal places, don't update
+      }
+    }
+
+    return value
   }
 
   // Auto-correct value to min/max range on blur
-  const handleRangeCorrection = (value: string, min: number, max: number): string => {
-    if (value === '') return String(min)
+  const handleRangeCorrection = (value: string, min: number, max: number, maxDecimals?: number): string => {
+    if (value === '') {
+      // Format min value to avoid scientific notation if maxDecimals is specified
+      if (maxDecimals !== undefined) {
+        return min.toFixed(maxDecimals).replace(/\.?0+$/, '')
+      }
+      return String(min)
+    }
 
     const numValue = parseFloat(value)
-    if (Number.isNaN(numValue)) return String(min)
+    if (Number.isNaN(numValue)) {
+      // Format min value to avoid scientific notation if maxDecimals is specified
+      if (maxDecimals !== undefined) {
+        return min.toFixed(maxDecimals).replace(/\.?0+$/, '')
+      }
+      return String(min)
+    }
 
-    if (numValue < min) return String(min)
-    if (numValue > max) return String(max)
+    let corrected = numValue
+    if (corrected < min) corrected = min
+    if (corrected > max) corrected = max
 
-    return value
+    // Round to maxDecimals if specified and format to avoid scientific notation
+    if (maxDecimals !== undefined) {
+      const factor = 10 ** maxDecimals
+      corrected = Math.round(corrected * factor) / factor
+      // Use toFixed to avoid scientific notation, then remove trailing zeros
+      return corrected.toFixed(maxDecimals).replace(/\.?0+$/, '')
+    }
+
+    return String(corrected)
   }
 
   // Handlers for A parameter
@@ -279,18 +309,46 @@ export const ParamSettingSection = () => {
     setMovingAverageTime(corrected)
   }
 
-  // Handlers for swap fee (0% to 1%)
+  // Handlers for swap fee (0% to 1%, max 8 decimal places)
   const handleSwapFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = handleNumberInput(e.target.value, true) // Allow decimal
+    const newValue = handleNumberInput(e.target.value, true, 8) // Allow decimal, max 8 decimals
+
     if (newValue !== null) {
       setSwapFee(newValue)
     }
   }
 
   const handleSwapFeeBlur = () => {
-    const corrected = handleRangeCorrection(swapFee, 0, 1)
+    const corrected = handleRangeCorrection(swapFee, 0, 1, 8) // Max 8 decimal places
     setSwapFee(corrected)
   }
+
+  // Calculate pool options for contract call
+  const poolOptions = useMemo(() => {
+    const options: Partial<CreateInfinityStablePoolOptions> = {}
+
+    // Convert swap fee to the correct format if provided
+    if (swapFee) {
+      const swapFeeValue = parseFloat(swapFee)
+      const clampedSwapFee = Math.max(0, Math.min(1, swapFeeValue))
+      options.fee = percentageToFee(clampedSwapFee / 100)
+    }
+
+    // Convert advanced parameters if enabled
+    if (isAdvancedEnabled) {
+      if (amplificationParam) {
+        options.A = BigInt(amplificationParam.replace(/,/g, ''))
+      }
+      if (offpegFeeMultiplier) {
+        options.offpegFeeMultiplier = BigInt(Math.floor(parseFloat(offpegFeeMultiplier) * 1e10))
+      }
+      if (movingAverageTime) {
+        options.maExpTime = BigInt(Math.floor(parseInt(movingAverageTime, 10) / Math.log(2)))
+      }
+    }
+
+    return options
+  }, [swapFee, isAdvancedEnabled, amplificationParam, offpegFeeMultiplier, movingAverageTime])
 
   const handlePreviewPool = () => {
     setIsPreviewModalOpen(true)
@@ -303,34 +361,12 @@ export const ParamSettingSection = () => {
     }
 
     try {
-      // Convert swap fee to the correct format if provided
-      // Ensure swap fee is clamped to 0-1 range before conversion
-      const swapFeeValue = parseFloat(swapFee)
-      const clampedSwapFee = Math.max(0, Math.min(1, swapFeeValue))
-      const customFee = swapFee ? percentageToFee(clampedSwapFee / 100) : undefined
-
-      // Convert advanced parameters if provided
-      const advancedOptions: Partial<CreateInfinityStablePoolOptions> = {}
-
-      if (isAdvancedEnabled) {
-        if (amplificationParam) {
-          advancedOptions.A = BigInt(amplificationParam.replace(/,/g, ''))
-        }
-        if (offpegFeeMultiplier) {
-          advancedOptions.offpegFeeMultiplier = BigInt(Math.floor(parseFloat(offpegFeeMultiplier) * 1e10))
-        }
-        if (movingAverageTime) {
-          advancedOptions.maExpTime = BigInt(Math.floor(parseInt(movingAverageTime, 10) / Math.log(2)))
-        }
-      }
-
       const hash = await createInfinityStablePool({
         // NOTE: already check isEvm above, safe to cast
         tokenA: baseCurrency as Currency,
         tokenB: quoteCurrency as Currency,
         preset: selectedPreset,
-        ...(customFee && { fee: customFee }), // Override fee if custom fee is provided
-        ...advancedOptions, // Override advanced parameters if provided
+        ...poolOptions,
       })
 
       if (!hash) {
@@ -365,7 +401,7 @@ export const ParamSettingSection = () => {
       {/* Fees */}
       <Box mb="24px">
         <PreTitle textTransform="uppercase" mb="8px">
-          {t('Fees (0% - 1%)')}
+          {t('Fees (0% - 1%, max 8 decimals)')}
         </PreTitle>
         <Input type="text" value={swapFee} onChange={handleSwapFeeChange} onBlur={handleSwapFeeBlur} />
       </Box>
@@ -452,39 +488,21 @@ export const ParamSettingSection = () => {
       />
 
       {/* Create Pool Preview Modal */}
-      {isEvm(baseCurrency?.chainId) &&
-        isEvm(quoteCurrency?.chainId) &&
-        (() => {
-          // Clamp swap fee to 0-1 range before passing to modal
-          const swapFeeValue = parseFloat(swapFee)
-          const clampedSwapFee = Math.max(0, Math.min(1, swapFeeValue))
-
-          return (
-            <CreatePoolPreviewModal
-              isOpen={isPreviewModalOpen}
-              onDismiss={() => setIsPreviewModalOpen(false)}
-              tokenA={baseCurrency as Currency}
-              tokenB={quoteCurrency as Currency}
-              preset={selectedPreset}
-              poolOptions={{
-                ...(swapFee && { fee: percentageToFee(clampedSwapFee / 100) }),
-                ...(isAdvancedEnabled && amplificationParam && { A: BigInt(amplificationParam.replace(/,/g, '')) }),
-                ...(isAdvancedEnabled &&
-                  offpegFeeMultiplier && {
-                    offpegFeeMultiplier: BigInt(Math.floor(parseFloat(offpegFeeMultiplier) * 1e10)),
-                  }),
-                ...(isAdvancedEnabled &&
-                  movingAverageTime && {
-                    maExpTime: BigInt(Math.floor(parseInt(movingAverageTime, 10) / Math.log(2))),
-                  }),
-              }}
-              onCreatePool={handleCreatePool}
-              isCreating={attemptingTxn || isConfirming}
-              tokenAConfig={tokenAConfig}
-              tokenBConfig={tokenBConfig}
-            />
-          )
-        })()}
+      {isEvm(baseCurrency?.chainId) && isEvm(quoteCurrency?.chainId) && (
+        <CreatePoolPreviewModal
+          isOpen={isPreviewModalOpen}
+          onDismiss={() => setIsPreviewModalOpen(false)}
+          tokenA={baseCurrency as Currency}
+          tokenB={quoteCurrency as Currency}
+          preset={selectedPreset}
+          swapFee={swapFee}
+          amplificationParam={amplificationParam}
+          offpegFeeMultiplier={offpegFeeMultiplier}
+          movingAverageTime={movingAverageTime}
+          onCreatePool={handleCreatePool}
+          isCreating={attemptingTxn || isConfirming}
+        />
+      )}
     </Box>
   )
 }
