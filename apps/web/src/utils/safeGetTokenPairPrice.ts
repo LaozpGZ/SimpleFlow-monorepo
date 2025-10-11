@@ -1,5 +1,10 @@
-import { Token } from '@pancakeswap/swap-sdk-core'
-import { Pair } from '@pancakeswap/v2-sdk'
+interface PriceLike {
+  toSignificant: (digits: number) => string
+}
+
+interface TokenPriceSource<TToken = any> {
+  priceOf: (token: TToken) => PriceLike | undefined
+}
 
 /**
  *
@@ -7,7 +12,11 @@ import { Pair } from '@pancakeswap/v2-sdk'
  * This may happen if the pair data is incomplete, invalid, or in an inconsistent state.
  *
  */
-export function safeGetTokenPairPrice(pair: Pair, token: Token, significantDigits = 6): string {
+export function safeGetTokenPairPrice<TPair extends TokenPriceSource<TToken>, TToken>(
+  pair: TPair | null | undefined,
+  token: TToken | null | undefined,
+  significantDigits = 6,
+): string {
   try {
     if (!pair || !token) return '-'
     const price = pair.priceOf(token)
