@@ -9,6 +9,7 @@ import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { Field } from 'state/burn/actions'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import { safeGetTokenPairPrice } from 'utils/safeGetTokenPairPrice'
 
 interface ConfirmRemoveLiquidityModalProps {
   title: string
@@ -114,13 +115,13 @@ const ConfirmRemoveLiquidityModal: React.FC<
             <RowBetween>
               <Text>{t('Price')}</Text>
               <Text>
-                1 {currencyA?.symbol} = {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {currencyB?.symbol}
+                1 {currencyA?.symbol} = {safeGetTokenPairPrice(pair, tokenA)} {currencyB?.symbol}
               </Text>
             </RowBetween>
             <RowBetween>
               <div />
               <Text>
-                1 {currencyB?.symbol} = {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {currencyA?.symbol}
+                1 {currencyB?.symbol} = {safeGetTokenPairPrice(pair, tokenB)} {currencyA?.symbol}
               </Text>
             </RowBetween>
           </>
