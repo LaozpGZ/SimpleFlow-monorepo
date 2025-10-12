@@ -1,14 +1,11 @@
-import { PoolKey } from '@pancakeswap/infinity-sdk'
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { CurrencyAmount, Percent, Token } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
-import { useAccount } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   useModal,
-  AddIcon,
   ArrowDownIcon,
   AutoColumn,
   Box,
@@ -18,11 +15,10 @@ import {
   Flex,
   Slider,
   Text,
-  TooltipText,
   useMatchBreakpoints,
-  useTooltip,
   ArrowForwardIcon,
   PreTitle,
+  Card,
 } from '@pancakeswap/uikit'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected, logError } from 'utils/sentry'
@@ -39,7 +35,6 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { styled } from 'styled-components'
 import { useDebouncedChangeHandler } from '@pancakeswap/hooks'
-import { formatAmount } from 'utils/formatInfoNumbers'
 import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
@@ -357,200 +352,204 @@ export default function InfinityStableRemoveLiquidityProvider({
   const newTotalUSD = currentTotalUSD - removedTotalUSD
 
   return (
-    <>
-      <CardBody>
-        <AutoColumn gap="20px">
-          <RowBetween>
-            <Text>{t('Amount')}</Text>
-          </RowBetween>
-          <BorderCard style={{ padding: isMobile ? '8px' : '16px' }}>
-            <Text fontSize="40px" bold mb="16px" style={{ lineHeight: 1 }}>
-              {percentToRemove}%
-            </Text>
-            <Slider
-              name="lp-amount"
-              min={0}
-              max={100}
-              value={innerLiquidityPercentage}
-              onValueChanged={handleChangePercent}
-              mb="16px"
-            />
-            <Flex flexWrap="wrap" justifyContent="space-evenly">
-              <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(25)}>
-                25%
-              </Button>
-              <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(50)}>
-                50%
-              </Button>
-              <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(75)}>
-                75%
-              </Button>
-              <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(100)}>
-                {t('Max.fill-max')}
-              </Button>
-            </Flex>
-          </BorderCard>
-        </AutoColumn>
-        <>
-          <ColumnCenter>
-            <ArrowDownIcon color="textSubtle" width="24px" my="16px" />
-          </ColumnCenter>
-          <AutoColumn gap="12px">
-            <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
-              {t('Receive')}
-            </Text>
-            <LightGreyCard>
-              <Flex justifyContent="space-between" mb="8px" as="label" alignItems="center">
-                <Flex alignItems="center">
-                  <CurrencyLogo currency={currencyA ?? undefined} />
-                  <Text small color="textSubtle" id="remove-liquidity-tokena-symbol" ml="4px">
-                    {currencyA?.symbol}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text small bold>
-                    {parsedAmountA?.toSignificant(6) || '0'}
-                  </Text>
-                  <Text small ml="4px">
-                    {percentageA}%
-                  </Text>
-                </Flex>
-              </Flex>
-              <Flex justifyContent="space-between" as="label" alignItems="center">
-                <Flex alignItems="center">
-                  <CurrencyLogo currency={currencyB ?? undefined} />
-                  <Text small color="textSubtle" id="remove-liquidity-tokenb-symbol" ml="4px">
-                    {currencyB?.symbol}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text bold small>
-                    {parsedAmountB?.toSignificant(6) || '0'}
-                  </Text>
-                  <Text small ml="4px">
-                    {percentageB}%
-                  </Text>
-                </Flex>
-              </Flex>
-            </LightGreyCard>
-          </AutoColumn>
-        </>
-
-        <RowBetween mt="16px">
-          <Text bold color="secondary" fontSize="12px">
-            {t('Slippage Tolerance')}
-          </Text>
-          <LiquiditySlippageButton />
-        </RowBetween>
-
-        {/* Position Summary */}
-        {percentToRemove > 0 && (
-          <BorderCard style={{ marginTop: '16px' }}>
-            <AutoColumn gap="12px">
-              {/* Header */}
-              <RowBetween mb="8px">
-                <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
-                  {t('Position')}
+    <Box mx="auto" pb="16px" width="100%" maxWidth={[null, null, null, null, '480px']}>
+      <Card>
+        <CardBody>
+          <AutoColumn>
+            <AutoColumn gap="20px">
+              <RowBetween>
+                <Text>{t('Amount')}</Text>
+              </RowBetween>
+              <BorderCard style={{ padding: isMobile ? '8px' : '16px' }}>
+                <Text fontSize="40px" bold mb="16px" style={{ lineHeight: 1 }}>
+                  {percentToRemove}%
                 </Text>
-                <Flex alignItems="center" style={{ gap: '8px' }}>
-                  <Text fontSize="12px" color="textSubtle">
-                    {t('Current')}
-                  </Text>
-                  <ArrowForwardIcon width="12px" color="textSubtle" />
-                  <Text fontSize="12px" color="textSubtle">
-                    {t('New Balance')}
-                  </Text>
+                <Slider
+                  name="lp-amount"
+                  min={0}
+                  max={100}
+                  value={innerLiquidityPercentage}
+                  onValueChanged={handleChangePercent}
+                  mb="16px"
+                />
+                <Flex flexWrap="wrap" justifyContent="space-evenly">
+                  <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(25)}>
+                    25%
+                  </Button>
+                  <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(50)}>
+                    50%
+                  </Button>
+                  <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(75)}>
+                    75%
+                  </Button>
+                  <Button variant="tertiary" scale="sm" onClick={() => setPercentToRemove(100)}>
+                    {t('Max.fill-max')}
+                  </Button>
                 </Flex>
-              </RowBetween>
-
-              {/* Token 1 Row */}
-              <RowBetween>
-                <Flex alignItems="center" style={{ gap: '8px' }}>
-                  <CurrencyLogo currency={currencyA ?? undefined} size="24px" />
-                  <Text>{currencyA?.symbol}</Text>
-                </Flex>
-                <Flex alignItems="center" style={{ gap: '8px' }}>
-                  <Text>{currentParsedAmountA?.toSignificant(6) || '0'}</Text>
-                  <ArrowForwardIcon width="12px" color="textSubtle" />
-                  <Text>{newParsedAmountA?.toSignificant(6) || '0'}</Text>
-                </Flex>
-              </RowBetween>
-
-              {/* Token 2 Row */}
-              <RowBetween>
-                <Flex alignItems="center" style={{ gap: '8px' }}>
-                  <CurrencyLogo currency={currencyB ?? undefined} size="24px" />
-                  <Text>{currencyB?.symbol}</Text>
-                </Flex>
-                <Flex alignItems="center" style={{ gap: '8px' }}>
-                  <Text>{currentParsedAmountB?.toSignificant(6) || '0'}</Text>
-                  <ArrowForwardIcon width="12px" color="textSubtle" />
-                  <Text>{newParsedAmountB?.toSignificant(6) || '0'}</Text>
-                </Flex>
-              </RowBetween>
-
-              {/* Divider */}
-              <Box height="1px" backgroundColor="cardBorder" my="4px" />
-
-              {/* Total Position Value (USD) */}
-              <RowBetween>
-                <PreTitle textTransform="uppercase">{t('Total Position Value (USD)')}</PreTitle>
-                <Flex alignItems="center" style={{ gap: '8px' }}>
-                  <Text>{formatDollarAmount(currentTotalUSD, 2, false)}</Text>
-                  <ArrowForwardIcon width="12px" color="textSubtle" />
-                  <Text>{formatDollarAmount(newTotalUSD, 2, false)}</Text>
-                </Flex>
-              </RowBetween>
-
-              {/* Total removed value (USD) */}
-              <RowBetween>
-                <Text color="textSubtle">{t('Total removed value (USD)')}:</Text>
-                <Text>{formatDollarAmount(removedTotalUSD, 2, false)}</Text>
-              </RowBetween>
+              </BorderCard>
             </AutoColumn>
-          </BorderCard>
-        )}
+            <>
+              <ColumnCenter>
+                <ArrowDownIcon color="textSubtle" width="24px" my="16px" />
+              </ColumnCenter>
+              <AutoColumn gap="12px">
+                <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
+                  {t('Receive')}
+                </Text>
+                <LightGreyCard>
+                  <Flex justifyContent="space-between" mb="8px" as="label" alignItems="center">
+                    <Flex alignItems="center">
+                      <CurrencyLogo currency={currencyA ?? undefined} />
+                      <Text small color="textSubtle" id="remove-liquidity-tokena-symbol" ml="4px">
+                        {currencyA?.symbol}
+                      </Text>
+                    </Flex>
+                    <Flex>
+                      <Text small bold>
+                        {parsedAmountA?.toSignificant(6) || '0'}
+                      </Text>
+                      <Text small ml="4px">
+                        {percentageA}%
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  <Flex justifyContent="space-between" as="label" alignItems="center">
+                    <Flex alignItems="center">
+                      <CurrencyLogo currency={currencyB ?? undefined} />
+                      <Text small color="textSubtle" id="remove-liquidity-tokenb-symbol" ml="4px">
+                        {currencyB?.symbol}
+                      </Text>
+                    </Flex>
+                    <Flex>
+                      <Text bold small>
+                        {parsedAmountB?.toSignificant(6) || '0'}
+                      </Text>
+                      <Text small ml="4px">
+                        {percentageB}%
+                      </Text>
+                    </Flex>
+                  </Flex>
+                </LightGreyCard>
+              </AutoColumn>
+            </>
 
-        <Box position="relative" mt="16px">
-          {!account ? (
-            <ConnectWalletButton width="100%" />
-          ) : isWrongNetwork ? (
-            <CommitButton width="100%" />
-          ) : (
-            <RowBetween>
-              <Button
-                variant={approvalState === ApprovalState.APPROVED ? 'success' : 'primary'}
-                onClick={() => approveCallback()}
-                disabled={approvalState !== ApprovalState.NOT_APPROVED}
-                width="100%"
-                mr="0.5rem"
-              >
-                {approvalState === ApprovalState.PENDING ? (
-                  <Dots>{t('Enabling')}</Dots>
-                ) : approvalState === ApprovalState.APPROVED ? (
-                  t('Enabled')
-                ) : (
-                  t('Enable.Approval')
-                )}
-              </Button>
-              <Button
-                variant={!isValid && lpAmountToBurn > 0n ? 'danger' : 'primary'}
-                onClick={handleOpenRemoveLiquidityModal}
-                width="100%"
-                disabled={!isValid || approvalState !== ApprovalState.APPROVED}
-              >
-                {!isReady
-                  ? t('Pool not ready')
-                  : lpAmountToBurn === 0n
-                  ? t('Enter an amount')
-                  : calcError
-                  ? t('Error calculating amounts')
-                  : t('Remove')}
-              </Button>
+            <RowBetween mt="16px">
+              <Text bold color="secondary" fontSize="12px">
+                {t('Slippage Tolerance')}
+              </Text>
+              <LiquiditySlippageButton />
             </RowBetween>
-          )}
-        </Box>
-      </CardBody>
-    </>
+
+            {/* Position Summary */}
+            {percentToRemove > 0 && (
+              <BorderCard style={{ marginTop: '16px' }}>
+                <AutoColumn gap="12px">
+                  {/* Header */}
+                  <RowBetween mb="8px">
+                    <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
+                      {t('Position')}
+                    </Text>
+                    <Flex alignItems="center" style={{ gap: '8px' }}>
+                      <Text fontSize="12px" color="textSubtle">
+                        {t('Current')}
+                      </Text>
+                      <ArrowForwardIcon width="12px" color="textSubtle" />
+                      <Text fontSize="12px" color="textSubtle">
+                        {t('New Balance')}
+                      </Text>
+                    </Flex>
+                  </RowBetween>
+
+                  {/* Token 1 Row */}
+                  <RowBetween>
+                    <Flex alignItems="center" style={{ gap: '8px' }}>
+                      <CurrencyLogo currency={currencyA ?? undefined} size="24px" />
+                      <Text>{currencyA?.symbol}</Text>
+                    </Flex>
+                    <Flex alignItems="center" style={{ gap: '8px' }}>
+                      <Text>{currentParsedAmountA?.toSignificant(6) || '0'}</Text>
+                      <ArrowForwardIcon width="12px" color="textSubtle" />
+                      <Text>{newParsedAmountA?.toSignificant(6) || '0'}</Text>
+                    </Flex>
+                  </RowBetween>
+
+                  {/* Token 2 Row */}
+                  <RowBetween>
+                    <Flex alignItems="center" style={{ gap: '8px' }}>
+                      <CurrencyLogo currency={currencyB ?? undefined} size="24px" />
+                      <Text>{currencyB?.symbol}</Text>
+                    </Flex>
+                    <Flex alignItems="center" style={{ gap: '8px' }}>
+                      <Text>{currentParsedAmountB?.toSignificant(6) || '0'}</Text>
+                      <ArrowForwardIcon width="12px" color="textSubtle" />
+                      <Text>{newParsedAmountB?.toSignificant(6) || '0'}</Text>
+                    </Flex>
+                  </RowBetween>
+
+                  {/* Divider */}
+                  <Box height="1px" backgroundColor="cardBorder" my="4px" />
+
+                  {/* Total Position Value (USD) */}
+                  <RowBetween>
+                    <PreTitle textTransform="uppercase">{t('Total Position Value (USD)')}</PreTitle>
+                    <Flex alignItems="center" style={{ gap: '8px' }}>
+                      <Text>{formatDollarAmount(currentTotalUSD, 2, false)}</Text>
+                      <ArrowForwardIcon width="12px" color="textSubtle" />
+                      <Text>{formatDollarAmount(newTotalUSD, 2, false)}</Text>
+                    </Flex>
+                  </RowBetween>
+
+                  {/* Total removed value (USD) */}
+                  <RowBetween>
+                    <Text color="textSubtle">{t('Total removed value (USD)')}:</Text>
+                    <Text>{formatDollarAmount(removedTotalUSD, 2, false)}</Text>
+                  </RowBetween>
+                </AutoColumn>
+              </BorderCard>
+            )}
+
+            <Box position="relative" mt="16px">
+              {!account ? (
+                <ConnectWalletButton width="100%" />
+              ) : isWrongNetwork ? (
+                <CommitButton width="100%" />
+              ) : (
+                <RowBetween>
+                  <Button
+                    variant={approvalState === ApprovalState.APPROVED ? 'success' : 'primary'}
+                    onClick={() => approveCallback()}
+                    disabled={approvalState !== ApprovalState.NOT_APPROVED}
+                    width="100%"
+                    mr="0.5rem"
+                  >
+                    {approvalState === ApprovalState.PENDING ? (
+                      <Dots>{t('Enabling')}</Dots>
+                    ) : approvalState === ApprovalState.APPROVED ? (
+                      t('Enabled')
+                    ) : (
+                      t('Enable.Approval')
+                    )}
+                  </Button>
+                  <Button
+                    variant={!isValid && lpAmountToBurn > 0n ? 'danger' : 'primary'}
+                    onClick={handleOpenRemoveLiquidityModal}
+                    width="100%"
+                    disabled={!isValid || approvalState !== ApprovalState.APPROVED}
+                  >
+                    {!isReady
+                      ? t('Pool not ready')
+                      : lpAmountToBurn === 0n
+                      ? t('Enter an amount')
+                      : calcError
+                      ? t('Error calculating amounts')
+                      : t('Remove')}
+                  </Button>
+                </RowBetween>
+              )}
+            </Box>
+          </AutoColumn>
+        </CardBody>
+      </Card>
+    </Box>
   )
 }

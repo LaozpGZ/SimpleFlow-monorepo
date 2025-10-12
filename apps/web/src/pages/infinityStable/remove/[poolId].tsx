@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Text, Breadcrumbs, FlexGap, Container, SkeletonV2, useMatchBreakpoints, Card } from '@pancakeswap/uikit'
+import { Box, Text, Breadcrumbs, FlexGap, Container, SkeletonV2, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { LinkText } from 'components/Liquidity/LinkText'
 import { CHAIN_QUERY_NAME } from 'config/chains'
@@ -49,13 +49,11 @@ const RemoveLiquidityInfinityStablePage = () => {
             <InfinityPoolInfoHeader poolId={poolId as `0x${string}`} chainId={chainId} />
           </SkeletonV2>
           <SkeletonV2 isDataReady={Boolean(poolKey?.hooks?.toString() && currencyIdA && currencyIdB)}>
-            <Card>
-              <InfinityStableRemoveLiquidityProvider
-                currencyId0={currencyIdA as `0x${string}`}
-                currencyId1={currencyIdB as `0x${string}`}
-                hookAddress={poolKey?.hooks?.toString() as `0x${string}`}
-              />
-            </Card>
+            <InfinityStableRemoveLiquidityProvider
+              currencyId0={currencyIdA as `0x${string}`}
+              currencyId1={currencyIdB as `0x${string}`}
+              hookAddress={poolKey?.hooks?.toString() as `0x${string}`}
+            />
           </SkeletonV2>
         </FlexGap>
       </Container>
