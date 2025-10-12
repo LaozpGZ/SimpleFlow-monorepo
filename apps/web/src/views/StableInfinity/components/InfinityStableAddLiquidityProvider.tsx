@@ -148,8 +148,8 @@ export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKe
   })
 
   // Determine if approvals are needed
-  const showFieldAApproval = approvalA !== ApprovalState.APPROVED && !!parsedAmountA
-  const showFieldBApproval = approvalB !== ApprovalState.APPROVED && !!parsedAmountB
+  const showFieldAApproval = [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approvalA) && !!parsedAmountA
+  const showFieldBApproval = [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approvalB) && !!parsedAmountB
   const shouldShowApprovalGroup = showFieldAApproval || showFieldBApproval
 
   const onAdd = useCallback(async () => {
