@@ -509,7 +509,7 @@ export default function InfinityStableRemoveLiquidityProvider({
 
                   {/* Total removed value (USD) */}
                   <RowBetween>
-                    <Text color="textSubtle">{t('Total removed value (USD)')}:</Text>
+                    <Text color="textSubtle">{t('Total removed value (USD)')}</Text>
                     <Text>{formatDollarAmount(removedTotalUSD, 2, false)}</Text>
                   </RowBetween>
                 </AutoColumn>
