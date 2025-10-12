@@ -239,12 +239,12 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const { onUserInput } = useSwapActionHandlers()
   const reset = useCallback(() => {
+    resetState()
     afterCommit?.()
     setTradeToConfirm(undefined)
     if (confirmState === ConfirmModalState.COMPLETED) {
       onUserInput(Field.INPUT, '')
     }
-    resetState()
   }, [afterCommit, confirmState, onUserInput, resetState])
 
   const handleAcceptChanges = useCallback(() => {
@@ -346,8 +346,8 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   )
 
   const handleSwap = useCallback(() => {
-    setTradeToConfirm(order)
     resetState()
+    setTradeToConfirm(order)
 
     // if expert mode turn-on, will not show preview modal
     // start swap directly
