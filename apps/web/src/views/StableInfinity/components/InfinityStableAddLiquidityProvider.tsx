@@ -11,20 +11,46 @@ import { CurrencyField as Field } from 'utils/types'
 import { useAccount } from 'wagmi'
 import StableFormView from 'views/AddLiquidityV3/formViews/StableFormView'
 import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
-import { useCalcTokenAmount, useTotalSupply } from '../hooks/useCalcTokenAmount'
+import { useTranslation } from '@pancakeswap/localization'
+import { useModal } from '@pancakeswap/uikit'
+import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { isUserRejected, logError } from 'utils/sentry'
+import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
+import ConfirmAddLiquidityModal from 'views/AddLiquidity/components/ConfirmAddLiquidityModal'
 import { useAddLiquidityInfinityStablePool } from '../hooks/useAddLiquidityStableInfinityPool'
+import { useCalcTokenAmount, useTotalSupply } from '../hooks/useCalcTokenAmount'
 
 export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKey: PoolKey }) {
   const { address: account } = useAccount()
+  const {
+    t,
+    currentLanguage: { locale },
+  } = useTranslation()
+
   const currencyA = useCurrency(poolKey.currency0)
   const currencyB = useCurrency(poolKey.currency1)
 
   const [amountA, setAmountA] = useState('')
   const [amountB, setAmountB] = useState('')
 
+  // modal and loading state
+  const [{ attemptingTxn, liquidityErrorMessage, txHash }, setLiquidityState] = useState<{
+    attemptingTxn: boolean
+    liquidityErrorMessage: string | undefined
+    txHash: string | undefined
+  }>({
+    attemptingTxn: false,
+    liquidityErrorMessage: undefined,
+    txHash: undefined,
+  })
+
   // Use the pool hooks address as the pool address
   const poolAddress = poolKey.hooks?.toString() || ''
   const { addLiquidityInfinityStablePool, isReady } = useAddLiquidityInfinityStablePool({ poolAddress })
+
+  // Transaction adder
+  const addTransaction = useTransactionAdder()
 
   // Get user's currency balances
   const [balanceA, balanceB] = useCurrencyBalancesWithChain(account, [currencyA, currencyB], currencyA?.chainId)
@@ -126,22 +152,54 @@ export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKe
   const showFieldBApproval = approvalB !== ApprovalState.APPROVED && !!parsedAmountB
   const shouldShowApprovalGroup = showFieldAApproval || showFieldBApproval
 
-  const handleAddLiquidity = useCallback(async () => {
+  const onAdd = useCallback(async () => {
     if (!currencyA || !currencyB || (!parsedAmountA && !parsedAmountB) || !expectedLP) return
 
-    try {
-      // Calculate minimum mint amount using user's slippage tolerance
-      // Convert slippage from basis points (e.g., 50 = 0.5%) to percentage
-      const slippagePercent = BigInt(userSlippageTolerance)
-      const minMintAmount = (expectedLP * (10000n - slippagePercent)) / 10000n
+    // Calculate minimum mint amount using user's slippage tolerance
+    // Convert slippage from basis points (e.g., 50 = 0.5%) to percentage
+    const slippagePercent = BigInt(userSlippageTolerance)
+    const minMintAmount = (expectedLP * (10000n - slippagePercent)) / 10000n
 
-      // Add liquidity - use 0 for amounts that are not provided
-      const amountAToAdd = parsedAmountA?.quotient ?? 0n
-      const amountBToAdd = parsedAmountB?.quotient ?? 0n
-      const txHash = await addLiquidityInfinityStablePool(amountAToAdd, amountBToAdd, minMintAmount)
-      console.log('Add liquidity successful, tx hash:', txHash)
+    // Add liquidity - use 0 for amounts that are not provided
+    const amountAToAdd = parsedAmountA?.quotient ?? 0n
+    const amountBToAdd = parsedAmountB?.quotient ?? 0n
+
+    setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: undefined })
+
+    try {
+      const response = await addLiquidityInfinityStablePool(amountAToAdd, amountBToAdd, minMintAmount)
+
+      setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response })
+
+      const symbolA = currencyA?.symbol
+      const amountA = parsedAmountA?.toSignificant(3) || '0'
+      const symbolB = currencyB?.symbol
+      const amountB = parsedAmountB?.toSignificant(3) || '0'
+
+      addTransaction(
+        { hash: response },
+        {
+          summary: `Add ${amountA} ${symbolA} and ${amountB} ${symbolB}`,
+          translatableSummary: {
+            text: 'Add %amountA% %symbolA% and %amountB% %symbolB%',
+            data: { amountA, symbolA, amountB, symbolB },
+          },
+          type: 'add-liquidity',
+        },
+      )
     } catch (error) {
-      console.error('Add liquidity failed:', error)
+      if (error && !isUserRejected(error)) {
+        logError(error)
+        console.error('Add liquidity failed:', error)
+      }
+      setLiquidityState({
+        attemptingTxn: false,
+        liquidityErrorMessage:
+          error && !isUserRejected(error)
+            ? t('Add liquidity failed: %message%', { message: transactionErrorToUserReadableMessage(error, t) })
+            : undefined,
+        txHash: undefined,
+      })
     }
   }, [
     currencyA,
@@ -151,61 +209,112 @@ export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKe
     expectedLP,
     addLiquidityInfinityStablePool,
     userSlippageTolerance,
+    addTransaction,
+    t,
   ])
 
+  const pendingText = t('Supplying %amountA% %symbolA% and %amountB% %symbolB%', {
+    amountA: formatCurrencyAmount(parsedAmountA, 4, locale),
+    symbolA: currencyA?.symbol ?? '',
+    amountB: formatCurrencyAmount(parsedAmountB, 4, locale),
+    symbolB: currencyB?.symbol ?? '',
+  })
+
+  const handleDismissConfirmation = useCallback(() => {
+    // if there was a tx hash, we want to clear the input
+    if (txHash) {
+      setAmountA('')
+      setAmountB('')
+    }
+
+    setLiquidityState({
+      attemptingTxn: false,
+      liquidityErrorMessage: undefined,
+      txHash: undefined,
+    })
+  }, [txHash])
+
+  const currencies = useMemo(
+    () => ({
+      [Field.CURRENCY_A]: currencyA ?? undefined,
+      [Field.CURRENCY_B]: currencyB ?? undefined,
+    }),
+    [currencyA, currencyB],
+  )
+
+  const parsedAmounts = useMemo(
+    () => ({
+      [Field.CURRENCY_A]: parsedAmountA,
+      [Field.CURRENCY_B]: parsedAmountB,
+    }),
+    [parsedAmountA, parsedAmountB],
+  )
+
+  const [onPresentAddLiquidityModal] = useModal(
+    <ConfirmAddLiquidityModal
+      title={t('You will receive')}
+      customOnDismiss={handleDismissConfirmation}
+      attemptingTxn={attemptingTxn}
+      hash={txHash}
+      pendingText={pendingText}
+      currencyToAdd={undefined}
+      allowedSlippage={userSlippageTolerance}
+      onAdd={onAdd}
+      parsedAmounts={parsedAmounts}
+      currencies={currencies}
+      liquidityErrorMessage={liquidityErrorMessage}
+      price={undefined}
+      noLiquidity={false}
+      poolTokenPercentage={poolTokenPercentage}
+      liquidityMinted={undefined}
+      isStable
+    />,
+    true,
+    true,
+    'addLiquidityModal',
+  )
+
   return (
-    <>
-      <StableFormView
-        formattedAmounts={formattedAmounts}
-        onFieldAInput={setAmountA}
-        onFieldBInput={setAmountB}
-        maxAmounts={maxAmounts}
-        currencies={{
-          CURRENCY_A: currencyA ?? undefined,
-          CURRENCY_B: currencyB ?? undefined,
-        }}
-        buttonDisabled={
-          !isReady ||
-          (!amountA && !amountB) ||
-          isCalculating ||
-          !expectedLP ||
-          !!calcError ||
-          approvalA === ApprovalState.PENDING ||
-          approvalB === ApprovalState.PENDING ||
-          showFieldAApproval ||
-          showFieldBApproval
-        }
-        onAdd={handleAddLiquidity}
-        onPresentAddLiquidityModal={() => handleAddLiquidity()}
-        errorText={
-          !isReady
-            ? 'Pool not ready'
-            : !amountA && !amountB
-            ? 'Please enter at least one amount'
-            : isCalculating
-            ? 'Calculating LP tokens...'
-            : calcError
-            ? 'Error calculating LP tokens'
-            : !expectedLP
-            ? 'Unable to calculate LP tokens'
-            : approvalA === ApprovalState.PENDING || approvalB === ApprovalState.PENDING
-            ? 'Waiting for approval...'
-            : showFieldAApproval || showFieldBApproval
-            ? 'Approval required'
-            : undefined
-        }
-        inputAmountsTotalUsdValue={inputAmountsTotalUsdValue}
-        shouldShowApprovalGroup={shouldShowApprovalGroup}
-        showFieldAApproval={showFieldAApproval}
-        approvalA={approvalA}
-        showFieldBApproval={showFieldBApproval}
-        approvalB={approvalB}
-        approveBCallback={approveBCallback}
-        approveACallback={approveACallback}
-        loading={false}
-        poolTokenPercentage={poolTokenPercentage}
-        executionSlippage={new Percent(userSlippageTolerance, 10000)}
-      />
-    </>
+    <StableFormView
+      formattedAmounts={formattedAmounts}
+      onFieldAInput={setAmountA}
+      onFieldBInput={setAmountB}
+      maxAmounts={maxAmounts}
+      currencies={currencies}
+      buttonDisabled={
+        !isReady ||
+        (!amountA && !amountB) ||
+        !expectedLP ||
+        !!calcError ||
+        approvalA === ApprovalState.PENDING ||
+        approvalB === ApprovalState.PENDING ||
+        showFieldAApproval ||
+        showFieldBApproval
+      }
+      onAdd={onAdd}
+      onPresentAddLiquidityModal={onPresentAddLiquidityModal}
+      errorText={
+        !isReady
+          ? t('Pool not ready')
+          : !amountA && !amountB
+          ? t('Please enter at least one amount')
+          : approvalA === ApprovalState.PENDING || approvalB === ApprovalState.PENDING
+          ? t('Waiting for approval...')
+          : showFieldAApproval || showFieldBApproval
+          ? t('Approval required')
+          : undefined
+      }
+      inputAmountsTotalUsdValue={inputAmountsTotalUsdValue}
+      shouldShowApprovalGroup={shouldShowApprovalGroup}
+      showFieldAApproval={showFieldAApproval}
+      approvalA={approvalA}
+      showFieldBApproval={showFieldBApproval}
+      approvalB={approvalB}
+      approveBCallback={approveBCallback}
+      approveACallback={approveACallback}
+      loading={false}
+      poolTokenPercentage={poolTokenPercentage}
+      executionSlippage={new Percent(userSlippageTolerance, 10000)}
+    />
   )
 }
