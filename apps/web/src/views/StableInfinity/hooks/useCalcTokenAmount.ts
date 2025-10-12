@@ -15,6 +15,11 @@ interface UseCalcTokenAmountReturn {
   error: Error | null
 }
 
+interface UseUserLPBalanceParams {
+  poolAddress: string
+  account?: `0x${string}`
+}
+
 export const useTotalSupply = ({ poolAddress }: { poolAddress: string }): bigint | null => {
   const [totalSupply, setTotalSupply] = useState<bigint | null>(null)
 
@@ -79,7 +84,9 @@ export const useCalcTokenAmount = ({
       setError(null)
 
       try {
+        console.log('infinityStableHook amounts', amounts)
         const result = await infinityStableHook.calcTokenAmount(amounts, deposit)
+        console.log('infinityStableHook result', result)
         setTokenAmount(result)
       } catch (err) {
         const error = err as Error
@@ -101,4 +108,76 @@ export const useCalcTokenAmount = ({
     }),
     [tokenAmount, isLoading, error],
   )
+}
+
+export const useUserLPBalance = ({ poolAddress, account }: UseUserLPBalanceParams): bigint | null => {
+  const [lpBalance, setLpBalance] = useState<bigint | null>(null)
+
+  const publicClient = usePublicClient()
+  const { data: walletClient } = useWalletClient()
+
+  const infinityStableHook = useMemo(() => {
+    if (!publicClient || !poolAddress) return null
+    return new InfinityStableHook(poolAddress, publicClient, walletClient)
+  }, [poolAddress, publicClient, walletClient])
+
+  useEffect(() => {
+    if (!infinityStableHook || !account) {
+      setLpBalance(null)
+      return
+    }
+
+    const fetchLPBalance = async () => {
+      try {
+        const result = await infinityStableHook.balanceOf(account)
+        setLpBalance(result)
+      } catch (err) {
+        console.error('Error fetching LP balance:', err)
+        setLpBalance(null)
+      }
+    }
+
+    fetchLPBalance()
+  }, [infinityStableHook, account])
+
+  return lpBalance
+}
+
+export const usePoolBalances = ({ poolAddress }: { poolAddress: string }): [bigint | null, bigint | null] => {
+  const [balance0, setBalance0] = useState<bigint | null>(null)
+  const [balance1, setBalance1] = useState<bigint | null>(null)
+
+  const publicClient = usePublicClient()
+  const { data: walletClient } = useWalletClient()
+
+  const infinityStableHook = useMemo(() => {
+    if (!publicClient || !poolAddress) return null
+    return new InfinityStableHook(poolAddress, publicClient, walletClient)
+  }, [poolAddress, publicClient, walletClient])
+
+  useEffect(() => {
+    if (!infinityStableHook) {
+      setBalance0(null)
+      setBalance1(null)
+      return
+    }
+
+    const fetchBalances = async () => {
+      console.log('infinityStableHook fetchBalances', poolAddress)
+      try {
+        const [bal0, bal1] = await Promise.all([infinityStableHook.balances(0), infinityStableHook.balances(1)])
+        console.log('infinityStableHook fetchBalances', bal0, bal1)
+        setBalance0(bal0)
+        setBalance1(bal1)
+      } catch (err) {
+        console.error('Error fetching pool balances:', err)
+        setBalance0(null)
+        setBalance1(null)
+      }
+    }
+
+    fetchBalances()
+  }, [infinityStableHook])
+
+  return [balance0, balance1]
 }
