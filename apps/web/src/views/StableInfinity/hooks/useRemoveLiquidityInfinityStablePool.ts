@@ -15,6 +15,14 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
     return new InfinityStableHook(poolAddress, publicClient, walletClient)
   }, [poolAddress, publicClient, walletClient])
 
+  const estimateRemoveLiquidityGas = useCallback(
+    async (burnAmount: bigint, minAmount0: bigint, minAmount1: bigint) => {
+      if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
+      return infinityStableHook.estimateRemoveLiquidityGas(burnAmount, minAmount0, minAmount1)
+    },
+    [infinityStableHook],
+  )
+
   const removeLiquidityInfinityStablePool = useCallback(
     async (burnAmount: bigint, minAmount0: bigint, minAmount1: bigint) => {
       if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
@@ -25,9 +33,10 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
 
   return useMemo(
     () => ({
+      estimateRemoveLiquidityGas,
       removeLiquidityInfinityStablePool,
       isReady: !!infinityStableHook,
     }),
-    [removeLiquidityInfinityStablePool, infinityStableHook],
+    [estimateRemoveLiquidityGas, removeLiquidityInfinityStablePool, infinityStableHook],
   )
 }

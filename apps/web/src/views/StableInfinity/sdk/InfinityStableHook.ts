@@ -123,6 +123,33 @@ export class InfinityStableHook {
   }
 
   /**
+   * Estimate gas for removing liquidity
+   * @param burnAmount Amount of LP tokens to burn
+   * @param minAmount0 Minimum amount of token0 to receive
+   * @param minAmount1 Minimum amount of token1 to receive
+   * @returns Promise<bigint> Estimated gas amount
+   */
+  async estimateRemoveLiquidityGas(burnAmount: bigint, minAmount0: bigint, minAmount1: bigint): Promise<bigint> {
+    if (!this.walletClient || !this.walletClient.account) {
+      throw new Error('Wallet client or account not available')
+    }
+
+    try {
+      const gasEstimate = await this.publicClient.estimateContractGas({
+        address: this.contractAddress as `0x${string}`,
+        abi: infinityStableHookABI,
+        functionName: 'remove_liquidity',
+        args: [burnAmount, minAmount0, minAmount1],
+        account: this.walletClient.account,
+      })
+      return gasEstimate
+    } catch (error) {
+      console.error('Error estimating gas for remove liquidity:', error)
+      throw error
+    }
+  }
+
+  /**
    * Remove liquidity from the stable swap pool
    * @param burnAmount Amount of LP tokens to burn
    * @param minAmount0 Minimum amount of token0 to receive
@@ -130,6 +157,7 @@ export class InfinityStableHook {
    * @returns Promise<string> Transaction hash
    */
   async removeLiquidity(burnAmount: bigint, minAmount0: bigint, minAmount1: bigint): Promise<string> {
+    console.log('call removeLiquidity')
     if (!this.walletClient || !this.walletClient.account) {
       throw new Error('Wallet client or account not available')
     }

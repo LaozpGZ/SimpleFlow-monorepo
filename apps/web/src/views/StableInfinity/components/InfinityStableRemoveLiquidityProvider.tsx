@@ -37,6 +37,7 @@ import { styled } from 'styled-components'
 import { useDebouncedChangeHandler } from '@pancakeswap/hooks'
 import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { calculateSlippageAmount } from 'utils/exchange'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useUserLPBalance, useTotalSupply, usePoolBalances } from '../hooks/useCalcTokenAmount'
 
@@ -78,7 +79,8 @@ export default function InfinityStableRemoveLiquidityProvider({
   // Use the pool hooks address as the pool address
   const poolAddress = hookAddress
 
-  const { removeLiquidityInfinityStablePool, isReady } = useRemoveLiquidityInfinityStablePool({ poolAddress })
+  const { estimateRemoveLiquidityGas, removeLiquidityInfinityStablePool, isReady } =
+    useRemoveLiquidityInfinityStablePool({ poolAddress })
 
   // Transaction adder
   const addTransaction = useTransactionAdder()
@@ -145,16 +147,21 @@ export default function InfinityStableRemoveLiquidityProvider({
     return CurrencyAmount.fromRawAmount(lpToken, lpAmountToBurn)
   }, [lpToken, lpAmountToBurn])
 
+  // TODO: confirm with team if need it
   // Approval hook for LP tokens
-  const { approvalState, approveCallback } = useApproveCallback(lpTokenAmount, poolAddress)
+  // const { approvalState, approveCallback } = useApproveCallback(lpTokenAmount, poolAddress)
+
+  const approvalState = ApprovalState.APPROVED
+  const approveCallback = () => {
+    console.log('approveCallback')
+  }
 
   const onRemove = useCallback(async () => {
     if (!currencyA || !currencyB || !lpAmountToBurn || lpAmountToBurn === 0n) return
 
-    // Calculate minimum amounts using user's slippage tolerance
-    const slippagePercent = BigInt(userSlippageTolerance)
-    const minAmount0 = parsedAmountA ? (parsedAmountA.quotient * (10000n - slippagePercent)) / 10000n : 0n
-    const minAmount1 = parsedAmountB ? (parsedAmountB.quotient * (10000n - slippagePercent)) / 10000n : 0n
+    // reuse slippage calc
+    const minAmount0 = parsedAmountA ? calculateSlippageAmount(parsedAmountA, userSlippageTolerance)[0] : 0n
+    const minAmount1 = parsedAmountB ? calculateSlippageAmount(parsedAmountB, userSlippageTolerance)[0] : 0n
 
     setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: undefined })
 
@@ -199,6 +206,7 @@ export default function InfinityStableRemoveLiquidityProvider({
     lpAmountToBurn,
     parsedAmountA,
     parsedAmountB,
+    estimateRemoveLiquidityGas,
     removeLiquidityInfinityStablePool,
     userSlippageTolerance,
     addTransaction,
@@ -515,21 +523,6 @@ export default function InfinityStableRemoveLiquidityProvider({
                 <CommitButton width="100%" />
               ) : (
                 <RowBetween>
-                  <Button
-                    variant={approvalState === ApprovalState.APPROVED ? 'success' : 'primary'}
-                    onClick={() => approveCallback()}
-                    disabled={approvalState !== ApprovalState.NOT_APPROVED}
-                    width="100%"
-                    mr="0.5rem"
-                  >
-                    {approvalState === ApprovalState.PENDING ? (
-                      <Dots>{t('Enabling')}</Dots>
-                    ) : approvalState === ApprovalState.APPROVED ? (
-                      t('Enabled')
-                    ) : (
-                      t('Enable.Approval')
-                    )}
-                  </Button>
                   <Button
                     variant={!isValid && lpAmountToBurn > 0n ? 'danger' : 'primary'}
                     onClick={handleOpenRemoveLiquidityModal}
