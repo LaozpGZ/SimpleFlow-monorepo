@@ -169,10 +169,10 @@ export default function StableFormView({
               </RowBetween>
               <RowBetween>
                 <FlexGap gap="4px" alignItems="center">
-                  <Text color="textSubtle">{t('Slippage')}</Text>
+                  <Text color="textSubtle">{t('Slippage bonus')}</Text>
                   <QuestionHelper
                     text={t(
-                      'Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected',
+                      'Extra LP tokens earned when depositing low balance coin in the pool. Appears as a bonus for helping rebalance.',
                     )}
                     placement="top-start"
                     mt="1px"

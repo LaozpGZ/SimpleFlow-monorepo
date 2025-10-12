@@ -10,6 +10,7 @@ import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
 import { useAccount } from 'wagmi'
 import StableFormView from 'views/AddLiquidityV3/formViews/StableFormView'
+import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
 import { useCalcTokenAmount, useTotalSupply } from '../hooks/useCalcTokenAmount'
 import { useAddLiquidityInfinityStablePool } from '../hooks/useAddLiquidityStableInfinityPool'
 
@@ -79,6 +80,14 @@ export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKe
 
   // Get user's slippage tolerance setting
   const [userSlippageTolerance] = useUserSlippage()
+
+  // Calculate total USD value of input amounts
+  const inputAmountsTotalUsdValue = useTotalPriceUSD({
+    currency0: currencyA,
+    currency1: currencyB,
+    amount0: parsedAmountA,
+    amount1: parsedAmountB,
+  })
 
   // Calculate max amounts that can be spent (accounting for gas reserves for native tokens)
   const maxAmounts = useMemo(() => {
@@ -185,7 +194,7 @@ export default function InfinityStableAddLiquidityProvider({ poolKey }: { poolKe
             ? 'Approval required'
             : undefined
         }
-        inputAmountsTotalUsdValue={0}
+        inputAmountsTotalUsdValue={inputAmountsTotalUsdValue}
         shouldShowApprovalGroup={shouldShowApprovalGroup}
         showFieldAApproval={showFieldAApproval}
         approvalA={approvalA}
