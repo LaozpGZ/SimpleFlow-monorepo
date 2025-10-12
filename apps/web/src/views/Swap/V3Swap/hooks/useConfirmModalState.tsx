@@ -16,7 +16,7 @@ import { Calldata, usePermit2 } from 'hooks/usePermit2'
 import { usePermit2Requires } from 'hooks/usePermit2Requires'
 import { useSafeTxHashTransformer } from 'hooks/useSafeTxHashTransformer'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { RetryableError, retry } from 'state/multicall/retry'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { logGTMSwapTxSentEvent } from 'utils/customGTMEventTracking'
@@ -161,19 +161,21 @@ const useConfirmActions = (
       inputs,
     }
   }, [chainId, amountToApprove?.currency.address, account])
-  const [permit2Signature, setPermit2Signature] = useState<Permit2Signature | undefined>(undefined)
+
+  const permit2SignatureRef = useRef<Permit2Signature | undefined>(undefined)
+
   const {
     callback: swap,
     error: swapError,
-    swapCalls,
+    getSwapCalls,
   } = useSwapCallback({
     trade: isClassicOrder(order) ? order.trade : undefined,
     deadline,
-    permitSignature: permit2Signature,
   })
 
   const nativeCurrency = useNativeCurrency(order?.trade?.inputAmount.currency.chainId)
-  const wrappedBalance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
+
+  const wrappedBalance = useCurrencyBalance(account, nativeCurrency.wrapped)
 
   const { mutateAsync: sendXOrder } = useSendXOrder()
 
@@ -208,14 +210,14 @@ const useConfirmActions = (
     setConfirmState(ConfirmModalState.REVIEWING)
     setTxHash(undefined)
     setErrorMessage(undefined)
-    setPermit2Signature(undefined)
+    permit2SignatureRef.current = undefined
     resumeQuoting()
   }, [resumeQuoting])
 
   const showError = useCallback((error: string) => {
     setErrorMessage(error)
     setTxHash(undefined)
-    setPermit2Signature(undefined)
+    permit2SignatureRef.current = undefined
   }, [])
 
   const retryWaitForTransaction = useCallback(
@@ -329,16 +331,16 @@ const useConfirmActions = (
           if (isBridgeOrder(order) && signPermit2) {
             const permitSignatureResponse = await signPermit2()
 
-            setPermit2Signature(permitSignatureResponse)
+            permit2SignatureRef.current = permitSignatureResponse
           } else {
             const { tx, ...result } = (await permit()) ?? {}
             if (tx) {
               const hash = await safeTxHashTransformer(tx)
               retryWaitForTransaction({ hash })
               // use transferAllowance, no need to use permit signature
-              setPermit2Signature(undefined)
+              permit2SignatureRef.current = undefined
             } else {
-              setPermit2Signature(result)
+              permit2SignatureRef.current = result
             }
           }
 
@@ -354,16 +356,7 @@ const useConfirmActions = (
       showIndicator: true,
       getCalldata: getPermitCalldata,
     }
-  }, [
-    permit,
-    retryWaitForTransaction,
-    safeTxHashTransformer,
-    showError,
-    signPermit2,
-    setPermit2Signature,
-    order,
-    getPermitCalldata,
-  ])
+  }, [permit, retryWaitForTransaction, safeTxHashTransformer, showError, signPermit2, order, getPermitCalldata])
 
   const wrapStep = useMemo(() => {
     return {
@@ -674,7 +667,7 @@ const useConfirmActions = (
               order: order as BridgeOrderWithCommands,
               account,
               recipient: recipient as Address,
-              permit2: permit2Signature as Permit2Schema | undefined,
+              permit2: permit2SignatureRef.current as Permit2Schema | undefined,
               allowedSlippage,
             })
           }
@@ -762,7 +755,6 @@ const useConfirmActions = (
     recipient,
     chainId,
     setActiveBridgeOrderMetadata,
-    permit2Signature,
     allowedSlippage,
     bridgeSolanaSwapCalldata,
     refreshOrder,
@@ -787,7 +779,7 @@ const useConfirmActions = (
         }
 
         try {
-          const result = await swap()
+          const result = await swap(permit2SignatureRef.current)
           if (result?.hash) {
             const hash = await safeTxHashTransformer(result.hash)
 
@@ -806,9 +798,9 @@ const useConfirmActions = (
         }
       },
       showIndicator: false,
-      getCalldata: () => swapCalls,
+      getCalldata: () => getSwapCalls?.(permit2SignatureRef.current),
     }
-  }, [swapCalls, resetState, retryWaitForTransaction, safeTxHashTransformer, showError, swap, swapError])
+  }, [getSwapCalls, resetState, retryWaitForTransaction, safeTxHashTransformer, showError, swap, swapError])
 
   const xSwapStep = useMemo(() => {
     return {
