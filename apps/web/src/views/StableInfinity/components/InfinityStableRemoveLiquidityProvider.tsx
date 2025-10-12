@@ -21,6 +21,8 @@ import {
   TooltipText,
   useMatchBreakpoints,
   useTooltip,
+  ArrowForwardIcon,
+  PreTitle,
 } from '@pancakeswap/uikit'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected, logError } from 'utils/sentry'
@@ -38,6 +40,8 @@ import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { styled } from 'styled-components'
 import { useDebouncedChangeHandler } from '@pancakeswap/hooks'
 import { formatAmount } from 'utils/formatInfoNumbers'
+import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useUserLPBalance, useTotalSupply, usePoolBalances } from '../hooks/useCalcTokenAmount'
 
@@ -285,17 +289,6 @@ export default function InfinityStableRemoveLiquidityProvider({
     onPresentRemoveLiquidity()
   }, [onPresentRemoveLiquidity])
 
-  // Calculate token prices (for stable pools, typically 1:1 ratio)
-  const priceOfTokenAInTokenB = useMemo(() => {
-    if (!parsedAmountA || !parsedAmountB || parsedAmountA.equalTo(0)) return undefined
-    return parsedAmountB.divide(parsedAmountA).toSignificant(6)
-  }, [parsedAmountA, parsedAmountB])
-
-  const priceOfTokenBInTokenA = useMemo(() => {
-    if (!parsedAmountA || !parsedAmountB || parsedAmountB.equalTo(0)) return undefined
-    return parsedAmountA.divide(parsedAmountB).toSignificant(6)
-  }, [parsedAmountA, parsedAmountB])
-
   // Calculate percentage of each token in the withdrawal
   const [percentageA, percentageB] = useMemo(() => {
     if (!amount0Withdrawn || !amount1Withdrawn || (amount0Withdrawn === 0n && amount1Withdrawn === 0n)) {
@@ -309,6 +302,59 @@ export default function InfinityStableRemoveLiquidityProvider({
   }, [amount0Withdrawn, amount1Withdrawn])
 
   const isValid = lpAmountToBurn > 0n && !calcError && isReady
+
+  // Calculate current token balances from user's LP position
+  const [currentAmount0, currentAmount1] = useMemo<[bigint, bigint]>(() => {
+    if (!totalSupply || totalSupply === 0n || !balance0 || !balance1 || !userLPBalance) {
+      return [0n, 0n]
+    }
+    const amount0 = (userLPBalance * balance0) / totalSupply
+    const amount1 = (userLPBalance * balance1) / totalSupply
+    return [amount0, amount1]
+  }, [userLPBalance, balance0, balance1, totalSupply])
+
+  // Calculate new balances after removal
+  const [newAmount0, newAmount1] = useMemo<[bigint, bigint]>(() => {
+    return [currentAmount0 - amount0Withdrawn, currentAmount1 - amount1Withdrawn]
+  }, [currentAmount0, currentAmount1, amount0Withdrawn, amount1Withdrawn])
+
+  // Parse current and new amounts for display
+  const currentParsedAmountA = useMemo(() => {
+    if (!currencyA || currentAmount0 === 0n) return undefined
+    return CurrencyAmount.fromRawAmount(currencyA, currentAmount0)
+  }, [currencyA, currentAmount0])
+
+  const currentParsedAmountB = useMemo(() => {
+    if (!currencyB || currentAmount1 === 0n) return undefined
+    return CurrencyAmount.fromRawAmount(currencyB, currentAmount1)
+  }, [currencyB, currentAmount1])
+
+  const newParsedAmountA = useMemo(() => {
+    if (!currencyA) return undefined
+    return CurrencyAmount.fromRawAmount(currencyA, newAmount0)
+  }, [currencyA, newAmount0])
+
+  const newParsedAmountB = useMemo(() => {
+    if (!currencyB) return undefined
+    return CurrencyAmount.fromRawAmount(currencyB, newAmount1)
+  }, [currencyB, newAmount1])
+
+  // Calculate USD values for current, new, and removed amounts
+  const currentTotalUSD = useTotalPriceUSD({
+    currency0: currencyA,
+    currency1: currencyB,
+    amount0: currentParsedAmountA,
+    amount1: currentParsedAmountB,
+  })
+
+  const removedTotalUSD = useTotalPriceUSD({
+    currency0: currencyA,
+    currency1: currencyB,
+    amount0: parsedAmountA,
+    amount1: parsedAmountB,
+  })
+
+  const newTotalUSD = currentTotalUSD - removedTotalUSD
 
   return (
     <>
@@ -390,38 +436,80 @@ export default function InfinityStableRemoveLiquidityProvider({
           </AutoColumn>
         </>
 
-        {currencyA && currencyB && parsedAmountA && parsedAmountB && (
-          <AutoColumn gap="12px" style={{ marginTop: '16px' }}>
-            <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
-              {t('Prices')}
-            </Text>
-            <LightGreyCard>
-              <Flex justifyContent="space-between">
-                <Text small color="textSubtle">
-                  1 {currencyA?.symbol} =
-                </Text>
-                <Text small>
-                  {priceOfTokenAInTokenB || '-'} {currencyB?.symbol}
-                </Text>
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Text small color="textSubtle">
-                  1 {currencyB?.symbol} =
-                </Text>
-                <Text small>
-                  {priceOfTokenBInTokenA || '-'} {currencyA?.symbol}
-                </Text>
-              </Flex>
-            </LightGreyCard>
-          </AutoColumn>
-        )}
-
         <RowBetween mt="16px">
           <Text bold color="secondary" fontSize="12px">
             {t('Slippage Tolerance')}
           </Text>
           <LiquiditySlippageButton />
         </RowBetween>
+
+        {/* Position Summary */}
+        {percentToRemove > 0 && (
+          <BorderCard style={{ marginTop: '16px' }}>
+            <AutoColumn gap="12px">
+              {/* Header */}
+              <RowBetween mb="8px">
+                <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
+                  {t('Position')}
+                </Text>
+                <Flex alignItems="center" style={{ gap: '8px' }}>
+                  <Text fontSize="12px" color="textSubtle">
+                    {t('Current')}
+                  </Text>
+                  <ArrowForwardIcon width="12px" color="textSubtle" />
+                  <Text fontSize="12px" color="textSubtle">
+                    {t('New Balance')}
+                  </Text>
+                </Flex>
+              </RowBetween>
+
+              {/* Token 1 Row */}
+              <RowBetween>
+                <Flex alignItems="center" style={{ gap: '8px' }}>
+                  <CurrencyLogo currency={currencyA ?? undefined} size="24px" />
+                  <Text>{currencyA?.symbol}</Text>
+                </Flex>
+                <Flex alignItems="center" style={{ gap: '8px' }}>
+                  <Text>{currentParsedAmountA?.toSignificant(6) || '0'}</Text>
+                  <ArrowForwardIcon width="12px" color="textSubtle" />
+                  <Text>{newParsedAmountA?.toSignificant(6) || '0'}</Text>
+                </Flex>
+              </RowBetween>
+
+              {/* Token 2 Row */}
+              <RowBetween>
+                <Flex alignItems="center" style={{ gap: '8px' }}>
+                  <CurrencyLogo currency={currencyB ?? undefined} size="24px" />
+                  <Text>{currencyB?.symbol}</Text>
+                </Flex>
+                <Flex alignItems="center" style={{ gap: '8px' }}>
+                  <Text>{currentParsedAmountB?.toSignificant(6) || '0'}</Text>
+                  <ArrowForwardIcon width="12px" color="textSubtle" />
+                  <Text>{newParsedAmountB?.toSignificant(6) || '0'}</Text>
+                </Flex>
+              </RowBetween>
+
+              {/* Divider */}
+              <Box height="1px" backgroundColor="cardBorder" my="4px" />
+
+              {/* Total Position Value (USD) */}
+              <RowBetween>
+                <PreTitle textTransform="uppercase">{t('Total Position Value (USD)')}</PreTitle>
+                <Flex alignItems="center" style={{ gap: '8px' }}>
+                  <Text>{formatDollarAmount(currentTotalUSD, 2, false)}</Text>
+                  <ArrowForwardIcon width="12px" color="textSubtle" />
+                  <Text>{formatDollarAmount(newTotalUSD, 2, false)}</Text>
+                </Flex>
+              </RowBetween>
+
+              {/* Total removed value (USD) */}
+              <RowBetween>
+                <Text color="textSubtle">{t('Total removed value (USD)')}:</Text>
+                <Text>{formatDollarAmount(removedTotalUSD, 2, false)}</Text>
+              </RowBetween>
+            </AutoColumn>
+          </BorderCard>
+        )}
 
         <Box position="relative" mt="16px">
           {!account ? (
