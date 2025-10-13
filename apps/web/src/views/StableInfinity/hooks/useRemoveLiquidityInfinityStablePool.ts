@@ -30,6 +30,7 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
           value,
         })
         .then((gasLimit) => {
+          console.log('success estimate gas: ', { to, data, value })
           return sendTransactionAsync({
             to,
             data,
@@ -39,15 +40,6 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
         })
     },
     [publicClient, account, sendTransactionAsync],
-  )
-
-  const estimateRemoveLiquidityGas = useCallback(
-    async (burnAmount: bigint, minAmount0: bigint, minAmount1: bigint) => {
-      if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
-      if (!account) throw new Error('Account not connected')
-      return infinityStableHook.estimateRemoveLiquidityGas(burnAmount, minAmount0, minAmount1, account)
-    },
-    [infinityStableHook, account],
   )
 
   const removeLiquidityInfinityStablePool = useCallback(
@@ -114,7 +106,6 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
 
   return useMemo(
     () => ({
-      estimateRemoveLiquidityGas,
       removeLiquidityInfinityStablePool,
       calcWithdrawOneCoin,
       removeLiquidityOneCoin,
@@ -122,7 +113,6 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
       isReady: !!infinityStableHook,
     }),
     [
-      estimateRemoveLiquidityGas,
       removeLiquidityInfinityStablePool,
       calcWithdrawOneCoin,
       removeLiquidityOneCoin,

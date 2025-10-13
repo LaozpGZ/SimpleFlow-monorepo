@@ -10,17 +10,19 @@ import { getViemErrorMessage } from 'utils/errors'
 import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
-import {
-  InfinityStablePoolFactory,
-  STABLE_NG_POOL_FACTORY_ADDRESS,
-  type CreateInfinityStablePoolOptions,
-  type PoolPreset,
-} from '../sdk'
+import { InfinityStablePoolFactory, type CreateInfinityStablePoolOptions, type PoolPreset, TokenType } from '../sdk'
 
 interface CreateInfinityStablePoolParams extends Omit<CreateInfinityStablePoolOptions, 'tokenA' | 'tokenB'> {
   tokenA: Currency
   tokenB: Currency
   preset?: PoolPreset
+  /**
+   * Asset types for each token
+   * [0, 0] = Standard tokens (no oracle)
+   * [1, 1] = Oracle-based tokens
+   * [0, 1] = Mixed (tokenA standard, tokenB oracle)
+   */
+  assetTypes: readonly [number, number]
 }
 
 export const useCreateInfinityStablePool = () => {
@@ -35,9 +37,14 @@ export const useCreateInfinityStablePool = () => {
   const [txnErrorMessage, setTxnErrorMessage] = useState<string | undefined>()
 
   const createInfinityStablePool = useCallback(
-    async ({ tokenA, tokenB, preset, ...options }: CreateInfinityStablePoolParams) => {
+    async ({ tokenA, tokenB, preset, assetTypes, ...options }: CreateInfinityStablePoolParams) => {
       if (!chainId || !signer || !account || !tokenA || !tokenB) {
         return undefined
+      }
+
+      // Validate assetTypes
+      if (!assetTypes || assetTypes.length !== 2) {
+        throw new Error('assetTypes must be provided as [number, number]')
       }
 
       try {
@@ -51,17 +58,21 @@ export const useCreateInfinityStablePool = () => {
               tokenA,
               tokenB,
               ...InfinityStablePoolFactory.getPresetConfig(preset),
+              assetTypes,
               ...options, // Override preset values with custom options
             })
           : InfinityStablePoolFactory.createPoolCallParameters({
               tokenA,
               tokenB,
+              assetTypes,
               ...options,
             })
 
+        const factoryAddress = InfinityStablePoolFactory.getFactoryAddress(chainId)
+
         const txn = {
           data: calldata,
-          to: STABLE_NG_POOL_FACTORY_ADDRESS,
+          to: factoryAddress,
           value: 0n,
           account,
         }
@@ -77,6 +88,14 @@ export const useCreateInfinityStablePool = () => {
           ...txn,
           gas: calculateGasMargin(estimatedGas),
         })
+
+        // Add transaction to tracking
+        addTransaction(
+          { hash },
+          {
+            summary: `Create ${tokenA.symbol}-${tokenB.symbol} InfinityStable Pool`,
+          },
+        )
 
         setAttemptingTxn(false)
 

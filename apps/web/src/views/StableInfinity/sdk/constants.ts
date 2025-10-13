@@ -1,9 +1,13 @@
 import { Address } from 'viem'
+import { ChainId } from '@pancakeswap/chains'
 
 /**
- * InfinityStable Pool Factory contract address
+ * InfinityStable Pool Factory contract addresses by chain
  */
-export const STABLE_NG_POOL_FACTORY_ADDRESS = '0xA5297FC8479F12A956AeD3A2af0703b845d99A70' as Address
+export const CL_STABLE_SWAP_POOL_FACTORY_ADDRESS: Record<ChainId.BSC | ChainId.BSC_TESTNET, Address> = {
+  [ChainId.BSC]: '0xA5297FC8479F12A956AeD3A2af0703b845d99A70',
+  [ChainId.BSC_TESTNET]: '0xBF1Ac62e35b8d138aC2b6A65DEFa25D4db176c71',
+}
 
 /**
  * Zero address constant

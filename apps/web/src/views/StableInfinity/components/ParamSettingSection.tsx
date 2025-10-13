@@ -360,12 +360,17 @@ export const ParamSettingSection = () => {
       return
     }
 
+    // tokenAConfig, tokenBConfig
+
     try {
       const hash = await createInfinityStablePool({
         // NOTE: already check isEvm above, safe to cast
         tokenA: baseCurrency as Currency,
         tokenB: quoteCurrency as Currency,
         preset: selectedPreset,
+        assetTypes: [tokenAConfig.type, tokenBConfig.type],
+        methodIds: [tokenAConfig.methodId, tokenBConfig.methodId],
+        oracles: [tokenAConfig.oracleAddress, tokenBConfig.oracleAddress],
         ...poolOptions,
       })
 

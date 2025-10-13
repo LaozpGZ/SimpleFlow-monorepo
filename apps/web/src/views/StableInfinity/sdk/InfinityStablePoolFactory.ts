@@ -1,15 +1,10 @@
 import { Currency } from '@pancakeswap/sdk'
+import { ChainId } from '@pancakeswap/chains'
 import { Address, Hex, encodeFunctionData, toHex } from 'viem'
 import invariant from 'tiny-invariant'
 
 import { infinityStablePoolFactoryABI } from './abis/infinityStablePoolFactoryABI'
-import {
-  STABLE_NG_POOL_FACTORY_ADDRESS,
-  ADDRESS_ZERO,
-  NULL_METHOD_ID,
-  DEFAULT_IMPLEMENTATION_IDX,
-  DEFAULT_ASSET_TYPE,
-} from './constants'
+import { CL_STABLE_SWAP_POOL_FACTORY_ADDRESS, ADDRESS_ZERO, NULL_METHOD_ID } from './constants'
 import { CreateInfinityStablePoolOptions, MethodParameters, PoolPreset, PRESET_CONFIGS } from './types'
 
 /**
@@ -33,7 +28,14 @@ function sortCurrencies(tokenA: Currency, tokenB: Currency): [Currency, Currency
 export abstract class InfinityStablePoolFactory {
   public static ABI = infinityStablePoolFactoryABI
 
-  public static ADDRESS = STABLE_NG_POOL_FACTORY_ADDRESS
+  /**
+   * Get the factory address for a specific chain
+   */
+  public static getFactoryAddress(chainId: ChainId.BSC | ChainId.BSC_TESTNET): Address {
+    const address = CL_STABLE_SWAP_POOL_FACTORY_ADDRESS[chainId]
+    invariant(address, `Unsupported chainId: ${chainId}`)
+    return address
+  }
 
   /**
    * Cannot be constructed.
@@ -54,15 +56,21 @@ export abstract class InfinityStablePoolFactory {
     // Prepare token addresses
     const coins = [tokenA.wrapped.address as Address, tokenB.wrapped.address as Address]
 
-    // Use provided values or defaults
-    const A = options.A ?? 1000n
-    const fee = options.fee ?? 1000000n // 0.01%
-    const offpegFeeMultiplier = options.offpegFeeMultiplier ?? 100000000000n // 10
-    const maExpTime = options.maExpTime ?? 866n
-    const implementationIdx = options.implementationIdx ?? DEFAULT_IMPLEMENTATION_IDX
-    const assetTypes = options.assetTypes ?? ([DEFAULT_ASSET_TYPE, DEFAULT_ASSET_TYPE] as const)
-    const methodIds = options.methodIds ?? ([NULL_METHOD_ID, NULL_METHOD_ID] as const)
-    const oracles = options.oracles ?? ([ADDRESS_ZERO, ADDRESS_ZERO] as const)
+    // Validate all required parameters are provided
+    invariant(options.A !== undefined, 'A parameter is required')
+    invariant(options.fee !== undefined, 'fee parameter is required')
+    invariant(options.offpegFeeMultiplier !== undefined, 'offpegFeeMultiplier parameter is required')
+    invariant(options.maExpTime !== undefined, 'maExpTime parameter is required')
+    invariant(options.assetTypes !== undefined, 'assetTypes parameter is required')
+
+    const { A } = options
+    const { fee } = options
+    const { offpegFeeMultiplier } = options
+    const { maExpTime } = options
+    const implementationIdx = 0n
+    const { assetTypes } = options
+    const methodIds = [options.methodIds?.[0] ?? NULL_METHOD_ID, options.methodIds?.[1] ?? NULL_METHOD_ID]
+    const oracles = [options.oracles?.[0] ?? ADDRESS_ZERO, options.oracles?.[1] ?? ADDRESS_ZERO]
 
     console.info('[debug] InfinityStablePoolFactory.encodeCreatePool call parameters', {
       name,
@@ -82,17 +90,19 @@ export abstract class InfinityStablePoolFactory {
       abi: InfinityStablePoolFactory.ABI,
       functionName: 'createPool',
       args: [
-        name,
-        symbol,
-        coins,
-        A,
-        fee,
-        offpegFeeMultiplier,
-        maExpTime,
-        implementationIdx,
-        assetTypes,
-        methodIds,
-        oracles,
+        {
+          name,
+          symbol,
+          coins,
+          A,
+          fee,
+          offpegFeeMultiplier,
+          maExpTime,
+          implementationIdx,
+          assetTypes,
+          methodIds,
+          oracles,
+        },
       ],
     })
   }

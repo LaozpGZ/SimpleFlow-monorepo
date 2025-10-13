@@ -19,8 +19,8 @@ export interface MethodParameters {
  * Token type for InfinityStable pool
  */
 export enum TokenType {
-  STANDARD = 'Standard',
-  ORACLE = 'Oracle',
+  STANDARD = 0,
+  ORACLE = 1,
 }
 
 /**
