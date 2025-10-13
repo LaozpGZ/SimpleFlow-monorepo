@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useCurrency } from 'hooks/Tokens'
-import { ApprovalState } from 'hooks/useApproveCallback'
-import { CurrencyAmount, Percent, Token } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, Percent, Token } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useTranslation } from '@pancakeswap/localization'
 import {
@@ -20,7 +19,6 @@ import {
   ArrowForwardIcon,
   PreTitle,
   Card,
-  BalanceInput,
 } from '@pancakeswap/uikit'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected, logError } from 'utils/sentry'
@@ -40,6 +38,8 @@ import { calculateSlippageAmount } from 'utils/exchange'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import ConfirmLiquidityModal from 'components/Liquidity/ConfirmRemoveLiquidityModal'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
+import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { ApprovalState } from 'hooks/useApproveCallback'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useUserLPBalance, useTotalSupply, usePoolBalances } from '../hooks/useCalcTokenAmount'
 import { CardCheckBox } from './shared/CardCheckBox'
@@ -130,8 +130,6 @@ export default function InfinityStableRemoveLiquidityProvider({
     return [amount0Withdrawn, amount1Withdrawn]
   }, [amount0Withdrawn, amount1Withdrawn])
 
-  console.log('lpAmountToBurn', lpAmountToBurn)
-
   // Calculate expected token amounts using calc_token_amount with deposit=false
   // For stable swap removal, we need to calculate the amounts we'll receive
   const { tokenAmount: expectedTokensOut, error: calcError } = useCalcTokenAmount({
@@ -172,23 +170,23 @@ export default function InfinityStableRemoveLiquidityProvider({
     fetchOneCoinAmount()
   }, [removeMode, lpAmountToBurn, selectedCoinIndex, calcWithdrawOneCoin, isReady])
 
+  const customCurrencyAmount0 = useMemo(() => {
+    if (!currencyA || !customAmount0) return undefined
+    return tryParseAmount(customAmount0, currencyA)
+  }, [currencyA, customAmount0, customAmount0])
+
+  const customCurrencyAmount1 = useMemo(() => {
+    if (!currencyB || !customAmount1) return undefined
+    return tryParseAmount(customAmount1, currencyB)
+  }, [currencyB, customAmount1, customAmount1])
+
   // Custom mode: Parse custom input amounts
   const customAmount0Parsed = useMemo(() => {
-    if (!currencyA || !customAmount0) return 0n
-    try {
-      return BigInt(Math.floor(parseFloat(customAmount0) * 10 ** currencyA.decimals))
-    } catch {
-      return 0n
-    }
+    return customCurrencyAmount0?.quotient ?? 0n
   }, [customAmount0, currencyA])
 
   const customAmount1Parsed = useMemo(() => {
-    if (!currencyB || !customAmount1) return 0n
-    try {
-      return BigInt(Math.floor(parseFloat(customAmount1) * 10 ** currencyB.decimals))
-    } catch {
-      return 0n
-    }
+    return customCurrencyAmount1?.quotient ?? 0n
   }, [customAmount1, currencyB])
 
   const amountsCustom = useMemo<[bigint, bigint]>(() => {
@@ -200,7 +198,7 @@ export default function InfinityStableRemoveLiquidityProvider({
     poolAddress,
     amounts: amountsCustom,
     deposit: false,
-    enabled: removeMode === RemoveMode.CUSTOM && (customAmount0Parsed > 0n || customAmount1Parsed > 0n),
+    enabled: removeMode === RemoveMode.CUSTOM && customAmount0Parsed > 0n && customAmount1Parsed > 0n,
   })
 
   // Create a mock LP token for approval
@@ -213,15 +211,6 @@ export default function InfinityStableRemoveLiquidityProvider({
     if (!lpToken || !lpAmountToBurn) return undefined
     return CurrencyAmount.fromRawAmount(lpToken, lpAmountToBurn)
   }, [lpToken, lpAmountToBurn])
-
-  // TODO: confirm with team if need it
-  // Approval hook for LP tokens
-  // const { approvalState, approveCallback } = useApproveCallback(lpTokenAmount, poolAddress)
-
-  const approvalState = ApprovalState.APPROVED
-  const approveCallback = () => {
-    console.log('approveCallback')
-  }
 
   const onRemove = useCallback(async () => {
     if (!currencyA || !currencyB) return
@@ -249,8 +238,6 @@ export default function InfinityStableRemoveLiquidityProvider({
         const parsedOneCoinAmount = CurrencyAmount.fromRawAmount(selectedCurrency, oneCoinAmount)
         const minReceived = calculateSlippageAmount(parsedOneCoinAmount, userSlippageTolerance)[0]
 
-        console.log('call removeLiquidityOneCoin', lpAmountToBurn, selectedCoinIndex, minReceived)
-
         response = await removeLiquidityOneCoin(lpAmountToBurn, selectedCoinIndex === 0, minReceived)
 
         if (selectedCoinIndex === 0) {
@@ -262,19 +249,21 @@ export default function InfinityStableRemoveLiquidityProvider({
         }
       } else {
         // Custom mode
-        if (customAmount0Parsed === 0n && customAmount1Parsed === 0n) return
+        if (customCurrencyAmount0 === undefined || customCurrencyAmount1 === undefined) return
         if (!customMaxBurnAmount || customMaxBurnAmount === 0n) return
 
-        // Apply slippage to max burn amount (allow slightly more burn for slippage)
-        const slippagePercent = new Percent(userSlippageTolerance, 10000)
-        const maxBurnWithSlippage = customMaxBurnAmount + (customMaxBurnAmount * BigInt(userSlippageTolerance)) / 10000n
+        const slippagedCustomAmount0Parsed = calculateSlippageAmount(customCurrencyAmount0, userSlippageTolerance)[0]
 
-        response = await removeLiquidityImbalance(customAmount0Parsed, customAmount1Parsed, maxBurnWithSlippage)
+        const slippagedCustomAmount1Parsed = calculateSlippageAmount(customCurrencyAmount1, userSlippageTolerance)[0]
 
-        const parsedCustomAmount0 = CurrencyAmount.fromRawAmount(currencyA, customAmount0Parsed)
-        const parsedCustomAmount1 = CurrencyAmount.fromRawAmount(currencyB, customAmount1Parsed)
-        amountA = parsedCustomAmount0.toSignificant(3)
-        amountB = parsedCustomAmount1.toSignificant(3)
+        response = await removeLiquidityImbalance(
+          slippagedCustomAmount0Parsed,
+          slippagedCustomAmount1Parsed,
+          customMaxBurnAmount,
+        )
+
+        amountA = customCurrencyAmount0.toSignificant(3)
+        amountB = customCurrencyAmount1.toSignificant(3)
       }
 
       setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response })
@@ -313,8 +302,8 @@ export default function InfinityStableRemoveLiquidityProvider({
     parsedAmountB,
     oneCoinAmount,
     selectedCoinIndex,
-    customAmount0Parsed,
-    customAmount1Parsed,
+    customCurrencyAmount0,
+    customCurrencyAmount1,
     customMaxBurnAmount,
     estimateRemoveLiquidityGas,
     removeLiquidityInfinityStablePool,
@@ -324,13 +313,6 @@ export default function InfinityStableRemoveLiquidityProvider({
     addTransaction,
     t,
   ])
-
-  const pendingText = t('Removing %amountA% %symbolA% and %amountB% %symbolB%', {
-    amountA: parsedAmountA?.toSignificant(6) ?? '',
-    symbolA: currencyA?.symbol ?? '',
-    amountB: parsedAmountB?.toSignificant(6) ?? '',
-    symbolB: currencyB?.symbol ?? '',
-  })
 
   const handleDismissConfirmation = useCallback(() => {
     // if there was a tx hash, we want to clear the input
@@ -359,18 +341,64 @@ export default function InfinityStableRemoveLiquidityProvider({
     [setInnerLiquidityPercentage],
   )
 
-  const parsedAmounts = useMemo(
-    () => ({
-      [Field.LIQUIDITY_PERCENT]: new Percent(percentToRemove, 100),
-      CURRENCY_A: parsedAmountA,
-      CURRENCY_B: parsedAmountB,
-    }),
-    [parsedAmountA, parsedAmountB, percentToRemove],
-  )
+  const parsedAmounts = useMemo(() => {
+    let amountA: CurrencyAmount<Currency> | undefined
+    let amountB: CurrencyAmount<Currency> | undefined
 
+    if (removeMode === RemoveMode.BALANCE) {
+      amountA = parsedAmountA
+      amountB = parsedAmountB
+    } else if (removeMode === RemoveMode.ONE_COIN) {
+      if (selectedCoinIndex === 0 && currencyA && oneCoinAmount > 0n) {
+        amountA = CurrencyAmount.fromRawAmount(currencyA, oneCoinAmount)
+        amountB = undefined
+      } else if (selectedCoinIndex === 1 && currencyB && oneCoinAmount > 0n) {
+        amountA = undefined
+        amountB = CurrencyAmount.fromRawAmount(currencyB, oneCoinAmount)
+      }
+    } else if (removeMode === RemoveMode.CUSTOM) {
+      amountA =
+        currencyA && customAmount0Parsed > 0n ? CurrencyAmount.fromRawAmount(currencyA, customAmount0Parsed) : undefined
+      amountB =
+        currencyB && customAmount1Parsed > 0n ? CurrencyAmount.fromRawAmount(currencyB, customAmount1Parsed) : undefined
+    }
+
+    return {
+      [Field.LIQUIDITY_PERCENT]: new Percent(percentToRemove, 100),
+      CURRENCY_A: amountA,
+      CURRENCY_B: amountB,
+    }
+  }, [
+    removeMode,
+    parsedAmountA,
+    parsedAmountB,
+    selectedCoinIndex,
+    currencyA,
+    currencyB,
+    oneCoinAmount,
+    customAmount0Parsed,
+    customAmount1Parsed,
+    percentToRemove,
+  ])
+
+  const pendingText = useMemo(() => {
+    const amountAForModal = parsedAmounts.CURRENCY_A
+    const amountBForModal = parsedAmounts.CURRENCY_B
+
+    return t('Removing %amountA% %symbolA% and %amountB% %symbolB%', {
+      amountA: amountAForModal?.toSignificant(6) ?? '',
+      symbolA: currencyA?.symbol ?? '',
+      amountB: amountBForModal?.toSignificant(6) ?? '',
+      symbolB: currencyB?.symbol ?? '',
+    })
+  }, [parsedAmounts, currencyA, currencyB, t])
+
+  // Because not need approval for removing liquidity in infinity stable pool
+  // So we set approval to approved as default
   const [onPresentRemoveLiquidity] = useModal(
     currencyA?.wrapped && currencyB?.wrapped ? (
       <ConfirmLiquidityModal
+        approval={ApprovalState.APPROVED}
         title={t('You will receive')}
         customOnDismiss={handleDismissConfirmation}
         attemptingTxn={attemptingTxn}
@@ -378,7 +406,6 @@ export default function InfinityStableRemoveLiquidityProvider({
         allowedSlippage={userSlippageTolerance}
         onRemove={onRemove}
         pendingText={pendingText}
-        approval={approvalState}
         tokenA={currencyA.wrapped}
         tokenB={currencyB.wrapped}
         liquidityErrorMessage={liquidityErrorMessage}
@@ -920,7 +947,7 @@ export default function InfinityStableRemoveLiquidityProvider({
                     variant={!isValid && lpAmountToBurn > 0n ? 'danger' : 'primary'}
                     onClick={handleOpenRemoveLiquidityModal}
                     width="100%"
-                    disabled={!isValid || approvalState !== ApprovalState.APPROVED}
+                    disabled={!isValid}
                   >
                     {!isReady
                       ? t('Pool not ready')

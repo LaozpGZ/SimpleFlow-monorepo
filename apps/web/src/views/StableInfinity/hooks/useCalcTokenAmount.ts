@@ -70,7 +70,7 @@ export const useCalcTokenAmount = ({
   }, [poolAddress, publicClient])
 
   useEffect(() => {
-    if (!enabled || !infinityStableHook || (amounts[0] === 0n && amounts[1] === 0n)) {
+    if (!enabled || !infinityStableHook || amounts[0] === 0n || amounts[1] === 0n) {
       setTokenAmount(null)
       setError(null)
       setIsLoading(false)
@@ -82,11 +82,13 @@ export const useCalcTokenAmount = ({
       setError(null)
 
       try {
-        console.log('infinityStableHook amounts', amounts)
+        console.log('infinityStableHook calcTokenAmount', amounts, deposit)
         const result = await infinityStableHook.calcTokenAmount(amounts, deposit)
-        console.log('infinityStableHook result', result)
+
+        console.log('infinityStableHook calcTokenAmount result', result)
         setTokenAmount(result)
       } catch (err) {
+        console.error('infinityStableHook calcTokenAmount error', err)
         const error = err as Error
         setError(error)
         setTokenAmount(null)
