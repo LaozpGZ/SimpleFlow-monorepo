@@ -94,7 +94,7 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
       ConfirmModalState.PERMITTING,
     ].includes(confirmModalState)
   }, [confirmModalState])
-  const hasError = useMemo(() => swapErrorMessage !== undefined, [swapErrorMessage])
+  const hasError = swapErrorMessage !== undefined
   const stepsVisible = useMemo(() => {
     if (swapErrorMessage) return false
     if (confirmModalState === ConfirmModalState.REVIEWING || confirmModalState === ConfirmModalState.COMPLETED)
@@ -302,6 +302,8 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
     token,
   ])
 
+  const pendingModalStepsFlow = useMemo(() => pendingModalSteps.map((step) => step.step) as any, [pendingModalSteps])
+
   if (!chainId) return null
 
   return (
@@ -317,10 +319,7 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
     >
       <Box>{modalContent}</Box>
       {stepsVisible ? (
-        <ApproveStepFlow
-          confirmModalState={confirmModalState}
-          pendingModalSteps={pendingModalSteps.map((step) => step.step) as any}
-        />
+        <ApproveStepFlow confirmModalState={confirmModalState} pendingModalSteps={pendingModalStepsFlow} />
       ) : null}
     </ConfirmSwapModalContainer>
   )
