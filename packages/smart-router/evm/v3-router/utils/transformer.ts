@@ -87,9 +87,12 @@ export interface SerializedInfinityBinPool
   reserve1?: SerializedCurrencyAmount
 }
 
-export interface SerializedInfinityStablePool extends Omit<InfinityStablePool, 'currency0' | 'currency1'> {
+export interface SerializedInfinityStablePool
+  extends Omit<InfinityStablePool, 'currency0' | 'currency1' | 'reserve0' | 'reserve1'> {
   currency0: SerializedCurrency
   currency1: SerializedCurrency
+  reserve0?: SerializedCurrencyAmount
+  reserve1?: SerializedCurrencyAmount
 }
 
 export type SerializedBinReserves = {

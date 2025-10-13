@@ -14,7 +14,7 @@ import {
 import { ACTIONS, ActionsPlanner, encodePoolKey } from '@pancakeswap/infinity-sdk'
 import first from 'lodash/first'
 import last from 'lodash/last'
-import { Address, encodeAbiParameters, keccak256, parseAbiParameters, zeroAddress } from 'viem'
+import { Address } from 'viem'
 import { ACTION_CONSTANTS } from '../../constants'
 import {
   EncodedMultiSwapInParams,

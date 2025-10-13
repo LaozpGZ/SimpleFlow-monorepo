@@ -54,7 +54,7 @@ export const getInfinityCandidatePoolsLite = async (
   console.log('calling fetchPoolsOnChain')
 
   // TODO: disable fetchPoolsOnChain for faster development
-  const pools = []
+  const pools: InfinityPoolWithTvl[] = []
 
   console.log('calling getInfinityStableCandidatePools')
 
