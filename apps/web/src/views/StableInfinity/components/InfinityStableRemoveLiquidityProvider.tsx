@@ -39,6 +39,7 @@ import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { calculateSlippageAmount } from 'utils/exchange'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import ConfirmLiquidityModal from 'components/Liquidity/ConfirmRemoveLiquidityModal'
+import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useUserLPBalance, useTotalSupply, usePoolBalances } from '../hooks/useCalcTokenAmount'
 import { CardCheckBox } from './shared/CardCheckBox'
@@ -415,6 +416,16 @@ export default function InfinityStableRemoveLiquidityProvider({
     return [percA.toString(), percB.toString()]
   }, [amount0Withdrawn, amount1Withdrawn])
 
+  // Calculate current token balances from user's LP position
+  const [currentAmount0, currentAmount1] = useMemo<[bigint, bigint]>(() => {
+    if (!totalSupply || totalSupply === 0n || !balance0 || !balance1 || !userLPBalance) {
+      return [0n, 0n]
+    }
+    const amount0 = (userLPBalance * balance0) / totalSupply
+    const amount1 = (userLPBalance * balance1) / totalSupply
+    return [amount0, amount1]
+  }, [userLPBalance, balance0, balance1, totalSupply])
+
   const isValid = useMemo(() => {
     if (!isReady) return false
 
@@ -425,12 +436,16 @@ export default function InfinityStableRemoveLiquidityProvider({
       return lpAmountToBurn > 0n && oneCoinAmount > 0n
     }
     if (removeMode === RemoveMode.CUSTOM) {
-      return (
-        (customAmount0Parsed > 0n || customAmount1Parsed > 0n) &&
-        customMaxBurnAmount !== undefined &&
-        customMaxBurnAmount !== null &&
-        customMaxBurnAmount > 0n
-      )
+      // Check if amounts are positive
+      const hasAmount = customAmount0Parsed > 0n || customAmount1Parsed > 0n
+      // Check if amounts don't exceed current balance
+      const amount0Valid = customAmount0Parsed === 0n || customAmount0Parsed <= currentAmount0
+      const amount1Valid = customAmount1Parsed === 0n || customAmount1Parsed <= currentAmount1
+      // Check if we have a valid burn amount
+      const hasValidBurnAmount =
+        customMaxBurnAmount !== undefined && customMaxBurnAmount !== null && customMaxBurnAmount > 0n
+
+      return hasAmount && amount0Valid && amount1Valid && hasValidBurnAmount
     }
     return false
   }, [
@@ -442,17 +457,24 @@ export default function InfinityStableRemoveLiquidityProvider({
     customAmount1Parsed,
     customMaxBurnAmount,
     isReady,
+    currentAmount0,
+    currentAmount1,
   ])
 
-  // Calculate current token balances from user's LP position
-  const [currentAmount0, currentAmount1] = useMemo<[bigint, bigint]>(() => {
-    if (!totalSupply || totalSupply === 0n || !balance0 || !balance1 || !userLPBalance) {
-      return [0n, 0n]
+  const insufficientBalanceError = useMemo(() => {
+    if (removeMode !== RemoveMode.CUSTOM) return null
+
+    const insufficientTokens: string[] = []
+
+    if (customAmount0Parsed > 0n && customAmount0Parsed > currentAmount0 && currencyA) {
+      insufficientTokens.push(currencyA.symbol || 'Token')
     }
-    const amount0 = (userLPBalance * balance0) / totalSupply
-    const amount1 = (userLPBalance * balance1) / totalSupply
-    return [amount0, amount1]
-  }, [userLPBalance, balance0, balance1, totalSupply])
+    if (customAmount1Parsed > 0n && customAmount1Parsed > currentAmount1 && currencyB) {
+      insufficientTokens.push(currencyB.symbol || 'Token')
+    }
+
+    return insufficientTokens.length > 0 ? insufficientTokens.join(' and ') : null
+  }, [removeMode, customAmount0Parsed, customAmount1Parsed, currentAmount0, currentAmount1, currencyA, currencyB])
 
   // Calculate new balances after removal based on mode
   const [newAmount0, newAmount1] = useMemo<[bigint, bigint]>(() => {
@@ -781,43 +803,30 @@ export default function InfinityStableRemoveLiquidityProvider({
                   {/* Custom Mode Display */}
                   {removeMode === RemoveMode.CUSTOM && (
                     <AutoColumn gap="8px">
-                      <BalanceInput
-                        value={customAmount0}
+                      <CurrencyInputPanelSimplify
+                        title={<>&nbsp;</>}
+                        id="remove-liquidity-custom-currency-0"
+                        defaultValue={customAmount0}
                         onUserInput={setCustomAmount0}
-                        placeholder="0.0"
-                        decimals={currencyA?.decimals ?? 18}
-                        appendComponent={
-                          <Flex alignItems="center" mr="8px">
-                            <CurrencyLogo currency={currencyA ?? undefined} />
-                            <Text small color="textSubtle" ml="4px">
-                              {currencyA?.symbol}
-                            </Text>
-                          </Flex>
-                        }
+                        currency={currencyA ?? undefined}
+                        overrideBalance={currentParsedAmountA}
+                        showMaxButton
+                        onMax={() => setCustomAmount0(currentParsedAmountA?.toExact() ?? '')}
+                        showUSDPrice
+                        disableCurrencySelect
                       />
-                      <BalanceInput
-                        value={customAmount1}
+                      <CurrencyInputPanelSimplify
+                        title={<>&nbsp;</>}
+                        id="remove-liquidity-custom-currency-1"
+                        defaultValue={customAmount1}
                         onUserInput={setCustomAmount1}
-                        placeholder="0.0"
-                        decimals={currencyB?.decimals ?? 18}
-                        appendComponent={
-                          <Flex alignItems="center" mr="8px">
-                            <CurrencyLogo currency={currencyB ?? undefined} />
-                            <Text small color="textSubtle" ml="4px">
-                              {currencyB?.symbol}
-                            </Text>
-                          </Flex>
-                        }
+                        currency={currencyB ?? undefined}
+                        overrideBalance={currentParsedAmountB}
+                        showMaxButton
+                        onMax={() => setCustomAmount1(currentParsedAmountB?.toExact() ?? '')}
+                        showUSDPrice
+                        disableCurrencySelect
                       />
-                      {customMaxBurnAmount !== null &&
-                        customMaxBurnAmount !== undefined &&
-                        customMaxBurnAmount > 0n && (
-                          <Text small color="textSubtle">
-                            {t('Max LP to burn: %amount%', {
-                              amount: (customMaxBurnAmount / BigInt(1e18)).toString(),
-                            })}
-                          </Text>
-                        )}
                     </AutoColumn>
                   )}
                 </LightGreyCard>
@@ -914,8 +923,12 @@ export default function InfinityStableRemoveLiquidityProvider({
                   >
                     {!isReady
                       ? t('Pool not ready')
-                      : lpAmountToBurn === 0n
+                      : lpAmountToBurn === 0n && removeMode !== RemoveMode.CUSTOM
                       ? t('Enter an amount')
+                      : removeMode === RemoveMode.CUSTOM && customAmount0Parsed === 0n && customAmount1Parsed === 0n
+                      ? t('Enter an amount')
+                      : insufficientBalanceError
+                      ? t('Insufficient %symbol% balance', { symbol: insufficientBalanceError })
                       : calcError
                       ? t('Error calculating amounts')
                       : t('Remove')}
