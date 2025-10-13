@@ -139,7 +139,7 @@ export class InfinityStableHook {
         address: this.contractAddress as `0x${string}`,
         abi: infinityStableHookABI,
         functionName: 'remove_liquidity',
-        args: [burnAmount, minAmount0, minAmount1],
+        args: [burnAmount, minAmount0, minAmount1, this.walletClient.account.address, false],
         account: this.walletClient.account,
       })
       return gasEstimate
@@ -167,13 +167,92 @@ export class InfinityStableHook {
         address: this.contractAddress as `0x${string}`,
         abi: infinityStableHookABI,
         functionName: 'remove_liquidity',
-        args: [burnAmount, minAmount0, minAmount1],
+        args: [burnAmount, minAmount0, minAmount1, this.walletClient.account.address, false],
         account: this.walletClient.account,
         chain: this.walletClient.chain,
       })
       return hash
     } catch (error) {
       console.error('Error removing liquidity:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Calculate the amount of a single token that will be received when burning LP tokens
+   * @param burnAmount Amount of LP tokens to burn
+   * @param index Token index (0 or 1)
+   * @returns Promise<bigint> Amount of tokens that will be received
+   */
+  async calcWithdrawOneCoin(burnAmount: bigint, index: number): Promise<bigint> {
+    try {
+      const result = await this.publicClient.readContract({
+        address: this.contractAddress as `0x${string}`,
+        abi: infinityStableHookABI,
+        functionName: 'calc_withdraw_one_coin',
+        args: [burnAmount, BigInt(index)],
+      })
+      return result as bigint
+    } catch (error) {
+      console.error('Error calculating withdraw one coin:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Remove liquidity and receive only one token
+   * @param burnAmount Amount of LP tokens to burn
+   * @param zeroOrOne True for token0, false for token1
+   * @param minReceived Minimum amount of tokens to receive
+   * @returns Promise<string> Transaction hash
+   */
+  async removeLiquidityOneCoin(burnAmount: bigint, zeroOrOne: boolean, minReceived: bigint): Promise<string> {
+    console.log('call removeLiquidityOneCoin')
+    if (!this.walletClient || !this.walletClient.account) {
+      throw new Error('Wallet client or account not available')
+    }
+
+    try {
+      const hash = await this.walletClient.writeContract({
+        address: this.contractAddress as `0x${string}`,
+        abi: infinityStableHookABI,
+        functionName: 'remove_liquidity_one_coin',
+        args: [burnAmount, zeroOrOne, minReceived],
+        account: this.walletClient.account,
+        chain: this.walletClient.chain,
+      })
+      return hash
+    } catch (error) {
+      console.error('Error removing liquidity one coin:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Remove liquidity with imbalanced token amounts
+   * @param amount0 Amount of token0 to withdraw
+   * @param amount1 Amount of token1 to withdraw
+   * @param maxBurnAmount Maximum amount of LP tokens to burn
+   * @returns Promise<string> Transaction hash
+   */
+  async removeLiquidityImbalance(amount0: bigint, amount1: bigint, maxBurnAmount: bigint): Promise<string> {
+    console.log('call removeLiquidityImbalance')
+    if (!this.walletClient || !this.walletClient.account) {
+      throw new Error('Wallet client or account not available')
+    }
+
+    try {
+      const hash = await this.walletClient.writeContract({
+        address: this.contractAddress as `0x${string}`,
+        abi: infinityStableHookABI,
+        functionName: 'remove_liquidity_imbalance',
+        args: [amount0, amount1, maxBurnAmount],
+        account: this.walletClient.account,
+        chain: this.walletClient.chain,
+      })
+      return hash
+    } catch (error) {
+      console.error('Error removing liquidity imbalance:', error)
       throw error
     }
   }

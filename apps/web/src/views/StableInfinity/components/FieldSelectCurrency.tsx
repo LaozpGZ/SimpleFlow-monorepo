@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, ERC20Token, UnifiedCurrency } from '@pancakeswap/sdk'
-import { AutoRow, Box, Checkbox, Flex, Input, PreTitle, Text } from '@pancakeswap/uikit'
+import { AutoRow, Box, Input, PreTitle } from '@pancakeswap/uikit'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
@@ -12,6 +12,7 @@ import { CurrencyField } from 'utils/types'
 import { TokenType } from '../sdk/types'
 import { ADDRESS_ZERO, NULL_METHOD_ID } from '../sdk/constants'
 import { useTokenConfig } from '../contexts/TokenConfigContext'
+import { CardCheckBox } from './shared/CardCheckBox'
 
 export const FieldSelectCurrency = ({
   selectedCurrency,
@@ -35,17 +36,6 @@ export const FieldSelectCurrency = ({
       commonBasesType={CommonBasesType.LIQUIDITY}
       hideBalance
     />
-  )
-}
-
-function CardCheckBox({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
-  return (
-    <Flex alignItems="center" style={{ cursor: 'pointer' }} onClick={onChange}>
-      <Text bold small color="textSubtle" mr="4px">
-        {label}
-      </Text>
-      <Checkbox scale="sm" checked={checked} onChange={onChange} />
-    </Flex>
   )
 }
 

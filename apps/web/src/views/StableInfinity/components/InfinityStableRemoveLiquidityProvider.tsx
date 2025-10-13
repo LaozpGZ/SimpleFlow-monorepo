@@ -8,6 +8,7 @@ import {
   useModal,
   ArrowDownIcon,
   AutoColumn,
+  AutoRow,
   Box,
   Button,
   CardBody,
@@ -19,6 +20,7 @@ import {
   ArrowForwardIcon,
   PreTitle,
   Card,
+  BalanceInput,
 } from '@pancakeswap/uikit'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected, logError } from 'utils/sentry'
@@ -26,7 +28,6 @@ import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToU
 import ConfirmLiquidityModal from 'views/Swap/components/ConfirmRemoveLiquidityModal'
 import { Field } from 'state/burn/actions'
 import { LightGreyCard } from 'components/Card'
-import { CurrencyLogo } from 'components/Logo'
 import { RowBetween } from 'components/Layout/Row'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Dots from 'components/Loader/Dots'
@@ -38,8 +39,11 @@ import { useDebouncedChangeHandler } from '@pancakeswap/hooks'
 import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { calculateSlippageAmount } from 'utils/exchange'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useUserLPBalance, useTotalSupply, usePoolBalances } from '../hooks/useCalcTokenAmount'
+import { CardCheckBox } from './shared/CardCheckBox'
+import { RemoveMode } from '../types/removeMode'
 
 const BorderCard = styled.div`
   border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -64,6 +68,10 @@ export default function InfinityStableRemoveLiquidityProvider({
   const currencyB = useCurrency(currencyId1)
 
   const [percentToRemove, setPercentToRemove] = useState(0)
+  const [removeMode, setRemoveMode] = useState<RemoveMode>(RemoveMode.BALANCE)
+  const [selectedCoinIndex, setSelectedCoinIndex] = useState<0 | 1>(0)
+  const [customAmount0, setCustomAmount0] = useState('')
+  const [customAmount1, setCustomAmount1] = useState('')
 
   // modal and loading state
   const [{ attemptingTxn, liquidityErrorMessage, txHash }, setLiquidityState] = useState<{
@@ -79,8 +87,14 @@ export default function InfinityStableRemoveLiquidityProvider({
   // Use the pool hooks address as the pool address
   const poolAddress = hookAddress
 
-  const { estimateRemoveLiquidityGas, removeLiquidityInfinityStablePool, isReady } =
-    useRemoveLiquidityInfinityStablePool({ poolAddress })
+  const {
+    estimateRemoveLiquidityGas,
+    removeLiquidityInfinityStablePool,
+    calcWithdrawOneCoin,
+    removeLiquidityOneCoin,
+    removeLiquidityImbalance,
+    isReady,
+  } = useRemoveLiquidityInfinityStablePool({ poolAddress })
 
   // Transaction adder
   const addTransaction = useTransactionAdder()
@@ -136,6 +150,52 @@ export default function InfinityStableRemoveLiquidityProvider({
     return CurrencyAmount.fromRawAmount(currencyB, amount1Withdrawn)
   }, [currencyB, amount1Withdrawn])
 
+  // OneCoin mode: Calculate amount for single coin withdrawal
+  const [oneCoinAmount, setOneCoinAmount] = useState<bigint>(0n)
+  useEffect(() => {
+    const fetchOneCoinAmount = async () => {
+      if (removeMode === RemoveMode.ONE_COIN && lpAmountToBurn > 0n && isReady) {
+        try {
+          const amount = await calcWithdrawOneCoin(lpAmountToBurn, selectedCoinIndex)
+          setOneCoinAmount(amount)
+        } catch (error) {
+          console.error('Error calculating one coin amount:', error)
+          setOneCoinAmount(0n)
+        }
+      } else {
+        setOneCoinAmount(0n)
+      }
+    }
+    fetchOneCoinAmount()
+  }, [removeMode, lpAmountToBurn, selectedCoinIndex, calcWithdrawOneCoin, isReady])
+
+  // Custom mode: Parse custom input amounts
+  const customAmount0Parsed = useMemo(() => {
+    if (!currencyA || !customAmount0) return 0n
+    try {
+      return BigInt(Math.floor(parseFloat(customAmount0) * 10 ** currencyA.decimals))
+    } catch {
+      return 0n
+    }
+  }, [customAmount0, currencyA])
+
+  const customAmount1Parsed = useMemo(() => {
+    if (!currencyB || !customAmount1) return 0n
+    try {
+      return BigInt(Math.floor(parseFloat(customAmount1) * 10 ** currencyB.decimals))
+    } catch {
+      return 0n
+    }
+  }, [customAmount1, currencyB])
+
+  // Custom mode: Calculate max burn amount
+  const { tokenAmount: customMaxBurnAmount } = useCalcTokenAmount({
+    poolAddress,
+    amounts: [customAmount0Parsed, customAmount1Parsed],
+    deposit: false,
+    enabled: removeMode === RemoveMode.CUSTOM && (customAmount0Parsed > 0n || customAmount1Parsed > 0n),
+  })
+
   // Create a mock LP token for approval
   const lpToken = useMemo(() => {
     if (!currencyA || !poolAddress) return undefined
@@ -157,23 +217,58 @@ export default function InfinityStableRemoveLiquidityProvider({
   }
 
   const onRemove = useCallback(async () => {
-    if (!currencyA || !currencyB || !lpAmountToBurn || lpAmountToBurn === 0n) return
-
-    // reuse slippage calc
-    const minAmount0 = parsedAmountA ? calculateSlippageAmount(parsedAmountA, userSlippageTolerance)[0] : 0n
-    const minAmount1 = parsedAmountB ? calculateSlippageAmount(parsedAmountB, userSlippageTolerance)[0] : 0n
+    if (!currencyA || !currencyB) return
 
     setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: undefined })
 
     try {
-      const response = await removeLiquidityInfinityStablePool(lpAmountToBurn, minAmount0, minAmount1)
+      let response: string
+      const symbolA = currencyA?.symbol
+      const symbolB = currencyB?.symbol
+      let amountA = '0'
+      let amountB = '0'
+
+      if (removeMode === RemoveMode.BALANCE) {
+        if (!lpAmountToBurn || lpAmountToBurn === 0n) return
+        const minAmount0 = parsedAmountA ? calculateSlippageAmount(parsedAmountA, userSlippageTolerance)[0] : 0n
+        const minAmount1 = parsedAmountB ? calculateSlippageAmount(parsedAmountB, userSlippageTolerance)[0] : 0n
+
+        response = await removeLiquidityInfinityStablePool(lpAmountToBurn, minAmount0, minAmount1)
+        amountA = parsedAmountA?.toSignificant(3) || '0'
+        amountB = parsedAmountB?.toSignificant(3) || '0'
+      } else if (removeMode === RemoveMode.ONE_COIN) {
+        if (!lpAmountToBurn || lpAmountToBurn === 0n || oneCoinAmount === 0n) return
+        const selectedCurrency = selectedCoinIndex === 0 ? currencyA : currencyB
+        const parsedOneCoinAmount = CurrencyAmount.fromRawAmount(selectedCurrency, oneCoinAmount)
+        const minReceived = calculateSlippageAmount(parsedOneCoinAmount, userSlippageTolerance)[0]
+
+        response = await removeLiquidityOneCoin(lpAmountToBurn, selectedCoinIndex === 0, minReceived)
+
+        if (selectedCoinIndex === 0) {
+          amountA = parsedOneCoinAmount.toSignificant(3)
+          amountB = '0'
+        } else {
+          amountA = '0'
+          amountB = parsedOneCoinAmount.toSignificant(3)
+        }
+      } else {
+        // Custom mode
+        if (customAmount0Parsed === 0n && customAmount1Parsed === 0n) return
+        if (!customMaxBurnAmount || customMaxBurnAmount === 0n) return
+
+        // Apply slippage to max burn amount (allow slightly more burn for slippage)
+        const slippagePercent = new Percent(userSlippageTolerance, 10000)
+        const maxBurnWithSlippage = customMaxBurnAmount + (customMaxBurnAmount * BigInt(userSlippageTolerance)) / 10000n
+
+        response = await removeLiquidityImbalance(customAmount0Parsed, customAmount1Parsed, maxBurnWithSlippage)
+
+        const parsedCustomAmount0 = CurrencyAmount.fromRawAmount(currencyA, customAmount0Parsed)
+        const parsedCustomAmount1 = CurrencyAmount.fromRawAmount(currencyB, customAmount1Parsed)
+        amountA = parsedCustomAmount0.toSignificant(3)
+        amountB = parsedCustomAmount1.toSignificant(3)
+      }
 
       setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response })
-
-      const symbolA = currencyA?.symbol
-      const amountA = parsedAmountA?.toSignificant(3) || '0'
-      const symbolB = currencyB?.symbol
-      const amountB = parsedAmountB?.toSignificant(3) || '0'
 
       addTransaction(
         { hash: response },
@@ -203,11 +298,19 @@ export default function InfinityStableRemoveLiquidityProvider({
   }, [
     currencyA,
     currencyB,
+    removeMode,
     lpAmountToBurn,
     parsedAmountA,
     parsedAmountB,
+    oneCoinAmount,
+    selectedCoinIndex,
+    customAmount0Parsed,
+    customAmount1Parsed,
+    customMaxBurnAmount,
     estimateRemoveLiquidityGas,
     removeLiquidityInfinityStablePool,
+    removeLiquidityOneCoin,
+    removeLiquidityImbalance,
     userSlippageTolerance,
     addTransaction,
     t,
@@ -304,7 +407,34 @@ export default function InfinityStableRemoveLiquidityProvider({
     return [percA.toString(), percB.toString()]
   }, [amount0Withdrawn, amount1Withdrawn])
 
-  const isValid = lpAmountToBurn > 0n && !calcError && isReady
+  const isValid = useMemo(() => {
+    if (!isReady) return false
+
+    if (removeMode === RemoveMode.BALANCE) {
+      return lpAmountToBurn > 0n && !calcError
+    }
+    if (removeMode === RemoveMode.ONE_COIN) {
+      return lpAmountToBurn > 0n && oneCoinAmount > 0n
+    }
+    if (removeMode === RemoveMode.CUSTOM) {
+      return (
+        (customAmount0Parsed > 0n || customAmount1Parsed > 0n) &&
+        customMaxBurnAmount !== undefined &&
+        customMaxBurnAmount !== null &&
+        customMaxBurnAmount > 0n
+      )
+    }
+    return false
+  }, [
+    removeMode,
+    lpAmountToBurn,
+    calcError,
+    oneCoinAmount,
+    customAmount0Parsed,
+    customAmount1Parsed,
+    customMaxBurnAmount,
+    isReady,
+  ])
 
   // Calculate current token balances from user's LP position
   const [currentAmount0, currentAmount1] = useMemo<[bigint, bigint]>(() => {
@@ -316,10 +446,32 @@ export default function InfinityStableRemoveLiquidityProvider({
     return [amount0, amount1]
   }, [userLPBalance, balance0, balance1, totalSupply])
 
-  // Calculate new balances after removal
+  // Calculate new balances after removal based on mode
   const [newAmount0, newAmount1] = useMemo<[bigint, bigint]>(() => {
-    return [currentAmount0 - amount0Withdrawn, currentAmount1 - amount1Withdrawn]
-  }, [currentAmount0, currentAmount1, amount0Withdrawn, amount1Withdrawn])
+    if (removeMode === RemoveMode.BALANCE) {
+      return [currentAmount0 - amount0Withdrawn, currentAmount1 - amount1Withdrawn]
+    }
+    if (removeMode === RemoveMode.ONE_COIN) {
+      if (selectedCoinIndex === 0) {
+        return [currentAmount0 - oneCoinAmount, currentAmount1]
+      }
+      return [currentAmount0, currentAmount1 - oneCoinAmount]
+    }
+    if (removeMode === RemoveMode.CUSTOM) {
+      return [currentAmount0 - customAmount0Parsed, currentAmount1 - customAmount1Parsed]
+    }
+    return [currentAmount0, currentAmount1]
+  }, [
+    removeMode,
+    currentAmount0,
+    currentAmount1,
+    amount0Withdrawn,
+    amount1Withdrawn,
+    selectedCoinIndex,
+    oneCoinAmount,
+    customAmount0Parsed,
+    customAmount1Parsed,
+  ])
 
   // Parse current and new amounts for display
   const currentParsedAmountA = useMemo(() => {
@@ -350,11 +502,44 @@ export default function InfinityStableRemoveLiquidityProvider({
     amount1: currentParsedAmountB,
   })
 
+  // Calculate removed amounts based on mode for USD calculation
+  const [removedAmount0, removedAmount1] = useMemo(() => {
+    if (removeMode === RemoveMode.BALANCE) {
+      return [parsedAmountA, parsedAmountB]
+    }
+    if (removeMode === RemoveMode.ONE_COIN) {
+      if (selectedCoinIndex === 0 && currencyA && oneCoinAmount > 0n) {
+        return [CurrencyAmount.fromRawAmount(currencyA, oneCoinAmount), undefined]
+      }
+      if (selectedCoinIndex === 1 && currencyB && oneCoinAmount > 0n) {
+        return [undefined, CurrencyAmount.fromRawAmount(currencyB, oneCoinAmount)]
+      }
+    }
+    if (removeMode === RemoveMode.CUSTOM) {
+      const amt0 =
+        currencyA && customAmount0Parsed > 0n ? CurrencyAmount.fromRawAmount(currencyA, customAmount0Parsed) : undefined
+      const amt1 =
+        currencyB && customAmount1Parsed > 0n ? CurrencyAmount.fromRawAmount(currencyB, customAmount1Parsed) : undefined
+      return [amt0, amt1]
+    }
+    return [undefined, undefined]
+  }, [
+    removeMode,
+    parsedAmountA,
+    parsedAmountB,
+    selectedCoinIndex,
+    currencyA,
+    currencyB,
+    oneCoinAmount,
+    customAmount0Parsed,
+    customAmount1Parsed,
+  ])
+
   const removedTotalUSD = useTotalPriceUSD({
     currency0: currencyA,
     currency1: currencyB,
-    amount0: parsedAmountA,
-    amount1: parsedAmountB,
+    amount0: removedAmount0,
+    amount1: removedAmount1,
   })
 
   const newTotalUSD = currentTotalUSD - removedTotalUSD
@@ -396,47 +581,224 @@ export default function InfinityStableRemoveLiquidityProvider({
                 </Flex>
               </BorderCard>
             </AutoColumn>
+            {/* collect as */}
             <>
               <ColumnCenter>
                 <ArrowDownIcon color="textSubtle" width="24px" my="16px" />
               </ColumnCenter>
               <AutoColumn gap="12px">
                 <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
-                  {t('Receive')}
+                  {t('Collect as')}
                 </Text>
                 <LightGreyCard>
-                  <Flex justifyContent="space-between" mb="8px" as="label" alignItems="center">
-                    <Flex alignItems="center">
-                      <CurrencyLogo currency={currencyA ?? undefined} />
-                      <Text small color="textSubtle" id="remove-liquidity-tokena-symbol" ml="4px">
-                        {currencyA?.symbol}
-                      </Text>
-                    </Flex>
-                    <Flex>
-                      <Text small bold>
-                        {parsedAmountA?.toSignificant(6) || '0'}
-                      </Text>
-                      <Text small ml="4px">
-                        {percentageA}%
-                      </Text>
-                    </Flex>
-                  </Flex>
-                  <Flex justifyContent="space-between" as="label" alignItems="center">
-                    <Flex alignItems="center">
-                      <CurrencyLogo currency={currencyB ?? undefined} />
-                      <Text small color="textSubtle" id="remove-liquidity-tokenb-symbol" ml="4px">
-                        {currencyB?.symbol}
-                      </Text>
-                    </Flex>
-                    <Flex>
-                      <Text bold small>
-                        {parsedAmountB?.toSignificant(6) || '0'}
-                      </Text>
-                      <Text small ml="4px">
-                        {percentageB}%
-                      </Text>
-                    </Flex>
-                  </Flex>
+                  {/* Radio Group */}
+                  <AutoRow gap="16px" mb="16px">
+                    <CardCheckBox
+                      label={t('One coin')}
+                      checked={removeMode === RemoveMode.ONE_COIN}
+                      onChange={() => setRemoveMode(RemoveMode.ONE_COIN)}
+                    />
+                    <CardCheckBox
+                      label={t('Balance')}
+                      checked={removeMode === RemoveMode.BALANCE}
+                      onChange={() => setRemoveMode(RemoveMode.BALANCE)}
+                    />
+                    <CardCheckBox
+                      label={t('Custom')}
+                      checked={removeMode === RemoveMode.CUSTOM}
+                      onChange={() => setRemoveMode(RemoveMode.CUSTOM)}
+                    />
+                  </AutoRow>
+
+                  {/* Balance Mode Display */}
+                  {removeMode === RemoveMode.BALANCE && (
+                    <AutoColumn gap="8px">
+                      <BorderCard style={{ padding: '8px 16px' }}>
+                        <Flex justifyContent="space-between" alignItems="center">
+                          <Flex alignItems="center" style={{ gap: '8px' }}>
+                            <CurrencyLogo showChainLogo currency={currencyA ?? undefined} size="40px" />
+                            <Flex flexDirection="column" style={{ gap: '4px' }}>
+                              <Text fontSize="16px" bold>
+                                {currencyA?.symbol}
+                              </Text>
+                            </Flex>
+                          </Flex>
+                          <Flex flexDirection="column" alignItems="flex-end" style={{ gap: '4px' }}>
+                            <Text fontSize="16px" bold>
+                              {parsedAmountA?.toSignificant(6) || '0'}
+                            </Text>
+                            <Text fontSize="12px" color="textSubtle">
+                              ~
+                              {formatDollarAmount(
+                                (parsedAmountA ? parseFloat(parsedAmountA.toSignificant(6)) : 0) * 1,
+                                2,
+                                true,
+                              )}
+                            </Text>
+                          </Flex>
+                        </Flex>
+                      </BorderCard>
+                      <BorderCard style={{ padding: '8px 16px' }}>
+                        <Flex justifyContent="space-between" alignItems="center">
+                          <Flex alignItems="center" style={{ gap: '8px' }}>
+                            <CurrencyLogo showChainLogo currency={currencyB ?? undefined} size="40px" />
+                            <Flex flexDirection="column" style={{ gap: '4px' }}>
+                              <Text fontSize="16px" bold>
+                                {currencyB?.symbol}
+                              </Text>
+                            </Flex>
+                          </Flex>
+                          <Flex flexDirection="column" alignItems="flex-end" style={{ gap: '4px' }}>
+                            <Text fontSize="16px" bold>
+                              {parsedAmountB?.toSignificant(6) || '0'}
+                            </Text>
+                            <Text fontSize="12px" color="textSubtle">
+                              ~
+                              {formatDollarAmount(
+                                (parsedAmountB ? parseFloat(parsedAmountB.toSignificant(6)) : 0) * 1,
+                                2,
+                                true,
+                              )}
+                            </Text>
+                          </Flex>
+                        </Flex>
+                      </BorderCard>
+                    </AutoColumn>
+                  )}
+
+                  {/* OneCoin Mode Display */}
+                  {removeMode === RemoveMode.ONE_COIN && (
+                    <AutoColumn gap="8px">
+                      <BorderCard
+                        style={{
+                          padding: '8px 16px',
+                          cursor: 'pointer',
+                          border: selectedCoinIndex === 0 ? '1px solid #31D0AA' : undefined,
+                        }}
+                        onClick={() => setSelectedCoinIndex(0)}
+                      >
+                        <Flex justifyContent="space-between" alignItems="center">
+                          <Flex alignItems="center" style={{ gap: '8px', marginLeft: '-8px' }}>
+                            <CardCheckBox
+                              label=""
+                              checked={selectedCoinIndex === 0}
+                              onChange={() => setSelectedCoinIndex(0)}
+                            />
+                            <CurrencyLogo showChainLogo currency={currencyA ?? undefined} size="40px" />
+                            <Flex flexDirection="column" style={{ gap: '4px' }}>
+                              <Text fontSize="16px" bold>
+                                {currencyA?.symbol}
+                              </Text>
+                            </Flex>
+                          </Flex>
+                          <Flex flexDirection="column" alignItems="flex-end" style={{ gap: '4px' }}>
+                            <Text fontSize="16px" bold>
+                              {selectedCoinIndex === 0 && oneCoinAmount > 0n
+                                ? CurrencyAmount.fromRawAmount(currencyA!, oneCoinAmount).toSignificant(6)
+                                : '0'}
+                            </Text>
+                            <Text fontSize="12px" color="textSubtle">
+                              ~
+                              {selectedCoinIndex === 0 && oneCoinAmount > 0n
+                                ? formatDollarAmount(
+                                    parseFloat(
+                                      CurrencyAmount.fromRawAmount(currencyA!, oneCoinAmount).toSignificant(6),
+                                    ) * 1,
+                                    2,
+                                    true,
+                                  )
+                                : '$0.00'}
+                            </Text>
+                          </Flex>
+                        </Flex>
+                      </BorderCard>
+                      <BorderCard
+                        style={{
+                          padding: '8px 16px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => setSelectedCoinIndex(1)}
+                      >
+                        <Flex justifyContent="space-between" alignItems="center">
+                          <Flex alignItems="center" style={{ gap: '8px', marginLeft: '-8px' }}>
+                            <CardCheckBox
+                              label=""
+                              checked={selectedCoinIndex === 1}
+                              onChange={() => setSelectedCoinIndex(1)}
+                            />
+                            <CurrencyLogo showChainLogo currency={currencyB ?? undefined} size="40px" />
+                            <Flex flexDirection="column" style={{ gap: '4px' }}>
+                              <Text fontSize="16px" bold>
+                                {currencyB?.symbol}
+                              </Text>
+                            </Flex>
+                          </Flex>
+                          <Flex flexDirection="column" alignItems="flex-end" style={{ gap: '4px' }}>
+                            <Text fontSize="16px" bold>
+                              {selectedCoinIndex === 1 && oneCoinAmount > 0n
+                                ? CurrencyAmount.fromRawAmount(currencyB!, oneCoinAmount).toSignificant(6)
+                                : '0'}
+                            </Text>
+                            <Text fontSize="12px" color="textSubtle">
+                              ~
+                              {selectedCoinIndex === 1 && oneCoinAmount > 0n
+                                ? formatDollarAmount(
+                                    parseFloat(
+                                      CurrencyAmount.fromRawAmount(currencyB!, oneCoinAmount).toSignificant(6),
+                                    ) * 1,
+                                    2,
+                                    true,
+                                  )
+                                : '$0.00'}
+                            </Text>
+                          </Flex>
+                        </Flex>
+                      </BorderCard>
+                    </AutoColumn>
+                  )}
+
+                  {/* Custom Mode Display */}
+                  {removeMode === RemoveMode.CUSTOM && (
+                    <AutoColumn gap="8px">
+                      <BalanceInput
+                        value={customAmount0}
+                        onUserInput={setCustomAmount0}
+                        placeholder="0.0"
+                        decimals={currencyA?.decimals ?? 18}
+                        appendComponent={
+                          <Flex alignItems="center" mr="8px">
+                            <CurrencyLogo currency={currencyA ?? undefined} />
+                            <Text small color="textSubtle" ml="4px">
+                              {currencyA?.symbol}
+                            </Text>
+                          </Flex>
+                        }
+                      />
+                      <BalanceInput
+                        value={customAmount1}
+                        onUserInput={setCustomAmount1}
+                        placeholder="0.0"
+                        decimals={currencyB?.decimals ?? 18}
+                        appendComponent={
+                          <Flex alignItems="center" mr="8px">
+                            <CurrencyLogo currency={currencyB ?? undefined} />
+                            <Text small color="textSubtle" ml="4px">
+                              {currencyB?.symbol}
+                            </Text>
+                          </Flex>
+                        }
+                      />
+                      {customMaxBurnAmount !== null &&
+                        customMaxBurnAmount !== undefined &&
+                        customMaxBurnAmount > 0n && (
+                          <Text small color="textSubtle">
+                            {t('Max LP to burn: %amount%', {
+                              amount: (customMaxBurnAmount / BigInt(1e18)).toString(),
+                            })}
+                          </Text>
+                        )}
+                    </AutoColumn>
+                  )}
                 </LightGreyCard>
               </AutoColumn>
             </>

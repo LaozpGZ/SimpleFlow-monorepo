@@ -31,12 +31,46 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
     [infinityStableHook],
   )
 
+  const calcWithdrawOneCoin = useCallback(
+    async (burnAmount: bigint, index: number) => {
+      if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
+      return infinityStableHook.calcWithdrawOneCoin(burnAmount, index)
+    },
+    [infinityStableHook],
+  )
+
+  const removeLiquidityOneCoin = useCallback(
+    async (burnAmount: bigint, zeroOrOne: boolean, minReceived: bigint) => {
+      if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
+      return infinityStableHook.removeLiquidityOneCoin(burnAmount, zeroOrOne, minReceived)
+    },
+    [infinityStableHook],
+  )
+
+  const removeLiquidityImbalance = useCallback(
+    async (amount0: bigint, amount1: bigint, maxBurnAmount: bigint) => {
+      if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
+      return infinityStableHook.removeLiquidityImbalance(amount0, amount1, maxBurnAmount)
+    },
+    [infinityStableHook],
+  )
+
   return useMemo(
     () => ({
       estimateRemoveLiquidityGas,
       removeLiquidityInfinityStablePool,
+      calcWithdrawOneCoin,
+      removeLiquidityOneCoin,
+      removeLiquidityImbalance,
       isReady: !!infinityStableHook,
     }),
-    [estimateRemoveLiquidityGas, removeLiquidityInfinityStablePool, infinityStableHook],
+    [
+      estimateRemoveLiquidityGas,
+      removeLiquidityInfinityStablePool,
+      calcWithdrawOneCoin,
+      removeLiquidityOneCoin,
+      removeLiquidityImbalance,
+      infinityStableHook,
+    ],
   )
 }
