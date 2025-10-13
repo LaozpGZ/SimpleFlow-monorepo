@@ -18,7 +18,14 @@ const assignError = (maybeError: any) => {
   return maybeError
 }
 
-const possibleRejectMessage = ['Cancelled by User', 'cancel', 'Transaction was rejected', 'denied', 'user has reject']
+const possibleRejectMessage = [
+  'Cancelled by User',
+  'cancel',
+  'Transaction was rejected',
+  'denied',
+  'user has reject',
+  'The transaction was cancelled',
+]
 
 // provider user rejected error code
 export const isUserRejected = (err) => {
@@ -26,9 +33,9 @@ export const isUserRejected = (err) => {
     return true
   }
   if (err && typeof err === 'object') {
-    if ('details' in err) {
+    if ('details' in err || typeof err?.cause === 'string') {
       // fallback for some wallets that don't follow EIP 1193, trust, safe
-      if (possibleRejectMessage.some((msg) => err.details?.includes(msg))) {
+      if (possibleRejectMessage.some((msg) => err.details?.includes(msg) || err.cause?.includes?.(msg))) {
         return true
       }
     }
