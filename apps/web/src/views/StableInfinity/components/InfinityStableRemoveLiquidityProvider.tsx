@@ -841,7 +841,8 @@ export default function InfinityStableRemoveLiquidityProvider({
             </RowBetween>
 
             {/* Position Summary */}
-            {percentToRemove > 0 && (
+            {((removeMode !== RemoveMode.CUSTOM && percentToRemove > 0) ||
+              (removeMode === RemoveMode.CUSTOM && (customAmount0Parsed > 0n || customAmount1Parsed > 0n))) && (
               <BorderCard style={{ marginTop: '16px' }}>
                 <AutoColumn gap="12px">
                   {/* Header */}
