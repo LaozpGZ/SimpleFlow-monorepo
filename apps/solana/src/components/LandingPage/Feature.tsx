@@ -28,7 +28,7 @@ export default function Feature() {
     },
     {
       title: 'CLMM',
-      desc: 'Concentrate liquidity for increased captial efficiency.',
+      desc: 'Concentrate liquidity for increased capital efficiency.',
       link: '',
       linkTitle: 'Launch CLMM'
     },
