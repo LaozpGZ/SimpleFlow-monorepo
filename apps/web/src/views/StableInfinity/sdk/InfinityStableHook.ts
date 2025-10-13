@@ -116,35 +116,6 @@ export class InfinityStableHook {
   }
 
   /**
-   * Estimate gas for removing liquidity
-   * @param burnAmount Amount of LP tokens to burn
-   * @param minAmount0 Minimum amount of token0 to receive
-   * @param minAmount1 Minimum amount of token1 to receive
-   * @param account The account address that will perform the transaction
-   * @returns Promise<bigint> Estimated gas amount
-   */
-  async estimateRemoveLiquidityGas(
-    burnAmount: bigint,
-    minAmount0: bigint,
-    minAmount1: bigint,
-    account: `0x${string}`,
-  ): Promise<bigint> {
-    try {
-      const gasEstimate = await this.publicClient.estimateContractGas({
-        address: this.contractAddress as `0x${string}`,
-        abi: infinityStableHookABI,
-        functionName: 'remove_liquidity',
-        args: [burnAmount, minAmount0, minAmount1, account, false],
-        account,
-      })
-      return gasEstimate
-    } catch (error) {
-      console.error('Error estimating gas for remove liquidity:', error)
-      throw error
-    }
-  }
-
-  /**
    * Get calldata for removing liquidity from the stable swap pool
    * @param burnAmount Amount of LP tokens to burn
    * @param minAmount0 Minimum amount of token0 to receive
