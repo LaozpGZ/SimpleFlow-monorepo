@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { usePublicClient, useWalletClient } from 'wagmi'
-import { InfinityStableHook } from '../sdk/infinityStableHook'
+import { usePublicClient } from 'wagmi'
+import { InfinityStableHook } from '../sdk/InfinityStableHook'
 
 interface UseCalcTokenAmountParams {
   poolAddress: string
@@ -24,12 +24,11 @@ export const useTotalSupply = ({ poolAddress }: { poolAddress: string }): bigint
   const [totalSupply, setTotalSupply] = useState<bigint | null>(null)
 
   const publicClient = usePublicClient()
-  const { data: walletClient } = useWalletClient()
 
   const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new InfinityStableHook(poolAddress, publicClient, walletClient)
-  }, [poolAddress, publicClient, walletClient])
+    return new InfinityStableHook(poolAddress, publicClient)
+  }, [poolAddress, publicClient])
 
   useEffect(() => {
     if (!infinityStableHook) {
@@ -64,12 +63,11 @@ export const useCalcTokenAmount = ({
   const [error, setError] = useState<Error | null>(null)
 
   const publicClient = usePublicClient()
-  const { data: walletClient } = useWalletClient()
 
   const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new InfinityStableHook(poolAddress, publicClient, walletClient)
-  }, [poolAddress, publicClient, walletClient])
+    return new InfinityStableHook(poolAddress, publicClient)
+  }, [poolAddress, publicClient])
 
   useEffect(() => {
     if (!enabled || !infinityStableHook || (amounts[0] === 0n && amounts[1] === 0n)) {
@@ -114,12 +112,11 @@ export const useUserLPBalance = ({ poolAddress, account }: UseUserLPBalanceParam
   const [lpBalance, setLpBalance] = useState<bigint | null>(null)
 
   const publicClient = usePublicClient()
-  const { data: walletClient } = useWalletClient()
 
   const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new InfinityStableHook(poolAddress, publicClient, walletClient)
-  }, [poolAddress, publicClient, walletClient])
+    return new InfinityStableHook(poolAddress, publicClient)
+  }, [poolAddress, publicClient])
 
   useEffect(() => {
     if (!infinityStableHook || !account) {
@@ -148,12 +145,11 @@ export const usePoolBalances = ({ poolAddress }: { poolAddress: string }): [bigi
   const [balance1, setBalance1] = useState<bigint | null>(null)
 
   const publicClient = usePublicClient()
-  const { data: walletClient } = useWalletClient()
 
   const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new InfinityStableHook(poolAddress, publicClient, walletClient)
-  }, [poolAddress, publicClient, walletClient])
+    return new InfinityStableHook(poolAddress, publicClient)
+  }, [poolAddress, publicClient])
 
   useEffect(() => {
     if (!infinityStableHook) {
@@ -177,7 +173,7 @@ export const usePoolBalances = ({ poolAddress }: { poolAddress: string }): [bigi
     }
 
     fetchBalances()
-  }, [infinityStableHook])
+  }, [infinityStableHook, poolAddress])
 
   return [balance0, balance1]
 }

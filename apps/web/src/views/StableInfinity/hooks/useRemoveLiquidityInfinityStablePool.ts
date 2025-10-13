@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
-import { usePublicClient, useWalletClient } from 'wagmi'
-import { InfinityStableHook } from '../sdk/infinityStableHook'
+import { usePublicClient, useSendTransaction, useAccount } from 'wagmi'
+import { InfinityStableHook } from '../sdk/InfinityStableHook'
 
 interface UseRemoveLiquidityInfinityStablePoolParams {
   poolAddress: string
@@ -8,27 +8,39 @@ interface UseRemoveLiquidityInfinityStablePoolParams {
 
 export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveLiquidityInfinityStablePoolParams) => {
   const publicClient = usePublicClient()
-  const { data: walletClient } = useWalletClient()
+  const { sendTransactionAsync } = useSendTransaction()
+  const { address: account } = useAccount()
 
   const infinityStableHook = useMemo(() => {
     if (!publicClient || !poolAddress) return null
-    return new InfinityStableHook(poolAddress, publicClient, walletClient)
-  }, [poolAddress, publicClient, walletClient])
+    return new InfinityStableHook(poolAddress, publicClient)
+  }, [poolAddress, publicClient])
 
   const estimateRemoveLiquidityGas = useCallback(
     async (burnAmount: bigint, minAmount0: bigint, minAmount1: bigint) => {
       if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
-      return infinityStableHook.estimateRemoveLiquidityGas(burnAmount, minAmount0, minAmount1)
+      if (!account) throw new Error('Account not connected')
+      return infinityStableHook.estimateRemoveLiquidityGas(burnAmount, minAmount0, minAmount1, account)
     },
-    [infinityStableHook],
+    [infinityStableHook, account],
   )
 
   const removeLiquidityInfinityStablePool = useCallback(
     async (burnAmount: bigint, minAmount0: bigint, minAmount1: bigint) => {
       if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
-      return infinityStableHook.removeLiquidity(burnAmount, minAmount0, minAmount1)
+      if (!account) throw new Error('Account not connected')
+
+      const calldata = infinityStableHook.getRemoveLiquidityCalldata(burnAmount, minAmount0, minAmount1, account)
+
+      const hash = await sendTransactionAsync({
+        to: calldata.address,
+        data: calldata.calldata,
+        ...(calldata.value ? { value: BigInt(calldata.value) } : {}),
+      })
+
+      return hash
     },
-    [infinityStableHook],
+    [infinityStableHook, account, sendTransactionAsync],
   )
 
   const calcWithdrawOneCoin = useCallback(
@@ -42,17 +54,35 @@ export const useRemoveLiquidityInfinityStablePool = ({ poolAddress }: UseRemoveL
   const removeLiquidityOneCoin = useCallback(
     async (burnAmount: bigint, zeroOrOne: boolean, minReceived: bigint) => {
       if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
-      return infinityStableHook.removeLiquidityOneCoin(burnAmount, zeroOrOne, minReceived)
+
+      const calldata = infinityStableHook.getRemoveLiquidityOneCoinCalldata(burnAmount, zeroOrOne, minReceived)
+
+      const hash = await sendTransactionAsync({
+        to: calldata.address,
+        data: calldata.calldata,
+        ...(calldata.value ? { value: BigInt(calldata.value) } : {}),
+      })
+
+      return hash
     },
-    [infinityStableHook],
+    [infinityStableHook, sendTransactionAsync],
   )
 
   const removeLiquidityImbalance = useCallback(
     async (amount0: bigint, amount1: bigint, maxBurnAmount: bigint) => {
       if (!infinityStableHook) throw new Error('InfinityStableHook not initialized')
-      return infinityStableHook.removeLiquidityImbalance(amount0, amount1, maxBurnAmount)
+
+      const calldata = infinityStableHook.getRemoveLiquidityImbalanceCalldata(amount0, amount1, maxBurnAmount)
+
+      const hash = await sendTransactionAsync({
+        to: calldata.address,
+        data: calldata.calldata,
+        ...(calldata.value ? { value: BigInt(calldata.value) } : {}),
+      })
+
+      return hash
     },
-    [infinityStableHook],
+    [infinityStableHook, sendTransactionAsync],
   )
 
   return useMemo(

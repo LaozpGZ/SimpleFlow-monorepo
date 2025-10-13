@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useCurrency } from 'hooks/Tokens'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { ApprovalState } from 'hooks/useApproveCallback'
 import { CurrencyAmount, Percent, Token } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useTranslation } from '@pancakeswap/localization'
@@ -25,12 +25,10 @@ import {
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected, logError } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
-import ConfirmLiquidityModal from 'views/Swap/components/ConfirmRemoveLiquidityModal'
 import { Field } from 'state/burn/actions'
 import { LightGreyCard } from 'components/Card'
 import { RowBetween } from 'components/Layout/Row'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import Dots from 'components/Loader/Dots'
 import { CommitButton } from 'components/CommitButton'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
@@ -40,6 +38,7 @@ import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { calculateSlippageAmount } from 'utils/exchange'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import ConfirmLiquidityModal from 'components/Liquidity/ConfirmRemoveLiquidityModal'
 import { useRemoveLiquidityInfinityStablePool } from '../hooks/useRemoveLiquidityInfinityStablePool'
 import { useCalcTokenAmount, useUserLPBalance, useTotalSupply, usePoolBalances } from '../hooks/useCalcTokenAmount'
 import { CardCheckBox } from './shared/CardCheckBox'
@@ -130,6 +129,8 @@ export default function InfinityStableRemoveLiquidityProvider({
     return [amount0Withdrawn, amount1Withdrawn]
   }, [amount0Withdrawn, amount1Withdrawn])
 
+  console.log('lpAmountToBurn', lpAmountToBurn)
+
   // Calculate expected token amounts using calc_token_amount with deposit=false
   // For stable swap removal, we need to calculate the amounts we'll receive
   const { tokenAmount: expectedTokensOut, error: calcError } = useCalcTokenAmount({
@@ -157,6 +158,7 @@ export default function InfinityStableRemoveLiquidityProvider({
       if (removeMode === RemoveMode.ONE_COIN && lpAmountToBurn > 0n && isReady) {
         try {
           const amount = await calcWithdrawOneCoin(lpAmountToBurn, selectedCoinIndex)
+          console.log('calcWithdrawOneCoin amount', amount)
           setOneCoinAmount(amount)
         } catch (error) {
           console.error('Error calculating one coin amount:', error)
@@ -188,10 +190,14 @@ export default function InfinityStableRemoveLiquidityProvider({
     }
   }, [customAmount1, currencyB])
 
+  const amountsCustom = useMemo<[bigint, bigint]>(() => {
+    return [customAmount0Parsed, customAmount1Parsed]
+  }, [customAmount0Parsed, customAmount1Parsed])
+
   // Custom mode: Calculate max burn amount
   const { tokenAmount: customMaxBurnAmount } = useCalcTokenAmount({
     poolAddress,
-    amounts: [customAmount0Parsed, customAmount1Parsed],
+    amounts: amountsCustom,
     deposit: false,
     enabled: removeMode === RemoveMode.CUSTOM && (customAmount0Parsed > 0n || customAmount1Parsed > 0n),
   })
@@ -241,6 +247,8 @@ export default function InfinityStableRemoveLiquidityProvider({
         const selectedCurrency = selectedCoinIndex === 0 ? currencyA : currencyB
         const parsedOneCoinAmount = CurrencyAmount.fromRawAmount(selectedCurrency, oneCoinAmount)
         const minReceived = calculateSlippageAmount(parsedOneCoinAmount, userSlippageTolerance)[0]
+
+        console.log('call removeLiquidityOneCoin', lpAmountToBurn, selectedCoinIndex, minReceived)
 
         response = await removeLiquidityOneCoin(lpAmountToBurn, selectedCoinIndex === 0, minReceived)
 
@@ -448,17 +456,30 @@ export default function InfinityStableRemoveLiquidityProvider({
 
   // Calculate new balances after removal based on mode
   const [newAmount0, newAmount1] = useMemo<[bigint, bigint]>(() => {
+    // Helper function to handle very small values (likely rounding errors)
+    const cleanupSmallValue = (value: bigint): bigint => {
+      // If value is negative or less than 100 wei, treat as 0
+      if (value < 0n || value < 100n) return 0n
+      return value
+    }
+
     if (removeMode === RemoveMode.BALANCE) {
-      return [currentAmount0 - amount0Withdrawn, currentAmount1 - amount1Withdrawn]
+      return [
+        cleanupSmallValue(currentAmount0 - amount0Withdrawn),
+        cleanupSmallValue(currentAmount1 - amount1Withdrawn),
+      ]
     }
     if (removeMode === RemoveMode.ONE_COIN) {
       if (selectedCoinIndex === 0) {
-        return [currentAmount0 - oneCoinAmount, currentAmount1]
+        return [cleanupSmallValue(currentAmount0 - oneCoinAmount), currentAmount1]
       }
-      return [currentAmount0, currentAmount1 - oneCoinAmount]
+      return [currentAmount0, cleanupSmallValue(currentAmount1 - oneCoinAmount)]
     }
     if (removeMode === RemoveMode.CUSTOM) {
-      return [currentAmount0 - customAmount0Parsed, currentAmount1 - customAmount1Parsed]
+      return [
+        cleanupSmallValue(currentAmount0 - customAmount0Parsed),
+        cleanupSmallValue(currentAmount1 - customAmount1Parsed),
+      ]
     }
     return [currentAmount0, currentAmount1]
   }, [

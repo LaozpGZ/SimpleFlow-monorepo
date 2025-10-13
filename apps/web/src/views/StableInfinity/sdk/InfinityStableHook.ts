@@ -1,17 +1,20 @@
-import { PublicClient, WalletClient } from 'viem'
+import { PublicClient, Address, Hex, encodeFunctionData } from 'viem'
 import { infinityStableHookABI } from './abis/infinityStableHookABI'
+
+export interface Calldata {
+  address: Address
+  calldata: Hex
+  value?: Hex
+}
 
 export class InfinityStableHook {
   private contractAddress: string
 
   private publicClient: PublicClient
 
-  private walletClient?: WalletClient
-
-  constructor(contractAddress: string, publicClient: PublicClient, walletClient?: WalletClient) {
+  constructor(contractAddress: string, publicClient: PublicClient) {
     this.contractAddress = contractAddress
     this.publicClient = publicClient
-    this.walletClient = walletClient
   }
 
   /**
@@ -55,30 +58,20 @@ export class InfinityStableHook {
   }
 
   /**
-   * Add liquidity to the stable swap pool
+   * Get calldata for adding liquidity to the stable swap pool
    * @param amount0 Amount of token0 to add
    * @param amount1 Amount of token1 to add
    * @param minMintAmount Minimum amount of LP tokens to mint
-   * @returns Promise<string> Transaction hash
+   * @returns Calldata object with address and encoded function data
    */
-  async addLiquidity(amount0: bigint, amount1: bigint, minMintAmount: bigint): Promise<string> {
-    if (!this.walletClient || !this.walletClient.account) {
-      throw new Error('Wallet client or account not available')
-    }
-
-    try {
-      const hash = await this.walletClient.writeContract({
-        address: this.contractAddress as `0x${string}`,
+  getAddLiquidityCalldata(amount0: bigint, amount1: bigint, minMintAmount: bigint): Calldata {
+    return {
+      address: this.contractAddress as `0x${string}`,
+      calldata: encodeFunctionData({
         abi: infinityStableHookABI,
         functionName: 'add_liquidity',
         args: [amount0, amount1, minMintAmount],
-        account: this.walletClient.account,
-        chain: this.walletClient.chain,
-      })
-      return hash
-    } catch (error) {
-      console.error('Error adding liquidity:', error)
-      throw error
+      }),
     }
   }
 
@@ -127,20 +120,22 @@ export class InfinityStableHook {
    * @param burnAmount Amount of LP tokens to burn
    * @param minAmount0 Minimum amount of token0 to receive
    * @param minAmount1 Minimum amount of token1 to receive
+   * @param account The account address that will perform the transaction
    * @returns Promise<bigint> Estimated gas amount
    */
-  async estimateRemoveLiquidityGas(burnAmount: bigint, minAmount0: bigint, minAmount1: bigint): Promise<bigint> {
-    if (!this.walletClient || !this.walletClient.account) {
-      throw new Error('Wallet client or account not available')
-    }
-
+  async estimateRemoveLiquidityGas(
+    burnAmount: bigint,
+    minAmount0: bigint,
+    minAmount1: bigint,
+    account: `0x${string}`,
+  ): Promise<bigint> {
     try {
       const gasEstimate = await this.publicClient.estimateContractGas({
         address: this.contractAddress as `0x${string}`,
         abi: infinityStableHookABI,
         functionName: 'remove_liquidity',
-        args: [burnAmount, minAmount0, minAmount1, this.walletClient.account.address, false],
-        account: this.walletClient.account,
+        args: [burnAmount, minAmount0, minAmount1, account, false],
+        account,
       })
       return gasEstimate
     } catch (error) {
@@ -150,31 +145,26 @@ export class InfinityStableHook {
   }
 
   /**
-   * Remove liquidity from the stable swap pool
+   * Get calldata for removing liquidity from the stable swap pool
    * @param burnAmount Amount of LP tokens to burn
    * @param minAmount0 Minimum amount of token0 to receive
    * @param minAmount1 Minimum amount of token1 to receive
-   * @returns Promise<string> Transaction hash
+   * @param recipient Address to receive the tokens
+   * @returns Calldata object with address and encoded function data
    */
-  async removeLiquidity(burnAmount: bigint, minAmount0: bigint, minAmount1: bigint): Promise<string> {
-    console.log('call removeLiquidity')
-    if (!this.walletClient || !this.walletClient.account) {
-      throw new Error('Wallet client or account not available')
-    }
-
-    try {
-      const hash = await this.walletClient.writeContract({
-        address: this.contractAddress as `0x${string}`,
+  getRemoveLiquidityCalldata(
+    burnAmount: bigint,
+    minAmount0: bigint,
+    minAmount1: bigint,
+    recipient: `0x${string}`,
+  ): Calldata {
+    return {
+      address: this.contractAddress as `0x${string}`,
+      calldata: encodeFunctionData({
         abi: infinityStableHookABI,
         functionName: 'remove_liquidity',
-        args: [burnAmount, minAmount0, minAmount1, this.walletClient.account.address, false],
-        account: this.walletClient.account,
-        chain: this.walletClient.chain,
-      })
-      return hash
-    } catch (error) {
-      console.error('Error removing liquidity:', error)
-      throw error
+        args: [burnAmount, minAmount0, minAmount1, recipient, false],
+      }),
     }
   }
 
@@ -200,60 +190,38 @@ export class InfinityStableHook {
   }
 
   /**
-   * Remove liquidity and receive only one token
+   * Get calldata for removing liquidity and receiving only one token
    * @param burnAmount Amount of LP tokens to burn
    * @param zeroOrOne True for token0, false for token1
    * @param minReceived Minimum amount of tokens to receive
-   * @returns Promise<string> Transaction hash
+   * @returns Calldata object with address and encoded function data
    */
-  async removeLiquidityOneCoin(burnAmount: bigint, zeroOrOne: boolean, minReceived: bigint): Promise<string> {
-    console.log('call removeLiquidityOneCoin')
-    if (!this.walletClient || !this.walletClient.account) {
-      throw new Error('Wallet client or account not available')
-    }
-
-    try {
-      const hash = await this.walletClient.writeContract({
-        address: this.contractAddress as `0x${string}`,
+  getRemoveLiquidityOneCoinCalldata(burnAmount: bigint, zeroOrOne: boolean, minReceived: bigint): Calldata {
+    return {
+      address: this.contractAddress as `0x${string}`,
+      calldata: encodeFunctionData({
         abi: infinityStableHookABI,
         functionName: 'remove_liquidity_one_coin',
         args: [burnAmount, zeroOrOne, minReceived],
-        account: this.walletClient.account,
-        chain: this.walletClient.chain,
-      })
-      return hash
-    } catch (error) {
-      console.error('Error removing liquidity one coin:', error)
-      throw error
+      }),
     }
   }
 
   /**
-   * Remove liquidity with imbalanced token amounts
+   * Get calldata for removing liquidity with imbalanced token amounts
    * @param amount0 Amount of token0 to withdraw
    * @param amount1 Amount of token1 to withdraw
    * @param maxBurnAmount Maximum amount of LP tokens to burn
-   * @returns Promise<string> Transaction hash
+   * @returns Calldata object with address and encoded function data
    */
-  async removeLiquidityImbalance(amount0: bigint, amount1: bigint, maxBurnAmount: bigint): Promise<string> {
-    console.log('call removeLiquidityImbalance')
-    if (!this.walletClient || !this.walletClient.account) {
-      throw new Error('Wallet client or account not available')
-    }
-
-    try {
-      const hash = await this.walletClient.writeContract({
-        address: this.contractAddress as `0x${string}`,
+  getRemoveLiquidityImbalanceCalldata(amount0: bigint, amount1: bigint, maxBurnAmount: bigint): Calldata {
+    return {
+      address: this.contractAddress as `0x${string}`,
+      calldata: encodeFunctionData({
         abi: infinityStableHookABI,
         functionName: 'remove_liquidity_imbalance',
         args: [amount0, amount1, maxBurnAmount],
-        account: this.walletClient.account,
-        chain: this.walletClient.chain,
-      })
-      return hash
-    } catch (error) {
-      console.error('Error removing liquidity imbalance:', error)
-      throw error
+      }),
     }
   }
 }
