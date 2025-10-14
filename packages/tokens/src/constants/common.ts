@@ -539,3 +539,14 @@ export const STABLE_COIN = {
   [ChainId.BASE_SEPOLIA]: USDC[ChainId.BASE_SEPOLIA],
   [ChainId.MONAD_TESTNET]: USDC[ChainId.MONAD_TESTNET],
 } satisfies Record<ChainId, ERC20Token>
+
+export const USDON = {
+  [ChainId.BSC]: new ERC20Token(ChainId.BSC, '0x1f8955E640Cbd9abc3C3Bb408c9E2E1f5F20DfE6', 18, 'USDON', 'USDON'),
+  [ChainId.ETHEREUM]: new ERC20Token(
+    ChainId.ETHEREUM,
+    '0xAcE8E719899F6E91831B18AE746C9A965c2119F1',
+    18,
+    'USDON',
+    'USDON',
+  ),
+}

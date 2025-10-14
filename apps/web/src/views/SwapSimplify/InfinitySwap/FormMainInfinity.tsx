@@ -30,6 +30,7 @@ import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { AssignRecipientButton, FlipButton } from './FlipButton'
 import { FormContainer } from './FormContainer'
 import { Recipient } from './Recipient'
+import { useRwaSwapRestrictions } from './useRwaSwapRestrictions'
 
 interface Props {
   inputAmount?: UnifiedCurrencyAmount<UnifiedCurrency>
@@ -161,6 +162,10 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const inputCurrency = useUnifiedCurrency(inputCurrencyId, inputChainId)
   const outputCurrency = useUnifiedCurrency(outputCurrencyId, outputChainId)
+  const { inputConfig: inputRwaConfig, outputConfig: outputRwaConfig } = useRwaSwapRestrictions(
+    inputCurrency,
+    outputCurrency,
+  )
 
   const inputBalance = useUnifiedCurrencyBalance(inputCurrency)
 
@@ -251,7 +256,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           id="swap-currency-input"
           showUSDPrice
           showMaxButton
-          showCommonBases
+          showCommonBases={inputRwaConfig.showCommonBases}
+          supportCrossChain={inputRwaConfig.supportCrossChain}
+          tokensToShow={inputRwaConfig.tokensToShow}
           inputLoading={!isWrapping && inputLoading}
           currencyLoading={!loadedUrlParams}
           label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
@@ -295,7 +302,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           disabled={isBridge}
           id="swap-currency-output"
           showUSDPrice
-          showCommonBases
+          showCommonBases={outputRwaConfig.showCommonBases}
+          supportCrossChain={outputRwaConfig.supportCrossChain}
+          tokensToShow={outputRwaConfig.tokensToShow}
           showMaxButton={false}
           inputLoading={!isWrapping && outputLoading}
           currencyLoading={!loadedUrlParams}

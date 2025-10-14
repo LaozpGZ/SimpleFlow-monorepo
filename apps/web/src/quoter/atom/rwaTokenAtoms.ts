@@ -83,6 +83,47 @@ export const rwaStatusesAtom = atom(async () => fetchRwaStatuses())
 
 const DEFAULT_STATUS: RwaTokenStatusInfo = { status: 'active' }
 
+const parseTimestamp = (value?: string): number | undefined => {
+  if (!value) {
+    return undefined
+  }
+  const parsed = Date.parse(value)
+  return Number.isNaN(parsed) ? undefined : parsed
+}
+
+const selectStatusForCurrentTime = (statuses: RwaAssetStatus[], now: number): RwaAssetStatus | undefined => {
+  if (!statuses.length) {
+    return undefined
+  }
+
+  const withTimestamps = statuses.map((item) => ({
+    item,
+    startTime: parseTimestamp(item.start),
+    endTime: parseTimestamp(item.end),
+  }))
+
+  const active = withTimestamps
+    .filter(({ startTime, endTime }) => {
+      if (startTime !== undefined && now < startTime) {
+        return false
+      }
+      if (endTime !== undefined && now >= endTime) {
+        return false
+      }
+      return true
+    })
+    .sort((a, b) => {
+      const aStart = a.startTime ?? Number.NEGATIVE_INFINITY
+      const bStart = b.startTime ?? Number.NEGATIVE_INFINITY
+      return bStart - aStart
+    })[0]
+
+  if (active) {
+    return active.item
+  }
+  return undefined
+}
+
 export const isRwaTokenAtom = atomFamily(
   ({ chainId, address }: { chainId: number; address: string }) =>
     atom((get) => {
@@ -107,9 +148,10 @@ export const getRwaTokenStatus = async (
   }
 
   const statuses = await get(rwaStatusesAtom)
-  const status = statuses.find((item) => item.symbol?.toLowerCase() === token.symbol.toLowerCase())
+  const matchingStatuses = statuses.filter((item) => item.symbol?.toLowerCase() === token.symbol.toLowerCase())
+  const status = selectStatusForCurrentTime(matchingStatuses, Date.now())
   if (!status) {
-    return DEFAULT_STATUS
+    return undefined
   }
 
   const { reason, status: apiStatus } = status
