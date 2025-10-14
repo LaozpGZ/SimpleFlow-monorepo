@@ -86,14 +86,16 @@ export const SERVER_NODES = {
 
 export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   [ChainId.BSC]: [
-    process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
-    getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
-    process.env.NEXT_PUBLIC_NODIES_BSC || '',
-    // getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
-    'https://bsc.publicnode.com',
+    // ! Ths RPC is for Cakepad IFO QA Testing. Remove it after testing, Do not merge.
+    'https://virtual.binance.eu.rpc.tenderly.co/a035c6e6-9a24-4773-a694-2ef798af1537',
+    // process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
+    // getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
+    // process.env.NEXT_PUBLIC_NODIES_BSC || '',
+    // // getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
+    // 'https://bsc.publicnode.com',
     // 'https://binance.llamarpc.com',
-    'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.bnbchain.org',
+    // 'https://bsc-dataseed1.defibit.io',
+    // 'https://bsc-dataseed1.bnbchain.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: [
     getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
