@@ -131,6 +131,8 @@ export const ParamSettingSection = () => {
   const { account, chainId } = useAccountActiveChain()
 
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined)
+  const [createPoolError, setCreatePoolError] = useState<string | undefined>(undefined)
+
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -426,6 +428,8 @@ export const ParamSettingSection = () => {
       return
     }
 
+    setCreatePoolError(undefined)
+
     try {
       const hash = await createInfinityStablePool({
         // NOTE: already check isEvm above, safe to cast
@@ -445,12 +449,17 @@ export const ParamSettingSection = () => {
       }
 
       setTxHash(hash)
-      setIsPreviewModalOpen(false)
     } catch (error) {
       console.error('Failed to create pool:', error)
-      // Error handling is already done in the hook
+      setCreatePoolError(error instanceof Error ? error.message : 'Failed to create pool')
     }
   }
+
+  const handleDismissConfirmation = useCallback(() => {
+    setIsPreviewModalOpen(false)
+    setTxHash(undefined)
+    setCreatePoolError(undefined)
+  }, [])
 
   return (
     <Box>
@@ -638,6 +647,7 @@ export const ParamSettingSection = () => {
         <CreatePoolPreviewModal
           isOpen={isPreviewModalOpen}
           onDismiss={() => setIsPreviewModalOpen(false)}
+          customOnDismiss={handleDismissConfirmation}
           tokenA={baseCurrency as Currency}
           tokenB={quoteCurrency as Currency}
           preset={selectedPreset}
@@ -648,7 +658,9 @@ export const ParamSettingSection = () => {
           depositAmountA={depositAmountA}
           depositAmountB={depositAmountB}
           onCreatePool={handleCreatePool}
-          isCreating={attemptingTxn || isConfirming}
+          attemptingTxn={attemptingTxn || isConfirming}
+          hash={txHash}
+          errorMessage={createPoolError}
         />
       )}
     </Box>

@@ -1,48 +1,13 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency } from '@pancakeswap/sdk'
-import {
-  Modal,
-  ModalV2,
-  Button,
-  Checkbox,
-  Text,
-  Box,
-  Flex,
-  CloseIcon,
-  IconButton,
-  Card,
-  CardBody,
-} from '@pancakeswap/uikit'
+import { Button, Checkbox, Text, Box, Flex, Card, CardBody } from '@pancakeswap/uikit'
+import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
+import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 import { styled } from 'styled-components'
 import DoubleCurrencyLogo from 'components/Logo/DoubleLogo'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { PRESET_CONFIGS, type PoolPreset } from '../sdk'
-
-const StyledModal = styled(Modal)`
-  max-width: 408px;
-  width: 100%;
-`
-
-// const TokenRow = styled(Flex)`
-//   background: ${({ theme }) => theme.colors.background};
-//   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-//   border-radius: 16px;
-//   padding: 8px 16px;
-//   align-items: center;
-//   justify-content: space-between;
-
-//   &:first-child {
-//     border-bottom-left-radius: 0;
-//     border-bottom-right-radius: 0;
-//     border-bottom: none;
-//   }
-
-//   &:last-child {
-//     border-top-left-radius: 0;
-//     border-top-right-radius: 0;
-//   }
-// `
 
 const ParameterRow = styled(Flex)`
   justify-content: space-between;
@@ -79,6 +44,7 @@ const TokenRow = styled(Flex)`
 interface CreatePoolPreviewModalProps {
   isOpen: boolean
   onDismiss: () => void
+  customOnDismiss?: () => void
   tokenA?: Currency
   tokenB?: Currency
   preset?: PoolPreset
@@ -89,12 +55,15 @@ interface CreatePoolPreviewModalProps {
   depositAmountA?: string
   depositAmountB?: string
   onCreatePool: () => void
-  isCreating?: boolean
+  attemptingTxn: boolean
+  hash?: string
+  errorMessage?: string
 }
 
 export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
   isOpen,
   onDismiss,
+  customOnDismiss,
   tokenA,
   tokenB,
   preset,
@@ -105,7 +74,9 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
   depositAmountA,
   depositAmountB,
   onCreatePool,
-  isCreating = false,
+  attemptingTxn,
+  hash,
+  errorMessage,
 }) => {
   const { t } = useTranslation()
   const [confirmed, setConfirmed] = useState(false)
@@ -118,19 +89,14 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
   const displayOffpegMultiplier = offpegFeeMultiplier || '10'
   const displayMaExpTime = movingAverageTime || '60'
 
-  return (
-    <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-      <StyledModal
-        title=""
-        onDismiss={onDismiss}
-        headerBackground="gradientCardHeader"
-        headerRightSlot={
-          <IconButton variant="text" onClick={onDismiss} style={{ background: 'transparent' }}>
-            <CloseIcon color="text" width="24px" />
-          </IconButton>
-        }
-        hideCloseButton
-      >
+  const pendingText = t('Creating %tokenA%-%tokenB% Pool', {
+    tokenA: tokenA?.symbol,
+    tokenB: tokenB?.symbol,
+  })
+
+  const modalHeader = useCallback(
+    () => (
+      <Box>
         {/* Token Pair Header */}
         <Flex flexDirection="column" alignItems="center" mb="16px">
           <Box mb="8px">
@@ -263,10 +229,53 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
         </Flex>
 
         {/* Create Pool Button */}
-        <Button width="100%" onClick={onCreatePool} disabled={!confirmed || isCreating} isLoading={isCreating}>
-          {isCreating ? t('Creating Pool...') : t('Create Pool')}
+        <Button width="100%" onClick={onCreatePool} disabled={!confirmed} mt="20px">
+          {t('Create Pool')}
         </Button>
-      </StyledModal>
-    </ModalV2>
+      </Box>
+    ),
+    [
+      tokenA,
+      tokenB,
+      depositAmountA,
+      depositAmountB,
+      displaySwapFee,
+      displayA,
+      displayOffpegMultiplier,
+      displayMaExpTime,
+      confirmed,
+      onCreatePool,
+      t,
+    ],
+  )
+
+  const modalBottom = useCallback(
+    () => (
+      <Button width="100%" onClick={onCreatePool} disabled={!confirmed}>
+        {t('Confirm Create Pool')}
+      </Button>
+    ),
+    [confirmed, onCreatePool, t],
+  )
+
+  const confirmationContent = useCallback(
+    () => <ConfirmationModalContent topContent={modalHeader} bottomContent={modalBottom} />,
+    [modalHeader, modalBottom],
+  )
+
+  if (!isOpen) return null
+
+  return (
+    <TransactionConfirmationModal
+      minWidth={['100%', '', '420px']}
+      title={t('Create Pool')}
+      onDismiss={onDismiss}
+      customOnDismiss={customOnDismiss}
+      attemptingTxn={attemptingTxn}
+      errorMessage={errorMessage}
+      hash={hash}
+      content={confirmationContent}
+      pendingText={pendingText}
+    />
   )
 }
