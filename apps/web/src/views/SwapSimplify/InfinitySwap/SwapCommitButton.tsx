@@ -20,7 +20,7 @@ import { useUnifiedCurrencyBalances } from 'hooks/useUnifiedCurrencyBalance'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { useAtomValue } from 'jotai'
 import { baseAllTypeBestTradeAtom } from 'quoter/atom/bestTradeUISyncAtom'
-import { BridgeTradeError, NoValidRouteError } from 'quoter/quoter.types'
+import { BridgeTradeError, NoValidRouteError, XTradeError } from 'quoter/quoter.types'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
@@ -259,15 +259,17 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   )
 
   const hasBridgeTradeError = useMemo(() => Boolean(tradeError && tradeError instanceof BridgeTradeError), [tradeError])
+  const hasXTradeError = useMemo(() => Boolean(tradeError && tradeError instanceof XTradeError), [tradeError])
 
   const isValid = useMemo(
     () =>
       !swapInputError &&
       !tradeLoading &&
       !hasBridgeTradeError &&
+      !hasXTradeError &&
       parsedAmounts[Field.INPUT]?.greaterThan(BIG_INT_ZERO) &&
       parsedAmounts[Field.OUTPUT]?.greaterThan(BIG_INT_ZERO),
-    [swapInputError, tradeLoading, hasBridgeTradeError, parsedAmounts],
+    [swapInputError, tradeLoading, hasBridgeTradeError, hasXTradeError, parsedAmounts],
   )
 
   const { isLoading: isBridgeCheckApprovalLoading } = useBridgeCheckApproval(order)
@@ -428,6 +430,19 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
       const errorMessage = handleBridgeTradeErrorMessage(tradeError)
 
       if (errorMessage) return errorMessage
+    }
+
+    if (tradeError instanceof XTradeError) {
+      if (tradeError.code === 'MARKET_CLOSED') {
+        return t('Market is closed.')
+      }
+      if (tradeError.code === 'MARKET_PAUSED') {
+        return t('Market is temporarily paused.')
+      }
+      if (tradeError.code === 'ASSET_PAUSED') {
+        return t('Specific asset is paused.')
+      }
+      return t('Market is temporarily unavailable.')
     }
 
     if (swapInputError) return swapInputError

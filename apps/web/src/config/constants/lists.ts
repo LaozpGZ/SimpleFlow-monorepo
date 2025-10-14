@@ -6,6 +6,8 @@ const COINGECKO_BSC = 'https://tokens.coingecko.com/binance-smart-chain/all.json
 const COINGECKO_ARB = 'https://tokens.coingecko.com/arbitrum-one/all.json'
 const COINGECKO_BASE = 'https://tokens.coingecko.com/base/all.json'
 const COINGECKO_LINEA = 'https://tokens.coingecko.com/linea/all.json'
+const PANCAKE_ONDO_RWA_LIST = 'https://tokens.pancakeswap.finance/ondo-rwa-tokens.json'
+
 export const PANCAKE_ETH_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-eth-default.json'
 export const PANCAKE_ZKSYNC_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-zksync-default.json'
 export const PANCAKE_ARB_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-arbitrum-default.json'
@@ -13,6 +15,7 @@ export const PANCAKE_LINEA_DEFAULT = 'https://tokens.pancakeswap.finance/pancake
 export const PANCAKE_BASE_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-base-default.json'
 export const PANCAKE_OPBNB_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-opbnb-default.json'
 export const PANCAKE_SOLANA_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
+export const RWA_URLS = [PANCAKE_ONDO_RWA_LIST]
 
 export const PANCAKE_MONAD_TESTNET_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-monad-testnet-default.json'
 
@@ -60,6 +63,7 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   ...WARNING_LIST_URLS,
   ...OPBNB_URLS,
   ...MONAD_TESTNET_URLS,
+  ...RWA_URLS,
 ]
 
 // default lists to be 'active' aka searched across
