@@ -241,7 +241,7 @@ const useConfirmActions = (
           n: 6,
           minWait: 2000,
           maxWait: confirmations ? confirmations * 5000 : 5000,
-          delay: (AVERAGE_CHAIN_BLOCK_TIMES[chainId] ?? BSC_BLOCK_TIME) * 1000 + 1000,
+          delay: ((t) => t + Math.min(t * 0.3, 1000))((AVERAGE_CHAIN_BLOCK_TIMES[chainId] ?? BSC_BLOCK_TIME) * 1000),
         })
         return promise
       }
