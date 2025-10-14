@@ -67,7 +67,7 @@ export const InfinitySwapForm = memo(() => {
   } = useSwapState()
 
   const inputCurrency = useCurrency(inputCurrencyId)
-  const outputCurrency = useCurrency(outputCurrencyId)
+  const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
 
   const { slippageTolerance: userSlippageTolerance } = useAutoSlippageWithFallback()
 
