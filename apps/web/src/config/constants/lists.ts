@@ -22,8 +22,8 @@ export const PANCAKE_MONAD_TESTNET_DEFAULT = 'https://tokens.pancakeswap.finance
 const COINGECKO_ETH = 'https://tokens.coingecko.com/uniswap/all.json'
 // export const CMC = 'https://tokens.pancakeswap.finance/cmc.json' // not updated for a while
 
-const ETH_URLS = [PANCAKE_ETH_DEFAULT, COINGECKO_ETH]
-const BSC_URLS = [PANCAKE_EXTENDED, COINGECKO_BSC]
+const ETH_URLS = [PANCAKE_ETH_DEFAULT, COINGECKO_ETH, ...RWA_URLS]
+const BSC_URLS = [PANCAKE_EXTENDED, COINGECKO_BSC, ...RWA_URLS]
 const ARBITRUM_URLS = [PANCAKE_ARB_DEFAULT, COINGECKO_ARB]
 const LINEA_URLS = [PANCAKE_LINEA_DEFAULT, COINGECKO_LINEA]
 const ZKSYNC_URLS = [
@@ -82,6 +82,7 @@ export const DEFAULT_ACTIVE_LIST_URLS: string[] = [
   COINGECKO_BASE,
   PANCAKE_MONAD_TESTNET_DEFAULT,
   COINGECKO_LINEA,
+  ...RWA_URLS,
 ]
 
 export const MULTI_CHAIN_LIST_URLS: { [chainId: number]: string[] } = {

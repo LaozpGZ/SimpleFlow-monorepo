@@ -92,14 +92,18 @@ export const isRwaTokenAtom = atomFamily(
   (a, b) => a.chainId === b.chainId && normalizeAddress(a.address) === normalizeAddress(b.address),
 )
 
-export const getRwaTokenStatus = async (get: Getter, chainId: number, address: string): Promise<RwaTokenStatusInfo> => {
+export const getRwaTokenStatus = async (
+  get: Getter,
+  chainId: number,
+  address: string,
+): Promise<RwaTokenStatusInfo | undefined> => {
   if (!address) {
     return DEFAULT_STATUS
   }
   const lists = get(listsAtom)
   const token = findRwaToken(lists, chainId, address)
   if (!token) {
-    return DEFAULT_STATUS
+    return undefined
   }
 
   const statuses = await get(rwaStatusesAtom)

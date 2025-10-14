@@ -159,7 +159,7 @@ const SwapCommitButtonComp: React.FC<SwapCommitButtonPropsType & CommitButtonPro
 export const SwapCommitButton = memo(SwapCommitButtonComp)
 
 function isSupportedErrorType(err: any) {
-  return err instanceof NoValidRouteError || err instanceof TimeoutError
+  return err instanceof NoValidRouteError || err instanceof TimeoutError || err instanceof XTradeError
 }
 
 const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
@@ -432,19 +432,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
       if (errorMessage) return errorMessage
     }
 
-    if (tradeError instanceof XTradeError) {
-      if (tradeError.code === 'MARKET_CLOSED') {
-        return t('Market is closed.')
-      }
-      if (tradeError.code === 'MARKET_PAUSED') {
-        return t('Market is temporarily paused.')
-      }
-      if (tradeError.code === 'ASSET_PAUSED') {
-        return t('Specific asset is paused.')
-      }
-      return t('Market is temporarily unavailable.')
-    }
-
     if (swapInputError) return swapInputError
 
     if (tradeLoading) return <Dots>{t('Searching For The Best Price')}</Dots>
@@ -473,6 +460,10 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     return <TimeoutButton />
   }
 
+  if (noRoute && userHasSpecifiedInputOutput && tradeError instanceof XTradeError) {
+    return <ErrorButton tradeError={tradeError} />
+  }
+
   if (noRoute && userHasSpecifiedInputOutput && (hasNoValidRouteError || !tradeLoading)) {
     return <ResetRoutesButton />
   }
@@ -491,6 +482,33 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     </CommitButton>
   )
 })
+
+const ErrorButton = ({ tradeError }: { tradeError: XTradeError }) => {
+  const { t } = useTranslation()
+  const message = useMemo(() => {
+    if (tradeError instanceof XTradeError) {
+      if (tradeError.code === 'MARKET_CLOSED') {
+        return t('Market is closed.')
+      }
+      if (tradeError.code === 'MARKET_PAUSED') {
+        return t('Market is temporarily paused.')
+      }
+      if (tradeError.code === 'ASSET_PAUSED') {
+        return t('Specific asset is paused.')
+      }
+      return t('Market is temporarily unavailable.')
+    }
+    throw new Error('Unsupported error type')
+  }, [tradeError, t])
+
+  return (
+    <AutoColumn gap="12px">
+      <GreyCard style={{ textAlign: 'center', padding: '0.75rem' }}>
+        <Text color="textSubtle">{message}</Text>
+      </GreyCard>
+    </AutoColumn>
+  )
+}
 
 const TimeoutButton = () => {
   const { refreshTrade, pauseQuoting, resumeQuoting } = useAtomValue(baseAllTypeBestTradeAtom)

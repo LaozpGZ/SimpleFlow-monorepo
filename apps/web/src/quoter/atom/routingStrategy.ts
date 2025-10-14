@@ -143,9 +143,11 @@ function getRoutingStrategy(
   const { chainId } = currencyA
   const addressA = getCurrencyAddress(currencyA)
   const addressB = getCurrencyAddress(currencyB)
-  const config = isRwaTrade
-    ? RWA_ONLY_ROUTING_CONFIG
-    : tokenSpecificConfig[chainId]?.[addressA] || tokenSpecificConfig[chainId]?.[addressB] || defaultRoutingConfig
+  if (isRwaTrade) {
+    return RWA_ONLY_ROUTING_CONFIG.map((x) => ({ ...Strategies[x.key], ...x })) as StrategyRoute[]
+  }
+  const config =
+    tokenSpecificConfig[chainId]?.[addressA] || tokenSpecificConfig[chainId]?.[addressB] || defaultRoutingConfig
 
   return config.map((x) => {
     const strategy = Strategies[x.key]

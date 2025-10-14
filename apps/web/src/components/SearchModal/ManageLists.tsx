@@ -200,6 +200,7 @@ function ManageLists({
   const [, dispatch] = useListState()
 
   const lists = useAllListsByChainId(chainId)
+  console.log(`[list]`, lists)
 
   // sort by active but only if not visible
   const activeListUrls = useActiveListUrlsByChainId(chainId)
