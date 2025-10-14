@@ -16,6 +16,7 @@ import {
 } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import DoubleCurrencyLogo from 'components/Logo/DoubleLogo'
+import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { PRESET_CONFIGS, type PoolPreset } from '../sdk'
 
 const StyledModal = styled(Modal)`
@@ -55,6 +56,26 @@ const StyledCard = styled(Card)`
   border-radius: 16px;
 `
 
+const TokenRow = styled(Flex)`
+  background: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 16px;
+  padding: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+
+  &:first-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
+  }
+
+  &:last-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+`
+
 interface CreatePoolPreviewModalProps {
   isOpen: boolean
   onDismiss: () => void
@@ -65,6 +86,8 @@ interface CreatePoolPreviewModalProps {
   amplificationParam?: string
   offpegFeeMultiplier?: string
   movingAverageTime?: string
+  depositAmountA?: string
+  depositAmountB?: string
   onCreatePool: () => void
   isCreating?: boolean
 }
@@ -79,6 +102,8 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
   amplificationParam,
   offpegFeeMultiplier,
   movingAverageTime,
+  depositAmountA,
+  depositAmountB,
   onCreatePool,
   isCreating = false,
 }) => {
@@ -135,41 +160,37 @@ export const CreatePoolPreviewModal: React.FC<CreatePoolPreviewModalProps> = ({
         </Flex>
 
         {/* Token Amounts */}
-        {/* <Box mb="16px">
-          <TokenRow>
-            <Flex alignItems="center" style={{ gap: '8px' }}>
-              {tokenA && <CurrencyLogo currency={tokenA} size="24px" />}
-              <Text fontSize="16px" bold color="text">
-                {tokenA?.symbol || 'Token1'}
-              </Text>
-            </Flex>
-            <Flex flexDirection="column" alignItems="flex-end">
-              <Text fontSize="16px" bold color="text">
-                {tokenAAmount}
-              </Text>
-              <Text fontSize="12px" color="textSubtle">
-                ~2.85 USD
-              </Text>
-            </Flex>
-          </TokenRow>
+        {depositAmountA && depositAmountB && (
+          <Box mb="16px">
+            <TokenRow>
+              <Flex alignItems="center" style={{ gap: '8px' }}>
+                {tokenA && <CurrencyLogo currency={tokenA} size="24px" />}
+                <Text fontSize="16px" bold color="text">
+                  {tokenA?.symbol || 'Token1'}
+                </Text>
+              </Flex>
+              <Flex flexDirection="column" alignItems="flex-end">
+                <Text fontSize="16px" bold color="text">
+                  {depositAmountA}
+                </Text>
+              </Flex>
+            </TokenRow>
 
-          <TokenRow>
-            <Flex alignItems="center" style={{ gap: '8px' }}>
-              {tokenB && <CurrencyLogo currency={tokenB} size="24px" />}
-              <Text fontSize="16px" bold color="text">
-                {tokenB?.symbol || 'Token2'}
-              </Text>
-            </Flex>
-            <Flex flexDirection="column" alignItems="flex-end">
-              <Text fontSize="16px" bold color="text">
-                {tokenBAmount}
-              </Text>
-              <Text fontSize="12px" color="textSubtle">
-                ~2.85 USD
-              </Text>
-            </Flex>
-          </TokenRow>
-        </Box> */}
+            <TokenRow>
+              <Flex alignItems="center" style={{ gap: '8px' }}>
+                {tokenB && <CurrencyLogo currency={tokenB} size="24px" />}
+                <Text fontSize="16px" bold color="text">
+                  {tokenB?.symbol || 'Token2'}
+                </Text>
+              </Flex>
+              <Flex flexDirection="column" alignItems="flex-end">
+                <Text fontSize="16px" bold color="text">
+                  {depositAmountB}
+                </Text>
+              </Flex>
+            </TokenRow>
+          </Box>
+        )}
 
         {/* Pool Parameters */}
         <StyledCard mb="16px">

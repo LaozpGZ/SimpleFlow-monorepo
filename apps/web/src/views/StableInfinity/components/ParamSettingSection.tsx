@@ -22,15 +22,22 @@ import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
 import { useWaitForTransactionReceipt } from 'wagmi'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { useRouter } from 'next/router'
+import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { ApprovalState, useApproveCallbackFromAmount } from 'hooks/useApproveCallback'
+import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
+import { Percent, Currency } from '@pancakeswap/swap-sdk-core'
+import { type ERC20Token } from '@pancakeswap/sdk'
+import { useCurrencyBalances } from 'state/wallet/hooks'
+import { maxAmountSpend } from 'utils/maxAmountSpend'
 
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { isEvm } from '@pancakeswap/chains'
-import { Currency } from '@pancakeswap/swap-sdk-core'
 import { type PoolPreset, percentageToFee, TokenType, type CreateInfinityStablePoolOptions } from '../sdk'
 import { ADDRESS_ZERO, NULL_METHOD_ID } from '../sdk/constants'
 import { useCreateInfinityStablePool } from '../hooks/useCreateInfinityStablePool'
 import { useTokenConfig } from '../contexts/TokenConfigContext'
 import { CreatePoolPreviewModal } from './CreatePoolPreviewModal'
+import { InfinityStablePoolFactory } from '../sdk'
 
 type PresetType = PoolPreset
 
@@ -114,12 +121,14 @@ export const ParamSettingSection = () => {
   const [amplificationParam, setAmplificationParam] = useState('1000')
   const [offpegFeeMultiplier, setOffpegFeeMultiplier] = useState('10')
   const [movingAverageTime, setMovingAverageTime] = useState('60')
+  const [depositAmountA, setDepositAmountA] = useState('')
+  const [depositAmountB, setDepositAmountB] = useState('')
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const { createInfinityStablePool, attemptingTxn } = useCreateInfinityStablePool()
   const { tokenAConfig, tokenBConfig } = useTokenConfig()
 
   const router = useRouter()
-  const { chainId } = useAccountActiveChain()
+  const { account, chainId } = useAccountActiveChain()
 
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined)
   const {
@@ -210,9 +219,61 @@ export const ParamSettingSection = () => {
     return null
   }
 
+  // Parse deposit amounts
+  const parsedAmountA = useMemo(() => tryParseAmount(depositAmountA, baseCurrency), [depositAmountA, baseCurrency])
+  const parsedAmountB = useMemo(() => tryParseAmount(depositAmountB, quoteCurrency), [depositAmountB, quoteCurrency])
+
+  // Get user balances
+  const [balanceA, balanceB] = useCurrencyBalances(account, [baseCurrency, quoteCurrency])
+
+  // Calculate max amounts
+  const maxAmountA = useMemo(() => maxAmountSpend(balanceA), [balanceA])
+  const maxAmountB = useMemo(() => maxAmountSpend(balanceB), [balanceB])
+
+  // Get factory address for approvals
+  const factoryAddress = useMemo(() => {
+    if (!chainId || !isEvm(chainId)) return undefined
+    return InfinityStablePoolFactory.getFactoryAddress(chainId)
+  }, [chainId])
+
+  // Approval hooks for both tokens
+  const { approvalState: approvalA, approveCallback: approveACallback } = useApproveCallbackFromAmount({
+    token: (baseCurrency?.isToken && isEvm(baseCurrency.chainId) ? baseCurrency : undefined) as ERC20Token | undefined,
+    minAmount: parsedAmountA?.quotient,
+    spender: factoryAddress,
+  })
+
+  const { approvalState: approvalB, approveCallback: approveBCallback } = useApproveCallbackFromAmount({
+    token: (quoteCurrency?.isToken && isEvm(quoteCurrency.chainId) ? quoteCurrency : undefined) as
+      | ERC20Token
+      | undefined,
+    minAmount: parsedAmountB?.quotient,
+    spender: factoryAddress,
+  })
+
+  // Determine if approvals are needed
+  const showFieldAApproval = [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approvalA) && !!parsedAmountA
+  const showFieldBApproval = [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approvalB) && !!parsedAmountB
+  const shouldShowApprovalGroup = showFieldAApproval || showFieldBApproval
+
+  // Validate deposit amounts
+  const validateDepositAmounts = () => {
+    if (!depositAmountA || !depositAmountB) {
+      return t('Please enter both deposit amounts')
+    }
+    if (!parsedAmountA || !parsedAmountB) {
+      return t('Invalid deposit amounts')
+    }
+    if (parsedAmountA.quotient === 0n || parsedAmountB.quotient === 0n) {
+      return t('Deposit amounts must be greater than 0')
+    }
+    return null
+  }
+
   const presetValidationError = validatePreset()
   const oracleValidationError = validateOracleConfig(tokenAConfig, 'A') || validateOracleConfig(tokenBConfig, 'B')
   const advancedValidationError = validateAdvancedParams()
+  const depositAmountsValidationError = validateDepositAmounts()
 
   // Handle number-only input with optional decimal place limit
   const handleNumberInput = (value: string, allowDecimal = false, maxDecimals?: number) => {
@@ -360,7 +421,10 @@ export const ParamSettingSection = () => {
       return
     }
 
-    // tokenAConfig, tokenBConfig
+    if (!parsedAmountA || !parsedAmountB) {
+      console.error('Missing deposit amounts')
+      return
+    }
 
     try {
       const hash = await createInfinityStablePool({
@@ -371,6 +435,8 @@ export const ParamSettingSection = () => {
         assetTypes: [tokenAConfig.type, tokenBConfig.type],
         methodIds: [tokenAConfig.methodId, tokenBConfig.methodId],
         oracles: [tokenAConfig.oracleAddress, tokenBConfig.oracleAddress],
+        amount0: parsedAmountA.quotient,
+        amount1: parsedAmountB.quotient,
         ...poolOptions,
       })
 
@@ -464,6 +530,72 @@ export const ParamSettingSection = () => {
         )}
       </LightGreyCard>
 
+      {/* Deposit Amount Section */}
+      <Box mb="24px">
+        <CurrencyInputPanelSimplify
+          title={<PreTitle>{t('Deposit Amount')}</PreTitle>}
+          showUSDPrice
+          maxAmount={maxAmountA}
+          onMax={() => setDepositAmountA(maxAmountA?.toExact() ?? '')}
+          onPercentInput={(percent) => {
+            if (maxAmountA) {
+              setDepositAmountA(maxAmountA?.multiply(new Percent(percent, 100)).toExact() ?? '')
+            }
+          }}
+          disableCurrencySelect
+          defaultValue={depositAmountA}
+          onUserInput={setDepositAmountA}
+          showQuickInputButton
+          showMaxButton
+          currency={baseCurrency}
+          id="stable-create-pool-input-tokena"
+        />
+        <Box my="8px" />
+        <CurrencyInputPanelSimplify
+          title={<>&nbsp;</>}
+          showUSDPrice
+          disableCurrencySelect
+          maxAmount={maxAmountB}
+          onPercentInput={(percent) => {
+            if (maxAmountB) {
+              setDepositAmountB(maxAmountB?.multiply(new Percent(percent, 100)).toExact() ?? '')
+            }
+          }}
+          onMax={() => setDepositAmountB(maxAmountB?.toExact() ?? '')}
+          defaultValue={depositAmountB}
+          onUserInput={setDepositAmountB}
+          showQuickInputButton
+          showMaxButton
+          currency={quoteCurrency}
+          id="stable-create-pool-input-tokenb"
+        />
+      </Box>
+
+      {/* Approval Buttons */}
+      {shouldShowApprovalGroup && (
+        <Box mb="16px">
+          {showFieldAApproval && (
+            <Button
+              width="100%"
+              onClick={approveACallback}
+              disabled={approvalA === ApprovalState.PENDING}
+              mb={showFieldBApproval ? '8px' : '0px'}
+            >
+              {approvalA === ApprovalState.PENDING
+                ? t('Enabling %symbol%', { symbol: baseCurrency?.symbol })
+                : t('Enable %symbol%', { symbol: baseCurrency?.symbol })}
+            </Button>
+          )}
+          {showFieldBApproval && (
+            <Button width="100%" onClick={approveBCallback} disabled={approvalB === ApprovalState.PENDING}>
+              {approvalB === ApprovalState.PENDING
+                ? t('Enabling %symbol%', { symbol: quoteCurrency?.symbol })
+                : t('Enable %symbol%', { symbol: quoteCurrency?.symbol })}
+            </Button>
+          )}
+        </Box>
+      )}
+
       {/* Preview Pool Button */}
       <Button
         width="100%"
@@ -474,13 +606,22 @@ export const ParamSettingSection = () => {
           attemptingTxn ||
           !!presetValidationError ||
           !!oracleValidationError ||
-          !!advancedValidationError
+          !!advancedValidationError ||
+          !!depositAmountsValidationError ||
+          approvalA === ApprovalState.PENDING ||
+          approvalB === ApprovalState.PENDING ||
+          showFieldAApproval ||
+          showFieldBApproval
         }
         isLoading={attemptingTxn}
       >
         {attemptingTxn || isConfirming
           ? t('Creating Pool...')
-          : presetValidationError || oracleValidationError || advancedValidationError || t('Preview Pool')}
+          : presetValidationError ||
+            oracleValidationError ||
+            advancedValidationError ||
+            depositAmountsValidationError ||
+            t('Preview Pool')}
       </Button>
 
       {/* Preset Modal */}
@@ -504,6 +645,8 @@ export const ParamSettingSection = () => {
           amplificationParam={amplificationParam}
           offpegFeeMultiplier={offpegFeeMultiplier}
           movingAverageTime={movingAverageTime}
+          depositAmountA={depositAmountA}
+          depositAmountB={depositAmountB}
           onCreatePool={handleCreatePool}
           isCreating={attemptingTxn || isConfirming}
         />

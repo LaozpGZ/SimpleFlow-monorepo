@@ -79,6 +79,28 @@ export interface CreateInfinityStablePoolOptions {
 }
 
 /**
+ * Options for creating a InfinityStable pool and adding liquidity in one transaction
+ */
+export interface CreatePoolAndAddLiquidityOptions extends CreateInfinityStablePoolOptions {
+  /**
+   * Amount of first token to add
+   */
+  amount0: bigint
+  /**
+   * Amount of second token to add
+   */
+  amount1: bigint
+  /**
+   * Minimum amount of LP tokens to mint
+   */
+  minMintAmount: bigint
+  /**
+   * Address to receive LP tokens
+   */
+  receiver: Address
+}
+
+/**
  * Pool key returned by the factory
  */
 export interface PoolKey {

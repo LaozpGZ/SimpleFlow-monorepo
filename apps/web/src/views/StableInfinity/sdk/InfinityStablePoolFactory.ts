@@ -5,7 +5,13 @@ import invariant from 'tiny-invariant'
 
 import { infinityStablePoolFactoryABI } from './abis/infinityStablePoolFactoryABI'
 import { CL_STABLE_SWAP_POOL_FACTORY_ADDRESS, ADDRESS_ZERO, NULL_METHOD_ID } from './constants'
-import { CreateInfinityStablePoolOptions, MethodParameters, PoolPreset, PRESET_CONFIGS } from './types'
+import {
+  CreateInfinityStablePoolOptions,
+  CreatePoolAndAddLiquidityOptions,
+  MethodParameters,
+  PoolPreset,
+  PRESET_CONFIGS,
+} from './types'
 
 /**
  * Validates that two currencies are different
@@ -144,5 +150,100 @@ export abstract class InfinityStablePoolFactory {
     const presetConfig = PRESET_CONFIGS[preset]
     invariant(presetConfig, `Unknown preset: ${preset}`)
     return presetConfig
+  }
+
+  /**
+   * Encodes the createPoolAndAddLiquidity function call
+   */
+  private static encodeCreatePoolAndAddLiquidity(options: CreatePoolAndAddLiquidityOptions): Hex {
+    const [tokenA, tokenB] = sortCurrencies(options.tokenA, options.tokenB)
+
+    // Generate pool name and symbol
+    const name = `${tokenA.symbol}-${tokenB.symbol}`
+    const symbol = `${tokenA.symbol}-${tokenB.symbol}`
+
+    // Prepare token addresses
+    const coins = [tokenA.wrapped.address as Address, tokenB.wrapped.address as Address]
+
+    // Validate all required parameters are provided
+    invariant(options.A !== undefined, 'A parameter is required')
+    invariant(options.fee !== undefined, 'fee parameter is required')
+    invariant(options.offpegFeeMultiplier !== undefined, 'offpegFeeMultiplier parameter is required')
+    invariant(options.maExpTime !== undefined, 'maExpTime parameter is required')
+    invariant(options.assetTypes !== undefined, 'assetTypes parameter is required')
+    invariant(options.amount0 !== undefined, 'amount0 is required')
+    invariant(options.amount1 !== undefined, 'amount1 is required')
+    invariant(options.minMintAmount !== undefined, 'minMintAmount is required')
+    invariant(options.receiver !== undefined, 'receiver is required')
+
+    const { A } = options
+    const { fee } = options
+    const { offpegFeeMultiplier } = options
+    const { maExpTime } = options
+    const implementationIdx = 0n
+    const { assetTypes } = options
+    const methodIds = [options.methodIds?.[0] ?? NULL_METHOD_ID, options.methodIds?.[1] ?? NULL_METHOD_ID]
+    const oracles = [options.oracles?.[0] ?? ADDRESS_ZERO, options.oracles?.[1] ?? ADDRESS_ZERO]
+
+    // Determine which amounts to use based on token order
+    const isSorted = tokenA.wrapped.sortsBefore(tokenB.wrapped)
+    const amount0 = isSorted ? options.amount0 : options.amount1
+    const amount1 = isSorted ? options.amount1 : options.amount0
+
+    console.info('[debug] InfinityStablePoolFactory.encodeCreatePoolAndAddLiquidity call parameters', {
+      name,
+      symbol,
+      coins,
+      A,
+      fee,
+      offpegFeeMultiplier,
+      maExpTime,
+      implementationIdx,
+      assetTypes,
+      methodIds,
+      oracles,
+      amount0,
+      amount1,
+      minMintAmount: options.minMintAmount,
+      receiver: options.receiver,
+    })
+
+    return encodeFunctionData({
+      abi: InfinityStablePoolFactory.ABI,
+      functionName: 'createPoolAndAddLiquidity',
+      args: [
+        {
+          name,
+          symbol,
+          coins,
+          A,
+          fee,
+          offpegFeeMultiplier,
+          maExpTime,
+          implementationIdx,
+          assetTypes,
+          methodIds,
+          oracles,
+        },
+        {
+          amount0,
+          amount1,
+          minMintAmount: options.minMintAmount,
+          receiver: options.receiver,
+        },
+      ],
+    })
+  }
+
+  /**
+   * Creates call parameters for pool creation with initial liquidity
+   */
+  public static createPoolAndAddLiquidityCallParameters(options: CreatePoolAndAddLiquidityOptions): MethodParameters {
+    validateCurrencies(options.tokenA, options.tokenB)
+
+    return {
+      calldata: this.encodeCreatePoolAndAddLiquidity(options),
+      value: toHex(0),
+    }
   }
 }

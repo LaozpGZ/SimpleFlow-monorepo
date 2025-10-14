@@ -23,6 +23,14 @@ interface CreateInfinityStablePoolParams extends Omit<CreateInfinityStablePoolOp
    * [0, 1] = Mixed (tokenA standard, tokenB oracle)
    */
   assetTypes: readonly [number, number]
+  /**
+   * Amount of first token to deposit
+   */
+  amount0: bigint
+  /**
+   * Amount of second token to deposit
+   */
+  amount1: bigint
 }
 
 export const useCreateInfinityStablePool = () => {
@@ -37,7 +45,7 @@ export const useCreateInfinityStablePool = () => {
   const [txnErrorMessage, setTxnErrorMessage] = useState<string | undefined>()
 
   const createInfinityStablePool = useCallback(
-    async ({ tokenA, tokenB, preset, assetTypes, ...options }: CreateInfinityStablePoolParams) => {
+    async ({ tokenA, tokenB, preset, assetTypes, amount0, amount1, ...options }: CreateInfinityStablePoolParams) => {
       if (!chainId || !signer || !account || !tokenA || !tokenB) {
         return undefined
       }
@@ -47,6 +55,11 @@ export const useCreateInfinityStablePool = () => {
         throw new Error('assetTypes must be provided as [number, number]')
       }
 
+      // Validate amounts
+      if (amount0 === undefined || amount1 === undefined) {
+        throw new Error('amount0 and amount1 are required')
+      }
+
       try {
         setAttemptingTxn(true)
         setTxnErrorMessage(undefined)
@@ -54,17 +67,25 @@ export const useCreateInfinityStablePool = () => {
         // Generate call parameters using the SDK
         // When preset is provided, merge it with custom options (custom options override preset)
         const { calldata } = preset
-          ? InfinityStablePoolFactory.createPoolCallParameters({
+          ? InfinityStablePoolFactory.createPoolAndAddLiquidityCallParameters({
               tokenA,
               tokenB,
               ...InfinityStablePoolFactory.getPresetConfig(preset),
               assetTypes,
+              amount0,
+              amount1,
+              minMintAmount: 0n, // Default to 0 for now
+              receiver: account,
               ...options, // Override preset values with custom options
             })
-          : InfinityStablePoolFactory.createPoolCallParameters({
+          : InfinityStablePoolFactory.createPoolAndAddLiquidityCallParameters({
               tokenA,
               tokenB,
               assetTypes,
+              amount0,
+              amount1,
+              minMintAmount: 0n, // Default to 0 for now
+              receiver: account,
               ...options,
             })
 
@@ -93,7 +114,7 @@ export const useCreateInfinityStablePool = () => {
         addTransaction(
           { hash },
           {
-            summary: `Create ${tokenA.symbol}-${tokenB.symbol} InfinityStable Pool`,
+            summary: `Create ${tokenA.symbol}-${tokenB.symbol} InfinityStable Pool and add liquidity`,
           },
         )
 
@@ -113,7 +134,7 @@ export const useCreateInfinityStablePool = () => {
         throw error
       }
     },
-    [account, chainId, signer, sendTransactionAsync, t, toastError],
+    [account, chainId, signer, sendTransactionAsync, t, toastError, addTransaction],
   )
 
   return useMemo(
