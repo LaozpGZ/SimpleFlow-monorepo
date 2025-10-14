@@ -42,7 +42,7 @@ import { useSetAtom } from 'jotai'
 import { getBridgeCalldata, getSolanaToEVMBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 
-import { ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
+import { AVERAGE_CHAIN_BLOCK_TIMES, ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
@@ -60,6 +60,7 @@ import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
 import { useEVMToSolanaBridgeCalldata } from 'views/Swap/Bridge/hooks/useEVMToSolanaBridgeCalldata'
 import { calculateGasMargin } from 'utils'
 import { viemClients } from 'utils/viem'
+import { BSC_BLOCK_TIME } from 'config'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
 import { useSolSwapStep } from './steps/useSolSwapStep'
@@ -240,6 +241,7 @@ const useConfirmActions = (
           n: 6,
           minWait: 2000,
           maxWait: confirmations ? confirmations * 5000 : 5000,
+          delay: (AVERAGE_CHAIN_BLOCK_TIMES[chainId] ?? BSC_BLOCK_TIME) * 1000 + 1000,
         })
         return promise
       }
