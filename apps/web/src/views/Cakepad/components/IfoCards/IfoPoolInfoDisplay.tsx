@@ -214,15 +214,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!feeTier,
     },
     {
-      left: <StyledText color="textSubtle">{t('Your Tax')}:</StyledText>,
-      right: taxValue ? (
-        <NumberDisplay {...commonNumberDisplayProps} value={taxValue} suffix={taxSuffix} maximumSignificantDigits={6} />
-      ) : (
-        <StyledText color="text">-</StyledText>
-      ),
-      display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!taxValue,
-    },
-    {
       left: <StyledText color="textSubtle">{t('Status')}</StyledText>,
       right: statusRight,
       display: variant !== 'presale' && variant !== 'history',
