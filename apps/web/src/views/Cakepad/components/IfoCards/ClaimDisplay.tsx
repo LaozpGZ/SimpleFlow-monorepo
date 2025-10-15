@@ -6,6 +6,7 @@ import useTheme from 'hooks/useTheme'
 import { useAccount } from 'wagmi'
 import { logGTMIfoConnectWalletEvent } from 'utils/customGTMEventTracking'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { useIFOClaimCallback } from '../../hooks/ifo/useIFOClaimCallback'
 import useIfo from '../../hooks/useIfo'
 import { formatDollarAmount } from './IfoDepositForm'
@@ -15,7 +16,7 @@ export const ClaimDisplay: React.FC<{ pid: number }> = ({ pid }) => {
   const { claim, isPending: isLoading } = useIFOClaimCallback()
   const { info, pools, users } = useIfo()
   const userStatus = users[pid]
-  const claimableAmount = userStatus?.claimableAmount?.toSignificant(6)
+  const claimableAmount = formatAmount(userStatus?.claimableAmount, 6)
   const offeringCurrency = info?.offeringCurrency
   const status = info?.status
   const stakeCurrency = pools?.[pid]?.stakeCurrency
@@ -23,7 +24,7 @@ export const ClaimDisplay: React.FC<{ pid: number }> = ({ pid }) => {
     offeringCurrency ?? undefined,
     claimableAmount !== undefined && Number.isFinite(+claimableAmount) ? +claimableAmount : undefined,
   )
-  const refundAmount = userStatus?.stakeRefund?.toSignificant(6)
+  const refundAmount = formatAmount(userStatus?.stakeRefund, 6)
   const hasRefund = userStatus?.stakeRefund?.greaterThan(0)
 
   const refundInDollar = useStablecoinPriceAmount(
@@ -63,7 +64,7 @@ export const ClaimDisplay: React.FC<{ pid: number }> = ({ pid }) => {
               </FlexGap>
               <FlexGap flexDirection="column" mt="8px">
                 <Text textTransform="uppercase" color="secondary" fontSize="12px" bold>
-                  {offeringCurrency?.symbol} {t('allocated')}
+                  {t('%symbol% allocated', { symbol: offeringCurrency?.symbol })}
                 </Text>
                 <Text fontSize="20px" bold lineHeight="30px">
                   {claimableAmount}
