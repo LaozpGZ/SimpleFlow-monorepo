@@ -40,9 +40,13 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
   const showExtraInfo = variant === 'live' && userHasStaked
   const feeTier = poolInfo?.feeTier !== undefined ? `${(poolInfo.feeTier * 100).toFixed(2)}%` : undefined
-  const cakeToBurn =
+  const tax =
     poolInfo?.isCakePool && userStatus?.tax
       ? `${userStatus.tax.toSignificant(6)} ${userStatus.tax.currency.symbol}`
+      : undefined
+  const cakeToBurn =
+    poolInfo?.isCakePool && poolInfo?.estimatedCakeToBurn
+      ? `${poolInfo.estimatedCakeToBurn.toSignificant(6)} ${poolInfo.estimatedCakeToBurn.currency.symbol}`
       : undefined
 
   const {
@@ -159,7 +163,12 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!feeTier,
     },
     {
-      left: <StyledText color="textSubtle">{t('Est. CAKE to burn:')}</StyledText>,
+      left: <StyledText color="textSubtle">{t('Tax')}:</StyledText>,
+      right: <StyledText color="text">{tax}</StyledText>,
+      display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!tax,
+    },
+    {
+      left: <StyledText color="textSubtle">{t('Est. CAKE to burn')}:</StyledText>,
       right: <StyledText color="text">{cakeToBurn}</StyledText>,
       display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!cakeToBurn,
     },
@@ -174,7 +183,12 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       display: Boolean(variant !== 'presale' && showExtraInfo && !!feeTier),
     },
     {
-      left: <StyledText color="textSubtle">{t('Est. CAKE to burn:')}</StyledText>,
+      left: <StyledText color="textSubtle">{t('Tax')}:</StyledText>,
+      right: <StyledText color="text">{tax}</StyledText>,
+      display: Boolean(variant !== 'presale' && showExtraInfo && !!tax),
+    },
+    {
+      left: <StyledText color="textSubtle">{t('Est. CAKE to burn')}:</StyledText>,
       right: <StyledText color="text">{cakeToBurn}</StyledText>,
       display: Boolean(variant !== 'presale' && showExtraInfo && !!cakeToBurn),
     },

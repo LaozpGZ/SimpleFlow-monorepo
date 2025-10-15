@@ -65,6 +65,10 @@ export interface PoolInfo {
    * Whether the staking token for this pool is CAKE
    */
   isCakePool?: boolean
+  /**
+   * Estimated CAKE amount to be burned for this pool
+   */
+  estimatedCakeToBurn?: CurrencyAmount<Currency>
 }
 
 export type IFOConfig = {

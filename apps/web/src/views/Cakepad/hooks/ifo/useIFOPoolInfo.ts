@@ -5,7 +5,7 @@ import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/u
 import { getViemClients } from 'utils/viem'
 import { zeroAddress, isAddressEqual, type Address } from 'viem'
 import { useCurrency } from 'hooks/Tokens'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, Fraction } from '@pancakeswap/swap-sdk-core'
 import { useAtomValue } from 'jotai'
 import { ifoPoolsAtom } from 'views/Cakepad/atom/ifo.atoms'
 import { useIfoV2Context } from 'views/Cakepad/contexts/useIfoV2Context'
@@ -14,6 +14,8 @@ import { ifoVersionAtom } from 'views/Cakepad/atom/ifoVersionAtom'
 import { useIFOAddresses } from './useIFOAddresses'
 import type { PoolInfo } from '../../ifov2.types'
 import { mapToPoolInfo, type RawPoolInfo } from './mapToPoolInfo'
+
+const TAX_RATE_PRECISION = 1_000_000_000_000n
 
 export const useIFOPoolInfo = () => {
   const { config } = useIfoV2Context()
@@ -91,7 +93,7 @@ export const useIFOPoolInfoCtx = (): PoolInfo[] => {
         const poolToken = ((idx === 0 ? addresses.lpToken0 : addresses.lpToken1) ?? zeroAddress) as Address
         const stakeCurrency = (idx === 0 ? stakeCurrency0 : stakeCurrency1) as Currency
         const [raisingAmountPool, , , , totalAmountPool] = raw
-        const feeTier = totalAmountPool < raisingAmountPool ? 0 : Number(taxRateRaw) / 1e12
+        const feeTier = totalAmountPool < raisingAmountPool ? 0 : Number(taxRateRaw) / Number(TAX_RATE_PRECISION)
         const mapped = mapToPoolInfo({
           raw,
           pid: idx,
@@ -103,9 +105,18 @@ export const useIFOPoolInfoCtx = (): PoolInfo[] => {
 
         if (!mapped) return undefined
 
+        const isCakePool = isAddressEqual(poolToken, cakeAddress as `0x${string}`)
+        const estimatedCakeToBurn =
+          isCakePool && stakeCurrency && taxRateRaw > 0n && totalAmountPool > 0n
+            ? CurrencyAmount.fromRawAmount(stakeCurrency, totalAmountPool).multiply(
+                new Fraction(taxRateRaw, TAX_RATE_PRECISION),
+              )
+            : undefined
+
         return {
           ...mapped,
-          isCakePool: isAddressEqual(poolToken, cakeAddress as `0x${string}`),
+          isCakePool,
+          estimatedCakeToBurn,
         } as PoolInfo
       })
       .filter((pool): pool is PoolInfo => Boolean(pool))
