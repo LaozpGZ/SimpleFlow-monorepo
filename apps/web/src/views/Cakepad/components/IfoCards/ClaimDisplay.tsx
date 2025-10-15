@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, CheckmarkIcon, FlexGap, InfoIcon, SwapLoading, Text, useTooltip } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
 import { useAccount } from 'wagmi'
@@ -66,9 +66,15 @@ export const ClaimDisplay: React.FC<{ pid: number }> = ({ pid }) => {
                 <Text textTransform="uppercase" color="secondary" fontSize="12px" bold>
                   {t('%symbol% allocated', { symbol: offeringCurrency?.symbol })}
                 </Text>
-                <Text fontSize="20px" bold lineHeight="30px">
-                  {claimableAmount}
-                </Text>
+
+                <NumberDisplay
+                  value={claimableAmount}
+                  suffix={` ${offeringCurrency?.symbol}`}
+                  fontSize="20px"
+                  bold
+                  lineHeight="30px"
+                />
+
                 <FlexGap>
                   {Number.isFinite(amountInDollar) ? (
                     <>
@@ -103,7 +109,7 @@ export const ClaimDisplay: React.FC<{ pid: number }> = ({ pid }) => {
           <FlexGap justifyContent="space-between" mt="8px">
             <Text color="textSubtle">{t('Subscribed')}</Text>
             <Text>
-              {userStatus?.stakedAmount?.toSignificant(6)} {stakeCurrency?.symbol ?? ''}
+              <NumberDisplay value={formatAmount(userStatus?.stakedAmount, 6)} suffix={` ${stakeCurrency?.symbol}`} />
             </Text>
           </FlexGap>
           {hasRefund && (
@@ -120,7 +126,7 @@ export const ClaimDisplay: React.FC<{ pid: number }> = ({ pid }) => {
                 </FlexGap>
                 <FlexGap flexDirection="column" alignItems="flex-end">
                   <Text>
-                    {refundAmount} {stakeCurrency?.symbol ?? ''}
+                    <NumberDisplay value={refundAmount} suffix={` ${stakeCurrency?.symbol}`} />
                   </Text>
                   <FlexGap>
                     {Number.isFinite(refundInDollar) ? (
