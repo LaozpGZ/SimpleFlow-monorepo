@@ -163,7 +163,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           {...commonNumberDisplayProps}
           value={pricePerToken.toFixed(6)}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
-          maximumSignificantDigits={6}
         />
       ) : (
         <StyledText color="text">-</StyledText>
