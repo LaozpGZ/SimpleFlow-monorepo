@@ -83,6 +83,7 @@ export type IFOConfig = {
   description: ReactNode
   ineligibleContent?: ReactNode
   contractAddress: Address
+  tokenAddress?: Address
   faqs?: IFOFAQs
   howTo?: HowTo[]
 

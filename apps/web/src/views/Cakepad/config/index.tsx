@@ -12,6 +12,9 @@ export const ifoConfigs: IFOConfig[] = [
 
     contractAddress: '0xD8210a960f0F15778e00C62Dad14D3319712e5cb', // Production contract
 
+    // Used for showing bscScan link in the footer. Falls back to contractAddress if not set
+    tokenAddress: '0x635d44F246156ed1080CB470877256c847673f19',
+
     icon: `${ASSET_CDN}/web/ifos/v2/whitebridge/logo.png`,
     bannerUrl: `${ASSET_CDN}/web/ifos/v2/whitebridge/bg.png`,
     projectUrl: 'https://www.whitebridge.network/',
