@@ -79,25 +79,23 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
 
   const feeTierTooltipContent = (
     <Text as="div" fontSize="12px">
-      <Trans>
-        Tiered Tax based on subscription % : Fees decrease as oversubscription increases.
-        <ul>
-          <li>≤100% Sub → 0% Fee</li>
-          <li>&gt;100% Sub → 1% Fee</li>
-          <li>≥5,000% Sub → 0.8% Fee</li>
-          <li>≥10,000% Sub → 0.6% Fee</li>
-          <li>≥15,000% Sub → 0.5% Fee</li>
-          <li>≥20,000% Sub → 0.4% Fee</li>
-          <li>≥25,000% Sub → 0.3% Fee</li>
-          <li>≥30,000% Sub → 0.25% Fee</li>
-          <li>≥40,000% Sub → 0.20% Fee</li>
-          <li>≥50,000% Sub → 0.15% Fee</li>
-          <li>≥65,000% Sub → 0.12% Fee</li>
-          <li>≥80,000% Sub → 0.10% Fee</li>
-          <li>&gt;150,000% Sub → 0.05% Fee</li>
-        </ul>
-        (All CAKE.PAD fees collected will be used in CAKE burn)
-      </Trans>
+      <Trans>Tiered Tax based on subscription % : Fees decrease as oversubscription increases.</Trans>
+      <ul>
+        <li>≤100% Sub → 0% Fee</li>
+        <li>&gt;100% Sub → 1% Fee</li>
+        <li>≥5,000% Sub → 0.8% Fee</li>
+        <li>≥10,000% Sub → 0.6% Fee</li>
+        <li>≥15,000% Sub → 0.5% Fee</li>
+        <li>≥20,000% Sub → 0.4% Fee</li>
+        <li>≥25,000% Sub → 0.3% Fee</li>
+        <li>≥30,000% Sub → 0.25% Fee</li>
+        <li>≥40,000% Sub → 0.20% Fee</li>
+        <li>≥50,000% Sub → 0.15% Fee</li>
+        <li>≥65,000% Sub → 0.12% Fee</li>
+        <li>≥80,000% Sub → 0.10% Fee</li>
+        <li>&gt;150,000% Sub → 0.05% Fee</li>
+      </ul>
+      (<Trans>All CAKE.PAD fees collected will be used in CAKE burn</Trans>)
     </Text>
   )
 
