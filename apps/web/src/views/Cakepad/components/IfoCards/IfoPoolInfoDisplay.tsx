@@ -130,7 +130,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           {...commonNumberDisplayProps}
           value={ifoStatus?.progress ? ifoStatus.progress.toFixed(2) : '0.00'}
           suffix=" %"
-          maximumSignificantDigits={6}
         />
         {ifoStatus?.progress?.greaterThan(1) && (
           <StyledText as="span" color="text">
@@ -162,7 +161,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       right: pricePerToken ? (
         <NumberDisplay
           {...commonNumberDisplayProps}
-          value={pricePerToken.toSignificant(6)}
+          value={pricePerToken.toFixed(6)}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
           maximumSignificantDigits={6}
         />
@@ -192,7 +191,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           {...commonNumberDisplayProps}
           value={ifoStatus?.currentStakedAmount?.toSignificant(6) ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
-          maximumSignificantDigits={9}
+          maximumSignificantDigits={12}
         />
       ),
       display: variant !== 'presale',
