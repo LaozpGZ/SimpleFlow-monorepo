@@ -107,7 +107,12 @@ export const useIFOPoolInfoCtx = (): PoolInfo[] => {
 
         const isCakePool = isAddressEqual(poolToken, cakeAddress as `0x${string}`)
         const estimatedCakeToBurn =
-          isCakePool && stakeCurrency && taxRateRaw > 0n && totalAmountPool > 0n && mapped.raise
+          isCakePool &&
+          stakeCurrency &&
+          taxRateRaw > 0n &&
+          totalAmountPool > 0n &&
+          mapped.raise !== undefined &&
+          totalAmountPool >= mapped.raise.quotient
             ? CurrencyAmount.fromRawAmount(stakeCurrency, totalAmountPool)
                 .subtract(mapped.raise)
                 .multiply(new Fraction(taxRateRaw, TAX_RATE_PRECISION))
