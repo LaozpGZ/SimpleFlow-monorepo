@@ -70,7 +70,7 @@ const IfoSubmittingCard: React.FC<IfoSubmittingCardProps> = ({ deposit }) => {
   return (
     <Box>
       <Box p="24px" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {animationData && <Lottie animationData={animationData} loop style={{ width: 200 }} />}
+        {animationData && <Lottie animationData={animationData} loop style={{ width: 100 }} />}
       </Box>
       <DepositDisplay deposit={deposit} usdValue={formattedUsd} />
     </Box>

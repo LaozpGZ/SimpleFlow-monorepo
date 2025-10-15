@@ -207,14 +207,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
           maximumSignificantDigits={12}
         />
-        // <StyledText color="text">
-        //   <NumberDisplay
-        //     value={formatAmount(ifoStatus?.currentStakedAmount, 6)}
-        //     suffix={` ${stakeCurrency?.symbol}`}
-        //     fontSize="14px"
-        //     lineHeight="150%"
-        //   />
-        // </StyledText>
       ),
       display: variant !== 'presale',
     },
@@ -227,14 +219,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
           maximumSignificantDigits={6}
         />
-        // <StyledText color="text">
-        //   <NumberDisplay
-        //     value={formatAmount(userStatus?.stakedAmount, 6)}
-        //     suffix={` ${stakeCurrency?.symbol}`}
-        //     fontSize="14px"
-        //     lineHeight="150%"
-        //   />
-        // </StyledText>
       ),
       display: Boolean(variant !== 'presale' && showExtraInfo),
     },
