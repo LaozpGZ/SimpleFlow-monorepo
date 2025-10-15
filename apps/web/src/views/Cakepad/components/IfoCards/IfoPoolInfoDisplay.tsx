@@ -53,7 +53,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
   const showExtraInfo = variant === 'live' && userHasStaked
   const feeTier = poolInfo?.feeTier !== undefined ? `${(poolInfo.feeTier * 100).toFixed(2)}%` : undefined
-  const taxValue = poolInfo?.isCakePool && userStatus?.tax ? userStatus.tax.toSignificant(6) : undefined
+  const taxValue = poolInfo?.isCakePool && userStatus?.tax ? userStatus.tax.toExact() : undefined
   const taxSymbol = userStatus?.tax?.currency?.symbol
   const taxSuffix = poolInfo?.isCakePool && userStatus?.tax && taxSymbol ? ` ${taxSymbol}` : undefined
   const cakeToBurnValue =
@@ -98,6 +98,23 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
         </ul>
         (All CAKE.PAD fees collected will be used in CAKE burn)
       </Trans>
+    </Text>
+  )
+
+  const {
+    targetRef: feeTierTargetRef,
+    tooltip: feeTierTooltip,
+    tooltipVisible: feeTierTooltipVisible,
+  } = useTooltip(feeTierTooltipContent, {
+    placement: 'top-start',
+  })
+
+  const taxTooltipContent = (
+    <Text as="div" fontSize="12px">
+      {t(
+        'Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).',
+      )}
+      <br />
       <Link
         href="https://docs.pancakeswap.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
         target="_blank"
@@ -108,10 +125,10 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
   )
 
   const {
-    targetRef: feeTierTargetRef,
-    tooltip: feeTierTooltip,
-    tooltipVisible: feeTierTooltipVisible,
-  } = useTooltip(feeTierTooltipContent, {
+    targetRef: taxTargetRef,
+    tooltip: taxTooltip,
+    tooltipVisible: taxTooltipVisible,
+  } = useTooltip(taxTooltipContent, {
     placement: 'top-start',
   })
 
@@ -224,10 +241,16 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
     },
     {
       left: <StyledText color="textSubtle">{t('Your Tax')}</StyledText>,
-      right: taxValue ? (
-        <NumberDisplay {...commonNumberDisplayProps} value={taxValue} suffix={taxSuffix} maximumSignificantDigits={6} />
-      ) : (
-        <StyledText color="text">-</StyledText>
+      right: (
+        <FlexGap ref={taxTargetRef} alignItems="center">
+          {taxValue ? (
+            <NumberDisplay {...commonNumberDisplayProps} value={taxValue} suffix={taxSuffix} />
+          ) : (
+            <StyledText color="text">-</StyledText>
+          )}
+          <InfoIcon width="14px" color="textSubtle" />
+          {taxTooltipVisible && taxTooltip}
+        </FlexGap>
       ),
       display: Boolean(variant !== 'presale' && showExtraInfo && !!taxValue),
     },
