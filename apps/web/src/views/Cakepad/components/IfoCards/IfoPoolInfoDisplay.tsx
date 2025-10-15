@@ -168,11 +168,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!tax,
     },
     {
-      left: <StyledText color="textSubtle">{t('Est. CAKE to burn')}:</StyledText>,
-      right: <StyledText color="text">{cakeToBurn}</StyledText>,
-      display: variant !== 'presale' && variant !== 'finished' && !showExtraInfo && !!cakeToBurn,
-    },
-    {
       left: <StyledText color="textSubtle">{t('Status')}</StyledText>,
       right: statusRight,
       display: variant !== 'presale' && variant !== 'history',
@@ -190,7 +185,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
     {
       left: <StyledText color="textSubtle">{t('Est. CAKE to burn')}:</StyledText>,
       right: <StyledText color="text">{cakeToBurn}</StyledText>,
-      display: Boolean(variant !== 'presale' && showExtraInfo && !!cakeToBurn),
+      display: Boolean(variant !== 'presale' && !!cakeToBurn),
     },
   ]
 
