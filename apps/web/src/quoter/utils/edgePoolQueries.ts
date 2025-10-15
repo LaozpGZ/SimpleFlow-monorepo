@@ -71,7 +71,16 @@ async function getHooksMap(type: 'light' | 'full', poolWithHooks: (RemotePoolCL 
 async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, chainId: ChainId, type: 'full' | 'light') {
   const chain = getChainName(chainId)
   const url = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/candidates/infinity/${chain}/${addressA}/${addressB}`
-  const response = await fetch(url)
+  const fetchOptions: RequestInit = {}
+  if (typeof window === 'undefined') {
+    const apiKey = process.env.EXPLORER_API_KEY
+    if (apiKey) {
+      fetchOptions.headers = {
+        'X-API-KEY': apiKey,
+      }
+    }
+  }
+  const response = await fetch(url, fetchOptions)
   if (!response.ok) {
     throw new Error(`Error fetching infinity pools: ${response.statusText}`)
   }
@@ -431,11 +440,15 @@ async function fetchAllPools({
 
     try {
       // eslint-disable-next-line no-await-in-loop
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      }
+      if (typeof window === 'undefined' && process.env.EXPLORER_API_KEY) {
+        headers['X-API-KEY'] = process.env.EXPLORER_API_KEY
+      }
+      // eslint-disable-next-line no-await-in-loop
       const response = await fetch(url, {
-        headers: {
-          ...(typeof window === 'undefined' ? { 'x-api-key': process.env.EXPLORER_API_KEY || '' } : {}),
-          'Content-Type': 'application/json',
-        },
+        headers,
         signal: AbortSignal.timeout(10000), // 10 second timeout
       })
 
