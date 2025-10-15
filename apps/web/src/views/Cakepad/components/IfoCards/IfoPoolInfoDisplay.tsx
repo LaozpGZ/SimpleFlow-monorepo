@@ -53,7 +53,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
   const showExtraInfo = variant === 'live' && userHasStaked
   const feeTier = poolInfo?.feeTier !== undefined ? `${(poolInfo.feeTier * 100).toFixed(2)}%` : undefined
-  const taxValue = poolInfo?.isCakePool && userStatus?.tax ? userStatus.tax.toExact() : undefined
+  const taxValue = poolInfo?.isCakePool && userStatus?.tax ? userStatus.tax.toFixed(6) : undefined
   const taxSymbol = userStatus?.tax?.currency?.symbol
   const taxSuffix = poolInfo?.isCakePool && userStatus?.tax && taxSymbol ? ` ${taxSymbol}` : undefined
   const cakeToBurnValue =
