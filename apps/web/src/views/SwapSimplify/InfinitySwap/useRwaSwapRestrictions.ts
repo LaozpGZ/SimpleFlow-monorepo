@@ -42,10 +42,13 @@ export const useRwaSwapRestrictions = (
 
   const rwaChainId = inputIsRwa ? inputCurrency?.chainId : outputCurrency?.chainId
 
+  const hasValidRwaChainId = typeof rwaChainId === 'number'
+  const normalizedRwaChainId = hasValidRwaChainId ? (rwaChainId as ChainId) : undefined
+
   // const rwaChainId = ChainId.BSC
-  const wBnb = rwaChainId ? WNATIVE[rwaChainId] : undefined
-  const bscUsdt = USDT[rwaChainId]
-  const usdOnToken = USDON[rwaChainId]
+  const wBnb = normalizedRwaChainId !== undefined ? WNATIVE[normalizedRwaChainId] : undefined
+  const bscUsdt = normalizedRwaChainId !== undefined ? USDT[normalizedRwaChainId] : undefined
+  const usdOnToken = normalizedRwaChainId !== undefined ? USDON[normalizedRwaChainId] : undefined
 
   const baseWhitelist = useMemo(() => {
     const list: Token[] = []
