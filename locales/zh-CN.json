@@ -4054,7 +4054,6 @@
   "Max Deposit": "最大存入量",
   "Sale Price per token": "每代币销售价格",
   "Raise Goal": "募资目标",
-  "Est. CAKE to burn:": "预计销毁CAKE：",
   "Deposit %symbol%": "存入%symbol%",
   "Subscribe to the sale by depositing": "通过存入进行认购",
   "in a 1:1 ratio.": "以1:1的比例。",
@@ -4111,7 +4110,6 @@
   "CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which determines your benefits based on the amount staked and the lock duration.": "CAKE 质押允许您锁定 CAKE 代币以赚取奖励。锁定后，CAKE 将生成 veCAKE，其收益将根据质押数量和锁定周期决定。",
   "Help shape PancakeSwap's future through governance votes.": "通过治理投票帮助塑造 PancakeSwap 的未来。",
   "No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.": "不可以，veCAKE 不可转让，并将保留在您的钱包中，直到您的 CAKE 解锁。",
-  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All IFO fees collected will be used in CAKE burn)": "根据认购比例分级收费：超额认购率越高，费用越低。 <ul> <li>≤100% 认购 → 0% 费用</li> <li>>100% 认购 → 1% 费用</li> <li>≥5,000% 认购 → 0.8% 费用</li> <li>≥10,000% 认购 → 0.6% 费用</li> <li>≥15,000% 认购 → 0.5% 费用</li> <li>≥20,000% 认购 → 0.4% 费用</li> <li>≥25,000% 认购 → 0.3% 费用</li> <li>≥30,000% 认购 → 0.25% 费用</li> <li>≥40,000% 认购 → 0.20% 费用</li> <li>≥50,000% 认购 → 0.15% 费用</li> <li>≥65,000% 认购 → 0.12% 费用</li> <li>≥80,000% 认购 → 0.10% 费用</li> <li>>150,000% 认购 → 0.05% 费用</li> </ul> (所有 IFO 费用将用于 CAKE 销毁)",
   "What happens if I don't claim my rewards?": "如果我不领取奖励，会发生什么？",
   "syrup-pools-desc": "糖浆池可让您通过质押 CAKE 赚取奖励。将 CAKE 存入糖浆池，您就可以根据所选池子从合作项目中获得代币。",
   "syrup-pools-instructions": "前往 PancakeSwap 上的 <0>糖浆池</0> 板块，选择一个池子并存入 CAKE。您的奖励将开始自动累积。您可以随时取消质押 CAKE。",
@@ -4286,5 +4284,9 @@
   "Launch CAKE.PAD Event": "启动 CAKE.PAD 活动",
   "For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>": "更多信息：<0>CAKE.PAD 合作伙伴条款</0> | <1>合作伙伴常见问题解答</1>",
   "Whitebridge Network": "Whitebridge Network",
-  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network 是一个去中心化的人物数据智能层，可将分散的公共记录和在线信号转化为可信、即用的见解。"
+  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network 是一个去中心化的人物数据智能层，可将分散的公共记录和在线信号转化为可信、即用的见解。",
+  "Your Tax": "您的费用",
+  "Total CAKE to burn": "待销毁的 CAKE 总量",
+  "Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).": "仅当 CAKE.PAD 活动超额认购时，才会收取费用。费用将仅从您超额投入的资金中扣除（基于费用等级）。",
+  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All CAKE.PAD fees collected will be used in CAKE burn)": "基于认购百分比的分级费用：超额认购倍数越高，费用越低。<ul> <li>≤100% 认购 → 0% 费用</li> <li>>100% 认购 → 1% 费用</li> <li>≥5,000% 认购 → 0.8% 费用</li> <li>≥10,000% 认购 → 0.6% 费用</li> <li>≥15,000% 认购 → 0.5% 费用</li> <li>≥20,000% 认购 → 0.4% 费用</li> <li>≥25,000% 认购 → 0.3% 费用</li> <li>≥30,000% 认购 → 0.25% 费用</li> <li>≥40,000% 认购 → 0.20% 费用</li> <li>≥50,000% 认购 → 0.15% 费用</li> <li>≥65,000% 认购 → 0.12% 费用</li> <li>≥80,000% 认购 → 0.10% 费用</li> <li>>150,000% 认购 → 0.05% 费用</li> </ul>（所有收取的 CAKE.PAD 费用都将用于 CAKE 销毁）"
 }

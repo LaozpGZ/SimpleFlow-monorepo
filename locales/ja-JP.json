@@ -4054,7 +4054,6 @@
   "Max Deposit": "最大入金",
   "Sale Price per token": "トークンあたりの販売価格",
   "Raise Goal": "調達目標",
-  "Est. CAKE to burn:": "推定バーンCAKE:",
   "Deposit %symbol%": "%symbol%を入金",
   "Subscribe to the sale by depositing": "預け入れることでセールに申し込む",
   "in a 1:1 ratio.": "1:1の比率で。",
@@ -4111,7 +4110,6 @@
   "CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which determines your benefits based on the amount staked and the lock duration.": "CAKEステーキングでは、CAKEトークンをロックして報酬を獲得できます。ロックすると、CAKEはveCAKEを生成し、これはステーキング量とロック期間に基づいてあなたのメリットを決定します。",
   "Help shape PancakeSwap's future through governance votes.": "ガバナンス投票を通じてPancakeSwapの未来を形成するのを手伝ってください。",
   "No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.": "いいえ、veCAKEは譲渡不可であり、CAKEがアンロックされるまでウォレットに保管されます。",
-  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All IFO fees collected will be used in CAKE burn)": "購読率に基づく段階的税金：応募超過率が高まるにつれて手数料が減少します。<ul> <li>≤100% 応募 → 0% 手数料</li> <li>>100% 応募 → 1% 手数料</li> <li>≥5,000% 応募 → 0.8% 手数料</li> <li>≥10,000% 応募 → 0.6% 手数料</li> <li>≥15,000% 応募 → 0.5% 手数料</li> <li>≥20,000% 応募 → 0.4% 手数料</li> <li>≥25,000% 応募 → 0.3% 手数料</li> <li>≥30,000% 応募 → 0.25% 手数料</li> <li>≥40,000% 応募 → 0.20% 手数料</li> <li>≥50,000% 応募 → 0.15% 手数料</li> <li>≥65,000% 応募 → 0.12% 手数料</li> <li>≥80,000% 応募 → 0.10% 手数料</li> <li>>150,000% 応募 → 0.05% 手数料</li> </ul> (徴収されたIFO手数料はすべてCAKEバーンに使用されます)",
   "What happens if I don't claim my rewards?": "報酬を請求しなかった場合、どうなりますか？",
   "syrup-pools-desc": "Syrup Poolでは、CAKEをステークして報酬を獲得できます。CAKEをSyrup Poolに預けることで、プールに応じてパートナープロジェクトのトークンを受け取ることができます。",
   "syrup-pools-instructions": "PancakeSwapの<0>Syrup Pools</0>セクションに移動し、プールを選択してCAKEを預けてください。報酬は自動的に貯まり始めます。CAKEはいつでもアンステークできます。",
@@ -4286,5 +4284,9 @@
   "Launch CAKE.PAD Event": "CAKE.PAD イベントのローンチ",
   "For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>": "詳細はこちら：<0>CAKE.PAD パートナー規約</0>｜<1>パートナーFAQ</1>",
   "Whitebridge Network": "Whitebridge Network",
-  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Networkは、散在する公開記録やオンラインシグナルを、信頼性が高くすぐに利用できるインサイトに変換する、分散型のピープルデータ・インテリジェンス・レイヤーです。"
+  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Networkは、散在する公開記録やオンラインシグナルを、信頼性が高くすぐに利用できるインサイトに変換する、分散型のピープルデータ・インテリジェンス・レイヤーです。",
+  "Your Tax": "あなたの税金",
+  "Total CAKE to burn": "バーンされるCAKE合計",
+  "Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).": "税金は、CAKE.PADイベントが応募超過となった場合にのみ適用されます。税金は手数料ティアに基づき、あなたの余剰コミット資金からのみ差し引かれます。",
+  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All CAKE.PAD fees collected will be used in CAKE burn)": "応募率(%)に応じた段階的税金：応募超過率が高くなるほど手数料は低くなります。<ul> <li>応募 ≤100% → 手数料0%</li> <li>応募 >100% → 手数料1%</li> <li>応募 ≥5,000% → 手数料0.8%</li> <li>応募 ≥10,000% → 手数料0.6%</li> <li>応募 ≥15,000% → 手数料0.5%</li> <li>応募 ≥20,000% → 手数料0.4%</li> <li>応募 ≥25,000% → 手数料0.3%</li> <li>応募 ≥30,000% → 手数料0.25%</li> <li>応募 ≥40,000% → 手数料0.20%</li> <li>応募 ≥50,000% → 手数料0.15%</li> <li>応募 ≥65,000% → 手数料0.12%</li> <li>応募 ≥80,000% → 手数料0.10%</li> <li>応募 >150,000% → 手数料0.05%</li> </ul> （徴収されたすべてのCAKE.PAD手数料はCAKEのバーンに使用されます）"
 }

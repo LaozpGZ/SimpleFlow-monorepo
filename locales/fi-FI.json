@@ -4054,7 +4054,6 @@
   "Max Deposit": "Maksimitalletus",
   "Sale Price per token": "Myyntihinta per token",
   "Raise Goal": "Keräystavoite",
-  "Est. CAKE to burn:": "Arvioitu poltettava CAKE:",
   "Deposit %symbol%": "Talleta %symbol%",
   "Subscribe to the sale by depositing": "Tilaa myynti tallettamalla",
   "in a 1:1 ratio.": "suhteessa 1:1.",
@@ -4111,7 +4110,6 @@
   "CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which determines your benefits based on the amount staked and the lock duration.": "CAKE-steikkaus mahdollistaa CAKE-tokeniesi lukitsemisen palkkioiden ansaitsemiseksi. Lukittuna CAKE tuottaa veCAKEa, joka määrittää etusi steikatun määrän ja lukituksen keston perusteella.",
   "Help shape PancakeSwap's future through governance votes.": "Auta muokkaamaan PancakeSwapin tulevaisuutta hallintoäänestyksillä.",
   "No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.": "Ei, veCAKE ei ole siirrettävissä ja se pysyy lompakossasi, kunnes CAKE-tokenisi vapautuvat.",
-  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All IFO fees collected will be used in CAKE burn)": "Porrastettu vero merkinnän % perusteella: Maksut pienenevät ylimerkinnän kasvaessa. <ul> <li>≤100% merkintä → 0% maksu</li> <li>>100% merkintä → 1% maksu</li> <li>≥5 000% merkintä → 0,8% maksu</li> <li>≥10 000% merkintä → 0,6% maksu</li> <li>≥15 000% merkintä → 0,5% maksu</li> <li>≥20 000% merkintä → 0,4% maksu</li> <li>≥25 000% merkintä → 0,3% maksu</li> <li>≥30 000% merkintä → 0,25% maksu</li> <li>≥40 000% merkintä → 0,20% maksu</li> <li>≥50 000% merkintä → 0,15% maksu</li> <li>≥65 000% merkintä → 0,12% maksu</li> <li>≥80 000% merkintä → 0,10% maksu</li> <li>>150 000% merkintä → 0,05% maksu</li> </ul> (Kaikki kerätyt IFO-maksut käytetään CAKE-polttoon)",
   "What happens if I don't claim my rewards?": "Mitä tapahtuu, jos en lunasta palkkioitani?",
   "syrup-pools-desc": "Syrup Poolien avulla voit steikata CAKEa ansaitaksesi palkintoja. Tallettamalla CAKEa Syrup Pooliin voit saada tokeneita kumppaniprojekteilta poolista riippuen.",
   "syrup-pools-instructions": "Mene PancakeSwapin <0>Syrup Poolit</0> -osioon, valitse pooli ja talleta CAKEa. Palkintosi alkavat kertyä automaattisesti. Voit poistaa CAKEsi steikkauksesta milloin tahansa.",
@@ -4286,5 +4284,9 @@
   "Launch CAKE.PAD Event": "CAKE.PAD-tapahtuman julkaisu",
   "For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>": "Lisätietoja: <0>CAKE.PAD-kumppaniehdot</0> | <1>Kumppanin UKK</1>",
   "Whitebridge Network": "Whitebridge Network",
-  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network on hajautettu, ihmisdataa käsittelevä älykkyyskerros, joka muuntaa hajanaiset julkiset tiedot ja verkkosignaalit luotettaviksi, käyttövalmiiksi oivalluksiksi."
+  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network on hajautettu, ihmisdataa käsittelevä älykkyyskerros, joka muuntaa hajanaiset julkiset tiedot ja verkkosignaalit luotettaviksi, käyttövalmiiksi oivalluksiksi.",
+  "Your Tax": "Oma verosi",
+  "Total CAKE to burn": "Poltettava CAKE yhteensä",
+  "Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).": "Veroja peritään vain, jos CAKE.PAD-tapahtuma on ylimerkitty. Vero vähennetään ainoastaan ylimenevistä sitomista varoistasi (maksuluokan perusteella).",
+  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All CAKE.PAD fees collected will be used in CAKE burn)": "Porrastettu vero merkintä-%:n perusteella: Maksut laskevat ylimerkinnän kasvaessa. <ul> <li>≤100% Merk. → 0% Maksu</li> <li>>100% Merk. → 1% Maksu</li> <li>≥5 000% Merk. → 0,8% Maksu</li> <li>≥10 000% Merk. → 0,6% Maksu</li> <li>≥15 000% Merk. → 0,5% Maksu</li> <li>≥20 000% Merk. → 0,4% Maksu</li> <li>≥25 000% Merk. → 0,3% Maksu</li> <li>≥30 000% Merk. → 0,25% Maksu</li> <li>≥40 000% Merk. → 0,20% Maksu</li> <li>≥50 000% Merk. → 0,15% Maksu</li> <li>≥65 000% Merk. → 0,12% Maksu</li> <li>≥80 000% Merk. → 0,10% Maksu</li> <li>>150 000% Merk. → 0,05% Maksu</li> </ul> (Kaikki kerätyt CAKE.PAD-maksut käytetään CAKE-polttoon)"
 }

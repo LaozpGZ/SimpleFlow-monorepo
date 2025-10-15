@@ -4054,7 +4054,6 @@
   "Max Deposit": "अधिकतम डिपॉज़िट",
   "Sale Price per token": "प्रति टोकन बिक्री मूल्य",
   "Raise Goal": "रेज़ गोल",
-  "Est. CAKE to burn:": "अनुमानित CAKE बर्न:",
   "Deposit %symbol%": "%symbol% डिपॉज़िट करें",
   "Subscribe to the sale by depositing": "जमा करके सेल को सब्सक्राइब करें",
   "in a 1:1 ratio.": "1:1 अनुपात में।",
@@ -4111,7 +4110,6 @@
   "CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which determines your benefits based on the amount staked and the lock duration.": "CAKE स्टेकिंग आपको इनाम अर्जित करने के लिए अपने CAKE टोकन लॉक करने की सुविधा देता है। लॉक होने पर, CAKE, veCAKE जेनरेट करता है, जो स्टेकिंग की गई राशि और लॉक की अवधि के आधार पर आपके लाभों को निर्धारित करता है।",
   "Help shape PancakeSwap's future through governance votes.": "गवर्नेंस वोटों के माध्यम से PancakeSwap के भविष्य को आकार देने में मदद करें।",
   "No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.": "नहीं, veCAKE नॉन-ट्रांसफरेबल है और आपका CAKE अनलॉक होने तक आपके वॉलेट में रहता है।",
-  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All IFO fees collected will be used in CAKE burn)": "सदस्यता % के आधार पर टियर्ड टैक्स: ओवरसब्सक्रिप्शन बढ़ने पर फीस घटती जाती है। <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (संग्रहित सभी IFO फीस CAKE बर्न में उपयोग की जाएगी)",
   "What happens if I don't claim my rewards?": "मेरे रिवॉर्ड क्लेम न करने पर क्या होगा?",
   "syrup-pools-desc": "सिरप पूल्स आपको पुरस्कार अर्जित करने के लिए CAKE स्टेक करने की सुविधा देते हैं। एक सिरप पूल में CAKE जमा करके, आप पूल के आधार पर पार्टनर प्रोजेक्ट्स से टोकन प्राप्त कर सकते हैं।",
   "syrup-pools-instructions": "PancakeSwap पर <0>सिरप पूल्स</0> सेक्शन पर जाएं, एक पूल चुनें, और CAKE जमा करें। आपके पुरस्कार अपने आप जमा होने लगेंगे। आप किसी भी समय अपना CAKE अनस्टेक कर सकते हैं।",
@@ -4286,5 +4284,9 @@
   "Launch CAKE.PAD Event": "CAKE.PAD इवेंट लॉन्च करें",
   "For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>": "अधिक जानकारी के लिए: <0>CAKE.PAD पार्टनर की शर्तें</0> | <1>पार्टनर के अक्सर पूछे जाने वाले प्रश्न</1>",
   "Whitebridge Network": "Whitebridge Network",
-  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network एक विकेन्द्रीकृत पीपल-डेटा इंटेलिजेंस लेयर है जो बिखरे हुए सार्वजनिक रिकॉर्ड और ऑनलाइन संकेतों को भरोसेमंद, उपयोग के लिए तैयार इनसाइट्स में बदल देता है।"
+  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network एक विकेन्द्रीकृत पीपल-डेटा इंटेलिजेंस लेयर है जो बिखरे हुए सार्वजनिक रिकॉर्ड और ऑनलाइन संकेतों को भरोसेमंद, उपयोग के लिए तैयार इनसाइट्स में बदल देता है।",
+  "Your Tax": "आपका टैक्स",
+  "Total CAKE to burn": "बर्न करने के लिए कुल CAKE",
+  "Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).": "टैक्स तभी लागू होते हैं जब CAKE.PAD इवेंट ओवरसब्सक्राइब हो जाता है। टैक्स केवल आपकी अतिरिक्त कमिटेड फंड्स (फीस टियर के आधार पर) से काटा जाता है।",
+  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All CAKE.PAD fees collected will be used in CAKE burn)": "सब्सक्रिप्शन % पर आधारित टियर वाला टैक्स: ओवरसब्सक्रिप्शन बढ़ने पर फीस कम हो जाती है। <ul> <li>≤100% सब → 0% फीस</li> <li>>100% सब → 1% फीस</li> <li>≥5,000% सब → 0.8% फीस</li> <li>≥10,000% सब → 0.6% फीस</li> <li>≥15,000% सब → 0.5% फीस</li> <li>≥20,000% सब → 0.4% फीस</li> <li>≥25,000% सब → 0.3% फीस</li> <li>≥30,000% सब → 0.25% फीस</li> <li>≥40,000% सब → 0.20% फीस</li> <li>≥50,000% सब → 0.15% फीस</li> <li>≥65,000% सब → 0.12% फीस</li> <li>≥80,000% सब → 0.10% फीस</li> <li>>150,000% सब → 0.05% फीस</li> </ul> (इकट्ठी की गई सभी CAKE.PAD फीस का इस्तेमाल CAKE बर्न में किया जाएगा)"
 }

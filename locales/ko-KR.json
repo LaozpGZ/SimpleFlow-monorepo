@@ -4054,7 +4054,6 @@
   "Max Deposit": "최대 예치",
   "Sale Price per token": "토큰당 판매 가격",
   "Raise Goal": "모집 목표",
-  "Est. CAKE to burn:": "예상 CAKE 소각량:",
   "Deposit %symbol%": "%symbol% 예치",
   "Subscribe to the sale by depositing": "판매에 참여하려면 예치하세요",
   "in a 1:1 ratio.": "1:1 비율로.",
@@ -4111,7 +4110,6 @@
   "CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which determines your benefits based on the amount staked and the lock duration.": "CAKE 스테이킹을 통해 CAKE 토큰을 락업하여 보상을 받을 수 있습니다. 락업된 CAKE는 veCAKE를 생성하며, 이는 스테이킹된 수량과 락업 기간에 따라 혜택을 결정합니다.",
   "Help shape PancakeSwap's future through governance votes.": "거버넌스 투표를 통해 PancakeSwap의 미래를 만들어나가세요.",
   "No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.": "아니요, veCAKE는 양도할 수 없으며 CAKE가 락업 해제될 때까지 지갑에 남아있습니다.",
-  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All IFO fees collected will be used in CAKE burn)": "구독률에 따른 계층형 수수료: 초과 구독 시 수수료가 감소합니다. <ul> <li>≤100% 구독 → 수수료 0%</li> <li>>100% 구독 → 수수료 1%</li> <li>≥5,000% 구독 → 수수료 0.8%</li> <li>≥10,000% 구독 → 수수료 0.6%</li> <li>≥15,000% 구독 → 수수료 0.5%</li> <li>≥20,000% 구독 → 수수료 0.4%</li> <li>≥25,000% 구독 → 수수료 0.3%</li> <li>≥30,000% 구독 → 수수료 0.25%</li> <li>≥40,000% 구독 → 수수료 0.20%</li> <li>≥50,000% 구독 → 수수료 0.15%</li> <li>≥65,000% 구독 → 수수료 0.12%</li> <li>≥80,000% 구독 → 수수료 0.10%</li> <li>>150,000% 구독 → 수수료 0.05%</li> </ul> (수집된 모든 IFO 수수료는 CAKE 소각에 사용됩니다.)",
   "What happens if I don't claim my rewards?": "보상을 클레임하지 않으면 어떻게 되나요?",
   "syrup-pools-desc": "시럽 풀은 CAKE를 스테이킹하여 보상을 받을 수 있는 곳입니다. 시럽 풀에 CAKE를 예치하면 풀에 따라 파트너 프로젝트의 토큰을 받을 수 있습니다.",
   "syrup-pools-instructions": "PancakeSwap의 <0>시럽 풀</0> 섹션으로 이동하여 풀을 선택하고 CAKE를 예치하세요. 보상은 자동으로 쌓이기 시작하며, 언제든지 CAKE를 언스테이킹할 수 있습니다.",
@@ -4286,5 +4284,9 @@
   "Launch CAKE.PAD Event": "CAKE.PAD 이벤트 런칭",
   "For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>": "더 자세한 정보: <0>CAKE.PAD 파트너 약관</0> | <1>파트너 FAQ</1>",
   "Whitebridge Network": "Whitebridge Network",
-  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network는 흩어져 있는 공공 기록과 온라인 신호를 신뢰할 수 있고 즉시 사용 가능한 인사이트로 전환하는 분산형 인물 데이터 인텔리전스 레이어입니다."
+  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network는 흩어져 있는 공공 기록과 온라인 신호를 신뢰할 수 있고 즉시 사용 가능한 인사이트로 전환하는 분산형 인물 데이터 인텔리전스 레이어입니다.",
+  "Your Tax": "세금",
+  "Total CAKE to burn": "소각될 CAKE 총량",
+  "Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).": "세금은 CAKE.PAD 이벤트가 초과 청약된 경우에만 적용됩니다. 세금은 수수료 등급에 따라 초과 예치된 자금에서만 공제됩니다.",
+  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All CAKE.PAD fees collected will be used in CAKE burn)": "초과 청약률(%)에 따른 단계별 수수료: 초과 청약률이 높을수록 수수료는 낮아집니다. <ul> <li>≤100% 청약률 → 0% 수수료</li> <li>>100% 청약률 → 1% 수수료</li> <li>≥5,000% 청약률 → 0.8% 수수료</li> <li>≥10,000% 청약률 → 0.6% 수수료</li> <li>≥15,000% 청약률 → 0.5% 수수료</li> <li>≥20,000% 청약률 → 0.4% 수수료</li> <li>≥25,000% 청약률 → 0.3% 수수료</li> <li>≥30,000% 청약률 → 0.25% 수수료</li> <li>≥40,000% 청약률 → 0.20% 수수료</li> <li>≥50,000% 청약률 → 0.15% 수수료</li> <li>≥65,000% 청약률 → 0.12% 수수료</li> <li>≥80,000% 청약률 → 0.10% 수수료</li> <li>>150,000% 청약률 → 0.05% 수수료</li> </ul> (모든 CAKE.PAD 수수료는 CAKE 소각에 사용됩니다)"
 }

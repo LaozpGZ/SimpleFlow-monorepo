@@ -4054,7 +4054,6 @@
   "Max Deposit": "最大存入量",
   "Sale Price per token": "每個代幣的發售價格",
   "Raise Goal": "募資目標",
-  "Est. CAKE to burn:": "預計銷毀的 CAKE：",
   "Deposit %symbol%": "存入 %symbol%",
   "Subscribe to the sale by depositing": "透過存入以下代幣來認購",
   "in a 1:1 ratio.": "以 1:1 的比例。",
@@ -4111,7 +4110,6 @@
   "CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which determines your benefits based on the amount staked and the lock duration.": "CAKE 質押讓您能鎖定您的 CAKE 代幣以賺取獎勵。鎖定後，CAKE 會產生 veCAKE，您的收益將依據質押數量和鎖定期間而定。",
   "Help shape PancakeSwap's future through governance votes.": "透過治理投票，共同塑造 PancakeSwap 的未來。",
   "No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.": "不行，veCAKE 無法轉讓，且將保留在您的錢包中，直到您的 CAKE 解鎖為止。",
-  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All IFO fees collected will be used in CAKE burn)": "根據申購比例分級稅費：超額申購越多，費用越低。<ul> <li>≤100% 申購 → 0% 費用</li> <li>>100% 申購 → 1% 費用</li> <li>≥5,000% 申購 → 0.8% 費用</li> <li>≥10,000% 申購 → 0.6% 費用</li> <li>≥15,000% 申購 → 0.5% 費用</li> <li>≥20,000% 申購 → 0.4% 費用</li> <li>≥25,000% 申購 → 0.3% 費用</li> <li>≥30,000% 申購 → 0.25% 費用</li> <li>≥40,000% 申購 → 0.20% 費用</li> <li>≥50,000% 申購 → 0.15% 費用</li> <li>≥65,000% 申購 → 0.12% 費用</li> <li>≥80,000% 申購 → 0.10% 費用</li> <li>>150,000% 申購 → 0.05% 費用</li> </ul> (所有收取的 IFO 費用將用於 CAKE 銷毀)",
   "What happens if I don't claim my rewards?": "如果我不領取獎勵會發生什麼？",
   "syrup-pools-desc": "Syrup Pool 讓您質押 CAKE 以賺取獎勵。將 CAKE 存入 Syrup Pool，您就可以根據不同的礦池從合作夥伴項目中獲得代幣。",
   "syrup-pools-instructions": "前往 PancakeSwap 上的 <0>Syrup Pools</0> 區塊，選擇一個礦池，然後存入 CAKE。您的獎勵將自動開始累積。您可以隨時取消質押您的 CAKE。",
@@ -4286,5 +4284,9 @@
   "Launch CAKE.PAD Event": "啟動 CAKE.PAD 活動",
   "For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>": "更多資訊：<0>CAKE.PAD 合作夥伴條款</0> | <1>合作夥伴常見問題</1>",
   "Whitebridge Network": "Whitebridge Network",
-  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network 是一個去中心化的人員數據智能層，可將分散的公共記錄和線上信號轉化為可信、即用的洞察。"
+  "Whitebridge Network is a decentralised people-data intelligence layer that turns scattered public records and online signals into trustable, ready-to-use insights.": "Whitebridge Network 是一個去中心化的人員數據智能層，可將分散的公共記錄和線上信號轉化為可信、即用的洞察。",
+  "Your Tax": "您的費用",
+  "Total CAKE to burn": "待銷毀 CAKE 總量",
+  "Taxes apply only if the CAKE.PAD event is oversubscribed. Tax is deducted solely from your excess committed funds (based on fee tier).": "僅在 CAKE.PAD 活動超額認購時才適用費用。費用僅從您超額投入的資金中扣除（根據費用等級）。",
+  "Tiered Tax based on subscription % : Fees decrease as oversubscription increases. <ul> <li>≤100% Sub → 0% Fee</li> <li>>100% Sub → 1% Fee</li> <li>≥5,000% Sub → 0.8% Fee</li> <li>≥10,000% Sub → 0.6% Fee</li> <li>≥15,000% Sub → 0.5% Fee</li> <li>≥20,000% Sub → 0.4% Fee</li> <li>≥25,000% Sub → 0.3% Fee</li> <li>≥30,000% Sub → 0.25% Fee</li> <li>≥40,000% Sub → 0.20% Fee</li> <li>≥50,000% Sub → 0.15% Fee</li> <li>≥65,000% Sub → 0.12% Fee</li> <li>≥80,000% Sub → 0.10% Fee</li> <li>>150,000% Sub → 0.05% Fee</li> </ul> (All CAKE.PAD fees collected will be used in CAKE burn)": "基於認購百分比的階梯式費用：超額認購率越高，費用越低。<ul> <li>≤100% 認購 → 0% 費用</li> <li>>100% 認購 → 1% 費用</li> <li>≥5,000% 認購 → 0.8% 費用</li> <li>≥10,000% 認購 → 0.6% 費用</li> <li>≥15,000% 認購 → 0.5% 費用</li> <li>≥20,000% 認購 → 0.4% 費用</li> <li>≥25,000% 認購 → 0.3% 費用</li> <li>≥30,000% 認購 → 0.25% 費用</li> <li>≥40,000% 認購 → 0.20% 費用</li> <li>≥50,000% 認購 → 0.15% 費用</li> <li>≥65,000% 認購 → 0.12% 費用</li> <li>≥80,000% 認購 → 0.10% 費用</li> <li>>150,000% 認購 → 0.05% 費用</li> </ul> （所有收取的 CAKE.PAD 費用將用於 CAKE 銷毀）"
 }
