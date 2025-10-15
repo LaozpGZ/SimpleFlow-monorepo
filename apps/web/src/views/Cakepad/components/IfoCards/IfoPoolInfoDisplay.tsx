@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from '@pancakeswap/localization'
-import { FlexGap, InfoIcon, Text, useTooltip } from '@pancakeswap/uikit'
+import { FlexGap, InfoIcon, Link, Text, useTooltip } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 import { styled } from 'styled-components'
 import { NumberDisplay } from '@pancakeswap/widgets-internal'
@@ -96,8 +96,14 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           <li>≥80,000% Sub → 0.10% Fee</li>
           <li>&gt;150,000% Sub → 0.05% Fee</li>
         </ul>
-        (All IFO fees collected will be used in CAKE burn)
+        (All CAKE.PAD fees collected will be used in CAKE burn)
       </Trans>
+      <Link
+        href="https://docs.pancakeswap.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
+        target="_blank"
+      >
+        {t('Learn More')}
+      </Link>
     </Text>
   )
 
@@ -186,12 +192,10 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           {...commonNumberDisplayProps}
           value={ifoStatus?.currentStakedAmount?.toSignificant(6) ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
-          maximumSignificantDigits={6}
+          maximumSignificantDigits={9}
         />
       ),
-      display:
-        variant !== 'presale' &&
-        ((variant === 'live' && userHasStaked) || variant === 'finished' || variant === 'history'),
+      display: variant !== 'presale',
     },
     {
       left: <StyledText color="textSubtle">{t('Deposit Amount')}</StyledText>,
@@ -230,7 +234,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       display: Boolean(variant !== 'presale' && showExtraInfo && !!feeTier),
     },
     {
-      left: <StyledText color="textSubtle">{t('Your Tax')}:</StyledText>,
+      left: <StyledText color="textSubtle">{t('Your Tax')}</StyledText>,
       right: taxValue ? (
         <NumberDisplay {...commonNumberDisplayProps} value={taxValue} suffix={taxSuffix} maximumSignificantDigits={6} />
       ) : (
@@ -239,7 +243,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       display: Boolean(variant !== 'presale' && showExtraInfo && !!taxValue),
     },
     {
-      left: <StyledText color="textSubtle">{t('Total CAKE to burn')}:</StyledText>,
+      left: <StyledText color="textSubtle">{t('Total CAKE to burn')}</StyledText>,
       right: cakeToBurnValue ? (
         <NumberDisplay
           {...commonNumberDisplayProps}
