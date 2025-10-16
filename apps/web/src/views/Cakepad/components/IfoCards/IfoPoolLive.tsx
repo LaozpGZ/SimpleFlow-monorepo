@@ -7,6 +7,8 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { logGTMIfoConnectWalletEvent } from 'utils/customGTMEventTracking'
 import { CAKEPAD_DEPOSIT_URL } from 'views/Cakepad/config/routes'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { BigNumber as BN } from 'bignumber.js'
 import type { IFOStatus } from '../../hooks/ifo/useIFOStatus'
 import useIfo from '../../hooks/useIfo'
 import IfoPoolInfoDisplay from './IfoPoolInfoDisplay'
@@ -41,15 +43,17 @@ const PoolAction: React.FC<{ pid: number }> = ({ pid }) => {
   const ifoId = config?.id
   const userHasStaked = stakedAmount?.greaterThan(0)
   const { address: account } = useAccount()
+
+  const stakedAmountBN = BN(stakedAmount?.quotient.toString() ?? '')
+
   const amountInDollar = useStablecoinPriceAmount(
     stakeCurrency ?? undefined,
-    stakedAmount !== undefined && Number.isFinite(+stakedAmount.toSignificant(6))
-      ? +stakedAmount.toSignificant(6)
-      : undefined,
+    stakedAmount !== undefined && stakedAmountBN.isFinite() ? Number(stakedAmount.quotient) : undefined,
     {
-      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount.toSignificant(6))),
+      enabled: Boolean(stakedAmount !== undefined && stakedAmountBN.isFinite()),
     },
   )
+
   if (isComingSoon) {
     return null
   }

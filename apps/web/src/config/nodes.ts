@@ -87,6 +87,7 @@ export const SERVER_NODES = {
 export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   [ChainId.BSC]: [
     // ! Ths RPC is for Cakepad IFO QA Testing. Remove it after testing, Do not merge.
+    // [VirtualNet QA2] Snapshot ID: 0x071dee289d1188a6e800fad531e121ba9aa58527689cc54c01a7b3006089dba3
     'https://virtual.binance.eu.rpc.tenderly.co/af3297d9-7af2-4da1-ae78-d73951654e58',
     // process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
     // getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',

@@ -1,8 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Button, FlexGap, Text } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useState } from 'react'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import useIfo from '../../hooks/useIfo'
 import { IfoDepositForm, formatDollarAmount } from './IfoDepositForm'
 
@@ -34,9 +35,13 @@ export const StakedDisplay: React.FC<{ pid: number }> = ({ pid }) => {
             </Text>
           </FlexGap>
           <FlexGap gap="8px" flexDirection="column">
-            <Text fontSize="20px" bold lineHeight="30px">
-              {stakedAmount?.toSignificant(6)}
-            </Text>
+            <NumberDisplay
+              value={formatAmount(stakedAmount, 6)}
+              suffix={` ${stakeCurrency?.symbol ?? ''}`}
+              fontSize="20px"
+              lineHeight="30px"
+              bold
+            />
             <FlexGap>
               {Number.isFinite(amountInDollar) ? (
                 <>

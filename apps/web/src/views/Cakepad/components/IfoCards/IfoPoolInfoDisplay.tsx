@@ -3,6 +3,7 @@ import { FlexGap, InfoIcon, Link, Text, useTooltip } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 import { styled } from 'styled-components'
 import { NumberDisplay } from '@pancakeswap/widgets-internal'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import type { IFOStatus } from '../../hooks/ifo/useIFOStatus'
 import useIfo from '../../hooks/useIfo'
 import { useIfoDisplay } from '../../hooks/useIfoDisplay'
@@ -57,7 +58,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
   const taxSymbol = userStatus?.tax?.currency?.symbol
   const taxSuffix = poolInfo?.isCakePool && userStatus?.tax && taxSymbol ? ` ${taxSymbol}` : undefined
   const cakeToBurnValue =
-    poolInfo?.isCakePool && poolInfo?.estimatedCakeToBurn ? poolInfo.estimatedCakeToBurn.toSignificant(6) : undefined
+    poolInfo?.isCakePool && poolInfo?.estimatedCakeToBurn ? formatAmount(poolInfo.estimatedCakeToBurn, 6) : undefined
   const cakeToBurnSymbol = poolInfo?.estimatedCakeToBurn?.currency?.symbol
   const cakeToBurnSuffix =
     poolInfo?.isCakePool && poolInfo?.estimatedCakeToBurn && cakeToBurnSymbol ? ` ${cakeToBurnSymbol}` : undefined
@@ -203,7 +204,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       right: (
         <NumberDisplay
           {...commonNumberDisplayProps}
-          value={ifoStatus?.currentStakedAmount?.toSignificant(6) ?? '0'}
+          value={formatAmount(ifoStatus?.currentStakedAmount, 6) ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
           maximumSignificantDigits={12}
         />
@@ -215,7 +216,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       right: (
         <NumberDisplay
           {...commonNumberDisplayProps}
-          value={userStatus?.stakedAmount?.toSignificant(6) ?? '0'}
+          value={formatAmount(userStatus?.stakedAmount, 6) ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
           maximumSignificantDigits={6}
         />

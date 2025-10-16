@@ -7,6 +7,8 @@ import { useAtomValue } from 'jotai'
 import { LottieComponentProps } from 'lottie-react'
 import { useTheme } from 'styled-components'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { NumberDisplay } from '@pancakeswap/widgets-internal'
 import { ifoLoadingAnimationAtom } from '../atoms'
 
 const Lottie = dynamic<LottieComponentProps>(() => import('lottie-react'), { ssr: false })
@@ -42,7 +44,7 @@ const DepositDisplay: React.FC<DepositDisplayProps> = ({ deposit, usdValue }) =>
           {t('Deposit Amount')}
         </Text>
         <Text>
-          {deposit.toSignificant(6)} {deposit.currency.symbol}
+          <NumberDisplay value={formatAmount(deposit, 6)} suffix={` ${deposit.currency.symbol}`} />
         </Text>
         <Text fontSize="14px" color="textSubtle">
           ~{usdValue} USD
