@@ -11,7 +11,6 @@ interface ChartWithPriceHeaderProps {
   symbol?: string
   currency0?: UnifiedCurrency
   currency1?: UnifiedCurrency
-  theme?: 'Light' | 'Dark'
 }
 
 const Container = styled(Box)`
@@ -29,12 +28,7 @@ const Container = styled(Box)`
   }
 `
 
-const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
-  symbol = 'CAKE/BNB',
-  currency0,
-  currency1,
-  theme = 'Dark',
-}) => {
+const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({ symbol = 'CAKE/BNB', currency0, currency1 }) => {
   const [isReversed, setIsReversed] = useState(false)
   const setPriceData = useSetAtom(chartPriceDataAtom)
 
@@ -63,7 +57,6 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
         setIsReversed={setIsReversed}
       />
       <TradingViewChart
-        theme={theme}
         currency0={isReversed ? currency1 : currency0}
         currency1={isReversed ? currency0 : currency1}
         on24HPriceDataChange={on24HPriceDataChange}
