@@ -48,7 +48,7 @@ const PoolAction: React.FC<{ pid: number }> = ({ pid }) => {
 
   const amountInDollar = useStablecoinPriceAmount(
     stakeCurrency ?? undefined,
-    stakedAmount !== undefined && stakedAmountBN.isFinite() ? Number(stakedAmount.quotient) : undefined,
+    stakedAmount !== undefined && stakedAmountBN.isFinite() ? Number(formatAmount(stakedAmount, 6)) : undefined,
     {
       enabled: Boolean(stakedAmount !== undefined && stakedAmountBN.isFinite()),
     },
