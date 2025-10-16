@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Button, FlexGap, Text } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -83,7 +83,7 @@ const PoolAction: React.FC<{ pid: number }> = ({ pid }) => {
             </Text>
           </FlexGap>
           <Text fontSize="20px" bold lineHeight="30px">
-            {stakedAmount?.toSignificant(6)}
+            <NumberDisplay value={formatAmount(stakedAmount, 6)} fontSize="20px" lineHeight="30px" bold />
           </Text>
           {Number.isFinite(amountInDollar) && (
             <Text fontSize="14px" color="textSubtle">
