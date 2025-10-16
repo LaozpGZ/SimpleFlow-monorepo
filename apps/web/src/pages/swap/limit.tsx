@@ -7,7 +7,7 @@ import { PCSLimitOrdersView } from 'views/PCSLimitOrders'
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <Page showExternalLink={false} showHelpLink={false} removePadding>
+    <Page showExternalLink={false} showHelpLink={false}>
       {children}
     </Page>
   )
