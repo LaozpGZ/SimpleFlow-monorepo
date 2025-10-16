@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { styled } from 'styled-components'
 import { NumberDisplay } from '@pancakeswap/widgets-internal'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import type { IFOStatus } from '../../hooks/ifo/useIFOStatus'
 import useIfo from '../../hooks/useIfo'
 import { useIfoDisplay } from '../../hooks/useIfoDisplay'
@@ -188,12 +189,9 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
     {
       left: <StyledText color="textSubtle">{t('Raise Goal')}</StyledText>,
       right: raiseAmountValue ? (
-        <NumberDisplay
-          {...commonNumberDisplayProps}
-          value={raiseAmountValue}
-          suffix={raiseAmountSuffix}
-          maximumSignificantDigits={6}
-        />
+        <StyledText>
+          {formatNumber(raiseAmountValue, { maxDecimalDisplayDigits: 6 })} {raiseAmountSuffix}
+        </StyledText>
       ) : (
         <StyledText color="text">{raiseAmountText ?? '-'}</StyledText>
       ),
@@ -206,7 +204,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           {...commonNumberDisplayProps}
           value={formatAmount(ifoStatus?.currentStakedAmount, 6) ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
-          maximumSignificantDigits={12}
         />
       ),
       display: variant !== 'presale',
@@ -218,7 +215,6 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
           {...commonNumberDisplayProps}
           value={formatAmount(userStatus?.stakedAmount, 6) ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
-          maximumSignificantDigits={6}
         />
       ),
       display: Boolean(variant !== 'presale' && showExtraInfo),
