@@ -9,6 +9,7 @@ import { useTheme } from 'styled-components'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { NumberDisplay } from '@pancakeswap/widgets-internal'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { ifoLoadingAnimationAtom } from '../atoms'
 
 const Lottie = dynamic<LottieComponentProps>(() => import('lottie-react'), { ssr: false })
@@ -47,7 +48,7 @@ const DepositDisplay: React.FC<DepositDisplayProps> = ({ deposit, usdValue }) =>
           <NumberDisplay value={formatAmount(deposit, 6)} suffix={` ${deposit.currency.symbol}`} />
         </Text>
         <Text fontSize="14px" color="textSubtle">
-          ~{usdValue} USD
+          ~{formatNumber(usdValue, { maxDecimalDisplayDigits: 6 })} USD
         </Text>
       </Box>
     </Box>
