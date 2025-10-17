@@ -59,6 +59,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
       if (!shouldUseAAWallet) {
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
+        setSetupStartTime(null)
         return
       }
 
@@ -84,6 +85,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
         setHasSetupFailed(false) // Clear failed state if successful
+        setSetupStartTime(null)
         return
       }
 
@@ -91,6 +93,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
       if (!isReady) {
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
+        setSetupStartTime(null)
         return
       }
 
