@@ -28,7 +28,6 @@ import { useState } from 'react'
 import { useCombinedInactiveList } from 'state/lists/hooks'
 import { useAddUserToken } from 'state/user/hooks'
 import { useBlockExploreLink, useBlockExploreName } from 'utils'
-import { chains } from 'utils/wagmi'
 
 interface ImportProps {
   tokens: Token[]
@@ -36,14 +35,13 @@ interface ImportProps {
   chainId?: number
 }
 
-export function WarningMessage({ chainName }: { chainName: string }) {
+export function WarningMessage() {
   const { t } = useTranslation()
   return (
     <Message variant="warning">
       <Text>
-        {t(
-          'Anyone can create tokens with any name, including fake or misleading versions of existing projects. Buying such fraudulent tokens can lead to permanent loss of funds.',
-        )}
+        {t('Anyone can create tokens with any name, including fake or misleading versions of existing projects.')}{' '}
+        <b>{t('Buying such fraudulent tokens can lead to permanent loss of funds.')}</b>
       </Text>
     </Message>
   )
@@ -84,7 +82,7 @@ function ImportToken({ tokens, handleCurrencySelect, chainId: chainIdProp }: Imp
 
   return (
     <AutoColumn gap="lg">
-      <WarningMessage chainName={chains.find((c) => c.id === tokens?.[0]?.chainId || chainId)?.name || ''} />
+      <WarningMessage />
 
       {tokens.map((token) => {
         const list = token.chainId && inactiveTokenList?.[token.chainId]?.[token.address]?.list
