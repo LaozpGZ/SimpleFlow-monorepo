@@ -1,8 +1,10 @@
 import IfoHistoryCard from './components/IfoHistoryCard'
-import { ifoConfigs } from './config'
 import { IfoV2Provider } from './contexts/IfoV2Provider'
+import { useIfoConfigs } from './hooks/useIfoConfigs'
 
 const HistoryIfos: React.FC = () => {
+  const { data: ifoConfigs } = useIfoConfigs()
+
   return (
     <>
       {ifoConfigs.map((ifo) => (
