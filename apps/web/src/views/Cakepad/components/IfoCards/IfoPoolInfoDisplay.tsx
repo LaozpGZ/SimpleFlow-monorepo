@@ -202,7 +202,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       right: (
         <NumberDisplay
           {...commonNumberDisplayProps}
-          value={formatAmount(ifoStatus?.currentStakedAmount, 6) ?? '0'}
+          value={ifoStatus?.currentStakedAmount?.toExact() ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
         />
       ),
@@ -213,7 +213,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       right: (
         <NumberDisplay
           {...commonNumberDisplayProps}
-          value={formatAmount(userStatus?.stakedAmount, 6) ?? '0'}
+          value={userStatus?.stakedAmount?.toExact() ?? '0'}
           suffix={stakeCurrency?.symbol ? ` ${stakeCurrency.symbol}` : undefined}
         />
       ),

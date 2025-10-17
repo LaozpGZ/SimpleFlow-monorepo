@@ -80,7 +80,7 @@ export const ClaimedCard: React.FC<{ pid: number }> = ({ pid }) => {
             </Text>
 
             <NumberDisplay
-              value={claimableAmount}
+              value={userStatus?.claimableAmount?.toExact()}
               suffix={` ${offeringCurrency?.symbol}`}
               fontSize="20px"
               bold

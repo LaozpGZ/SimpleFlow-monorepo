@@ -83,7 +83,7 @@ const PoolAction: React.FC<{ pid: number }> = ({ pid }) => {
             </Text>
           </FlexGap>
           <Text fontSize="20px" bold lineHeight="30px">
-            <NumberDisplay value={formatAmount(stakedAmount, 6)} fontSize="20px" lineHeight="30px" bold />
+            <NumberDisplay value={stakedAmount?.toExact()} fontSize="20px" lineHeight="30px" bold />
           </Text>
           {Number.isFinite(amountInDollar) && (
             <Text fontSize="14px" color="textSubtle">

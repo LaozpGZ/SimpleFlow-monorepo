@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Box, Card, CardBody, CardHeader, ExpandableButton, FlexGap } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { IfoRibbon } from './IfoCards/IfoRibbon'
 import { IfoSaleInfoDisplay } from './IfoCards/IfoSaleInfoCard'
 import IfoPoolInfoDisplay from './IfoCards/IfoPoolInfoDisplay'
@@ -41,7 +40,7 @@ const IfoHistoryCard: React.FC = () => {
   const tokenAddress = info?.offeringCurrency?.wrapped.address ?? ''
   const tokenDecimals = info?.offeringCurrency?.decimals ?? 18
   const allocationCurrencyAmount = getAllocationCurrencyAmount(users)
-  const allocatedAmount = formatAmount(allocationCurrencyAmount, 6)
+  const allocatedAmount = allocationCurrencyAmount?.toExact()
 
   const userHasClaimed = users[0]?.claimed
 

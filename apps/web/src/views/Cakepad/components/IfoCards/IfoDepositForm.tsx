@@ -250,7 +250,7 @@ export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }
             <StyledText color="textSubtle">{t('Max Deposit')}</StyledText>
             <StyledText color="text">
               <NumberDisplay
-                value={formatAmount(maxStakePerUser, 6)}
+                value={maxStakePerUser.toExact()}
                 suffix={` ${stakeCurrency?.symbol ?? ''}`}
                 fontSize="14px"
                 lineHeight="150%"
@@ -263,7 +263,7 @@ export const IfoDepositForm: React.FC<IfoDepositFormProps> = ({ pid, onDismiss }
             <StyledText color="textSubtle">{t('Subscribed')}</StyledText>
             <StyledText color="text">
               <NumberDisplay
-                value={formatAmount(userStatus?.stakedAmount, 6)}
+                value={userStatus?.stakedAmount?.toExact()}
                 suffix={` ${stakeCurrency?.symbol ?? ''}`}
                 fontSize="14px"
                 lineHeight="150%"

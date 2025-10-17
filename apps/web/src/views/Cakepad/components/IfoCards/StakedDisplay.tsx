@@ -3,7 +3,6 @@ import { AddIcon, Button, FlexGap, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useState } from 'react'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import useIfo from '../../hooks/useIfo'
 import { IfoDepositForm, formatDollarAmount } from './IfoDepositForm'
 
@@ -36,7 +35,7 @@ export const StakedDisplay: React.FC<{ pid: number }> = ({ pid }) => {
           </FlexGap>
           <FlexGap gap="8px" flexDirection="column">
             <NumberDisplay
-              value={formatAmount(stakedAmount, 6)}
+              value={stakedAmount?.toExact()}
               suffix={` ${stakeCurrency?.symbol ?? ''}`}
               fontSize="20px"
               lineHeight="30px"

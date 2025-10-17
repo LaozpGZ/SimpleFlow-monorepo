@@ -1,6 +1,5 @@
 import { Card, CardBody, FlexGap, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { IfoAllocationCard } from '../IfoAllocationCard'
 import useIfo from '../../hooks/useIfo'
@@ -28,7 +27,7 @@ export const IfoCardFinished: React.FC<{ ifoStatus0: IFOStatus; ifoStatus1: IFOS
 
   const allocationCurrencyAmount = getAllocationCurrencyAmount(users)
 
-  const allocatedAmount = formatAmount(allocationCurrencyAmount, 6)
+  const allocatedAmount = allocationCurrencyAmount?.toExact()
 
   const userHasStaked0 = userStatus0?.stakedAmount?.greaterThan(0)
   const userHasStaked1 = userStatus1?.stakedAmount?.greaterThan(0)
