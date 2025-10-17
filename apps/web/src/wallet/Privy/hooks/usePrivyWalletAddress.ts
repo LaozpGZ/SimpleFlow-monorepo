@@ -12,7 +12,7 @@ import { useEmbeddedSmartAccountConnectorV2 } from './usePrivySmartAccountConnec
 export const usePrivyWalletAddress = () => {
   const { address: wagmiAddress, connector } = useAccount()
   const { client: smartWalletClient } = useSmartWallets()
-  const { ready, authenticated, user } = usePrivy()
+  const { ready, authenticated, user, logout } = usePrivy()
   const connectors = useConnectors()
   const { isSmartWalletReady, isSettingUp, shouldUseAAWallet, hasSetupFailed } = useEmbeddedSmartAccountConnectorV2()
 
@@ -40,14 +40,18 @@ export const usePrivyWalletAddress = () => {
 
         // Force stop loading and show error state
         setIsLoading(false)
+        setLoadingStartTime(null)
         setFinalAddress(undefined)
         setAddressType(null)
+        if (authenticated) {
+          logout()
+        }
       }, 10000) // 10 seconds global timeout
 
       return () => clearTimeout(timeoutId)
     }
     return undefined
-  }, [loadingStartTime])
+  }, [loadingStartTime, logout, authenticated])
 
   useEffect(() => {
     const determineAddress = async () => {
