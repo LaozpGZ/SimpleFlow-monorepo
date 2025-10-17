@@ -13,7 +13,7 @@ import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { basisPointsToPercent } from 'utils/exchange'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { atomWithLoadable } from './atomWithLoadable'
-import { getRwaTokenStatus } from './rwaTokenAtoms'
+import { getRwaTokenStatus, rwaTokenListAtom } from './rwaTokenAtoms'
 
 const PCSX_AUTO_SLIPPAGE_BPS = 10 // 0.1%
 
@@ -31,6 +31,7 @@ export const bestXApiAtom = atomFamily((option: QuoteQuery) => {
     }
 
     const currencies = [option.baseCurrency, currency].filter(Boolean) as Currency[]
+    const rwaTokens = get(rwaTokenListAtom)
     const seen = new Set<string>()
     const statuses = await Promise.all(
       currencies.map(async (curr) => {
@@ -43,7 +44,7 @@ export const bestXApiAtom = atomFamily((option: QuoteQuery) => {
           return undefined
         }
         seen.add(key)
-        return getRwaTokenStatus(get, curr.chainId, address)
+        return getRwaTokenStatus(rwaTokens, curr.chainId, address)
       }),
     )
 

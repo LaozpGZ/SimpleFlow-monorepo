@@ -1,15 +1,56 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Token, UnifiedCurrency, WNATIVE } from '@pancakeswap/sdk'
-import { useUnifiedNativeCurrency } from 'hooks/useNativeCurrency'
+import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
-import { USDT, USDON } from '@pancakeswap/tokens'
-import { isRwaTokenAtom } from 'quoter/atom/rwaTokenAtoms'
+import { USDT } from '@pancakeswap/tokens'
+import { isRwaTokenAtom, usdonTokenAtom } from 'quoter/atom/rwaTokenAtoms'
 
 type RwaPanelConfig = {
   tokensToShow?: Token[]
   supportCrossChain: boolean
   showCommonBases: boolean
+  showNative?: boolean
+}
+
+type AllowedTokensResult = {
+  tokens?: Token[]
+  showNative: boolean
+  isRwa: boolean
+}
+
+const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): AllowedTokensResult => {
+  const normalizedChainId = typeof currency?.chainId === 'number' ? (currency.chainId as ChainId) : undefined
+  const address = currency?.wrapped?.address ?? ''
+
+  const isRwa = useAtomValue(
+    useMemo(
+      () =>
+        isRwaTokenAtom({
+          chainId: normalizedChainId ?? 0,
+          address,
+        }),
+      [normalizedChainId, address],
+    ),
+  )
+
+  const usdtToken = normalizedChainId !== undefined ? USDT[normalizedChainId] : undefined
+  const usdOnToken = useAtomValue(useMemo(() => usdonTokenAtom(normalizedChainId ?? 0), [normalizedChainId]))
+
+  return useMemo(() => {
+    if (!isRwa) {
+      return { tokens: undefined, showNative: false, isRwa: false }
+    }
+
+    const list: Token[] = []
+    if (usdtToken) {
+      list.push(usdtToken)
+    }
+    if (usdOnToken) {
+      list.push(usdOnToken)
+    }
+    const showNative = normalizedChainId === ChainId.BSC
+    return { tokens: list, showNative, isRwa: true }
+  }, [isRwa, normalizedChainId, usdtToken, usdOnToken])
 }
 
 export const useRwaSwapRestrictions = (
@@ -19,65 +60,28 @@ export const useRwaSwapRestrictions = (
   inputConfig: RwaPanelConfig
   outputConfig: RwaPanelConfig
 } => {
-  const inputIsRwa = useAtomValue(
-    useMemo(
-      () =>
-        isRwaTokenAtom({
-          chainId: inputCurrency?.chainId ?? 0,
-          address: inputCurrency?.wrapped?.address ?? '',
-        }),
-      [inputCurrency?.chainId, inputCurrency?.wrapped?.address],
-    ),
-  )
-  const outputIsRwa = useAtomValue(
-    useMemo(
-      () =>
-        isRwaTokenAtom({
-          chainId: outputCurrency?.chainId ?? 0,
-          address: outputCurrency?.wrapped?.address ?? '',
-        }),
-      [outputCurrency?.chainId, outputCurrency?.wrapped?.address],
-    ),
-  )
+  const inputAllowedTokens = useAllowedTokensForCurrency(inputCurrency)
+  const outputAllowedTokens = useAllowedTokensForCurrency(outputCurrency)
 
-  const rwaChainId = inputIsRwa ? inputCurrency?.chainId : outputCurrency?.chainId
-
-  const hasValidRwaChainId = typeof rwaChainId === 'number'
-  const normalizedRwaChainId = hasValidRwaChainId ? (rwaChainId as ChainId) : undefined
-
-  // const rwaChainId = ChainId.BSC
-  const wBnb = normalizedRwaChainId !== undefined ? WNATIVE[normalizedRwaChainId] : undefined
-  const bscUsdt = normalizedRwaChainId !== undefined ? USDT[normalizedRwaChainId] : undefined
-  const usdOnToken = normalizedRwaChainId !== undefined ? USDON[normalizedRwaChainId] : undefined
-
-  const baseWhitelist = useMemo(() => {
-    const list: Token[] = []
-    if (bscUsdt) {
-      list.push(bscUsdt)
-    }
-    if (usdOnToken) {
-      list.push(usdOnToken)
-    }
-    if (wBnb) {
-      list.push(wBnb)
-    }
-    return list
-  }, [bscUsdt, usdOnToken, wBnb])
+  const inputIsRwa = inputAllowedTokens.isRwa
+  const outputIsRwa = outputAllowedTokens.isRwa
 
   return useMemo(
     () => ({
       inputConfig: {
-        tokensToShow: outputIsRwa ? baseWhitelist : undefined,
+        tokensToShow: outputIsRwa ? outputAllowedTokens.tokens : undefined,
         supportCrossChain: !outputIsRwa,
         showCommonBases: !outputIsRwa,
+        showNative: outputIsRwa ? outputAllowedTokens.showNative : undefined,
       },
       outputConfig: {
-        tokensToShow: inputIsRwa ? baseWhitelist : undefined,
+        tokensToShow: inputIsRwa ? inputAllowedTokens.tokens : undefined,
         supportCrossChain: !inputIsRwa,
         showCommonBases: !inputIsRwa,
+        showNative: inputIsRwa ? inputAllowedTokens.showNative : undefined,
       },
     }),
-    [baseWhitelist, inputIsRwa, outputIsRwa],
+    [inputAllowedTokens, inputIsRwa, outputAllowedTokens, outputIsRwa],
   )
 }
 

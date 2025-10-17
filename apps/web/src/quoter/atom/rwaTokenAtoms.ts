@@ -1,14 +1,15 @@
+import { Token } from '@pancakeswap/sdk'
 import type { TokenInfo } from '@pancakeswap/token-lists'
-import type { ListsState } from '@pancakeswap/token-lists/react'
 import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import { atom } from 'jotai'
-import type { Getter } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { RWA_URLS } from 'config/constants/lists'
 import { listsAtom } from 'state/lists/lists'
 
 const RWA_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/status'
+const RWA_MARKET_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/market-status'
 const MEMOIZE_TTL_MS = 30 * 1000
+const USDON_TOKEN_ADDRESS = '0x1f8955E640Cbd9abc3C3Bb408c9E2E1f5F20DfE6'
 
 interface RwaAssetStatus {
   symbol: string
@@ -23,11 +24,22 @@ interface RwaAssetStatus {
   end?: string
 }
 
+interface RwaMarketStatus {
+  isOpen?: boolean
+}
+
 type RwaPauseCode = 'MARKET_CLOSED' | 'MARKET_PAUSED' | 'ASSET_PAUSED'
 
 type RwaTokenStatusInfo = {
   status: 'active' | 'upcoming'
   code?: RwaPauseCode
+}
+
+const parsePauseCode = (rawCode?: string): RwaPauseCode | undefined => {
+  if (rawCode === 'MARKET_CLOSED' || rawCode === 'MARKET_PAUSED' || rawCode === 'ASSET_PAUSED') {
+    return rawCode
+  }
+  return undefined
 }
 
 const fetchRwaStatuses = memoizeAsync(
@@ -55,14 +67,51 @@ const fetchRwaStatuses = memoizeAsync(
   },
 )
 
+const fetchRwaMarketStatus = memoizeAsync(
+  async (): Promise<RwaMarketStatus | undefined> => {
+    if (typeof window === 'undefined') {
+      return undefined
+    }
+    const response = await fetch(RWA_MARKET_STATUS_ENDPOINT, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch RWA market status: ${response.status}`)
+    }
+
+    const data = (await response.json()) as RwaMarketStatus | undefined
+    return data && typeof data === 'object' ? data : undefined
+  },
+  {
+    isValid: () => true,
+    resolver: () => Math.floor(Date.now() / MEMOIZE_TTL_MS),
+  },
+)
+
+export const rwaMarketStatusAtom = atom(async () => fetchRwaMarketStatus())
+
+export const isMarketOpen = async (): Promise<boolean> => {
+  const marketStatus = await fetchRwaMarketStatus()
+  return marketStatus?.isOpen !== false
+}
+
 const normalizeAddress = (address: string) => address.toLowerCase()
 
-const findRwaToken = (lists: ListsState | undefined, chainId: number, address: string): TokenInfo | undefined => {
+const tokenInfoToToken = (tokenInfo: TokenInfo): Token =>
+  new Token(tokenInfo.chainId, tokenInfo.address, tokenInfo.decimals, tokenInfo.symbol, tokenInfo.name)
+
+export const rwaTokenListAtom = atom((get) => {
+  const lists = get(listsAtom)
   if (!lists?.byUrl) {
-    return undefined
+    return [] as TokenInfo[]
   }
 
-  const normalized = normalizeAddress(address)
+  const tokens: TokenInfo[] = []
+  const seen = new Set<string>()
 
   for (const url of RWA_URLS) {
     const tokenList = lists.byUrl[url]?.current
@@ -70,16 +119,44 @@ const findRwaToken = (lists: ListsState | undefined, chainId: number, address: s
       continue
     }
 
-    const token = tokenList.tokens.find((item) => item.chainId === chainId && item.address.toLowerCase() === normalized)
-    if (token) {
-      return token
+    for (const token of tokenList.tokens) {
+      const normalizedAddress = normalizeAddress(token.address)
+      const key = `${token.chainId}:${normalizedAddress}`
+      if (seen.has(key)) {
+        continue
+      }
+      seen.add(key)
+      tokens.push(token)
     }
   }
 
-  return undefined
-}
+  return tokens
+})
 
-export const rwaStatusesAtom = atom(async () => fetchRwaStatuses())
+export const usdonTokenAtom = atomFamily(
+  (chainId: number | undefined) =>
+    atom((get) => {
+      if (!chainId || chainId <= 0) {
+        return undefined
+      }
+
+      const tokens = get(rwaTokenListAtom)
+      const match = tokens.find(
+        (token) => token.chainId === chainId && normalizeAddress(token.address) === USDON_TOKEN_ADDRESS,
+      )
+      return match ? tokenInfoToToken(match) : undefined
+    }),
+  (a, b) => a === b,
+)
+
+const findRwaToken = (tokens: TokenInfo[], chainId: number, address: string): TokenInfo | undefined => {
+  if (!tokens.length) {
+    return undefined
+  }
+
+  const normalized = normalizeAddress(address)
+  return tokens.find((token) => token.chainId === chainId && token.address.toLowerCase() === normalized)
+}
 
 const DEFAULT_STATUS: RwaTokenStatusInfo = { status: 'active' }
 
@@ -127,37 +204,39 @@ const selectStatusForCurrentTime = (statuses: RwaAssetStatus[], now: number): Rw
 export const isRwaTokenAtom = atomFamily(
   ({ chainId, address }: { chainId: number; address: string }) =>
     atom((get) => {
-      const lists = get(listsAtom)
-      return Boolean(findRwaToken(lists, chainId, address))
+      const tokens = get(rwaTokenListAtom)
+      return Boolean(findRwaToken(tokens, chainId, address))
     }),
   (a, b) => a.chainId === b.chainId && normalizeAddress(a.address) === normalizeAddress(b.address),
 )
 
 export const getRwaTokenStatus = async (
-  get: Getter,
+  tokens: TokenInfo[],
   chainId: number,
   address: string,
 ): Promise<RwaTokenStatusInfo | undefined> => {
   if (!address) {
     return DEFAULT_STATUS
   }
-  const lists = get(listsAtom)
-  const token = findRwaToken(lists, chainId, address)
+  const token = findRwaToken(tokens, chainId, address)
   if (!token) {
     return undefined
   }
 
-  const statuses = await get(rwaStatusesAtom)
+  const marketOpen = await isMarketOpen()
+  if (!marketOpen) {
+    return { status: 'upcoming', code: 'MARKET_CLOSED' }
+  }
+
+  const statuses = await fetchRwaStatuses()
   const matchingStatuses = statuses.filter((item) => item.symbol?.toLowerCase() === token.symbol.toLowerCase())
   const status = selectStatusForCurrentTime(matchingStatuses, Date.now())
   if (!status) {
-    return undefined
+    return { status: 'active' }
   }
 
   const { reason, status: apiStatus } = status
-  const rawCode = reason?.code
-  const code: RwaPauseCode | undefined =
-    rawCode === 'MARKET_CLOSED' || rawCode === 'MARKET_PAUSED' || rawCode === 'ASSET_PAUSED' ? rawCode : undefined
+  const code = parsePauseCode(reason?.code)
 
   if (apiStatus === 'active' || apiStatus === 'upcoming') {
     return { status: apiStatus, code }
