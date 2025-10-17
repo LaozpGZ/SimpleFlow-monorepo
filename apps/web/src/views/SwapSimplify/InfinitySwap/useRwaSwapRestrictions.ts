@@ -3,7 +3,7 @@ import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import { USDT } from '@pancakeswap/tokens'
-import { isRwaTokenAtom, usdonTokenAtom } from 'quoter/atom/rwaTokenAtoms'
+import { isRwaTokenAtom, rwaTokenListAtom, usdonTokenAtom } from 'quoter/atom/rwaTokenAtoms'
 
 type RwaPanelConfig = {
   tokensToShow?: Token[]
@@ -34,11 +34,32 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
   )
 
   const usdtToken = normalizedChainId !== undefined ? USDT[normalizedChainId] : undefined
-  const usdOnToken = useAtomValue(useMemo(() => usdonTokenAtom(normalizedChainId ?? 0), [normalizedChainId]))
+  const rwaTokenInfos = useAtomValue(rwaTokenListAtom)
+  const rwaTokens = useMemo(
+    () =>
+      rwaTokenInfos.map((tokenInfo) => {
+        const token = new Token(
+          tokenInfo.chainId as ChainId,
+          tokenInfo.address,
+          tokenInfo.decimals,
+          tokenInfo.symbol,
+          tokenInfo.name,
+        )
+        // @ts-ignore
+        token.logoURI = tokenInfo.logoURI
+        return token
+      }),
+    [rwaTokenInfos],
+  )
+  const usdOnToken = useAtomValue(usdonTokenAtom(normalizedChainId))
 
   return useMemo(() => {
     if (!isRwa) {
       return { tokens: undefined, showNative: false, isRwa: false }
+    }
+
+    if (usdOnToken && currency?.wrapped.equals(usdOnToken)) {
+      return { tokens: [...rwaTokens], showNative: false, isRwa: true }
     }
 
     const list: Token[] = []
@@ -50,7 +71,7 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
     }
     const showNative = normalizedChainId === ChainId.BSC
     return { tokens: list, showNative, isRwa: true }
-  }, [isRwa, normalizedChainId, usdtToken, usdOnToken])
+  }, [isRwa, normalizedChainId, rwaTokens, usdtToken, usdOnToken])
 }
 
 export const useRwaSwapRestrictions = (

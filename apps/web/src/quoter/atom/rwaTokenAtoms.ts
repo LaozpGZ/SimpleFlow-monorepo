@@ -142,7 +142,7 @@ export const usdonTokenAtom = atomFamily(
 
       const tokens = get(rwaTokenListAtom)
       const match = tokens.find(
-        (token) => token.chainId === chainId && normalizeAddress(token.address) === USDON_TOKEN_ADDRESS,
+        (token) => token.chainId === chainId && normalizeAddress(token.address) === USDON_TOKEN_ADDRESS.toLowerCase(),
       )
       return match ? tokenInfoToToken(match) : undefined
     }),
