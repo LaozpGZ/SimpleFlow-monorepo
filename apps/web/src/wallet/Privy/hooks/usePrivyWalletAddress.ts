@@ -25,7 +25,6 @@ export const usePrivyWalletAddress = () => {
     if (isLoading && !loadingStartTime) {
       setLoadingStartTime(Date.now())
     } else if (!isLoading && loadingStartTime) {
-      const loadingDuration = (Date.now() - loadingStartTime) / 1000
       setLoadingStartTime(null)
     }
   }, [isLoading, loadingStartTime])
