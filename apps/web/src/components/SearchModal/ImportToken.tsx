@@ -42,14 +42,8 @@ export function WarningMessage({ chainName }: { chainName: string }) {
     <Message variant="warning">
       <Text>
         {t(
-          'Anyone can create tokens on %network% with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.',
-          {
-            network: chainName,
-          },
+          'Anyone can create tokens with any name, including fake or misleading versions of existing projects. Buying such fraudulent tokens can lead to permanent loss of funds.',
         )}
-        <br />
-        <br />
-        <b>{t('If you purchase a fraudulent token, you may be exposed to permanent loss of funds.')}</b>
       </Text>
     </Message>
   )
