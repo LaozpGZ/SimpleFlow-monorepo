@@ -43,7 +43,7 @@ const IfoHistoryCard: React.FC = () => {
   const allocationCurrencyAmount = getAllocationCurrencyAmount(users)
   const allocatedAmount = formatAmount(allocationCurrencyAmount, 6)
 
-  const userHasStaked = users[0]?.stakedAmount && users[0].stakedAmount.greaterThan(0)
+  const userHasClaimed = users[0]?.claimed
 
   if (info?.status !== 'finished') {
     return null
@@ -62,7 +62,7 @@ const IfoHistoryCard: React.FC = () => {
           <FlexGap flexDirection="column" gap="16px">
             <IfoSaleInfoDisplay />
 
-            {userHasStaked && (
+            {userHasClaimed && (
               <IfoAllocationDisplay
                 symbol={symbol}
                 tokenAddress={tokenAddress}
