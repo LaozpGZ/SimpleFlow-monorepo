@@ -23,9 +23,13 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
   // Preload submitting animation
   useAtomValue(ifoLoadingAnimationAtom)
 
+  if (!ifoConfigs) {
+    return null
+  }
+
   const ifoId = (id ?? (query.ifo as string)) || ''
 
-  const config = ifoId ? ifoConfigs.find((x) => x.id === ifoId) : ifoConfigs?.[0]
+  const config = ifoId ? ifoConfigs.find((x) => x.id === ifoId) : ifoConfigs[0]
   if (!config) {
     return null
   }

@@ -39,13 +39,16 @@ function transformJsonToConfig(jsonConfig: any): IFOConfig {
 
 export const useIfoConfigs = () => {
   return useQuery<IFOConfig[]>({
-    queryKey: ['ifo-configs'],
+    queryKey: ['cakepad-ifo-configs'],
     queryFn: async () => {
       const response = await fetch('/test-ifo-config.json')
+      if (!response.ok) {
+        throw new Error(`Failed to fetch IFO config: ${response.status}`)
+      }
       const jsonData = await response.json()
       return jsonData.map(transformJsonToConfig)
     },
-    refetchOnWindowFocus: false,
-    initialData: [] as IFOConfig[],
+    refetchOnMount: true,
+    staleTime: 5_000,
   })
 }
