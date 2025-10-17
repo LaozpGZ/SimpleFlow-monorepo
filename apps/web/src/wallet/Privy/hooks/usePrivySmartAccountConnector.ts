@@ -105,7 +105,6 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         console.error(`[PrivySmartAccount] ⏱️ Setup timeout after 3 seconds (attempt ${retryCount + 1}/3)`)
         setRetryCount((prev) => prev + 1)
         setIsSmartWalletReady(false)
-        setIsSettingUp(false)
       }, 3000) // 3 seconds timeout per attempt
 
       try {
