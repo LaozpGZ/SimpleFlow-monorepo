@@ -42,6 +42,7 @@ export const usePrivyWalletAddress = () => {
         setFinalAddress(undefined)
         setAddressType(null)
         setIsLoading(false)
+        // Force logout if an embedded wallet is injected
         if (authenticated) {
           logout()
         }
