@@ -162,7 +162,6 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         // Increment retry count and try again
         setRetryCount((prev) => prev + 1)
         setIsSmartWalletReady(false)
-        setIsSettingUp(false)
       }
     }
 
