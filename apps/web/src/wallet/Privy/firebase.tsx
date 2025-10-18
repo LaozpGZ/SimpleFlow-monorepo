@@ -128,19 +128,22 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   }
 
   // Helper function to sign in with custom token
-  const loginWithCustomToken = async (customToken: string) => {
-    try {
-      setPrivySocialLogin(true)
-      const auth = getAuth(firebaseApp)
-      const userCredential = await signInWithCustomToken(auth, customToken)
-      const idToken = await userCredential.user.getIdToken(true)
-      setToken(idToken)
-      return true
-    } catch (error) {
-      console.error('Error signing in with custom token:', error)
-      return false
-    }
-  }
+  const loginWithCustomToken = useCallback(
+    async (customToken: string) => {
+      try {
+        setPrivySocialLogin(true)
+        const auth = getAuth(firebaseApp)
+        const userCredential = await signInWithCustomToken(auth, customToken)
+        const idToken = await userCredential.user.getIdToken(true)
+        setToken(idToken)
+        return true
+      } catch (error) {
+        console.error('Error signing in with custom token:', error)
+        return false
+      }
+    },
+    [setPrivySocialLogin],
+  )
 
   const loginWithDiscord = async () => {
     try {
@@ -304,7 +307,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       window.removeEventListener('message', handleMessage)
       clearInterval(checkLocalStorage)
     }
-  }, [])
+  }, [setSocialProvider, loginWithCustomToken])
 
   // Clean up Discord popup window
   useEffect(() => {
@@ -329,7 +332,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     setToken(undefined)
     setLoading(false)
     setSocialProvider(null)
-  }, [])
+  }, [setSocialProvider, signOutFirebase])
 
   const value = {
     token,
