@@ -40,7 +40,6 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setLoading] = useState(false)
   const [token, setToken] = useState<string | undefined>()
   const [discordPopup, setDiscordPopup] = useState<Window | null>(null)
-  const [telegramPopup, setTelegramPopup] = useState<Window | null>(null)
   const [, setPrivySocialLogin] = usePrivySocialLoginAtom()
   const [, setSocialProvider] = useSocialLoginProviderAtom()
 

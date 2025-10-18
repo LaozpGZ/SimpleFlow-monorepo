@@ -141,7 +141,6 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         await config.storage?.setItem('recentConnectorId', smartAccountConnector.id)
 
         // After setup is complete, mark as ready and reconnect
-        const totalDuration = setupStartTime ? ((Date.now() - setupStartTime) / 1000).toFixed(2) : '0'
         clearTimeout(setupTimeout)
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
