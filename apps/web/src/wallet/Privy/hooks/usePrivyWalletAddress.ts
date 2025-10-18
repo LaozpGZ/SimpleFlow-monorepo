@@ -38,10 +38,10 @@ export const usePrivyWalletAddress = () => {
         console.error('[PrivyWalletAddress] Forcing error state to prevent infinite loading')
 
         // Force stop loading and show error state
-        setIsLoading(false)
         setLoadingStartTime(null)
         setFinalAddress(undefined)
         setAddressType(null)
+        setIsLoading(false)
         if (authenticated) {
           logout()
         }
@@ -64,9 +64,9 @@ export const usePrivyWalletAddress = () => {
 
       // If Privy is not ready or user is not authenticated, keep loading state
       if (!ready || !authenticated) {
-        setIsLoading(true)
         setFinalAddress(undefined)
         setAddressType(null)
+        setIsLoading(true)
         return
       }
 
