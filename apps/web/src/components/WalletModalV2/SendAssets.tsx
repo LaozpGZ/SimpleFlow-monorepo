@@ -6,6 +6,7 @@ import { BalanceData } from 'hooks/useAddressBalance'
 import { useCallback, useMemo, useState } from 'react'
 import { useAllChainsOpts } from 'views/universalFarms/hooks/useMultiChains'
 import { useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
+import { getSunsetLegacyLink } from 'utils/sunsetLegacyLinks'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssetForm } from './SendAssetForm'
@@ -93,6 +94,10 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
         assets={filteredTokens}
         isLoading={isLoading}
         onRowClick={(asset) => {
+          if (getSunsetLegacyLink(asset.chainId) && typeof window !== 'undefined') {
+            window.open(getSunsetLegacyLink(asset.chainId), '_blank', 'noopener noreferrer')
+            return
+          }
           setSelectedAsset(asset)
           onViewStateChange(ViewState.SEND_FORM)
           if (sendEntry === SEND_ENTRY.CREATE_GIFT) {
