@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Token } from '@pancakeswap/swap-sdk-core'
 import { CurrencyConfig, IFOConfig } from '../ifov2.types'
+import { CAKEPAD_CONFIGS_URL } from '../config'
 
 /**
  * Helper to create a Token from a currency config object
@@ -41,7 +42,7 @@ export const useIfoConfigs = () => {
   return useQuery<IFOConfig[]>({
     queryKey: ['cakepad-ifo-configs'],
     queryFn: async () => {
-      const response = await fetch('/test-ifo-config.json')
+      const response = await fetch(CAKEPAD_CONFIGS_URL)
       if (!response.ok) {
         throw new Error(`Failed to fetch IFO config: ${response.status}`)
       }
