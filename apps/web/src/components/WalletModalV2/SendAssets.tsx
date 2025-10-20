@@ -74,12 +74,7 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
       </Text>
       <FlexGap gap="16px" flexDirection="column" mb="16px">
         <Box>
-          <NetworkFilter
-            data={allChainsOpts}
-            value={selectedNetworks}
-            onChange={(value) => setSelectedNetworks(value)}
-            multiple
-          />
+          <NetworkFilter data={allChainsOpts} value={selectedNetworks} onChange={setSelectedNetworks} multiple />
         </Box>
 
         <Box>
@@ -111,12 +106,7 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
         }}
       />
       <FlexGap gap="16px" mt="16px">
-        <ActionButton
-          onClick={() => {
-            onBack()
-          }}
-          variant="tertiary"
-        >
+        <ActionButton onClick={onBack} variant="tertiary">
           {t('Cancel')}
         </ActionButton>
       </FlexGap>
