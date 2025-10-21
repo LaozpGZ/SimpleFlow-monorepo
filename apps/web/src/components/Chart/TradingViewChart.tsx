@@ -9,10 +9,6 @@ import { createTradingViewWidget, loadTradingViewLibrary } from './lib/pancakesw
 import { AggregatePricingModal } from './AggregatePricingModal'
 
 interface TradingViewChartProps {
-  symbol?: string
-  interval?: string
-  height?: string
-  width?: string
   currency0?: UnifiedCurrency
   currency1?: UnifiedCurrency
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void
