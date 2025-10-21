@@ -1,9 +1,8 @@
 import { useDebounce } from '@pancakeswap/hooks'
 import { UnifiedCurrency } from '@pancakeswap/sdk'
 import { tokens } from '@pancakeswap/uikit'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { styled } from 'styled-components'
 import type { TradingViewWidget, TradingViewWidgetOptions } from './lib/pancakeswap-charting-library.d.ts'
 import { createTradingViewWidget, loadTradingViewLibrary } from './lib/pancakeswap-charting-library.es.js'
@@ -101,7 +100,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     debouncedCurrency0 && debouncedCurrency1 ? `${debouncedCurrency0?.symbol}/${debouncedCurrency1?.symbol}` : ''
 
   // Function to create custom button in TradingView toolbar
-  const createCustomButton = () => {
+  const createCustomButton = useCallback(() => {
     if (!widgetRef.current || !isWidgetReady.current) return
 
     try {
@@ -124,7 +123,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     } catch (error) {
       console.error('Error creating custom button:', error)
     }
-  }
+  }, [theme?.colors?.text])
 
   useEffect(() => {
     const symbolChanged = symbol !== currentSymbol.current
@@ -180,7 +179,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
       }
     }
-  }, [debouncedCurrency0, debouncedCurrency1, symbol])
+  }, [debouncedCurrency0, debouncedCurrency1, symbol, _onLiveDataChanges, on24HPriceDataChange])
 
   useEffect(() => {
     async function initChart() {
@@ -381,7 +380,16 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
 
     initChart()
-  }, [symbol, isDark, theme, debouncedCurrency0, debouncedCurrency1])
+  }, [
+    symbol,
+    isDark,
+    theme,
+    debouncedCurrency0,
+    debouncedCurrency1,
+    _onLiveDataChanges,
+    on24HPriceDataChange,
+    createCustomButton,
+  ])
 
   useEffect(() => {
     async function changeTheme() {
