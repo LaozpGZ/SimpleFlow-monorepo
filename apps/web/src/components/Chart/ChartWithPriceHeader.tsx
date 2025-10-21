@@ -49,9 +49,6 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
     },
     [setPriceData],
   )
-  const onLiveDataChanges = useCallback((c: number) => {
-    console.log('c', c)
-  }, [])
 
   return (
     <Container>
@@ -67,8 +64,6 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
         currency0={isReversed ? currency1 : currency0}
         currency1={isReversed ? currency0 : currency1}
         on24HPriceDataChange={on24HPriceDataChange}
-        // @ts-ignore
-        onLiveDataChanges={onLiveDataChanges}
       />
     </Container>
   )

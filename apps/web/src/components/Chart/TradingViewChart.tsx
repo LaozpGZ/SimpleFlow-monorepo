@@ -17,7 +17,6 @@ interface TradingViewChartProps {
   currency0?: UnifiedCurrency
   currency1?: UnifiedCurrency
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void
-  onLiveDataChanges: (price: number) => void
 }
 
 const ChartContainer = styled.div`
@@ -62,7 +61,6 @@ const setSymbolInfo = (
   currency0: UnifiedCurrency,
   currency1: UnifiedCurrency,
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
-  onLiveDataChanges: (price: number) => void,
 ) => {
   // Clear any existing data to prevent caching issues and ensure clean state
   window.pcsExtraData = window.pcsExtraData || {}
@@ -73,12 +71,7 @@ const setSymbolInfo = (
   update24HPriceData(on24HPriceDataChange)
 }
 
-const TradingViewChart: React.FC<TradingViewChartProps> = ({
-  currency0,
-  currency1,
-  on24HPriceDataChange,
-  onLiveDataChanges: _onLiveDataChanges,
-}) => {
+const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency1, on24HPriceDataChange }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetRef = useRef<TradingViewWidget | null>(null)
   const isInitialized = useRef(false)
@@ -164,7 +157,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
       // Only try to update existing widget if we have one and it's ready
       if (widgetRef.current && isInitialized.current && isWidgetReady.current) {
-        setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, _onLiveDataChanges)
+        setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange)
 
         try {
           // Check if widget has activeChart method
@@ -179,7 +172,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
       }
     }
-  }, [debouncedCurrency0, debouncedCurrency1, symbol, _onLiveDataChanges, on24HPriceDataChange])
+  }, [debouncedCurrency0, debouncedCurrency1, symbol, on24HPriceDataChange])
 
   useEffect(() => {
     async function initChart() {
@@ -340,7 +333,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
                 { text: '1d', resolution: '1D' },
               ],
             }
-            setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, _onLiveDataChanges)
+            setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange)
 
             widgetRef.current = createTradingViewWidget(containerRef.current, options)
 
@@ -380,16 +373,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
 
     initChart()
-  }, [
-    symbol,
-    isDark,
-    theme,
-    debouncedCurrency0,
-    debouncedCurrency1,
-    _onLiveDataChanges,
-    on24HPriceDataChange,
-    createCustomButton,
-  ])
+  }, [symbol, isDark, theme, debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, createCustomButton])
 
   useEffect(() => {
     async function changeTheme() {
