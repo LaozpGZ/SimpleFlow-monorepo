@@ -30,7 +30,7 @@ const Container = styled(Box)`
 `
 
 const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
-  symbol = 'CAKE/BNB',
+  symbol = 'BNB/CAKE',
   currency0,
   currency1,
   theme = 'Dark',
