@@ -117,7 +117,7 @@ const useViewUserOfferingAndRefundingAmounts = () => {
   const latestTxReceipt = useLatestTxReceipt()
 
   return useQuery({
-    queryKey: ['ifoUserOfferingAndRefundingAmounts', ifoContract.address, account, latestTxReceipt],
+    queryKey: ['ifoUserOfferingAndRefundingAmounts', ifoContract?.address, account, latestTxReceipt],
     queryFn: async (): Promise<[UserOfferingAndRefundingAmounts, UserOfferingAndRefundingAmounts]> => {
       if (!ifoContract || !account) throw new Error('IFO contract not found')
       const [
