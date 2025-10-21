@@ -11,7 +11,6 @@ import { AggregatePricingModal } from './AggregatePricingModal'
 interface TradingViewChartProps {
   symbol?: string
   interval?: string
-  theme?: 'Light' | 'Dark'
   height?: string
   width?: string
   currency0?: UnifiedCurrency
