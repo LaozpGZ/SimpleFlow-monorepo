@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { getCurrencyAddress, Percent } from '@pancakeswap/swap-sdk-core'
+import { getCurrencyAddress, Percent, ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
 import {
   Box,
   Grid,
@@ -25,6 +25,7 @@ import { useUnifiedToken } from 'hooks/Tokens'
 import { getFarmAprInfo, getFarmHookData } from 'state/farmsV4/search/farm.util'
 import { getCurrencySymbol } from 'utils/getTokenAlias'
 import { useAtomValue } from 'jotai'
+import { isAddressEqual } from 'utils'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
 import { getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
@@ -184,6 +185,7 @@ export const usePoolFeatureConfig = (showPoolType = true) => {
 }
 
 export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { data: T }) => {
+  const { t } = useTranslation()
   const token0 =
     useUnifiedToken(getCurrencyAddress(data.token0), data.chainId, {
       unwrapWSol: true,
@@ -195,18 +197,33 @@ export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { dat
 
   const provider = getRewardProvider(data.chainId, data.lpAddress)
   const multiplier = getRewardMultiplier(data.chainId, data.lpAddress)
-  const showReward = !!provider
   const { tokensMap } = useAtomValue(tokensMapAtom)
-  const riskToken = getUnwhitelistedToken(data.farm!, tokensMap)
-  const showRisk = Boolean(riskToken)
-  const { t } = useTranslation()
+  const riskToken = useMemo(() => getUnwhitelistedToken(data.farm!, tokensMap), [data.farm, tokensMap])
+  const isHookUnverified = useMemo(() => {
+    if ('hookAddress' in data && data.hookAddress && !isAddressEqual(data.hookAddress, ZERO_ADDRESS)) {
+      return !getHookByAddress(data.chainId, data.hookAddress as `0x${string}`)
+    }
+    return false
+  }, [data])
+  const showRisk = Boolean(riskToken || isHookUnverified)
+  const showReward = Boolean(provider)
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <Text>
-      {t(
-        'Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.',
-        { token: riskToken?.symbol },
+      {riskToken &&
+        t(
+          'Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.',
+          { token: riskToken?.symbol },
+        )}
+      {riskToken && isHookUnverified && (
+        <>
+          <br /> <br />
+        </>
       )}
+      {isHookUnverified &&
+        t(
+          'Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.',
+        )}
     </Text>,
     { placement: 'top' },
   )
