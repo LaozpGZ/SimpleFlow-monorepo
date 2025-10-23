@@ -3,20 +3,11 @@ import { createConnector } from 'wagmi'
 import { UserRejectedRequestError, withRetry } from 'viem'
 import { EIP6963Detail } from './WalletProvider'
 import { normalizeAccounts } from './util/normalizeAccounts'
+import { normalizeChainId } from './util/normalizeChainId'
 
 const cache = new Map<string, any>()
 
 type CreateConnectorConfig = Parameters<typeof createConnector>[0] extends (arg: infer C) => any ? C : never
-
-const normalizeChainId = (chainId: unknown): number => {
-  if (typeof chainId === 'number') {
-    return chainId
-  }
-  if (typeof chainId === 'string') {
-    return chainId.startsWith('0x') ? parseInt(chainId, 16) : parseInt(chainId, 10)
-  }
-  throw new Error(`Invalid chainId: ${chainId}`)
-}
 
 const waitForChainIdToSync = async (provider: any, chainId: number): Promise<number> => {
   return withRetry(
@@ -75,7 +66,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
         this.getChainId(),
       ])
 
-      let currentChainId = currentChainIdRaw
+      let currentChainId = normalizeChainId(currentChainIdRaw)
 
       if (chainId && currentChainId !== chainId) {
         const chain = await this.switchChain!({ chainId }).catch((error) => {

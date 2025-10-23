@@ -3,6 +3,7 @@ import { chains } from 'utils/wagmi'
 import { createConnector } from 'wagmi'
 import { eip6963Providers } from './WalletProvider'
 import { normalizeAccounts } from './util/normalizeAccounts'
+import { normalizeChainId } from './util/normalizeChainId'
 
 function getMMProvider() {
   const window = safeGetWindow()
@@ -34,7 +35,7 @@ export const customMetaMaskConnector = createConnector(() => ({
       accounts: normalizeAccounts(accounts).map((account) =>
         withCapabilities ? { address: account, capabilities: {} } : account,
       ) as never,
-      chainId: chainId ?? parseInt(currentChainId, 16),
+      chainId: chainId ?? normalizeChainId(currentChainId),
     }
   },
 
@@ -64,7 +65,7 @@ export const customMetaMaskConnector = createConnector(() => ({
     const provider = getMMProvider()
     if (!provider) throw new Error('MetaMask not found')
     const chainId = await provider.request({ method: 'eth_chainId' })
-    return parseInt(chainId, 16)
+    return normalizeChainId(chainId)
   },
 
   onAccountsChanged(callback) {
