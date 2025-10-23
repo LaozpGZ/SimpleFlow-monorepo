@@ -2,6 +2,7 @@ import { chains } from 'utils/wagmi'
 import { createConnector } from 'wagmi'
 import { UserRejectedRequestError, withRetry } from 'viem'
 import { EIP6963Detail } from './WalletProvider'
+import { normalizeAccounts } from './util/normalizeAccounts'
 
 const cache = new Map<string, any>()
 
@@ -69,8 +70,12 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
     icon: info.icon,
 
     async connect({ chainId, withCapabilities } = {}) {
-      const accounts = await provider.request({ method: 'eth_requestAccounts' })
-      let currentChainId = await this.getChainId()
+      const [accounts, currentChainIdRaw] = await Promise.all([
+        provider.request({ method: 'eth_requestAccounts' }),
+        this.getChainId(),
+      ])
+
+      let currentChainId = currentChainIdRaw
 
       if (chainId && currentChainId !== chainId) {
         const chain = await this.switchChain!({ chainId }).catch((error) => {
@@ -81,7 +86,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
       }
 
       return {
-        accounts: accounts.map((account) => {
+        accounts: normalizeAccounts(accounts).map((account) => {
           return withCapabilities ? { address: account, capabilities: {} } : account
         }) as never,
         chainId: currentChainId,
@@ -97,13 +102,13 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
     async isAuthorized() {
       if (!provider) return false
       const accounts = await provider.request({ method: 'eth_accounts' })
-      return accounts.length > 0
+      return normalizeAccounts(accounts).length > 0
     },
 
     async getAccounts() {
       if (!provider) return []
       const accounts = await provider.request({ method: 'eth_accounts' })
-      return accounts as readonly `0x${string}`[]
+      return normalizeAccounts(accounts) as readonly `0x${string}`[]
     },
 
     async getChainId() {
