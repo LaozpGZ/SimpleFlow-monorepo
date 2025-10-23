@@ -74,7 +74,7 @@ import { ChainLinkSupportChains } from 'state/info/constant'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useIsTransactionPending, useTransactionAdder } from 'state/transactions/hooks'
 import { styled } from 'styled-components'
-import { calculateGasMargin, getBlockExploreLink } from 'utils'
+import { calculateGasMargin, getBlockExploreLink, isAddressEqual } from 'utils'
 import currencyId from 'utils/currencyId'
 import { formatCurrencyAmount, formatPrice } from 'utils/formatCurrencyAmount'
 import { v3Clients } from 'utils/graphql'
@@ -441,7 +441,7 @@ export const LiquidityView = () => {
     functionName: 'ownerOf',
     args: useMemo(() => [tokenId] as [bigint], [tokenId]),
   }).result
-  const ownsNFT = owner === account || positionDetails?.operator === account
+  const ownsNFT = isAddressEqual(owner, account) || isAddressEqual(positionDetails?.operator, account)
 
   const feeValueUpper = inverted ? feeValue0 : feeValue1
   const feeValueLower = inverted ? feeValue1 : feeValue0
