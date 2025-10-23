@@ -8,9 +8,9 @@ import { BottomDrawer, Box, FlexGap, Link, useMatchBreakpoints } from '@pancakes
 import { useTranslation } from '@pancakeswap/localization'
 import { Suspense } from 'react'
 import styled from 'styled-components'
-import { useAtom, useAtomValue } from 'jotai'
-import { chartDisplayAtom } from 'views/SwapSimplify/InfinitySwap/atoms'
+import { useAtomValue } from 'jotai'
 import ChartWithPriceHeader from 'components/Chart/ChartWithPriceHeader'
+import { useExchangeChartManager } from 'state/user/hooks'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
@@ -58,7 +58,7 @@ export const PCSLimitOrdersView = () => {
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
-  const [isChartDisplayed_, setIsChartDisplayed] = useAtom(chartDisplayAtom)
+  const [isChartDisplayed_, setIsChartDisplayed] = useExchangeChartManager()
   const isChartDisplayed = isChartDisplayed_ && Boolean(inputCurrency) && Boolean(outputCurrency)
 
   return (
@@ -71,7 +71,6 @@ export const PCSLimitOrdersView = () => {
                 currency0={inputCurrency || undefined}
                 currency1={outputCurrency || undefined}
                 symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
-                theme="Dark"
               />
             </FlexGap>
           )}
@@ -127,11 +126,10 @@ export const PCSLimitOrdersView = () => {
               currency0={inputCurrency || undefined}
               currency1={outputCurrency || undefined}
               symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
-              theme="Dark"
             />
           }
           isOpen={isChartDisplayed}
-          setIsOpen={(isOpen) => setIsChartDisplayed(isOpen)}
+          setIsOpen={setIsChartDisplayed}
           hideCloseButton
         />
       )}
