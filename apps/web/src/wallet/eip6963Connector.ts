@@ -66,7 +66,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
         this.getChainId(),
       ])
 
-      let currentChainId = normalizeChainId(currentChainIdRaw)
+      let currentChainId = currentChainIdRaw
 
       if (chainId && currentChainId !== chainId) {
         const chain = await this.switchChain!({ chainId }).catch((error) => {
