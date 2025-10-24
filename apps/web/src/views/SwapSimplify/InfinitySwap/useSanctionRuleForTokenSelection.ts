@@ -78,7 +78,7 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
   }, [currency?.wrapped?.address, isRwa, normalizedChainId, rwaTokens, usdtToken, usdOnToken])
 }
 
-export const useRwaSwapRestrictions = (
+export const useSanctionRuleForTokenSelection = (
   inputCurrency?: UnifiedCurrency | null,
   outputCurrency?: UnifiedCurrency | null,
 ): {

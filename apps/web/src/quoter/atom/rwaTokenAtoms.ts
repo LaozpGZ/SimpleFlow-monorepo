@@ -137,6 +137,17 @@ export const rwaTokenListAtom = atom((get) => {
   return tokens
 })
 
+export const isRwaTokenFnAtom = atom((get) => {
+  const tokens = get(rwaTokenListAtom)
+  const lookup = new Set(tokens.map((token) => `${token.chainId}:${normalizeAddress(token.address)}`))
+  return (chainId?: number, address?: string): boolean => {
+    if (!chainId || !address) {
+      return false
+    }
+    return lookup.has(`${chainId}:${normalizeAddress(address)}`)
+  }
+})
+
 export const usdonTokenAtom = atomFamily(
   (chainId: number | undefined) =>
     atom((get) => {
