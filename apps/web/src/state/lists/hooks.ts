@@ -156,8 +156,17 @@ export function listToTokenMap(list: TokenList, key?: string): TokenAddressMap {
   const result = listCache?.get(list)
   if (result) return result
 
+  let sanitizedTokens: TokenInfo[] = list.tokens
+  // Skip Ondo Tokenized assets from the app token lists
+  if (!list.name.includes('Ondo')) {
+    sanitizedTokens = list.tokens.filter((tokenInfo) => {
+      const name = tokenInfo.name?.toLowerCase()
+      return !(name && name.includes('ondo tokenized'))
+    })
+  }
+
   const tokenMap: WrappedTokenInfo[] = uniqBy(
-    list.tokens,
+    sanitizedTokens,
     (tokenInfo: TokenInfo) => `${tokenInfo.chainId}#${tokenInfo.address}`,
   )
     .map((tokenInfo) => {
