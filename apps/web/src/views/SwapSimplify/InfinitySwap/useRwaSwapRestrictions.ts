@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Native, Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import { USDT } from '@pancakeswap/tokens'
@@ -52,6 +52,7 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
     [rwaTokenInfos],
   )
   const usdOnToken = useAtomValue(usdonTokenAtom(normalizedChainId))
+  const wNativeToken = Native.onChain(normalizedChainId ?? 0).wrapped
 
   return useMemo(() => {
     if (!isRwa) {
@@ -68,6 +69,9 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
     }
     if (usdOnToken) {
       list.push(usdOnToken)
+    }
+    if (wNativeToken) {
+      list.push(wNativeToken)
     }
     const showNative = normalizedChainId === ChainId.BSC
     return { tokens: list, showNative, isRwa: true }
