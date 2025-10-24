@@ -1,12 +1,12 @@
-import { Address, Hex, zeroAddress } from 'viem'
+import { Address, Hex } from 'viem'
 import { ACTIONS } from '../../../constants/actions'
-import { CLPositionConfig } from '../../../types'
+import { PoolKey } from '../../../types'
 import { ActionsPlanner } from '../../../utils/ActionsPlanner'
 import { encodeCLPositionModifyLiquidities } from './modifyLiquidities'
 
 export const encodeCLPositionManagerIncreaseLiquidityCalldata = (
   tokenId: bigint,
-  positionConfig: CLPositionConfig,
+  poolKey: PoolKey,
   liquidity: bigint,
   amount0Max: bigint,
   amount1Max: bigint,
@@ -17,6 +17,6 @@ export const encodeCLPositionManagerIncreaseLiquidityCalldata = (
   const planner = new ActionsPlanner()
   planner.add(ACTIONS.CL_INCREASE_LIQUIDITY, [tokenId, liquidity, amount0Max, amount1Max, hookData])
 
-  const calls = planner.finalizeModifyLiquidityWithSettlePair(positionConfig.poolKey, recipient)
+  const calls = planner.finalizeModifyLiquidityWithSettlePair(poolKey, recipient)
   return encodeCLPositionModifyLiquidities(calls, deadline)
 }

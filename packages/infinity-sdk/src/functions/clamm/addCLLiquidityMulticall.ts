@@ -1,5 +1,5 @@
 import { Address, Hex } from 'viem'
-import { CLPositionConfig, Permit2Signature } from '../../types'
+import { Permit2Signature, PoolKey } from '../../types'
 import { encodeMulticall } from '../../utils/encodeMulticall'
 import { encodePermit2 } from '../../utils/encodePermit2'
 import {
@@ -12,7 +12,9 @@ export const addCLLiquidityMulticall = ({
   isInitialized,
   sqrtPriceX96,
   tokenId,
-  positionConfig,
+  poolKey,
+  tickLower,
+  tickUpper,
   liquidity,
   owner,
   recipient,
@@ -26,7 +28,9 @@ export const addCLLiquidityMulticall = ({
   isInitialized: boolean
   sqrtPriceX96: bigint
   tokenId?: bigint
-  positionConfig: CLPositionConfig
+  poolKey: PoolKey
+  tickLower: number
+  tickUpper: number
   liquidity: bigint
   owner: Address
   recipient: Address
@@ -40,7 +44,7 @@ export const addCLLiquidityMulticall = ({
   const calls: Hex[] = []
 
   if (!isInitialized) {
-    calls.push(encodeCLPositionManagerInitializePoolCalldata(positionConfig.poolKey, sqrtPriceX96))
+    calls.push(encodeCLPositionManagerInitializePoolCalldata(poolKey, sqrtPriceX96))
   }
   if (token0Permit2Signature) {
     calls.push(encodePermit2(owner, token0Permit2Signature))
@@ -54,7 +58,9 @@ export const addCLLiquidityMulticall = ({
   if (typeof tokenId === 'undefined') {
     calls.push(
       encodeCLPositionManagerMintCalldata(
-        positionConfig,
+        poolKey,
+        tickLower,
+        tickUpper,
         liquidity,
         recipient,
         amount0Max,
@@ -68,7 +74,7 @@ export const addCLLiquidityMulticall = ({
     calls.push(
       encodeCLPositionManagerIncreaseLiquidityCalldata(
         tokenId,
-        positionConfig,
+        poolKey,
         liquidity,
         amount0Max,
         amount1Max,

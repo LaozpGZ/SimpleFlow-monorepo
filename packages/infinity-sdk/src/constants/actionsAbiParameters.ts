@@ -12,29 +12,26 @@ import {
   ABI_STRUCT_CL_SWAP_EXACT_OUTPUT_PARAMS,
   ABI_STRUCT_CL_SWAP_EXACT_OUTPUT_SINGLE_PARAMS,
   ABI_STRUCT_POOL_KEY,
-  ABI_STRUCT_POSITION_CONFIG,
 } from './abiStructFragments'
 import { ACTIONS } from './actions'
 
 export const ACTIONS_ABI = {
   // 0x00
   [ACTIONS.CL_INCREASE_LIQUIDITY]: parseAbiParameters([
-    'uint256 tokenId, uint128 liquidity, uint128 amount0Max, uint128 amount1Max, bytes hookData',
-    ...ABI_STRUCT_POSITION_CONFIG,
+    'uint256 tokenId, uint256 liquidity, uint128 amount0Max, uint128 amount1Max, bytes hookData',
   ]),
   // 0x01
   [ACTIONS.CL_DECREASE_LIQUIDITY]: parseAbiParameters(
-    'uint256 tokenId, uint128 liquidity, uint128 amount0Min, uint128 amount1Min, bytes hookData'
+    'uint256 tokenId, uint256 liquidity, uint128 amount0Min, uint128 amount1Min, bytes hookData'
   ),
   // 0x02
   [ACTIONS.CL_MINT_POSITION]: parseAbiParameters([
-    'PositionConfig positionConfig, uint128 liquidity, uint128 amount0Max, uint128 amount1Max, address owner, bytes hookData',
-    ...ABI_STRUCT_POSITION_CONFIG,
+    'PoolKey poolKey, int24 tickLower, int24 tickUpper, uint256 liquidity, uint128 amount0Max, uint128 amount1Max, address owner, bytes hookData',
+    ...ABI_STRUCT_POOL_KEY,
   ]),
   // 0x03
   [ACTIONS.CL_BURN_POSITION]: parseAbiParameters([
-    'uint256 tokenId, PositionConfig config, uint128 amount0Min, uint128 amount1Min, bytes hookData',
-    ...ABI_STRUCT_POSITION_CONFIG,
+    'uint256 tokenId, uint128 amount0Min, uint128 amount1Min, bytes hookData',
   ]),
   // 0x04
   [ACTIONS.CL_INCREASE_LIQUIDITY_FROM_DELTAS]: parseAbiParameters([
