@@ -19,6 +19,7 @@ import _pickBy from 'lodash/pickBy'
 import uniqBy from 'lodash/uniqBy'
 import { useMemo } from 'react'
 import { isNotUndefinedOrNull } from 'utils/isNotUndefinedOrNull'
+import { USDON_TOKEN_ADDRESS } from 'quoter/atom/rwaTokenAtoms'
 import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
 import ONRAMP_TOKEN_LIST from '../../config/constants/tokenLists/pancake-supported-onramp-currency-list.json'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
@@ -161,7 +162,13 @@ export function listToTokenMap(list: TokenList, key?: string): TokenAddressMap {
   if (!list.name.includes('Ondo')) {
     sanitizedTokens = list.tokens.filter((tokenInfo) => {
       const name = tokenInfo.name?.toLowerCase()
-      return !(name && name.includes('ondo tokenized'))
+      if (name && name.includes('ondo tokenized')) {
+        return false
+      }
+      if (tokenInfo.address === USDON_TOKEN_ADDRESS) {
+        return false
+      }
+      return true
     })
   }
 

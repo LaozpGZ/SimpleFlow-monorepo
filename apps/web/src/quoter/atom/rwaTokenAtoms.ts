@@ -9,7 +9,7 @@ import { listsAtom } from 'state/lists/lists'
 const RWA_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/status'
 const RWA_MARKET_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/market-status'
 const MEMOIZE_TTL_MS = 30 * 1000
-const USDON_TOKEN_ADDRESS = '0x1f8955E640Cbd9abc3C3Bb408c9E2E1f5F20DfE6'
+export const USDON_TOKEN_ADDRESS = '0x1f8955E640Cbd9abc3C3Bb408c9E2E1f5F20DfE6'
 
 interface RwaAssetStatus {
   symbol: string
