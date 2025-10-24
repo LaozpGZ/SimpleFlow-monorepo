@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { TokenAddressMap as TTokenAddressMap, TokenInfo, TokenList, WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { ListsState } from '@pancakeswap/token-lists/react'
-import { EMPTY_LIST } from '@pancakeswap/tokens'
+import { createEmptyList, EMPTY_LIST } from '@pancakeswap/tokens'
 import { enumValues } from '@pancakeswap/utils/enumValues'
 import {
   DEFAULT_LIST_OF_LISTS,
@@ -70,7 +70,7 @@ export const combinedCurrenciesMapFromActiveUrlsAtom = atom(() => {
 })
 
 const combineTokenMaps = (lists: ListsState['byUrl'], urls: string[]): any => {
-  if (!urls) return EMPTY_LIST
+  if (!urls?.length) return EMPTY_LIST
   return (
     [...urls]
       // sort by priority so top priority goes last
@@ -79,13 +79,16 @@ const combineTokenMaps = (lists: ListsState['byUrl'], urls: string[]): any => {
         const current = lists[currentUrl]?.current
         if (!current) return allTokens
         try {
-          const newTokens = Object.assign(listToTokenMap(current, 'address'))
-          return combineMaps(allTokens, newTokens)
+          const newTokens = listToTokenMap(current, 'address')
+          for (const chainId of enumValues(ChainId)) {
+            Object.assign(allTokens[chainId], newTokens[chainId])
+          }
+          return allTokens
         } catch (error) {
           console.error('Could not show token list due to error', error)
           return allTokens
         }
-      }, EMPTY_LIST)
+      }, createEmptyList())
   )
 }
 
@@ -149,11 +152,11 @@ export const combinedTokenMapFromWarningUrlsAtom = atom((get) => {
 
   return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap)
 })
-const listCache: WeakMap<TokenList, TokenAddressMap> | null =
-  typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, TokenAddressMap>() : null
+const listCache: WeakMap<TokenList, Map<string, TokenAddressMap>> | null =
+  typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, Map<string, TokenAddressMap>>() : null
 
-export function listToTokenMap(list: TokenList, key?: string): TokenAddressMap {
-  const result = listCache?.get(list)
+export function listToTokenMap(list: TokenList, key: string): TokenAddressMap {
+  const result = listCache?.get(list)?.get(key)
   if (result) return result
 
   const tokenMap: WrappedTokenInfo[] = uniqBy(
@@ -184,7 +187,12 @@ export function listToTokenMap(list: TokenList, key?: string): TokenAddressMap {
     }
   })
 
-  listCache?.set(list, tokenAddressMap)
+  let keyCache = listCache?.get(list)
+  if (!keyCache) {
+    keyCache = new Map<string, TokenAddressMap>()
+    listCache?.set(list, keyCache)
+  }
+  keyCache.set(key, tokenAddressMap)
   return tokenAddressMap
 }
 

@@ -5,18 +5,18 @@ import { TokenAddressMap } from '@pancakeswap/token-lists'
 
 export * from './getTokensByChain'
 
-const createEmptyList = () => {
-  const list = {} as Record<ChainId, TokenAddressMap<ChainId>[ChainId]>
+export const createEmptyList = () => {
+  const list = {} as Record<ChainId, Readonly<TokenAddressMap<ChainId>[ChainId]>>
   for (const chainId of enumValues(ChainId)) {
     list[chainId] = {}
   }
-  return list as TokenAddressMap<ChainId>
+  return list as Readonly<TokenAddressMap<ChainId>>
 }
 
 /**
  * An empty result, useful as a default.
  */
-export const EMPTY_LIST: TokenAddressMap<ChainId> = createEmptyList()
+export const EMPTY_LIST: Readonly<TokenAddressMap<ChainId>> = createEmptyList()
 
 export function serializeTokens(unserializedTokens: any) {
   const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
