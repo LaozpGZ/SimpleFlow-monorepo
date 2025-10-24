@@ -165,7 +165,7 @@ export function listToTokenMap(list: TokenList, key?: string): TokenAddressMap {
       if (name && name.includes('ondo tokenized')) {
         return false
       }
-      if (tokenInfo.address === USDON_TOKEN_ADDRESS) {
+      if (tokenInfo.address.toLowerCase() === USDON_TOKEN_ADDRESS.toLowerCase()) {
         return false
       }
       return true
