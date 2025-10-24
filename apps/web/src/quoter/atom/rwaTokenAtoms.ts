@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { ChainId, Token } from '@pancakeswap/sdk'
 import type { TokenInfo } from '@pancakeswap/token-lists'
 import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import { atom } from 'jotai'
@@ -9,7 +9,11 @@ import { listsAtom } from 'state/lists/lists'
 const RWA_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/status'
 const RWA_MARKET_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/market-status'
 const MEMOIZE_TTL_MS = 30 * 1000
-export const USDON_TOKEN_ADDRESS = '0x1f8955E640Cbd9abc3C3Bb408c9E2E1f5F20DfE6'
+
+export const USDON_TOKEN_ADDRESS: Partial<Record<number, string>> = {
+  [ChainId.BSC]: '0x1f8955E640Cbd9abc3C3Bb408c9E2E1f5F20DfE6',
+  [ChainId.ETHEREUM]: '0xAcE8E719899F6E91831B18AE746C9A965c2119F1',
+}
 
 interface RwaAssetStatus {
   symbol: string
@@ -141,8 +145,13 @@ export const usdonTokenAtom = atomFamily(
       }
 
       const tokens = get(rwaTokenListAtom)
+      const usdonAddress = USDON_TOKEN_ADDRESS[chainId]
+      if (!usdonAddress) {
+        return undefined
+      }
+
       const match = tokens.find(
-        (token) => token.chainId === chainId && normalizeAddress(token.address) === USDON_TOKEN_ADDRESS.toLowerCase(),
+        (token) => token.chainId === chainId && normalizeAddress(token.address) === normalizeAddress(usdonAddress),
       )
       return match ? tokenInfoToToken(match) : undefined
     }),

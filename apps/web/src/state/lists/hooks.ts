@@ -153,24 +153,29 @@ export const combinedTokenMapFromWarningUrlsAtom = atom((get) => {
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
   typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, TokenAddressMap>() : null
 
+export function sanitizeTokenInfos(list: TokenList): TokenInfo[] {
+  if (list.name.includes('Ondo')) {
+    return list.tokens
+  }
+
+  return list.tokens.filter((tokenInfo) => {
+    const name = tokenInfo.name?.toLowerCase()
+    if (name && name.includes('ondo tokenized')) {
+      return false
+    }
+    const usdonAddress = USDON_TOKEN_ADDRESS[tokenInfo.chainId]
+    if (usdonAddress && tokenInfo.address.toLowerCase() === usdonAddress.toLowerCase()) {
+      return false
+    }
+    return true
+  })
+}
+
 export function listToTokenMap(list: TokenList, key?: string): TokenAddressMap {
   const result = listCache?.get(list)
   if (result) return result
 
-  let sanitizedTokens: TokenInfo[] = list.tokens
-  // Skip Ondo Tokenized assets from the app token lists
-  if (!list.name.includes('Ondo')) {
-    sanitizedTokens = list.tokens.filter((tokenInfo) => {
-      const name = tokenInfo.name?.toLowerCase()
-      if (name && name.includes('ondo tokenized')) {
-        return false
-      }
-      if (tokenInfo.address.toLowerCase() === USDON_TOKEN_ADDRESS.toLowerCase()) {
-        return false
-      }
-      return true
-    })
-  }
+  const sanitizedTokens = sanitizeTokenInfos(list)
 
   const tokenMap: WrappedTokenInfo[] = uniqBy(
     sanitizedTokens,
