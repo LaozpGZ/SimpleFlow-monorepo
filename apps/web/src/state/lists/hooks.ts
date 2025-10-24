@@ -24,7 +24,7 @@ import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-defaul
 import ONRAMP_TOKEN_LIST from '../../config/constants/tokenLists/pancake-supported-onramp-currency-list.json'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 import WARNING_TOKEN_LIST from '../../config/constants/tokenLists/pancake-warning.tokenlist.json'
-import { safeGetAddress } from '../../utils'
+import { isAddressEqual, safeGetAddress } from '../../utils'
 import { listsAtom } from './lists'
 
 type TokenAddressMap = TTokenAddressMap<ChainId>
@@ -164,7 +164,7 @@ export function sanitizeTokenInfos(list: TokenList): TokenInfo[] {
       return false
     }
     const usdonAddress = USDON_TOKEN_ADDRESS[tokenInfo.chainId]
-    if (usdonAddress && tokenInfo.address.toLowerCase() === usdonAddress.toLowerCase()) {
+    if (isAddressEqual(usdonAddress, tokenInfo.address)) {
       return false
     }
     return true
