@@ -75,7 +75,7 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
     }
     const showNative = normalizedChainId === ChainId.BSC
     return { tokens: list, showNative, isRwa: true }
-  }, [isRwa, normalizedChainId, rwaTokens, usdtToken, usdOnToken])
+  }, [currency?.wrapped?.address, isRwa, normalizedChainId, rwaTokens, usdtToken, usdOnToken])
 }
 
 export const useRwaSwapRestrictions = (
