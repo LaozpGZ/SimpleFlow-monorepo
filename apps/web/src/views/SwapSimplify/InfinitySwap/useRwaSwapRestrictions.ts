@@ -52,13 +52,13 @@ const useAllowedTokensForCurrency = (currency?: UnifiedCurrency | null): Allowed
     [rwaTokenInfos],
   )
   const usdOnToken = useAtomValue(usdonTokenAtom(normalizedChainId))
-  const wNativeToken = Native.onChain(normalizedChainId ?? 0).wrapped
 
   return useMemo(() => {
-    if (!isRwa) {
+    if (!isRwa || !normalizedChainId) {
       return { tokens: undefined, showNative: false, isRwa: false }
     }
 
+    const wNativeToken = Native.onChain(normalizedChainId ?? 0).wrapped
     if (usdOnToken && currency?.wrapped.equals(usdOnToken)) {
       return { tokens: [...rwaTokens], showNative: false, isRwa: true }
     }
