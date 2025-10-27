@@ -2,6 +2,14 @@ import { getTrustWalletProvider } from '@pancakeswap/wagmi/connectors/trustWalle
 import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 import { isCyberWallet } from '@cyberlab/cyber-app-sdk'
 
+function safeCheck<T>(fn: () => T): T | false {
+  try {
+    return fn()
+  } catch {
+    return false
+  }
+}
+
 export const isMetamaskInstalled = () => {
   if (!safeGetWindow()) {
     return false
@@ -25,58 +33,32 @@ export const isMetamaskInstalled = () => {
   return false
 }
 
-export const isBinanceWeb3WalletInstalled = () => {
-  try {
-    return Boolean(Boolean(safeGetWindow()?.isBinance) || Boolean(safeGetWindow()?.binancew3w))
-  } catch (error) {
-    console.error('Error checking Binance Web3 Wallet:', error)
-    return false
-  }
-}
+export const isBinanceWeb3WalletInstalled = (): boolean =>
+  Boolean(safeCheck(() => safeGetWindow()?.isBinance) || safeCheck(() => safeGetWindow()?.binancew3w))
 
 export const isTrustWalletInstalled = () => {
   return !!getTrustWalletProvider()
 }
 
-export const isOkxWalletInstalled = () => {
-  return Boolean(safeGetWindow()?.okxwallet)
-}
+export const isOkxWalletInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow()?.okxwallet))
 
-export const isOperaWalletInstalled = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isOpera)
-}
+export const isOperaWalletInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isOpera))
 
-export const isBraveWalletInstalled = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isBraveWallet)
-}
+export const isBraveWalletInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isBraveWallet))
 
-export const isRabbyWalletInstalled = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isRabby)
-}
+export const isRabbyWalletInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isRabby))
 
-export const isMathWalletInstalled = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isMathWallet)
-}
+export const isMathWalletInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isMathWallet))
 
-export const isTokenPocketInstalled = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isTokenPocket) || Boolean(safeGetWindow()?.tokenpocket)
-}
+export const isTokenPocketInstalled = (): boolean =>
+  Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isTokenPocket) || safeCheck(() => safeGetWindow()?.tokenpocket))
 
-export const isSafePalInstalled = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isSafePal)
-}
+export const isSafePalInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isSafePal))
 
-export const isCoin98Installed = () => {
-  return Boolean(safeGetWindow()?.ethereum?.isCoin98) || Boolean(safeGetWindow()?.coin98)
-}
+export const isCoin98Installed = (): boolean =>
+  Boolean(safeCheck(() => safeGetWindow()?.ethereum?.isCoin98) || safeCheck(() => safeGetWindow()?.coin98))
 
-export const isCyberWalletInstalled = () => {
-  return Boolean(safeGetWindow() && isCyberWallet())
-}
+export const isCyberWalletInstalled = (): boolean => Boolean(safeCheck(() => safeGetWindow() && isCyberWallet()))
 
-export const isPhantomWalletInstalled = () => {
-  return Boolean(
-    // safeGetWindow()?.ethereum?.isPhantom  // evm not we supported now
-    safeGetWindow()?.phantom?.solana?.isPhantom,
-  )
-}
+export const isPhantomWalletInstalled = (): boolean =>
+  Boolean(safeCheck(() => safeGetWindow()?.phantom?.solana?.isPhantom))
