@@ -1,0 +1,19 @@
+{
+  "name": "Just Funny List",
+  "timestamp": "2025-10-27T00:00:00+00:00",
+  "version": { "major": 1, "minor": 0, "patch": 0 },
+  "tokens": [
+    {
+      "chainId": 56,
+      "address": "0x2338c5AD75967dAC2fF988FC3488109eC2406dfE",
+      "name": "Just Funny",
+      "symbol": "JF",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/faresalanzemb-star/pancake-frontend/gh-pages/logo.png",
+      "extensions": {
+        "twitter": "https://x.com/token_just?t=eqUJQppADiNxWITvCljJww&s=09",
+        "website": ""
+      }
+    }
+  ]
+}
