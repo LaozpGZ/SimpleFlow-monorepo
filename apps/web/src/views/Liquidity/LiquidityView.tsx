@@ -210,7 +210,7 @@ export const LiquidityView = () => {
 
   const { tokenId: tokenIdFromUrl } = router.query
 
-  const parsedTokenId = Number.isFinite(Number(tokenIdFromUrl)) ? BigInt(tokenIdFromUrl as string) : undefined
+  const parsedTokenId = Number.isInteger(Number(tokenIdFromUrl)) ? BigInt(tokenIdFromUrl as string) : undefined
 
   const { loading: positionDetailsLoading, position: positionDetails } = useV3PositionFromTokenId(parsedTokenId)
 
