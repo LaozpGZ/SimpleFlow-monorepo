@@ -53,7 +53,7 @@ export const useFeeAmountFromQuery = () => {
   const router = useRouter()
   const ammConfig = useClmmAmmConfigs()
 
-  const feeAmountFromUrl = router.isReady && chainId && (router.query.currency?.[2] as string)
+  const feeAmountFromUrl = router.isReady && chainId ? (router.query.currency?.[2] as string) : undefined
 
   return useMemo(
     () =>
