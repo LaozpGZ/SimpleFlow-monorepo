@@ -201,7 +201,7 @@ export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { dat
   const riskToken = useMemo(() => getUnwhitelistedToken(data.farm!, tokensMap), [data.farm, tokensMap])
   const isHookUnverified = useMemo(() => {
     if ('hookAddress' in data && data.hookAddress) {
-      return !isHookWhitelisted(data.chainId, data.hookAddress as `0x${string}`)
+      return !isHookWhitelisted(data.chainId, data.hookAddress)
     }
     return false
   }, [data])
