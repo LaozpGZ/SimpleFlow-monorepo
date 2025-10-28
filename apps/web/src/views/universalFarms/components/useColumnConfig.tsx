@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { getCurrencyAddress, Percent, ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
+import { getCurrencyAddress, Percent } from '@pancakeswap/swap-sdk-core'
 import {
   Box,
   Grid,
@@ -25,7 +25,6 @@ import { useUnifiedToken } from 'hooks/Tokens'
 import { getFarmAprInfo, getFarmHookData } from 'state/farmsV4/search/farm.util'
 import { getCurrencySymbol } from 'utils/getTokenAlias'
 import { useAtomValue } from 'jotai'
-import { isAddressEqual } from 'utils'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
 import { getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
