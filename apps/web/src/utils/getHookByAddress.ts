@@ -17,9 +17,9 @@ export const getHookByAddress = (chainId?: ChainId, address?: HookData['address'
 export const isHookWhitelisted = memoize(
   (chainId?: ChainId, address?: Address): boolean => {
     if (!chainId || !address) return false
-    return (
-      whitelistLabeledHooksList[chainId].some((addr) => isAddressEqual(addr, address)) ||
-      Boolean(getHookByAddress(chainId, address))
+    return Boolean(
+      whitelistLabeledHooksList[chainId]?.some((addr) => isAddressEqual(addr, address)) ||
+        getHookByAddress(chainId, address),
     )
   },
   (chainId, address) => `${chainId}#${address}`,
