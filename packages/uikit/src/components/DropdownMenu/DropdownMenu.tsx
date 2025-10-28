@@ -194,7 +194,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     [items, isMobile, isMd]
   );
   const hasItems = filteredItems.length > 0;
-  const { styles, attributes } = usePopper(targetRef, tooltipRef, {
+  const { styles, attributes, update } = usePopper(targetRef, tooltipRef, {
     strategy: isBottomNav ? "absolute" : "fixed",
     placement: isBottomNav ? "top" : "bottom-start",
     modifiers: [{ name: "offset", options: { offset: [0, isBottomNav ? 6 : 0] } }],
@@ -248,6 +248,12 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     if (isBottomNav && !hasItems) return;
     setIsOpen((s) => !s);
   }, [isBottomNav, hasItems]);
+
+  useEffect(() => {
+    if (!isBottomNav && hasItems) {
+      update?.();
+    }
+  }, [update, hasItems]);
 
   return (
     <Box ref={setTargetRef} {...props}>
