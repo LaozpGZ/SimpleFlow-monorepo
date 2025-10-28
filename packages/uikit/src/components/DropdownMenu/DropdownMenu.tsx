@@ -203,8 +203,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
   const isMenuShown = isOpen && ((isBottomNav && showItemsOnMobile) || !isBottomNav);
 
   useEffect(() => {
-    if (isBottomNav && !hasItems) return undefined;
-    if (trigger !== "hover") return undefined;
+    if (!hasItems || trigger !== "hover") return undefined;
     const showDropdownMenu = () => {
       setIsOpen(true);
       hideDropdownMenu.cancel();
@@ -250,10 +249,10 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
   }, [isBottomNav, hasItems]);
 
   useEffect(() => {
-    if (!isBottomNav && hasItems) {
+    if (!isBottomNav && isMenuShown) {
       update?.();
     }
-  }, [update, hasItems]);
+  }, [update, isMenuShown]);
 
   return (
     <Box ref={setTargetRef} {...props}>
