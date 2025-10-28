@@ -99,6 +99,7 @@ export const farmToPoolInfo = (farm: FarmInfo): PoolInfo => {
       poolId: farm.id,
       hookAddress: infinityPool.hooks,
       dynamic: isDynamic(infinityPool),
+      lpApr: farm.apr24h || '0',
     } as PoolInfo
   }
 
