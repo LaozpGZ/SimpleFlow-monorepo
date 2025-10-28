@@ -123,7 +123,6 @@ const getStats = async (type: 'v2' | 'v3' | 'stable', chainIds: number[]) => {
 
         let result: { data?: StatsRes } | undefined
         try {
-          console.log(`Fetching ${type} tvl for ${chainName}`)
           result = await explorerApiClient.GET('/cached/protocol/{protocol}/{chainName}/stats', {
             signal: abortController.signal,
             params: {
