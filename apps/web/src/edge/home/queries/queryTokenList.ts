@@ -18,6 +18,7 @@ export const _queryTokenList = async () => {
   }
   const lists = results
     .filter((result): result is PromiseFulfilledResult<TokenList> => result.status === 'fulfilled')
+    .filter((x) => x && x.value && x.value.tokens)
     .map((result) => result.value.tokens)
     .flat()
     .map((x) => ({ ...x, address: checksumAddress(x.address) }))
