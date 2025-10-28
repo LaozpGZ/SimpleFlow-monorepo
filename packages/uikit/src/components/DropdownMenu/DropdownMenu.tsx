@@ -200,7 +200,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     modifiers: [{ name: "offset", options: { offset: [0, isBottomNav ? 6 : 0] } }],
   });
 
-  const isMenuShow = isOpen && ((isBottomNav && showItemsOnMobile) || !isBottomNav);
+  const isMenuShown = isOpen && ((isBottomNav && showItemsOnMobile) || !isBottomNav);
 
   useEffect(() => {
     if (isBottomNav && !hasItems) return undefined;
@@ -233,9 +233,9 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
 
   useEffect(() => {
     if (setMenuOpenByIndex && index !== undefined) {
-      setMenuOpenByIndex((prevValue) => ({ ...prevValue, [index]: isMenuShow }));
+      setMenuOpenByIndex((prevValue) => ({ ...prevValue, [index]: isMenuShown }));
     }
-  }, [isMenuShow, setMenuOpenByIndex, index]);
+  }, [isMenuShown, setMenuOpenByIndex, index]);
 
   useOnClickOutside(
     isOpen ? targetRef : null,
@@ -263,7 +263,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
           ref={setTooltipRef}
           style={styles.popper}
           $isBottomNav={isBottomNav}
-          $isOpen={isMenuShow}
+          $isOpen={isMenuShown}
           {...attributes.popper}
         >
           {filteredItems.map((item) => (
