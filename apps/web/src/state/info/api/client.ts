@@ -12,6 +12,7 @@ const solEndpoints = process.env.NEXT_PUBLIC_SOLANA_EXPLORE_API_ENDPOINT || 'htt
 export const throwOnError: Middleware = {
   async onResponse({ response: res }) {
     if (res.status >= 400) {
+      console.log(await res.clone().json())
       const body = res.headers.get('content-type')?.includes('json')
         ? await res.clone().json()
         : await res.clone().text()
