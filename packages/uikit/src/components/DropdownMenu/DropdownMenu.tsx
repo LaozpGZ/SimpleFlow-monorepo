@@ -1,5 +1,5 @@
 import debounce from "lodash/debounce";
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { usePopper } from "react-popper";
 import useMatchBreakpoints from "../../contexts/MatchBreakpoints/useMatchBreakpoints";
 import { useOnClickOutside } from "../../hooks";
@@ -194,7 +194,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     [items, isMobile, isMd]
   );
   const hasItems = filteredItems.length > 0;
-  const { styles, attributes, update } = usePopper(targetRef, tooltipRef, {
+  const { styles, attributes, forceUpdate } = usePopper(targetRef, tooltipRef, {
     strategy: isBottomNav ? "absolute" : "fixed",
     placement: isBottomNav ? "top" : "bottom-start",
     modifiers: [{ name: "offset", options: { offset: [0, isBottomNav ? 6 : 0] } }],
@@ -248,11 +248,11 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     setIsOpen((s) => !s);
   }, [isBottomNav, hasItems]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isBottomNav && isMenuShown) {
-      update?.();
+      forceUpdate?.();
     }
-  }, [update, isMenuShown]);
+  }, [forceUpdate, isMenuShown]);
 
   return (
     <Box ref={setTargetRef} {...props}>
