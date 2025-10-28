@@ -9,6 +9,7 @@ import isUndefined from 'lodash/isUndefined'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { UpdaterByChainId } from 'state/lists/updater'
 import styled from 'styled-components'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { usePoolProtocols } from '../constants'
 import { MAINNET_CHAINS, useAllChainsOpts } from '../hooks/useMultiChains'
 
@@ -51,11 +52,11 @@ const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
 export const useSelectedProtocols = (selectedIndex: number): Protocol[] => {
   const allProtocols = usePoolProtocols()
   return useMemo(() => {
-    const { value } = allProtocols[selectedIndex]
-    if (value === null || selectedIndex === 0 || selectedIndex > allProtocols.length - 1) {
+    const { value } = allProtocols[selectedIndex] || {}
+    if (isUndefinedOrNull(value) || selectedIndex === 0 || selectedIndex > allProtocols.length - 1) {
       return allProtocols.filter((t) => t.value !== null).flatMap((t) => t.value) as NonNullable<Protocol[]>
     }
-    return Array.isArray(value) ? value : [value]
+    return Array.isArray(value) ? value : [value!]
   }, [selectedIndex, allProtocols])
 }
 
