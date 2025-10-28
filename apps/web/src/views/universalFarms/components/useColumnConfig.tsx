@@ -17,7 +17,7 @@ import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { TokenPairLogo } from 'components/TokenImage'
 import { useMemo } from 'react'
 import type { PoolInfo } from 'state/farmsV4/state/type'
-import { getHookByAddress } from 'utils/getHookByAddress'
+import { getHookByAddress, isHookWhitelisted } from 'utils/getHookByAddress'
 import { isInfinityProtocol } from 'utils/protocols'
 
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
@@ -201,7 +201,7 @@ export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { dat
   const riskToken = useMemo(() => getUnwhitelistedToken(data.farm!, tokensMap), [data.farm, tokensMap])
   const isHookUnverified = useMemo(() => {
     if ('hookAddress' in data && data.hookAddress && !isAddressEqual(data.hookAddress, ZERO_ADDRESS)) {
-      return !getHookByAddress(data.chainId, data.hookAddress as `0x${string}`)
+      return !isHookWhitelisted(data.chainId, data.hookAddress as `0x${string}`)
     }
     return false
   }, [data])
