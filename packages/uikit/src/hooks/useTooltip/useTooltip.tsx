@@ -125,8 +125,10 @@ const useTooltip = (content: React.ReactNode, options?: TooltipOptions): Tooltip
 
   const toggleTooltip = useCallback(
     (e: Event) => {
-      const target = e.currentTarget as HTMLElement | null;
-      const isClickableChild = target?.querySelector("a, button, [role='button']") !== null;
+      let isClickableChild = false;
+      if (e.currentTarget instanceof HTMLElement) {
+        isClickableChild = e.currentTarget.querySelector("a, button, [role='button']") !== null;
+      }
 
       if (isClickableChild) {
         if (!visible) {
