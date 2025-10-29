@@ -261,4 +261,5 @@ export const bscDynamicHooks: Record<PoolType, HookData | undefined> = {
 // whitelisted hooks but without metadata, just for eliminating the fe warning
 export const bscWhitelistLabeledHooks: Address[] = [
   '0x9a9B5331ce8d74b2B721291D57DE696E878353fd', // IDO TGE
+  '0x72e09eBd9b24F47730b651889a4eD984CBa53d90',
 ]
