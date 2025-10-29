@@ -14,7 +14,16 @@ import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId, Currency, UnifiedCurrency, UnifiedCurrencyAmount, UnifiedToken } from '@pancakeswap/sdk'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
-import { ArrowForwardIcon, AutoColumn, Column, CopyButton, FlexGap, QuestionHelper, Text } from '@pancakeswap/uikit'
+import {
+  ArrowForwardIcon,
+  AutoColumn,
+  Column,
+  CopyButton,
+  FlexGap,
+  QuestionHelper,
+  Text,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useUnifiedTokenUsdPrice } from 'hooks/useUnifiedTokenUsdPrice'
@@ -77,16 +86,9 @@ const MenuItemInner = styled.div<{ disabled?: boolean; selected: boolean }>`
   transition: background-color 0.1s;
 `
 
-function ComplementSection({
-  selectedCurrency,
-  isSelected,
-  showActions,
-}: {
-  selectedCurrency: Currency
-  isSelected: boolean
-  showActions: boolean
-}) {
+function ComplementSection({ selectedCurrency, showActions }: { selectedCurrency: Currency; showActions: boolean }) {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   if (selectedCurrency.isNative) {
     return null
@@ -102,7 +104,7 @@ function ComplementSection({
             buttonColor="textSubtle"
             text={selectedCurrency.wrapped.address}
             tooltipMessage={t('Token address copied')}
-            defaultTooltipMessage={t('Copy token address')}
+            defaultTooltipMessage={!isMobile ? t('Copy token address') : undefined}
             tooltipPlacement="top"
           />
           <ViewOnExplorerButton
@@ -190,7 +192,7 @@ function CurrencyRow({
       <MenuItemInner
         disabled={isSelected}
         selected={otherSelected}
-        onClick={() => (isSelected ? null : onSelect())}
+        onClick={isSelected ? undefined : onSelect}
         onMouseEnter={setIsHoveredCallback}
         onMouseLeave={setIsHoveredLeaveCallback}
       >
@@ -199,7 +201,7 @@ function CurrencyRow({
         <Column>
           <FlexGap alignItems="center">
             <Text bold>{getTokenSymbolAlias(currency?.wrapped?.address, currency?.chainId, currency?.symbol)}</Text>
-            <ComplementSection isSelected={isSelected} selectedCurrency={currency} showActions={isHovered} />
+            <ComplementSection selectedCurrency={currency} showActions={isHovered} />
           </FlexGap>
           <Text color="textSubtle" small ellipsis maxWidth="200px">
             {!isOnSelectedList && customAdded && `${t('Added by user')} •`} {currency?.name}
