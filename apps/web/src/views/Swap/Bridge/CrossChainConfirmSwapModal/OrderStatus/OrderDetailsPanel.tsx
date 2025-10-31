@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CurrencyAmount, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,

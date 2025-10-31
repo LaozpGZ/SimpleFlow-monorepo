@@ -1,4 +1,4 @@
-import { Currency, Token, UnifiedCurrency, UnifiedToken } from '@pancakeswap/sdk'
+import { Currency, UnifiedCurrency } from '@pancakeswap/sdk'
 import {
   ImageProps,
   TokenImage as UIKitTokenImage,
