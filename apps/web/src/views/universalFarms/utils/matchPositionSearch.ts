@@ -8,6 +8,7 @@ import {
 } from 'state/farmsV4/state/accountPositions/type'
 import { Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { isSolana } from '@pancakeswap/chains'
+import { isAddressEqual } from 'utils'
 import { tokensMapAtom } from '../atom/tokensMapAtom'
 
 const store = getDefaultStore()
@@ -18,10 +19,10 @@ const getSymbolTags = (chainId: number, address: string) => {
   const relatedToken = tokensMap[key]
   const tags = new Set<string>()
   if (relatedToken) {
-    if (Native.onChain(chainId).wrapped.address.toLowerCase() === relatedToken.address.toLowerCase()) {
+    if (isAddressEqual(Native.onChain(chainId).wrapped.address, relatedToken.address)) {
       tags.add(Native.onChain(chainId).symbol.toLowerCase())
     }
-    if (relatedToken.address.toLowerCase() === ZERO_ADDRESS.toLowerCase()) {
+    if (isAddressEqual(relatedToken.address, ZERO_ADDRESS)) {
       tags.add(Native.onChain(chainId).symbol.toLowerCase())
     }
     tags.add(relatedToken?.symbol?.toLowerCase() || '')
