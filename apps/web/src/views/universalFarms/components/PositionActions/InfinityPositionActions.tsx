@@ -56,7 +56,7 @@ export const InfinityPositionActions = ({
     hasUnclaimedRewards,
   } = useFarmInfinityActions({
     chainId,
-    onDone: (resp) => setLatestTxReceipt(resp),
+    onDone: setLatestTxReceipt,
   })
   const { onCollect, attemptingTx: collectAttemptingTxn } = useInfinityCollectFeeAction({ chainId })
 
