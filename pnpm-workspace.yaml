@@ -25,6 +25,8 @@ catalog:
   "@wagmi/core": 2.21.2
   wrangler: 3.81.0
   zod: ^3.25.67
+  '@binance/w3w-utils': "1.1.8"
+  '@binance/w3w-wagmi-connector-v2': "1.2.9"
   '@solana/wallet-adapter-wallets': 0.19.37
   '@solana/wallet-adapter-base': 0.9.27
   '@solana/wallet-adapter-react': 0.15.39
