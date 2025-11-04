@@ -158,6 +158,7 @@ const useProcessSwitchChainRequest = () => {
       try {
         setSwitching(true)
         if (isEvm(requestChainId)) {
+          // from = wagmi -> no need call switch again
           if (from !== 'wagmi') {
             let shouldSwitch = true
 
@@ -173,7 +174,6 @@ const useProcessSwitchChainRequest = () => {
             }
 
             if (shouldSwitch) {
-              // from = wagmi -> no need call switch again
               await switchNetworkWagmiAsync({ chainId: requestChainId })
             } else {
               console.info('Chain IDs match — no switch needed.')
