@@ -17,7 +17,7 @@ import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { TokenPairLogo } from 'components/TokenImage'
 import { useMemo } from 'react'
 import type { PoolInfo } from 'state/farmsV4/state/type'
-import { getHookByAddress, isHookWhitelisted } from 'utils/getHookByAddress'
+import { getHookByAddress } from 'utils/getHookByAddress'
 import { isInfinityProtocol } from 'utils/protocols'
 
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
@@ -32,6 +32,7 @@ import { PoolGlobalAprButton } from './PoolAprButton'
 import { PoolListItemAction } from './PoolListItemAction'
 import { getUnwhitelistedToken } from '../atom/farmSearch.filter'
 import { tokensMapAtom } from '../atom/tokensMapAtom'
+import { useIsHookUnverified } from '../hooks/useIsHookUnverified'
 
 export const FeeTierComponent = <T extends PoolInfo>({
   dynamic,
@@ -198,12 +199,8 @@ export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { dat
   const multiplier = getRewardMultiplier(data.chainId, data.lpAddress)
   const { tokensMap } = useAtomValue(tokensMapAtom)
   const riskToken = useMemo(() => getUnwhitelistedToken(data.farm!, tokensMap), [data.farm, tokensMap])
-  const isHookUnverified = useMemo(() => {
-    if ('hookAddress' in data && data.hookAddress) {
-      return !isHookWhitelisted(data.chainId, data.hookAddress)
-    }
-    return false
-  }, [data])
+  const isHookUnverified = useIsHookUnverified(data)
+
   const showRisk = Boolean(riskToken || isHookUnverified)
   const showReward = Boolean(provider)
 

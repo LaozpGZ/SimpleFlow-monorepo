@@ -8,8 +8,8 @@ import { isAddress, parseAbiItem } from 'viem/utils'
 
 import { useQuery } from '@tanstack/react-query'
 import { publicClient } from 'utils/viem'
+import { useDebouncedVerifyHookAddress } from 'hooks/useVerifyHookAddress'
 import { useSelectHookFromList } from './useSelectHookFromList'
-import { useDebouncedVerifyHookAddress } from './useVerifyHookAddress'
 
 // from manual input hook address
 export const useManualHook = () => {

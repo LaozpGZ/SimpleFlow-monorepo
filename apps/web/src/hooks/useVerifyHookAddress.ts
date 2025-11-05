@@ -4,18 +4,26 @@ import debounce from 'lodash/debounce'
 import { useEffect, useMemo, useState } from 'react'
 import { rewardApiClient } from 'state/farmsV4/api/client'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
-import { isAddress } from 'viem/utils'
+import { safeGetAddress } from 'utils'
 
-export const useVerifyHookAddress = ({ chainId, hookAddress }: { chainId?: number; hookAddress?: string }) => {
+export const useVerifyHookAddress = ({
+  chainId,
+  hookAddress,
+  enabled = true,
+}: {
+  chainId?: number
+  hookAddress?: string
+  enabled?: boolean
+}) => {
   const { data, isLoading } = useQuery({
     queryKey: ['isVerified', chainId, hookAddress],
     queryFn: async () => {
-      const unVerifyed = { isVerified: false, isUpgradable: false }
+      const unVerified = { isVerified: false, isUpgradable: false }
       if (!chainId || !hookAddress) {
-        return unVerifyed
+        return unVerified
       }
-      if (!isAddress(hookAddress)) {
-        return unVerifyed
+      if (!safeGetAddress(hookAddress)) {
+        return unVerified
       }
       const resp = await rewardApiClient.GET('/farms/verification/verify-contract', {
         // @todo @ChefJerry remove this after the backend is ready
@@ -28,10 +36,13 @@ export const useVerifyHookAddress = ({ chainId, hookAddress }: { chainId?: numbe
           },
         },
       })
-      return resp.data ?? unVerifyed
+      return resp.data ?? unVerified
     },
-    enabled: Boolean(chainId && hookAddress),
+    enabled: Boolean(enabled && chainId && hookAddress),
     retry: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
   return useMemo(
     () => ({
