@@ -3,7 +3,6 @@ import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
 import { SUPPORTED_CHAIN_IDS as PREDICTION_SUPPORTED_CHAINS } from '@pancakeswap/prediction'
 import {
-  BridgeIcon,
   DropdownMenuItems,
   DropdownMenuItemType,
   EarnFillIcon,
@@ -40,7 +39,7 @@ export const addMenuItemSupported = (item, chainId: number | undefined) => {
   if (item.supportChainIds?.includes(chainId)) {
     return item
   }
-  // if unsupport chain, redirect to bsc
+  // if unsupported chain, redirect to bsc
   if (item?.href) {
     return {
       ...item,
@@ -136,14 +135,6 @@ const config: (
           ].map((item) => addMenuItemSupported(item, chainId)),
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
-    },
-    {
-      label: t('Bridge'),
-      href: '/bridge',
-      icon: BridgeIcon,
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      image: '/images/decorations/pe2.png',
-      showItemsOnMobile: false,
     },
     {
       label: t('Play'),
