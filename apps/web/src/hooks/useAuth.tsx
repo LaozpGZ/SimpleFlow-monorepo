@@ -53,7 +53,10 @@ const useAuth = () => {
       try {
         if (!connector) return
         // eslint-disable-next-line consistent-return
-        return connectAsync({ connector, chainId })
+        return connectAsync({
+          connector,
+          chainId: connectorId === EvmConnectorNames.WalletConnect ? undefined : chainId,
+        })
       } catch (error) {
         if (error instanceof ConnectorNotFoundError) {
           throw new WalletConnectorNotFoundError()
