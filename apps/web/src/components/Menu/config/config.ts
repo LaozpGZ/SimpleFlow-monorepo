@@ -10,6 +10,7 @@ import {
   GameIcon,
   MenuItemsType,
   MoreIcon,
+  RocketIcon,
   SwapFillIcon,
   SwapIcon,
   TradeFilledIcon,
@@ -137,6 +138,22 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
+      label: t('CAKE.PAD'),
+      icon: RocketIcon,
+      href: '/cakepad',
+      image: '/images/ifos/ifo-bunny.png',
+      overrideSubNavItems: [
+        {
+          label: t('Latest'),
+          href: '/cakepad',
+        },
+        {
+          label: t('Finished'),
+          href: '/cakepad/history',
+        },
+      ],
+    },
+    {
       label: t('Play'),
       icon: GameIcon,
       href: '/prediction',
@@ -182,21 +199,6 @@ const config: (
         {
           label: t('Burn Dashboard'),
           href: '/burn-dashboard',
-        },
-        {
-          label: t('CAKE.PAD'),
-          href: '/cakepad',
-          image: '/images/ifos/ifo-bunny.png',
-          overrideSubNavItems: [
-            {
-              label: t('Latest'),
-              href: '/cakepad',
-            },
-            {
-              label: t('Finished'),
-              href: '/cakepad/history',
-            },
-          ],
         },
         {
           label: t('Voting'),
