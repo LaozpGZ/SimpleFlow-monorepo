@@ -10,13 +10,11 @@ const StyledLightGreyCard = styled(LightGreyCard)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
 
-  .content-wrapper {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 1s ease-in-out;
-  }
+  max-height: 100px;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
 
-  &.expanded .content-wrapper {
+  &.expanded {
     max-height: 1000px;
   }
 `
@@ -66,7 +64,7 @@ export default function HideShowSelectorSection({
           </Button>
         )}
       </AutoRow>
-      <div className="content-wrapper">{showOptions ? content : null}</div>
+      {showOptions ? content : <></>}
     </StyledLightGreyCard>
   )
 }
