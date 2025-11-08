@@ -27,8 +27,8 @@ export const TokenPairImage: React.FC<React.PropsWithChildren<TokenPairImageProp
   const chainLogo = withChainLogo ? getChainLogoUrlFromChainId(primaryToken.chainId) : undefined
   return (
     <UIKitTokenPairImage
-      primarySrc={getCurrencyLogoSrcs(primaryToken)?.[0]}
-      secondarySrc={getCurrencyLogoSrcs(secondaryToken)?.[0]}
+      primarySrc={getCurrencyLogoSrcs(primaryToken)[0]}
+      secondarySrc={getCurrencyLogoSrcs(secondaryToken)[0]}
       chainLogoSrc={chainLogo}
       {...props}
     />
@@ -41,8 +41,8 @@ export const TokenPairLogo = forwardRef<HTMLDivElement, React.PropsWithChildren<
       () => (withChainLogo ? [getChainLogoUrlFromChainId(primaryToken.chainId)] : []),
       [withChainLogo, primaryToken.chainId],
     )
-    const primarySrcs = getCurrencyLogoSrcs(primaryToken as Currency & { logoURI?: string | undefined })
-    const secondarySrcs = getCurrencyLogoSrcs(secondaryToken as Currency & { logoURI?: string | undefined })
+    const primarySrcs = getCurrencyLogoSrcs(primaryToken)
+    const secondarySrcs = getCurrencyLogoSrcs(secondaryToken)
     return (
       <UIKitTokenPairLogo
         ref={ref}
@@ -62,7 +62,7 @@ interface TokenImageProps extends ImageProps {
 }
 
 export const TokenImage: React.FC<React.PropsWithChildren<TokenImageProps>> = ({ token, ...props }) => {
-  return <UIKitTokenImage src={getCurrencyLogoSrcs(token)?.[0]} {...props} />
+  return <UIKitTokenImage src={getCurrencyLogoSrcs(token)[0]} {...props} />
 }
 
 export { getCurrencyLogoSrcs, tokenImageChainNameMapping }

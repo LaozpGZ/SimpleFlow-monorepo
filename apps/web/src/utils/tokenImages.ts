@@ -40,13 +40,11 @@ const _getCurrencyLogoSrcs = (currency?: UnifiedCurrency & { logoURI?: string | 
     if (currency?.isNative) return [getImageUrlFromToken(currency)]
     if (currency?.isToken) {
       const uriLocations =
-        currency && typeof currency === 'object' && 'logoURI' in currency && currency.logoURI
-          ? uriToHttp(currency.logoURI)
-          : []
+        typeof currency === 'object' && 'logoURI' in currency && currency.logoURI ? uriToHttp(currency.logoURI) : []
       const imageUri = getImageUrlFromToken(currency)
       const basicTokenImage = getBasicTokensImage(currency)
       const tokenLogoURL = getTokenLogoURL(currency as Token)
-      return [imageUri, ...uriLocations, tokenLogoURL, basicTokenImage]
+      return [...uriLocations, imageUri, tokenLogoURL, basicTokenImage]
     }
     return []
   }

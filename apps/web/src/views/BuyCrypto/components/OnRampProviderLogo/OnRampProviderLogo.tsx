@@ -39,7 +39,7 @@ export const EvmLogo = ({ mode, currency, size = 24 }: { mode: string; currency:
           <TokenPairImage
             width={size}
             height={size}
-            primarySrc={getCurrencyLogoSrcs(currency)?.[0]}
+            primarySrc={getCurrencyLogoSrcs(currency)[0]}
             secondarySrc={currency ? `${ASSET_CDN}/web/chains/${currency.chainId}.png` : ''}
           />
         </Box>

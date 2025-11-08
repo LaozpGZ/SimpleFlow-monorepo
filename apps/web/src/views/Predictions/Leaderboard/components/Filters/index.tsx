@@ -99,7 +99,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
       ? Object.values(predictionConfigs)?.map((i) => ({
           label: i?.predictionCurrency.symbol ?? '',
           value: i?.predictionCurrency.symbol ?? '',
-          imageUrl: getCurrencyLogoSrcs(i?.predictionCurrency)?.[0] ?? '',
+          imageUrl: getCurrencyLogoSrcs(i?.predictionCurrency)[0] ?? '',
         }))
       : []
   }, [predictionConfigs])
