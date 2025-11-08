@@ -8,7 +8,6 @@ import {
 } from '@pancakeswap/ui-wallets'
 import { ConnectData } from '@pancakeswap/ui-wallets/src/types'
 import { usePrivy } from '@privy-io/react-auth'
-import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'
 import { CONNECTOR_MAP } from 'utils/wagmi'
@@ -21,12 +20,11 @@ import { useActiveChainId } from './useActiveChainId'
 
 const useAuth = () => {
   const dispatch = useAppDispatch()
-  const { connectAsync, connectors } = useConnect()
+  const { connectAsync } = useConnect()
   const { chain } = useAccount()
   const { disconnectAsync } = useDisconnect()
   const { chainId } = useActiveChainId()
   const { t } = useTranslation()
-  const router = useRouter()
   const { logout: privyLogout, ready, authenticated } = usePrivy()
   const { signOutAndClearUserStates } = useFirebaseAuth()
 
@@ -70,7 +68,7 @@ const useAuth = () => {
         }
       }
     },
-    [connectors, connectAsync, chainId, t, router],
+    [connectAsync, chainId, t],
   )
 
   const logout = useCallback(async () => {
@@ -90,7 +88,7 @@ const useAuth = () => {
         window.localStorage.removeItem('wagmi.store')
       }
     }
-  }, [disconnectAsync, dispatch, chain?.id, authenticated, ready, signOutAndClearUserStates, privyLogout])
+  }, [disconnectAsync, dispatch, chain?.id, chainId, authenticated, ready, signOutAndClearUserStates, privyLogout])
 
   return { login, logout }
 }
