@@ -141,7 +141,7 @@ export const GasTokenSelector = ({ inputCurrency, ...props }: GasTokenSelectorPr
   const nativeBalances = useNativeBalances(account)
   const [balances, balancesLoading] = useTokenBalancesWithLoadingIndicator(
     account,
-    paymasterTokens.filter((token) => token.isToken) as any[],
+    useMemo(() => paymasterTokens.filter((token) => token.isToken), [paymasterTokens]) as any[],
   )
 
   const showSameTokenWarning = useMemo(

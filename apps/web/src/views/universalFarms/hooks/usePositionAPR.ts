@@ -61,6 +61,7 @@ import { useAccount } from 'wagmi'
 import { Address } from 'viem/accounts'
 import { useSolanaTokenPrices } from 'hooks/solana/useSolanaTokenPrice'
 import uniq from 'lodash/uniq'
+import { isAddressEqual } from 'utils'
 import { getActiveLiquidityFromShape } from '../utils/getActiveLiquidityFromShape'
 import { useBinAmountsFromUsdValue } from './useBinAmountsFromUsdValue'
 import { getPositionAprCore } from '../utils/getSolanaV3PositionAprCore'
@@ -233,7 +234,7 @@ export const useSolanaV3PositionApr = (pool: SolanaV3PoolInfo, userPosition: Sol
 
   const apr = useMemo(() => {
     const mintPrices = Object.entries(pricesData).reduce((acc, [mint, value]) => {
-      const addr = mints.find((i) => i.toLowerCase() === mint.toLowerCase())
+      const addr = mints.find((i) => isAddressEqual(i, mint))
       if (addr) {
         return {
           ...acc,

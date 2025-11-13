@@ -1,4 +1,3 @@
-import { isSolana } from '@pancakeswap/chains'
 import { HOOK_CATEGORY, findHook } from '@pancakeswap/infinity-sdk'
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import {
