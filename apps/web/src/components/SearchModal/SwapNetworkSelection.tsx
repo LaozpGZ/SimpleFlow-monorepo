@@ -62,12 +62,12 @@ const useIsTwap = () => {
 
 const useCustomChains = () => {
   const isTWAP = useIsTwap()
-  return useMemo(() => {
-    if (isTWAP) {
-      return TWAP_LIMIT_SUPPORTED_CHAINS
-    }
-    return undefined
-  }, [isTWAP])
+
+  if (isTWAP) {
+    return TWAP_LIMIT_SUPPORTED_CHAINS
+  }
+
+  return undefined
 }
 
 export default function SwapNetworkSelection({
