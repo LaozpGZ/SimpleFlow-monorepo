@@ -169,17 +169,20 @@ function useTxStatus() {
               toastSubject.next({
                 id: txId,
                 update: true,
-                title: isSlippageError
-                  ? t('Swap failed due to slippage error!')
-                  : `${
-                      isMultisigWallet ? (
-                        <>
-                          {title} {t('Transaction initiation')}
-                        </>
-                      ) : (
-                        title
-                      )
-                    } ${t('Failed')}`,
+                title: isSlippageError ? (
+                  t('Swap failed due to slippage error!')
+                ) : (
+                  <>
+                    {isMultisigWallet ? (
+                      <>
+                        {title} {t('Transaction initiation')}
+                      </>
+                    ) : (
+                      title
+                    )}{' '}
+                    {t('Failed')}
+                  </>
+                ),
                 status: 'error',
                 description: isSlippageError
                   ? t('Slippage has exceeded user settings. Try again or adjust your slippage tolerance.')
@@ -409,15 +412,17 @@ function useTxStatus() {
                   toastSubject.next({
                     id: toastId,
                     update: true,
-                    title: isSlippageError
-                      ? t('Swap failed due to slippage error!')
-                      : (isMultisigWallet ? (
-                          <>
-                            {title} {t('Transaction initiation')}
-                          </>
-                        ) : (
-                          title || t('Transaction')
-                        )) + t('Failed'),
+                    title: isSlippageError ? (
+                      t('Swap failed due to slippage error!')
+                    ) : isMultisigWallet ? (
+                      <>
+                        {title} {t('Transaction initiation')} {t('Failed')}
+                      </>
+                    ) : (
+                      <>
+                        {title || t('Transaction')} {t('Failed')}
+                      </>
+                    ),
                     status: 'error',
                     description: isSlippageError
                       ? t('Slippage has exceeded user settings. Try again or adjust your slippage tolerance.')
@@ -452,11 +457,17 @@ function useTxStatus() {
                   toastSubject.next({
                     id: toastId,
                     update: true,
-                    title: isMultisigWallet
-                      ? t('Transaction initiated.')
-                      : title
-                      ? `${title} ${t('Confirmed')}`
-                      : `${t('Transaction')} ${t('Confirmed')}`,
+                    title: isMultisigWallet ? (
+                      t('Transaction initiated.')
+                    ) : title ? (
+                      <>
+                        {title} {t('Confirmed')}
+                      </>
+                    ) : (
+                      <>
+                        {t('Transaction')} {t('Confirmed')}
+                      </>
+                    ),
                     description,
                     detail: renderDetail(),
                     status: isAllSuccess ? 'success' : 'info',

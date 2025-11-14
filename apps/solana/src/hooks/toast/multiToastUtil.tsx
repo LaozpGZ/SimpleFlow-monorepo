@@ -81,7 +81,12 @@ export const handleMultiTxToast = (
     status: isError ? 'error' : isSuccess ? 'success' : 'info',
     ...meta,
     isSwap,
-    title: meta.title + (isError && !isSwap ? ` ${t('Failed')}` : ''),
+    title: (
+      <>
+        {meta.title}
+        {isError && !isSwap ? ` ${t('Failed')}` : ''}
+      </>
+    ),
     duration: isError || isSuccess ? 8000 : undefined,
     subTxIds: processedId.map((tx, idx) => {
       const titleKey = getSubTxTitle(idx)
@@ -131,7 +136,12 @@ export default function showMultiToast({
     update: true,
     status: isError ? 'error' : isSuccess ? 'success' : 'info',
     ...meta,
-    title: meta.title + (isError ? ` ${t('Failed')}` : ''),
+    title: (
+      <>
+        {meta.title}
+        {isError && ` ${t('Failed')}`}
+      </>
+    ),
     duration: isError || isSuccess ? 8000 : undefined,
     onClose,
     subTxIds: processedId.map((tx, idx) => {
