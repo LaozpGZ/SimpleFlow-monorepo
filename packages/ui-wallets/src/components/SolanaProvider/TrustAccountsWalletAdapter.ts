@@ -127,6 +127,8 @@ export class TrustAccountsWalletAdapter extends BaseMessageSignerWalletAdapter {
         throw new WalletPublicKeyError(error?.message, error)
       }
 
+      wallet.removeListener?.('disconnect', this._disconnected)
+      wallet.removeListener?.('accountChanged', this._accountChanged)
       wallet.on('disconnect', this._disconnected)
       wallet.on('accountChanged', this._accountChanged)
 
@@ -244,18 +246,17 @@ export class TrustAccountsWalletAdapter extends BaseMessageSignerWalletAdapter {
 
   private _accountChanged = async (newAccount: any) => {
     const accountStr = newAccount?.toBase58?.() || null
-    console.info('Wallet account changed:', accountStr)
+    console.info(`[TW] Wallet account changed → ${accountStr || 'null'} (forcing reconnect)`)
 
     if (!newAccount) {
       // If no account, disconnect
       await this.disconnect()
       return
     }
-
     try {
-      const newPublicKey = new PublicKey(newAccount.toBytes())
-      this._publicKey = newPublicKey
-      this.emit('connect', newPublicKey)
+      this._wallet = null
+      this._publicKey = null
+      window.location.reload()
     } catch (error: any) {
       this.emit('error', new WalletPublicKeyError(error?.message, error))
       await this.disconnect()
