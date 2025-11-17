@@ -131,6 +131,14 @@ export const BUSD = {
     'Binance USD',
     'https://www.paxos.com/busd/',
   ),
+  [ChainId.MONAD_MAINNET]: new ERC20Token(
+    ChainId.MONAD_MAINNET,
+    '0xcf27F781841484d5CF7e155b44954D7224caF1dD',
+    18,
+    'BUSD',
+    'Binance USD',
+    'https://www.paxos.com/busd/',
+  ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,
     '0xcf27F781841484d5CF7e155b44954D7224caF1dD',
@@ -235,6 +243,14 @@ export const CAKE = {
   [ChainId.OPBNB_TESTNET]: new ERC20Token(
     ChainId.OPBNB_TESTNET,
     '0xa11B290B038C35711eB309268a2460754f730921',
+    18,
+    'CAKE',
+    'PancakeSwap Token',
+    'https://pancakeswap.finance/',
+  ),
+  [ChainId.MONAD_MAINNET]: new ERC20Token(
+    ChainId.MONAD_MAINNET,
+    '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
     18,
     'CAKE',
     'PancakeSwap Token',
@@ -352,6 +368,14 @@ export const USDC = {
     'USD Coin',
     'https://www.centre.io/usdc',
   ),
+  [ChainId.MONAD_MAINNET]: new ERC20Token(
+    ChainId.MONAD_MAINNET,
+    '0xf817257fed379853cDe0fa4F97AB987181B1E5Ea',
+    18,
+    'USDC',
+    'USD Coin',
+    'https://www.centre.io/usdc',
+  ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,
     '0xf817257fed379853cDe0fa4F97AB987181B1E5Ea',
@@ -412,6 +436,23 @@ export const USDT = {
     6,
     'USDT',
     'Tether USDT',
+    'https://tether.to/',
+  ),
+  // [ChainId.MONAD_MAINNET]: new ERC20Token(
+  //   ChainId.MONAD_MAINNET,
+  //   '0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D',
+  //   18,
+  //   'USDT',
+  //   'Tether USD',
+  //   'https://tether.to/',
+  // ),
+  // TODO: Remove Mock USDT after QA testing
+  [ChainId.MONAD_MAINNET]: new ERC20Token(
+    ChainId.MONAD_MAINNET,
+    '0xF05266b1B1759D3A2746cd3b031b802C2496b278',
+    18,
+    'MUSDT',
+    'Mock USDT',
     'https://tether.to/',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
@@ -537,5 +578,6 @@ export const STABLE_COIN = {
   [ChainId.SEPOLIA]: USDC[ChainId.SEPOLIA],
   [ChainId.ARBITRUM_SEPOLIA]: USDC[ChainId.ARBITRUM_SEPOLIA],
   [ChainId.BASE_SEPOLIA]: USDC[ChainId.BASE_SEPOLIA],
+  [ChainId.MONAD_MAINNET]: USDC[ChainId.MONAD_MAINNET],
   [ChainId.MONAD_TESTNET]: USDC[ChainId.MONAD_TESTNET],
 } satisfies Record<ChainId, ERC20Token>
