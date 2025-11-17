@@ -89,6 +89,12 @@ export const Chains: Chain[] = [
     isEVM: true,
   },
   {
+    id: ChainId.MONAD_MAINNET,
+    name: chainNames[ChainId.MONAD_MAINNET],
+    fullName: chainFullNames[ChainId.MONAD_MAINNET],
+    isEVM: true,
+  },
+  {
     id: ChainId.MONAD_TESTNET,
     name: chainNames[ChainId.MONAD_TESTNET],
     fullName: chainFullNames[ChainId.MONAD_TESTNET],
