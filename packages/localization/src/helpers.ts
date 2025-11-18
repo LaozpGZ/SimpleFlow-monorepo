@@ -1,6 +1,6 @@
-import { EN } from './config/languages'
+import { EN, languages } from './config/languages'
 
-const publicUrl = 'https://locales.pancakeswap.finance'
+const publicUrl = process.env.NEXT_PUBLIC_I18N_BASE_URL || 'https://locales.pancakeswap.finance'
 
 export const LS_KEY = 'pancakeswap_language'
 
@@ -19,7 +19,10 @@ export const getLanguageCodeFromLS = () => {
   try {
     const codeFromStorage = localStorage.getItem(LS_KEY)
 
-    return codeFromStorage || EN.locale
+    if (codeFromStorage && languages[codeFromStorage]) {
+      return codeFromStorage
+    }
+    return EN.locale
   } catch {
     return EN.locale
   }
