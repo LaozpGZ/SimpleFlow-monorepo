@@ -26,6 +26,7 @@ import { isAddressEqual } from 'utils'
 import WalletModalManager from 'components/WalletModalManager'
 import { useMasterchefV3 } from 'hooks/useContract'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { PoolType } from '@kyberswap/pancake-liquidity-widgets'
 
 const ActionText = styled(Text)`
   white-space: nowrap;
@@ -233,6 +234,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
           {chainId ? (
             <LiquidityWidget
               theme={isDark ? 'dark' : 'light'}
+              poolType={PoolType.DEX_PANCAKESWAPV3}
               feeAddress="0xB82bb6Ce9A249076Ca7135470e7CA634806De168"
               feePcm={0}
               walletClient={walletClient}
