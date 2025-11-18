@@ -115,9 +115,12 @@ export const useClDepositAmounts = () => {
     upperTick,
   ])
 
-  const handleDepositAmountChange = (amount: string, currency: 0 | 1) => {
-    setLastEdit({ lastEditAmount: amount, lastEditCurrency: currency })
-  }
+  const handleDepositAmountChange = useCallback(
+    (amount: string, currency: 0 | 1) => {
+      setLastEdit({ lastEditAmount: amount, lastEditCurrency: currency })
+    },
+    [setLastEdit],
+  )
 
   return {
     depositCurrencyAmount0,
