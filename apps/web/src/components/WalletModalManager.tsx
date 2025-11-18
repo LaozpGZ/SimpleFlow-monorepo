@@ -41,7 +41,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
   }, [chainId, connectAsync])
 
   const { wallets: solanaWallets } = useWallet()
-  useWalletFilterEffect({ evmAddress: evmAccount, solanaAddress: solanaAccount })
+  useWalletFilterEffect({ evmAddress: evmAccount ?? undefined, solanaAddress: solanaAccount ?? undefined })
   const walletFilter = useWalletFilterValue()
 
   const wallets = useMemo(
