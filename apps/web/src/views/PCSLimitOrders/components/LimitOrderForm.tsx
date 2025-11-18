@@ -6,7 +6,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { Suspense, useCallback } from 'react'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { formattedAmountsAtom, setInputAtom } from 'views/PCSLimitOrders/state/form/inputAtoms'
-import { Currency, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
 import { flipCurrenciesAtom, setCurrencyAtom } from '../state/currency/setCurrencyAtoms'
@@ -30,51 +30,17 @@ export const LimitOrderForm = () => {
 
   const { showMinimumUSDWarning, showMinimumBNBWarning } = useLimitOrderUserBalance()
 
-  const handleInputUserInput = useCallback(
-    (value: string | undefined) => {
-      if (value === formattedAmounts[Field.CURRENCY_A]) return
-      setInput({ field: Field.CURRENCY_A, value })
+  const handleInput = useCallback(
+    (field: Field, value: string | undefined) => {
+      if (value === formattedAmounts[field]) return
+      setInput({ field, value })
     },
     [formattedAmounts, setInput],
   )
 
-  const handleInputCurrencySelect = useCallback(
-    (currency: UnifiedCurrency) => setCurrency({ field: Field.CURRENCY_A, newCurrency: currency as Currency }),
-    [setCurrency],
-  )
+  const handleInputUserInput = useCallback((value: string) => handleInput(Field.CURRENCY_A, value), [handleInput])
 
-  const handleInputPercentInput = useCallback(
-    (percent: number) => handleInputUserInput(getPercentInputCurrency(percent)),
-    [handleInputUserInput, getPercentInputCurrency],
-  )
-
-  const handleInputMax = useCallback(
-    () => handleInputUserInput(maxInputBalance),
-    [handleInputUserInput, maxInputBalance],
-  )
-
-  const handleOutputUserInput = useCallback(
-    (value: string | undefined) => {
-      if (value === formattedAmounts[Field.CURRENCY_B]) return
-      setInput({ field: Field.CURRENCY_B, value })
-    },
-    [formattedAmounts, setInput],
-  )
-
-  const handleOutputCurrencySelect = useCallback(
-    (currency: UnifiedCurrency) => setCurrency({ field: Field.CURRENCY_B, newCurrency: currency as Currency }),
-    [setCurrency],
-  )
-
-  const handleOutputPercentInput = useCallback(
-    (percent: number) => handleOutputUserInput(getPercentOutputCurrency(percent)),
-    [handleOutputUserInput, getPercentOutputCurrency],
-  )
-
-  const handleOutputMax = useCallback(
-    () => handleOutputUserInput(maxOutputBalance),
-    [handleOutputUserInput, maxOutputBalance],
-  )
+  const handleOutputUserInput = useCallback((value: string) => handleInput(Field.CURRENCY_B, value), [handleInput])
 
   return (
     <>
@@ -93,13 +59,13 @@ export const LimitOrderForm = () => {
             }
             defaultValue={formattedAmounts[Field.CURRENCY_A]}
             onUserInput={handleInputUserInput}
-            onCurrencySelect={handleInputCurrencySelect}
+            onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_A, newCurrency: c as Currency })}
             showCommonBases={false}
             supportCrossChain={false}
             showUSDPrice
             showMaxButton
-            onPercentInput={handleInputPercentInput}
-            onMax={handleInputMax}
+            onPercentInput={(percent) => handleInput(Field.CURRENCY_A, getPercentInputCurrency(percent))}
+            onMax={() => handleInput(Field.CURRENCY_A, maxInputBalance)}
           />
         </Suspense>
         {showMinimumUSDWarning && (
@@ -133,13 +99,13 @@ export const LimitOrderForm = () => {
             }
             defaultValue={formattedAmounts[Field.CURRENCY_B]}
             onUserInput={handleOutputUserInput}
-            onCurrencySelect={handleOutputCurrencySelect}
+            onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_B, newCurrency: c as Currency })}
             showCommonBases={false}
             supportCrossChain={false}
             showUSDPrice
             showMaxButton
-            onPercentInput={handleOutputPercentInput}
-            onMax={handleOutputMax}
+            onPercentInput={(percent) => handleInput(Field.CURRENCY_B, getPercentOutputCurrency(percent))}
+            onMax={() => handleInput(Field.CURRENCY_B, maxOutputBalance)}
           />
         </Suspense>
       </FormContainer>
