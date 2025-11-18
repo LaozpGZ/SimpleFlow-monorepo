@@ -236,12 +236,16 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
               color="#02919D"
               onClick={handleOnClick}
               role="presentation"
-              data-dd-action-name="Zap V3 Liquidity"
+              data-dd-action-name={
+                poolType === PoolType.DEX_PANCAKE_INFINITY_CL ? 'Zap InfinityCL Liquidity' : 'Zap V3 Liquidity'
+              }
               bold
             >
               {t('Try Zap')}{' '}
             </ActionText>
-            {t('to automatically balance and provide V3 liquidity in one click.')}
+            {poolType === PoolType.DEX_PANCAKE_INFINITY_CL
+              ? t('to automatically balance and provide Infinity liquidity in one click.')
+              : t('to automatically balance and provide V3 liquidity in one click.')}
           </MessageText>
         </Flex>
       </Message>

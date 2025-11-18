@@ -3,7 +3,7 @@ import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
 import { useMemo } from 'react'
 import { useInverted, useClRangeQueryState } from 'state/infinity/shared'
 import styled from 'styled-components'
-import { Address, zeroAddress } from 'viem'
+import { Address, stringify, zeroAddress } from 'viem'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
@@ -11,6 +11,7 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isAddressEqual } from 'utils'
 import { PoolType } from '@kyberswap/pancake-liquidity-widgets'
+import { ZAP_INFINITY_CL_SUPPORTED_CHAINS } from 'config/constants/zap'
 import { useAddDepositAmounts } from '../hooks/useAddDepositAmounts'
 import { usePool } from '../hooks/usePool'
 import { SubmitButton } from './SubmitButton'
@@ -59,7 +60,7 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
     return false
   }, [currency0Balance, currency1Balance, depositCurrencyAmount0, depositCurrencyAmount1])
 
-  // Show Zap widget only for CL pools without hooks and when user has insufficient balance
+  // Show Zap widget only for CL pools without hooks, on supported chains, and when user has insufficient balance
   const showZap = useMemo(() => {
     return (
       pool &&
@@ -68,9 +69,11 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
       hasInsufficentBalance &&
       lowerTick !== null &&
       upperTick !== null &&
-      poolId
+      poolId &&
+      chainId &&
+      ZAP_INFINITY_CL_SUPPORTED_CHAINS.includes(chainId)
     )
-  }, [pool, hasNoHook, hasInsufficentBalance, lowerTick, upperTick, poolId])
+  }, [pool, hasNoHook, hasInsufficentBalance, lowerTick, upperTick, poolId, chainId])
 
   return (
     <StyledCard>
@@ -90,7 +93,6 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
           </Box>
         )}
         <FieldAddDepositAmount baseCurrency={currency0} quoteCurrency={currency1} />
-
         <Box mt="16px">
           <MevProtectToggle size="sm" />
         </Box>
