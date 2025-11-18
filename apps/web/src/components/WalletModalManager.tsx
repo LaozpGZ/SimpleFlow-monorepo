@@ -49,10 +49,13 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     [walletFilter, createEvmQrCode, solanaWallets],
   )
 
-  // Show OKX and WalletConnect as top wallets when connected to Monad
+  // Show Metamask, OKX and WalletConnect as top wallets when connected to Monad
   const topWallets = useMemo(() => {
     if (chainId === ChainId.MONAD_MAINNET) {
-      return wallets.filter((wallet) => wallet.id === WalletIds.Okx || wallet.id === WalletIds.Walletconnect)
+      return wallets.filter(
+        (wallet) =>
+          wallet.id === WalletIds.Metamask || wallet.id === WalletIds.Okx || wallet.id === WalletIds.Walletconnect,
+      )
     }
     return getTopWalletsConfig(wallets, walletFilter)
   }, [chainId, wallets, walletFilter])
