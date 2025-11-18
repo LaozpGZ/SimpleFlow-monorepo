@@ -10,9 +10,8 @@ import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { getWalletsConfig, getTopWalletsConfig } from '@pancakeswap/ui-wallets/src/config/wallets'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useWalletFilterValue, useWalletFilterEffect } from '@pancakeswap/ui-wallets/src/state/hooks'
+import { useWalletFilterEffect } from '@pancakeswap/ui-wallets/src/state/hooks'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()
@@ -39,24 +38,13 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     return createQrCode(chainId || ChainId.BSC, connectAsync)
   }, [chainId, connectAsync])
 
-  const { wallets: solanaWallets } = useWallet()
   useWalletFilterEffect({ evmAddress: evmAccount ?? undefined, solanaAddress: solanaAccount ?? undefined })
-  const walletFilter = useWalletFilterValue()
-
-  const wallets = useMemo(
-    () => getWalletsConfig({ walletFilter, createEvmQrCode, solanaWalletAdapters: solanaWallets }),
-    [walletFilter, createEvmQrCode, solanaWallets],
-  )
-
-  const topWallets = useMemo(
-    () => getTopWalletsConfig(wallets, walletFilter, chainId),
-    [chainId, wallets, walletFilter],
-  )
 
   return (
     <MultichainWalletModal
       evmAddress={evmAccount}
       solanaAddress={solanaAccount ?? undefined}
+      chainId={chainId}
       docText={t('Learn How to Connect')}
       docLink={docLink}
       isOpen={isOpen}
@@ -68,7 +56,6 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       onXLogin={loginWithX}
       onTelegramLogin={loginWithTelegram}
       onDiscordLogin={loginWithDiscord}
-      topWallets={topWallets}
     />
   )
 }
