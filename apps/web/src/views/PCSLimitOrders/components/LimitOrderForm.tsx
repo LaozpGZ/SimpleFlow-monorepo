@@ -45,7 +45,7 @@ export const LimitOrderForm = () => {
 
   const handleInputPercentInput = useCallback(
     (percent: number) => handleInputUserInput(getPercentInputCurrency(percent)),
-    [handleInputUserInput],
+    [handleInputUserInput, getPercentInputCurrency],
   )
 
   const handleInputMax = useCallback(
@@ -68,7 +68,7 @@ export const LimitOrderForm = () => {
 
   const handleOutputPercentInput = useCallback(
     (percent: number) => handleOutputUserInput(getPercentOutputCurrency(percent)),
-    [handleOutputUserInput],
+    [handleOutputUserInput, getPercentOutputCurrency],
   )
 
   const handleOutputMax = useCallback(
