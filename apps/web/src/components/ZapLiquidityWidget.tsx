@@ -46,6 +46,8 @@ interface ZapLiquidityProps {
   quoteCurrency?: Currency | null
   quoteCurrencyAmount?: string | null
   onSubmit?: () => void
+  poolId?: string
+  poolType?: PoolType
 }
 
 const LiquidityWidget = dynamic(
@@ -68,6 +70,8 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
   quoteCurrency,
   quoteCurrencyAmount,
   onSubmit,
+  poolId,
+  poolType,
 }) => {
   const { t } = useTranslation()
 
@@ -81,7 +85,14 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const { toastSuccess } = useToast()
 
-  const poolAddress = useMemo(() => pool && Pool.getAddress(pool.token0, pool.token1, pool.fee), [pool])
+  const poolAddress = useMemo(() => {
+    // For Infinity pools, use poolId directly
+    if (poolId) {
+      return poolId
+    }
+    // For V3 pools, calculate address from pool
+    return pool && Pool.getAddress(pool.token0, pool.token1, pool.fee)
+  }, [pool, poolId])
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -97,7 +108,13 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const masterChefV3 = useMasterchefV3()
 
-  const masterChefV3Addresses = useMemo(() => (masterChefV3 ? [masterChefV3.address] : undefined), [masterChefV3])
+  // For Infinity pools, don't use MasterChef V3 addresses
+  const masterChefV3Addresses = useMemo(() => {
+    if (poolType === PoolType.DEX_PANCAKE_INFINITY_CL) {
+      return undefined
+    }
+    return masterChefV3 ? [masterChefV3.address] : undefined
+  }, [masterChefV3, poolType])
 
   const handleOnClick = useCallback(() => {
     setDepositTokens(
@@ -234,7 +251,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
           {chainId ? (
             <LiquidityWidget
               theme={isDark ? 'dark' : 'light'}
-              poolType={PoolType.DEX_PANCAKESWAPV3}
+              poolType={poolType ?? PoolType.DEX_PANCAKESWAPV3}
               feeAddress="0xB82bb6Ce9A249076Ca7135470e7CA634806De168"
               feePcm={0}
               walletClient={walletClient}
