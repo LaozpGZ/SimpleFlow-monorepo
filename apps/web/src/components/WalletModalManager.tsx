@@ -10,6 +10,10 @@ import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { getWalletsConfig, getTopWalletsConfig } from '@pancakeswap/ui-wallets/src/config/wallets'
+import { WalletIds } from '@pancakeswap/ui-wallets/src/config/walletIds'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { useWalletFilterValue, useWalletFilterEffect } from '@pancakeswap/ui-wallets/src/state/hooks'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()
@@ -36,6 +40,23 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     return createQrCode(chainId || ChainId.BSC, connectAsync)
   }, [chainId, connectAsync])
 
+  const { wallets: solanaWallets } = useWallet()
+  useWalletFilterEffect({ evmAddress: evmAccount, solanaAddress: solanaAccount })
+  const walletFilter = useWalletFilterValue()
+
+  const wallets = useMemo(
+    () => getWalletsConfig({ walletFilter, createEvmQrCode, solanaWalletAdapters: solanaWallets }),
+    [walletFilter, createEvmQrCode, solanaWallets],
+  )
+
+  // Show OKX and WalletConnect as top wallets when connected to Monad
+  const topWallets = useMemo(() => {
+    if (chainId === ChainId.MONAD_MAINNET) {
+      return wallets.filter((wallet) => wallet.id === WalletIds.Okx || wallet.id === WalletIds.Walletconnect)
+    }
+    return getTopWalletsConfig(wallets, walletFilter)
+  }, [chainId, wallets, walletFilter])
+
   return (
     <MultichainWalletModal
       evmAddress={evmAccount}
@@ -51,6 +72,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       onXLogin={loginWithX}
       onTelegramLogin={loginWithTelegram}
       onDiscordLogin={loginWithDiscord}
+      topWallets={topWallets}
     />
   )
 }
