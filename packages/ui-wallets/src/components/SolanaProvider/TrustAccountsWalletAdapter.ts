@@ -1,3 +1,4 @@
+import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 import type { EventEmitter, SendTransactionOptions, WalletName } from '@solana/wallet-adapter-base'
 import {
   BaseMessageSignerWalletAdapter,
@@ -256,7 +257,7 @@ export class TrustAccountsWalletAdapter extends BaseMessageSignerWalletAdapter {
     try {
       this._wallet = null
       this._publicKey = null
-      window.location.reload()
+      safeGetWindow()?.location.reload()
     } catch (error: any) {
       this.emit('error', new WalletPublicKeyError(error?.message, error))
       await this.disconnect()
