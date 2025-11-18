@@ -52,6 +52,11 @@ import { calculateSlippageAmount } from 'utils/exchange'
 import { NavBreadcrumbs } from 'views/RemoveLiquidityInfinity/components/NavBreadcrumbs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
+import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
+import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
+import { isAddressEqual } from 'utils'
+import { PoolType } from '@kyberswap/pancake-liquidity-widgets'
+import { ZAP_INFINITY_CL_SUPPORTED_CHAINS } from 'config/constants/zap'
 import { useErrorMsg } from './hooks/useErrorMsg'
 import { useIncreaseForm } from './hooks/useIncreaseForm'
 
@@ -171,6 +176,40 @@ export const IncreaseLiquidity = () => {
     outOfRange: isOutOfRange,
     invalidRange,
   })
+
+  // Get poolKey to check for hooks
+  const { data: poolKey } = usePoolKeyByPoolId(poolId, chainId, 'CL')
+
+  // Check if pool has no hook
+  const hasNoHook = useMemo(() => {
+    if (!poolKey) return false
+    return !poolKey.hooks || isAddressEqual(poolKey.hooks, zeroAddress)
+  }, [poolKey])
+
+  // Check if user has insufficient balance
+  const hasInsufficentBalance = useMemo(() => {
+    if (!inputBalance || !outputBalance) return false
+
+    if (inputAmount && inputBalance.lessThan(inputAmount)) return true
+    if (outputAmount && outputBalance.lessThan(outputAmount)) return true
+
+    return false
+  }, [inputBalance, outputBalance, inputAmount, outputAmount])
+
+  // Show Zap widget only for CL pools without hooks, on supported chains, and when user has insufficient balance
+  const showZap = useMemo(() => {
+    return (
+      pool &&
+      pool.poolType === 'CL' &&
+      hasNoHook &&
+      hasInsufficentBalance &&
+      typeof tickLower !== 'undefined' &&
+      typeof tickUpper !== 'undefined' &&
+      poolId &&
+      chainId &&
+      ZAP_INFINITY_CL_SUPPORTED_CHAINS.includes(chainId)
+    )
+  }, [pool, hasNoHook, hasInsufficentBalance, tickLower, tickUpper, poolId, chainId])
 
   const parsedAmounts = useMemo(
     () => ({
@@ -480,6 +519,22 @@ export const IncreaseLiquidity = () => {
             depositADisabled={deposit0Disabled}
             depositBDisabled={deposit1Disabled}
           />
+
+          {showZap && (
+            <Box mt="16px">
+              <ZapLiquidityWidget
+                tokenId={position?.tokenId?.toString() ?? undefined}
+                poolId={poolId}
+                poolType={PoolType.DEX_PANCAKE_INFINITY_CL}
+                tickLower={tickLower}
+                tickUpper={tickUpper}
+                baseCurrency={currency0}
+                baseCurrencyAmount={inputAmountRaw}
+                quoteCurrency={currency1}
+                quoteCurrencyAmount={outputAmountRaw}
+              />
+            </Box>
+          )}
         </CardBody>
       </StyledCard>
     </Container>
