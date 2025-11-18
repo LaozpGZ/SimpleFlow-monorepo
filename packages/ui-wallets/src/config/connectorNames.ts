@@ -33,7 +33,6 @@ export const SolanaWalletNames = {
   MetaMask: 'MetaMask' as WalletName<'MetaMask'>,
   Okx: 'OKX Wallet' as WalletName<'OKX Wallet'>,
   BinanceW3W: 'Binance Wallet' as WalletName<'Binance Wallet'>,
-  // Trust: 'TrustAccounts' as WalletName<'TrustAccounts'>,
   Trust: TrustWalletName,
   TokenPocket: TokenPocketWalletName,
   Coin98: Coin98WalletName,
