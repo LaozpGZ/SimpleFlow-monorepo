@@ -14,7 +14,7 @@ import {
   WalletReadyState,
   WalletSendTransactionError,
   WalletSignMessageError,
-  WalletSignTransactionError,
+  WalletSignTransactionError
 } from '@solana/wallet-adapter-base'
 import { TrustWalletAdapterConfig } from '@solana/wallet-adapter-wallets'
 import type { Connection, SendOptions, Transaction, TransactionSignature } from '@solana/web3.js'
@@ -65,9 +65,7 @@ export class TrustAccountsWalletAdapter extends BaseMessageSignerWalletAdapter {
   private _publicKey: PublicKey | null
 
   private _readyState: WalletReadyState =
-    typeof window === 'undefined' || typeof document === 'undefined'
-      ? WalletReadyState.Unsupported
-      : WalletReadyState.NotDetected
+    typeof window === 'undefined' || typeof document === 'undefined' ? WalletReadyState.Unsupported : WalletReadyState.NotDetected
 
   constructor(config: TrustWalletAdapterConfig = {}) {
     super()
@@ -167,7 +165,7 @@ export class TrustAccountsWalletAdapter extends BaseMessageSignerWalletAdapter {
   async sendTransaction(
     transaction: Transaction,
     connection: Connection,
-    options: SendTransactionOptions = {},
+    options: SendTransactionOptions = {}
   ): Promise<TransactionSignature> {
     try {
       const wallet = this._wallet

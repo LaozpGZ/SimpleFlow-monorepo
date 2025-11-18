@@ -1066,9 +1066,6 @@ importers:
       '@pancakeswap/solana-core-sdk':
         specifier: workspace:*
         version: link:../../packages/solana-core-sdk
-      '@pancakeswap/ui-wallets':
-        specifier: workspace:*
-        version: link:../../packages/ui-wallets
       '@pancakeswap/uikit':
         specifier: workspace:*
         version: link:../../packages/uikit

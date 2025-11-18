@@ -1,11 +1,10 @@
 {
   "extends": "@pancakeswap/tsconfig/react-library",
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@pancakeswap/uikit": ["../../packages/uikit/src/index.ts"],
-      "@pancakeswap/uikit/*": ["../../packages/uikit/src/*"],
-      "src/*": ["src/*"]
+      "@pancakeswap/uikit/*": ["../../packages/uikit/src/*"]
     }
   }
 }

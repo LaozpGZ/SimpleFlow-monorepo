@@ -19,16 +19,16 @@ import {
 } from '@solana/wallet-adapter-wallets'
 import { initialize, SolflareWalletAdapter } from '@solflare-wallet/wallet-adapter'
 import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
-import { TrustAccountsWalletAdapter } from '@pancakeswap/ui-wallets'
 import { useEvent } from '@/hooks/useEvent'
 import { logGTMSolErrorLogEvent } from '@/utils/report/curstomGTMEventTracking'
 
 import { defaultEndpoint, defaultNetWork, useAppStore } from '../store/useAppStore'
 import { BackpackWalletAdapter } from './walletAdapter/BackpackWalletAdapter'
 import { OKXWalletAdapter } from './walletAdapter/OKXWalletAdapter'
+import { TrustAccountsWalletAdapter } from './walletAdapter/TrustAccountsWalletAdapter'
 
 initialize()
-
+/*  */
 const App: FC<PropsWithChildren<any>> = ({ children }) => {
   const rpcNodeUrl = useAppStore((s) => s.rpcNodeUrl)
   const wsNodeUrl = useAppStore((s) => s.wsNodeUrl)
