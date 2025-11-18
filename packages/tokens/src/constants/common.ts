@@ -370,11 +370,11 @@ export const USDC = {
   ),
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0xf817257fed379853cDe0fa4F97AB987181B1E5Ea',
-    18,
-    'USDC',
-    'USD Coin',
-    'https://www.centre.io/usdc',
+    '0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a',
+    6,
+    'AUSD',
+    'AUSD',
+    'https://www.agora.finance/',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,
@@ -438,22 +438,13 @@ export const USDT = {
     'Tether USDT',
     'https://tether.to/',
   ),
-  // [ChainId.MONAD_MAINNET]: new ERC20Token(
-  //   ChainId.MONAD_MAINNET,
-  //   '0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D',
-  //   18,
-  //   'USDT',
-  //   'Tether USD',
-  //   'https://tether.to/',
-  // ),
-  // TODO: Remove Mock USDT after QA testing
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0xF05266b1B1759D3A2746cd3b031b802C2496b278',
+    '0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a',
     18,
-    'MUSDT',
-    'Mock USDT',
-    'https://tether.to/',
+    'AUSD',
+    'AUSD',
+    'https://www.agora.finance/',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,

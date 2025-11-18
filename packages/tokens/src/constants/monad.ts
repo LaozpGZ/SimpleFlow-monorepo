@@ -48,4 +48,12 @@ export const monadTokens = {
     'Mock BNB',
     'https://www.binance.org',
   ),
+  ausd: new ERC20Token(
+    ChainId.MONAD_MAINNET,
+    '0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a',
+    6,
+    'AUSD',
+    'AUSD',
+    'https://www.agora.finance/',
+  ),
 }
