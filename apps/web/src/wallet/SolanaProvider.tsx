@@ -3,6 +3,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { initialize } from '@solflare-wallet/wallet-adapter'
 import { useSetAtom } from 'jotai'
 import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
+import { PublicKey } from '@solana/web3.js'
 import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 
 initialize()
@@ -21,10 +22,19 @@ export const SolanaWalletStateUpdater = () => {
   useEffect(() => {
     if (!connected) return undefined
 
-    const wallet = window?.trustwallet?.solana
-    if (!wallet) return undefined
+    const trustWallet = window?.trustwallet?.solana
+    if (!trustWallet) return undefined
 
-    console.info('[TW] provider', wallet)
+    const trustPublicKey = trustWallet.publicKey ? new PublicKey(trustWallet.publicKey.toBytes()) : null
+    if (!trustPublicKey || !publicKey || !trustPublicKey.equals(publicKey)) {
+      console.info('[TW] Public keys do not match', {
+        adapterPublicKey: publicKey?.toBase58(),
+        trustPublicKey: trustPublicKey?.toBase58(),
+      })
+      return undefined
+    }
+
+    console.info('[TW] provider', trustWallet)
     console.info('[TW] Wallet connected, attaching listener')
 
     const handleAccountChange = async (newAccount: any) => {
@@ -33,10 +43,10 @@ export const SolanaWalletStateUpdater = () => {
       safeGetWindow()?.location.reload()
     }
 
-    wallet.on('accountChanged', handleAccountChange)
+    trustWallet.on('accountChanged', handleAccountChange)
 
-    return () => wallet.off('accountChanged', handleAccountChange)
-  }, [connected])
+    return () => trustWallet.off('accountChanged', handleAccountChange)
+  }, [connected, publicKey])
 
   return null
 }
