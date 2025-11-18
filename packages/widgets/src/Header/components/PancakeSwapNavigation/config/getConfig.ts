@@ -1,28 +1,32 @@
+import { ChainId, chainNames } from '@pancakeswap/chains'
+import { ContextApi } from '@pancakeswap/localization'
+import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
+import { SUPPORTED_CHAIN_IDS as PREDICTION_SUPPORTED_CHAINS } from '@pancakeswap/prediction'
 import {
-  BridgeIcon,
   DropdownMenuItems,
   DropdownMenuItemType,
   EarnFillIcon,
   EarnIcon,
   GameIcon,
-  type MenuItemsType,
+  MenuItemsType,
   MoreIcon,
+  RocketIcon,
   SwapFillIcon,
   SwapIcon,
   TradeFilledIcon,
   TradeIcon,
 } from '@pancakeswap/uikit'
 import { getPerpetualUrl } from '../utils/getPerpetualUrl'
-import {
-  POOL_SUPPORTED_CHAINS,
-  POSITION_MANAGERS_SUPPORTED_CHAINS,
-  PREDICTION_SUPPORTED_CHAINS,
-  SUPPORT_FARMS,
-  SUPPORT_ONLY_BSC,
-} from './supportChains'
+import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from './supportChains'
+
+const CHAIN_QUERY_NAME = chainNames
+
+const isChainIdValue = (value: string | ChainId): value is ChainId => typeof value === 'number'
+
+const EVM_CHAIN_IDS: ChainId[] = Object.values(ChainId).filter(isChainIdValue)
 
 type GetNavigationConfigParameters = {
-  t: (key: string) => string
+  t: ContextApi['t']
   isDark?: boolean
   languageCode?: string
   chainId?: number
@@ -32,40 +36,38 @@ export type NavigationDropdownItem = DropdownMenuItems & {
   hideSubNav?: boolean
   overrideSubNavItems?: DropdownMenuItems['items']
   matchHrefs?: string[]
+  supportChainIds?: readonly number[]
 }
 
-export type NavigationItem = Omit<MenuItemsType, 'items' | 'href' | 'label'> & {
-  label: string
-  supportChainIds?: readonly number[]
+export type NavigationItem = Omit<MenuItemsType, 'items'> & {
   hideSubNav?: boolean
   image?: string
+  items?: NavigationDropdownItem[]
   overrideSubNavItems?: NavigationDropdownItem[]
-} & (
-    | {
-        href?: string
-        items: NavigationDropdownItem[]
-      }
-    | {
-        href: string
-        items?: NavigationDropdownItem[]
-      }
-  )
-
-export const addMenuItemSupported = (item: NavigationItem, chainId?: number) => {
-  if (!chainId || !('supportChainIds' in item)) {
-    return item
-  }
-  if (item.supportChainIds?.includes(chainId)) {
-    return item
-  }
-  return {
-    ...item,
-    disabled: true,
-  }
+  supportChainIds?: readonly number[]
 }
 
-export function getNavigationConfig({ t, isDark = false, languageCode, chainId }: GetNavigationConfigParameters) {
-  return [
+export const addMenuItemSupported = <T extends NavigationItem | NavigationDropdownItem>(
+  item: T,
+  chainId?: number,
+): T => {
+  if (!chainId || !item.supportChainIds) {
+    return item
+  }
+  if (item.supportChainIds.includes(chainId)) {
+    return item
+  }
+  if (item.href) {
+    return {
+      ...item,
+      href: `${item.href}?chain=${CHAIN_QUERY_NAME[ChainId.BSC]}`,
+    }
+  }
+  return item
+}
+
+const config = (t: ContextApi['t'], isDark = false, languageCode?: string, chainId?: number): NavigationItem[] =>
+  [
     {
       label: t('Trade'),
       icon: SwapIcon,
@@ -80,6 +82,7 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
         {
           label: t('Buy Crypto'),
           href: '/buy-crypto',
+          supportChainIds: EVM_CHAIN_IDS,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
@@ -93,10 +96,12 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
         isDark,
       }),
       hideSubNav: true,
+      type: DropdownMenuItemType.EXTERNAL_LINK,
       confirmModalId: 'perpConfirmModal',
+      showItemsOnMobile: false,
     },
     {
-      label: t('Earn'),
+      label: t('Earn.verb'),
       href: '/liquidity/pools',
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
@@ -107,11 +112,6 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
           label: t('Farm / Liquidity'),
           href: '/liquidity/pools',
           supportChainIds: SUPPORT_FARMS,
-        },
-        {
-          label: t('Position Manager'),
-          href: '/position-managers',
-          supportChainIds: POSITION_MANAGERS_SUPPORTED_CHAINS,
         },
         {
           label: t('veCake Redeem'),
@@ -132,11 +132,6 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
           supportChainIds: SUPPORT_FARMS,
         },
         {
-          label: t('Position Manager'),
-          href: '/position-managers',
-          supportChainIds: POSITION_MANAGERS_SUPPORTED_CHAINS,
-        },
-        {
           label: t('Staking'),
           items: [
             {
@@ -154,12 +149,20 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
-      label: t('Bridge'),
-      href: '/bridge',
-      icon: BridgeIcon,
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      image: '/images/decorations/pe2.png',
-      showItemsOnMobile: false,
+      label: t('CAKE.PAD'),
+      icon: RocketIcon,
+      href: '/cakepad',
+      image: '/images/ifos/ifo-bunny.png',
+      overrideSubNavItems: [
+        {
+          label: t('Latest'),
+          href: '/cakepad',
+        },
+        {
+          label: t('Finished'),
+          href: '/cakepad/history',
+        },
+      ],
     },
     {
       label: t('Play'),
@@ -201,27 +204,12 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
       hideSubNav: true,
       items: [
         {
-          label: t('Info'),
+          label: t('Info.section_title'),
           href: '/info/v3',
         },
         {
           label: t('Burn Dashboard'),
           href: '/burn-dashboard',
-        },
-        {
-          label: t('IFO'),
-          href: '/ifo',
-          image: '/images/ifos/ifo-bunny.png',
-          overrideSubNavItems: [
-            {
-              label: t('Latest'),
-              href: '/ifo',
-            },
-            {
-              label: t('Finished'),
-              href: '/ifo/history',
-            },
-          ],
         },
         {
           label: t('Voting'),
@@ -242,7 +230,12 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
           href: 'https://docs.pancakeswap.finance',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
-      ].map((item) => addMenuItemSupported(item as NavigationItem, chainId)),
+      ].map((item) => addMenuItemSupported(item, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))
+
+export function getNavigationConfig({ t, isDark = false, languageCode, chainId }: GetNavigationConfigParameters) {
+  return config(t, isDark, languageCode, chainId)
 }
+
+export default config
