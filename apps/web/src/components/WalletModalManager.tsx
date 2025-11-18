@@ -11,7 +11,6 @@ import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { getWalletsConfig, getTopWalletsConfig } from '@pancakeswap/ui-wallets/src/config/wallets'
-import { WalletIds } from '@pancakeswap/ui-wallets/src/config/walletIds'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletFilterValue, useWalletFilterEffect } from '@pancakeswap/ui-wallets/src/state/hooks'
 
@@ -49,16 +48,10 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     [walletFilter, createEvmQrCode, solanaWallets],
   )
 
-  // Show Metamask, OKX and WalletConnect as top wallets when connected to Monad
-  const topWallets = useMemo(() => {
-    if (chainId === ChainId.MONAD_MAINNET) {
-      return wallets.filter(
-        (wallet) =>
-          wallet.id === WalletIds.Metamask || wallet.id === WalletIds.Okx || wallet.id === WalletIds.Walletconnect,
-      )
-    }
-    return getTopWalletsConfig(wallets, walletFilter)
-  }, [chainId, wallets, walletFilter])
+  const topWallets = useMemo(
+    () => getTopWalletsConfig(wallets, walletFilter, chainId),
+    [chainId, wallets, walletFilter],
+  )
 
   return (
     <MultichainWalletModal
