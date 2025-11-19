@@ -51,14 +51,21 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
   }, [poolKey])
 
   // Check if user has insufficient balance
+  // When inverted, currency0Balance/currency1Balance are swapped but depositCurrencyAmount0/depositCurrencyAmount1
+  // are always in pool's natural order, so we need to swap the comparison
   const hasInsufficentBalance = useMemo(() => {
     if (!currency0Balance || !currency1Balance) return false
 
-    if (depositCurrencyAmount0 && currency0Balance.lessThan(depositCurrencyAmount0)) return true
-    if (depositCurrencyAmount1 && currency1Balance.lessThan(depositCurrencyAmount1)) return true
+    // When inverted: currency0Balance is for pool's token1, currency1Balance is for pool's token0
+    // depositCurrencyAmount0 is for pool's token0, depositCurrencyAmount1 is for pool's token1
+    const amount0ToCheck = inverted ? depositCurrencyAmount1 : depositCurrencyAmount0
+    const amount1ToCheck = inverted ? depositCurrencyAmount0 : depositCurrencyAmount1
+
+    if (amount0ToCheck && currency0Balance.lessThan(amount0ToCheck)) return true
+    if (amount1ToCheck && currency1Balance.lessThan(amount1ToCheck)) return true
 
     return false
-  }, [currency0Balance, currency1Balance, depositCurrencyAmount0, depositCurrencyAmount1])
+  }, [currency0Balance, currency1Balance, depositCurrencyAmount0, depositCurrencyAmount1, inverted])
 
   // Show Zap widget only for CL pools without hooks, on supported chains, and when user has insufficient balance
   const showZap = useMemo(() => {
