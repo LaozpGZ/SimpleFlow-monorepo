@@ -277,7 +277,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
               onDismiss={handleOnDismiss}
               onTxSubmit={handleTransaction}
               source="pancakeswap"
-              includedSources="pancake-infinity-cl,pancake-infinity-bin,pancake-v3,pancake-stable,pancake,pancake-legacy"
+              // includedSources="pancake-infinity-cl,pancake-infinity-bin,pancake-v3,pancake-stable,pancake,pancake-legacy"
             />
           ) : null}
         </ModalContainer>
