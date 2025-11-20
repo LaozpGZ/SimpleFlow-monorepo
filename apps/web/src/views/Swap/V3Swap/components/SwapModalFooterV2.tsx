@@ -16,8 +16,7 @@ import {
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo as CurrencyLogoWidget } from '@pancakeswap/widgets-internal'
-import BigNumber from 'bignumber.js'
-import formatLocaleNumber from 'utils/formatLocaleNumber'
+import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import { AutoRow, RowBetween, RowFixed } from 'components/Layout/Row'
 import { useGasToken } from 'hooks/useGasToken'
 import { memo, useMemo, useState } from 'react'
@@ -213,20 +212,20 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
           </RowFixed>
           <RowFixed>
             <Text fontSize="14px">
-              {(() => {
-                const amount =
-                  tradeType === TradeType.EXACT_INPUT
-                    ? slippageAdjustedAmounts?.[Field.OUTPUT]
-                    : slippageAdjustedAmounts?.[Field.INPUT]
-                if (!amount) return '-'
-                const amountNumber = parseFloat(amount.toExact())
-                const rounded = new BigNumber(amountNumber).toFixed(6, BigNumber.ROUND_DOWN)
-                return formatLocaleNumber({
-                  number: parseFloat(rounded),
-                  locale: undefined,
-                  fixedDecimals: 6,
-                })
-              })()}
+              {formatCurrencyAmount(
+                tradeType === TradeType.EXACT_INPUT
+                  ? (slippageAdjustedAmounts?.[Field.OUTPUT] as
+                      | CurrencyAmount<Currency>
+                      | UnifiedCurrencyAmount<UnifiedCurrency>
+                      | undefined)
+                  : (slippageAdjustedAmounts?.[Field.INPUT] as
+                      | CurrencyAmount<Currency>
+                      | UnifiedCurrencyAmount<UnifiedCurrency>
+                      | undefined),
+                6,
+                undefined,
+                6,
+              )}
             </Text>
             <Text fontSize="14px" marginLeft="4px">
               {tradeType === TradeType.EXACT_INPUT ? outputAmount.currency.symbol : inputAmount.currency.symbol}

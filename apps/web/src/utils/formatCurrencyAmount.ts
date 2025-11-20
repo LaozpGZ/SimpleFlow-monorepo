@@ -1,10 +1,10 @@
-import { Currency, CurrencyAmount, Fraction, Price, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Fraction, Price, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import formatLocaleNumber from './formatLocaleNumber'
 
 export function formatCurrencyAmount(
-  amount: CurrencyAmount<Currency> | undefined,
+  amount: CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency> | undefined,
   sigFigs: number,
-  locale: string,
+  locale: string | undefined,
   fixedDecimals?: number,
 ): string {
   if (!amount) {
@@ -19,7 +19,15 @@ export function formatCurrencyAmount(
     return `<0.0001`
   }
 
-  return formatLocaleNumber({ number: amount, locale, sigFigs, fixedDecimals })
+  // Convert to number for formatLocaleNumber to handle both CurrencyAmount and UnifiedCurrencyAmount
+  // Both types have toExact() method, so we can use toSignificant for sigFigs
+  const amountNumber = parseFloat(amount.toSignificant(sigFigs))
+  return formatLocaleNumber({
+    number: amountNumber,
+    locale,
+    sigFigs,
+    fixedDecimals,
+  })
 }
 
 export function formatPrice(

@@ -1,22 +1,14 @@
 import { useDebounce, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Route } from '@pancakeswap/smart-router'
-import {
-  Box,
-  IconButton,
-  ModalV2,
-  PoolTypeIcon,
-  QuestionHelperV2,
-  SkeletonV2,
-  Text,
-  useModalV2,
-} from '@pancakeswap/uikit'
+import { Box, ModalV2, PoolTypeIcon, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
 import { memo } from 'react'
 import { styled } from 'styled-components'
 
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import SwapRoute from 'views/Swap/components/SwapRoute'
 import { RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
+import { TertiaryButton } from 'views/Swap/components/SlippageButton'
 import {
   RouteDisplayEssentials,
   RouteDisplayModal,
@@ -81,9 +73,14 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
               </span>
             </RoutesDisplayButtonView>
           </SkeletonV2>
-          <IconButton variant="text" scale="sm" onClick={routingSettingsModal.onOpen} style={{ padding: '4px' }}>
+          <TertiaryButton
+            role="button"
+            $color={theme.colors.primary60}
+            onClick={routingSettingsModal.onOpen}
+            style={{ padding: '7px 8px', height: 'unset' }}
+          >
             <PoolTypeIcon color={theme.colors.primary60} width={20} />
-          </IconButton>
+          </TertiaryButton>
         </RowFixed>
         <RouteDisplayModal {...routeDisplayModal} routes={routes} />
         <ModalV2 isOpen={routingSettingsModal.isOpen} onDismiss={routingSettingsModal.onDismiss} closeOnOverlayClick>

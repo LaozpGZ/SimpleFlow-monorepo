@@ -12,10 +12,8 @@ import { useCallback, useMemo } from 'react'
 
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { Box, BscScanIcon, Flex, InjectedModalProps, Link } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import BigNumber from 'bignumber.js'
-import formatLocaleNumber from 'utils/formatLocaleNumber'
+import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import {
   ApproveModalContent,
   ConfirmModalState,
@@ -139,22 +137,26 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
     const currencyA = currencyBalances?.INPUT?.currency ?? originalOrder?.trade?.inputAmount?.currency
     const currencyB = currencyBalances?.OUTPUT?.currency ?? originalOrder?.trade?.outputAmount?.currency
 
-    const formatAmountFixed = (
-      amount: CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency> | null | undefined,
-    ): string => {
-      if (!amount) return ''
-      // Both CurrencyAmount and UnifiedCurrencyAmount have toExact() method
-      const amountNumber = parseFloat((amount as { toExact(): string }).toExact())
-      const rounded = new BigNumber(amountNumber).toFixed(6, BigNumber.ROUND_DOWN)
-      return formatLocaleNumber({
-        number: parseFloat(rounded),
-        locale: undefined,
-        fixedDecimals: 6,
-      })
-    }
-
-    const amountAWithSlippage = formatAmountFixed(slippageAdjustedAmounts[Field.INPUT])
-    const amountBWithSlippage = formatAmountFixed(slippageAdjustedAmounts[Field.OUTPUT])
+    const amountAWithSlippage =
+      formatCurrencyAmount(
+        slippageAdjustedAmounts[Field.INPUT] as
+          | CurrencyAmount<Currency>
+          | UnifiedCurrencyAmount<UnifiedCurrency>
+          | undefined,
+        6,
+        undefined,
+        6,
+      ) || ''
+    const amountBWithSlippage =
+      formatCurrencyAmount(
+        slippageAdjustedAmounts[Field.OUTPUT] as
+          | CurrencyAmount<Currency>
+          | UnifiedCurrencyAmount<UnifiedCurrency>
+          | undefined,
+        6,
+        undefined,
+        6,
+      ) || ''
     const amountA = isExactIn ? amountAWithSlippage : `Max ${amountAWithSlippage}`
     const amountB = isExactIn ? `Min ${amountBWithSlippage}` : amountBWithSlippage
 
@@ -325,6 +327,8 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
     showAddToWalletButton,
     orderHash,
     token,
+    blockExplorerName,
+    getBlockExploreLink,
   ])
 
   if (!chainId) return null
