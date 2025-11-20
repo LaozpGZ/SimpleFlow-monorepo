@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
@@ -214,14 +214,8 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
             <Text fontSize="14px">
               {formatCurrencyAmount(
                 tradeType === TradeType.EXACT_INPUT
-                  ? (slippageAdjustedAmounts?.[Field.OUTPUT] as
-                      | CurrencyAmount<Currency>
-                      | UnifiedCurrencyAmount<UnifiedCurrency>
-                      | undefined)
-                  : (slippageAdjustedAmounts?.[Field.INPUT] as
-                      | CurrencyAmount<Currency>
-                      | UnifiedCurrencyAmount<UnifiedCurrency>
-                      | undefined),
+                  ? (slippageAdjustedAmounts?.[Field.OUTPUT] as UnifiedCurrencyAmount<UnifiedCurrency> | undefined)
+                  : (slippageAdjustedAmounts?.[Field.INPUT] as UnifiedCurrencyAmount<UnifiedCurrency> | undefined),
                 6,
                 undefined,
                 6,
