@@ -85,14 +85,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.SEPOLIA]: [scrollSepoliaTokens.usdc, scrollSepoliaTokens.weth],
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
-  [ChainId.MONAD_MAINNET]: [
-    monadTokens.ausd,
-    monadTokens.wmon,
-    monadTokens.usdc,
-    monadTokens.usdt,
-    monadTokens.mcake,
-    monadTokens.mbnb,
-  ],
+  [ChainId.MONAD_MAINNET]: [monadTokens.wmon, monadTokens.usdc, monadTokens.usdt, monadTokens.ausd],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.wmon, monadTestnetTokens.usdc, monadTestnetTokens.usdt],
   [NonEVMChainId.SOLANA]: [solanaTokens.usdc, solanaTokens.usdt],
   [NonEVMChainId.APTOS]: [],
@@ -119,9 +112,13 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.MONAD_MAINNET]: [
-    monadTokens.wmon,
     monadTokens.usdc,
+    monadTokens.usdt,
+    monadTokens.ausd,
     monadTokens.busd,
+    monadTokens.wmon,
+
+    // TODO: Remove mock tokens after testing
     monadTokens.musdt,
     monadTokens.mcake,
     monadTokens.meth,

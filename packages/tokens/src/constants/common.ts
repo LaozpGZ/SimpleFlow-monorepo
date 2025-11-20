@@ -370,11 +370,11 @@ export const USDC = {
   ),
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a',
+    '0x754704Bc059F8C67012fEd69BC8A327a5aafb603',
     6,
-    'AUSD',
-    'AUSD',
-    'https://www.agora.finance/',
+    'USDC',
+    'USDC',
+    'https://www.centre.io/usdc',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,
@@ -440,11 +440,11 @@ export const USDT = {
   ),
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a',
-    18,
-    'AUSD',
-    'AUSD',
-    'https://www.agora.finance/',
+    '0xe7cd86e13AC4309349F30B3435a9d337750fC82D',
+    6,
+    'USDT0',
+    'USDT0',
+    'https://usdt0.to/',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,
