@@ -62,6 +62,9 @@ export const useSolSwapStep = (context: ConfirmStepContext) => {
           return
         }
 
+        setTxHash(undefined)
+        setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
+
         try {
           const based64tx = Buffer.from(transaction, 'base64')
           const versionedTransaction = VersionedTransaction.deserialize(new Uint8Array(based64tx))
