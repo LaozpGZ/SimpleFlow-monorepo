@@ -53,7 +53,7 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
   // Check if user has insufficient balance
   // When inverted, currency0Balance/currency1Balance are swapped but depositCurrencyAmount0/depositCurrencyAmount1
   // are always in pool's natural order, so we need to swap the comparison
-  const hasInsufficentBalance = useMemo(() => {
+  const hasInsufficientBalance = useMemo(() => {
     if (!currency0Balance || !currency1Balance) return false
 
     // When inverted: currency0Balance is for pool's token1, currency1Balance is for pool's token0
@@ -73,14 +73,14 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
       pool &&
       pool.poolType === 'CL' &&
       hasNoHook &&
-      hasInsufficentBalance &&
+      hasInsufficientBalance &&
       lowerTick !== null &&
       upperTick !== null &&
       poolId &&
       chainId &&
       ZAP_INFINITY_CL_SUPPORTED_CHAINS.includes(chainId)
     )
-  }, [pool, hasNoHook, hasInsufficentBalance, lowerTick, upperTick, poolId, chainId])
+  }, [pool, hasNoHook, hasInsufficientBalance, lowerTick, upperTick, poolId, chainId])
 
   return (
     <StyledCard>
