@@ -1,21 +1,21 @@
-import { Box, Card, CardBody, Column, Row, RowBetween, Text } from '@pancakeswap/uikit'
-import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
-import { useMemo } from 'react'
-import { useInverted, useClRangeQueryState } from 'state/infinity/shared'
-import styled from 'styled-components'
-import { Address, zeroAddress } from 'viem'
-import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
-import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
-import { useCurrencyBalances } from 'state/wallet/hooks'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isAddressEqual } from 'utils'
+import { Box, Card, CardBody } from '@pancakeswap/uikit'
 import { PoolType } from '@kyberswap/pancake-liquidity-widgets'
 import { ZAP_INFINITY_CL_SUPPORTED_CHAINS } from 'config/constants/zap'
+import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
+import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
+import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { useMemo } from 'react'
+import { useCurrencyBalances } from 'state/wallet/hooks'
+import { useInverted, useClRangeQueryState } from 'state/infinity/shared'
+import styled from 'styled-components'
+import { isAddressEqual } from 'utils'
+import { Address, zeroAddress } from 'viem'
+import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAddDepositAmounts } from '../hooks/useAddDepositAmounts'
 import { usePool } from '../hooks/usePool'
-import { SubmitButton } from './SubmitButton'
 import { FieldAddDepositAmount } from './FieldAddDepositAmount'
+import { SubmitButton } from './SubmitButton'
 
 const StyledCard = styled(Card)`
   height: fit-content;
@@ -27,55 +27,55 @@ interface InfinityDepositPanelProps {
 }
 
 export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelProps) => {
+  // Base currencies from pool (not inverted)
   const { currency0: currency0Base, currency1: currency1Base } = useCurrencyByPoolId({ chainId, poolId })
   const [inverted] = useInverted()
+  const { account } = useAccountActiveChain()
 
-  const currency0 = useMemo(() => (inverted ? currency1Base : currency0Base), [inverted, currency0Base, currency1Base])
-  const currency1 = useMemo(() => (inverted ? currency0Base : currency1Base), [inverted, currency0Base, currency1Base])
-
-  // Get pool and check if it's CL type
+  // Pool data
   const pool = usePool<'CL'>()
   const { data: poolKey } = usePoolKeyByPoolId(poolId, chainId, 'CL')
   const [{ lowerTick, upperTick }] = useClRangeQueryState()
   const { inputValue0, inputValue1, depositCurrencyAmount0, depositCurrencyAmount1 } = useAddDepositAmounts()
-  const { account } = useAccountActiveChain()
+
+  // Display currencies (inverted if needed for UI display)
+  const currency0 = useMemo(() => (inverted ? currency1Base : currency0Base), [inverted, currency0Base, currency1Base])
+  const currency1 = useMemo(() => (inverted ? currency0Base : currency1Base), [inverted, currency0Base, currency1Base])
+
+  // Get balances for display currencies
   const [currency0Balance, currency1Balance] = useCurrencyBalances(
     account ?? undefined,
     useMemo(() => [currency0, currency1], [currency0, currency1]),
   )
 
-  // Swap input values when inverted to match the swapped currencies
+  // Display amounts (inverted if needed to match display currencies)
   const displayInputValue0 = useMemo(() => (inverted ? inputValue1 : inputValue0), [inverted, inputValue0, inputValue1])
   const displayInputValue1 = useMemo(() => (inverted ? inputValue0 : inputValue1), [inverted, inputValue0, inputValue1])
 
-  // Check if pool has no hook
+  // Check if user has insufficient balance for either token
+  const hasInsufficientBalance = useMemo(() => {
+    if (!currency0Balance || !currency1Balance) return false
+
+    // Compare display balances with deposit amounts (adjusting for inversion)
+    const amount0ToCheck = inverted ? depositCurrencyAmount1 : depositCurrencyAmount0
+    const amount1ToCheck = inverted ? depositCurrencyAmount0 : depositCurrencyAmount1
+
+    return (
+      (amount0ToCheck && currency0Balance.lessThan(amount0ToCheck)) ||
+      (amount1ToCheck && currency1Balance.lessThan(amount1ToCheck))
+    )
+  }, [currency0Balance, currency1Balance, depositCurrencyAmount0, depositCurrencyAmount1, inverted])
+
+  // Check if pool has no hook (required for Zap)
   const hasNoHook = useMemo(() => {
     if (!poolKey) return false
     return !poolKey.hooks || isAddressEqual(poolKey.hooks, zeroAddress)
   }, [poolKey])
 
-  // Check if user has insufficient balance
-  // When inverted, currency0Balance/currency1Balance are swapped but depositCurrencyAmount0/depositCurrencyAmount1
-  // are always in pool's natural order, so we need to swap the comparison
-  const hasInsufficientBalance = useMemo(() => {
-    if (!currency0Balance || !currency1Balance) return false
-
-    // When inverted: currency0Balance is for pool's token1, currency1Balance is for pool's token0
-    // depositCurrencyAmount0 is for pool's token0, depositCurrencyAmount1 is for pool's token1
-    const amount0ToCheck = inverted ? depositCurrencyAmount1 : depositCurrencyAmount0
-    const amount1ToCheck = inverted ? depositCurrencyAmount0 : depositCurrencyAmount1
-
-    if (amount0ToCheck && currency0Balance.lessThan(amount0ToCheck)) return true
-    if (amount1ToCheck && currency1Balance.lessThan(amount1ToCheck)) return true
-
-    return false
-  }, [currency0Balance, currency1Balance, depositCurrencyAmount0, depositCurrencyAmount1, inverted])
-
-  // Show Zap widget only for CL pools without hooks, on supported chains, and when user has insufficient balance
+  // Show Zap widget only when all conditions are met
   const showZap = useMemo(() => {
     return (
-      pool &&
-      pool.poolType === 'CL' &&
+      pool?.poolType === 'CL' &&
       hasNoHook &&
       hasInsufficientBalance &&
       lowerTick !== null &&
