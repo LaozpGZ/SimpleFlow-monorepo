@@ -44,6 +44,10 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
     useMemo(() => [currency0, currency1], [currency0, currency1]),
   )
 
+  // Swap input values when inverted to match the swapped currencies
+  const displayInputValue0 = useMemo(() => (inverted ? inputValue1 : inputValue0), [inverted, inputValue0, inputValue1])
+  const displayInputValue1 = useMemo(() => (inverted ? inputValue0 : inputValue1), [inverted, inputValue0, inputValue1])
+
   // Check if pool has no hook
   const hasNoHook = useMemo(() => {
     if (!poolKey) return false
@@ -93,9 +97,9 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
               tickLower={lowerTick ?? undefined}
               tickUpper={upperTick ?? undefined}
               baseCurrency={currency0}
-              baseCurrencyAmount={inputValue0}
+              baseCurrencyAmount={displayInputValue0}
               quoteCurrency={currency1}
-              quoteCurrencyAmount={inputValue1}
+              quoteCurrencyAmount={displayInputValue1}
             />
           </Box>
         )}
