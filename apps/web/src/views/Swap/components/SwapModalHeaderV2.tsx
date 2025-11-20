@@ -1,8 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
-import { ArrowDownIcon, AutoColumn, Button, ErrorIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { ArrowDownIcon, AutoColumn, Button, ErrorIcon, Text } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import BigNumber from 'bignumber.js'
+import formatLocaleNumber from 'utils/formatLocaleNumber'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { CurrencyLogo } from 'components/Logo'
 import { warningSeverity } from 'utils/exchange'
@@ -34,11 +35,17 @@ export default function SwapModalHeaderV2({
 }) {
   const { t } = useTranslation()
 
-  const { isMobile } = useMatchBreakpoints()
-
   const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
-  const displayDecimals = isMobile ? 6 : 12
+  const formatAmountFixed = (amount: CurrencyAmount<Currency>): string => {
+    const amountNumber = parseFloat(amount.toExact())
+    const rounded = new BigNumber(amountNumber).toFixed(6, BigNumber.ROUND_DOWN)
+    return formatLocaleNumber({
+      number: parseFloat(rounded),
+      locale: undefined,
+      fixedDecimals: 6,
+    })
+  }
 
   const inputTextColor =
     showAcceptChanges && tradeType === TradeType.EXACT_OUTPUT && isEnoughInputBalance
@@ -60,7 +67,7 @@ export default function SwapModalHeaderV2({
       <RowBetween align="flex-end">
         <RowFixed gap="4px">
           <TruncatedText fontSize="24px" bold color={inputTextColor}>
-            {formatAmount(inputAmount, displayDecimals)}
+            {formatAmountFixed(inputAmount)}
           </TruncatedText>
         </RowFixed>
         <RowFixed style={{ alignSelf: 'center' }}>
@@ -86,7 +93,7 @@ export default function SwapModalHeaderV2({
                 : 'text'
             }
           >
-            {formatAmount(outputAmount, displayDecimals)}
+            {formatAmountFixed(outputAmount)}
           </TruncatedText>
         </RowFixed>
         <RowFixed style={{ alignSelf: 'center' }}>

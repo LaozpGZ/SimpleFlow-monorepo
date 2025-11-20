@@ -1,11 +1,20 @@
-import { useDebounce } from '@pancakeswap/hooks'
+import { useDebounce, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Route } from '@pancakeswap/smart-router'
-import { Box, ModalV2, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
+import {
+  Box,
+  IconButton,
+  ModalV2,
+  PoolTypeIcon,
+  QuestionHelperV2,
+  SkeletonV2,
+  Text,
+  useModalV2,
+} from '@pancakeswap/uikit'
 import { memo } from 'react'
 import { styled } from 'styled-components'
 
-import { RowBetween } from 'components/Layout/Row'
+import { RowBetween, RowFixed } from 'components/Layout/Row'
 import SwapRoute from 'views/Swap/components/SwapRoute'
 import { RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import {
@@ -28,7 +37,9 @@ const RouteInfoContainer = styled(RowBetween)`
 export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrapperStyle, loading }: Props) {
   const [wallchainStatus] = useWallchainStatus()
   const { t } = useTranslation()
+  const { theme } = useTheme()
   const routeDisplayModal = useModalV2()
+  const routingSettingsModal = useModalV2()
   const deferWallchainStatus = useDebounce(wallchainStatus, 500)
 
   if (!routes.length) {
@@ -58,18 +69,26 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
             </Text>
           </QuestionHelperV2>
         </span>
-        <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
-          <RoutesDisplayButtonView onClick={routeDisplayModal.onOpen}>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-              {count > 1 ? (
-                <Text fontSize="14px">{t('%count% Separate Routes', { count })}</Text>
-              ) : (
-                <RouteComp route={routes[0]} />
-              )}
-            </span>
-          </RoutesDisplayButtonView>
-        </SkeletonV2>
+        <RowFixed gap="4px">
+          <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
+            <RoutesDisplayButtonView onClick={routeDisplayModal.onOpen}>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                {count > 1 ? (
+                  <Text fontSize="14px">{t('%count% Separate Routes', { count })}</Text>
+                ) : (
+                  <RouteComp route={routes[0]} />
+                )}
+              </span>
+            </RoutesDisplayButtonView>
+          </SkeletonV2>
+          <IconButton variant="text" scale="sm" onClick={routingSettingsModal.onOpen} style={{ padding: '4px' }}>
+            <PoolTypeIcon color={theme.colors.primary60} width={20} />
+          </IconButton>
+        </RowFixed>
         <RouteDisplayModal {...routeDisplayModal} routes={routes} />
+        <ModalV2 isOpen={routingSettingsModal.isOpen} onDismiss={routingSettingsModal.onDismiss} closeOnOverlayClick>
+          <RoutingSettingsModalContent />
+        </ModalV2>
       </RouteInfoContainer>
     </>
   )

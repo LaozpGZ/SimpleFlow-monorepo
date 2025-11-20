@@ -37,12 +37,7 @@ interface Props extends UseModalV2Props {
 export const RoutesDisplayButtonView = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => {
   const { theme } = useTheme()
   return (
-    <TertiaryButton
-      role="button"
-      $color={theme.colors.primary60}
-      endIcon={<PoolTypeIcon color={theme.colors.primary60} width={20} ml="2px" />}
-      onClick={onClick}
-    >
+    <TertiaryButton role="button" $color={theme.colors.primary60} onClick={onClick}>
       {children}
     </TertiaryButton>
   )
