@@ -4,7 +4,7 @@ import formatLocaleNumber from './formatLocaleNumber'
 export function formatCurrencyAmount(
   amount: UnifiedCurrencyAmount<UnifiedCurrency> | undefined,
   sigFigs: number,
-  locale: string | undefined,
+  locale: string = 'en-US',
   fixedDecimals?: number,
 ): string {
   if (!amount) {
