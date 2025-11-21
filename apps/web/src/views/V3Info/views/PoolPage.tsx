@@ -250,7 +250,7 @@ const PoolPage: React.FC<{ address: string }> = ({ address }) => {
                 <NextLinkFromReactRouter
                   to={`/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}&chain=${
                     CHAIN_QUERY_NAME[multiChainId[chainName]]
-                  }`}
+                  }&${PERSIST_CHAIN_KEY}=1`}
                 >
                   <Button>{t('Trade')}</Button>
                 </NextLinkFromReactRouter>
