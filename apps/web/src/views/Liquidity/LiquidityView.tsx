@@ -87,6 +87,8 @@ import RateToggle from 'views/AddLiquidityV3/formViews/V3FormView/components/Rat
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 import { IncentraTag } from 'components/Incentra/IncentraTag'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
+import { CHAIN_QUERY_NAME } from 'config/chains'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 24px;
@@ -611,7 +613,9 @@ export const LiquidityView = () => {
                 currencyBase && (
                   <>
                     <NextLinkFromReactRouter
-                      to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}`}
+                      to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}${
+                        poolInfo?.chainId ? `?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${PERSIST_CHAIN_KEY}=1` : ''
+                      }`}
                     >
                       <Button
                         disabled={
@@ -623,7 +627,11 @@ export const LiquidityView = () => {
                       </Button>
                     </NextLinkFromReactRouter>
                     {!removed && (
-                      <NextLinkFromReactRouter to={`/remove/${tokenId}`}>
+                      <NextLinkFromReactRouter
+                        to={`/remove/${tokenId}${
+                          poolInfo?.chainId ? `?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${PERSIST_CHAIN_KEY}=1` : ''
+                        }`}
+                      >
                         <Button disabled={!isOwnNFT} ml="4px" variant="secondary" width="100%">
                           {t('Remove')}
                         </Button>
@@ -637,7 +645,9 @@ export const LiquidityView = () => {
               {isMobile && currencyQuote && currencyBase && (
                 <>
                   <NextLinkFromReactRouter
-                    to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}`}
+                    to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}${
+                      poolInfo?.chainId ? `?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${PERSIST_CHAIN_KEY}=1` : ''
+                    }`}
                   >
                     <Button
                       disabled={
@@ -650,7 +660,11 @@ export const LiquidityView = () => {
                     </Button>
                   </NextLinkFromReactRouter>
                   {!removed && (
-                    <NextLinkFromReactRouter to={`/remove/${tokenId}`}>
+                    <NextLinkFromReactRouter
+                      to={`/remove/${tokenId}${
+                        poolInfo?.chainId ? `?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${PERSIST_CHAIN_KEY}=1` : ''
+                      }`}
+                    >
                       <Button disabled={!isOwnNFT} variant="secondary" width="100%" mb="8px">
                         {t('Remove')}
                       </Button>
