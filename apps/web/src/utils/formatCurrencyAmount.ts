@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, Fraction, Price, UnifiedCurrency, UnifiedCurr
 import formatLocaleNumber from './formatLocaleNumber'
 
 export function formatCurrencyAmount(
-  amount: CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency> | undefined,
+  amount: UnifiedCurrencyAmount<UnifiedCurrency> | undefined,
   sigFigs: number,
   locale: string | undefined,
   fixedDecimals?: number,

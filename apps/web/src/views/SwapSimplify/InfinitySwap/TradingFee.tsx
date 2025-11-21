@@ -4,9 +4,7 @@ import { FlexGap, SkeletonV2, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { memo, useMemo } from 'react'
 import { isSVMOrder, isSolanaBridge, isXOrder } from 'views/Swap/utils'
-import { Currency, SPLToken, TradeType } from '@pancakeswap/sdk'
-import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { SPLToken, TradeType } from '@pancakeswap/sdk'
 
 import BigNumber from 'bignumber.js'
 import { useSolanaTokenPrices } from 'hooks/solana/useSolanaTokenPrice'
@@ -154,25 +152,6 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
   const hasDynamicHooks = useHasDynamicHook(order)
   const isWrapping = useIsWrapping()
 
-  // Calculate all derived values before any conditional returns
-  const lpFeeAmount = Array.isArray(priceBreakdown) ? undefined : priceBreakdown?.lpFeeAmount
-  const inputAmount = order?.trade?.inputAmount
-
-  const feeAmountNumber = useMemo(() => {
-    if (!lpFeeAmount) return undefined
-    return parseFloat(lpFeeAmount.toExact())
-  }, [lpFeeAmount])
-
-  const feeCurrency = useMemo(() => {
-    if (!lpFeeAmount || SPLToken.isSPLToken(lpFeeAmount.currency)) return undefined
-    return lpFeeAmount.currency as Currency
-  }, [lpFeeAmount])
-
-  const feeUsdValue = useStablecoinPriceAmount(feeCurrency, feeAmountNumber, {
-    enabled: Boolean(feeCurrency && feeAmountNumber && order && !isXOrder(order)),
-  })
-
-  // Now perform conditional returns after all hooks have been called
   if (Array.isArray(priceBreakdown)) {
     return null
   }
@@ -180,6 +159,10 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
   if (isWrapping || !order || !order.trade || !slippageAdjustedAmounts) {
     return null
   }
+
+  const { lpFeeAmount } = priceBreakdown
+
+  const { inputAmount } = order.trade
 
   // No need to show trading fee for solana bridge, similar to evm bridge
   if (isSolanaBridge(order)) return null
@@ -196,11 +179,9 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
     )
   } else {
     feeText = (
-      <Text color="textSubtle" fontSize="14px">
-        {feeUsdValue !== undefined
-          ? `${hasDynamicHooks ? '~' : ''}${formatDollarAmount(feeUsdValue, 3)}`
-          : `${hasDynamicHooks ? '~' : ''}${formatAmount(lpFeeAmount, 4)} ${inputAmount?.currency?.symbol}`}
-      </Text>
+      <Text color="textSubtle" fontSize="14px">{`${hasDynamicHooks ? '~' : ''}${formatAmount(lpFeeAmount, 4)} ${
+        inputAmount?.currency?.symbol
+      }`}</Text>
     )
   }
 
