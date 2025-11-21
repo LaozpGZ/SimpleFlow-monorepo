@@ -8,7 +8,7 @@ import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 initialize()
 
 export const SolanaWalletStateUpdater = () => {
-  const { connected, connecting, publicKey } = useWallet()
+  const { connected, connecting, publicKey, disconnect } = useWallet()
   const setWalletState = useSetAtom(accountActiveChainAtom)
 
   useEffect(() => {
@@ -24,9 +24,10 @@ export const SolanaWalletStateUpdater = () => {
 
     let listenersAttached = false
 
-    const handleAccountChange = (newAccount: any) => {
+    const handleAccountChange = async (newAccount: any) => {
       const accountStr = newAccount?.toBase58?.() || null
       console.info(`[TW] accountChanged → ${accountStr || 'null'} (forcing reload)`)
+      await disconnect()
       safeGetWindow()?.location.reload()
     }
 
@@ -67,7 +68,7 @@ export const SolanaWalletStateUpdater = () => {
       trustWallet.off('accountChanged', handleAccountChange)
       trustWallet.off('disconnect', handleDisconnect)
     }
-  }, [])
+  }, [disconnect])
 
   return null
 }
