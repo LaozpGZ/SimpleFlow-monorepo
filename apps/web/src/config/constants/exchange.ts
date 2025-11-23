@@ -85,7 +85,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.SEPOLIA]: [scrollSepoliaTokens.usdc, scrollSepoliaTokens.weth],
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
-  [ChainId.MONAD_MAINNET]: [monadTokens.wmon, monadTokens.usdc, monadTokens.usdt, monadTokens.ausd],
+  [ChainId.MONAD_MAINNET]: [monadTokens.wmon, monadTokens.usdc, monadTokens.usdt0, monadTokens.ausd],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.wmon, monadTestnetTokens.usdc, monadTestnetTokens.usdt],
   [NonEVMChainId.SOLANA]: [solanaTokens.usdc, solanaTokens.usdt],
   [NonEVMChainId.APTOS]: [],
@@ -198,9 +198,9 @@ export const LIMIT_ORDERS_DOCS_URL = 'https://docs.pancakeswap.finance/products/
 export const EXCHANGE_PAGE_PATHS = ['/swap', '/limit-orders', 'liquidity', '/add', '/find', '/remove', '/stable', '/v2']
 export const UNIVERSAL_PAGE_PATHS = ['/liquidity/pools', '/liquidity/positions']
 
-// Override gas buffer per chain. If not present, use a default value
+// Override gas buffer per chain. If not present, use a default value like 2000n (20%)
 export const GAS_MARGIN_BY_CHAIN: Partial<Record<ChainId, bigint>> = {
-  // Only 10% buffer for Monad Mainnet due to full consumption of gas limit
+  // Reduced buffer for Monad Mainnet due to full consumption of gas limit
   // https://docs.monad.xyz/developer-essentials/gas-pricing#gas-limit-not-gas-used
   [ChainId.MONAD_MAINNET]: 1000n,
 }

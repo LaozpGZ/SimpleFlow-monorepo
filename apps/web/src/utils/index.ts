@@ -91,7 +91,7 @@ export function calculateGasMargin(value: bigint, margin = 1000n): bigint {
 
 // Gas buffer for swap if override by chain
 export function getGasMarginByChain(chainId: ChainId): bigint {
-  return GAS_MARGIN_BY_CHAIN[chainId] || 2000n
+  return GAS_MARGIN_BY_CHAIN[chainId] ?? 2000n
 }
 
 export function escapeRegExp(string: string): string {

@@ -216,14 +216,7 @@ export const CAKE = {
     'PancakeSwap Token',
     'https://pancakeswap.finance/',
   ),
-  [ChainId.MONAD_MAINNET]: new ERC20Token(
-    ChainId.MONAD_MAINNET,
-    '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-    18,
-    'CAKE',
-    'PancakeSwap Token',
-    'https://pancakeswap.finance/',
-  ),
+  [ChainId.MONAD_MAINNET]: undefined as unknown as ERC20Token,
   [ChainId.BASE_TESTNET]: new ERC20Token(
     ChainId.BASE_TESTNET,
     '0x052a99849Ef2e13a5CB28275862991671D4b6fF5',

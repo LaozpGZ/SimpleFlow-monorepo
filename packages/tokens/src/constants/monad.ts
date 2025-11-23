@@ -56,4 +56,12 @@ export const monadTokens = {
     'AUSD',
     'https://www.agora.finance/',
   ),
+  usdt0: new ERC20Token(
+    ChainId.MONAD_MAINNET,
+    '0xe7cd86e13AC4309349F30B3435a9d337750fC82D',
+    6,
+    'USDT0',
+    'USDT0',
+    'https://usdt0.to/',
+  ),
 }
