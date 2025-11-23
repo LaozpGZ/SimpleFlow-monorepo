@@ -64,7 +64,7 @@ const monad: Chain = {
   blockExplorers: {
     default: {
       name: 'MonadScan',
-      url: 'https://monadscan.io',
+      url: 'https://monadvision.com',
     },
   },
   contracts: {
