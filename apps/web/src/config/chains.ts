@@ -51,7 +51,9 @@ const bsc = {
   },
 } satisfies Chain
 
-const MONAD_RPC_URLS = [process.env.NEXT_PUBLIC_MONAD_RPC].filter(Boolean) as [string, ...string[]]
+const MONAD_RPC_URLS = [process.env.NEXT_PUBLIC_MONAD_RPC, process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC].filter(
+  Boolean,
+) as [string, ...string[]]
 
 const monad: Chain = {
   id: ChainId.MONAD_MAINNET,
