@@ -17,14 +17,13 @@ import {
   zkSync,
   zksyncSepoliaTestnet,
 } from 'wagmi/chains'
+import { MONAD_RPC_URLS } from './chains'
 
 const ARBITRUM_NODES = [
   ...arbitrum.rpcUrls.default.http,
   'https://arbitrum-one.publicnode.com',
   'https://arbitrum.llamarpc.com',
 ].filter(Boolean)
-
-const MONAD_RPC_URLS = [process.env.NEXT_PUBLIC_MONAD_RPC] as readonly string[]
 
 export const SERVER_NODES = {
   [ChainId.BSC]: [

@@ -51,9 +51,14 @@ const bsc = {
   },
 } satisfies Chain
 
-const MONAD_RPC_URLS = [process.env.NEXT_PUBLIC_MONAD_RPC, process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC].filter(
-  Boolean,
-) as [string, ...string[]]
+export const MONAD_RPC_URLS = [
+  process.env.NEXT_PUBLIC_MONAD_RPC,
+  process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC,
+  'https://rpc-mainnet.monadinfra.com',
+  'https://rpc.monad.xyz',
+  'https://rpc1.monad.xyz',
+  'https://rpc3.monad.xyz',
+].filter(Boolean) as [string, ...string[]]
 
 const monad: Chain = {
   id: ChainId.MONAD_MAINNET,
