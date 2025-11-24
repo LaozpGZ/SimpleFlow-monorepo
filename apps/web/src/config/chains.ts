@@ -70,7 +70,7 @@ const monad: Chain = {
   },
   blockExplorers: {
     default: {
-      name: 'MonadScan',
+      name: 'MonadVision',
       url: 'https://monadvision.com',
     },
   },
