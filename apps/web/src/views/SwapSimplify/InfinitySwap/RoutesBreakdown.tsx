@@ -95,6 +95,8 @@ export const XRoutesBreakdown = memo(function XRoutesBreakdown({ wrapperStyle, l
   const { t } = useTranslation()
   const { isOpen, setIsOpen, onDismiss } = useModalV2()
 
+  const { theme } = useTheme()
+
   return (
     <>
       <RouteInfoContainer style={wrapperStyle}>
@@ -112,7 +114,10 @@ export const XRoutesBreakdown = memo(function XRoutesBreakdown({ wrapperStyle, l
         </span>
         <Box>
           <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
-            <RoutesDisplayButtonView onClick={() => setIsOpen(true)}>
+            <RoutesDisplayButtonView
+              onClick={() => setIsOpen(true)}
+              endIcon={<PoolTypeIcon color={theme.colors.primary60} width={20} ml="2px" />}
+            >
               <Text fontSize="14px">PancakeSwap X</Text>
             </RoutesDisplayButtonView>
             <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>

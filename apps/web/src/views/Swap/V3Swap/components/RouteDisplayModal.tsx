@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
+  ButtonProps,
   Flex,
   Modal,
   ModalV2,
@@ -34,10 +35,14 @@ interface Props extends UseModalV2Props {
   routes: RouteDisplayEssentials[]
 }
 
-export const RoutesDisplayButtonView = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => {
+interface RoutesDisplayButtonViewProps extends ButtonProps {
+  onClick: () => void
+  children: React.ReactNode
+}
+export const RoutesDisplayButtonView = ({ onClick, children, ...props }: RoutesDisplayButtonViewProps) => {
   const { theme } = useTheme()
   return (
-    <TertiaryButton role="button" $color={theme.colors.primary60} onClick={onClick}>
+    <TertiaryButton role="button" $color={theme.colors.primary60} onClick={onClick} {...props}>
       {children}
     </TertiaryButton>
   )
