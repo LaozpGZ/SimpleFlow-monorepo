@@ -9,6 +9,7 @@ import { RowBetween, RowFixed } from 'components/Layout/Row'
 import SwapRoute from 'views/Swap/components/SwapRoute'
 import { RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { TertiaryButton } from 'views/Swap/components/SlippageButton'
+import { isSolana } from '@pancakeswap/chains'
 import {
   RouteDisplayEssentials,
   RouteDisplayModal,
@@ -73,14 +74,17 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
               </span>
             </RoutesDisplayButtonView>
           </SkeletonV2>
-          <TertiaryButton
-            role="button"
-            $color={theme.colors.primary60}
-            onClick={routingSettingsModal.onOpen}
-            style={{ padding: '7px 8px', height: 'unset' }}
-          >
-            <PoolTypeIcon color={theme.colors.primary60} width={20} />
-          </TertiaryButton>
+          {!isSolana(routes[0]?.inputAmount?.currency?.chainId) &&
+          !isSolana(routes[0]?.outputAmount?.currency?.chainId) ? (
+            <TertiaryButton
+              role="button"
+              $color={theme.colors.primary60}
+              onClick={routingSettingsModal.onOpen}
+              style={{ padding: '7px 8px', height: 'unset' }}
+            >
+              <PoolTypeIcon color={theme.colors.primary60} width={20} />
+            </TertiaryButton>
+          ) : null}
         </RowFixed>
         <RouteDisplayModal {...routeDisplayModal} routes={routes} />
         <ModalV2 isOpen={routingSettingsModal.isOpen} onDismiss={routingSettingsModal.onDismiss} closeOnOverlayClick>
