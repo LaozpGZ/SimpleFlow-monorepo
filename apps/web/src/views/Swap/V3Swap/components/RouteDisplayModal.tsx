@@ -65,7 +65,7 @@ const RoutesDisplayView = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
         </Flex>
       }
       minHeight="0px"
-      bodyPadding="24px 24px 36px"
+      bodyPadding="24px 24px 48px"
     >
       {isBridgeRouting ? (
         <BridgeRoutesDisplay routes={routes} />
