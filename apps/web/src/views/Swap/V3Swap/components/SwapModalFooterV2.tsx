@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
@@ -12,11 +12,11 @@ import {
   QuestionHelperV2,
   Text,
   WarningIcon,
+  useMatchBreakpoints,
   useTooltip,
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo as CurrencyLogoWidget } from '@pancakeswap/widgets-internal'
-import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import { AutoRow, RowBetween, RowFixed } from 'components/Layout/Row'
 import { useGasToken } from 'hooks/useGasToken'
 import { memo, useMemo, useState } from 'react'
@@ -25,8 +25,6 @@ import { styled } from 'styled-components'
 import { warningSeverity } from 'utils/exchange'
 import { SVMTradingFee } from 'views/SwapSimplify/InfinitySwap/TradingFee'
 import { SolanaBridgeTradingFee } from 'views/SwapSimplify/InfinitySwap/SolanaBridgeTradingFee'
-import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 import { PancakeSwapXTag } from 'components/PancakeSwapXTag'
 import { paymasterInfo } from 'config/paymaster'
@@ -98,20 +96,14 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
 }) {
   const { t } = useTranslation()
   const [showInverted, setShowInverted] = useState<boolean>(false)
+  const { isMobile } = useMatchBreakpoints()
 
   const [gasToken] = useGasToken()
   const { isPaymasterAvailable, isPaymasterTokenActive } = usePaymaster()
   const gasTokenInfo = paymasterInfo[gasToken.isToken ? gasToken?.wrapped.address : '']
   const hasDynamicHook = useHasDynamicHook(order)
 
-  const feeAmountNumber = useMemo(() => {
-    if (!realizedLPFee) return undefined
-    return parseFloat(realizedLPFee.toExact())
-  }, [realizedLPFee])
-
-  const feeUsdValue = useStablecoinPriceAmount(realizedLPFee?.currency, feeAmountNumber, {
-    enabled: Boolean(realizedLPFee && feeAmountNumber && !isXOrder(order)),
-  })
+  const displayDecimals = isMobile ? 6 : 12
 
   const showSameTokenWarning = useMemo(
     () =>
@@ -212,14 +204,9 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
           </RowFixed>
           <RowFixed>
             <Text fontSize="14px">
-              {formatCurrencyAmount(
-                tradeType === TradeType.EXACT_INPUT
-                  ? (slippageAdjustedAmounts?.[Field.OUTPUT] as UnifiedCurrencyAmount<UnifiedCurrency> | undefined)
-                  : (slippageAdjustedAmounts?.[Field.INPUT] as UnifiedCurrencyAmount<UnifiedCurrency> | undefined),
-                6,
-                undefined,
-                6,
-              )}
+              {tradeType === TradeType.EXACT_INPUT
+                ? formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], displayDecimals) ?? '-'
+                : formatAmount(slippageAdjustedAmounts?.[Field.INPUT], displayDecimals) ?? '-'}
             </Text>
             <Text fontSize="14px" marginLeft="4px">
               {tradeType === TradeType.EXACT_INPUT ? outputAmount.currency.symbol : inputAmount.currency.symbol}
@@ -268,18 +255,22 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
                 <QuestionHelperV2 text={t('This route uses a dynamic fee pool; actual fees may vary.')}>
                   <Flex style={{ textDecoration: 'underline dotted', cursor: 'help' }}>
                     <Text fontSize="14px" ml="8px" strikeThrough={isXOrder(order)}>
-                      {feeUsdValue !== undefined
-                        ? `~${formatDollarAmount(feeUsdValue, 3)}`
-                        : `~${formatAmount(realizedLPFee, 6)} ${inputAmount.currency.symbol}`}
+                      ~{formatAmount(realizedLPFee, 6)}
+                    </Text>
+                    <Text ml="4px" fontSize="14px">
+                      {inputAmount.currency.symbol}
                     </Text>
                   </Flex>
                 </QuestionHelperV2>
               ) : (
-                <Text fontSize="14px" ml="8px" strikeThrough={isXOrder(order)}>
-                  {feeUsdValue !== undefined
-                    ? formatDollarAmount(feeUsdValue, 3)
-                    : `${formatAmount(realizedLPFee, 6)} ${inputAmount.currency.symbol}`}
-                </Text>
+                <>
+                  <Text fontSize="14px" ml="8px" strikeThrough={isXOrder(order)}>
+                    {formatAmount(realizedLPFee, 6)}
+                  </Text>
+                  <Text ml="4px" fontSize="14px">
+                    {inputAmount.currency.symbol}
+                  </Text>
+                </>
               )}
             </Flex>
           ) : (

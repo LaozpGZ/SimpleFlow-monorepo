@@ -1,19 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Token,
-  TradeType,
-  UnifiedCurrencyAmount,
-  UnifiedCurrency,
-} from '@pancakeswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@pancakeswap/sdk'
 import { useCallback, useMemo } from 'react'
 
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { Box, BscScanIcon, Flex, InjectedModalProps, Link } from '@pancakeswap/uikit'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import {
   ApproveModalContent,
   ConfirmModalState,
@@ -136,27 +128,8 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
     const isExactIn = originalOrder?.trade.tradeType === TradeType.EXACT_INPUT
     const currencyA = currencyBalances?.INPUT?.currency ?? originalOrder?.trade?.inputAmount?.currency
     const currencyB = currencyBalances?.OUTPUT?.currency ?? originalOrder?.trade?.outputAmount?.currency
-
-    const amountAWithSlippage =
-      formatCurrencyAmount(
-        slippageAdjustedAmounts[Field.INPUT] as
-          | CurrencyAmount<Currency>
-          | UnifiedCurrencyAmount<UnifiedCurrency>
-          | undefined,
-        6,
-        undefined,
-        6,
-      ) || ''
-    const amountBWithSlippage =
-      formatCurrencyAmount(
-        slippageAdjustedAmounts[Field.OUTPUT] as
-          | CurrencyAmount<Currency>
-          | UnifiedCurrencyAmount<UnifiedCurrency>
-          | undefined,
-        6,
-        undefined,
-        6,
-      ) || ''
+    const amountAWithSlippage = formatAmount(slippageAdjustedAmounts[Field.INPUT], 6) ?? ''
+    const amountBWithSlippage = formatAmount(slippageAdjustedAmounts[Field.OUTPUT], 6) ?? ''
     const amountA = isExactIn ? amountAWithSlippage : `Max ${amountAWithSlippage}`
     const amountB = isExactIn ? `Min ${amountBWithSlippage}` : amountBWithSlippage
 
@@ -327,8 +300,6 @@ export const ConfirmSwapModalV2: React.FC<ConfirmSwapModalV2Props> = ({
     showAddToWalletButton,
     orderHash,
     token,
-    blockExplorerName,
-    getBlockExploreLink,
   ])
 
   if (!chainId) return null
