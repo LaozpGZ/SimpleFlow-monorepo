@@ -1,8 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
-import { ArrowDownIcon, AutoColumn, Button, ErrorIcon, Text } from '@pancakeswap/uikit'
+import { ArrowDownIcon, AutoColumn, Button, ErrorIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { CurrencyLogo } from 'components/Logo'
 import { warningSeverity } from 'utils/exchange'
@@ -34,7 +34,11 @@ export default function SwapModalHeaderV2({
 }) {
   const { t } = useTranslation()
 
+  const { isMobile } = useMatchBreakpoints()
+
   const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
+
+  const displayDecimals = 6
 
   const inputTextColor =
     showAcceptChanges && tradeType === TradeType.EXACT_OUTPUT && isEnoughInputBalance
@@ -56,7 +60,7 @@ export default function SwapModalHeaderV2({
       <RowBetween align="flex-end">
         <RowFixed gap="4px">
           <TruncatedText fontSize="24px" bold color={inputTextColor}>
-            {formatCurrencyAmount(inputAmount, 6, undefined, 6)}
+            {formatAmount(inputAmount, displayDecimals)}
           </TruncatedText>
         </RowFixed>
         <RowFixed style={{ alignSelf: 'center' }}>
@@ -82,7 +86,7 @@ export default function SwapModalHeaderV2({
                 : 'text'
             }
           >
-            {formatCurrencyAmount(outputAmount, 6, undefined, 6)}
+            {formatAmount(outputAmount, displayDecimals)}
           </TruncatedText>
         </RowFixed>
         <RowFixed style={{ alignSelf: 'center' }}>
