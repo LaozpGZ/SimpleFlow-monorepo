@@ -12,7 +12,7 @@ import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { Address } from 'viem'
 import { ChainId as EvmChainId } from '@pancakeswap/chains'
 import useSendSwapTransaction from './useSendSwapTransaction'
-import { useSwapCallArguments, SwapCall } from './useSwapCallArguments'
+import { SwapCall, useSwapCallArgumentsFactory } from './useSwapCallArguments'
 import type { TWallchainMasterInput, WallchainStatus } from './useWallchain'
 
 export enum SwapCallbackState {
@@ -24,8 +24,8 @@ export enum SwapCallbackState {
 
 interface UseSwapCallbackReturns {
   state: SwapCallbackState
-  callback?: () => Promise<{ hash: Address }>
-  swapCalls?: SwapCall[]
+  callback?: (permitSignature: Permit2Signature | undefined) => Promise<{ hash: Address }>
+  getSwapCalls?: (permitSignature: Permit2Signature | undefined) => SwapCall[]
   error?: string
   reason?: string
 }
@@ -33,7 +33,6 @@ interface UseSwapCallbackReturns {
 interface UseSwapCallbackArgs {
   trade: ClassicOrder['trade'] | undefined | null // trade to execute, required
   deadline?: bigint
-  permitSignature: Permit2Signature | undefined
   feeOptions?: FeeOptions
   onWallchainDrop?: () => void
   statusWallchain?: WallchainStatus
@@ -42,28 +41,22 @@ interface UseSwapCallbackArgs {
 
 // returns a function that will execute a swap, if the parameters are all valid
 // and the user has approved the slippage adjusted input amount for the trade
-export function useSwapCallback({
-  trade,
-  deadline,
-  permitSignature,
-  feeOptions,
-}: UseSwapCallbackArgs): UseSwapCallbackReturns {
+export function useSwapCallback({ trade, deadline, feeOptions }: UseSwapCallbackArgs): UseSwapCallbackReturns {
   const { t } = useTranslation()
   const { account, chainId } = useAccountActiveChain()
   const { slippageTolerance: allowedSlippageRaw } = useAutoSlippageWithFallback()
   const { recipient: recipientAddress } = useSwapState()
   const recipient = recipientAddress === null ? account : recipientAddress
 
-  const swapCalls = useSwapCallArguments(
+  const getSwapCalls = useSwapCallArgumentsFactory(
     trade,
     basisPointsToPercent(allowedSlippageRaw),
     recipientAddress,
-    permitSignature,
     deadline,
     feeOptions,
   )
 
-  const { callback } = useSendSwapTransaction(account, chainId, trade ?? undefined, swapCalls, 'UniversalRouter')
+  const { callback } = useSendSwapTransaction(account, chainId, trade ?? undefined, getSwapCalls, 'UniversalRouter')
 
   return useMemo(() => {
     if (!trade || !account || !chainId || !callback || !(chainId in EvmChainId)) {
@@ -79,7 +72,7 @@ export function useSwapCallback({
     return {
       state: SwapCallbackState.VALID,
       callback,
-      swapCalls,
+      getSwapCalls,
     }
-  }, [swapCalls, trade, account, chainId, callback, recipient, recipientAddress, t])
+  }, [getSwapCalls, trade, account, chainId, callback, recipient, recipientAddress, t])
 }

@@ -19,6 +19,7 @@ import { usePaymaster } from 'hooks/usePaymaster'
 import { logger } from 'utils/datadog'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { viemClients } from 'utils/viem'
+import { Permit2Signature } from '@pancakeswap/universal-router-sdk'
 import useSwapRecordTransaction from './useSwapRecordTransaction'
 import { isZero } from '../utils/isZero'
 
@@ -53,7 +54,10 @@ export default function useSendSwapTransaction(
   account?: Address,
   chainId?: number,
   trade?: ClassicOrder['trade'] | null, // trade to execute, required
-  swapCalls: SwapCall[] | WallchainSwapCall[] = [],
+  swapCalls:
+    | SwapCall[]
+    | WallchainSwapCall[]
+    | ((permitSignature?: Permit2Signature) => SwapCall[] | WallchainSwapCall[]) = [],
   type: 'V3SmartSwap' | 'UniversalRouter' = 'V3SmartSwap',
 ) {
   const { t } = useTranslation()
@@ -69,9 +73,10 @@ export default function useSendSwapTransaction(
       return { callback: null }
     }
     return {
-      callback: async function onSwap() {
+      callback: async function onSwap(permitSignature?: Permit2Signature) {
+        const resolvedSwapCalls = typeof swapCalls === 'function' ? swapCalls(permitSignature) : swapCalls
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
-          swapCalls.map((call) => {
+          resolvedSwapCalls.map((call) => {
             const { address, calldata, value } = call
             if ('getCall' in call) {
               // Only WallchainSwapCall, don't use rest of pipeline

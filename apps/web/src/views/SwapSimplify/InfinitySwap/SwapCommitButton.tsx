@@ -49,6 +49,8 @@ import { useIsRecipientError } from '../hooks/useIsRecipientError'
 import { useQuoteTrackingStateMachine } from '../hooks/useQuoteTrackingStateMachine'
 import { usePriceBreakdown } from '../hooks/usePriceBreakdown'
 
+const EMPTY_ARRAY = []
+
 interface SwapCommitButtonPropsType {
   order?: PriceOrder
   tradeError?: Error | null
@@ -239,12 +241,12 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const { onUserInput } = useSwapActionHandlers()
   const reset = useCallback(() => {
+    resetState()
     afterCommit?.()
     setTradeToConfirm(undefined)
     if (confirmState === ConfirmModalState.COMPLETED) {
       onUserInput(Field.INPUT, '')
     }
-    resetState()
   }, [afterCommit, confirmState, onUserInput, resetState])
 
   const handleAcceptChanges = useCallback(() => {
@@ -315,7 +317,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         originalOrder={tradeToConfirm as EVMInterfaceOrder}
         txHash={txHash}
         confirmModalState={confirmState}
-        pendingModalSteps={confirmActions ?? []}
+        pendingModalSteps={confirmActions ?? EMPTY_ARRAY}
         swapErrorMessage={errorMessage}
         currencyBalances={
           // NOTE: since Bridge not support Solana yet, can safely cast to CurrencyAmount<Currency>
@@ -332,7 +334,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         originalOrder={tradeToConfirm as EVMInterfaceOrder}
         txHash={txHash}
         confirmModalState={confirmState}
-        pendingModalSteps={confirmActions ?? []}
+        pendingModalSteps={confirmActions ?? EMPTY_ARRAY}
         swapErrorMessage={errorMessage}
         currencyBalances={currencyBalances as { [field in Field]?: CurrencyAmount<Currency> | undefined }}
         onAcceptChanges={handleAcceptChanges}
@@ -346,8 +348,8 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   )
 
   const handleSwap = useCallback(() => {
-    setTradeToConfirm(order)
     resetState()
+    setTradeToConfirm(order)
 
     // if expert mode turn-on, will not show preview modal
     // start swap directly

@@ -110,9 +110,9 @@ export const Updater: React.FC<{ chainId: number }> = ({ chainId }) => {
         }
         retry(getTransaction, {
           n: 10,
-          minWait: 5000,
-          maxWait: 10000,
-          delay: (AVERAGE_CHAIN_BLOCK_TIMES[chainId] ?? BSC_BLOCK_TIME) * 1000 + 1000,
+          minWait: 2000,
+          maxWait: 5000,
+          delay: ((t) => t + Math.min(t * 0.3, 1000))((AVERAGE_CHAIN_BLOCK_TIMES[chainId] ?? BSC_BLOCK_TIME) * 1000),
         })
       },
     )

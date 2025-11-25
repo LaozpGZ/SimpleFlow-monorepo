@@ -223,7 +223,7 @@ export const AssignRecipientButton: React.FC = memo(() => {
       variant="text"
       id="add-recipient-button"
       onClick={() => onChangeRecipient('')}
-      data-dd-action-name="Swap flip button"
+      data-dd-action-name="Swap Assign Recipient Button"
       width="100%"
     >
       {t('+ Assign Recipient')}
