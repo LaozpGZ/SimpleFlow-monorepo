@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Intercambio máximo de %inputAmount% %inputSymbol% por %outputAmount% %outputSymbol% para %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Intercambio de %inputAmount% %inputSymbol% por minuto. %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Intercambio de %inputAmount% %inputSymbol% por minuto. %outputAmount% %outputSymbol% para %recipientAddress%",
-  "Currently %feature% only supported in": "Actualmente, la función %feature% solo es compatible en",
   "Please switch your network to continue.": "Cambia de red para continuar.",
   "Switch network in wallet": "Cambia de red en el monedero",
   "It’s a BNB Smart Chain only feature": "Esta función solo está disponible con la BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "para balancear y aportar automáticamente liquidez Infinity con un solo clic.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Precaución: Este pool utiliza un hook no verificado. Realice su propia investigación antes de interactuar con él, ya que hacerlo puede resultar en una pérdida de fondos irrecuperable.",
   "Monad Now Live on PancakeSwap": "Monad ya está disponible en PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Opere con Activos Tokenizados sin comisiones"
+  "Trade Tokenized Assets with Zero Fees": "Opere con Activos Tokenizados sin comisiones",
+  "Currently %feature% are only supported on": "Actualmente, %feature% solo está disponible en",
+  "No transaction data found for Solana swap": "No se encontraron datos de la transacción para el swap de Solana",
+  "Solana swap failed": "El swap de Solana ha fallado",
+  "Insufficient balance for transaction": "Saldo insuficiente para la transacción",
+  "Please connect your Solana wallet first": "Por favor, conecte primero su billetera de Solana"
 }

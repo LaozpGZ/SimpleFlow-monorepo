@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Обміняти макс. %inputAmount% %inputSymbol% на %outputAmount% %outputSymbol%, одержувач – %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Обміняти %inputAmount% %inputSymbol% на мін. %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Обміняти %inputAmount% %inputSymbol% на мін. %outputAmount% %outputSymbol%, одержувач – %recipientAddress%",
-  "Currently %feature% only supported in": "Зараз %feature% підтримується лише в",
   "Please switch your network to continue.": "Перемкніть мережу, щоб продовжити.",
   "Switch network in wallet": "Перемкніть мережу в гаманці",
   "It’s a BNB Smart Chain only feature": "Ця функція доступна лише в BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "щоб автоматично збалансувати та надати ліквідність Infinity в один клік.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Обережно: Цей пул використовує неперевірений хук. Будь ласка, проведіть власне дослідження, перш ніж взаємодіяти з ним, оскільки це може призвести до втрати коштів, які неможливо буде повернути.",
   "Monad Now Live on PancakeSwap": "Monad тепер на PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Торгуйте токенізованими активами без комісій"
+  "Trade Tokenized Assets with Zero Fees": "Торгуйте токенізованими активами без комісій",
+  "Currently %feature% are only supported on": "Наразі %feature% підтримуються лише на",
+  "No transaction data found for Solana swap": "Не знайдено даних транзакції для обміну Solana",
+  "Solana swap failed": "Помилка обміну Solana",
+  "Insufficient balance for transaction": "Недостатньо коштів для транзакції",
+  "Please connect your Solana wallet first": "Будь ласка, спершу підключіть свій гаманець Solana"
 }
