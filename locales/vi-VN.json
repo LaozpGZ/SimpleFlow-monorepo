@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "để tự động cân bằng và cung cấp thanh khoản vô cực chỉ với một cú nhấp.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Thận trọng: Pool này sử dụng một hook chưa được xác minh. Vui lòng tự nghiên cứu trước khi tương tác với nó, vì việc này có thể dẫn đến tổn thất tài sản không thể phục hồi.",
   "Monad Now Live on PancakeSwap": "Monad đã ra mắt trên PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Giao dịch Tài sản Token hoá Miễn phí"
+  "Trade Tokenized Assets with Zero Fees": "Giao dịch Tài sản Token hoá Miễn phí",
+  "No transaction data found for Solana swap": "Không tìm thấy dữ liệu giao dịch cho lệnh hoán đổi trên Solana",
+  "Solana swap failed": "Giao dịch hoán đổi trên Solana thất bại",
+  "Insufficient balance for transaction": "Số dư không đủ để thực hiện giao dịch",
+  "Please connect your Solana wallet first": "Vui lòng kết nối ví Solana của bạn trước"
 }

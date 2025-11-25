@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "Tasapainottaa ja tarjoaa Infinity-likviditeettiä automaattisesti yhdellä klikkauksella.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Varoitus: Tämä pooli käyttää vahvistamatonta hookia. Tee oma tutkimuksesi ennen kuin olet vuorovaikutuksessa sen kanssa, koska se voi johtaa peruuttamattomaan varojen menetykseen.",
   "Monad Now Live on PancakeSwap": "Monad nyt livenä PancakeSwapissa",
-  "Trade Tokenized Assets with Zero Fees": "Treidaa tokenisoituja omaisuuseriä nollapalkkioilla"
+  "Trade Tokenized Assets with Zero Fees": "Treidaa tokenisoituja omaisuuseriä nollapalkkioilla",
+  "No transaction data found for Solana swap": "Solana-vaihdon transaktiotietoja ei löytynyt",
+  "Solana swap failed": "Solana-vaihto epäonnistui",
+  "Insufficient balance for transaction": "Saldo ei riitä transaktioon",
+  "Please connect your Solana wallet first": "Yhdistä Solana-lompakkosi ensin"
 }

@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "一鍵自動平衡並提供 Infinity 流動性。",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "注意：此流動性池使用未經驗證的 hook。在與其互動前，請自行研究，否則可能導致無法挽回的資金損失。",
   "Monad Now Live on PancakeSwap": "Monad 現已在 PancakeSwap 上線",
-  "Trade Tokenized Assets with Zero Fees": "零手續費交易代幣化資產"
+  "Trade Tokenized Assets with Zero Fees": "零手續費交易代幣化資產",
+  "No transaction data found for Solana swap": "找不到 Solana 兌換的交易資料",
+  "Solana swap failed": "Solana 兌換失敗",
+  "Insufficient balance for transaction": "交易餘額不足",
+  "Please connect your Solana wallet first": "請先連接您的 Solana 錢包"
 }

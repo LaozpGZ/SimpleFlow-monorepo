@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "aby automatycznie zrównoważyć i zapewnić płynność Infinity jednym kliknięciem.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Ostrzeżenie: Ta pula używa niezweryfikowanego hooka. Prosimy o przeprowadzenie własnej analizy przed interakcją z nią, ponieważ może to skutkować nieodwracalną utratą środków.",
   "Monad Now Live on PancakeSwap": "Monad już dostępny na PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Handluj tokenizowanymi aktywami bez opłat"
+  "Trade Tokenized Assets with Zero Fees": "Handluj tokenizowanymi aktywami bez opłat",
+  "No transaction data found for Solana swap": "Brak danych transakcji dla swapu Solana",
+  "Solana swap failed": "Swap na Solana nie powiódł się",
+  "Insufficient balance for transaction": "Niewystarczające saldo do przeprowadzenia transakcji",
+  "Please connect your Solana wallet first": "Proszę najpierw połączyć swój portfel Solana"
 }

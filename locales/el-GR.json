@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "για αυτόματη εξισορρόπηση και παροχή ρευστότητας Infinity με ένα κλικ.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Προσοχή: Αυτό το pool χρησιμοποιεί ένα μη επαληθευμένο hook. Παρακαλούμε, διεξάγετε τη δική σας έρευνα πριν αλληλεπιδράσετε με αυτό, καθώς μπορεί να οδηγήσει σε απώλεια κεφαλαίων που δεν μπορεί να ανακτηθεί.",
   "Monad Now Live on PancakeSwap": "Το Monad τώρα διαθέσιμο στο PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Κάντε συναλλαγές σε Tokenized Assets με Μηδενικές Χρεώσεις"
+  "Trade Tokenized Assets with Zero Fees": "Κάντε συναλλαγές σε Tokenized Assets με Μηδενικές Χρεώσεις",
+  "No transaction data found for Solana swap": "Δεν βρέθηκαν δεδομένα συναλλαγής για ανταλλαγή Solana",
+  "Solana swap failed": "Η ανταλλαγή Solana απέτυχε",
+  "Insufficient balance for transaction": "Ανεπαρκές υπόλοιπο για τη συναλλαγή",
+  "Please connect your Solana wallet first": "Παρακαλώ συνδέστε πρώτα το πορτοφόλι σας Solana"
 }

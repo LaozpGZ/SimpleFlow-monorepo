@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "এক ক্লিকে স্বয়ংক্রিয়ভাবে ব্যালেন্স করতে এবং Infinity লিকুইডিটি প্রদান করতে।",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "সতর্কতা: এই পুল একটি যাচাইবিহীন হুক ব্যবহার করে। এর সাথে ইন্টারঅ্যাক্ট করার আগে অনুগ্রহ করে আপনার নিজের গবেষণা পরিচালনা করুন, কারণ এমনটি করলে আপনার তহবিল হারিয়ে যেতে পারে যা পুনরুদ্ধার করা যাবে না।",
   "Monad Now Live on PancakeSwap": "Monad এখন PancakeSwap-এ লাইভ",
-  "Trade Tokenized Assets with Zero Fees": "শূন্য ফিতে টোকেনাইজড অ্যাসেট ট্রেড করুন"
+  "Trade Tokenized Assets with Zero Fees": "শূন্য ফিতে টোকেনাইজড অ্যাসেট ট্রেড করুন",
+  "No transaction data found for Solana swap": "Solana সোয়াপের জন্য কোনো লেনদেনের ডেটা খুঁজে পাওয়া যায়নি",
+  "Solana swap failed": "Solana সোয়াপ ব্যর্থ হয়েছে",
+  "Insufficient balance for transaction": "লেনদেনের জন্য অপর্যাপ্ত ব্যালেন্স",
+  "Please connect your Solana wallet first": "অনুগ্রহ করে প্রথমে আপনার Solana ওয়ালেট সংযুক্ত করুন"
 }

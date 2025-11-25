@@ -4291,5 +4291,9 @@
   "to automatically balance and provide Infinity liquidity in one click.": "pentru a echilibra automat și a furniza lichiditate Infinity cu un singur clic.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Atenție: Acest pool folosește un hook neverificat. Vă rugăm să efectuați propria cercetare înainte de a interacționa cu acesta, deoarece acest lucru poate duce la o pierdere de fonduri care nu poate fi recuperată.",
   "Monad Now Live on PancakeSwap": "Monad acum live pe PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Tranzacționați active tokenizate cu zero comisioane"
+  "Trade Tokenized Assets with Zero Fees": "Tranzacționați active tokenizate cu zero comisioane",
+  "No transaction data found for Solana swap": "Nu s-au găsit date despre tranzacție pentru swap-ul Solana",
+  "Solana swap failed": "Swap-ul Solana a eșuat",
+  "Insufficient balance for transaction": "Sold insuficient pentru tranzacție",
+  "Please connect your Solana wallet first": "Vă rugăm să vă conectați mai întâi portofelul Solana"
 }
