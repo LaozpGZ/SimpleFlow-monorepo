@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Swap máx. %inputAmount% %inputSymbol% para %outputAmount% %outputSymbol% para %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Swap %inputAmount% %inputSymbol% para no mín. %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Swap %inputAmount% %inputSymbol% para no mín. %outputAmount% %outputSymbol% para %recipientAddress%",
-  "Currently %feature% only supported in": "%feature% atualmente só suportada em",
   "Please switch your network to continue.": "Troque a sua rede para continuar.",
   "Switch network in wallet": "Troque a rede na carteira",
   "It’s a BNB Smart Chain only feature": "É um recurso exclusivo da BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "para equilibrar automaticamente e fornecer liquidez Infinity com um clique.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Atenção: Esta pool utiliza um hook não verificado. Por favor, faça a sua própria pesquisa antes de interagir com ela, pois tal pode resultar numa perda de fundos que não pode ser recuperada.",
   "Monad Now Live on PancakeSwap": "Monad Já Disponível na PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Negoceie Ativos Tokenizados com Taxas Zero"
+  "Trade Tokenized Assets with Zero Fees": "Negoceie Ativos Tokenizados com Taxas Zero",
+  "Currently %feature% are only supported on": "Atualmente, %feature% só tem suporte em",
+  "No transaction data found for Solana swap": "Não foram encontrados dados da transação para o swap na Solana",
+  "Solana swap failed": "O swap na Solana falhou",
+  "Insufficient balance for transaction": "Saldo insuficiente para a transação",
+  "Please connect your Solana wallet first": "Por favor, conecte primeiro a sua carteira Solana"
 }
