@@ -66,7 +66,7 @@ const useTooltip = (content: React.ReactNode, options?: TooltipOptions): Tooltip
     [hideTimeout]
   );
   // using lodash debounce we can get rid of hideTimeout cleanups
-  // loadash's debounce handles cleanup it its implementation
+  // lodash's debounce handles cleanup it its implementation
   const hideTooltip = useCallback(
     (e: Event) => {
       if (manualVisible) return;
@@ -103,17 +103,6 @@ const useTooltip = (content: React.ReactNode, options?: TooltipOptions): Tooltip
     [trigger, avoidToStopPropagation, debouncedHide]
   );
 
-  const toggleTooltip = useCallback(
-    (e: Event) => {
-      if (!avoidToStopPropagation) {
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      setVisible(!visible);
-    },
-    [visible, avoidToStopPropagation]
-  );
-
   // Trigger = hover
   useEffect(() => {
     if (targetElement === null || trigger !== "hover" || manualVisible) return undefined;
@@ -134,7 +123,33 @@ const useTooltip = (content: React.ReactNode, options?: TooltipOptions): Tooltip
     };
   }, [trigger, targetElement, hideTooltip, showTooltip, manualVisible, tooltipElement, debouncedHide]);
 
-  // no longer need the extra useeffect
+  const toggleTooltip = useCallback(
+    (e: Event) => {
+      let isClickableChild = false;
+      if (e.currentTarget instanceof HTMLElement) {
+        isClickableChild = e.currentTarget.querySelector("a, button, [role='button']") !== null;
+      }
+
+      if (isClickableChild) {
+        if (!visible) {
+          e.stopPropagation();
+          e.preventDefault();
+          setVisible(true);
+          return;
+        }
+
+        setVisible(false);
+        return;
+      }
+
+      if (!avoidToStopPropagation) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      setVisible(!visible);
+    },
+    [visible, avoidToStopPropagation]
+  );
 
   // Trigger = click
   useEffect(() => {

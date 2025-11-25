@@ -35,6 +35,12 @@ export const ViewOnExplorerButton = ({
           rel="noopener noreferrer"
           title={t('Open on Explorer')}
           showExternalIcon={false}
+          onClick={(event) => {
+            event.stopPropagation()
+          }}
+          onTouchStart={(event) => {
+            event.stopPropagation()
+          }}
         >
           <BscScanIcon color={color} width={width} />
         </LinkExternal>
