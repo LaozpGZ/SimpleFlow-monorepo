@@ -7,7 +7,7 @@ import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 initialize()
 
 export const SolanaWalletStateUpdater = () => {
-  const { connected, connecting, publicKey } = useWallet()
+  const { connected, connecting, publicKey, disconnect } = useWallet()
   const setWalletState = useSetAtom(accountActiveChainAtom)
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export const SolanaWalletStateUpdater = () => {
     const disconnectSolana = async () => {
       console.info('[TW] Disconnecting Solana wallet...')
       try {
+        await disconnect()
         await solanaTW.disconnect?.()
         console.info('[TW] Solana wallet disconnected')
 
@@ -89,15 +90,18 @@ export const SolanaWalletStateUpdater = () => {
       }
     }
 
-    evmTW?.on?.('accountsChanged', handleEvmAccountChange)
-    evmTW?.on?.('accountChanged', handleEvmAccountChange)
+    if (evmTW) {
+      console.info('[TW] Attaching evm listeners')
+      evmTW.on?.('accountsChanged', handleEvmAccountChange)
+      evmTW.on?.('accountChanged', handleEvmAccountChange)
+    }
 
     return () => {
       console.info('[TW] Cleaning up all listeners')
       evmTW?.off?.('accountsChanged', handleEvmAccountChange)
       evmTW?.off?.('accountChanged', handleEvmAccountChange)
     }
-  }, [])
+  }, [disconnect])
 
   return null
 }
