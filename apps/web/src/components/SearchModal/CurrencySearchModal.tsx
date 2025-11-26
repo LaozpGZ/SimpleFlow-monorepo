@@ -166,7 +166,7 @@ export default function CurrencySearchModal({
   useEffect(() => {
     if (!wrapperRef.current) return
 
-    setHeight(wrapperRef.current.offsetHeight - 330)
+    setHeight(wrapperRef.current.offsetHeight - 300)
   }, [])
 
   return (
