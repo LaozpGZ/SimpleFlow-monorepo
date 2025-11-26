@@ -96,10 +96,19 @@ export const SolanaWalletStateUpdater = () => {
       evmTW.on?.('accountChanged', handleEvmAccountChange)
     }
 
+    const handleSolanaAccountChange = async (publicKey: any) => {
+      const newKey = publicKey?.toString?.() || null
+      console.info(`[TW] Solana accountChanged → ${newKey || 'null'}`)
+      await disconnectSolana()
+    }
+
+    solanaTW.on?.('accountChanged', handleSolanaAccountChange)
+
     return () => {
       console.info('[TW] Cleaning up all listeners')
       evmTW?.off?.('accountsChanged', handleEvmAccountChange)
       evmTW?.off?.('accountChanged', handleEvmAccountChange)
+      solanaTW?.off?.('accountChanged', handleSolanaAccountChange)
     }
   }, [disconnect])
 
