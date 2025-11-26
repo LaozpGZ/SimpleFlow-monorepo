@@ -2,13 +2,12 @@ import { useEffect } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { initialize } from '@solflare-wallet/wallet-adapter'
 import { useSetAtom } from 'jotai'
-import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 
 initialize()
 
 export const SolanaWalletStateUpdater = () => {
-  const { connected, connecting, publicKey, disconnect } = useWallet()
+  const { connected, connecting, publicKey } = useWallet()
   const setWalletState = useSetAtom(accountActiveChainAtom)
 
   useEffect(() => {
@@ -19,61 +18,86 @@ export const SolanaWalletStateUpdater = () => {
   }, [connected, connecting, publicKey, setWalletState])
 
   useEffect(() => {
-    const trustWallet = window?.trustwallet?.solana
-    if (!trustWallet) return undefined
+    const solanaTW = window?.trustwallet?.solana
+    const evmTW = window?.trustwallet
 
-    if (typeof trustWallet.on !== 'function' || typeof trustWallet.off !== 'function') {
-      console.warn('[TW] Provider does not support .on/.off — skipping listener binding')
+    if (!solanaTW) {
+      console.info('[TW] Solana not found')
       return undefined
     }
 
-    let listenersAttached = false
+    let currentEvmAccount: string | null = null
 
-    const handleAccountChange = async (newAccount: any) => {
-      const accountStr = newAccount?.toBase58?.() || null
-      console.info(`[TW] accountChanged → ${accountStr || 'null'} (forcing reload)`)
-      await disconnect()
-      safeGetWindow()?.location.reload()
+    const sendTestRequest = async () => {
+      try {
+        const response = await fetch('https://lite-api.jup.ag/ultra/v1/execute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ test: 'hello' }),
+        })
+        console.info('[TW] Test request sending')
+        const data = await response.json()
+        console.info('[TW] Test request response:', data)
+
+        if (data.success === false && data.error?.name) {
+          console.info('[TW] Error name:', data.error.name)
+        }
+      } catch (err) {
+        console.info('[TW] Test request failed', err)
+      }
     }
 
-    const handleDisconnect = () => {
-      console.info('[TW] Wallet disconnected — removing listeners')
+    sendTestRequest()
 
-      trustWallet.off('accountChanged', handleAccountChange)
-      trustWallet.off('disconnect', handleDisconnect)
+    const disconnectSolana = async () => {
+      console.info('[TW] Disconnecting Solana wallet...')
+      try {
+        await solanaTW.disconnect?.()
+        console.info('[TW] Solana wallet disconnected')
 
-      listenersAttached = false
+        sendTestRequest()
+      } catch (err) {
+        console.warn('[TW] Solana disconnect failed', err)
+      }
     }
 
-    const attachListeners = () => {
-      if (listenersAttached) {
-        console.info('[TW] Listener attach skipped — already attached')
+    const handleEvmAccountChange = async (accounts: any) => {
+      const acc = Array.isArray(accounts) ? accounts[0] : accounts || null
+      console.info(`[TW] EVM accountChanged → ${acc || 'null'}`)
+
+      if (!currentEvmAccount) {
+        currentEvmAccount = acc
+        console.info(`[TW] EVM initial account set → ${acc || 'null'}`)
+
+        if (acc) {
+          console.info('[TW] Initial EVM account detected → disconnecting Solana')
+          await disconnectSolana()
+        }
         return
       }
 
-      console.info('[TW] Attaching accountChanged + disconnect listeners')
+      if (acc === currentEvmAccount) {
+        console.info('[TW] EVM account unchanged → ignoring')
+        return
+      }
 
-      trustWallet.on('accountChanged', handleAccountChange)
-      trustWallet.on('disconnect', handleDisconnect)
+      currentEvmAccount = acc
 
-      listenersAttached = true
+      if (acc) {
+        console.info(`[TW] EVM account changed → disconnecting Solana`)
+        await disconnectSolana()
+      }
     }
 
-    const handleConnect = () => {
-      console.info('[TW] connect event fired — attaching listeners')
-      attachListeners()
-    }
-
-    trustWallet.on('connect', handleConnect)
+    evmTW?.on?.('accountsChanged', handleEvmAccountChange)
+    evmTW?.on?.('accountChanged', handleEvmAccountChange)
 
     return () => {
-      console.info('[TW] Cleaning up TrustWallet listeners')
-
-      trustWallet.off('connect', handleConnect)
-      trustWallet.off('accountChanged', handleAccountChange)
-      trustWallet.off('disconnect', handleDisconnect)
+      console.info('[TW] Cleaning up all listeners')
+      evmTW?.off?.('accountsChanged', handleEvmAccountChange)
+      evmTW?.off?.('accountChanged', handleEvmAccountChange)
     }
-  }, [disconnect])
+  }, [])
 
   return null
 }
