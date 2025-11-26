@@ -26,8 +26,6 @@ export const SolanaWalletStateUpdater = () => {
       return undefined
     }
 
-    let currentEvmAccount: string | null = null
-
     const sendTestRequest = async () => {
       try {
         const response = await fetch('https://lite-api.jup.ag/ultra/v1/execute', {
@@ -66,26 +64,8 @@ export const SolanaWalletStateUpdater = () => {
       const acc = Array.isArray(accounts) ? accounts[0] : accounts || null
       console.info(`[TW] EVM accountChanged → ${acc || 'null'}`)
 
-      if (!currentEvmAccount) {
-        currentEvmAccount = acc
-        console.info(`[TW] EVM initial account set → ${acc || 'null'}`)
-
-        if (acc) {
-          console.info('[TW] Initial EVM account detected → disconnecting Solana')
-          await disconnectSolana()
-        }
-        return
-      }
-
-      if (acc === currentEvmAccount) {
-        console.info('[TW] EVM account unchanged → ignoring')
-        return
-      }
-
-      currentEvmAccount = acc
-
       if (acc) {
-        console.info(`[TW] EVM account changed → disconnecting Solana`)
+        console.info(`[TW] EVM account active → disconnecting Solana`)
         await disconnectSolana()
       }
     }
