@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Μέγιστη ανταλλαγή %inputAmount% %inputSymbol% για %outputAmount% %outputSymbol% στη διεύθυνση %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Ανταλλαγή %inputAmount% %inputSymbol% για ελάχιστο %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Ανταλλαγή %inputAmount% %inputSymbol% για ελάχιστο %outputAmount% %outputSymbol% στη διεύθυνση %recipientAddress%",
-  "Currently %feature% only supported in": "Επί του παρόντος υποστηρίζεται %feature% μόνο σε",
   "Please switch your network to continue.": "Αλλάξτε δίκτυο για να συνεχίσετε.",
   "Switch network in wallet": "Αλλάξτε δίκτυο στο πορτοφόλι",
   "It’s a BNB Smart Chain only feature": "Είναι ένα χαρακτηριστικό μόνο της BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "για αυτόματη εξισορρόπηση και παροχή ρευστότητας Infinity με ένα κλικ.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Προσοχή: Αυτό το pool χρησιμοποιεί ένα μη επαληθευμένο hook. Παρακαλούμε, διεξάγετε τη δική σας έρευνα πριν αλληλεπιδράσετε με αυτό, καθώς μπορεί να οδηγήσει σε απώλεια κεφαλαίων που δεν μπορεί να ανακτηθεί.",
   "Monad Now Live on PancakeSwap": "Το Monad τώρα διαθέσιμο στο PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Κάντε συναλλαγές σε Tokenized Assets με Μηδενικές Χρεώσεις"
+  "Trade Tokenized Assets with Zero Fees": "Κάντε συναλλαγές σε Tokenized Assets με Μηδενικές Χρεώσεις",
+  "Currently %feature% are only supported on": "Αυτήν τη στιγμή, το %feature% υποστηρίζεται μόνο σε",
+  "No transaction data found for Solana swap": "Δεν βρέθηκαν δεδομένα συναλλαγής για την ανταλλαγή Solana",
+  "Solana swap failed": "Η ανταλλαγή Solana απέτυχε",
+  "Insufficient balance for transaction": "Ανεπαρκές υπόλοιπο για τη συναλλαγή",
+  "Please connect your Solana wallet first": "Παρακαλώ συνδέστε πρώτα το πορτοφόλι Solana σας"
 }
