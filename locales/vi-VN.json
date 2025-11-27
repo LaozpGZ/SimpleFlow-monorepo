@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Hoán đổi tối đa %inputAmount% %inputSymbol% để nhận %outputAmount% %outputSymbol% vào %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Hoán đổi %inputAmount% %inputSymbol% để nhận tối thiểu %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Hoán đổi %inputAmount% %inputSymbol% để nhận tối thiểu %outputAmount% %outputSymbol% vào %recipientAddress%",
-  "Currently %feature% only supported in": "Hiện tại %feature% chỉ được hỗ trợ trên",
   "Please switch your network to continue.": "Vui lòng chuyển mạng lưới của bạn để tiếp tục.",
   "Switch network in wallet": "Chuyển mạng lưới trong ví",
   "It’s a BNB Smart Chain only feature": "Đây là một tính năng chỉ có trên BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "để tự động cân bằng và cung cấp thanh khoản vô cực chỉ với một cú nhấp.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Thận trọng: Pool này sử dụng một hook chưa được xác minh. Vui lòng tự nghiên cứu trước khi tương tác với nó, vì việc này có thể dẫn đến tổn thất tài sản không thể phục hồi.",
   "Monad Now Live on PancakeSwap": "Monad đã ra mắt trên PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Giao dịch Tài sản Token hoá Miễn phí"
+  "Trade Tokenized Assets with Zero Fees": "Giao dịch Tài sản Token hoá Miễn phí",
+  "Currently %feature% are only supported on": "Hiện tại %feature% chỉ được hỗ trợ trên",
+  "No transaction data found for Solana swap": "Không tìm thấy dữ liệu giao dịch cho hoán đổi trên Solana",
+  "Solana swap failed": "Hoán đổi trên Solana đã thất bại",
+  "Insufficient balance for transaction": "Không đủ số dư để thực hiện giao dịch",
+  "Please connect your Solana wallet first": "Vui lòng kết nối ví Solana của bạn trước"
 }
