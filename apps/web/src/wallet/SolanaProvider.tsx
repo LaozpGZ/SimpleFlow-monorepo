@@ -26,6 +26,11 @@ export const SolanaWalletStateUpdater = () => {
       return undefined
     }
 
+    if (typeof solanaTW.on !== 'function' || typeof solanaTW.off !== 'function') {
+      console.warn('[TW] Provider does not support .on/.off — skipping listener binding')
+      return undefined
+    }
+
     const sendTestRequest = async () => {
       try {
         const response = await fetch('https://lite-api.jup.ag/ultra/v1/execute', {
