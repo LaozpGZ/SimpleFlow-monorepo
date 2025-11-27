@@ -5,7 +5,7 @@ import { ChainId, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@panca
 import { STABLE_SUPPORTED_CHAIN_IDS } from '@pancakeswap/stable-swap-sdk'
 import { mapValues } from '@pancakeswap/utils/fns'
 import { BSC_TOKEN_WHITELIST, ETH_TOKEN_BLACKLIST, ETH_TOKEN_WHITELIST, TOKEN_BLACKLIST } from 'config/constants/info'
-import { arbitrum, base, bsc, bscTestnet, linea, mainnet, opBNB, zkSync } from 'wagmi/chains'
+import { arbitrum, base, bsc, bscTestnet, linea, mainnet, opBNB, zksync } from 'wagmi/chains'
 
 export type MultiChainName =
   | 'BSC_TESTNET'
@@ -100,13 +100,13 @@ export const multiChainScan: Record<MultiChainName, string> = {
   BSC_TESTNET: bscTestnet.blockExplorers.default.name,
   BSC: bsc.blockExplorers.default.name,
   ETH: mainnet.blockExplorers.default.name,
-  ZKSYNC: zkSync.blockExplorers.default.name,
+  ZKSYNC: zksync.blockExplorers.default.name,
   ARB: arbitrum.blockExplorers.default.name,
   LINEA: linea.blockExplorers.default.name,
   BASE: base.blockExplorers.default.name,
   OPBNB: opBNB.blockExplorers.default.name,
   SOLANA: 'Solscan',
-  MONAD: 'MonVision',
+  MONAD: 'MonadVision',
 }
 
 /** Override Explorer Names if default for chain is "Etherscan" */
