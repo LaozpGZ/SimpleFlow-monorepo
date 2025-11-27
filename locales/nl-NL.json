@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Swap max. %inputAmount% %inputSymbol% voor %outputAmount% %outputSymbol% aan %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Swap %inputAmount% %inputSymbol% voor min. %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Swap %inputAmount% %inputSymbol% voor min. %outputAmount% %outputSymbol% aan %recipientAddress%",
-  "Currently %feature% only supported in": "%feature% wordt momenteel alleen ondersteund in",
   "Please switch your network to continue.": "Wissel van netwerk om door te gaan.",
   "Switch network in wallet": "Netwerk wisselen in wallet",
   "It’s a BNB Smart Chain only feature": "Het is een functie alleen voor BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "om met één klik automatisch te herbalanceren en Infinity liquiditeit te verschaffen.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Waarschuwing: Deze pool gebruikt een niet-geverifieerde hook. Doe je eigen onderzoek voordat je er interactie mee aangaat, aangezien dit kan leiden tot een onherstelbaar verlies van tegoeden.",
   "Monad Now Live on PancakeSwap": "Monad nu live op PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Verhandel getokeniseerde activa zonder transactiekosten"
+  "Trade Tokenized Assets with Zero Fees": "Verhandel getokeniseerde activa zonder transactiekosten",
+  "Currently %feature% are only supported on": "Momenteel worden %feature% alleen ondersteund op",
+  "No transaction data found for Solana swap": "Geen transactiegegevens gevonden voor de Solana swap",
+  "Solana swap failed": "Solana swap is mislukt",
+  "Insufficient balance for transaction": "Onvoldoende saldo voor de transactie",
+  "Please connect your Solana wallet first": "Verbind eerst je Solana wallet"
 }

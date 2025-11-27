@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "最大%inputAmount% %inputSymbol%を%recipientAddress%への%outputAmount% %outputSymbol%にスワップ",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "%inputAmount% %inputSymbol%を最低%outputAmount% %outputSymbol%にスワップ",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "%inputAmount% %inputSymbol%を%recipientAddress%への最低%outputAmount% %outputSymbol%にスワップ",
-  "Currently %feature% only supported in": "現在、%feature%は次でのみサポートされています：",
   "Please switch your network to continue.": "ネットワークを切り替えて続行してください。",
   "Switch network in wallet": "ウォレットのネットワークを切り替える",
   "It’s a BNB Smart Chain only feature": "BNB Smart Chain 限定機能です",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "ワンクリックで自動的にバランスを調整し、Infinity流動性を提供します。",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "注意：このプールは未検証のフックを使用しています。操作する前にご自身で調査を行ってください。操作した場合、回復不可能な資金の損失を被る可能性があります。",
   "Monad Now Live on PancakeSwap": "MonadがPancakeSwapに登場",
-  "Trade Tokenized Assets with Zero Fees": "トークン化資産を手数料ゼロで取引"
+  "Trade Tokenized Assets with Zero Fees": "トークン化資産を手数料ゼロで取引",
+  "Currently %feature% are only supported on": "現在、%feature%は以下のネットワークでのみサポートされています",
+  "No transaction data found for Solana swap": "Solanaスワップのトランザクションデータが見つかりませんでした",
+  "Solana swap failed": "Solanaスワップに失敗しました",
+  "Insufficient balance for transaction": "トランザクションの残高が不足しています",
+  "Please connect your Solana wallet first": "まずSolanaウォレットを接続してください"
 }

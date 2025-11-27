@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Max. %inputAmount% %inputSymbol% für %outputAmount% %outputSymbol% tauschen an %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "%inputAmount% %inputSymbol% für min. %outputAmount% %outputSymbol% tauschen",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "%inputAmount% %inputSymbol% für min. %outputAmount% %outputSymbol% tauschen an %recipientAddress%",
-  "Currently %feature% only supported in": "%feature% wird derzeit nur unterstützt in",
   "Please switch your network to continue.": "Bitte wechseln Sie Ihr Netzwerk, um fortzufahren.",
   "Switch network in wallet": "Netzwerk in Wallet wechseln",
   "It’s a BNB Smart Chain only feature": "Diese Funktion ist nur bei der BNB Smart Chain verfügbar",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "um mit einem Klick automatisch auszugleichen und Infinity-Liquidität bereitzustellen.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Vorsicht: Dieser Pool verwendet einen nicht verifizierten Hook. Bitte führe deine eigene Recherche durch, bevor du damit interagierst, da dies zu einem Verlust von Geldern führen kann, der nicht wiederhergestellt werden kann.",
   "Monad Now Live on PancakeSwap": "Monad jetzt live auf PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Tokenisierte Assets gebührenfrei handeln"
+  "Trade Tokenized Assets with Zero Fees": "Tokenisierte Assets gebührenfrei handeln",
+  "Currently %feature% are only supported on": "Derzeit werden %feature% nur auf ... unterstützt",
+  "No transaction data found for Solana swap": "Keine Transaktionsdaten für den Solana-Swap gefunden",
+  "Solana swap failed": "Solana-Swap fehlgeschlagen",
+  "Insufficient balance for transaction": "Unzureichendes Guthaben für die Transaktion",
+  "Please connect your Solana wallet first": "Bitte verbinden Sie zuerst Ihre Solana-Wallet"
 }

@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "%recipientAddress% க்கு அதிகபட்சம் %inputAmount% %inputSymbol% -ஐ %outputAmount% %outputSymbol% -க்கு ஸ்வாப் செய்யவும்",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "%inputAmount% %inputSymbol% -ஐ குறைந்தபட்சம் %outputAmount% %outputSymbol% -க்கு ஸ்வாப் செய்யவும்",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "%recipientAddress% -க்கு %inputAmount% %inputSymbol% -ஐ குறைந்தபட்சம் %outputAmount% %outputSymbol% -க்கு ஸ்வாப் செய்யவும்",
-  "Currently %feature% only supported in": "தற்போது %feature% இதில் மட்டுமே ஆதரிக்கப்படுகிறது:",
   "Please switch your network to continue.": "தொடர, உங்கள் நெட்வொர்க்கை மாற்றுங்கள்.",
   "Switch network in wallet": "வாலெட்டில் நெட்வொர்க்கை மாற்றவும்",
   "It’s a BNB Smart Chain only feature": "இது ஒரு BNB ஸ்மார்ட் செயின் மட்டுமே அம்சம்",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "ஒரே கிளிக்கில் தானாகவே சமநிலைப்படுத்தி Infinity liquidity வழங்க.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "எச்சரிக்கை: இந்தப் பூல் சரிபார்க்கப்படாத ஹூக்கைப் பயன்படுத்துகிறது. அதனுடன் தொடர்புகொள்வதற்கு முன், தயவுசெய்து உங்கள் சொந்த ஆராய்ச்சியை மேற்கொள்ளுங்கள், அவ்வாறு செய்வதால் மீட்க முடியாத நிதி இழப்பு ஏற்படலாம்.",
   "Monad Now Live on PancakeSwap": "Monad இப்போது PancakeSwap-இல் நேரலையில்",
-  "Trade Tokenized Assets with Zero Fees": "டோக்கனைஸ்டு சொத்துக்களை பூஜ்ஜியக் கட்டணத்தில் வர்த்தகம் செய்யுங்கள்"
+  "Trade Tokenized Assets with Zero Fees": "டோக்கனைஸ்டு சொத்துக்களை பூஜ்ஜியக் கட்டணத்தில் வர்த்தகம் செய்யுங்கள்",
+  "Currently %feature% are only supported on": "தற்போது %feature% இல் மட்டுமே ஆதரிக்கப்படுகிறது",
+  "No transaction data found for Solana swap": "Solana swap-க்கு பரிவர்த்தனைத் தரவு எதுவும் கிடைக்கவில்லை",
+  "Solana swap failed": "Solana swap தோல்வியடைந்தது",
+  "Insufficient balance for transaction": "பரிவர்த்தனைக்கு போதுமான இருப்பு இல்லை",
+  "Please connect your Solana wallet first": "தயவுசெய்து முதலில் உங்கள் Solana wallet-ஐ இணைக்கவும்"
 }
