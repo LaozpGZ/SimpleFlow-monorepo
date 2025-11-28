@@ -16,7 +16,7 @@ import { Calldata, usePermit2 } from 'hooks/usePermit2'
 import { usePermit2Requires } from 'hooks/usePermit2Requires'
 import { useSafeTxHashTransformer } from 'hooks/useSafeTxHashTransformer'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { startTransition, useCallback, useEffect, useMemo, useState } from 'react'
 import { RetryableError, retry } from 'state/multicall/retry'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { logGTMSwapTxSentEvent } from 'utils/customGTMEventTracking'
@@ -209,7 +209,7 @@ const useConfirmActions = (
     setTxHash(undefined)
     setErrorMessage(undefined)
     setPermit2Signature(undefined)
-    resumeQuoting()
+    startTransition(resumeQuoting)
   }, [resumeQuoting])
 
   const showError = useCallback((error: string) => {

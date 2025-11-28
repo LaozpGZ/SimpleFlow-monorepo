@@ -13,7 +13,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { usePaymaster } from 'hooks/usePaymaster'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
-import { memo, Suspense, useMemo } from 'react'
+import { memo, startTransition, Suspense, useMemo } from 'react'
 
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
@@ -55,9 +55,11 @@ export const InfinitySwapForm = memo(() => {
   const commitHooks = useMemo(() => {
     return {
       beforeCommit: () => {
-        pauseQuoting()
+        startTransition(pauseQuoting)
       },
-      afterCommit: resumeQuoting,
+      afterCommit: () => {
+        startTransition(resumeQuoting)
+      },
     }
   }, [pauseQuoting, resumeQuoting])
   const {
