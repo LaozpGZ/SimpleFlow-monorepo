@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "将最大 %inputAmount% %inputSymbol% 兑换为 %outputAmount% %outputSymbol% 并发送到 %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "将 %inputAmount% %inputSymbol% 兑换为至少 %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "将 %inputAmount% %inputSymbol% 兑换为至少 %outputAmount% %outputSymbol% 并发送到 %recipientAddress%",
-  "Currently %feature% only supported in": "当前，%feature%仅适用于",
   "Please switch your network to continue.": "请切换您的网络以继续。",
   "Switch network in wallet": "在钱包中切换网络",
   "It’s a BNB Smart Chain only feature": "这是一个仅适用于 BNB 智能链的功能",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "一键自动平衡并提供 Infinity 流动性。",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "注意：该流动性池使用未经验证的 hook。在与其交互前，请您自行研究，否则可能导致无法挽回的资金损失。",
   "Monad Now Live on PancakeSwap": "Monad 现已在 PancakeSwap 上线",
-  "Trade Tokenized Assets with Zero Fees": "零手续费交易代币化资产"
+  "Trade Tokenized Assets with Zero Fees": "零手续费交易代币化资产",
+  "Currently %feature% are only supported on": "目前 %feature% 仅支持",
+  "No transaction data found for Solana swap": "未找到 Solana 兑换的交易数据",
+  "Solana swap failed": "Solana 兑换失败",
+  "Insufficient balance for transaction": "交易余额不足",
+  "Please connect your Solana wallet first": "请先连接您的 Solana 钱包"
 }

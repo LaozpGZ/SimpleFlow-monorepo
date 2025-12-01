@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Mag-swap ng max. na %inputAmount% %inputSymbol% para sa %outputAmount% %outputSymbol% sa %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Mag-swap ng %inputAmount% %inputSymbol% para sa min. na %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Mag-swap ng %inputAmount% %inputSymbol% para sa min. na %outputAmount% %outputSymbol% sa %recipientAddress%",
-  "Currently %feature% only supported in": "Sa kasalukuyan, sinusuportahan lang ang %feature% sa",
   "Please switch your network to continue.": "Magpalit ng network mo para magpatuloy.",
   "Switch network in wallet": "Magpalit ng network sa wallet",
   "It’s a BNB Smart Chain only feature": "Feature lang ito sa BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "upang awtomatikong i-balance at magbigay ng Infinity liquidity sa isang click lang.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Babala: Ang pool na ito ay gumagamit ng unverified hook. Mangyaring magsagawa ng sariling pananaliksik bago makipag-ugnayan dito, dahil maaaring magresulta ito sa pagkawala ng pondo na hindi na mababawi.",
   "Monad Now Live on PancakeSwap": "Live na ang Monad sa PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Mag-trade ng Tokenized Assets nang Walang Fees."
+  "Trade Tokenized Assets with Zero Fees": "Mag-trade ng Tokenized Assets nang Walang Fees.",
+  "Currently %feature% are only supported on": "Sa ngayon, ang %feature% ay sinusuportahan lamang sa",
+  "No transaction data found for Solana swap": "Walang nakitang data ng transaksyon para sa Solana swap",
+  "Solana swap failed": "Nabigo ang Solana swap",
+  "Insufficient balance for transaction": "Hindi sapat ang balanse para sa transaksyon",
+  "Please connect your Solana wallet first": "Pakikonekta muna ang iyong Solana wallet"
 }

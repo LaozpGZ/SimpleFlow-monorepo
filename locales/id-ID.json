@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Tukar maks. %inputAmount% %inputSymbol% dengan %outputAmount% %outputSymbol% ke %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Tukar %inputAmount% %inputSymbol% dengan min. %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Tukar %inputAmount% %inputSymbol% dengan min. %outputAmount% %outputSymbol% ke %recipientAddress%",
-  "Currently %feature% only supported in": "Saat ini, %feature% hanya didukung dalam",
   "Please switch your network to continue.": "Silakan ganti jaringan Anda untuk melanjutkan.",
   "Switch network in wallet": "Ganti jaringan di dompet",
   "It’s a BNB Smart Chain only feature": "Ini adalah fitur BNB Smart Chain satu-satunya",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "untuk menyeimbangkan secara otomatis dan menyediakan likuiditas Infinity dalam satu klik.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Perhatian: Pool ini menggunakan hook yang belum diverifikasi. Harap lakukan riset Anda sendiri sebelum berinteraksi dengannya, karena hal itu dapat mengakibatkan hilangnya dana yang tidak dapat dipulihkan.",
   "Monad Now Live on PancakeSwap": "Monad Kini Hadir di PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Perdagangkan Aset Tokenisasi Tanpa Biaya"
+  "Trade Tokenized Assets with Zero Fees": "Perdagangkan Aset Tokenisasi Tanpa Biaya",
+  "Currently %feature% are only supported on": "Saat ini %feature% hanya didukung di",
+  "No transaction data found for Solana swap": "Data transaksi tidak ditemukan untuk swap Solana",
+  "Solana swap failed": "Swap Solana gagal",
+  "Insufficient balance for transaction": "Saldo tidak cukup untuk transaksi",
+  "Please connect your Solana wallet first": "Silakan hubungkan dompet Solana Anda terlebih dahulu"
 }
