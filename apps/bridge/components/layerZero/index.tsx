@@ -76,7 +76,7 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
           } catch (error) {
             console.error('Failed to load lz-bridge', error)
           }
-        }, 800)
+        }, 3000)
       }
 
       setShow(true)
