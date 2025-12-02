@@ -50,8 +50,10 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
         uiStore.theme.setConfig(newTheme)
       }
 
+      let currencyInterval: any = null
+
       if (isCake) {
-        const currencyInterval = setInterval(async () => {
+        currencyInterval = setInterval(async () => {
           try {
             await customElements.whenDefined('lz-bridge')
             const app: any = customElements.get('lz-bridge')
@@ -80,13 +82,14 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
             console.error('Failed to load lz-bridge', error)
             clearInterval(currencyInterval)
           }
-        }, 250)
-        setShow(true)
-        return () => clearInterval(currencyInterval)
+        }, 150)
       }
 
       setShow(true)
-      return undefined
+
+      return () => {
+        if (currencyInterval) clearInterval(currencyInterval)
+      }
     })
   }, [isCake])
 
