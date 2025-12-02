@@ -98,7 +98,7 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
 
   return (
     <Page>
-      <Script type="module" crossOrigin="anonymous" src={LAYER_ZERO_JS.src} />
+      <Script type="module" crossOrigin="anonymous" src={LAYER_ZERO_JS.src} integrity={LAYER_ZERO_JS.integrity} />
       <link rel="stylesheet" href={`${LAYER_ZERO_JS.css}`} />
       {show && (
         <Box width={['100%', null, '420px']} m="auto">
