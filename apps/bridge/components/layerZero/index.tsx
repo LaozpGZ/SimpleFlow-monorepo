@@ -51,35 +51,42 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
       }
 
       if (isCake) {
-        setTimeout(async () => {
+        const currencyInterval = setInterval(async () => {
           try {
             await customElements.whenDefined('lz-bridge')
             const app: any = customElements.get('lz-bridge')
             const length = app?.bridgeStore?.currencies?.length
 
-            if (length !== null || length !== undefined) {
-              let rawCurrencies = app?.bridgeStore?.currencies
-              if (!Array.isArray(rawCurrencies)) {
-                rawCurrencies = []
-              }
-              const currencies = rawCurrencies.slice()
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              app!.bridgeStore!.currencies.length = 0
+            const rawCurrencies = app?.bridgeStore?.currencies
 
-              const list = currencies.filter((i: any) => i?.symbol?.toLowerCase() === 'cake' && i?.chainId !== 158)
-              app?.bridgeStore?.addCurrencies(list)
-              const srcCake = app?.bridgeStore?.currencies?.find(
-                (i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId === 102,
-              )
-              app?.bridgeStore?.setSrcCurrency(srcCake)
+            if (!Array.isArray(rawCurrencies) || length === 0) {
+              return
             }
+
+            clearInterval(currencyInterval)
+            const currencies = rawCurrencies.slice()
+
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            app!.bridgeStore!.currencies.length = 0
+
+            const list = currencies.filter((i: any) => i?.symbol?.toLowerCase() === 'cake' && i?.chainId !== 158)
+            app?.bridgeStore?.addCurrencies(list)
+
+            const srcCake = app?.bridgeStore?.currencies?.find(
+              (i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId === 102,
+            )
+            app?.bridgeStore?.setSrcCurrency(srcCake)
           } catch (error) {
             console.error('Failed to load lz-bridge', error)
+            clearInterval(currencyInterval)
           }
-        }, 2000)
+        }, 250)
+        setShow(true)
+        return () => clearInterval(currencyInterval)
       }
 
       setShow(true)
+      return undefined
     })
   }, [isCake])
 
