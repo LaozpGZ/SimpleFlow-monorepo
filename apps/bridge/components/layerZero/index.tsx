@@ -73,10 +73,12 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
             const currencies = rawCurrencies.slice()
             app.bridgeStore.currencies.length = 0
 
-            const list = currencies.filter((i: any) => i.symbol?.toLowerCase() === 'cake' && i.chainId !== 158)
+            const list = currencies.filter((i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId !== 158)
             app.bridgeStore.addCurrencies(list)
 
-            const srcCake = app.bridgeStore.currencies.find((i: any) => i.symbol === 'CAKE' && i.chainId === 102)
+            const srcCake = app.bridgeStore.currencies.find(
+              (i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId === 102,
+            )
             app.bridgeStore.setSrcCurrency(srcCake)
           } catch (error) {
             console.error('Failed to load lz-bridge', error)
