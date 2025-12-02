@@ -86,7 +86,11 @@ export const useAddressBalance = (
       throw new Error(`Error fetching balances: ${response.statusText}`)
     }
 
-    const data = (await response.json()) || []
+    const data = await response.json()
+
+    if (!Array.isArray(data)) {
+      throw new Error(`Invalid balances response: expected array, got ${typeof data}`)
+    }
 
     return data
   }, [address])
