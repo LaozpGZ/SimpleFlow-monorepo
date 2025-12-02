@@ -58,11 +58,15 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
             const length = app?.bridgeStore?.currencies?.length
 
             if (length !== null || length !== undefined) {
-              const currencies = app?.bridgeStore?.currencies?.slice()
+              let rawCurrencies = app?.bridgeStore?.currencies
+              if (!Array.isArray(rawCurrencies)) {
+                rawCurrencies = []
+              }
+              const currencies = rawCurrencies.slice()
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               app!.bridgeStore!.currencies.length = 0
 
-              const list = currencies?.filter((i: any) => i.symbol.toLowerCase() === 'cake' && i.chainId !== 158)
+              const list = currencies.filter((i: any) => i?.symbol?.toLowerCase() === 'cake' && i?.chainId !== 158)
               app?.bridgeStore?.addCurrencies(list)
               const srcCake = app?.bridgeStore?.currencies?.find(
                 (i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId === 102,
