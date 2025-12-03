@@ -6,7 +6,7 @@ import { useConnections, useConnectorClient } from 'wagmi'
  * This hook will check Metamask version and return true if it's less than 13.3.0.
  */
 
-function isOutdatedVersion(minimum: string, current?: string | null) {
+export const isOutdatedVersion = (minimum: string, current?: string | null) => {
   if (typeof current !== 'string') return false
 
   const a = current.split('.').map((v) => Number(v))
