@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Schimbă max. %inputAmount% %inputSymbol% pentru %outputAmount% %outputSymbol% la %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Schimbă %inputAmount% %inputSymbol% pentru min. %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Schimbă %inputAmount% %inputSymbol% pentru min. %outputAmount% %outputSymbol% la %recipientAddress%",
-  "Currently %feature% only supported in": "Momentan numai %feature% este acceptată în",
   "Please switch your network to continue.": "Treci în rețeaua ta pentru a continua.",
   "Switch network in wallet": "Schimbă rețeaua în portofel",
   "It’s a BNB Smart Chain only feature": "Această caracteristică nu este disponibilă decât pentru BNB Smart Chain",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "pentru a echilibra automat și a furniza lichiditate Infinity cu un singur clic.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Atenție: Acest pool folosește un hook neverificat. Vă rugăm să efectuați propria cercetare înainte de a interacționa cu acesta, deoarece acest lucru poate duce la o pierdere de fonduri care nu poate fi recuperată.",
   "Monad Now Live on PancakeSwap": "Monad acum live pe PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "Tranzacționați active tokenizate cu zero comisioane"
+  "Trade Tokenized Assets with Zero Fees": "Tranzacționați active tokenizate cu zero comisioane",
+  "Currently %feature% are only supported on": "Momentan, %feature% sunt disponibile doar pe",
+  "No transaction data found for Solana swap": "Nu s-au găsit date despre tranzacție pentru swap-ul Solana",
+  "Solana swap failed": "Swap-ul Solana a eșuat",
+  "Insufficient balance for transaction": "Sold insuficient pentru tranzacție",
+  "Please connect your Solana wallet first": "Vă rugăm să vă conectați mai întâi portofelul Solana"
 }

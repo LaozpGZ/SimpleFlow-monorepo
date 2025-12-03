@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Csere max. %inputAmount%%inputSymbol% erre %outputAmount%%outputSymbol% a %recipientAddress% címre",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Csere %inputAmount%%inputSymbol% erre min%outputAmount%%outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Csere %inputAmount%%inputSymbol% erre min. %outputAmount%%outputSymbol% a %recipientAddress% címre",
-  "Currently %feature% only supported in": "Jelenleg a %feature% funkció csak itt támogatott",
   "Please switch your network to continue.": "Kérjük, a folytatáshoz kapcsolja át a saját hálózatát.",
   "Switch network in wallet": "Kapcsolja át a hálózatot a tárcában",
   "It’s a BNB Smart Chain only feature": "Ez kizárólag a BNB Smart Chain funkciója",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "Automatikus kiegyensúlyozás és Infinity likviditás biztosítása egyetlen kattintással.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Figyelem: Ez a pool egy nem ellenőrzött hookot használ. Kérjük, végezzen saját kutatást, mielőtt interakcióba lépne vele, mivel ez olyan pénzeszközök elvesztését eredményezheti, amelyek nem szerezhetők vissza.",
   "Monad Now Live on PancakeSwap": "A Monad már elérhető a PancakeSwapen",
-  "Trade Tokenized Assets with Zero Fees": "Kereskedj tokenizált eszközökkel díjmentesen"
+  "Trade Tokenized Assets with Zero Fees": "Kereskedj tokenizált eszközökkel díjmentesen",
+  "Currently %feature% are only supported on": "A(z) %feature% jelenleg csak a következő hálózatokon támogatott",
+  "No transaction data found for Solana swap": "Nem található tranzakciós adat a Solana swap-hez.",
+  "Solana swap failed": "A Solana swap sikertelen.",
+  "Insufficient balance for transaction": "Elégtelen egyenleg a tranzakcióhoz.",
+  "Please connect your Solana wallet first": "Kérjük, először csatlakoztassa a Solana tárcáját."
 }

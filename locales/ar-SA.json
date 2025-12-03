@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "مبادلة %inputAmount% %inputSymbol% بحد أقصى بـ %outputAmount% %outputSymbol% إلى %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "مبادلة %inputAmount% %inputSymbol% بـ%outputAmount% %outputSymbol% بحد أدنى",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "مبادلة %inputAmount% %inputSymbol% بـ %outputAmount% %outputSymbol% بحد أدنى إلى %recipientAddress%",
-  "Currently %feature% only supported in": "يتم حاليًا دعم %feature% فقط",
   "Please switch your network to continue.": "يرجى تبديل شبكتك للاستمرار.",
   "Switch network in wallet": "تبديل الشبكة في المحفظة",
   "It’s a BNB Smart Chain only feature": "إنها ميزة خاصة بسلسلة BNB Smart Chain فقط",
@@ -4291,5 +4290,10 @@
   "to automatically balance and provide Infinity liquidity in one click.": "لتحقيق التوازن التلقائي وتوفير سيولة Infinity بنقرة واحدة.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "تحذير: يستخدم هذا المجمع خطافًا غير متحقق منه. يرجى إجراء بحثك الخاص قبل التفاعل معه، حيث أن القيام بذلك قد يؤدي إلى خسارة أموال لا يمكن استردادها.",
   "Monad Now Live on PancakeSwap": "Monad متاح الآن على PancakeSwap",
-  "Trade Tokenized Assets with Zero Fees": "تداول الأصول المرمزة برسوم صفرية"
+  "Trade Tokenized Assets with Zero Fees": "تداول الأصول المرمزة برسوم صفرية",
+  "Currently %feature% are only supported on": "حاليًا، %feature% مدعومة فقط على",
+  "No transaction data found for Solana swap": "لا توجد بيانات معاملة لمبادلة Solana",
+  "Solana swap failed": "فشلت مبادلة Solana",
+  "Insufficient balance for transaction": "رصيد غير كافٍ للمعاملة",
+  "Please connect your Solana wallet first": "يرجى ربط محفظة Solana الخاصة بك أولاً"
 }
