@@ -22,7 +22,7 @@ import { ASSET_CDN } from './url'
 import { WalletFilterValue } from '../state/hooks'
 
 // Wrapper that keeps getter but makes it safe
-export function wrapInstalledSafe(walletConfig: WalletConfigV3): WalletConfigV3 {
+export function wrapInstalledSafe<T extends { id: any; installed?: boolean }>(walletConfig: T): T {
   if (!walletConfig) return walletConfig
   const descriptor = Object.getOwnPropertyDescriptor(walletConfig, 'installed')
 
