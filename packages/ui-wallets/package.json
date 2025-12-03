@@ -6,6 +6,9 @@
     "*.css.ts"
   ],
   "private": true,
+  "scripts": {
+    "test": "vitest --run"
+  },
   "dependencies": {
     "@pancakeswap/hooks": "workspace:*",
     "@pancakeswap/localization": "workspace:*",
