@@ -227,6 +227,11 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     [isMobile, theme.colors.background, theme.colors.gradientCardHeader, previewStatus],
   )
 
+  const previouslyUsedWallets = useMemo<[WalletConfigV3<EvmConnectorNames>[], WalletConfigV3<SolanaConnectorNames>[]]>(
+    () => [previouslyUsedEvmWallets, previouslyUsedSolanaWallets],
+    [previouslyUsedEvmWallets, previouslyUsedSolanaWallets],
+  )
+
   return (
     <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest} onDismiss={handleDismiss}>
       <ModalWrapper
@@ -260,7 +265,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
               onDismiss={handleDismiss}
               wallets={wallets_}
               topWallets={topWallets_}
-              previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
+              previouslyUsedWallets={previouslyUsedWallets}
               connectWallet={connectWallet}
               onWalletConnected={handleWalletConnected}
               displaySocialLogin={displaySocialLogin}
