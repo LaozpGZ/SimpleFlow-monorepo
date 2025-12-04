@@ -85,22 +85,6 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
-  const handleGoogleLogin = () => {
-    onGoogleLogin?.()
-  }
-
-  const handleXLogin = () => {
-    onXLogin?.()
-  }
-
-  const handleTelegramLogin = () => {
-    onTelegramLogin?.()
-  }
-
-  const handleDiscordLogin = () => {
-    onDiscordLogin?.()
-  }
-
   return (
     <>
       {isMobile ? (
@@ -114,7 +98,7 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
         </RowBetween>
       ) : null}
       <Column gap="12px">
-        <SocialLoginButton onClick={handleGoogleLogin}>
+        <SocialLoginButton onClick={onGoogleLogin}>
           <img
             src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`}
             width="32"
@@ -126,21 +110,21 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
         </SocialLoginButton>
 
         <FlexGap gap="8px" width="100%">
-          <SocialLoginButtonVertical onClick={handleXLogin}>
+          <SocialLoginButtonVertical onClick={onXLogin}>
             <IconWrapper>
               <SocialLoginXIcon />
             </IconWrapper>
             <Text style={{ whiteSpace: 'nowrap' }}>{t('X Login')}</Text>
           </SocialLoginButtonVertical>
 
-          <SocialLoginButtonVertical onClick={handleTelegramLogin}>
+          <SocialLoginButtonVertical onClick={onTelegramLogin}>
             <IconWrapper>
               <SocialLoginTelegramIcon />
             </IconWrapper>
             <Text>{t('Telegram')}</Text>
           </SocialLoginButtonVertical>
 
-          <SocialLoginButtonVertical onClick={handleDiscordLogin}>
+          <SocialLoginButtonVertical onClick={onDiscordLogin}>
             <IconWrapper>
               <SocialLoginDiscordIcon />
             </IconWrapper>
