@@ -68,9 +68,9 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   )
 
   const handleDismiss = useCallback(() => {
-    props.onDismiss?.()
+    onDismiss?.()
     setPreviewStatus(PreviewStatus.Intro)
-  }, [props.onDismiss])
+  }, [onDismiss])
 
   const setEvmSelectedWallet = useSetAtom(setSelectedEvmWalletAtom)
   const [, setSolanaError] = useAtom(errorSolanaAtom)
@@ -197,13 +197,13 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     (originalCallback?: () => void) => {
       return () => {
         // Close modal when social login is initiated
-        props.onDismiss?.()
+        onDismiss?.()
 
         // Execute the original callback
         originalCallback?.()
       }
     },
-    [props.onDismiss],
+    [onDismiss],
   )
 
   const { isMobile } = useMatchBreakpoints()
@@ -267,10 +267,10 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
               previewStatus={previewStatus}
               setPreviewStatus={setPreviewStatus}
               docLink={docLink}
-              onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
-              onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
-              onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
-              onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
+              onGoogleLogin={handleSocialLoginWithCleanup(onGoogleLogin)}
+              onXLogin={handleSocialLoginWithCleanup(onXLogin)}
+              onTelegramLogin={handleSocialLoginWithCleanup(onTelegramLogin)}
+              onDiscordLogin={handleSocialLoginWithCleanup(onDiscordLogin)}
             />
           </AtomBox>
         </AtomBox>
