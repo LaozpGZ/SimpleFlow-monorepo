@@ -260,6 +260,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
             width="100%"
           >
             <ModalContent
+              chainId={chainId}
               evmAddress={evmAddress}
               solanaAddress={solanaAddress}
               onDismiss={handleDismiss}
