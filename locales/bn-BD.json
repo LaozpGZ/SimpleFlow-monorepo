@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "%outputAmount% %outputSymbol% থেকে %recipientAddress% এর জন্য সর্বোচ্চ %inputAmount% %inputSymbol% সোয়াপ করুন",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "সর্বনিম্ন %outputAmount% %outputSymbol% এর জন্য %inputAmount% %inputSymbol% সোয়াপ করুন ",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "সর্বনিম্ন %outputAmount% %outputSymbol% থেকে %recipientAddress% এর জন্য %inputAmount% %inputSymbol% সোয়াপ করুন",
-  "Currently %feature% only supported in": "বর্তমানে %feature% সুবিধা রয়েছে কেবল",
   "Please switch your network to continue.": "চালিয়ে যেতে অনুগ্রহ করে আপনার নেটওয়ার্ক পরিবর্তন করুন।",
   "Switch network in wallet": "ওয়ালেট অ্যাপ থেকে নেটওয়ার্ক পরিবর্তন করুন",
   "It’s a BNB Smart Chain only feature": "এটি একটি কেবল BNB স্মার্ট চেইন বৈশিষ্ট্য",
@@ -4291,5 +4290,11 @@
   "to automatically balance and provide Infinity liquidity in one click.": "এক ক্লিকে স্বয়ংক্রিয়ভাবে ব্যালেন্স করতে এবং Infinity লিকুইডিটি প্রদান করতে।",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "সতর্কতা: এই পুল একটি যাচাইবিহীন হুক ব্যবহার করে। এর সাথে ইন্টারঅ্যাক্ট করার আগে অনুগ্রহ করে আপনার নিজের গবেষণা পরিচালনা করুন, কারণ এমনটি করলে আপনার তহবিল হারিয়ে যেতে পারে যা পুনরুদ্ধার করা যাবে না।",
   "Monad Now Live on PancakeSwap": "Monad এখন PancakeSwap-এ লাইভ",
-  "Trade Tokenized Assets with Zero Fees": "শূন্য ফিতে টোকেনাইজড অ্যাসেট ট্রেড করুন"
+  "Trade Tokenized Assets with Zero Fees": "শূন্য ফিতে টোকেনাইজড অ্যাসেট ট্রেড করুন",
+  "Currently %feature% are only supported on": "বর্তমানে %feature% শুধুমাত্র এখানে সমর্থিত",
+  "No transaction data found for Solana swap": "Solana সোয়াপের জন্য কোনো লেনদেনের ডেটা পাওয়া যায়নি",
+  "Solana swap failed": "Solana সোয়াপ ব্যর্থ হয়েছে",
+  "Insufficient balance for transaction": "লেনদেনের জন্য অপর্যাপ্ত ব্যালেন্স",
+  "Please connect your Solana wallet first": "অনুগ্রহ করে প্রথমে আপনার Solana ওয়ালেট সংযোগ করুন",
+  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "সোশ্যাল লগইন শুধুমাত্র %chains%-এ কাজ করে। অন্যান্য নেটওয়ার্কে ফান্ড পাঠালে স্থায়ীভাবে ক্ষতি হতে পারে।"
 }

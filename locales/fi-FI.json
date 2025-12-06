@@ -1615,7 +1615,6 @@
   "Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%": "Vaihda enintään %inputAmount% %inputSymbol% → %outputAmount% %outputSymbol% osoitteeseen %recipientAddress%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%": "Vaihda %inputAmount% %inputSymbol% → vähintään %outputAmount% %outputSymbol%",
   "Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%": "Vaihda %inputAmount% %inputSymbol% → vähintään %outputAmount% %outputSymbol% osoitteeseen %recipientAddress%",
-  "Currently %feature% only supported in": "%feature% on tällä hetkellä tuettu vain parissa",
   "Please switch your network to continue.": "Vaihda verkkosi jatkaaksesi.",
   "Switch network in wallet": "Vaihda verkkoa lompakossa",
   "It’s a BNB Smart Chain only feature": "Tämä on vain BNB Smart Chainin ominaisuus",
@@ -4291,5 +4290,11 @@
   "to automatically balance and provide Infinity liquidity in one click.": "Tasapainottaa ja tarjoaa Infinity-likviditeettiä automaattisesti yhdellä klikkauksella.",
   "Caution: This pool uses an unverified hook. Please conduct your own research before interacting with it, as doing so may result in a loss of funds that cannot be recovered.": "Varoitus: Tämä pooli käyttää vahvistamatonta hookia. Tee oma tutkimuksesi ennen kuin olet vuorovaikutuksessa sen kanssa, koska se voi johtaa peruuttamattomaan varojen menetykseen.",
   "Monad Now Live on PancakeSwap": "Monad nyt livenä PancakeSwapissa",
-  "Trade Tokenized Assets with Zero Fees": "Treidaa tokenisoituja omaisuuseriä nollapalkkioilla"
+  "Trade Tokenized Assets with Zero Fees": "Treidaa tokenisoituja omaisuuseriä nollapalkkioilla",
+  "Currently %feature% are only supported on": "Tällä hetkellä %feature% tuetaan vain",
+  "No transaction data found for Solana swap": "Solana-vaihdon transaktiodataa ei löytynyt",
+  "Solana swap failed": "Solana-vaihto epäonnistui",
+  "Insufficient balance for transaction": "Saldo ei riitä transaktioon",
+  "Please connect your Solana wallet first": "Yhdistä Solana-lompakkosi ensin",
+  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "Some-kirjautuminen toimii vain verkoissa %chains%. Varojen lähettäminen muihin verkkoihin voi aiheuttaa pysyvän menetyksen."
 }
