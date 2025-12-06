@@ -37,17 +37,17 @@ const Providers: React.FC<
         <LanguageProvider>
           <PrivyProvider>
             <QueryClientProvider client={queryClient}>
-              <WalletProvider>
-                <HydrationBoundary state={dehydratedState}>
-                  <NextThemeProvider>
-                    <StyledUIKitProvider>
+              <HydrationBoundary state={dehydratedState}>
+                <NextThemeProvider>
+                  <StyledUIKitProvider>
+                    <WalletProvider>
                       <HistoryManagerProvider>
                         <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
                       </HistoryManagerProvider>
-                    </StyledUIKitProvider>
-                  </NextThemeProvider>
-                </HydrationBoundary>
-              </WalletProvider>
+                    </WalletProvider>
+                  </StyledUIKitProvider>
+                </NextThemeProvider>
+              </HydrationBoundary>
             </QueryClientProvider>
           </PrivyProvider>
         </LanguageProvider>
