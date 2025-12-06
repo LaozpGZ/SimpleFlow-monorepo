@@ -239,10 +239,7 @@ class SmartWalletEIP1193Provider extends EventEmitter {
           if (err instanceof PrivySwitchChainError) {
             throw err
           }
-          const chainId = params?.[0]?.chainId as string | undefined
-          if (!chainId) {
-            throw new PrivySwitchChainError(undefined, 'Invalid or missing chainId')
-          }
+          const chainId = params?.[0]?.chainId as string
           const numericChainId = parseInt(chainId, 16)
           throw new PrivySwitchChainError(numericChainId, err?.message ?? 'Failed to switch chain')
         }
