@@ -237,7 +237,7 @@ const useProcessSwitchChainRequest = () => {
       } catch (error) {
         console.log(`[chain]`, 'switch error', error)
         if (error instanceof PrivySwitchChainError) {
-          const chainName = chainFullNames[error.chainId] ?? ''
+          const chainName = error.chainId ? chainFullNames[error.chainId] ?? '' : ''
 
           toastError(t('Error'), t('Social login with %chainName% is not supported.', { chainName }))
         }

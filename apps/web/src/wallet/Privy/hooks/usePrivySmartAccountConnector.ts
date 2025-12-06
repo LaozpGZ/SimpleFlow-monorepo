@@ -217,7 +217,10 @@ class SmartWalletEIP1193Provider extends EventEmitter {
         throw new Error('eth_signTransaction is not supported. Use eth_sendTransaction instead.')
       case 'wallet_switchEthereumChain': {
         try {
-          const [{ chainId }] = params as [{ chainId: string }]
+          const chainId = params?.[0]?.chainId as string | undefined
+          if (!chainId) {
+            throw new PrivySwitchChainError(undefined, 'Invalid or missing chainId')
+          }
           const numericChainId = parseInt(chainId, 16)
           if (!this.smartWalletClient?.account) {
             throw new PrivySwitchChainError(numericChainId, 'Account not connected!')
@@ -236,7 +239,10 @@ class SmartWalletEIP1193Provider extends EventEmitter {
           if (err instanceof PrivySwitchChainError) {
             throw err
           }
-          const [{ chainId }] = params as [{ chainId: string }]
+          const chainId = params?.[0]?.chainId as string | undefined
+          if (!chainId) {
+            throw new PrivySwitchChainError(undefined, 'Invalid or missing chainId')
+          }
           const numericChainId = parseInt(chainId, 16)
           throw new PrivySwitchChainError(numericChainId, err?.message ?? 'Failed to switch chain')
         }
