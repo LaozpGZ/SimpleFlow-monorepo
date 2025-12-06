@@ -28,17 +28,29 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      process.env.APTOS_PRIVATE_RPC && {
+        source: '/api/rpc/aptos/:path*',
+        destination: `${process.env.APTOS_PRIVATE_RPC}/:path*`,
+      },
+      process.env.SOLANA_PRIVATE_RPC && {
+        source: '/api/rpc/solana/:path*',
+        destination: `${process.env.SOLANA_PRIVATE_RPC}/:path*`,
+      },
+    ].filter(Boolean)
+  },
   webpack: (webpackConfig) => {
     webpackConfig.plugins.push(
-        new RetryChunkLoadPlugin({
-          cacheBust: `function() {
+      new RetryChunkLoadPlugin({
+        cacheBust: `function() {
           return 'cache-bust=' + Date.now();
         }`,
-          retryDelay: `function(retryAttempt) {
+        retryDelay: `function(retryAttempt) {
           return 2 ** (retryAttempt - 1) * 500;
         }`,
-          maxRetries: 5,
-        }),
+        maxRetries: 5,
+      }),
     )
     return webpackConfig
   },
