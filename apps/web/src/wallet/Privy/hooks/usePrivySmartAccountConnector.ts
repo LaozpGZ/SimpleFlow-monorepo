@@ -229,7 +229,10 @@ class SmartWalletEIP1193Provider extends EventEmitter {
           const newClient = await this.getClientForChain({ id: numericChainId })
 
           if (!newClient) {
-            throw new PrivySwitchChainError(numericChainId, `No smart wallet client found for chain ID ${chainId}`)
+            throw new PrivySwitchChainError(
+              numericChainId,
+              `No smart wallet client found for chain ID ${numericChainId}`,
+            )
           }
 
           this.smartWalletClient = newClient
@@ -237,7 +240,7 @@ class SmartWalletEIP1193Provider extends EventEmitter {
           return null
         } catch (err: any) {
           if (err instanceof PrivySwitchChainError) {
-            throw err
+            throw new Error(err.message)
           }
           const chainId = params?.[0]?.chainId as string
           const numericChainId = parseInt(chainId, 16)
