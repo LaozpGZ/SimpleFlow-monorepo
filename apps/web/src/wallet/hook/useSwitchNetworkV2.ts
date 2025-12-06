@@ -240,6 +240,8 @@ const useProcessSwitchChainRequest = () => {
           const chainName = error.chainId ? chainFullNames[error.chainId] ?? '' : ''
 
           toastError(t('Error'), t('Social login with %chainName% is not supported.', { chainName }))
+        } else {
+          toastError(t('Error'), t('An unexpected error occurred while switching chains. Please try again.'))
         }
         return false
       } finally {
