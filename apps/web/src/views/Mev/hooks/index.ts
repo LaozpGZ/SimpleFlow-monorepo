@@ -64,7 +64,11 @@ async function checkWalletSupportAddEthereumChain(connector: Connector) {
   try {
     if (typeof connector.getProvider !== 'function') return false
 
-    const provider = (await connector.getProvider()) as any
+    let provider = (await connector.getProvider()) as any
+
+    if (provider?.walletProvider) {
+      provider = provider.walletProvider
+    }
 
     return Boolean(provider && provider.isMetaMask && !WalletProviders.some((p: string) => p in provider))
   } catch (error) {
