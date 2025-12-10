@@ -114,6 +114,7 @@ export default function useSwapRecordTransaction(chainId?: number, account?: str
         input: trade.inputAmount.currency,
         output: trade.outputAmount.currency,
         type,
+        isMultisig,
       })
       logTx({ account, chainId, hash })
     },
