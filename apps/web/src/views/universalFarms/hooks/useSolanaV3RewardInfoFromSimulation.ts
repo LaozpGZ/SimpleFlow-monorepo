@@ -75,13 +75,6 @@ export const useSolanaV3RewardInfoFromSimulation = ({ poolInfo, position }: Sola
         try {
           const result = await raydium.clmm.getPoolInfoFromRpc(poolInfo.poolId!)
 
-          const ammPool = {
-            tickCurrent: result.computePoolInfo.tickCurrent,
-            feeGrowthGlobalX64A: result.computePoolInfo.feeGrowthGlobalX64A,
-            feeGrowthGlobalX64B: result.computePoolInfo.feeGrowthGlobalX64B,
-            rewardInfos: result.computePoolInfo.rewardInfos,
-          }
-
           const tickArrayLowerAddress = getTickArrayAddress({ pool: result.poolInfo, tickNumber: position.tickLower })
           const tickArrayUpperAddress = getTickArrayAddress({ pool: result.poolInfo, tickNumber: position.tickUpper })
 
@@ -99,8 +92,13 @@ export const useSolanaV3RewardInfoFromSimulation = ({ poolInfo, position }: Sola
           const tickUpperState =
             tickArrayUpper.ticks[TickUtils.getTickOffsetInArray(position.tickUpper, result.computePoolInfo.tickSpacing)]
 
-          const fees = PositionUtils.GetPositionFeesV2(ammPool, position, tickLowerState, tickUpperState)
-          const rewards = PositionUtils.GetPositionRewardsV2(ammPool, position, tickLowerState, tickUpperState)
+          const fees = PositionUtils.GetPositionFeesV2(result.computePoolInfo, position, tickLowerState, tickUpperState)
+          const rewards = PositionUtils.GetPositionRewardsV2(
+            result.computePoolInfo,
+            position,
+            tickLowerState,
+            tickUpperState,
+          )
 
           return {
             feeAmount0: fees.tokenFeeAmountA,
