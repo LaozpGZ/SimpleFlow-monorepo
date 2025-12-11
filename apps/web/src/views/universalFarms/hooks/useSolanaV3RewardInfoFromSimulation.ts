@@ -26,12 +26,12 @@ const simulationQueue = new PQueue({
   intervalCap: 1,
 })
 
-export type SolanaV3RewardInfoFromSimulationProps = {
+type SolanaV3RewardInfoFromSimulationProps = {
   poolInfo: SolanaV3PoolInfo | undefined
   position: SolanaV3PositionDetail
 }
 
-export type BreakdownRewardInfo = {
+type BreakdownRewardInfo = {
   fee: {
     A?: { amount: string; amountUSD: string; mint: TokenInfo }
     B?: { amount: string; amountUSD: string; mint: TokenInfo }
@@ -39,7 +39,7 @@ export type BreakdownRewardInfo = {
   rewards: { mint: TokenInfo; amount: string; amountUSD: string }[]
 }
 
-export const getTickArrayAddress = (props: { pool: ApiV3PoolInfoConcentratedItem; tickNumber: number }) =>
+const getTickArrayAddress = (props: { pool: ApiV3PoolInfoConcentratedItem; tickNumber: number }) =>
   TickUtils.getTickArrayAddressByTick(
     new PublicKey(props.pool.programId),
     new PublicKey(props.pool.id),
