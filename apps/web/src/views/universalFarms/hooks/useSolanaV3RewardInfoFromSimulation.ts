@@ -58,7 +58,7 @@ export const useSolanaV3RewardInfoFromSimulation = ({ poolInfo, position }: Sola
   const raydium = useRaydium()
   const simulation = useCallback(async () => {
     const result = await simulationQueue.add(async () => {
-      if (!raydium || !poolInfo) return DEFAULT_SIMULATION_RESULT
+      if (!raydium || !poolInfo || !position) return DEFAULT_SIMULATION_RESULT
 
       const simulationResult = await removeLiquidity({
         simulateOnly: true,
@@ -119,7 +119,7 @@ export const useSolanaV3RewardInfoFromSimulation = ({ poolInfo, position }: Sola
     queryKey: [
       'solana-v3-reward-info-from-simulation',
       poolInfo?.poolId,
-      position.nftMint.toBase58(),
+      position?.nftMint?.toBase58(),
       latestTxReceipt?.blockHash,
     ],
     queryFn: simulation,
@@ -142,10 +142,10 @@ export const useSolanaV3RewardInfoFromSimulation = ({ poolInfo, position }: Sola
 
   const mints = useMemo(() => {
     return uniq([
-      poolInfo?.rawPool.mintA.address,
-      poolInfo?.rawPool.mintB.address,
+      poolInfo?.rawPool?.mintA?.address,
+      poolInfo?.rawPool?.mintB?.address,
       ...(poolInfo?.rawPool?.rewardDefaultInfos?.map((r) => r.mint.address) || []),
-    ])
+    ]).filter(Boolean)
   }, [poolInfo])
 
   const { data: tokenPrices } = useSolanaTokenPrices({
