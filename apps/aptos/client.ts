@@ -3,6 +3,7 @@ import { FewchaConnector } from '@pancakeswap/awgmi/connectors/fewcha'
 import { MartianConnector } from '@pancakeswap/awgmi/connectors/martian'
 import { MsafeConnector } from '@pancakeswap/awgmi/connectors/msafe'
 import { PetraConnector } from '@pancakeswap/awgmi/connectors/petra'
+import { WalletStandardConnector } from '@pancakeswap/awgmi/connectors/walletStandard'
 import { PontemConnector } from '@pancakeswap/awgmi/connectors/pontem'
 import { RiseConnector } from '@pancakeswap/awgmi/connectors/rise'
 import { SafePalConnector } from '@pancakeswap/awgmi/connectors/safePal'
@@ -26,7 +27,7 @@ export const msafeConnector = new MsafeConnector({ chains })
 
 export const client = createClient({
   connectors: [
-    new PetraConnector({ chains }),
+    new WalletStandardConnector({ chains, options: { name: 'Petra', id: 'petra' } }),
     new PontemConnector({ chains }),
     new FewchaConnector({ chains }),
     new PetraConnector({ chains, options: { name: 'Trust Wallet', id: 'trustWallet' } }),

@@ -54,7 +54,13 @@ export const wallets: LegacyWalletConfig<ConnectorNames>[] = [
     title: 'Trust Wallet',
     icon: 'https://pancakeswap.finance/images/wallets/trust.png',
     get installed() {
-      return typeof window !== 'undefined' && Boolean(window.aptos) && Boolean((window.aptos as any)?.isTrust)
+      return (
+        typeof window !== 'undefined' &&
+        Boolean(window.aptos) &&
+        (Boolean((window.aptos as any)?.isTrust) ||
+          Boolean((window.aptos as any)?.isTrustWallet) ||
+          Boolean(window.trustwallet as any))
+      )
     },
     deepLink: 'https://link.trustwallet.com/open_url?coin_id=637&url=https://aptos.pancakeswap.finance/',
     connectorId: ConnectorNames.TrustWallet,
