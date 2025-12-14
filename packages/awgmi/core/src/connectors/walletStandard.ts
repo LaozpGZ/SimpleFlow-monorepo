@@ -1,7 +1,11 @@
 import {
   AccountAuthenticator,
+  Aptos,
+  AptosConfig,
+  generateRawTransaction,
   InputGenerateTransactionOptions,
   InputGenerateTransactionPayloadData,
+  Network,
 } from '@aptos-labs/ts-sdk'
 
 import { getWallets, Wallet } from '@wallet-standard/core'
@@ -89,17 +93,31 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
 
   get ready(): boolean {
     if (typeof window === 'undefined') return false
-
     return getWallets()
       .get()
-      .some((w) => w.name.toLowerCase() === this.name.toLowerCase() || w.name.toLowerCase() === this.id.toLowerCase())
+      .some((w) => {
+        const matchesNameOrId =
+          w.name.toLowerCase() === this.name.toLowerCase() || w.name.toLowerCase() === this.id.toLowerCase()
+
+        const hasAptosConnect = Boolean(w.features?.['aptos:connect'])
+
+        return matchesNameOrId && hasAptosConnect
+      })
   }
 
   async getProvider(_config?: { networkName?: string }): Promise<AptosWallet> {
     if (this.provider) return this.provider
 
     const wallets = getWallets().get()
-    const wallet = wallets.find((w) => w.name.toLowerCase() === this.id)
+
+    const wallet = wallets.find((w) => {
+      const matchesNameOrId =
+        w.name.toLowerCase() === this.name.toLowerCase() || w.name.toLowerCase() === this.id.toLowerCase()
+
+      const hasAptosConnect = Boolean(w.features?.['aptos:connect'])
+
+      return matchesNameOrId && hasAptosConnect
+    })
 
     if (!wallet) throw new ConnectorNotFoundError()
 
@@ -116,8 +134,8 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
     const result = await provider.features['aptos:connect'].connect()
 
     const account: Account = {
-      address: `0x${Buffer.from(result.args.address.data).toString('hex')}` as `0x${string}`,
-      publicKey: Buffer.from(result.args.publicKey.key.data).toString('hex'),
+      address: this.normalizeAddress(result.args.address),
+      publicKey: this.normalizePublicKey(result.args.publicKey),
     }
 
     const networkResult = await provider.features['aptos:network'].network()
@@ -131,8 +149,8 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
       }: {
         accounts?: Array<{
           args: {
-            address: { data: Uint8Array }
-            publicKey: { key: { data: Uint8Array } }
+            address: any
+            publicKey: any
           }
         }>
         chain?: string
@@ -141,10 +159,12 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
           this.emit('disconnect')
         } else {
           const raw = rawAccounts[0]
+
           const acc: Account = {
-            address: `0x${Buffer.from(raw.args.address.data).toString('hex')}` as `0x${string}`,
-            publicKey: Buffer.from(raw.args.publicKey.key.data).toString('hex'),
+            address: this.normalizeAddress(raw.args.address),
+            publicKey: this.normalizePublicKey(raw.args.publicKey),
           }
+
           this.emit('change', { account: acc })
         }
 
@@ -229,5 +249,29 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
     if (!provider) throw new ConnectorNotFoundError()
 
     return provider.features['aptos:signMessage'].signMessage(message)
+  }
+
+  private normalizeAddress(address: any): `0x${string}` {
+    if (typeof address === 'string') {
+      return address.startsWith('0x') ? (address as `0x${string}`) : (`0x${address}` as `0x${string}`)
+    }
+
+    if (address?.data instanceof Uint8Array) {
+      return `0x${Buffer.from(address.data).toString('hex')}` as `0x${string}`
+    }
+
+    throw new Error('Invalid address format')
+  }
+
+  private normalizePublicKey(publicKey: any): string {
+    if (typeof publicKey === 'string') {
+      return publicKey.startsWith('0x') ? publicKey.slice(2) : publicKey
+    }
+
+    if (publicKey?.key?.data instanceof Uint8Array) {
+      return Buffer.from(publicKey.key.data).toString('hex')
+    }
+
+    throw new Error('Invalid publicKey format')
   }
 }
