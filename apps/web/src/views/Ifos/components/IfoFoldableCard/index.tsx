@@ -151,7 +151,7 @@ export const IfoCurrentCard = ({
 // Past Ifo
 const IfoFoldableCard = ({ ifo }: { ifo: Ifo }) => {
   return (
-    <Box id={ifo.id} position="relative">
+    <Box id={ifo.id} position="relative" mb="10px">
       <Box as={StyledCard} borderRadius="32px">
         <Header ifoId={ifo.id} />
       </Box>
