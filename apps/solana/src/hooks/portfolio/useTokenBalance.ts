@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import Decimal from 'decimal.js'
+import { ENV as ChainID } from '@solana/spl-token-registry'
 import { useTokenAccountStore, useTokenStore } from '@/store'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
 import { IdleType } from '@/features/Portfolio/components/SectionOverview/components/PortfolioIdle'
@@ -27,7 +28,7 @@ export default function useTokenBalance() {
             return {
               token: {
                 decimals: 0,
-                chainId: 101,
+                chainId: ChainID.MainnetBeta,
                 symbol: tokenMint.slice(0, 6),
                 address: tokenMint,
                 programId: '',
@@ -60,7 +61,7 @@ export default function useTokenBalance() {
           ...acc,
           token: {
             decimals: 0,
-            chainId: 101,
+            chainId: ChainID.MainnetBeta,
             symbol: 'Others',
             address: '',
             programId: '',

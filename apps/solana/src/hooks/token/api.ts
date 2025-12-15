@@ -10,6 +10,7 @@ import {
   ExtensionType,
   MintLayout
 } from '@solana/spl-token-0.4'
+import { ENV as ChainID } from '@solana/spl-token-registry'
 import { getMintMetaData } from '@pancakeswap/solana-clmm-sdk'
 import { useAppStore } from '@/store/useAppStore'
 
@@ -80,7 +81,7 @@ export const getOnlineTokenInfo = async ({
         if (getTransferFeeConfig(onlineData)) tags.push('hasTransferFee')
         if (onlineData) {
           const res = {
-            chainId: 101,
+            chainId: ChainID.MainnetBeta,
             address: mintAddress,
             programId: pId?.toBase58() || TOKEN_PROGRAM_ID.toBase58(),
             logoURI: '',

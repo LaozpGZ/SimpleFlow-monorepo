@@ -1,5 +1,5 @@
 import { SPLToken } from '@pancakeswap/swap-sdk-core'
-import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { type TokenInfo, type JupRawTokenData, API_URLS } from '@pancakeswap/solana-core-sdk'
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
 
@@ -88,9 +88,21 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
     name: 'Jupiter',
     logoURI: 'https://jup.ag/_next/image?url=%2Fsvg%2Fjupiter-logo.png&w=96&q=75',
     description: 'Jupiter Token List',
-    apiUrl: 'https://lite-api.jup.ag/tokens/v1/tagged/verified',
-    parser: (data: TokenInfo[]) => {
-      return (data ?? []).map(convertRawTokenInfoIntoSPLToken)
+    apiUrl: API_URLS.JUP_TOKEN_LIST,
+    parser: (data: JupRawTokenData[]) => {
+      const tokenList: TokenInfo[] =
+        data?.map((t) => ({
+          chainId: NonEVMChainId.SOLANA,
+          address: t.id,
+          name: t.name,
+          decimals: t.decimals,
+          symbol: t.symbol,
+          logoURI: t.icon || '',
+          tags: t.tags || [],
+          programId: t.tokenProgram,
+          priority: 1,
+        })) || []
+      return tokenList.map(convertRawTokenInfoIntoSPLToken)
     },
   },
 }

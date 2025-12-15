@@ -4,6 +4,7 @@ import { BigNumberish } from "@/common/bignumber";
 import { Token, TokenAmount } from "../../module";
 import { SOL_INFO, TOKEN_WSOL } from "./constant";
 import { TokenInfo } from "./type";
+import { ENV as ChainID } from "@solana/spl-token-registry";
 
 import { ApiV3Token, ExtensionsItem } from "../../api";
 import { solToWSol } from "@/common";
@@ -43,7 +44,7 @@ export const toTokenInfo = ({
     symbol: pubStr,
     logoURI,
     extensions: {},
-    chainId: 101,
+    chainId: ChainID.MainnetBeta,
     programId: programId.toString(),
     name: pubStr,
     tags: [],
@@ -101,7 +102,7 @@ export const toApiV3Token = ({
   programId: string;
   decimals: number;
 } & Partial<ApiV3Token>): ApiV3Token => ({
-  chainId: 101,
+  chainId: ChainID.MainnetBeta,
   address: solToWSol(address).toBase58(),
   programId,
   logoURI: "",

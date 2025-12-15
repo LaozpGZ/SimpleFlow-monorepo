@@ -1,5 +1,6 @@
 import { EpochInfo, PublicKey } from "@solana/web3.js";
 import { createTransferInstruction, TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import { ENV as ChainID } from "@solana/spl-token-registry";
 import BN from "bn.js";
 import Decimal from "decimal.js";
 import { AmmV4Keys, ApiV3Token, ClmmKeys, PoolKeys } from "@/api";
@@ -842,7 +843,7 @@ export default class TradeV2 extends ModuleBase {
     for (const [routeMint, info] of Object.entries(routePathDict)) {
       // const routeToken = new Token(info.mintProgram, routeMint, info.mDecimals);
       const routeToken = {
-        chainId: 101,
+        chainId: ChainID.MainnetBeta,
         address: routeMint,
         programId: info.mintProgram.toBase58(),
         logoURI: "",
