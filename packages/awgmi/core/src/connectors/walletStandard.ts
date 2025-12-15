@@ -3,9 +3,12 @@ import {
   Aptos,
   AptosConfig,
   generateRawTransaction,
+  generateTransactionPayload,
+  InputEntryFunctionDataWithRemoteABI,
   InputGenerateTransactionOptions,
   InputGenerateTransactionPayloadData,
   Network,
+  RawTransaction,
 } from '@aptos-labs/ts-sdk'
 
 import { getWallets, Wallet } from '@wallet-standard/core'
@@ -47,9 +50,15 @@ type AptosWallet = Wallet & {
     }
     'aptos:signAndSubmitTransaction': {
       signAndSubmitTransaction(input: { payload: any; gasUnitPrice?: number; maxGasAmount?: number }): Promise<{
-        args: {
-          hash: string
-        }
+        args: { hash: string }
+        status: 'Approved' | 'Rejected'
+      }>
+
+      signAndSubmitTransaction(
+        input: { rawTransaction: RawTransaction },
+        options?: InputGenerateTransactionOptions,
+      ): Promise<{
+        args: { hash: string }
         status: 'Approved' | 'Rejected'
       }>
     }
@@ -190,11 +199,34 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
     const provider = await this.getProvider()
     if (!provider) throw new ConnectorNotFoundError()
 
-    if (provider.features['aptos:account']) {
-      return provider.features['aptos:account'].account()
+    const feature = provider.features['aptos:account']
+    if (!feature) throw new ConnectorNotFoundError()
+
+    const raw = await feature.account()
+
+    let addressValue: any
+
+    if (typeof raw === 'string') {
+      addressValue = raw
+    } else if (raw?.address) {
+      addressValue = raw.address
+    } else {
+      throw new Error('Invalid account format returned by wallet')
     }
 
-    throw new ConnectorNotFoundError()
+    const account: Account = {
+      address: this.normalizeAddress(addressValue),
+    }
+
+    if (raw && typeof raw === 'object' && raw.publicKey) {
+      if (Array.isArray(raw.publicKey)) {
+        account.publicKey = raw.publicKey.map((pk) => this.normalizePublicKey(pk))
+      } else {
+        account.publicKey = this.normalizePublicKey(raw.publicKey)
+      }
+    }
+
+    return account
   }
 
   async network(): Promise<string> {
@@ -229,11 +261,26 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
   ) {
     const provider = await this.getProvider()
     if (!provider) throw new ConnectorNotFoundError()
-    const result = await provider.features['aptos:signAndSubmitTransaction'].signAndSubmitTransaction({
-      payload: convertTransactionPayloadForWalletStandard(tx),
-      gasUnitPrice: options?.gasUnitPrice,
-      maxGasAmount: options?.maxGasAmount,
-    })
+
+    const feature = provider.features['aptos:signAndSubmitTransaction']
+    if (!feature) throw new ConnectorNotFoundError()
+
+    const normalizedOptions = this.normalizeTransactionOptions(options)
+
+    let result
+
+    try {
+      result = await feature.signAndSubmitTransaction({
+        payload: convertTransactionPayloadForWalletStandard(tx),
+        gasUnitPrice: normalizedOptions?.gasUnitPrice,
+        maxGasAmount: normalizedOptions?.maxGasAmount,
+      })
+    } catch (err) {
+      result = await feature.signAndSubmitTransaction(
+        { rawTransaction: await this.generateRawTransaction(tx, normalizedOptions) },
+        normalizedOptions,
+      )
+    }
 
     if (result?.status !== 'Approved') {
       throw new Error('Transaction was not approved')
@@ -273,5 +320,73 @@ export class WalletStandardConnector extends Connector<AptosWallet, WalletStanda
     }
 
     throw new Error('Invalid publicKey format')
+  }
+
+  private async getAptosClient(provider: any): Promise<Aptos> {
+    const networkResult = await provider.features['aptos:network']?.network()
+
+    if (!networkResult) {
+      throw new Error('Wallet does not expose aptos:network')
+    }
+
+    const networkName = typeof networkResult === 'string' ? networkResult : networkResult.name
+
+    let network: Network
+
+    switch (networkName) {
+      case 'mainnet':
+        network = Network.MAINNET
+        break
+      case 'testnet':
+        network = Network.TESTNET
+        break
+      case 'devnet':
+      default:
+        network = Network.DEVNET
+        break
+    }
+
+    const config = new AptosConfig({ network })
+    return new Aptos(config)
+  }
+
+  private async generateRawTransaction(
+    tx: InputGenerateTransactionPayloadData,
+    options?: Partial<InputGenerateTransactionOptions>,
+  ): Promise<RawTransaction> {
+    const provider = await this.getProvider()
+    if (!provider) throw new ConnectorNotFoundError()
+
+    const { address } = await this.account()
+
+    const { config: aptosConfig } = await this.getAptosClient(provider)
+
+    const payloadInstance = await generateTransactionPayload({
+      ...tx,
+      aptosConfig,
+    } as InputEntryFunctionDataWithRemoteABI)
+
+    const rawTxn = await generateRawTransaction({
+      aptosConfig,
+      sender: address,
+      payload: payloadInstance,
+      options: {
+        gasUnitPrice: options?.gasUnitPrice,
+        maxGasAmount: options?.maxGasAmount,
+        expireTimestamp: options?.expireTimestamp,
+      },
+    })
+
+    return rawTxn
+  }
+
+  private normalizeTransactionOptions(opts?: Record<string, any>): InputGenerateTransactionOptions {
+    if (!opts) return {}
+
+    return {
+      maxGasAmount: opts.max_gas_amount ?? opts.maxGasAmount,
+      gasUnitPrice: opts.gas_unit_price ? Number(opts.gas_unit_price) : opts.gasUnitPrice,
+      expireTimestamp: opts.expiration_timestamp_secs ? Number(opts.expiration_timestamp_secs) : opts.expireTimestamp,
+    }
   }
 }
