@@ -16,7 +16,6 @@ interface ProviderProps {
 }
 
 export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
-  const { chainId } = useActiveChainId()
   const { query } = useRouter()
   const { data: signer } = useWalletClient()
   const { data: ifoConfigs } = useIfoConfigs()
@@ -40,11 +39,11 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
     config?.id,
     ifoConfigs,
     signer ?? undefined,
-    chainId,
+    config.chainId,
     customAddress as `0x${string}` | undefined,
   )
   // info, pools and users will be attached in useIfo hook
-  const value = { chainId, ifoContract, config, info: undefined, pools: undefined, users: undefined }
+  const value = { chainId: config.chainId, ifoContract, config, info: undefined, pools: undefined, users: undefined }
 
   return (
     <IfoV2Context.Provider value={value}>
