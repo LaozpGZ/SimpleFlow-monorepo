@@ -1,12 +1,16 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import React, { useEffect } from 'react'
 import { Box, Flex, Skeleton, Spinner } from '@pancakeswap/uikit'
+import { useCheckAndSwitchChain } from 'hooks/useCheckAndSwitchChain'
 import { useIFOPoolInfoCtx } from '../hooks/ifo/useIFOPoolInfo'
 import { ifoInfoAtom, ifoPoolsAtom, ifoUsersAtom } from '../atom/ifo.atoms'
 import { useIFOInfoCtx } from '../hooks/ifo/useIFOInfo'
 import { useIFOUserStatusCtx } from '../hooks/ifo/useIFOUserStatus'
+import { useIfoV2Context } from './useIfoV2Context'
 
 export const SyncIfoContext = ({ id, children }: { id: string; children: React.ReactNode }) => {
+  const { config } = useIfoV2Context()
+  useCheckAndSwitchChain(config?.chainId)
   const pools = useIFOPoolInfoCtx()
   const updatePools = useSetAtom(ifoPoolsAtom(id))
   const updateInfo = useSetAtom(ifoInfoAtom(id))

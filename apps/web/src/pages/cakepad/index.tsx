@@ -9,7 +9,7 @@ import IFO from 'views/Cakepad/ifo'
 import { PageMeta } from 'components/Layout/Page'
 import { useIfoConfigs } from 'views/Cakepad/hooks/useIfoConfigs'
 
-const IFO_SUPPORT_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
+const IFO_SUPPORT_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.MONAD_MAINNET]
 
 const View = () => {
   useIfoConfigs()
