@@ -6,6 +6,7 @@ import { safeGetAddress } from 'utils'
 import { getIFOContract } from '../hooks/ifo/useIFOContract'
 import { ifoLoadingAnimationAtom } from '../atoms'
 import { useIfoConfigs } from '../hooks/useIfoConfigs'
+import { DEFAULT_CAKEPAD_IFO_ID } from '../config'
 import { SyncIfoContext } from './SyncIfoContext'
 import { IfoV2Context } from './IfoV2Context'
 
@@ -27,9 +28,9 @@ export const IfoV2Provider: React.FC<ProviderProps> = ({ id, children }) => {
     return null
   }
 
-  const ifoId = (id ?? (query.ifo as string)) || ''
-
-  const config = ifoId ? ifoConfigs.find((x) => x.id === ifoId) : ifoConfigs[0]
+  const envDefaultIfoId = DEFAULT_CAKEPAD_IFO_ID?.trim()
+  const resolvedIfoId = id ?? (query.ifo as string | undefined) ?? (envDefaultIfoId || undefined)
+  const config = resolvedIfoId ? ifoConfigs.find((x) => x.id === resolvedIfoId) ?? ifoConfigs[0] : ifoConfigs[0]
   if (!config) {
     return null
   }
