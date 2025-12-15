@@ -19,7 +19,7 @@ export const wallets: LegacyWalletConfig<ConnectorNames>[] = [
     title: 'Petra',
     icon: '/images/wallets/petra.png',
     get installed() {
-      return typeof window !== 'undefined' && Boolean(window.aptos)
+      return typeof window !== 'undefined' && Boolean(window.aptos) && (isMobile ? !(window.trustwallet as any) : true)
     },
     connectorId: ConnectorNames.Petra,
     downloadLink: {
