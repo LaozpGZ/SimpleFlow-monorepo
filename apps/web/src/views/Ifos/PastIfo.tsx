@@ -18,17 +18,17 @@ const PastIfo = ({ isV2 }: { isV2?: boolean }) => {
       {inactiveIfo?.map((ifo) => {
         switch (ifo.version) {
           case 1:
-            return <IfoCardV1Data key={ifo.id} ifo={ifo} isHistory />
+            return <IfoCardV1Data key={ifo.id} ifo={ifo} />
           case 2:
-            return <IfoCardV2Data key={ifo.id} ifo={ifo} isHistory />
+            return <IfoCardV2Data key={ifo.id} ifo={ifo} />
           case 3:
           case 3.1:
           case 3.2:
-            return <IfoCardV3Data key={ifo.id} ifo={ifo} isHistory />
+            return <IfoCardV3Data key={ifo.id} ifo={ifo} />
           case 7:
-            return <IfoCardV7Data key={ifo.id} ifo={ifo} isHistory />
+            return <IfoCardV7Data key={ifo.id} ifo={ifo} />
           case 8:
-            return <IfoCardV8Data key={ifo.id} ifo={ifo} isHistory />
+            return <IfoCardV8Data key={ifo.id} ifo={ifo} />
           default:
             return null
         }

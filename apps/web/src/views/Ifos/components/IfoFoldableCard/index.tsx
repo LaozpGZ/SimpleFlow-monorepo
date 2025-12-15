@@ -7,7 +7,6 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  ExpandableButton,
   ExpandableLabel,
   useMatchBreakpoints,
   useToast,
@@ -17,8 +16,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { FAST_INTERVAL } from 'config/constants'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useERC20 } from 'hooks/useContract'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { styled } from 'styled-components'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -32,7 +30,7 @@ import IfoPoolCard from './IfoPoolCard'
 import { IfoRibbon } from './IfoRibbon'
 import { EnableStatus } from './types'
 
-interface IfoFoldableCardProps {
+interface IfoCardProps {
   ifo: Ifo
   publicIfoData: PublicIfoData
   walletIfoData: WalletIfoData
@@ -150,57 +148,18 @@ export const IfoCurrentCard = ({
   )
 }
 
-const FoldableContent = styled.div<{ isVisible: boolean }>`
-  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
-`
-
 // Past Ifo
-const IfoFoldableCard = ({
-  ifo,
-  publicIfoData,
-  walletIfoData,
-  isHistory = false,
-}: {
-  ifo: Ifo
-  publicIfoData: PublicIfoData
-  walletIfoData: WalletIfoData
-  isHistory?: boolean
-}) => {
-  const { asPath } = useRouter()
-  const [isExpanded, setIsExpanded] = useState(false)
-  const wrapperEl = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const hash = asPath.split('#')[1]
-    if (hash === ifo.id) {
-      setIsExpanded(true)
-      wrapperEl?.current?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [asPath, ifo])
-
+const IfoFoldableCard = ({ ifo }: { ifo: Ifo }) => {
   return (
-    <Box id={ifo.id} ref={wrapperEl} position="relative">
+    <Box id={ifo.id} position="relative">
       <Box as={StyledCard} borderRadius="32px">
-        <Box position="relative">
-          <Header ifoId={ifo.id}>
-            <ExpandableButton expanded={isExpanded} onClick={() => setIsExpanded((prev) => !prev)} />
-          </Header>
-          {isExpanded && (
-            <>
-              <IfoRibbon ifoId={ifo.id} publicIfoData={publicIfoData} ifoChainId={ifo.chainId} isHistory={isHistory} />
-            </>
-          )}
-        </Box>
-        <FoldableContent isVisible={isExpanded}>
-          <IfoCard ifo={ifo} publicIfoData={publicIfoData} walletIfoData={walletIfoData} />
-          <IfoAchievement ifo={ifo} publicIfoData={publicIfoData} />
-        </FoldableContent>
+        <Header ifoId={ifo.id} />
       </Box>
     </Box>
   )
 }
 
-const IfoCard: React.FC<React.PropsWithChildren<IfoFoldableCardProps>> = ({ ifo, publicIfoData, walletIfoData }) => {
+const IfoCard: React.FC<React.PropsWithChildren<IfoCardProps>> = ({ ifo, publicIfoData, walletIfoData }) => {
   const currentBlock = useCurrentBlock()
   const { fetchIfoData: fetchPublicIfoData, isInitialized: isPublicIfoDataInitialized, secondsUntilEnd } = publicIfoData
   const {

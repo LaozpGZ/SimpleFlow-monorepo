@@ -1,5 +1,3 @@
-import { ChainId } from '@pancakeswap/chains'
-
 import IfoProvider from 'views/Ifos/contexts/IfoContext'
 import { NextPageWithLayout } from 'utils/page.types'
 import IfoLayout from 'views/Cakepad/components/IfoLayout'
@@ -8,8 +6,7 @@ import dynamic from 'next/dynamic'
 import IFO from 'views/Cakepad/ifo'
 import { PageMeta } from 'components/Layout/Page'
 import { useIfoConfigs } from 'views/Cakepad/hooks/useIfoConfigs'
-
-const IFO_SUPPORT_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.MONAD_MAINNET]
+import { IFO_SUPPORT_CHAINS } from 'config/cakepad.config'
 
 const View = () => {
   useIfoConfigs()
