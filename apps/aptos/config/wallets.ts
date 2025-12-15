@@ -1,4 +1,5 @@
 import { LegacyWalletConfig, LegacyWalletIds } from '@pancakeswap/ui-wallets'
+import { isMobile } from 'react-device-detect'
 
 export enum ConnectorNames {
   Petra = 'petra',
@@ -59,7 +60,7 @@ export const wallets: LegacyWalletConfig<ConnectorNames>[] = [
         Boolean(window.aptos) &&
         (Boolean((window.aptos as any)?.isTrust) ||
           Boolean((window.aptos as any)?.isTrustWallet) ||
-          Boolean(window.trustwallet as any))
+          (isMobile && Boolean(window.trustwallet as any)))
       )
     },
     deepLink: 'https://link.trustwallet.com/open_url?coin_id=637&url=https://aptos.pancakeswap.finance/',
