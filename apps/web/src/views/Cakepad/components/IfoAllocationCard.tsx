@@ -5,6 +5,7 @@ import { Native } from '@pancakeswap/sdk'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useMemo } from 'react'
 import AddToWalletButton from 'components/AddToWallet/AddToWalletButton'
+import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import useIfo from '../hooks/useIfo'
 
 interface IfoAllocationCardProps {
@@ -22,7 +23,8 @@ export const IfoAllocationDisplay: React.FC<IfoAllocationCardProps> = ({
 }) => {
   const { t } = useTranslation()
   const { chainId } = useIfo()
-  const amount = allocatedAmount ?? '0'
+
+  const amount = formatNumber(Number(allocatedAmount ?? '0'), 0, 2)
 
   const swapUrl = useMemo(() => {
     const chainQueryName = chainId ? CHAIN_QUERY_NAME[chainId] : 'bsc'
