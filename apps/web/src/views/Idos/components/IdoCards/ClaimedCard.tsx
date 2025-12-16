@@ -34,9 +34,6 @@ export const ClaimedCard: React.FC<{
   const amountInDollar = useStablecoinPriceAmount(
     offeringCurrency ?? undefined,
     claimableAmount !== undefined && Number.isFinite(+claimableAmount) ? +claimableAmount : undefined,
-    {
-      enabled: Boolean(claimableAmount !== undefined && Number.isFinite(+claimableAmount)),
-    },
   )
 
   const handleWalletClick = () => {

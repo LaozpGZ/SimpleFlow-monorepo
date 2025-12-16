@@ -137,9 +137,6 @@ export const IdoDepositButton: React.FC<{
   const amountInDollar = useStablecoinPriceAmount(
     stakeCurrency ?? undefined,
     value !== undefined && Number.isFinite(+value) ? +value : undefined,
-    {
-      enabled: Boolean(value !== undefined && Number.isFinite(+value)),
-    },
   )
   const isInputloading = inputBalance === undefined
 

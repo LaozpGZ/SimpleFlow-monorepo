@@ -15,9 +15,6 @@ export const StakedDisplay: React.FC<{ userStatus: IDOUserStatus; pid: number }>
     stakedAmount !== undefined && Number.isFinite(+stakedAmount.toSignificant(6))
       ? +stakedAmount.toSignificant(6)
       : undefined,
-    {
-      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount.toSignificant(6))),
-    },
   )
   return (
     <FlexGap gap="8px" justifyContent="space-between" alignItems="center">

@@ -340,9 +340,6 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
   const currency0UsdValue = useStablecoinPriceAmount(
     c0,
     depositCurrencyAmount0 ? Number(depositCurrencyAmount0.toExact()) : undefined,
-    {
-      enabled: Boolean(depositCurrencyAmount0),
-    },
   )
   const currency1UsdValue = useStablecoinPriceAmount(
     c1,
