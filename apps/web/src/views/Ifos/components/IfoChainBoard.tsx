@@ -13,6 +13,7 @@ const BACKGROUND = {
   [ChainId.ETHEREUM]: '#627AD8',
   [ChainId.GOERLI]: '#627AD8',
   [ChainId.ARBITRUM_ONE]: '#2D364D',
+  [ChainId.MONAD_MAINNET]: '#6954F6',
 }
 
 const Container = styled(Box)`
