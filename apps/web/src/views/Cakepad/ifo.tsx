@@ -1,6 +1,5 @@
 import { safeGetAddress } from 'utils'
 import { useCheckAndSwitchChain } from 'hooks/useCheckAndSwitchChain'
-import { IfoV2Provider } from './contexts/IfoV2Provider'
 import CurrentIfo from './CurrentIfo'
 import useIfo from './hooks/useIfo'
 import { IfoPresetPage } from './components/IfoCards/IfoPresetCard/IfoPresetCard'
@@ -18,13 +17,7 @@ const DisplayIfo = () => {
 }
 
 const Ifo = () => {
-  return (
-    <>
-      <IfoV2Provider>
-        <DisplayIfo />
-      </IfoV2Provider>
-    </>
-  )
+  return <DisplayIfo />
 }
 
 export default Ifo
