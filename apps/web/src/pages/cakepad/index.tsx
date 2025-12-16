@@ -1,4 +1,3 @@
-import IfoProvider from 'views/Ifos/contexts/IfoContext'
 import { NextPageWithLayout } from 'utils/page.types'
 import IfoLayout from 'views/Cakepad/components/IfoLayout'
 import Hero from 'views/Cakepad/components/Hero'
@@ -14,10 +13,8 @@ const View = () => {
   return (
     <>
       <PageMeta />
-      <IfoProvider>
-        <Hero />
-        <IFO />
-      </IfoProvider>
+      <Hero />
+      <IFO />
     </>
   )
 }

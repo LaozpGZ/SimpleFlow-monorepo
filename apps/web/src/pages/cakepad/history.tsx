@@ -1,6 +1,3 @@
-import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/ifos'
-
-import IfoProvider from 'views/Ifos/contexts/IfoContext'
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
 import PastIfo from 'views/Ifos/PastIfo'
@@ -14,9 +11,7 @@ const View = () => {
   return (
     <>
       <PageMeta />
-      <IfoProvider>
-        <PastIfo isV2 />
-      </IfoProvider>
+      <PastIfo isV2 />
     </>
   )
 }
