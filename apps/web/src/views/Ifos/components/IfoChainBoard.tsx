@@ -4,7 +4,7 @@ import { Box, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { useChainName } from '../hooks/useChainNames'
+import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getChainBasedImageUrl } from '../helpers'
 
 const BACKGROUND = {
@@ -51,7 +51,8 @@ export const IfoChainBoard = memo(function IfoChainBoard({ chainId, isHistory = 
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
   const boardImageUrl = useMemo(() => getChainBasedImageUrl({ chainId, name: 'chain-board' }), [chainId])
-  const chainName = useChainName(chainId, { shortName: true })
+
+  const chainName = getFullChainNameById(chainId)
 
   if (!chainId) {
     return null
