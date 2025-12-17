@@ -23,7 +23,8 @@ const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection
         <Container px={isMobile ? '16px' : '0px'}>{ifoSection}</Container>
       </SectionBackground>
       <HowToTakePart />
-      {ifoFaqs ? <IfoQuestions faqs={ifoFaqs} /> : <DefaultQuestions />}
+      {ifoFaqs && <IfoQuestions faqs={ifoFaqs} />}
+      <DefaultQuestions />
     </>
   )
 }

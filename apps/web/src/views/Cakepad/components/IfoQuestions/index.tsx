@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { useTranslation } from '@pancakeswap/localization'
-import { Card, CardBody, CardHeader, Heading, Text, Container } from '@pancakeswap/uikit'
+import { Card, CardBody, CardHeader, Heading, Text, Container, ReactMarkdown } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { IFOFAQs } from '../../ifov2.types'
@@ -33,7 +33,7 @@ const IfoQuestions: React.FC<{ faqs: IFOFAQs }> = ({ faqs }) => {
             return (
               <FoldableText key={i} mb={i + 1 === length ? '' : '24px'} title={t(title.i18nText)}>
                 <Text color="textSubtle" as="p">
-                  {t(description.i18nText)}
+                  <ReactMarkdown>{t(description.i18nText)}</ReactMarkdown>
                 </Text>
               </FoldableText>
             )
