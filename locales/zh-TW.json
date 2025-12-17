@@ -4133,5 +4133,11 @@
   "Please connect your Solana wallet first": "請先連接您的 Solana 錢包",
   "Social login with %chainName% is not supported.": "%chainName% 不支援社群登入。",
   "An unexpected error occurred while switching chains. Please try again.": "切換網路時發生非預期錯誤。請再試一次。",
-  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "社群登入僅適用於 %chains%。在其他網路上發送資金可能會造成永久損失。"
+  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "社群登入僅適用於 %chains%。在其他網路上發送資金可能會造成永久損失。",
+  "LeverUp IFO": "LeverUp IFO",
+  "LeverUp is a next-generation perpetual trading platform built on Monad — a fully LP-free perps DEX offering up to 1001x leverage, zero fees on losses, and 100% of protocol fees returned to stakeholders.": "LeverUp 是一個基於 Monad 打造的次世代永續合約交易平台——一個完全無需流動性提供者（LP）的永續合約去中心化交易所（DEX），提供高達 1001 倍的槓桿、虧損交易零手續費，並將 100% 的協議費用返還給權益相關者。",
+  "Users from restricted jurisdictions or wallets flagged by risk checks may not be eligible to participate.": "來自受限制司法管轄區的用戶或被風險檢查標記的錢包，可能沒有資格參加。",
+  "How to bridge cake?": "如何跨鏈 CAKE？",
+  "You can use this link to bridge CAKE: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE": "您可以使用此連結來跨鏈 CAKE：https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE",
+  "24 hours": "24 小時"
 }

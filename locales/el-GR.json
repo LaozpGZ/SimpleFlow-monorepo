@@ -4133,5 +4133,11 @@
   "Please connect your Solana wallet first": "Παρακαλώ, συνδέστε πρώτα το Solana πορτοφόλι σας.",
   "Social login with %chainName% is not supported.": "Η κοινωνική σύνδεση στο %chainName% δεν υποστηρίζεται.",
   "An unexpected error occurred while switching chains. Please try again.": "Παρουσιάστηκε ένα μη αναμενόμενο σφάλμα κατά την αλλαγή δικτύων. Παρακαλώ, δοκιμάστε ξανά.",
-  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "Η κοινωνική σύνδεση λειτουργεί μόνο στα %chains%. Η αποστολή κεφαλαίων σε άλλα δίκτυα μπορεί να προκαλέσει μόνιμη απώλεια."
+  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "Η κοινωνική σύνδεση λειτουργεί μόνο στα %chains%. Η αποστολή κεφαλαίων σε άλλα δίκτυα μπορεί να προκαλέσει μόνιμη απώλεια.",
+  "LeverUp IFO": "LeverUp IFO",
+  "LeverUp is a next-generation perpetual trading platform built on Monad — a fully LP-free perps DEX offering up to 1001x leverage, zero fees on losses, and 100% of protocol fees returned to stakeholders.": "Το LeverUp είναι μια πλατφόρμα διαπραγμάτευσης perpetual επόμενης γενιάς χτισμένη στο Monad — ένα πλήρως LP-free perps DEX που προσφέρει μόχλευση έως και 1001x, μηδενικές χρεώσεις στις απώλειες και το 100% των προμηθειών πρωτοκόλλου επιστρέφεται στους ενδιαφερόμενους.",
+  "Users from restricted jurisdictions or wallets flagged by risk checks may not be eligible to participate.": "Οι χρήστες από περιορισμένες δικαιοδοσίες ή πορτοφόλια που έχουν επισημανθεί από ελέγχους κινδύνου ενδέχεται να μην είναι επιλέξιμοι για συμμετοχή.",
+  "How to bridge cake?": "Πώς να κάνετε bridge το CAKE;",
+  "You can use this link to bridge CAKE: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE": "Μπορείτε να χρησιμοποιήσετε αυτόν τον σύνδεσμο για να κάνετε bridge το CAKE: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE",
+  "24 hours": "24 ώρες"
 }
