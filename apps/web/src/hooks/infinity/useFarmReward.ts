@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import { useCakePrice } from 'hooks/useCakePrice'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
+import orderBy from 'lodash/orderBy'
 import { useMemo } from 'react'
 import { rewardApiClient } from 'state/farmsV4/api/client'
 import { operations } from 'state/farmsV4/api/schema'
@@ -17,6 +18,8 @@ import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/u
 import { chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'
 import { getViemClients } from 'utils/viem'
 import { Address } from 'viem'
+import { DAY_IN_SECONDS } from '@pancakeswap/utils/getTimePeriods'
+import { useCampaignsByChainId } from './useCampaigns'
 
 const FETCH_OPTIONS = {
   ...QUERY_SETTINGS_IMMUTABLE,
@@ -57,7 +60,7 @@ const fetchUserFarmRewards = async ({ chainId, address, poolId, timestamp, signa
     },
   )
 
-  return resp.data?.rewardsInfo ?? []
+  return orderBy(resp.data?.rewardsInfo ?? [], ['endBlock'], ['desc'])
 }
 
 interface UserClaimedRewardsProps {
@@ -468,8 +471,43 @@ const formatRewardsMap = (data?: Awaited<ReturnType<typeof fetchUserFarmRewards>
   }, {} as Record<string, string>)
 }
 
+const adjustInactiveRewards = <
+  T extends {
+    campaignId: string
+    epochEndTimestamp: string | Record<string, never>
+    rewardAmounts: string[]
+  },
+>(
+  rewards: T[] | undefined,
+  activeCampaignIds: string[],
+  timestamp: number,
+): T[] | undefined => {
+  if (!rewards) return undefined
+
+  return rewards.map((r) => {
+    const epochTs = Number(r.epochEndTimestamp)
+    const isActive =
+      activeCampaignIds.includes(r.campaignId) &&
+      epochTs &&
+      !Number.isNaN(epochTs) &&
+      timestamp - epochTs <= DAY_IN_SECONDS
+
+    if (isActive) return r
+
+    return {
+      ...r,
+      rewardAmounts: r.rewardAmounts.map(() => '0'),
+    }
+  })
+}
+
 export const useFarmRewardsByPoolId = ({ chainId, address, poolId }: PoolFarmRewardsProps) => {
   const timestamp = dayjs().startOf('minute').unix()
+  const campaigns = useCampaignsByChainId({ chainId })
+  const activeCampaignIds = useMemo(
+    () => campaigns?.filter((c) => c.poolId.toLowerCase() === poolId?.toLowerCase()).map((c) => c.campaignId) || [],
+    [campaigns, poolId],
+  )
   const { data: rewards } = usePoolFarmRewardsFormAPI({ chainId, address, poolId, timestamp })
   const { data: previousRewards } = usePoolFarmRewardsFormAPI({
     chainId,
@@ -477,15 +515,27 @@ export const useFarmRewardsByPoolId = ({ chainId, address, poolId }: PoolFarmRew
     poolId,
     timestamp: rewards?.[0]?.epochEndTimestamp ? Number(rewards?.[0]?.epochEndTimestamp) - 1 : undefined,
   })
-  const rewardsMap = useMemo(() => formatRewardsMap(rewards), [rewards])
-  const previousRewardsMap = useMemo(() => formatRewardsMap(previousRewards), [previousRewards])
+
+  const rewardsMap = useMemo(
+    () => formatRewardsMap(adjustInactiveRewards(rewards, activeCampaignIds, timestamp)),
+    [rewards, activeCampaignIds, timestamp],
+  )
+
+  const previousRewardsMap = useMemo(
+    () => formatRewardsMap(adjustInactiveRewards(previousRewards, activeCampaignIds, timestamp)),
+    [previousRewards, activeCampaignIds, timestamp],
+  )
+
   return useMemo(() => {
     if (!(rewardsMap && Object.keys(rewardsMap).length)) {
       return undefined
     }
     return Object.keys(rewardsMap).reduce<{ [k: string]: BigNumber }>((acc, k) => {
+      const current = rewardsMap[k]
+      const previous = previousRewardsMap?.[k]
+
       // eslint-disable-next-line no-param-reassign
-      acc[k] = new BN(rewardsMap[k]).minus(previousRewardsMap?.[k] ?? 0)
+      acc[k] = current && previous ? new BN(current).minus(previous) : BIG_ZERO
       return acc
     }, {})
   }, [rewardsMap, previousRewardsMap])
