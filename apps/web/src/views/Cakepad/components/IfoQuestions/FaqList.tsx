@@ -15,7 +15,6 @@ import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { safeGetAddress } from 'utils'
 import { AnchorHTMLAttributes, ReactNode, useMemo } from 'react'
-import { ReactMarkdownProps } from 'react-markdown/lib/ast-to-react'
 import useIfo from '../../hooks/useIfo'
 import { IFOFAQs } from '../../ifov2.types'
 
@@ -38,8 +37,7 @@ const InlineLink = styled(Link)`
 `
 interface FAQ {
   title: ReactNode
-  description: ReactNode | string
-  isExternal?: boolean
+  description: ReactNode
 }
 
 const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
@@ -334,13 +332,20 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
     () =>
       (ifoFaqs ?? []).map(({ title, description }) => ({
         title: t(title.i18nText),
-        description: t(description.i18nText),
-        isExternal: true,
+        description: (
+          <ReactMarkdown
+            components={{
+              a: ExternalLink,
+            }}
+          >
+            {t(description.i18nText)}
+          </ReactMarkdown>
+        ),
       })),
     [ifoFaqs, t],
   )
 
-  const faqs = useMemo(() => [...defaultFaqs, ...extraFaqs] as FAQ[], [defaultFaqs, extraFaqs])
+  const faqs = useMemo(() => [...defaultFaqs, ...extraFaqs], [defaultFaqs, extraFaqs])
 
   return (
     <Container>
@@ -351,7 +356,7 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
           </StyledHeading>
         </StyledCardHeader>
         <CardBody>
-          {faqs.map(({ title, description, isExternal }, i, { length }) => (
+          {faqs.map(({ title, description }, i, { length }) => (
             <FoldableText
               key={i}
               mb={i + 1 === length ? '' : '24px'}
@@ -359,19 +364,9 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
               title={title}
               hideExpandableLabel={isMobile}
             >
-              {!isExternal ? (
-                <Text color="textSubtle" as="div">
-                  {description}
-                </Text>
-              ) : (
-                <ReactMarkdown
-                  components={{
-                    a: ExternalLink,
-                  }}
-                >
-                  {description}
-                </ReactMarkdown>
-              )}
+              <Text color="textSubtle" as="div">
+                {description}
+              </Text>
             </FoldableText>
           ))}
         </CardBody>
@@ -380,7 +375,9 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
   )
 }
 
-const ExternalLink = ({ href, children }: AnchorHTMLAttributes<HTMLAnchorElement> & ReactMarkdownProps) => {
+type MarkdownAnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href?: string }
+
+const ExternalLink = ({ href, children }: MarkdownAnchorProps) => {
   if (!href) {
     return <>{children}</>
   }
