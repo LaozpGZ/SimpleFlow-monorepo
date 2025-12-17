@@ -4133,5 +4133,12 @@
   "Please connect your Solana wallet first": "தயவுசெய்து முதலில் உங்கள் Solana வாலட்டை இணைக்கவும்",
   "Social login with %chainName% is not supported.": "%chainName% உடன் சமூக உள்நுழைவு ஆதரிக்கப்படவில்லை.",
   "An unexpected error occurred while switching chains. Please try again.": "செயின்களை மாற்றும்போது எதிர்பாராத பிழை ஏற்பட்டது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.",
-  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "சமூக உள்நுழைவு %chains% இல் மட்டுமே செயல்படும். மற்ற நெட்வொர்க்குகளுக்கு நிதியை அனுப்புவது நிரந்தர இழப்பை ஏற்படுத்தக்கூடும்."
+  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "சமூக உள்நுழைவு %chains% இல் மட்டுமே செயல்படும். மற்ற நெட்வொர்க்குகளுக்கு நிதியை அனுப்புவது நிரந்தர இழப்பை ஏற்படுத்தக்கூடும்.",
+  "Switch network to claim": "கிளெய்ம் செய்ய நெட்வொர்க்கை மாற்றவும்",
+  "LeverUp IFO": "LeverUp IFO",
+  "LeverUp is a next-generation perpetual trading platform built on Monad — a fully LP-free perps DEX offering up to 1001x leverage, zero fees on losses, and 100% of protocol fees returned to stakeholders.": "LeverUp என்பது Monad-இல் உருவாக்கப்பட்ட ஒரு அடுத்த தலைமுறை பெர்பெச்சுவல் டிரேடிங் தளம் ஆகும் — இது ஒரு முழுமையான LP-இல்லாத பெர்ப்ஸ் DEX, 1001x வரை லெவரேஜ், நஷ்டங்களுக்கு பூஜ்ஜிய கட்டணம் மற்றும் 100% புரோட்டோகால் கட்டணங்களை பங்குதாரர்களுக்குத் திருப்பித் தருகிறது.",
+  "Users from restricted jurisdictions or wallets flagged by risk checks may not be eligible to participate.": "கட்டுப்படுத்தப்பட்ட அதிகார வரம்புகளில் உள்ள பயனர்கள் அல்லது ஆபத்துச் சோதனைகளால் கொடியிடப்பட்ட வாலெட்டுகள் பங்கேற்கத் தகுதியற்றவர்களாக இருக்கலாம்.",
+  "How to bridge cake?": "CAKE-ஐ பிரிட்ஜ் செய்வது எப்படி?",
+  "You can use this link to bridge CAKE: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE": "CAKE-ஐ பிரிட்ஜ் செய்ய இந்த இணைப்பைப் பயன்படுத்தலாம்: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE",
+  "24 hours": "24 மணிநேரம்"
 }
