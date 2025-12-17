@@ -527,12 +527,15 @@ export const useFarmRewardsByPoolId = ({ chainId, address, poolId }: PoolFarmRew
   )
 
   return useMemo(() => {
-    if (!(rewardsMap && Object.keys(rewardsMap).length)) {
+    if (
+      !(rewardsMap && Object.keys(rewardsMap).length) ||
+      !(previousRewardsMap && Object.keys(previousRewardsMap).length)
+    ) {
       return undefined
     }
     return Object.keys(rewardsMap).reduce<{ [k: string]: BigNumber }>((acc, k) => {
       const current = rewardsMap[k]
-      const previous = previousRewardsMap?.[k]
+      const previous = previousRewardsMap[k]
 
       // eslint-disable-next-line no-param-reassign
       acc[k] = current && previous ? new BN(current).minus(previous) : BIG_ZERO
