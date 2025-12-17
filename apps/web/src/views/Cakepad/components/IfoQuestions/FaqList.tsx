@@ -14,8 +14,8 @@ import {
 import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { safeGetAddress } from 'utils'
-import { useMemo } from 'react'
-import { isExternal } from 'util/types'
+import { AnchorHTMLAttributes, ReactNode, useMemo } from 'react'
+import { ReactMarkdownProps } from 'react-markdown/lib/ast-to-react'
 import useIfo from '../../hooks/useIfo'
 import { IFOFAQs } from '../../ifov2.types'
 
@@ -37,8 +37,8 @@ const InlineLink = styled(Link)`
   display: inline-block;
 `
 interface FAQ {
-  title: string
-  description: string
+  title: ReactNode
+  description: ReactNode | string
   isExternal?: boolean
 }
 
@@ -380,10 +380,15 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
   )
 }
 
-const ExternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <Link external href={href}>
-    {children}
-  </Link>
-)
+const ExternalLink = ({ href, children }: AnchorHTMLAttributes<HTMLAnchorElement> & ReactMarkdownProps) => {
+  if (!href) {
+    return <>{children}</>
+  }
+  return (
+    <Link external href={href}>
+      {children}
+    </Link>
+  )
+}
 
 export default FaqList
