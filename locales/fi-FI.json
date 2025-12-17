@@ -4133,5 +4133,11 @@
   "Please connect your Solana wallet first": "Yhdistä ensin Solana-lompakkosi.",
   "Social login with %chainName% is not supported.": "Sosiaalinen kirjautuminen %chainName%-verkossa ei ole tuettu.",
   "An unexpected error occurred while switching chains. Please try again.": "Tapahtui odottamaton virhe verkkoa vaihdettaessa. Yritä uudelleen.",
-  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "Sosiaalinen kirjautuminen toimii vain %chains%-verkoissa. Varojen lähettäminen muihin verkkoihin voi aiheuttaa pysyvän menetyksen."
+  "Social login works only on %chains%. Sending funds on other networks may cause permanent loss.": "Sosiaalinen kirjautuminen toimii vain %chains%-verkoissa. Varojen lähettäminen muihin verkkoihin voi aiheuttaa pysyvän menetyksen.",
+  "LeverUp IFO": "LeverUp IFO",
+  "LeverUp is a next-generation perpetual trading platform built on Monad — a fully LP-free perps DEX offering up to 1001x leverage, zero fees on losses, and 100% of protocol fees returned to stakeholders.": "LeverUp on seuraavan sukupolven perpetuaalikaupankäyntialusta, joka on rakennettu Monadin päälle – täysin LP-vapaa perpetuaalien DEX, joka tarjoaa jopa 1001-kertaisen vivun, nolla kulua tappioista ja 100 % protokollamaksuista palautetaan sidosryhmille.",
+  "Users from restricted jurisdictions or wallets flagged by risk checks may not be eligible to participate.": "Rajoitetuilla alueilla olevat käyttäjät tai riskitarkastuksissa merkityt lompakot eivät välttämättä voi osallistua.",
+  "How to bridge cake?": "Miten CAKE siltautetaan?",
+  "You can use this link to bridge CAKE: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE": "Voit siltauttaa CAKE-tokeneita tästä linkistä: https://monadbridge.com/?fromChain=Bsc&fromToken=CAKE&toChain=Monad&toToken=CAKE",
+  "24 hours": "24 tuntia"
 }
