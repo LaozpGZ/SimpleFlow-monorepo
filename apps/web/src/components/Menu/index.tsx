@@ -21,17 +21,13 @@ import { getActiveMenuItem, getActiveSubMenuChildItem, getActiveSubMenuItem } fr
 const Notifications = lazy(() => import('views/Notifications'))
 
 const LinkComponent = (linkProps) => {
-  const { href, type, children, ...props } = linkProps
+  const { href, type, ...props } = linkProps
   // Check if it's an external link by type property first, then fallback to URL pattern
   const isExternalLink =
     type === DropdownMenuItemType.EXTERNAL_LINK || href?.startsWith('http://') || href?.startsWith('https://')
 
   if (isExternalLink) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer noopener" {...props}>
-        {children}
-      </a>
-    )
+    return <NextLinkFromReactRouter to={href} target="_blank" rel="noreferrer noopener" {...props} />
   }
 
   return <NextLinkFromReactRouter to={href} {...props} prefetch={false} />
@@ -135,7 +131,7 @@ function filterItemsProps(items: ReturnType<typeof useMenuItems>) {
     return {
       ...item,
       items: item.items?.map((subItem) => {
-        const { matchHrefs: _matchHrefs, overrideSubNavItems: _overrideSubNavItems, ...rest } = subItem
+        const { matchHrefs, overrideSubNavItems, ...rest } = subItem
         return rest
       }),
     }
