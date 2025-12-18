@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Menu as UikitMenu, footerLinks, useModal } from '@pancakeswap/uikit'
+import { DropdownMenuItemType, Menu as UikitMenu, footerLinks, useModal } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import USCitizenConfirmModal from 'components/Modal/USCitizenConfirmModal'
@@ -21,7 +21,20 @@ import { getActiveMenuItem, getActiveSubMenuChildItem, getActiveSubMenuItem } fr
 const Notifications = lazy(() => import('views/Notifications'))
 
 const LinkComponent = (linkProps) => {
-  return <NextLinkFromReactRouter to={linkProps.href} {...linkProps} prefetch={false} />
+  const { href, type, children, ...props } = linkProps
+  // Check if it's an external link by type property first, then fallback to URL pattern
+  const isExternalLink =
+    type === DropdownMenuItemType.EXTERNAL_LINK || href?.startsWith('http://') || href?.startsWith('https://')
+
+  if (isExternalLink) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer noopener" {...props}>
+        {children}
+      </a>
+    )
+  }
+
+  return <NextLinkFromReactRouter to={href} {...props} prefetch={false} />
 }
 
 const EMPTY_ARRAY = []
@@ -122,7 +135,7 @@ function filterItemsProps(items: ReturnType<typeof useMenuItems>) {
     return {
       ...item,
       items: item.items?.map((subItem) => {
-        const { matchHrefs, overrideSubNavItems, ...rest } = subItem
+        const { matchHrefs: _matchHrefs, overrideSubNavItems: _overrideSubNavItems, ...rest } = subItem
         return rest
       }),
     }
