@@ -16,6 +16,7 @@ import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
 import { PoolHashHelper } from './PoolHashHelper'
+import { getRoutingSettings } from './routingFlags'
 
 const poolQueriesFactory = memoize((chainId: ChainId) => {
   const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
@@ -230,6 +231,7 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
   const { chainId, currencyA, currencyB, blockNumber } = query
 
   const queries = poolQueriesFactory(chainId)
+  const flags = await getRoutingSettings()
   if (!currencyA || !currencyB || !chainId || !blockNumber) {
     return []
   }
@@ -247,9 +249,10 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
     return queries.getCandidatePools(query, options)
   }
 
-  if (isTestnetChainId(chainId)) {
+  if (isTestnetChainId(chainId) || !flags.edgePool) {
     return fallbackQuery()
   }
+
   const call = createAsyncCallWithFallbacks(defaultQuery, {
     fallbacks: [fallbackQuery],
     fallbackTimeout: POOL_EDGE_API_FETCH_TIMEOUT,
@@ -261,6 +264,7 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
 export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQueryOptions) => {
   const { chainId, currencyA, currencyB, blockNumber } = query
   const queries = poolQueriesFactory(chainId)
+  const flags = await getRoutingSettings()
   if (!currencyA || !currencyB || !chainId || !blockNumber) {
     return []
   }
@@ -277,6 +281,9 @@ export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQue
 
   const defaultQuery = async () => {
     return queries.getCandidatePoolsLight(query, options)
+  }
+  if (!flags.edgePool) {
+    return fallbackQuery()
   }
 
   const call = createAsyncCallWithFallbacks(defaultQuery, {
