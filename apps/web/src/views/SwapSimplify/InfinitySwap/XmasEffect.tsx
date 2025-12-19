@@ -5,10 +5,10 @@ import { styled } from 'styled-components'
 import { XmasStarEffect } from './XmasStarEffect'
 
 const XMAS_MOUNTAIN_HEIGHT_TABLE = {
-  base: 560,
-  lg: 390,
-  xl: 420,
-  xxl: 460,
+  base: '560px',
+  lg: '390px',
+  xl: '420px',
+  xxl: '460px',
 } as const
 
 const XMAS_MOUNTAIN_WIDTH_TABLE = {
@@ -50,17 +50,17 @@ const XmasBackground = styled.div`
   transform: translateZ(0);
 `
 
-const XmasMountain = styled.div<{ $isDesktop: boolean; $height: number; $width: string }>`
+const XmasMountain = styled.div<{ $isDesktop: boolean; $height: string; $width: string }>`
   position: absolute;
   left: 50%;
   bottom: -5%;
   transform: translateX(-50%);
   width: 100vw;
-  height: ${({ $height }) => `${$height}px`};
+  height: ${({ $height }) => $height};
   z-index: 2;
   background-image: ${({ theme }) =>
     `url('${ASSET_CDN}/web/swap/xmas-2025/mt_${theme.isDark ? 'dark' : 'light'}.webp')`};
-  background-size: ${({ $height, $width }) => `${$width} ${$height}px`};
+  background-size: ${({ $height, $width }) => `${$width} ${$height}`};
   background-position: bottom center;
   background-repeat: no-repeat;
   ${({ theme }) => theme.mediaQueries.md} {

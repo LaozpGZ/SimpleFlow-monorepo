@@ -127,7 +127,7 @@ export const XmasStarEffect: React.FC = memo(() => {
 
     const buildEntities = () => {
       const starEntities: Entity[] = []
-      const count = Math.max(Math.floor(viewport.height), 0)
+      const count = 500
       for (let i = 0; i < count; i += 1) {
         starEntities.push(createStar(Math.random() * viewport.width, Math.random() * viewport.height))
       }
@@ -137,9 +137,7 @@ export const XmasStarEffect: React.FC = memo(() => {
     }
 
     const animate = () => {
-      // starCtx.fillStyle = '#05004c'
       starCtx.clearRect(0, 0, viewport.width, viewport.height)
-      // starCtx.fillRect(0, 0, viewport.width, viewport.height)
       starCtx.fillStyle = '#ffffff'
       starCtx.strokeStyle = '#ffffff'
 
