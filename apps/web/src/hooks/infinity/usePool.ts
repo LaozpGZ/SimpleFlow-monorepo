@@ -31,7 +31,6 @@ export const usePoolById = <
     retry: false,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
-    refetchOnMount: true,
     staleTime: 5 * 1000,
   })
 
