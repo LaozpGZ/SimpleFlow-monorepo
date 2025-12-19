@@ -50,10 +50,12 @@ const BodyLock = () => {
       }
 
       return () => {
-        document.body.style.overflow = previousOverflow || "visible";
-        document.body.style.paddingRight = previousPaddingRight;
-        if (!previousOverflow) {
-          document.body.style.overflow = "overlay";
+        if (document?.body?.style) {
+          document.body.style.overflow = previousOverflow || "visible";
+          document.body.style.paddingRight = previousPaddingRight;
+          if (!previousOverflow) {
+            document.body.style.overflow = "overlay";
+          }
         }
       };
     }
