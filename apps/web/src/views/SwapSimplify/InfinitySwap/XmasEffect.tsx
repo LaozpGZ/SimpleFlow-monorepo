@@ -133,7 +133,7 @@ const getXmasSideLeftDimensions = ({
   if (isDesktop || isLg) {
     return {
       left: '-4vw',
-      width: 'min(560px, 46vw)',
+      width: 'min(580px, 47vw)',
       height: 'min(540px, 40vw)',
     }
   }
