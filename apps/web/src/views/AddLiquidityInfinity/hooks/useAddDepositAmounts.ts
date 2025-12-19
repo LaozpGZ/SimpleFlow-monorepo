@@ -30,9 +30,10 @@ export const lastEditAtom = atom<LastEdit>({
   lastEditCurrency: 0,
 })
 
-export const useClDepositAmounts = () => {
+export const useClDepositAmounts = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  const pool_ = usePool<'CL'>()
+  const pool = enabled ? pool_ : null
   const [lastEdit, setLastEdit] = useAtom(lastEditAtom)
-  const pool = usePool<'CL'>()
   const [{ lowerTick, upperTick }] = useClRangeQueryState()
   const { isDeposit0Enabled, isDeposit1Enabled } = useAddDepositAmountsEnabled()
   const [currency0, currency1] = useMemo(() => {
@@ -72,7 +73,11 @@ export const useClDepositAmounts = () => {
           false,
         )
 
-        amount1 = CurrencyAmount.fromRawAmount(currency1, amount1Raw)
+        try {
+          amount1 = CurrencyAmount.fromRawAmount(currency1, amount1Raw)
+        } catch {
+          amount1 = undefined
+        }
       } else {
         amount1 = CurrencyAmount.fromRawAmount(currency1, 0n)
       }
@@ -95,7 +100,11 @@ export const useClDepositAmounts = () => {
           true,
         )
 
-        amount0 = CurrencyAmount.fromRawAmount(currency0, amount0Raw)
+        try {
+          amount0 = CurrencyAmount.fromRawAmount(currency0, amount0Raw)
+        } catch {
+          amount0 = undefined
+        }
       } else {
         amount0 = CurrencyAmount.fromRawAmount(currency0, 0n)
       }
@@ -138,8 +147,9 @@ const binDepositAmountsAtom = atom<{
   depositCurrencyAmount0: null,
   depositCurrencyAmount1: null,
 })
-const useBinDepositAmounts = () => {
-  const pool = usePool<'Bin'>()
+export const useBinDepositAmounts = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  const pool_ = usePool<'Bin'>()
+  const pool = enabled ? pool_ : null
   const [currency0, currency1] = useMemo(() => {
     if (!pool) return [undefined, undefined]
 
@@ -190,10 +200,17 @@ const useBinDepositAmounts = () => {
 export const useAddDepositAmounts = () => {
   const pool = usePool()
 
-  const clDepositAmounts = useClDepositAmounts()
-  const binDepositAmounts = useBinDepositAmounts()
+  const isBinPool = pool?.poolType === 'Bin'
 
-  return pool?.poolType === 'Bin' ? binDepositAmounts : clDepositAmounts
+  const clDepositAmounts = useClDepositAmounts({
+    enabled: !isBinPool,
+  })
+
+  const binDepositAmounts = useBinDepositAmounts({
+    enabled: isBinPool,
+  })
+
+  return isBinPool ? binDepositAmounts : clDepositAmounts
 }
 
 export const useAddDepositAmountsEnabled = () => {
