@@ -25,6 +25,7 @@ export type ConfigMenuDropDownItemsType = DropdownMenuItems & {
   hideSubNav?: boolean
   overrideSubNavItems?: DropdownMenuItems['items']
   matchHrefs?: string[]
+  isHot?: boolean
 }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & {
   hideSubNav?: boolean
@@ -32,6 +33,7 @@ export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & {
   items?: ConfigMenuDropDownItemsType[]
   overrideSubNavItems?: ConfigMenuDropDownItemsType[]
   type?: DropdownMenuItemType
+  isHot?: boolean
 }
 
 export const addMenuItemSupported = (item, chainId: number | undefined) => {
@@ -149,11 +151,12 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
-      label: `${t('Prob')}🔥`,
+      label: t('Prob'),
       icon: RocketIcon,
       href: 'https://probable.markets',
       type: DropdownMenuItemType.EXTERNAL_LINK,
       hideSubNav: true,
+      isHot: true,
     },
     {
       label: t('Play'),
