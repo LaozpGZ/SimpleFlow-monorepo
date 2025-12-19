@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AutoColumn, Button, Dots, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
 import { useAddressBalance } from 'hooks/useAddressBalance'
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { memo, startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
@@ -518,8 +518,10 @@ const TimeoutButton = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const resume = useCallback(() => {
-    resumeQuoting()
-    refreshTrade()
+    startTransition(() => {
+      resumeQuoting()
+      refreshTrade()
+    })
   }, [resumeQuoting, refreshTrade])
 
   useEffect(() => {
