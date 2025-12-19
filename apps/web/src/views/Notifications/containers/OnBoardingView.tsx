@@ -83,6 +83,7 @@ const OnBoardingView = ({ onExternalDismiss }: { onExternalDismiss?: () => void 
         onSwiper={setSwiper}
         onRealIndexChange={handleRealIndexChange}
         centeredSlides
+        allowTouchMove={false}
         style={{ width: '320px', paddingTop: '24px' }}
       >
         {OnBoardingSteps.map((introStep, i) => (
