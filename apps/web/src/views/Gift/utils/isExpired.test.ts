@@ -13,18 +13,22 @@ describe('isExpired', () => {
   })
 
   it('should return false for current timestamp', () => {
-    const currentTimestamp = new Date().toISOString()
+    const baseNow = Date.now()
+    vi.spyOn(Date, 'now').mockReturnValue(baseNow)
+
+    const currentTimestamp = new Date(baseNow).toISOString()
     expect(isExpired(currentTimestamp)).toBe(false)
+
+    vi.restoreAllMocks()
   })
 
   it('should handle edge case of timestamp exactly at current time', () => {
     const now = Date.now()
     const exactTimestamp = new Date(now).toISOString()
     // Mock Date.now to return the exact same timestamp
-    const originalNow = Date.now
-    Date.now = () => now
+    vi.spyOn(Date, 'now').mockReturnValue(now)
     expect(isExpired(exactTimestamp)).toBe(false)
-    Date.now = originalNow
+    vi.restoreAllMocks()
   })
 
   it('should handle ISO string format correctly', () => {
