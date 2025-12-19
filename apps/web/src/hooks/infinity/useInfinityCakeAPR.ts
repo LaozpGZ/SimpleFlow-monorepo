@@ -4,7 +4,6 @@ import { SECONDS_PER_YEAR } from 'config'
 import { useMemo } from 'react'
 import { InfinityBinPositionDetail, InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { InfinityPoolInfo } from 'state/farmsV4/state/type'
-import { Address } from 'viem/accounts'
 import { useAccount } from 'wagmi'
 import { useCampaignsByChainId } from './useCampaigns'
 import { useFarmRewardsByPoolId } from './useFarmReward'
@@ -55,7 +54,7 @@ export const getInfinityCakeAPR = ({
     .reduce((acc, campaign) => {
       const { totalRewardAmount, duration } = campaign
       return new BigNumber(totalRewardAmount).dividedBy(1e18).dividedBy(duration).times(SECONDS_PER_YEAR).plus(acc)
-    }, new BigNumber(0))
+    }, BIG_ZERO)
 
   const poolCakeRewardsPerYear = validCampaigns
     ?.filter((c) => c.poolId === poolId)
@@ -63,7 +62,7 @@ export const getInfinityCakeAPR = ({
     .reduce((acc, campaign) => {
       const { totalRewardAmount, duration } = campaign
       return new BigNumber(totalRewardAmount).dividedBy(1e18).dividedBy(duration).times(SECONDS_PER_YEAR).plus(acc)
-    }, new BigNumber(0))
+    }, BIG_ZERO)
 
   const APR = (poolCakeRewardsPerYear?.times(cakePrice).dividedBy(tvlUSD).toFixed(6) ?? '0') as `${number}`
 
@@ -153,7 +152,7 @@ export const useInfinityBinPositionCakeAPR = ({
       ? Object.values(rewardsPerEpoch).reduce((acc, r) => acc.plus(r), BIG_ZERO)
       : undefined
 
-    const rewardForPositionPerYear = positionRewardPerEpoch?.gt(0)
+    const rewardForPositionPerYear = positionRewardPerEpoch
       ? positionRewardPerEpoch
           .dividedBy(1e18)
           .times(3)
