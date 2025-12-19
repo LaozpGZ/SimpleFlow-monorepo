@@ -29,9 +29,11 @@ declare global {
 }
 
 export async function loginWithTelegramViaScript(onLogin: (token: string) => void) {
+  // TODO: make sure user can login with telegran and use the same privy account to access the assets
   await loadTelegramScript()
 
   const botId = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!
+  console.log({ botId }, 'check bot id')
 
   if (!window.Telegram?.Login?.auth) return
   window.Telegram.Login.auth(
