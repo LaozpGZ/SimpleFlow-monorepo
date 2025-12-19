@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from 'react'
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react'
 
 interface UnclaimedOnlyContextType {
   unclaimedOnly: boolean
@@ -17,10 +17,6 @@ export const useUnclaimedOnlyContext = () => {
 
 export const UnclaimedOnlyProvider = ({ children }: { children: ReactNode }) => {
   const [unclaimedOnly, setUnclaimedOnly] = useState(false)
-
-  return (
-    <UnclaimedOnlyContext.Provider value={{ unclaimedOnly, setUnclaimedOnly }}>
-      {children}
-    </UnclaimedOnlyContext.Provider>
-  )
+  const providerValue = useMemo(() => ({ unclaimedOnly, setUnclaimedOnly }), [unclaimedOnly])
+  return <UnclaimedOnlyContext.Provider value={providerValue}>{children}</UnclaimedOnlyContext.Provider>
 }

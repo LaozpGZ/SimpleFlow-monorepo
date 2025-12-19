@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 
 export const CancelGiftContext = createContext({
   codeHash: '',
@@ -7,5 +7,6 @@ export const CancelGiftContext = createContext({
 
 export const CancelGiftProvider = ({ children }: { children: React.ReactNode }) => {
   const [codeHash, setCodeHash] = useState('')
-  return <CancelGiftContext.Provider value={{ codeHash, setCodeHash }}>{children}</CancelGiftContext.Provider>
+  const providerValue = useMemo(() => ({ codeHash, setCodeHash }), [codeHash])
+  return <CancelGiftContext.Provider value={providerValue}>{children}</CancelGiftContext.Provider>
 }
