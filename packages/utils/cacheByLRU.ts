@@ -89,7 +89,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     maxSize: maxCacheSize || 1000,
   })
   const fetchR2Cache = persist
-    ? cacheByLRU(_fetchR2Cache, {
+    ? cacheByLRU(getR2Cache, {
         ttl,
       })
     : undefined
@@ -256,7 +256,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
   return cachedFn as T
 }
 
-async function existsR2(key: string) {
+export async function existsR2(key: string) {
   try {
     const resp = await fetch(`https://obj-cache.pancakeswap.com/cache/${key}`, {
       method: 'HEAD',
@@ -266,7 +266,7 @@ async function existsR2(key: string) {
     return false
   }
 }
-async function uploadR2(key: string, value: any) {
+export async function uploadR2(key: string, value: any) {
   if (!process.env.OBJECT_CACHE_SECRET) {
     return false
   }
@@ -285,7 +285,7 @@ async function uploadR2(key: string, value: any) {
   return true
 }
 
-async function _fetchR2Cache(key: string) {
+export async function getR2Cache(key: string) {
   const resp = await fetch(`https://proofs.pancakeswap.com/cache/${key}`)
   console.log(`[fetch] cache https://proofs.pancakeswap.com/cache/${key}`)
   if (resp.ok) {
