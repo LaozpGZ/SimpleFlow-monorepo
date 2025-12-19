@@ -1,5 +1,5 @@
 import debounce from "lodash/debounce";
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { usePopper } from "react-popper";
 import useMatchBreakpoints from "../../contexts/MatchBreakpoints/useMatchBreakpoints";
 import { useOnClickOutside } from "../../hooks";
@@ -194,17 +194,16 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     [items, isMobile, isMd]
   );
   const hasItems = filteredItems.length > 0;
-  const { styles, attributes } = usePopper(targetRef, tooltipRef, {
+  const { styles, attributes, forceUpdate } = usePopper(targetRef, tooltipRef, {
     strategy: isBottomNav ? "absolute" : "fixed",
     placement: isBottomNav ? "top" : "bottom-start",
     modifiers: [{ name: "offset", options: { offset: [0, isBottomNav ? 6 : 0] } }],
   });
 
-  const isMenuShow = isOpen && ((isBottomNav && showItemsOnMobile) || !isBottomNav);
+  const isMenuShown = isOpen && ((isBottomNav && showItemsOnMobile) || !isBottomNav);
 
   useEffect(() => {
-    if (isBottomNav && !hasItems) return undefined;
-    if (trigger !== "hover") return undefined;
+    if (!hasItems || trigger !== "hover") return undefined;
     const showDropdownMenu = () => {
       setIsOpen(true);
       hideDropdownMenu.cancel();
@@ -233,9 +232,9 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
 
   useEffect(() => {
     if (setMenuOpenByIndex && index !== undefined) {
-      setMenuOpenByIndex((prevValue) => ({ ...prevValue, [index]: isMenuShow }));
+      setMenuOpenByIndex((prevValue) => ({ ...prevValue, [index]: isMenuShown }));
     }
-  }, [isMenuShow, setMenuOpenByIndex, index]);
+  }, [isMenuShown, setMenuOpenByIndex, index]);
 
   useOnClickOutside(
     isOpen ? targetRef : null,
@@ -249,6 +248,12 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     setIsOpen((s) => !s);
   }, [isBottomNav, hasItems]);
 
+  useLayoutEffect(() => {
+    if (!isBottomNav && isMenuShown) {
+      forceUpdate?.();
+    }
+  }, [forceUpdate, isMenuShown]);
+
   return (
     <Box ref={setTargetRef} {...props}>
       <Box onPointerDown={handlePointerDown}>{children}</Box>
@@ -257,7 +262,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
           ref={setTooltipRef}
           style={styles.popper}
           $isBottomNav={isBottomNav}
-          $isOpen={isMenuShow}
+          $isOpen={isMenuShown}
           {...attributes.popper}
         >
           {filteredItems.map((item) => (
