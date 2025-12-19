@@ -4,7 +4,7 @@ alwaysApply: false
 
 ## Commit Message Format
 
-When creating commits, use the conventional commit format:
+Commit Message MUST follow the conventional commit format:
 
 ```
 <type>(<scope>): <description>
@@ -46,12 +46,28 @@ revert: feat(auth): add OAuth2 login support
 
 ## Pull Request Guidelines
 
-### PR Title Format
+### Naming Pull Request title when creating Pull Request
 
-Use the same conventional commit format for PR titles:
+Pull Request's title MUST follow the conventional commit format:
 
 ```
 <type>(<scope>): <description>
+```
+
+### Examples:
+
+```
+feat(auth): add OAuth2 login support
+fix(api): resolve null pointer exception in user service
+docs(readme): update installation instructions
+style(components): fix indentation in Button component
+refactor(utils): extract common validation logic
+perf(search): optimize database queries for faster results
+test(auth): add unit tests for login flow
+build(deps): upgrade React to v18
+ci(github): add automated testing workflow
+chore(cleanup): remove unused dependencies
+revert: feat(auth): add OAuth2 login support
 ```
 
 ### PR Description Template

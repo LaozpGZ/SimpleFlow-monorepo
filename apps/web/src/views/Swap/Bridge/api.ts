@@ -13,9 +13,7 @@ import {
   PublicKey,
   Transaction,
   VersionedTransaction,
-  TransactionInstruction,
   ComputeBudgetProgram,
-  TransactionMessage,
 } from '@solana/web3.js'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
@@ -261,7 +259,7 @@ export const getBridgeCalldata = async ({
 
     const commands: (BridgeDataSchema | SwapDataSchema)[] = order.commands.map((command) => {
       if (isSVMOrder(command)) {
-        throw new Error('SVM order not supported for bridge')
+        throw new Error('getBridgeCalldata not support SVM order')
       }
 
       if (command.type === OrderType.PCS_BRIDGE) {
