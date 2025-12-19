@@ -23,6 +23,7 @@ const getPathList = memoize((t: ContextApi['t']): PathList => {
       '/swap/limit': { basePath: true, title: t('Limit Orders'), image: `${ASSET_CDN}/web/og/limit.jpg` },
       '/limit-orders': { basePath: true, title: t('Limit Orders'), image: `${ASSET_CDN}/web/og/limit.jpg` },
       '/add': { basePath: true, title: t('Add Liquidity'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
+      '/stable/add': { basePath: true, title: t('Add Liquidity'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
       '/remove': { basePath: true, title: t('Remove Liquidity'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
       '/liquidity': { title: t('Liquidity'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
       '/find': { title: t('Import Pool') },
@@ -47,6 +48,12 @@ const getPathList = memoize((t: ContextApi['t']): PathList => {
       '/info': {
         basePath: true,
         title: `${t('Overview')} - ${t('Info.section_title')}`,
+        description: 'View statistics for Pancakeswap exchanges.',
+        image: `${ASSET_CDN}/web/og/info.jpg`,
+      },
+      '/info/v3': {
+        basePath: true,
+        title: `${t('Overview')} - ${t('Info')}`,
         description: 'View statistics for Pancakeswap exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
