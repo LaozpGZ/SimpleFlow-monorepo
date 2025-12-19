@@ -142,7 +142,7 @@ const getXmasSideLeftDimensions = ({
     return {
       left: '-24vw',
       width: 'min(520px, 43vw)',
-      height: 'min(540px, 40vw)',
+      height: 'min(545px, 45vw)',
     }
   }
 
