@@ -1,27 +1,27 @@
-import { useRouter } from 'next/router'
-import { SwapHorizIcon } from '@pancakeswap/uikit'
-import { useCallback, useState, useEffect, useMemo, memo } from 'react'
+import { Box, Flex, Grid, GridItem, HStack, Skeleton, Tag, Text, useDisclosure } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Grid, GridItem, HStack, Tag, Text, Skeleton, useDisclosure } from '@chakra-ui/react'
-import Link from 'next/link'
+import { SwapHorizIcon } from '@pancakeswap/uikit'
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import AddressChip from '@/components/AddressChip'
 import Button from '@/components/Button'
+import { QuestionToolTip } from '@/components/QuestionToolTip'
 import TokenAvatar from '@/components/TokenAvatar'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
-import AddressChip from '@/components/AddressChip'
 import Tooltip from '@/components/Tooltip'
-import { colors } from '@/theme/cssVariables'
-import { PositionWithUpdateFn } from '@/hooks/portfolio/useAllPositionInfo'
-import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import useSubscribeClmmInfo, { RpcPoolData } from '@/hooks/pool/clmm/useSubscribeClmmInfo'
-import ChevronDoubleDownIcon from '@/icons/misc/ChevronDoubleDownIcon'
-import { panelCard } from '@/theme/cssBlocks'
-import { useAppStore } from '@/store'
-import toPercentString from '@/utils/numberish/toPercentString'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import { QuestionToolTip } from '@/components/QuestionToolTip'
+import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
+import { PositionWithUpdateFn } from '@/hooks/portfolio/useAllPositionInfo'
+import ChevronDoubleDownIcon from '@/icons/misc/ChevronDoubleDownIcon'
+import { useAppStore } from '@/store'
+import { panelCard } from '@/theme/cssBlocks'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import toPercentString from '@/utils/numberish/toPercentString'
 import { logGTMCreateNewPositionEvent } from '@/utils/report/curstomGTMEventTracking'
 import ClmmPositionAccountItem from './ClmmPositionAccountItem'
 
@@ -84,8 +84,8 @@ function ClmmPositionItemsCardComp({
     [lockInfo, positions]
   )
 
-  if (!poolInfo) {
-    return isLoading ? <Skeleton w="full" height="140px" rounded="lg" /> : null
+  if (!poolInfo || data?.isLoading) {
+    return <Skeleton w="full" height="140px" rounded="3xl" mb={4} />
   }
 
   return (
@@ -105,7 +105,7 @@ function ClmmPositionItemsCardComp({
       ]}
       py={[4, 3]}
       px={[3, 6]}
-      mb={4}
+      mb={[4, 0]}
       gap={[2, 4]}
       borderRadius="3xl"
       alignItems="center"
