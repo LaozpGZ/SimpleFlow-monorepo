@@ -141,7 +141,7 @@ const getXmasSideLeftDimensions = ({
   if (isTablet) {
     return {
       left: '-24vw',
-      width: 'min(520px, 36vw)',
+      width: 'min(520px, 43vw)',
       height: 'min(540px, 40vw)',
     }
   }
