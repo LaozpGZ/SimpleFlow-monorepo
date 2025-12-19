@@ -30,7 +30,7 @@ export const bestAMMTradeFromQuoterWorkerAtom = atomFamily((option: QuoteQuery) 
     const quoteProvider = createQuoteProvider({
       gasLimit,
     })
-    const worker = await get(globalWorkerAtom)
+    const worker = await get(globalWorkerAtom('smart-01'))
 
     if (!worker) {
       throw new Error('Quote worker not initialized')

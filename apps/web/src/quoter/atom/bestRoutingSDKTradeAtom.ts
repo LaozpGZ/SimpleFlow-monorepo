@@ -22,7 +22,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
       return undefined
     }
 
-    const worker = await get(globalWorkerAtom)
+    const worker = await get(globalWorkerAtom('smart-02'))
 
     if (!worker) {
       throw new Error('Quote worker not initialized')
@@ -55,6 +55,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
           signal: controller.signal,
         })
         const trade = InfinityRouter.Transformer.parseTrade(currency.chainId, result) ?? null
+        perf.tracker.track('routing_success')
         const verifiedTrade = await getVerifiedTrade(trade)
 
         if (verifiedTrade) {

@@ -1,12 +1,15 @@
 import { atom, useAtom, useAtomValue } from 'jotai'
+import { atomFamily } from 'jotai/utils'
 import { useEffect, useRef, useState } from 'react'
 
 import { WorkerInstance, createWorker } from 'utils/worker'
 
-export const globalWorkerAtom = atom(async () => {
-  const worker = await createWorker()
-  return worker
-})
+export const globalWorkerAtom = atomFamily((_: string) =>
+  atom(async () => {
+    const worker = await createWorker()
+    return worker
+  }),
+)
 
 function createUseWorkerHook(shared?: boolean) {
   return function useWorker() {
@@ -42,5 +45,7 @@ function createUseWorkerHook(shared?: boolean) {
 export const useWorker = createUseWorkerHook(false)
 
 export const useInitGlobalWorker = () => {
-  useAtomValue(globalWorkerAtom)
+  useAtomValue(globalWorkerAtom('routing-sdk'))
+  useAtomValue(globalWorkerAtom('smart-01'))
+  useAtomValue(globalWorkerAtom('smart-02'))
 }

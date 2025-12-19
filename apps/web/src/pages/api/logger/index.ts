@@ -9,9 +9,6 @@ export const config = {
   },
 }
 const handler: NextApiHandler = async (req, res) => {
-  if (process.env.NODE_ENV !== 'development') {
-    return res.status(404).end()
-  }
   if (req.method === 'POST') {
     const { body } = req
     const { id, logs } = body

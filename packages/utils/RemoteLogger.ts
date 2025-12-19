@@ -1,4 +1,4 @@
-const ENABLED = process.env.NODE_ENV === 'development'
+const ENABLED = true
 export class RemoteLogger {
   private logs: string[] = []
 
@@ -6,14 +6,21 @@ export class RemoteLogger {
 
   private createTime = new Date().getTime()
 
+  private time0 = new Date().getTime()
+
   constructor(_id: string) {
     this.id = _id
+  }
+
+  private getTime() {
+    const t = (new Date().getTime() - this.time0) / 1000
+    return `${t.toFixed(1)}s`
   }
 
   debug(log: string, indent: number = 0) {
     if (ENABLED && this.id !== '__dummy__') {
       const indentStr = '  '.repeat(indent)
-      this.logs.push(`${indentStr}${log}`)
+      this.logs.push(`${indentStr}(${this.getTime()})${log}`)
     }
   }
 
@@ -32,7 +39,8 @@ export class RemoteLogger {
         const lines = str.split('\n')
         const indentStr = '  '.repeat(indent)
         const logs = lines.map((line) => `${indentStr}${line}`)
-        this.logs.push(...logs)
+        const first = `${indentStr}(${this.getTime()})`
+        this.logs.push(first, ...logs)
       } catch (e) {
         this.logs.push(`Error in json, ${e}`)
       }
