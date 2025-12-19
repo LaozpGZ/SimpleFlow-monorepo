@@ -149,7 +149,7 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
-      label: t('Prob'),
+      label: `${t('Prob')}🔥`,
       icon: RocketIcon,
       href: 'https://probable.markets',
       type: DropdownMenuItemType.EXTERNAL_LINK,
