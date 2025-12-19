@@ -4,7 +4,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { isAddressEqual } from 'utils'
 import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import IncreaseLiquidityV3 from 'views/AddLiquidityV3/IncreaseLiquidityV3'
@@ -16,37 +16,34 @@ const IncreaseLiquidityPage = () => {
 
   const native = useNativeCurrency()
 
-  const [currencyIdA, currencyIdB] = router.query.currency || [
-    native.symbol,
-    (chainId && CAKE[chainId]?.address) ?? (chainId && USDC[chainId]?.address),
-  ]
-
-  useEffect(() => {
-    if (!router.isReady) return
-
-    const currency = (router.query.currency as string[]) || []
-    const [curA, curB, feeAmountFromUrl, tokenId] = currency
-    const match = curA?.match(OLD_PATH_STRUCTURE)
-
-    const isNumberReg = /^\d+$/
-
-    if (match?.length) {
-      router.replace(`/add/${match[1]}/${match[2]}`)
-      return
-    }
-
-    if (curA && curB && curA.toLowerCase() === curB.toLowerCase()) {
-      router.replace(`/add/${curA}`)
-      return
-    }
-
-    if (!(feeAmountFromUrl as string)?.match(isNumberReg) || !(tokenId as string)?.match(isNumberReg)) {
-      router.replace('/add')
-    }
-  }, [router])
+  const [currencyIdA, currencyIdB] =
+    !router.isReady || !chainId
+      ? [undefined, undefined]
+      : router.query.currency || [native.symbol, CAKE[chainId]?.address ?? USDC[chainId]?.address]
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
+
+  if (!router || !router.isReady) return null
+
+  const currency = (router.query.currency as string[]) || []
+  const [curA, curB, feeAmountFromUrl, tokenId] = currency
+  const match = curA?.match(OLD_PATH_STRUCTURE)
+
+  if (match?.length) {
+    router.replace(`/add/${match[1]}/${match[2]}`)
+    return null
+  }
+
+  if (curA && curB && isAddressEqual(curA, curB)) {
+    router.replace(`/add/${curA}`)
+    return null
+  }
+
+  if (!(feeAmountFromUrl as string)?.match(IS_NUMBER_REG) || !(tokenId as string)?.match(IS_NUMBER_REG)) {
+    router.replace('/add')
+    return null
+  }
 
   return (
     <LiquidityFormProvider>
@@ -55,6 +52,7 @@ const IncreaseLiquidityPage = () => {
   )
 }
 const OLD_PATH_STRUCTURE = /^(0x[a-fA-F0-9]{40}|BNB)-(0x[a-fA-F0-9]{40}|BNB)$/
+const IS_NUMBER_REG = /^\d+$/
 
 const Page = dynamic(() => Promise.resolve(IncreaseLiquidityPage), { ssr: false }) as NextPageWithLayout
 
