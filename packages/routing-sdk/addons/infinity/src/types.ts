@@ -2,18 +2,28 @@ import type { Pool, SerializableCurrency, SerializableCurrencyAmount } from '@pa
 import type { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import type { Tick } from '@pancakeswap/v3-sdk'
 
-import { INFI_BIN_POOL_TYPE, INFI_CL_POOL_TYPE } from './constants/poolType'
+import { INFI_BIN_POOL_TYPE, INFI_CL_POOL_TYPE, INFI_STABLE_POOL_TYPE } from './constants/poolType'
 
 export type Address = `0x${string}`
 
 export type InfinityCLPoolType = typeof INFI_CL_POOL_TYPE
 export type InfinityBinPoolType = typeof INFI_BIN_POOL_TYPE
+export type InfinityStablePoolType = typeof INFI_STABLE_POOL_TYPE
 export type InfinityPoolType = InfinityCLPoolType | InfinityBinPoolType
 
 export type InfinityPoolDataBase = {
   hooks?: Address
   hooksRegistrationBitmap?: Address | number
   poolManager: Address
+}
+
+export type InfinityStablePoolData = InfinityPoolDataBase & {
+  currency0: Currency
+  currency1: Currency
+  fee: number
+  tickSpacing: number
+  reserve0?: CurrencyAmount<Currency>
+  reserve1?: CurrencyAmount<Currency>
 }
 
 export type InfinityCLPoolData = InfinityPoolDataBase & {
@@ -59,6 +69,17 @@ export type InfinityBinPoolData = InfinityPoolDataBase & {
 export type InfinityCLPool = Pool<InfinityCLPoolType, InfinityCLPoolData>
 
 export type InfinityBinPool = Pool<InfinityBinPoolType, InfinityBinPoolData>
+
+export type InfinityStablePool = Pool<InfinityStablePoolType, InfinityStablePoolData>
+
+export type SerializableInfinityStablePool = InfinityPoolDataBase & {
+  currency0: SerializableCurrency
+  currency1: SerializableCurrency
+  fee: number
+  tickSpacing: number
+  reserve0?: SerializableCurrencyAmount
+  reserve1?: SerializableCurrencyAmount
+}
 
 export type SerializableInfinityCLPool = InfinityPoolDataBase & {
   currency0: SerializableCurrency

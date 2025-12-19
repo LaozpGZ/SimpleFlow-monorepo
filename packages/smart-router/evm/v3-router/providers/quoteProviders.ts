@@ -68,6 +68,8 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
       routes: RouteWithoutQuote[],
       { blockNumber, gasModel, signal, quoteId }: QuoterOptions,
     ): Promise<RouteWithQuote[]> {
+      console.log('getRoutesWithQuotes routes', routes, isExactIn)
+      console.log('getRoutesWithQuotes RouteType.InfinityStable', RouteType.InfinityStable)
       const { chainId } = routes[0]?.input || {}
       const getMixedRouteQuotes = createMixedRouteQuoteFetcher(chainId)
 
@@ -90,11 +92,21 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
           v3MultihopRoutes.push(route)
           continue
         }
+
+        if (route.type === RouteType.InfinityStable) {
+          if (isExactIn) {
+            mixedRoutesHaveV3Pool.push(route)
+            continue
+          }
+          // no support for exact out
+          continue
+        }
         if (route.type === RouteType.InfinityCL) {
           if (isExactIn) {
             mixedRoutesHaveV3Pool.push(route)
             continue
           }
+
           infinityClRoutes.push(route)
           continue
         }
@@ -123,6 +135,13 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
         infinityClRoutes,
         infinityBinRoutes,
       )
+
+      console.log('getMixedRouteQuotes', mixedRoutesHaveV3Pool)
+      console.log('getOffChainQuotes', routesCanQuoteOffChain)
+      console.log('getV3Quotes', v3SingleHopRoutes)
+      console.log('getV3Quotes', v3MultihopRoutes)
+      console.log('getInfinityClQuotes', infinityClRoutes)
+      console.log('getInfinityBinQuotes', infinityBinRoutes)
 
       const results = await Promise.allSettled([
         getOffChainQuotes(routesCanQuoteOffChain, { blockNumber, gasModel, signal, quoteId }),

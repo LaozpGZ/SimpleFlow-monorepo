@@ -113,6 +113,8 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
 
   const fetchTvMap = cacheByLRU(
     async (protocol: EdgeProtocol[], chainId: ChainId) => {
+      return {}
+
       const api = `${process.env.NEXT_PUBLIC_EDGE_ENDPOINT || ''}/api/pools/tvlref?protocol=${protocol.join(
         ',',
       )}&chainId=${chainId}`
@@ -137,12 +139,14 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
     const queryFunc = async () => {
       const provider = options.provider ?? getViemClients
       const tvMap = await fetchTvMap(['infinityBin', 'infinityCl'], query.chainId)
+      console.log('calling getInfinityCandidatePoolsLite')
       const pools = await InfinityRouter.getInfinityCandidatePoolsLite({
         currencyA,
         currencyB,
         clientProvider: provider,
         tvlRefMap: tvMap,
       })
+      console.log('pools length', pools?.length)
       return pools
     }
 

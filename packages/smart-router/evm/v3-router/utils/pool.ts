@@ -6,7 +6,16 @@ import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { Pool as SDKV3Pool, computePoolAddress } from '@pancakeswap/v3-sdk'
 import { Address } from 'viem'
 
-import { InfinityBinPool, InfinityClPool, Pool, PoolType, StablePool, V2Pool, V3Pool } from '../types'
+import {
+  InfinityBinPool,
+  InfinityClPool,
+  InfinityStablePool,
+  Pool,
+  PoolType,
+  StablePool,
+  V2Pool,
+  V3Pool,
+} from '../types'
 
 export function isV2Pool(pool: Pool): pool is V2Pool {
   return pool.type === PoolType.V2
@@ -26,6 +35,10 @@ export function isInfinityBinPool(pool: Pool): pool is InfinityBinPool {
 
 export function isInfinityClPool(pool: Pool): pool is InfinityClPool {
   return pool.type === PoolType.InfinityCL
+}
+
+export function isInfinityStablePool(pool: Pool): pool is InfinityStablePool {
+  return pool.type === PoolType.InfinityStable
 }
 
 export function involvesCurrency(pool: Pool, currency: Currency) {
@@ -51,6 +64,12 @@ export function involvesCurrency(pool: Pool, currency: Currency) {
     const { balances } = pool
     return balances.some((b) => b.currency.equals(token))
   }
+
+  if (isInfinityStablePool(pool)) {
+    const { reserve0, reserve1 } = pool
+    return reserve0?.currency.equals(token) || reserve1?.currency.equals(token)
+  }
+
   return false
 }
 
@@ -69,7 +88,7 @@ export function getOutputCurrency(pool: Pool, currencyIn: Currency): Currency {
     const { balances } = pool
     return balances[0].currency.equals(tokenIn) ? balances[1].currency : balances[0].currency
   }
-  if (isInfinityClPool(pool) || isInfinityBinPool(pool)) {
+  if (isInfinityClPool(pool) || isInfinityBinPool(pool) || isInfinityStablePool(pool)) {
     const { currency0, currency1 } = pool
     return currency0.wrapped.equals(tokenIn) ? currency1 : currency0
   }

@@ -1,7 +1,6 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
-import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useMemo } from 'react'
@@ -13,8 +12,7 @@ import {
   InfinityCLPoolDerivedAprButton,
 } from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
 
-export const InfinityPoolInfoHeader = () => {
-  const { chainId, poolId } = useInfinityPoolIdRouteParams()
+export const InfinityPoolInfoHeader = ({ poolId, chainId }: { poolId: `0x${string}`; chainId: number }) => {
   const { isMobile } = useMatchBreakpoints()
   const poolInfo = usePoolInfo({ poolAddress: poolId, chainId })
   const hookData = useHookByPoolId(chainId, poolId)

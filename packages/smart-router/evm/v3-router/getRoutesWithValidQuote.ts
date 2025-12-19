@@ -31,6 +31,7 @@ export async function getRoutesWithValidQuote({
   signal,
   quoteId,
 }: Params): Promise<RouteWithQuote[]> {
+  console.log('getRoutesWithValidQuote baseRoutes', baseRoutes, tradeType)
   // const distributionPercent = 100
   const logger = RemoteLogger.getLogger(quoteId)
   logger.debug('run getRoutesWithValidQuote')
@@ -61,6 +62,7 @@ export async function getRoutesWithValidQuote({
       : quoteProvider.getRouteWithQuotesExactOut
 
   if (!quoterOptimization) {
+    console.log('getQuotes !quoterOptimization getRoutesWithQuote', routesWithoutQuote)
     return getRoutesWithQuote(routesWithoutQuote, { blockNumber, gasModel, signal, quoteId })
   }
 
@@ -72,6 +74,7 @@ export async function getRoutesWithValidQuote({
     new Promise((resolve, reject) => {
       requestCallback(async () => {
         try {
+          console.log('getQuotes getRoutesWithQuote', routes)
           const result = await getRoutesWithQuote(routes, { blockNumber, gasModel, signal })
           resolve(result)
         } catch (e) {
@@ -80,7 +83,9 @@ export async function getRoutesWithValidQuote({
       })
     })
   const chunks = chunk(routesWithoutQuote, 10)
+  console.log('getRoutesWithValidQuote chunks', chunks)
   const result = await Promise.all(chunks.map(getQuotes))
+  console.log('getRoutesWithValidQuote result', result)
   const quotes = result.reduce<RouteWithQuote[]>((acc, cur) => {
     acc.push(...cur)
     return acc

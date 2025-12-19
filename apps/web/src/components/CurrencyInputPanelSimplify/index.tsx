@@ -172,6 +172,7 @@ interface CurrencyInputPanelProps {
   currency?: UnifiedCurrency | null
   disableCurrencySelect?: boolean
   hideBalance?: boolean
+  overrideBalance?: UnifiedCurrencyAmount<UnifiedCurrency>
   pair?: Pair | StablePair | null
   otherCurrency?: UnifiedCurrency | null
   id: string
@@ -215,6 +216,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   currency,
   disableCurrencySelect = false,
   hideBalance = false,
+  overrideBalance,
   supportCrossChain = true,
   beforeButton,
   pair = null, // used for double token logo
@@ -249,7 +251,8 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   }, [customChainId, evmAccount, solanaAccount, unifiedAccount])
   const [value, setValue] = useState<string | undefined>(defaultValue)
 
-  const selectedCurrencyBalance = useUnifiedCurrencyBalance(currency ?? undefined)
+  // If there is overrideBalance, no need to load currency balance
+  const selectedCurrencyBalance = useUnifiedCurrencyBalance((overrideBalance ? undefined : currency) ?? undefined)
 
   const { t } = useTranslation()
 
@@ -346,16 +349,12 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
     }
   }, [onPresentCurrencyModal, disableCurrencySelect])
 
-  const balance = useMemo(
-    () =>
-      !hideBalance &&
-      !!currency &&
-      selectedCurrencyBalance &&
-      !isUndefinedOrNull(selectedCurrencyBalance?.currency?.decimals)
-        ? formatAmount(selectedCurrencyBalance, selectedCurrencyBalance?.currency?.decimals)
-        : undefined,
-    [selectedCurrencyBalance, currency, hideBalance],
-  )
+  const balance = useMemo(() => {
+    const balanceToUse = overrideBalance ?? selectedCurrencyBalance
+    return !hideBalance && !!currency && balanceToUse && !isUndefinedOrNull(balanceToUse?.currency?.decimals)
+      ? formatAmount(balanceToUse, balanceToUse?.currency?.decimals)
+      : undefined
+  }, [overrideBalance, selectedCurrencyBalance, currency, hideBalance])
 
   return (
     <SwapUIV2.CurrencyInputPanelSimplify

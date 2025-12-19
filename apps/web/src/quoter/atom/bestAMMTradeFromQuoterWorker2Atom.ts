@@ -82,11 +82,17 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
         const candidatePools = await fetchCandidatePoolsLite(poolQuery, poolOptions)
         perf.tracker.track('pool_success')
 
+        console.log('calling filterPools')
+
         const filtered = filterPools(candidatePools)
 
         const quoteCurrencyUsdPrice = await get(currencyUSDPriceAtom(currency))
         const nativeCurrency = get(nativeCurrencyAtom(currency.chainId))
         const nativeCurrencyUsdPrice = await get(currencyUSDPriceAtom(nativeCurrency))
+
+        const serializedPools = filtered.map(SmartRouter.Transformer.serializePool)
+
+        console.log('bestAMMTradeFromQuoterWorker2Atom serializedPools', serializedPools)
 
         const gasPriceWei = await get(gasPriceWeiAtom(currency?.chainId))
         const quoterConfig = (quoteProvider as ReturnType<typeof SmartRouter.createQuoteProvider>)?.getConfig?.()
@@ -102,12 +108,15 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
           maxHops: option.maxHops,
           maxSplits,
           poolTypes: getAllowedPoolTypes(option),
-          candidatePools: filtered.map(SmartRouter.Transformer.serializePool),
+          candidatePools: serializedPools,
           onChainQuoterGasLimit: quoterConfig?.gasLimit?.toString(),
           quoteCurrencyUsdPrice,
           nativeCurrencyUsdPrice,
           signal: controller.signal,
         })
+
+        console.log('bestAMMTradeFromQuoterWorker2Atom result', result)
+
         const parsed = SmartRouter.Transformer.parseTrade(currency.chainId, result as any) as any as
           | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
           | undefined
@@ -132,6 +141,7 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
     try {
       return await query()
     } catch (ex) {
+      console.log('bestAMMTradeFromQuoterWorker2Atom error', ex)
       perf.tracker.fail(ex)
       controller.abort()
       throw ex

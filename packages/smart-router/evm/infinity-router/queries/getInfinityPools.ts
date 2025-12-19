@@ -1,8 +1,15 @@
 import { infinityPoolTvlSelector } from '../../v3-router/providers'
-import { InfinityBinPool, InfinityClPool, InfinityPoolWithTvl, PoolType } from '../../v3-router/types'
+import {
+  InfinityBinPool,
+  InfinityClPool,
+  InfinityPoolWithTvl,
+  InfinityStablePool,
+  PoolType,
+} from '../../v3-router/types'
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { fillPoolsWithBins, getInfinityBinCandidatePoolsWithoutBins } from './getInfinityBinPools'
 import { fillClPoolsWithTicks, getInfinityClCandidatePoolsWithoutTicks } from './getInfinityClPools'
+import { getInfinityStableCandidatePools } from './getInfinityStablePools'
 import { getInfinityPoolTvl } from './getPoolTvl'
 
 export const getInfinityCandidatePools = async (params: GetInfinityCandidatePoolsParams) => {
@@ -30,6 +37,7 @@ async function fetchPoolsOnChain(params: GetInfinityCandidatePoolsParams) {
     getInfinityClCandidatePoolsWithoutTicks(params),
     getInfinityBinCandidatePoolsWithoutBins(params),
   ])
+
   const pools = [...clPools, ...binPools]
   const poolsWithTvl: InfinityPoolWithTvl[] = pools.map((pool) => {
     return {
@@ -42,8 +50,22 @@ async function fetchPoolsOnChain(params: GetInfinityCandidatePoolsParams) {
 
 export const getInfinityCandidatePoolsLite = async (
   params: GetInfinityCandidatePoolsParams,
-): Promise<(InfinityClPool | InfinityBinPool)[]> => {
-  const pools = await fetchPoolsOnChain(params)
+): Promise<(InfinityClPool | InfinityBinPool | InfinityStablePool)[]> => {
+  console.log('calling fetchPoolsOnChain')
+
+  // TODO: disable fetchPoolsOnChain for faster development
+  const pools: InfinityPoolWithTvl[] = []
+
+  console.log('calling getInfinityStableCandidatePools')
+
+  const stableInfinityPools = await getInfinityStableCandidatePools(params)
+
+  console.log('stableInfinityPools: ', stableInfinityPools)
+
+  // Filter pools by TVL, and return Pools omitted tvlUSD field
   const filtered = infinityPoolTvlSelector(params.currencyA, params.currencyB, pools)
-  return filtered as (InfinityClPool | InfinityBinPool)[]
+
+  return [...filtered, ...stableInfinityPools] as (InfinityClPool | InfinityBinPool | InfinityStablePool)[]
+
+  // return filtered as (InfinityClPool | InfinityBinPool)[]
 }
