@@ -26,6 +26,7 @@ describe('transaction reducer', () => {
           hash: '0x0',
           approval: { tokenAddress: 'abc', spender: 'def' },
           from: 'abc',
+          outputChainId: ChainId.ETHEREUM,
         }),
       )
       const txs = store.getState()
@@ -38,6 +39,7 @@ describe('transaction reducer', () => {
       expect(tx?.approval).toEqual({ tokenAddress: 'abc', spender: 'def' })
       expect(tx?.from).toEqual('abc')
       expect(tx?.addedTime).toBeGreaterThanOrEqual(beforeTime)
+      expect(tx?.outputChainId).toBeGreaterThanOrEqual(ChainId.ETHEREUM)
     })
   })
 

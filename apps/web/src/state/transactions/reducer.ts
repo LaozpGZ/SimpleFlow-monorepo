@@ -32,6 +32,7 @@ export interface TransactionDetails {
   confirmedTime?: number
   from: string
   crossChainFarm?: CrossChainFarmTransactionType
+  outputChainId?: number
 }
 
 export interface TransactionState {
@@ -59,6 +60,7 @@ export default createReducer(initialState, (builder) =>
             claim,
             type,
             order,
+            outputChainId,
             crossChainFarm,
             receipt,
           },
@@ -78,6 +80,7 @@ export default createReducer(initialState, (builder) =>
           addedTime: now(),
           type,
           order,
+          outputChainId,
           crossChainFarm,
           receipt,
         }

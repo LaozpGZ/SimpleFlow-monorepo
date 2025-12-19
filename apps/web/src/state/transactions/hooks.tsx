@@ -39,6 +39,7 @@ export function useTransactionAdder(overrideChainId?: number): (
     claim?: { recipient: string }
     type?: TransactionType
     order?: Order
+    outputChainId?: number
     crossChainFarm?: CrossChainFarmTransactionType
     // add/remove pool
     baseCurrencyId?: string
@@ -72,6 +73,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         claim,
         type,
         order,
+        outputChainId,
         crossChainFarm,
         receipt,
       }: {
@@ -83,6 +85,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         order?: Order
         crossChainFarm?: CrossChainFarmTransactionType
         receipt?: SerializableTransactionReceipt
+        outputChainId?: number
       } = {},
     ) => {
       if (!from) return
@@ -118,6 +121,7 @@ export function useTransactionAdder(overrideChainId?: number): (
           claim,
           type,
           order,
+          outputChainId,
           crossChainFarm,
           receipt,
         }),

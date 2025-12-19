@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { WALLET_API } from 'config/constants/endpoints'
 import { UpdatePositionsReminder } from 'views/Farms/components/UpdatePositionsReminder'
 import { useAccount } from 'wagmi'
+import { WalletBalanceUpdater } from 'state/wallet/updater'
 import ListsUpdater from './state/lists/updater'
 import MulticallUpdater from './state/multicall/updater'
 import TransactionUpdater, { SolanaTransactionUpdater } from './state/transactions/updater'
@@ -19,6 +20,7 @@ export function Updaters() {
       ))}
       <SolanaTransactionUpdater />
       <MulticallUpdater />
+      <WalletBalanceUpdater />
     </>
   )
 }
