@@ -12,7 +12,7 @@ interface VirtualBoxProps {
 }
 
 /**
- * destory children if not show, but it will remain child's size by a `<div>` element
+ * destroy children if not show, but it will remain child's size by a `<div>` element
  */
 export default forwardRef(function VirtualBox(
   {

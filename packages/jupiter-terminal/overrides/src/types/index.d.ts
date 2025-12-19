@@ -93,7 +93,7 @@ export interface IInit {
   onRequestConnectWallet?: () => void | Promise<void>
 
   /** Callbacks */
-  /** When an error has occured during swap */
+  /** When an error has occurred during swap */
   onSwapError?: ({
     error,
     quoteResponseMeta,

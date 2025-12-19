@@ -77,7 +77,7 @@ function List<T>(
   const contextValue = useMemo(() => ({ observeFn: observe }), [observe])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => stop, []) // stop observer when destory
+  useEffect(() => stop, []) // stop observer when destroy
 
   const initRenderItemLength = renderAllAtOnce ? items.length : initRenderCount
   // actually showed itemLength

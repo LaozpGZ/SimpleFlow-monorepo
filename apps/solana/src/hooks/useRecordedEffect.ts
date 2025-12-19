@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { areShallowEqual, areShallowShallowEqual } from '@/utils/judges/areEqual'
 
 /**
- * similiar to React.useEffect, but can record dependence list
+ * similar to React.useEffect, but can record dependence list
  *
  * if clean fn is promise<function>, it will just ignore it
  *
