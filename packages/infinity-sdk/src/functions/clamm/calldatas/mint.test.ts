@@ -1,25 +1,23 @@
 import { Address, Hex, zeroAddress } from 'viem'
 import { describe, expect, it } from 'vitest'
-import { CLPositionConfig } from '../../../types'
+import { PoolKey } from '../../../types'
 import { encodeCLPositionManagerMintCalldata } from './mint'
 
 describe('encodeCLPositionManagerMintCalldata', () => {
   it('should correctly encode mint call data', () => {
-    const positionConfig: CLPositionConfig = {
-      poolKey: {
-        currency0: '0x8FaE29D9Fc8eC94097Acd977fC5B5134406D409c' as Address,
-        currency1: '0xe61AaC040dD88A85EE00BAa861FaEaddF1DC043C' as Address,
-        poolManager: '0x969D90aC74A1a5228b66440f8C8326a8dA47A5F9' as Address,
-        fee: 10000,
-        hooks: zeroAddress,
-        parameters: {
-          tickSpacing: 200,
-          hooksRegistration: {},
-        },
+    const poolKey: PoolKey = {
+      currency0: '0x8FaE29D9Fc8eC94097Acd977fC5B5134406D409c' as Address,
+      currency1: '0xe61AaC040dD88A85EE00BAa861FaEaddF1DC043C' as Address,
+      poolManager: '0x969D90aC74A1a5228b66440f8C8326a8dA47A5F9' as Address,
+      fee: 10000,
+      hooks: zeroAddress,
+      parameters: {
+        tickSpacing: 200,
+        hooksRegistration: {},
       },
-      tickLower: -16800,
-      tickUpper: 2800,
     }
+    const tickLower = -16800
+    const tickUpper = 2800
     const liquidity = 7999999999999999865782269n
     const recipient = '0xECcDeE7240A57d0190ab17BAC20f2695EbAb1c19' as Address
     const amount0Max = 4358793934808120209964501n
@@ -28,7 +26,9 @@ describe('encodeCLPositionManagerMintCalldata', () => {
     const hookData = '0x' as Hex
 
     const result = encodeCLPositionManagerMintCalldata(
-      positionConfig,
+      poolKey,
+      tickLower,
+      tickUpper,
       liquidity,
       recipient,
       amount0Max,
