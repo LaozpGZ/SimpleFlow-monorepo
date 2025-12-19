@@ -221,3 +221,11 @@
     }
   ]
 }
+{
+  "name": "Buck Norris Coin",
+  "symbol": "BUCK",
+  "address": "0x909ec2E99f0A8E5BF9C3bf2F7A5aCC44026D4dd3",
+  "chainId": 56,
+  "decimals": 18,
+  "logoURI": "https://yachtmaster92.github.io/bucknorris/images/logo-256.png"
+}
