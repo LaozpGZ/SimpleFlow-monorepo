@@ -1,5 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import {
+  FarmV3Data,
   FarmV3DataWithPrice,
   FarmV3DataWithPriceAndUserInfo,
   FarmV3DataWithPriceTVL,
@@ -10,6 +11,7 @@ import {
   SerializedFarmsV3Response,
   UniversalFarmConfigV3,
   bCakeSupportedChainId,
+  createBaseFarmFetcherV3,
   createFarmFetcherV3,
   defineFarmV3ConfigsFromUniversalFarm,
   fetchUniversalFarms,
@@ -60,17 +62,31 @@ export const farmV3ApiFetch = (chainId: number): Promise<FarmsV3Response> =>
       }
     })
 
-const fallback: Awaited<ReturnType<typeof farmFetcherV3.fetchFarms>> = {
+const baseFallback = {
   chainId: ChainId.BSC,
-  farmsWithPrice: [],
   poolLength: 0,
   cakePerSecond: '0',
   totalAllocPoint: '0',
 }
 
+const fallbackWithPrice: typeof baseFallback & {
+  farmsWithPrice: Awaited<ReturnType<typeof farmFetcherV3.fetchFarms>>['farmsWithPrice']
+} = {
+  ...baseFallback,
+  farmsWithPrice: [],
+}
+
+const fallbackWithData: typeof baseFallback & {
+  farmsData: Awaited<ReturnType<typeof baseFarmFetcherV3.fetchFarms>>['farmsData']
+} = {
+  ...baseFallback,
+  farmsData: [],
+}
+
 const API_FLAG = false
 
 const farmFetcherV3 = createFarmFetcherV3(getViemClients)
+const baseFarmFetcherV3 = createBaseFarmFetcherV3(getViemClients)
 
 export const useFarmsV3Public = () => {
   const { chainId } = useActiveChainId()
@@ -82,7 +98,7 @@ export const useFarmsV3Public = () => {
       if (API_FLAG && chainId) {
         return farmV3ApiFetch(chainId).catch((err) => {
           console.error(err)
-          return fallback
+          return fallbackWithPrice
         })
       }
 
@@ -109,7 +125,7 @@ export const useFarmsV3Public = () => {
       } catch (error) {
         console.error(error)
         // return fallback for now since not all chains supported
-        return fallback
+        return fallbackWithPrice
       }
     },
     refetchInterval: 1_000 * 60 * 10,
@@ -121,7 +137,53 @@ export const useFarmsV3Public = () => {
 
   return {
     ...resp,
-    data: resp?.data ?? fallback,
+    data: resp?.data ?? fallbackWithPrice,
+  }
+}
+
+export const useBaseFarmsV3Public = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  const { chainId } = useActiveChainId()
+
+  const resp = useQuery({
+    queryKey: [chainId, 'farmV3BaseFetch'],
+    queryFn: async () => {
+      if (!chainId) {
+        return fallbackWithData
+      }
+
+      try {
+        const fetchFarmsV3 = await fetchUniversalFarms(chainId, Protocol.V3)
+        const farms = defineFarmV3ConfigsFromUniversalFarm(fetchFarmsV3 as UniversalFarmConfigV3[])
+
+        const data = await baseFarmFetcherV3.fetchFarms({
+          chainId: chainId ?? -1,
+          farms,
+        })
+
+        return {
+          ...data,
+          farmsData: data.farmsData
+            .map((farm) => {
+              const checksummedAddress = safeGetAddress(farm.lpAddress)
+              return checksummedAddress ? { ...farm, lpAddress: checksummedAddress } : undefined
+            })
+            .filter((farm): farm is FarmV3Data => Boolean(farm)),
+        }
+      } catch (error) {
+        console.error(error)
+        return fallbackWithData
+      }
+    },
+    refetchInterval: 1_000 * 60 * 10,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    enabled: Boolean(enabled && chainId && baseFarmFetcherV3.isChainSupported?.(chainId ?? -1)),
+  })
+
+  return {
+    ...resp,
+    data: resp?.data ?? fallbackWithData,
   }
 }
 

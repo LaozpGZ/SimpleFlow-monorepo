@@ -35,6 +35,7 @@ test('exports', () => {
       "merklSupportedChainId",
       "createFarmFetcher",
       "createFarmFetcherV3",
+      "createBaseFarmFetcherV3",
       "fetchCommonTokenUSDValue",
       "fetchTokenUSDValues",
       "masterChefV3Addresses",

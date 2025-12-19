@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, ERC20Token } from '@pancakeswap/sdk'
+import { Currency, ERC20Token, Token } from '@pancakeswap/sdk'
 import { CAKE } from '@pancakeswap/tokens'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import chunk from '@pancakeswap/utils/chunk'
@@ -38,8 +38,14 @@ export async function farmV3FetchFarms({
   totalAllocPoint: bigint
   commonPrice: CommonPrice
 }) {
-  const [poolInfos, cakePrice, v3PoolData] = await Promise.all([
-    fetchPoolInfos(farms, chainId, provider, masterChefAddress),
+  const [farmsData, cakePrice] = await Promise.all([
+    farmV3FetchFarmsBase({
+      farms,
+      provider,
+      masterChefAddress,
+      chainId,
+      totalAllocPoint,
+    }),
     provider({ chainId: ChainId.BSC })
       .readContract({
         abi: chainlinkAbi,
@@ -47,6 +53,36 @@ export async function farmV3FetchFarms({
         functionName: 'latestAnswer',
       })
       .then((res) => formatUnits(res, 8)),
+  ])
+
+  const defaultCommonPrice: CommonPrice = supportedChainIdV3.includes(chainId)
+    ? DEFAULT_COMMON_PRICE[chainId as FarmV3SupportedChainId]
+    : {}
+  const combinedCommonPrice: CommonPrice = {
+    ...defaultCommonPrice,
+    ...commonPrice,
+  }
+
+  const farmsWithPrice = getFarmsPrices(farmsData, cakePrice, combinedCommonPrice)
+
+  return farmsWithPrice
+}
+
+export async function farmV3FetchFarmsBase({
+  farms,
+  provider,
+  masterChefAddress,
+  chainId,
+  totalAllocPoint,
+}: {
+  farms: ComputedFarmConfigV3[]
+  provider: ({ chainId }: { chainId: number }) => PublicClient
+  masterChefAddress: Address
+  chainId: number
+  totalAllocPoint: bigint
+}) {
+  const [poolInfos, v3PoolData] = await Promise.all([
+    fetchPoolInfos(farms, chainId, provider, masterChefAddress),
     fetchV3Pools(farms, chainId, provider),
   ])
 
@@ -83,17 +119,7 @@ export async function farmV3FetchFarms({
     })
     .filter(Boolean) as FarmV3Data[]
 
-  const defaultCommonPrice: CommonPrice = supportedChainIdV3.includes(chainId)
-    ? DEFAULT_COMMON_PRICE[chainId as FarmV3SupportedChainId]
-    : {}
-  const combinedCommonPrice: CommonPrice = {
-    ...defaultCommonPrice,
-    ...commonPrice,
-  }
-
-  const farmsWithPrice = getFarmsPrices(farmsData, cakePrice, combinedCommonPrice)
-
-  return farmsWithPrice
+  return farmsData
 }
 
 const masterchefV3Abi = [
@@ -454,11 +480,11 @@ export const fetchTokenUSDValues = async (currencies: Currency[] = []): Promise<
   return commonTokenUSDValue
 }
 
-export function getFarmsPrices(
+export async function getFarmsPrices(
   farms: FarmV3Data[],
   cakePriceUSD: string,
   commonPrice: CommonPrice,
-): FarmV3DataWithPrice[] {
+): Promise<FarmV3DataWithPrice[]> {
   const commonPriceFarms = farms.map((farm) => {
     let tokenPriceBusd = BIG_ZERO
     let quoteTokenPriceBusd = BIG_ZERO
@@ -502,57 +528,76 @@ export function getFarmsPrices(
     }
   })
 
-  return commonPriceFarms.map((farm) => {
-    let { tokenPriceBusd, quoteTokenPriceBusd } = farm
-    // if token price is zero, try to get price from existing farms
-    if (tokenPriceBusd.isZero()) {
-      const ifTokenPriceFound = commonPriceFarms.find(
-        (f) =>
-          (farm.token.equals(f.token) && !f.tokenPriceBusd.isZero()) ||
-          (farm.token.equals(f.quoteToken) && !f.quoteTokenPriceBusd.isZero()),
-      )
-      if (ifTokenPriceFound) {
-        tokenPriceBusd = farm.token.equals(ifTokenPriceFound.token)
-          ? ifTokenPriceFound.tokenPriceBusd
-          : ifTokenPriceFound.quoteTokenPriceBusd
-      }
-      if (quoteTokenPriceBusd.isZero()) {
-        const ifQuoteTokenPriceFound = commonPriceFarms.find(
+  return Promise.all(
+    commonPriceFarms.map(async (farm) => {
+      let { tokenPriceBusd, quoteTokenPriceBusd } = farm
+      // if token price is zero, try to get price from existing farms
+      if (tokenPriceBusd.isZero()) {
+        const ifTokenPriceFound = commonPriceFarms.find(
           (f) =>
-            (farm.quoteToken.equals(f.token) && !f.tokenPriceBusd.isZero()) ||
-            (farm.quoteToken.equals(f.quoteToken) && !f.quoteTokenPriceBusd.isZero()),
+            (farm.token.equals(f.token) && !f.tokenPriceBusd.isZero()) ||
+            (farm.token.equals(f.quoteToken) && !f.quoteTokenPriceBusd.isZero()),
         )
-        if (ifQuoteTokenPriceFound) {
-          quoteTokenPriceBusd = farm.quoteToken.equals(ifQuoteTokenPriceFound.token)
-            ? ifQuoteTokenPriceFound.tokenPriceBusd
-            : ifQuoteTokenPriceFound.quoteTokenPriceBusd
-        }
-
-        // try to get price via token price vs quote
-        if (tokenPriceBusd.isZero() && !quoteTokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
-          tokenPriceBusd = quoteTokenPriceBusd.times(farm.tokenPriceVsQuote)
-        }
-        if (quoteTokenPriceBusd.isZero() && !tokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
-          quoteTokenPriceBusd = tokenPriceBusd.div(farm.tokenPriceVsQuote)
-        }
-
-        if (tokenPriceBusd.isZero()) {
-          console.error(`Can't get price for ${farm.token.address}`)
+        if (ifTokenPriceFound) {
+          tokenPriceBusd = farm.token.equals(ifTokenPriceFound.token)
+            ? ifTokenPriceFound.tokenPriceBusd
+            : ifTokenPriceFound.quoteTokenPriceBusd
         }
         if (quoteTokenPriceBusd.isZero()) {
-          console.error(`Can't get price for ${farm.quoteToken.address}`)
+          const ifQuoteTokenPriceFound = commonPriceFarms.find(
+            (f) =>
+              (farm.quoteToken.equals(f.token) && !f.tokenPriceBusd.isZero()) ||
+              (farm.quoteToken.equals(f.quoteToken) && !f.quoteTokenPriceBusd.isZero()),
+          )
+          if (ifQuoteTokenPriceFound) {
+            quoteTokenPriceBusd = farm.quoteToken.equals(ifQuoteTokenPriceFound.token)
+              ? ifQuoteTokenPriceFound.tokenPriceBusd
+              : ifQuoteTokenPriceFound.quoteTokenPriceBusd
+          }
+
+          // try to get price via token price vs quote
+          if (tokenPriceBusd.isZero() && !quoteTokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
+            tokenPriceBusd = quoteTokenPriceBusd.times(farm.tokenPriceVsQuote)
+          }
+          if (quoteTokenPriceBusd.isZero() && !tokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
+            quoteTokenPriceBusd = tokenPriceBusd.div(farm.tokenPriceVsQuote)
+          }
+
+          const fallbackTokensToFetch: Token[] = []
+          if (tokenPriceBusd.isZero()) fallbackTokensToFetch.push(farm.token)
+          if (quoteTokenPriceBusd.isZero()) fallbackTokensToFetch.push(farm.quoteToken)
+
+          if (fallbackTokensToFetch.length > 0) {
+            const fetchedPrices = await fetchTokenUSDValues(fallbackTokensToFetch)
+
+            if (tokenPriceBusd.isZero()) {
+              tokenPriceBusd = fetchedPrices[farm.token.address] ? new BN(fetchedPrices[farm.token.address]) : BIG_ZERO
+            }
+            if (quoteTokenPriceBusd.isZero()) {
+              quoteTokenPriceBusd = fetchedPrices[farm.quoteToken.address]
+                ? new BN(fetchedPrices[farm.quoteToken.address])
+                : BIG_ZERO
+            }
+          }
+
+          if (tokenPriceBusd.isZero()) {
+            console.error(`Can't get price for ${farm.token.address}`)
+          }
+          if (quoteTokenPriceBusd.isZero()) {
+            console.error(`Can't get price for ${farm.quoteToken.address}`)
+          }
         }
       }
-    }
 
-    return {
-      ...farm,
-      tokenPriceBusd: tokenPriceBusd.toString(),
-      // adjust the quote token price by the token price vs quote
-      quoteTokenPriceBusd:
-        !quoteTokenPriceBusd.isZero() && farm.tokenPriceVsQuote
-          ? tokenPriceBusd.div(farm.tokenPriceVsQuote).toString()
-          : quoteTokenPriceBusd.toString(),
-    }
-  })
+      return {
+        ...farm,
+        tokenPriceBusd: tokenPriceBusd.toString(),
+        // adjust the quote token price by the token price vs quote
+        quoteTokenPriceBusd:
+          !quoteTokenPriceBusd.isZero() && farm.tokenPriceVsQuote
+            ? tokenPriceBusd.div(farm.tokenPriceVsQuote).toString()
+            : quoteTokenPriceBusd.toString(),
+      }
+    }),
+  )
 }
