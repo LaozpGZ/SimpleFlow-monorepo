@@ -85,31 +85,15 @@ class AptosCompatAdapter implements LegacyPetraApi {
 
   private connectedNetwork: string | null = null
 
-  private initialWalletsByName: Record<string, AptosWallet> = {}
+  private readonly walletName: string
 
-  constructor() {
-    this.refreshProviders()
-  }
-
-  private refreshProviders(): void {
-    this.initialWalletsByName = {}
-    const wallets = getWallets().get() as AptosWallet[]
-    wallets.forEach((wallet) => {
-      this.initialWalletsByName[wallet.name.toLowerCase()] = wallet
-    })
+  constructor(targetWalletName: string = 'Petra') {
+    this.walletName = targetWalletName
   }
 
   private findProviderByName(name: string): AptosWallet | undefined {
-    const lowerCaseName = name.toLowerCase()
-    const found = this.initialWalletsByName[lowerCaseName]
-
-    if (found && (getWallets().get() as AptosWallet[]).includes(found)) {
-      return found
-    }
-
-    return (getWallets().get() as AptosWallet[]).find(
-      (w) => w.name.toLowerCase() === lowerCaseName || w.name.toLowerCase() === name.toLowerCase(),
-    )
+    const lower = name.toLowerCase()
+    return (getWallets().get() as AptosWallet[]).find((w) => w.name.toLowerCase() === lower)
   }
 
   private ensureActiveProvider(): void {
@@ -118,23 +102,18 @@ class AptosCompatAdapter implements LegacyPetraApi {
     }
   }
 
-  async connect(walletName: string = 'Petra'): Promise<{ address: string; publicKey: string }> {
-    const provider = this.findProviderByName(walletName)
+  async connect(): Promise<{ address: string; publicKey: string }> {
+    const provider = this.findProviderByName(this.walletName)
 
     if (!provider) {
-      this.refreshProviders()
-      const foundAfterRefresh = this.findProviderByName(walletName)
-      if (!foundAfterRefresh) {
-        throw new Error(`Aptos adapter: Wallet '${walletName}' not found or not available.`)
-      }
-      this.activeProvider = foundAfterRefresh
-    } else {
-      this.activeProvider = provider
+      throw new Error(`Aptos adapter: Wallet '${this.walletName}' not found or not available.`)
     }
 
-    if (!this.activeProvider.features['aptos:connect']) {
-      throw new Error(`Aptos adapter: Selected wallet '${this.activeProvider.name}' does not support 'aptos:connect'.`)
+    if (!provider.features['aptos:connect']) {
+      throw new Error(`Aptos adapter: Selected wallet '${provider.name}' does not support 'aptos:connect'.`)
     }
+
+    this.activeProvider = provider
 
     try {
       const result = await this.activeProvider.features['aptos:connect'].connect()
@@ -298,7 +277,7 @@ class AptosCompatAdapter implements LegacyPetraApi {
 }
 
 export function initializeAptosCompatAdapter(targetWalletName: string = 'Petra', windowKey: string = 'petra') {
-  const adapter = new AptosCompatAdapter()
+  const adapter = new AptosCompatAdapter(targetWalletName)
 
   ;(window as any)[windowKey] = adapter
 
