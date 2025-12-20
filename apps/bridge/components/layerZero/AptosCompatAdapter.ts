@@ -300,10 +300,19 @@ class AptosCompatAdapter implements LegacyPetraApi {
 export function initializeAptosCompatAdapter(targetWalletName: string = 'Petra', windowKey: string = 'petra') {
   const adapter = new AptosCompatAdapter(targetWalletName)
 
-  ;(window as any)[windowKey] = adapter
+  Object.defineProperty(window, windowKey, {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return adapter
+    },
+    set(_) {
+      console.warn(`window.${windowKey} overwrite attempt ignored`)
+    },
+  })
 
   console.info(
-    `Aptos compatibility adapter installed on window.${windowKey}. Will attempt to connect to wallet named: "${targetWalletName}"`,
+    `Aptos compatibility adapter installed on window.${windowKey}. Will connect to wallet named: "${targetWalletName}"`,
   )
 }
 /* eslint-enable class-methods-use-this */
