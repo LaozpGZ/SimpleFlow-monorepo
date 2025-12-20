@@ -87,6 +87,8 @@ class AptosCompatAdapter implements LegacyPetraApi {
 
   private readonly walletName: string
 
+  private accountChangeListeners = new Set<(account: { address: string; publicKey: string } | null) => void>()
+
   constructor(targetWalletName: string = 'Petra') {
     this.walletName = targetWalletName
   }
@@ -143,8 +145,13 @@ class AptosCompatAdapter implements LegacyPetraApi {
             this.connectedNetwork = null
             this.activeProvider = null
           }
+
           if (args.chain) {
             this.connectedNetwork = args.chain
+          }
+
+          for (const listener of this.accountChangeListeners) {
+            listener(this.connectedAccount)
           }
         })
       }
@@ -179,6 +186,15 @@ class AptosCompatAdapter implements LegacyPetraApi {
       throw new Error('Aptos adapter: Account state is invalid.')
     }
     return this.connectedAccount
+  }
+
+  onAccountChange(callback: (account: { address: string; publicKey: string } | null) => void): () => void {
+    this.accountChangeListeners.add(callback)
+    callback(this.connectedAccount)
+
+    return () => {
+      this.accountChangeListeners.delete(callback)
+    }
   }
 
   async signTransaction(txnObject: any): Promise<Uint8Array> {
@@ -223,9 +239,14 @@ class AptosCompatAdapter implements LegacyPetraApi {
         console.warn("Aptos adapter: Error calling wallet's disconnect feature:", error)
       }
     }
+
     this.connectedAccount = null
     this.connectedNetwork = null
     this.activeProvider = null
+
+    for (const listener of this.accountChangeListeners) {
+      listener(null)
+    }
   }
 
   getNetwork(): { name: string } | null {
