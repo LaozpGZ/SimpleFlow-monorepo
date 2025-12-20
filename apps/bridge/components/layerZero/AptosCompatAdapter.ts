@@ -58,6 +58,18 @@ type AptosWallet = Wallet & {
           chain?: string
         }) => void,
       ): void
+      off(
+        event: 'change',
+        cb: (args: {
+          accounts?: Array<{
+            args: {
+              address: { data: Uint8Array } | string
+              publicKey: { key: { data: Uint8Array } } | string
+            }
+          }>
+          chain?: string
+        }) => void,
+      ): void
     }
   }
 }
@@ -87,7 +99,7 @@ class AptosCompatAdapter implements LegacyPetraApi {
 
   private readonly walletName: string
 
-  private accountChangeListeners = new Set<(account: { address: string; publicKey: string } | null) => void>()
+  private pendingAccountChangeCallbacks: Array<(account: { address: string; publicKey: string } | null) => void> = []
 
   constructor(targetWalletName: string = 'Petra') {
     this.walletName = targetWalletName
@@ -150,9 +162,8 @@ class AptosCompatAdapter implements LegacyPetraApi {
             this.connectedNetwork = args.chain
           }
 
-          for (const listener of this.accountChangeListeners) {
-            listener(this.connectedAccount)
-          }
+          this.pendingAccountChangeCallbacks.forEach((cb) => cb(this.connectedAccount))
+          this.pendingAccountChangeCallbacks = []
         })
       }
 
@@ -189,11 +200,43 @@ class AptosCompatAdapter implements LegacyPetraApi {
   }
 
   onAccountChange(callback: (account: { address: string; publicKey: string } | null) => void): () => void {
-    this.accountChangeListeners.add(callback)
-    callback(this.connectedAccount)
+    if (!this.activeProvider) {
+      this.pendingAccountChangeCallbacks.push(callback)
+      return () => {
+        this.pendingAccountChangeCallbacks = this.pendingAccountChangeCallbacks.filter((cb) => cb !== callback)
+      }
+    }
+
+    return this._registerAccountChangeListener(callback)
+  }
+
+  private _registerAccountChangeListener(
+    callback: (account: { address: string; publicKey: string } | null) => void,
+  ): () => void {
+    if (!this.activeProvider!.features['standard:events']) {
+      throw new Error("Active wallet does not support 'standard:events'.")
+    }
+
+    const listener = (args: any) => {
+      if (args.accounts && args.accounts.length > 0) {
+        const acc = args.accounts[0]
+        callback({
+          address: AptosCompatAdapter.normalizeAddress(acc.args.address),
+          publicKey: AptosCompatAdapter.normalizePublicKey(acc.args.publicKey),
+        })
+      } else {
+        callback(null)
+      }
+    }
+
+    this.activeProvider!.features['standard:events'].on('change', listener)
+
+    if (this.connectedAccount) {
+      callback(this.connectedAccount)
+    }
 
     return () => {
-      this.accountChangeListeners.delete(callback)
+      this.activeProvider!.features['standard:events']?.off('change', listener)
     }
   }
 
@@ -243,10 +286,6 @@ class AptosCompatAdapter implements LegacyPetraApi {
     this.connectedAccount = null
     this.connectedNetwork = null
     this.activeProvider = null
-
-    for (const listener of this.accountChangeListeners) {
-      listener(null)
-    }
   }
 
   getNetwork(): { name: string } | null {
