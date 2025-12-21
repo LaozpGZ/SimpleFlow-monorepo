@@ -167,6 +167,13 @@ export const WETH9 = {
     'Wrapped Monad',
     'https://www.monad.xyz/',
   ),
+  [ChainId.SIMPLECHAIN_TESTNET]: new ERC20Token(
+    ChainId.SIMPLECHAIN_TESTNET,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
+    18,
+    'WSRW',
+    'Wrapped SRW',
+  ),
 }
 
 export const WBNB = {
@@ -233,6 +240,7 @@ export const WNATIVE = {
   [ChainId.BASE_SEPOLIA]: WETH9[ChainId.BASE_SEPOLIA],
   [ChainId.MONAD_MAINNET]: WETH9[ChainId.MONAD_MAINNET],
   [ChainId.MONAD_TESTNET]: WETH9[ChainId.MONAD_TESTNET],
+  [ChainId.SIMPLECHAIN_TESTNET]: WETH9[ChainId.SIMPLECHAIN_TESTNET],
 } satisfies Partial<Record<ChainId, ERC20Token>>
 
 const ETHER = { name: 'Ether', symbol: 'ETH', decimals: 18 } as const
@@ -294,6 +302,11 @@ export const NATIVE = {
   [ChainId.MONAD_TESTNET]: {
     name: 'Monad Testnet Ether',
     symbol: 'MON',
+    decimals: 18,
+  },
+  [ChainId.SIMPLECHAIN_TESTNET]: {
+    name: 'SimpleChain',
+    symbol: 'SRW',
     decimals: 18,
   },
 } satisfies Partial<

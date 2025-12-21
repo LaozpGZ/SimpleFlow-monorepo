@@ -6,6 +6,8 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import { useTranslation } from '@pancakeswap/localization'
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
 import { getUniversalRouterAddress } from '@pancakeswap/universal-router-sdk'
+import { SMART_ROUTER_ADDRESSES } from '@pancakeswap/smart-router'
+import { ChainId, isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { TimeoutError } from '@pancakeswap/utils/withTimeout'
 import { ConfirmModalState } from '@pancakeswap/widgets-internal'
 import { GreyCard } from 'components/Card'
@@ -37,7 +39,6 @@ import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModa
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
 import { useBridgeTradeErrorHandler } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
 
 import { ConfirmSwapModalV3 } from '../../Swap/Bridge/CrossChainConfirmSwapModal/ConfirmSwapModalV3'
 import { useParsedAmounts, useSlippageAdjustedAmounts, useSwapInputError } from '../../Swap/V3Swap/hooks'
@@ -230,12 +231,17 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     [inputCurrency?.isNative, orderToExecute, slippageAdjustedAmounts],
   ) as CurrencyAmount<Currency> | undefined
 
+  // Get router address based on chain - use SmartRouter for SimpleChain, UniversalRouter for others
+  const routerAddress = useMemo(() => {
+    if (!isEvm(chainId)) return undefined
+    if (chainId === ChainId.SIMPLECHAIN_TESTNET) {
+      return SMART_ROUTER_ADDRESSES[chainId]
+    }
+    return getUniversalRouterAddress(chainId)
+  }, [chainId])
+
   const { callToAction, confirmState, txHash, orderHash, confirmActions, errorMessage, resetState } =
-    useConfirmModalState(
-      orderToExecute,
-      amountToApprove?.wrapped,
-      isEvm(chainId) ? getUniversalRouterAddress(chainId) : undefined,
-    )
+    useConfirmModalState(orderToExecute, amountToApprove?.wrapped, routerAddress)
 
   const { onUserInput } = useSwapActionHandlers()
   const reset = useCallback(() => {

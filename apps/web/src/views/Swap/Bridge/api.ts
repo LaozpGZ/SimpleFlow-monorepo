@@ -382,14 +382,95 @@ export type GetAvailableRoutesParams = {
 }
 
 export const getBridgeAvailableRoutes = async (params: GetAvailableRoutesParams) => {
+  // #region agent log
+  fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      location: 'Bridge/api.ts:getBridgeAvailableRoutes',
+      message: 'Bridge API call start',
+      data: { BRIDGE_API_ENDPOINT: BRIDGE_API_ENDPOINT || 'EMPTY', params },
+      timestamp: Date.now(),
+      sessionId: 'debug-session',
+      hypothesisId: 'A',
+    }),
+  }).catch(() => {})
+  // #endregion
+
+  // FIX: Return empty array if BRIDGE_API_ENDPOINT is not configured
+  if (!BRIDGE_API_ENDPOINT) {
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'Bridge/api.ts:getBridgeAvailableRoutes',
+        message: 'Bridge API skipped - no endpoint configured',
+        data: {},
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'A',
+      }),
+    }).catch(() => {})
+    // #endregion
+    return []
+  }
+
   const stringParams = Object.fromEntries(
     Object.entries(params)
       .filter(([_, value]) => value !== undefined && value !== '')
       .map(([key, value]) => [key, value?.toString()]),
   )
-  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/routes?${new URLSearchParams(stringParams).toString()}`)
-  const data = (await resp.json()) as { routes: Route[] }
-  return data?.routes
+  const fullUrl = `${BRIDGE_API_ENDPOINT}/v1/routes?${new URLSearchParams(stringParams).toString()}`
+  // #region agent log
+  fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      location: 'Bridge/api.ts:getBridgeAvailableRoutes',
+      message: 'Bridge API full URL',
+      data: { fullUrl },
+      timestamp: Date.now(),
+      sessionId: 'debug-session',
+      hypothesisId: 'A',
+    }),
+  }).catch(() => {})
+  // #endregion
+  try {
+    const resp = await fetch(fullUrl)
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'Bridge/api.ts:getBridgeAvailableRoutes',
+        message: 'Bridge API response',
+        data: { status: resp.status, ok: resp.ok },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'A',
+      }),
+    }).catch(() => {})
+    // #endregion
+    const data = (await resp.json()) as { routes: Route[] }
+    return data?.routes
+  } catch (error: any) {
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'Bridge/api.ts:getBridgeAvailableRoutes',
+        message: 'Bridge API error',
+        data: { error: error?.message || String(error) },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'A',
+      }),
+    }).catch(() => {})
+    // #endregion
+    throw error
+  }
 }
 
 export type Metadata = {

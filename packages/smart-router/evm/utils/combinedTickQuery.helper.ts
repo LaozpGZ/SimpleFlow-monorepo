@@ -35,12 +35,18 @@ export async function fetchCombinedPoolsTick({
   }
 
   // First try to fetch tickLen ticks as the default approach
-  const tickLenTicksByPool = await fetchTickLenPoolsTick({
-    pools,
-    clientProvider,
-    gasLimit,
-    disableFilterNoTicks,
-  })
+  let tickLenTicksByPool: Record<string, Tick[]> = {}
+  try {
+    tickLenTicksByPool = await fetchTickLenPoolsTick({
+      pools,
+      clientProvider,
+      gasLimit,
+      disableFilterNoTicks,
+    })
+  } catch (e) {
+    // If tickLen query fails, continue with empty ticks and try compact fallback
+    console.warn('fetchTickLenPoolsTick failed:', e)
+  }
 
   // Identify pools that need compact tick fallback (when tickLen failed to find ticks)
   const poolsNeedingCompactFallback: (V3Pool | InfinityClPool)[] = []
@@ -62,24 +68,36 @@ export async function fetchCombinedPoolsTick({
 
   // Second pass: fetch compact ticks for pools that need fallback
   if (poolsNeedingCompactFallback.length > 0) {
-    const compactTicksByPool = await fetchCompactPoolsTick({
-      pools: poolsNeedingCompactFallback,
-      clientProvider,
-      gasLimit,
-    })
+    try {
+      const compactTicksByPool = await fetchCompactPoolsTick({
+        pools: poolsNeedingCompactFallback,
+        clientProvider,
+        gasLimit,
+      })
 
-    // Process compact fallback pools
-    for (const pool of poolsNeedingCompactFallback) {
-      const poolKey = getPoolKey(pool)
-      const compactTicks = compactTicksByPool[poolKey] || []
+      // Process compact fallback pools
+      for (const pool of poolsNeedingCompactFallback) {
+        const poolKey = getPoolKey(pool)
+        const compactTicks = compactTicksByPool[poolKey] || []
 
-      if (compactTicks.length > 0) {
-        // Compact ticks found, use them
-        finalTicksByPool[poolKey] = compactTicks
-      } else if (disableFilterNoTicks) {
-        // Still no ticks found, add empty array if disableFilterNoTicks is true
-        finalTicksByPool[poolKey] = []
+        if (compactTicks.length > 0) {
+          // Compact ticks found, use them
+          finalTicksByPool[poolKey] = compactTicks
+        } else if (disableFilterNoTicks) {
+          // Still no ticks found, add empty array if disableFilterNoTicks is true
+          finalTicksByPool[poolKey] = []
+        }
       }
+    } catch (e) {
+      // If compact tick query fails (e.g., no tick query helper available),
+      // gracefully handle by setting empty ticks for pools that need fallback
+      if (disableFilterNoTicks) {
+        for (const pool of poolsNeedingCompactFallback) {
+          const poolKey = getPoolKey(pool)
+          finalTicksByPool[poolKey] = []
+        }
+      }
+      // Otherwise, pools without ticks will be filtered out
     }
   }
 

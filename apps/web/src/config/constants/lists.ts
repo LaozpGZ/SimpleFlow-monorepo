@@ -18,6 +18,7 @@ export const PANCAKE_OPBNB_DEFAULT = 'https://tokens.pancakeswap.finance/pancake
 export const PANCAKE_SOLANA_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
 export const PANCAKE_MONAD_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-monad-default.json'
 export const PANCAKE_MONAD_TESTNET_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-monad-testnet-default.json'
+export const PANCAKE_SIMPLECHAIN_TESTNET_DEFAULT = ''
 
 const COINGECKO_ETH = 'https://tokens.coingecko.com/uniswap/all.json'
 // export const CMC = 'https://tokens.pancakeswap.finance/cmc.json' // not updated for a while
@@ -36,6 +37,7 @@ const BASE_URLS = [PANCAKE_BASE_DEFAULT, OP_SUPER_CHAIN_URL, COINGECKO_BASE]
 const OPBNB_URLS = [PANCAKE_OPBNB_DEFAULT]
 const MONAD_URLS = [PANCAKE_MONAD_DEFAULT]
 const MONAD_TESTNET_URLS = [PANCAKE_MONAD_TESTNET_DEFAULT]
+const SIMPLECHAIN_TESTNET_URLS = [PANCAKE_SIMPLECHAIN_TESTNET_DEFAULT]
 
 // List of official tokens list
 export const OFFICIAL_LISTS = [
@@ -66,6 +68,7 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   ...OPBNB_URLS,
   ...MONAD_URLS,
   ...MONAD_TESTNET_URLS,
+  ...SIMPLECHAIN_TESTNET_URLS,
   ...RWA_URLS,
 ]
 
@@ -99,4 +102,5 @@ export const MULTI_CHAIN_LIST_URLS: { [chainId: number]: string[] } = {
   [ChainId.OPBNB]: OPBNB_URLS,
   [ChainId.MONAD_MAINNET]: MONAD_URLS,
   [ChainId.MONAD_TESTNET]: MONAD_TESTNET_URLS,
+  [ChainId.SIMPLECHAIN_TESTNET]: SIMPLECHAIN_TESTNET_URLS,
 }

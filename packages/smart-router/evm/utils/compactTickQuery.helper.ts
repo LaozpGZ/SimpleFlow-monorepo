@@ -118,7 +118,10 @@ export async function fetchCompactPoolsTick({
   if (!client) throw new Error('No valid public client found.')
 
   const queryHelperAddress = TICK_QUERY_HELPER_ADDRESSES[chainId as ChainId]
-  if (!queryHelperAddress) throw new Error('No tick query helper available.')
+  if (!queryHelperAddress) {
+    // Return empty ticks if no tick query helper is available for this chain
+    return {}
+  }
 
   const { retryGasMultiplier } = getTickQueryFetchConfig()
 

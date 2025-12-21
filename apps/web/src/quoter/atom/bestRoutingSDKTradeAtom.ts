@@ -18,6 +18,20 @@ import { atomWithLoadable } from './atomWithLoadable'
 export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
   const { amount, currency, tradeType, maxSplits, v2Swap, v3Swap, infinitySwap } = option
   return atomWithLoadable(async (get) => {
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'bestRoutingSDKTradeAtom.ts:start',
+        message: 'Quote started',
+        data: { hasAmount: !!amount, hasCurrency: !!currency, chainId: currency?.chainId },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'B',
+      }),
+    }).catch(() => {})
+    // #endregion
     if (!amount || !amount.currency || !currency) {
       return undefined
     }
@@ -35,10 +49,48 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
     const query = withTimeout(
       async () => {
         const { poolQuery, poolOptions } = createPoolQuery(option, controller)
+        // #region agent log
+        fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            location: 'bestRoutingSDKTradeAtom.ts:fetchPools',
+            message: 'Fetching candidate pools',
+            data: { chainId, currencyA: poolQuery.currencyA?.symbol, currencyB: poolQuery.currencyB?.symbol },
+            timestamp: Date.now(),
+            sessionId: 'debug-session',
+            hypothesisId: 'B',
+          }),
+        }).catch(() => {})
+        // #endregion
         const [candidatePools, gasPriceWei] = await Promise.all([
           fetchCandidatePools(poolQuery, poolOptions),
           get(gasPriceWeiAtom(currency?.chainId)),
         ])
+        // #region agent log
+        const poolDetails =
+          candidatePools?.map((p: any) => ({
+            type: p.type,
+            token0: p.token0?.symbol || p.reserve0?.currency?.symbol,
+            token1: p.token1?.symbol || p.reserve1?.currency?.symbol,
+            fee: p.fee,
+            liquidity: p.liquidity?.toString()?.slice(0, 10),
+            hasTicks: !!p.ticks?.length,
+            tickCount: p.ticks?.length || 0,
+          })) || []
+        fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            location: 'bestRoutingSDKTradeAtom.ts:poolsFetched',
+            message: 'Candidate pools fetched',
+            data: { poolCount: candidatePools?.length || 0, gasPriceWei: gasPriceWei?.toString(), pools: poolDetails },
+            timestamp: Date.now(),
+            sessionId: 'debug-session',
+            hypothesisId: 'B',
+          }),
+        }).catch(() => {})
+        // #endregion
         perf.tracker.track('pool_success')
         const result = await worker.getBestTradeOffchain({
           chainId: currency.chainId,
@@ -76,8 +128,37 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
     )
 
     try {
-      return await query()
-    } catch (ex) {
+      const result = await query()
+      // #region agent log
+      fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'bestRoutingSDKTradeAtom.ts:success',
+          message: 'Quote succeeded',
+          data: { hasTrade: !!result?.trade, tradeType: result?.type },
+          timestamp: Date.now(),
+          sessionId: 'debug-session',
+          hypothesisId: 'E',
+        }),
+      }).catch(() => {})
+      // #endregion
+      return result
+    } catch (ex: any) {
+      // #region agent log
+      fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'bestRoutingSDKTradeAtom.ts:error',
+          message: 'Quote failed',
+          data: { error: ex?.message || String(ex) },
+          timestamp: Date.now(),
+          sessionId: 'debug-session',
+          hypothesisId: 'E',
+        }),
+      }).catch(() => {})
+      // #endregion
       perf.tracker.fail(ex)
       controller.abort()
       throw ex

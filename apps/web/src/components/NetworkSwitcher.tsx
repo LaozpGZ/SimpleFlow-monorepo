@@ -31,6 +31,7 @@ export const SHORT_SYMBOL = {
   [ChainId.ARBITRUM_SEPOLIA]: 'Arb Sepolia',
   [ChainId.MONAD_MAINNET]: 'Monad',
   [ChainId.MONAD_TESTNET]: 'tMonad',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'tSimple',
   [NonEVMChainId.SOLANA]: 'Sol',
   [NonEVMChainId.APTOS]: 'Aptos',
 } as const satisfies Record<UnifiedChainId, string>

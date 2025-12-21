@@ -86,6 +86,9 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
         currencyB: query.currencyB,
         clientProvider: provider,
         gasLimit: options?.gasLimit,
+        // Don't filter out pools without ticks - they may still be valid for routing
+        // This is especially important for testnets where tick data may not be fully available
+        disableFilterNoTicks: true,
       })
       return res
     }
@@ -228,19 +231,172 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
 
 export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOptions) => {
   const { chainId, currencyA, currencyB, blockNumber } = query
+  // #region agent log
+  fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      location: 'poolQueries.ts:fetchCandidatePools',
+      message: 'fetchCandidatePools called',
+      data: {
+        chainId,
+        currencyA: currencyA?.symbol,
+        currencyB: currencyB?.symbol,
+        blockNumber: blockNumber?.toString(),
+        isTestnet: isTestnetChainId(chainId),
+        options: {
+          stableSwap: options.stableSwap,
+          v2Pools: options.v2Pools,
+          v3Pools: options.v3Pools,
+          infinity: options.infinity,
+        },
+      },
+      timestamp: Date.now(),
+      sessionId: 'debug-session',
+      hypothesisId: 'C',
+    }),
+  }).catch(() => {})
+  // #endregion
 
   const queries = poolQueriesFactory(chainId)
-  if (!currencyA || !currencyB || !chainId || !blockNumber) {
+  // FIX: For testnet chains, allow proceeding without blockNumber since it may not be available
+  // For non-testnet chains, still require blockNumber
+  if (!currencyA || !currencyB || !chainId) {
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'poolQueries.ts:fetchCandidatePools',
+        message: 'Early return - missing params',
+        data: {
+          hasCurrencyA: !!currencyA,
+          hasCurrencyB: !!currencyB,
+          hasChainId: !!chainId,
+          hasBlockNumber: !!blockNumber,
+        },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'C',
+      }),
+    }).catch(() => {})
+    // #endregion
+    return []
+  }
+
+  // For non-testnet chains, require blockNumber
+  if (!isTestnetChainId(chainId) && !blockNumber) {
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'poolQueries.ts:fetchCandidatePools',
+        message: 'Early return - non-testnet missing blockNumber',
+        data: { chainId, hasBlockNumber: !!blockNumber },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'C',
+      }),
+    }).catch(() => {})
+    // #endregion
     return []
   }
   const fallbackQuery = async () => {
-    const poolsArray = await Promise.all([
-      options.stableSwap ? queries.getStableSwapPools(query, options) : ([] as Pool[]),
-      options.v2Pools ? queries.getV2CandidatePools(query, options) : ([] as Pool[]),
-      options.v3Pools ? queries.getV3PoolsWithTicksOnChain(query, options) : ([] as Pool[]),
-      options.infinity ? queries.getInfinityCandidatePools(query, options) : ([] as Pool[]),
-    ])
-    return poolsArray.flat() as Pool[]
+    // #region agent log
+    fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'poolQueries.ts:fallbackQuery',
+        message: 'Using fallback query (testnet path)',
+        data: { chainId },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'C',
+      }),
+    }).catch(() => {})
+    // #endregion
+    try {
+      // For SIMPLECHAIN_TESTNET (1914), disable V2 and StableSwap pools as they are not deployed
+      // Also use getV3CandidatePools instead of getV3PoolsWithTicksOnChain because SimpleChain
+      // only has standard Multicall3 (no PancakeSwap custom Multicall with multicallWithGasLimitation)
+      const isSimpleChainTestnet = chainId === 1914
+      const enableV2 = options.v2Pools && !isSimpleChainTestnet
+      const enableStable = options.stableSwap && !isSimpleChainTestnet
+      const enableInfinity = options.infinity && !isSimpleChainTestnet
+      // #region agent log
+      fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'poolQueries.ts:fallbackQuery',
+          message: 'Pool query options',
+          data: {
+            chainId,
+            isSimpleChainTestnet,
+            enableV2,
+            enableStable,
+            enableV3: options.v3Pools,
+            enableInfinity,
+            useStandardMulticall: isSimpleChainTestnet,
+          },
+          timestamp: Date.now(),
+          sessionId: 'debug-session',
+          hypothesisId: 'C',
+        }),
+      }).catch(() => {})
+      // #endregion
+
+      // Use getV3PoolsWithTicksOnChain which fetches ticks from chain using PancakeSwap custom multicall
+      // Now that we have configured InterfaceMulticallV2 (0xC005b39086AF12248eA2507C22b0e38f0463a79b), this should work
+      const v3PoolsPromise = options.v3Pools ? queries.getV3PoolsWithTicksOnChain(query, options) : ([] as Pool[])
+
+      const poolsArray = await Promise.all([
+        enableStable ? queries.getStableSwapPools(query, options) : ([] as Pool[]),
+        enableV2 ? queries.getV2CandidatePools(query, options) : ([] as Pool[]),
+        v3PoolsPromise,
+        enableInfinity ? queries.getInfinityCandidatePools(query, options) : ([] as Pool[]),
+      ])
+      const flatPools = poolsArray.flat() as Pool[]
+      // #region agent log
+      fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'poolQueries.ts:fallbackQuery',
+          message: 'Fallback query pool results',
+          data: {
+            stableSwapCount: poolsArray[0]?.length || 0,
+            v2Count: poolsArray[1]?.length || 0,
+            v3Count: poolsArray[2]?.length || 0,
+            infinityCount: poolsArray[3]?.length || 0,
+            totalPools: flatPools.length,
+          },
+          timestamp: Date.now(),
+          sessionId: 'debug-session',
+          hypothesisId: 'C',
+        }),
+      }).catch(() => {})
+      // #endregion
+      return flatPools
+    } catch (error: any) {
+      // #region agent log
+      fetch('http://127.0.0.1:7245/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'poolQueries.ts:fallbackQuery',
+          message: 'Fallback query error',
+          data: { error: error?.message || String(error) },
+          timestamp: Date.now(),
+          sessionId: 'debug-session',
+          hypothesisId: 'C',
+        }),
+      }).catch(() => {})
+      // #endregion
+      throw error
+    }
   }
 
   const defaultQuery = async () => {

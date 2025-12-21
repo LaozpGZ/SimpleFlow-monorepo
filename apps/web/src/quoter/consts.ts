@@ -31,6 +31,7 @@ export const QUOTE_TIMEOUT = {
   // Misc
   [ChainId.MONAD_MAINNET]: 8_000,
   [ChainId.MONAD_TESTNET]: 8_000,
+  [ChainId.SIMPLECHAIN_TESTNET]: 12_000,
 
   [NonEVMChainId.SOLANA]: 5_000,
   [NonEVMChainId.APTOS]: 5_000,
@@ -73,6 +74,7 @@ export const QUOTE_SUCC_REVALIDATE = {
   // Misc
   [ChainId.MONAD_MAINNET]: 10,
   [ChainId.MONAD_TESTNET]: 10,
+  [ChainId.SIMPLECHAIN_TESTNET]: 15,
 
   // Solana
   [NonEVMChainId.SOLANA]: 5,
@@ -112,6 +114,7 @@ export const QUOTE_FAIL_REVALIDATE = {
   // Misc
   [ChainId.MONAD_MAINNET]: 5,
   [ChainId.MONAD_TESTNET]: 5,
+  [ChainId.SIMPLECHAIN_TESTNET]: 5,
   [NonEVMChainId.SOLANA]: 5,
   [NonEVMChainId.APTOS]: 5,
 } as const satisfies Record<ChainId | NonEVMChainId, number>

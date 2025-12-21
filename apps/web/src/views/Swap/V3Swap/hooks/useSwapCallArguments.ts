@@ -7,7 +7,8 @@ import {
 } from '@pancakeswap/universal-router-sdk'
 import { FeeOptions } from '@pancakeswap/v3-sdk'
 import { useMemo } from 'react'
-import { ChainId as EvmChainId } from '@pancakeswap/chains'
+import { ChainId, ChainId as EvmChainId } from '@pancakeswap/chains'
+import { SwapRouter, SMART_ROUTER_ADDRESSES } from '@pancakeswap/smart-router'
 
 import { useGetENSAddressByName } from 'hooks/useGetENSAddressByName'
 
@@ -21,6 +22,9 @@ export interface SwapCall {
   calldata: Hex
   value: Hex
 }
+
+// Chains that use SmartRouter instead of UniversalRouter
+const SMART_ROUTER_ONLY_CHAINS: ChainId[] = [ChainId.SIMPLECHAIN_TESTNET]
 
 /**
  * Returns the swap calls that can be used to make the trade
@@ -53,6 +57,28 @@ export function useSwapCallArguments(
   return useMemo(() => {
     if (!trade || !recipient || !account || !chainId || !(chainId in EvmChainId)) return []
 
+    // Use SmartRouter for chains without UniversalRouter (e.g., SimpleChain)
+    if (SMART_ROUTER_ONLY_CHAINS.includes(chainId)) {
+      const smartRouterAddress = SMART_ROUTER_ADDRESSES[chainId]
+      if (!smartRouterAddress) return []
+
+      const methodParameters = SwapRouter.swapCallParameters(trade, {
+        recipient,
+        slippageTolerance: allowedSlippage,
+        deadlineOrPreviousBlockhash: deadline?.toString(),
+        fee: feeOptions,
+      })
+
+      return [
+        {
+          address: smartRouterAddress as Address,
+          calldata: methodParameters.calldata as `0x${string}`,
+          value: methodParameters.value as `0x${string}`,
+        },
+      ]
+    }
+
+    // Default: Use UniversalRouter for other chains
     const options = {
       fee: feeOptions,
       recipient,

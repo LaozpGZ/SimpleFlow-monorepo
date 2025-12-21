@@ -1,0 +1,63 @@
+{
+  "name": "SimpleChain Testnet Default",
+  "timestamp": "2024-12-22T00:00:00Z",
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "https://pancakeswap.finance/logo.png",
+  "keywords": ["simplechain", "testnet", "default"],
+  "tokens": [
+    {
+      "name": "Wrapped SRW",
+      "symbol": "WSRW",
+      "address": "0x22608aC253B934D5078cB0d12f7F7e377b51798b",
+      "chainId": 1914,
+      "decimals": 18
+    },
+    {
+      "name": "Wrapped Bitcoin",
+      "symbol": "WBTC",
+      "address": "0x770556F853a17893b1187A9754F17c6f57776b7c",
+      "chainId": 1914,
+      "decimals": 8
+    },
+    {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "address": "0x3577E5E0E3A47d9a552426638977ee3EddD4552e",
+      "chainId": 1914,
+      "decimals": 6
+    },
+    {
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "address": "0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769",
+      "chainId": 1914,
+      "decimals": 6
+    },
+    {
+      "name": "Dai Stablecoin",
+      "symbol": "DAI",
+      "address": "0xA16171a7dadfb86afC934eaF16daCD86cD435120",
+      "chainId": 1914,
+      "decimals": 18
+    },
+    {
+      "name": "SimpleDex Token",
+      "symbol": "SDX",
+      "address": "0x961245FCe30FC5a3C7F4ee8AFa05f85cF5AB8C75",
+      "chainId": 1914,
+      "decimals": 18
+    },
+    {
+      "name": "Wrapped Solana",
+      "symbol": "WSOL",
+      "address": "0xbB0543b26A291648D67B91a8A0f150f6122FEd03",
+      "chainId": 1914,
+      "decimals": 18
+    }
+  ]
+}

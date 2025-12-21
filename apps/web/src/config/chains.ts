@@ -82,6 +82,28 @@ const monad: Chain = {
   testnet: false,
 }
 
+const simplechainTestnet: Chain = {
+  id: ChainId.SIMPLECHAIN_TESTNET,
+  name: 'SimpleChain Testnet',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://testnet-rpc.simplechain.com'] },
+    public: { http: ['https://testnet-rpc.simplechain.com'] },
+  },
+  blockExplorers: {
+    default: {
+      name: 'SimpleChain Explorer',
+      url: 'https://testnet-explorer.simplechain.com',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: true,
+}
+
 /**
  * Controls some L2 specific behavior, e.g. slippage tolerance, special UI behavior.
  * The expectation is that all of these networks have immediate transaction confirmation.
@@ -122,6 +144,7 @@ export const CHAINS: [Chain, ...Chain[]] = [
   scrollSepolia,
   monad,
   monadTestnet,
+  simplechainTestnet,
 ]
 
 // Minimal Solana chain descriptor for explorer and non‑EVM utilities
