@@ -3,14 +3,14 @@ import { ChainId, NonEVMChainId, UnifiedChainId } from './chainId'
 export const chainNames: Record<UnifiedChainId, string> = {
   [ChainId.ETHEREUM]: 'eth',
   [ChainId.GOERLI]: 'goerli',
-  [ChainId.BSC]: 'bsc',
+  [ChainId.BSC]: 'simple',
   [ChainId.BSC_TESTNET]: 'bscTestnet',
   [ChainId.ARBITRUM_ONE]: 'arb',
   [ChainId.ARBITRUM_GOERLI]: 'arbGoerli',
   [ChainId.ZKSYNC]: 'zkSync',
   [ChainId.ZKSYNC_TESTNET]: 'zkSyncTestnet',
   [ChainId.LINEA]: 'linea',
-  [ChainId.LINEA_TESTNET]: 'lineaTestnet',
+  [ChainId.LINEA_TESTNET]: 'simplechainTestnet',
   [ChainId.OPBNB]: 'opBNB',
   [ChainId.OPBNB_TESTNET]: 'opBnbTestnet',
   [ChainId.BASE]: 'base',
@@ -28,14 +28,14 @@ export const chainNames: Record<UnifiedChainId, string> = {
 export const chainFullNames: Record<UnifiedChainId, string> = {
   [ChainId.ETHEREUM]: 'Ethereum',
   [ChainId.GOERLI]: 'Goerli',
-  [ChainId.BSC]: 'BNB Chain',
-  [ChainId.BSC_TESTNET]: 'BNB Chain Testnet',
+  [ChainId.BSC]: 'SimpleChain',
+  [ChainId.BSC_TESTNET]: 'BNB Smart Chain Testnet',
   [ChainId.ARBITRUM_ONE]: 'Arbitrum One',
   [ChainId.ARBITRUM_GOERLI]: 'Arbitrum Goerli',
   [ChainId.ZKSYNC]: 'ZKsync Era',
   [ChainId.ZKSYNC_TESTNET]: 'ZKsync Era Testnet',
   [ChainId.LINEA]: 'Linea',
-  [ChainId.LINEA_TESTNET]: 'Linea Testnet',
+  [ChainId.LINEA_TESTNET]: 'SimpleChain Testnet',
   [ChainId.OPBNB]: 'opBNB',
   [ChainId.OPBNB_TESTNET]: 'opBNB Testnet',
   [ChainId.BASE]: 'Base',
@@ -53,14 +53,14 @@ export const chainFullNames: Record<UnifiedChainId, string> = {
 export const chainNamesInKebabCase = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: 'goerli',
-  [ChainId.BSC]: 'bsc',
+  [ChainId.BSC]: 'simple',
   [ChainId.BSC_TESTNET]: 'bsc-testnet',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.ARBITRUM_GOERLI]: 'arbitrum-goerli',
   [ChainId.ZKSYNC]: 'zksync',
   [ChainId.ZKSYNC_TESTNET]: 'zksync-testnet',
   [ChainId.LINEA]: 'linea',
-  [ChainId.LINEA_TESTNET]: 'linea-testnet',
+  [ChainId.LINEA_TESTNET]: 'simplechain-testnet',
   [ChainId.OPBNB]: 'opbnb',
   [ChainId.OPBNB_TESTNET]: 'opbnb-testnet',
   [ChainId.BASE]: 'base',
@@ -78,14 +78,14 @@ export const chainNamesInKebabCase = {
 export const mainnetChainNamesInKebabCase = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: 'ethereum',
-  [ChainId.BSC]: 'bsc',
+  [ChainId.BSC]: 'simple',
   [ChainId.BSC_TESTNET]: 'bsc',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.ARBITRUM_GOERLI]: 'arbitrum',
   [ChainId.ZKSYNC]: 'zksync',
   [ChainId.ZKSYNC_TESTNET]: 'zksync',
   [ChainId.LINEA]: 'linea',
-  [ChainId.LINEA_TESTNET]: 'linea',
+  [ChainId.LINEA_TESTNET]: 'simple',
   [ChainId.OPBNB]: 'opbnb',
   [ChainId.OPBNB_TESTNET]: 'opbnb',
   [ChainId.BASE]: 'base',
@@ -99,8 +99,8 @@ export const mainnetChainNamesInKebabCase = {
 } as const
 
 const legacyChainNames: [string, UnifiedChainId][] = [
-  ['Binance Smart Chain', ChainId.BSC],
-  ['BNB Smart Chain', ChainId.BSC],
+  ['SimpleChain', ChainId.BSC],
+  ['Simple Chain', ChainId.BSC],
 ]
 
 export const chainNameToChainId = Object.entries(chainNames).reduce((acc, [chainId, chainName]) => {
@@ -141,7 +141,7 @@ export const allCasesNameToChainId = Object.entries({
 // @see https://github.com/DefiLlama/defillama-server/blob/master/common/chainToCoingeckoId.ts
 // @see https://github.com/DefiLlama/chainlist/blob/main/constants/chainIds.json
 export const defiLlamaChainNames: Record<UnifiedChainId, string> = {
-  [ChainId.BSC]: 'bsc',
+  [ChainId.BSC]: 'simple',
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: '',
   [ChainId.BSC_TESTNET]: '',

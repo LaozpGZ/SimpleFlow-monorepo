@@ -9,10 +9,8 @@ import {
   baseGoerli,
   baseSepolia,
   bscTestnet,
-  bsc as bsc_,
   goerli,
   linea,
-  lineaTestnet,
   mainnet,
   monadTestnet,
   opBNB,
@@ -36,20 +34,45 @@ export const getChainId = memoize((chainName: string) => {
   return CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] ? +CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] : undefined
 })
 
-const bsc = {
-  ...bsc_,
+// SimpleChain 主网 (Chain ID: 1913)
+const simplechain: Chain = {
+  id: ChainId.BSC, // 1913
+  name: 'SimpleChain',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
   rpcUrls: {
-    ...bsc_.rpcUrls,
-    public: {
-      ...bsc_.rpcUrls,
-      http: ['https://bsc-dataseed.bnbchain.org/'],
-    },
-    default: {
-      ...bsc_.rpcUrls.default,
-      http: ['https://bsc-dataseed.bnbchain.org/'],
+    default: { http: ['https://rpc.simplechain.com'] },
+    public: { http: ['https://rpc.simplechain.com'] },
+  },
+  blockExplorers: {
+    default: { name: 'SimpleChain Explorer', url: 'https://explorer.simplechain.com' },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
     },
   },
-} satisfies Chain
+  testnet: false,
+}
+
+// SimpleChain 测试网 (Chain ID: 1914)
+const simplechainTestnet: Chain = {
+  id: ChainId.LINEA_TESTNET, // 1914
+  name: 'SimpleChain Testnet',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://testnet-rpc.simplechain.com'] },
+    public: { http: ['https://testnet-rpc.simplechain.com'] },
+  },
+  blockExplorers: {
+    default: { name: 'SimpleChain Testnet Explorer', url: 'https://testnet-explorer.simplechain.com' },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xC005b39086AF12248eA2507C22b0e38f0463a79b',
+    },
+  },
+  testnet: true,
+}
 
 const MONAD_RPC_URLS = [
   'https://rpc.monad.xyz',
@@ -103,7 +126,8 @@ export const L2_CHAIN_IDS: ChainId[] = [
 ]
 
 export const CHAINS: [Chain, ...Chain[]] = [
-  bsc,
+  simplechain,
+  simplechainTestnet,
   bscTestnet,
   mainnet,
   goerli,
@@ -113,7 +137,6 @@ export const CHAINS: [Chain, ...Chain[]] = [
   arbitrumGoerli,
   arbitrumSepolia,
   linea,
-  lineaTestnet,
   base,
   baseGoerli,
   baseSepolia,

@@ -20,7 +20,7 @@ export const SHORT_SYMBOL = {
   [ChainId.ZKSYNC]: 'zkSync',
   [ChainId.ZKSYNC_TESTNET]: 'tZkSync',
   [ChainId.LINEA]: 'Linea',
-  [ChainId.LINEA_TESTNET]: 'tLinea',
+  [ChainId.LINEA_TESTNET]: 'SRW',
   [ChainId.OPBNB]: 'opBNB',
   [ChainId.OPBNB_TESTNET]: 'tOpBNB',
   [ChainId.BASE]: 'Base',

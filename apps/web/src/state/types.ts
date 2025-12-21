@@ -14,10 +14,11 @@ import { Address, parseEther } from 'viem'
 import { NftToken } from './nftMarket/types'
 
 export enum GAS_PRICE {
-  default = '0.1',
-  fast = '0.12',
-  instant = '0.15',
-  testnet = '10',
+  // SimpleChain 需要 1 Gwei 的 Gas
+  default = '1',
+  fast = '1.2',
+  instant = '1.5',
+  testnet = '1',
 }
 
 export const GAS_PRICE_GWEI = {

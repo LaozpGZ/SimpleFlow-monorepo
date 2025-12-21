@@ -31,8 +31,8 @@ import { ChainMap, ChainTokenList } from '../types'
 export const SMART_ROUTER_ADDRESSES = {
   [ChainId.ETHEREUM]: '0x13f4EA83D0bd40E75C8222255bc855a974568Dd4',
   [ChainId.GOERLI]: '0x9a489505a00cE272eAa5e07Dba6491314CaE3796',
-  [ChainId.BSC]: '0x13f4EA83D0bd40E75C8222255bc855a974568Dd4',
-  [ChainId.BSC_TESTNET]: '0x9a489505a00cE272eAa5e07Dba6491314CaE3796',
+  [ChainId.BSC]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12',
+  [ChainId.BSC_TESTNET]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12',
   [ChainId.ARBITRUM_ONE]: '0x32226588378236Fd0c7c4053999F88aC0e5cAc77',
   [ChainId.ARBITRUM_GOERLI]: '0xBee35e9Cbd9595355Eaf5DE2055EF525adB41bE6',
   [ChainId.ZKSYNC]: '0xf8b59f3c3Ab33200ec80a8A58b2aA5F5D2a8944C',
@@ -110,13 +110,21 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     bscTokens.eth,
     bscTokens.usdc,
   ],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd, bscTestnetTokens.usdc],
+  // SimpleChain Testnet - 包含 WSRW, SDX, DAI, USDC, USDT, WETH 作为中间路由代币
+  [ChainId.BSC_TESTNET]: [
+    bscTestnetTokens.wbnb, // WSRW
+    bscTestnetTokens.cake, // SDX
+    bscTestnetTokens.busd, // DAI
+    bscTestnetTokens.usdc, // USDC
+    bscTestnetTokens.usdt, // USDT - 重要的中间代币
+    bscTestnetTokens.weth, // WETH - 跨链 ETH
+  ],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.weth, arbitrumGoerliTokens.usdc],
   [ChainId.ZKSYNC]: [zksyncTokens.usdc, zksyncTokens.weth],
   [ChainId.ZKSYNC_TESTNET]: [zkSyncTestnetTokens.usdc, zkSyncTestnetTokens.weth],
   [ChainId.LINEA]: [lineaTokens.usdc, lineaTokens.weth],
-  [ChainId.LINEA_TESTNET]: [lineaTestnetTokens.usdc, lineaTestnetTokens.weth],
+  [ChainId.LINEA_TESTNET]: [lineaTestnetTokens.usdc, lineaTestnetTokens.weth, lineaTestnetTokens.usdt],
   [ChainId.OPBNB]: [opBnbTokens.wbnb, opBnbTokens.usdt],
   [ChainId.OPBNB_TESTNET]: [opBnbTestnetTokens.usdc, opBnbTestnetTokens.wbnb],
   [ChainId.BASE]: [baseTokens.usdc, baseTokens.weth],

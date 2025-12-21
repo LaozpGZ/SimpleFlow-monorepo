@@ -8,6 +8,7 @@ import {
   base,
   baseGoerli,
   baseSepolia,
+  bscTestnet,
   linea,
   monadTestnet,
   opBNB,
@@ -35,19 +36,9 @@ const ARBITRUM_NODES = [
 
 export const SERVER_NODES = {
   [ChainId.BSC]: [
-    getNodeRealUrl(ChainId.BSC, process.env.SERVER_NODE_REAL_API_ETH) || '',
-    process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
-    getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
-    'https://bsc.publicnode.com',
-    // 'https://binance.llamarpc.com',
-    'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.bnbchain.org',
-  ].filter(Boolean),
-  [ChainId.BSC_TESTNET]: [
-    'https://bsc-testnet-dataseed.bnbchain.org',
-    'https://bsc-testnet.bnbchain.org',
-    'https://bsc-prebsc-dataseed.bnbchain.org',
+    'https://rpc.simplechain.com',
   ],
+  [ChainId.BSC_TESTNET]: bscTestnet.rpcUrls.default.http,
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://ethereum.publicnode.com',
@@ -68,9 +59,7 @@ export const SERVER_NODES = {
   [ChainId.ZKSYNC_TESTNET]: zksyncSepoliaTestnet.rpcUrls.default.http,
   [ChainId.LINEA]: linea.rpcUrls.default.http,
   [ChainId.LINEA_TESTNET]: [
-    'https://rpc.goerli.linea.build',
-    'https://linea-testnet.rpc.thirdweb.com',
-    'https://consensys-zkevm-goerli-prealpha.infura.io/v3/93e8a17747e34ec0ac9a554c1b403965',
+    'https://testnet-rpc.simplechain.com',
   ],
   [ChainId.OPBNB_TESTNET]: opBNBTestnet.rpcUrls.default.http,
   [ChainId.OPBNB]: [
@@ -96,21 +85,9 @@ export const SERVER_NODES = {
 
 export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
   [ChainId.BSC]: [
-    process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
-    getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
-    process.env.NEXT_PUBLIC_NODIES_BSC || '',
-    // getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
-    'https://bsc.publicnode.com',
-    // 'https://binance.llamarpc.com',
-    'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.bnbchain.org',
-  ].filter(Boolean) as readonly string[],
-  [ChainId.BSC_TESTNET]: [
-    getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
-    'https://bsc-testnet-dataseed.bnbchain.org',
-    'https://bsc-testnet.bnbchain.org',
-    'https://bsc-prebsc-dataseed.bnbchain.org',
-  ].filter(Boolean) as readonly string[],
+    'https://rpc.simplechain.com',
+  ] as readonly string[],
+  [ChainId.BSC_TESTNET]: bscTestnet.rpcUrls.default.http,
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODIES_ETH || '',
@@ -139,9 +116,7 @@ export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
   [ChainId.ZKSYNC_TESTNET]: zksyncSepoliaTestnet.rpcUrls.default.http,
   [ChainId.LINEA]: linea.rpcUrls.default.http,
   [ChainId.LINEA_TESTNET]: [
-    'https://rpc.goerli.linea.build',
-    'https://linea-testnet.rpc.thirdweb.com',
-    'https://consensys-zkevm-goerli-prealpha.infura.io/v3/93e8a17747e34ec0ac9a554c1b403965',
+    'https://testnet-rpc.simplechain.com',
   ],
   [ChainId.OPBNB_TESTNET]: opBNBTestnet.rpcUrls.default.http,
   [ChainId.OPBNB]: [
