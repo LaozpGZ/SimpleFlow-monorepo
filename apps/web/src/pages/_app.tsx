@@ -183,7 +183,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <Layout>
           <Component {...pageProps} />
           <MobileCard shouldRender={!shouldRenderOnPages(layoutMobileAdIgnoredPages)} mt="4px" mb="12px" />
-          <DesktopCard shouldRender={!shouldRenderOnPages(layoutDesktopAdIgnoredPages)} />
+          {/* <DesktopCard shouldRender={!shouldRenderOnPages(layoutDesktopAdIgnoredPages)} /> */}
         </Layout>
       </ShowMenu>
       <EasterEgg iterations={2} />

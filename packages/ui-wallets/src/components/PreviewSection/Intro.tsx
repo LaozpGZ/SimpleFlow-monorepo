@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Image, Text, Button, AutoRow, Card, CardBody, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Text, Button, AutoRow, Card, CardBody, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { ASSET_CDN } from '../../config/url'
 
 const StyledIntroCard = styled(Card)`
   width: 100%;
@@ -43,11 +42,8 @@ export const Intro = ({ docLink }: { docLink: string }) => {
   }
 
   return (
-    <>
-      <Image src={`${ASSET_CDN}/web/wallet-ui/intro.png`} width={150} height={228.72} />
-      <StyledIntroCard>
-        <CardBody p="16px">{content}</CardBody>
-      </StyledIntroCard>
-    </>
+    <StyledIntroCard>
+      <CardBody p="16px">{content}</CardBody>
+    </StyledIntroCard>
   )
 }

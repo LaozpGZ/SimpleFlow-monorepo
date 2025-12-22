@@ -112,15 +112,15 @@ export const VeCakeRedeem: React.FC = () => {
       if (cakeLockExpired) {
         await veCakeWithdrawAll.callMethod([account], {
           successToast: {
-            title: t('veCAKE Redeem Successfully'),
-            description: `${nativeCakeDisplay} ${t('CAKE has been sent to your wallet.')}`,
+            title: t('veSDX Redeem Successfully'),
+            description: `${nativeCakeDisplay} ${t('SDX has been sent to your wallet.')}`,
           },
         })
       } else {
         await earlyWithdraw.callMethod([account, BigInt(nativeCakeLockedAmount)], {
           successToast: {
-            title: t('veCAKE Redeem Successfully'),
-            description: `${nativeCakeDisplay} ${t('CAKE has been sent to your wallet.')}`,
+            title: t('veSDX Redeem Successfully'),
+            description: `${nativeCakeDisplay} ${t('SDX has been sent to your wallet.')}`,
           },
         })
       }
@@ -143,8 +143,8 @@ export const VeCakeRedeem: React.FC = () => {
     if (proxyCakeLockedAmount > 0) {
       await withdrawAll.callMethod([], {
         successToast: {
-          title: t('CAKE Pool Redeem Successfully'),
-          description: `${proxyCakeLockedAmountDisplay} ${t('CAKE has been sent to your wallet.')}`,
+          title: t('SDX Pool Redeem Successfully'),
+          description: `${proxyCakeLockedAmountDisplay} ${t('SDX has been sent to your wallet.')}`,
         },
       })
     }
@@ -155,8 +155,8 @@ export const VeCakeRedeem: React.FC = () => {
     if (cakeV1Amount > 0) {
       await withdrawV1All.callMethod([], {
         successToast: {
-          title: t('CAKE Pool Redeem Successfully'),
-          description: `${cakeV1AmountDisplay} ${t('CAKE has been sent to your wallet.')}`,
+          title: t('SDX Pool Redeem Successfully'),
+          description: `${cakeV1AmountDisplay} ${t('SDX has been sent to your wallet.')}`,
         },
       })
     }
@@ -221,7 +221,7 @@ export const VeCakeRedeem: React.FC = () => {
 
   return (
     <>
-      <SmartWalletWarning productName={t('veCake Redeem')} />
+      <SmartWalletWarning productName={t('veSDX Redeem')} />
       <Bg>
         <Page>
           <Container>
@@ -232,15 +232,15 @@ export const VeCakeRedeem: React.FC = () => {
                   padding: '24px',
                 }}
               >
-                <SectionTitle isMobile={isMobile}>{t('MY CAKE STAKING POSITION')}</SectionTitle>
+                <SectionTitle isMobile={isMobile}>{t('MY SDX STAKING POSITION')}</SectionTitle>
 
                 <FieldGroup>
-                  <VeCakeExitField label={t('My veCAKE')} value={myVeCake} />
+                  <VeCakeExitField label={t('My veSDX')} value={myVeCake} />
 
                   <VeCakeExitField
-                    label={t('My Locked CAKE')}
+                    label={t('My Locked SDX')}
                     value={lockedCake}
-                    symbol="CAKE"
+                    symbol="SDX"
                     valueStyles={{
                       fontWeight: 600,
                       fontSize: '16px',
@@ -249,7 +249,7 @@ export const VeCakeRedeem: React.FC = () => {
                     }}
                     usdValue={!allSettled ? lockedCake.times(cakePrice) : undefined}
                     labelTooltip={t(
-                      'All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.',
+                      'All locked SDX has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.',
                     )}
                   />
 
@@ -287,7 +287,7 @@ export const VeCakeRedeem: React.FC = () => {
                         {!allSettled && availableClaim.gt(0) && (
                           <DisplayValue
                             value={availableClaim}
-                            symbol="CAKE"
+                            symbol="SDX"
                             style={{
                               fontSize: '16px',
                               fontWeight: 600,
@@ -304,8 +304,8 @@ export const VeCakeRedeem: React.FC = () => {
                   {!allSettled && expand && (
                     <>
                       <SubField>
-                        <VeCakeExitField label={t('CAKE Pool Rewards')} value={cakePoolRewards} symbol="CAKE" />
-                        <VeCakeExitField label={t('Revenue Sharing Rewards')} value={veCakeRewards} symbol="CAKE" />
+                        <VeCakeExitField label={t('SDX Pool Rewards')} value={cakePoolRewards} symbol="SDX" />
+                        <VeCakeExitField label={t('Revenue Sharing Rewards')} value={veCakeRewards} symbol="SDX" />
                       </SubField>
                     </>
                   )}
@@ -323,7 +323,7 @@ export const VeCakeRedeem: React.FC = () => {
                         {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="CAKE" usdValue={totalAmountUSD} /> */}
                       </Box>
                       <Box>
-                        <StyledRedeemValue symbol="CAKE" value={totalAmount} />
+                        <StyledRedeemValue symbol="SDX" value={totalAmount} />
                         <DisplayUSDValue value={totalAmountUSD} />
                       </Box>
                     </Flex>

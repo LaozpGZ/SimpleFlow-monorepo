@@ -1,5 +1,5 @@
 import { languageList, useTranslation } from '@pancakeswap/localization'
-import { Menu as UikitMenu, footerLinks } from '@pancakeswap/uikit'
+import { Menu as UikitMenu } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
@@ -33,10 +33,6 @@ const Menu = (props: any) => {
     return () => setTheme(isDark ? 'light' : 'dark')
   }, [setTheme, isDark])
 
-  const getFooterLinks = useMemo(() => {
-    return footerLinks(t)
-  }, [t])
-
   return (
     <UikitMenu
       logoComponent={<Logo />}
@@ -57,11 +53,12 @@ const Menu = (props: any) => {
       cakePriceUsd={cakePrice.eq(BIG_ZERO) ? undefined : cakePrice}
       links={menuItems}
       subLinks={activeMenuItem?.hideSubNav || activeSubMenuItem?.hideSubNav ? [] : activeMenuItem?.items}
-      footerLinks={getFooterLinks}
+      footerLinks={[]}
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
       buyCakeLabel={t('Buy CAKE')}
       buyCakeLink="https://pancakeswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
+      hideFooter
       {...props}
     />
   )

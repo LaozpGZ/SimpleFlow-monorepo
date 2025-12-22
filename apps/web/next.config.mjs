@@ -112,6 +112,10 @@ const config = {
     return {
       afterFiles: [
         {
+          source: '/sdx-staking',
+          destination: '/cake-staking/redeem',
+        },
+        {
           source: '/info/token/:address',
           destination: '/info/tokens/:address',
         },

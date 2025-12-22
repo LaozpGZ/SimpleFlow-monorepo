@@ -41,6 +41,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   children,
   chainId,
   logoComponent,
+  hideFooter = false,
 }) => {
   const { isMobile } = useMatchBreakpoints();
   const isMounted = useIsMounted();
@@ -164,24 +165,26 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
           </BodyWrapper>
         </Wrapper>
       </AtomBox>
-      <Footer
-        chainId={chainId}
-        items={footerLinks}
-        isDark={isDark}
-        toggleTheme={toggleTheme}
-        langs={langs}
-        setLang={setLang}
-        currentLang={currentLang}
-        cakePriceUsd={cakePriceUsd}
-        buyCakeLabel={buyCakeLabel}
-        buyCakeLink={buyCakeLink}
-        showLangSelector={showLangSelector}
-        showCakePrice={showCakePrice}
-        mb={[`${MOBILE_MENU_HEIGHT}px`, null, "0px"]}
-      />
       <AtomBox display={{ xs: "block", lg: "none" }}>
         <BottomNav items={links} activeItem={activeItem} activeSubItem={activeSubItem} />
       </AtomBox>
+      {!hideFooter && (
+        <Footer
+          chainId={chainId}
+          items={footerLinks}
+          isDark={isDark}
+          toggleTheme={toggleTheme}
+          langs={langs}
+          setLang={setLang}
+          currentLang={currentLang}
+          cakePriceUsd={cakePriceUsd}
+          buyCakeLabel={buyCakeLabel}
+          buyCakeLink={buyCakeLink}
+          showLangSelector={showLangSelector}
+          showCakePrice={showCakePrice}
+          mb={[`${MOBILE_MENU_HEIGHT}px`, null, "0px"]}
+        />
+      )}
     </MenuContext.Provider>
   );
 };

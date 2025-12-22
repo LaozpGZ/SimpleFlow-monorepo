@@ -65,7 +65,12 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
   }
   body {
-    background-color: ${({ theme }) => theme.colors.background};
+    background: ${({ theme }) =>
+      theme.isDark
+        ? 'linear-gradient(180deg, #1a1028 0%, #2d1f4a 25%, #3d2a5e 50%, #4a3268 75%, #5a3d75 100%)'
+        : 'linear-gradient(180deg, #a78bfa 0%, #c4b5fd 25%, #e9d5ff 50%, #fce7f3 75%, #fef3c7 100%)'};
+    background-attachment: fixed;
+    min-height: 100vh;
     overflow-x: hidden;
 
     img {

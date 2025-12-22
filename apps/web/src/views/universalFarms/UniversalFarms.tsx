@@ -5,7 +5,6 @@ import Page_ from 'components/Layout/Page'
 import { useRouter } from 'next/router'
 import { PropsWithChildren, useMemo } from 'react'
 import styled from 'styled-components'
-import { PoolsBanner } from './components'
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { PoolsPage } from './PoolsPage'
 import { PositionPage } from './PositionPage'
@@ -114,7 +113,6 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
 
   return (
     <StyledBox>
-      <PoolsBanner additionLink={<LegacyPage />} />
       <Page style={isMobile ? { padding: '0 16px 16px 16px' } : undefined}>
         <FlexGap width="100%" alignItems="flex-end" justifyContent="space-between">
           <TabMenu gap="8px" activeIndex={tabIdx} isShowBorderBottom={false}>

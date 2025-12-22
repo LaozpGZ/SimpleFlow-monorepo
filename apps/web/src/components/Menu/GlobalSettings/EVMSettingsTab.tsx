@@ -1,13 +1,12 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, PancakeToggle, PreTitle, QuestionHelper, Text, Toggle } from '@pancakeswap/uikit'
-import { useAudioPlay, useExpertMode, useUserExpertModeAcknowledgement } from '@pancakeswap/utils/user'
+import { Box, Flex, PreTitle, QuestionHelper, Text, Toggle } from '@pancakeswap/uikit'
+import { useExpertMode, useUserExpertModeAcknowledgement } from '@pancakeswap/utils/user'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useId, useState } from 'react'
 import { TabContent } from './SettingsModalV2/TabContent'
 import GasSettings from './GasSettings'
-import { TxDeadlintSetting } from './TransactionSettings'
 import { ExpertModeTab } from './SettingsModalV2/ExpertModeTab'
 
 export const EVMSettingsTab = () => {
@@ -18,7 +17,6 @@ export const EVMSettingsTab = () => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const { onChangeRecipient } = useSwapActionHandlers()
-  const [audioPlay, setAudioMode] = useAudioPlay()
   const [showExpertModeAcknowledgement] = useUserExpertModeAcknowledgement()
 
   const handleExpertModeToggle = () => {
@@ -52,7 +50,7 @@ export const EVMSettingsTab = () => {
             </Flex>
           )}
 
-          <TxDeadlintSetting />
+          {/* TxDeadlintSetting hidden */}
         </Box>
 
         <PreTitle>{t('Interface Settings')}</PreTitle>
@@ -69,22 +67,7 @@ export const EVMSettingsTab = () => {
           <Toggle id="toggle-expert-mode-button" scale="md" checked={expertMode} onChange={handleExpertModeToggle} />
         </Flex>
 
-        <Flex justifyContent="space-between" alignItems="center" mt="16px">
-          <Flex alignItems="center">
-            <Text>{t('Flippy sounds')}</Text>
-            <QuestionHelper
-              text={t('Fun sounds to make a truly immersive pancake-flipping trading experience')}
-              placement="top"
-              ml="4px"
-            />
-          </Flex>
-          <PancakeToggle
-            id="toggle-audio-play"
-            checked={audioPlay}
-            onChange={() => setAudioMode((s) => !s)}
-            scale="md"
-          />
-        </Flex>
+        {/* Flippy sounds hidden */}
       </Flex>
     </TabContent>
   )

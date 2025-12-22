@@ -1,0 +1,176 @@
+==========================================
+SimpleDex V3 链上地址验证
+网络: SimpleChain Testnet (Chain ID: 1914)
+RPC: https://testnet-rpc.simplechain.com
+==========================================
+
+============================================
+1. 验证核心合约存在性
+============================================
+[0;32m✓[0m SimpleDexV3Factory (0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5) - 合约存在
+[0;32m✓[0m SimpleDexV3PoolDeployer (0x9E04B69a17f4Ce1AC05600EF3bEf66eF423E455d) - 合约存在
+
+============================================
+2. 验证代币信息
+============================================
+
+--- WSRW ---
+  Symbol: "WSRW"
+  Decimals: 18
+  地址: 0x22608aC253B934D5078cB0d12f7F7e377b51798b
+
+--- WBTC ---
+  Symbol: "WBTC"
+  Decimals: 8
+  地址: 0x770556F853a17893b1187A9754F17c6f57776b7c
+
+--- USDT ---
+  Symbol: "USDT"
+  Decimals: 6
+  地址: 0x3577E5E0E3A47d9a552426638977ee3EddD4552e
+
+--- USDC ---
+  Symbol: "USDC"
+  Decimals: 6
+  地址: 0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769
+
+--- DAI ---
+  Symbol: "DAI"
+  Decimals: 18
+  地址: 0xA16171a7dadfb86afC934eaF16daCD86cD435120
+
+============================================
+3. 验证 7 个流动性池
+============================================
+
+--- 验证池子: WBTC/USDT ---
+  池子地址: 0x851D390bdA232082C6368Ee1c245F6Eea5eadD62
+  Token0: 0x3577E5E0E3A47d9a552426638977ee3EddD4552e
+  Token1: 0x770556F853a17893b1187A9754F17c6f57776b7c
+  Fee: 2500
+  Liquidity: 16768725942 [1.676e10]
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+--- 验证池子: WBTC/USDC ---
+  池子地址: 0x2F7444DD0553CEBDAfdAE99f5aC568b3e6cf9d8F
+  Token0: 0x770556F853a17893b1187A9754F17c6f57776b7c
+  Token1: 0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769
+  Fee: 2500
+  Liquidity: 16764442264 [1.676e10]
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+--- 验证池子: DAI/USDT ---
+  池子地址: 0x44fB7EbEB324915632847Bb0A0EdDFD94A9351ad
+  Token0: 0x3577E5E0E3A47d9a552426638977ee3EddD4552e
+  Token1: 0xA16171a7dadfb86afC934eaF16daCD86cD435120
+  Fee: 100
+  Liquidity: 10252583134053 [1.025e13]
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+--- 验证池子: DAI/USDC ---
+  池子地址: 0x1eaC1C35f06231357F4a61ceb14962735Fa20b57
+  Token0: 0xA16171a7dadfb86afC934eaF16daCD86cD435120
+  Token1: 0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769
+  Fee: 100
+  Liquidity: 10252583134053 [1.025e13]
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+--- 验证池子: WBTC/WSRW ---
+  池子地址: 0x74698cde37436b62d60C877D39B5EdB6c9C70a74
+  Token0: 0x22608aC253B934D5078cB0d12f7F7e377b51798b
+  Token1: 0x770556F853a17893b1187A9754F17c6f57776b7c
+  Fee: 2500
+  Liquidity: 58
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+--- 验证池子: WSRW/USDT ---
+  池子地址: 0x88ebBc42a8ec9E4438cF9a14672C365e900C3e25
+  Token0: 0x22608aC253B934D5078cB0d12f7F7e377b51798b
+  Token1: 0x3577E5E0E3A47d9a552426638977ee3EddD4552e
+  Fee: 2500
+  Liquidity: 8655770 [8.655e6]
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+--- 验证池子: WSRW/USDC ---
+  池子地址: 0xd716aa0131379B1E88048db7A8e8a3f8f3c3213a
+  Token0: 0x22608aC253B934D5078cB0d12f7F7e377b51798b
+  Token1: 0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769
+  Fee: 2500
+  Liquidity: 8655770 [8.655e6]
+  [0;32m✓ Fee 匹配[0m
+  [0;32m✓ 池子有流动性[0m
+
+============================================
+4. 验证外围合约
+============================================
+
+--- 验证 NonfungiblePositionManager ---
+  地址: 0x53074FeB375dD50b600c9986180ab90974112284
+  [0;32m✓ 合约存在[0m
+  Factory 指向: 0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5
+
+--- 验证 SwapRouter ---
+  地址: 0x3B3Dedee55A83fb79f2659257b0B55B597D0D3D0
+  [0;32m✓ 合约存在[0m
+  Factory 指向: 0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5
+
+--- 验证 Quoter ---
+  地址: 0xA88cE47B8e9eF10591Be79793ccBA2C9d04866c5
+  [0;32m✓ 合约存在[0m
+  Factory 指向: 0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5
+
+--- 验证 QuoterV2 ---
+  地址: 0x06B24ED37b44719d64d0b564e9FE4a4914B8B64A
+  [0;32m✓ 合约存在[0m
+  Factory 指向: 0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5
+
+--- 验证 TickLens ---
+  地址: 0x64272699d818646781a4fCAa435C98A05b2d9668
+  [0;32m✓ 合约存在[0m
+
+--- 验证 SmartRouter ---
+  地址: 0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12
+  [0;32m✓ 合约存在[0m
+  Factory 指向: 0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5
+
+--- 验证 Multicall3 ---
+  地址: 0xcA11bde05977b3631167028862bE2a173976CA11
+  [0;32m✓ 合约存在[0m
+
+============================================
+5. 地址汇总
+============================================
+
+| 类型 | 名称 | 地址 |
+|------|------|------|
+| 核心 | Factory | 0xac3695E50cDc22941cffcBBE817EF2c7d7ef4AA5 |
+| 核心 | PoolDeployer | 0x9E04B69a17f4Ce1AC05600EF3bEf66eF423E455d |
+| 外围 | PositionManager | 0x53074FeB375dD50b600c9986180ab90974112284 |
+| 外围 | SwapRouter | 0x3B3Dedee55A83fb79f2659257b0B55B597D0D3D0 |
+| 外围 | SmartRouter | 0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12 |
+| 外围 | Quoter | 0xA88cE47B8e9eF10591Be79793ccBA2C9d04866c5 |
+| 外围 | QuoterV2 | 0x06B24ED37b44719d64d0b564e9FE4a4914B8B64A |
+| 外围 | TickLens | 0x64272699d818646781a4fCAa435C98A05b2d9668 |
+| 工具 | Multicall3 | 0xcA11bde05977b3631167028862bE2a173976CA11 |
+| 代币 | WSRW | 0x22608aC253B934D5078cB0d12f7F7e377b51798b |
+| 代币 | WBTC | 0x770556F853a17893b1187A9754F17c6f57776b7c |
+| 代币 | USDT | 0x3577E5E0E3A47d9a552426638977ee3EddD4552e |
+| 代币 | USDC | 0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769 |
+| 代币 | DAI | 0xA16171a7dadfb86afC934eaF16daCD86cD435120 |
+| 池子 | WBTC/USDT | 0x851D390bdA232082C6368Ee1c245F6Eea5eadD62 |
+| 池子 | WBTC/USDC | 0x2F7444DD0553CEBDAfdAE99f5aC568b3e6cf9d8F |
+| 池子 | DAI/USDT | 0x44fB7EbEB324915632847Bb0A0EdDFD94A9351ad |
+| 池子 | DAI/USDC | 0x1eaC1C35f06231357F4a61ceb14962735Fa20b57 |
+| 池子 | WBTC/WSRW | 0x74698cde37436b62d60C877D39B5EdB6c9C70a74 |
+| 池子 | WSRW/USDT | 0x88ebBc42a8ec9E4438cF9a14672C365e900C3e25 |
+| 池子 | WSRW/USDC | 0xd716aa0131379B1E88048db7A8e8a3f8f3c3213a |
+
+============================================
+验证完成!
+============================================

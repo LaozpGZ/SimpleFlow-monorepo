@@ -80,7 +80,7 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/pancakeswap",
+    href: "https://simpleflow.finance",
   },
   {
     label: "Telegram",
@@ -88,78 +88,78 @@ export const socials = [
     items: [
       {
         label: "English",
-        href: "https://t.me/pancakeswap",
+        href: "https://simpleflow.finance",
       },
       {
         label: "Bahasa Indonesia",
-        href: "https://t.me/pancakeswapIndonesia",
+        href: "https://simpleflow.finance",
       },
       {
         label: "中文",
-        href: "https://t.me/pancakeswap_CN",
+        href: "https://simpleflow.finance",
       },
       {
         label: "Tiếng Việt",
-        href: "https://t.me/PancakeSwapVN",
+        href: "https://simpleflow.finance",
       },
       {
         label: "русский",
-        href: "https://t.me/pancakeswap_ru",
+        href: "https://simpleflow.finance",
       },
       {
         label: "Português",
-        href: "https://t.me/pancakeswapPortuguese",
+        href: "https://simpleflow.finance",
       },
       {
         label: "Español",
-        href: "https://t.me/pancakeswapES",
+        href: "https://simpleflow.finance",
       },
       {
         label: "日本語",
-        href: "https://t.me/pancakeswapJP",
+        href: "https://simpleflow.finance",
       },
       {
         label: "Filipino",
-        href: "https://t.me/pancakeswap_PH",
+        href: "https://simpleflow.finance",
       },
       {
         label: "हिन्दी",
-        href: "https://t.me/pancakeswap_INDIA",
+        href: "https://simpleflow.finance",
       },
       {
         label: "한국어",
-        href: "https://t.me/PancakeSwapSouthKorea",
+        href: "https://simpleflow.finance",
       },
       {
         label: "Announcements",
-        href: "https://t.me/PancakeSwapAnn",
+        href: "https://simpleflow.finance",
       },
     ],
   },
   {
     label: "Reddit",
     icon: RedditIcon,
-    href: "https://reddit.com/r/pancakeswap",
+    href: "https://simpleflow.finance",
   },
   {
     label: "Instagram",
     icon: InstagramIcon,
-    href: "https://instagram.com/pancakeswapfinance",
+    href: "https://simpleflow.finance",
   },
   {
     label: "Github",
     icon: GithubIcon,
-    href: "https://github.com/pancakeswap/",
+    href: "https://simpleflow.finance",
   },
   {
     label: "Discord",
     icon: DiscordIcon,
-    href: "https://discord.gg/pancakeswap",
+    href: "https://simpleflow.finance",
   },
   {
     label: "Youtube",
     icon: YoutubeIcon,
-    href: "https://www.youtube.com/@pancakeswap_official",
+    href: "https://simpleflow.finance",
   },
 ];
 
