@@ -55,7 +55,7 @@ const ProfilePicture: React.FC = () => {
         if (nftsByCollection.length > 0) {
           const profileContract = getProfileContract()
           const nftRole = await profileContract.read.NFT_ROLE()
-          const collectionRoles = await publicClient({ chainId: ChainId.BSC }).multicall({
+          const collectionRoles = await publicClient({ chainId: ChainId.SIMPLECHAIN }).multicall({
             contracts: nftsByCollection.map((collectionAddress) => {
               return {
                 abi: pancakeProfileABI,

@@ -5,7 +5,7 @@ import { HOOK_CATEGORY, HookType, POOL_TYPE, type HookData, type PoolType } from
 import { CL_DYNAMIC_FEE_HOOKS_BY_CHAIN } from './dynamicFeeHook'
 
 export const CL_DYNAMIC_HOOK: HookData = {
-  address: CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC],
+  address: CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.SIMPLECHAIN],
   name: 'Dynamic Fees (CLAMM)',
   poolType: POOL_TYPE.CLAMM,
   description:
@@ -26,7 +26,7 @@ export const CL_DYNAMIC_HOOK: HookData = {
 }
 
 // const BIN_DYNAMIC_HOOK = {
-//   address: BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC],
+//   address: BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.SIMPLECHAIN],
 //   name: 'Dynamic Fees (Bin)',
 //   poolType: POOL_TYPE.Bin,
 //   description: 'It will set lpFee to 3000 i.e 0.3% in afterInitialize',
@@ -44,7 +44,7 @@ export const CL_DYNAMIC_HOOK: HookData = {
 
 const dynamicHooksList: HookData[] = [CL_DYNAMIC_HOOK]
 
-export const bscHooksList: HookData[] = [
+export const simplechainHooksList: HookData[] = [
   ...dynamicHooksList,
 
   // {
@@ -253,13 +253,13 @@ export const bscHooksList: HookData[] = [
 /**
  * Dynamic hook for each pool type for auto-selection on "Dynamic" fee tier
  */
-export const bscDynamicHooks: Record<PoolType, HookData | undefined> = {
+export const simplechainDynamicHooks: Record<PoolType, HookData | undefined> = {
   CL: CL_DYNAMIC_HOOK,
   Bin: undefined,
 }
 
 // whitelisted hooks but without metadata, just for eliminating the fe warning
-export const bscWhitelistLabeledHooks: Address[] = [
+export const simplechainWhitelistLabeledHooks: Address[] = [
   '0x9a9B5331ce8d74b2B721291D57DE696E878353fd', // IDO TGE
   '0x72e09eBd9b24F47730b651889a4eD984CBa53d90',
   '0x44428C6ce391915D51F963C0Dd395Cd0f95fdFD2',

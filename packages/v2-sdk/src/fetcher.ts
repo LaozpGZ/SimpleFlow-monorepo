@@ -2,33 +2,50 @@ import { ChainId } from '@pancakeswap/chains'
 import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
 import { erc20Abi } from '@pancakeswap/swap-sdk-evm'
 import invariant from 'tiny-invariant'
-import { Address, PublicClient, createPublicClient, getContract, http } from 'viem'
-import { bsc, bscTestnet, goerli, mainnet } from 'viem/chains'
+import { Address, PublicClient, createPublicClient, getContract, http, defineChain } from 'viem'
+import { goerli, mainnet } from 'viem/chains'
 
 import { pancakePairV2ABI } from './abis/IPancakePair'
 import { Pair } from './entities/pair'
 
+// SimpleChain 主网定义
+const simplechain = defineChain({
+  id: 1913,
+  name: 'SimpleChain',
+  nativeCurrency: { decimals: 18, name: 'SRW', symbol: 'SRW' },
+  rpcUrls: { default: { http: ['https://rpc.simplechain.com'] } },
+})
+
+// SimpleChain 测试网定义
+const simplechainTestnet = defineChain({
+  id: 1914,
+  name: 'SimpleChain Testnet',
+  nativeCurrency: { decimals: 18, name: 'tSRW', symbol: 'tSRW' },
+  rpcUrls: { default: { http: ['https://testnet-rpc.simplechain.com'] } },
+  testnet: true,
+})
+
 let TOKEN_DECIMALS_CACHE: { [chainId: number]: { [address: string]: number } } = {
-  [ChainId.BSC]: {},
+  [ChainId.SIMPLECHAIN]: {},
 }
 
 const ethClient = createPublicClient({ chain: mainnet, transport: http() })
-const bscClient = createPublicClient({ chain: bsc, transport: http() })
-const bscTestnetClient = createPublicClient({ chain: bscTestnet, transport: http() })
+const simplechainClient = createPublicClient({ chain: simplechain, transport: http() })
+const simplechainTestnetClient = createPublicClient({ chain: simplechainTestnet, transport: http() })
 const goerliClient = createPublicClient({ chain: goerli, transport: http() })
 
 const getDefaultClient = (chainId: ChainId): PublicClient => {
   switch (chainId) {
     case ChainId.ETHEREUM:
       return ethClient
-    case ChainId.BSC:
-      return bscClient
-    case ChainId.BSC_TESTNET:
-      return bscTestnetClient
+    case ChainId.SIMPLECHAIN:
+      return simplechainClient
+    case ChainId.SIMPLECHAIN_TESTNET:
+      return simplechainTestnetClient
     case ChainId.GOERLI:
       return goerliClient
     default:
-      return bscClient
+      return simplechainClient
   }
 }
 

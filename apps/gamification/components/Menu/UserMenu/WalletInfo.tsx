@@ -42,12 +42,12 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { t } = useTranslation()
   const { account, chainId, chain } = useActiveWeb3React()
   const { domainName } = useDomainNameForAddress(account ?? '')
-  const isBSC = chainId === ChainId.BSC
-  const bnbBalance = useBalance({ address: account ?? undefined, chainId: ChainId.BSC })
+  const isBSC = chainId === ChainId.SIMPLECHAIN
+  const bnbBalance = useBalance({ address: account ?? undefined, chainId: ChainId.SIMPLECHAIN })
   const nativeBalance = useBalance({ address: account ?? undefined, query: { enabled: !isBSC } })
   const native = useNativeCurrency()
   const wNativeToken = !isBSC ? WNATIVE[chainId as ChainId] : null
-  const wBNBToken = WNATIVE[ChainId.BSC]
+  const wBNBToken = WNATIVE[ChainId.SIMPLECHAIN]
   const { balance: wNativeBalance, fetchStatus: wNativeFetchStatus } = useTokenBalance(wNativeToken?.address as Address)
   const { balance: wBNBBalance, fetchStatus: wBNBFetchStatus } = useTokenBalance(wBNBToken?.address, true)
   const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useBSCCakeBalance()
@@ -131,13 +131,13 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
       <Box mb="24px">
         <Flex justifyContent="space-between" alignItems="center" mb="8px">
           <Flex bg={COLORS.BNB} borderRadius="16px" pl="4px" pr="8px" py="2px">
-            <ChainLogo chainId={ChainId.BSC} />
+            <ChainLogo chainId={ChainId.SIMPLECHAIN} />
             <Text color="white" ml="4px">
               BNB Smart Chain
             </Text>
           </Flex>
-          <ScanLink useBscCoinFallback href={getBlockExploreLink(account, 'address', ChainId.BSC)}>
-            {getBlockExploreName(ChainId.BSC)}
+          <ScanLink useBscCoinFallback href={getBlockExploreLink(account, 'address', ChainId.SIMPLECHAIN)}>
+            {getBlockExploreName(ChainId.SIMPLECHAIN)}
           </ScanLink>
         </Flex>
         {chainId === 56 ? (

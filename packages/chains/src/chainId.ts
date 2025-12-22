@@ -1,8 +1,8 @@
 export enum ChainId {
   ETHEREUM = 1,
   GOERLI = 5,
-  BSC = 56,
-  BSC_TESTNET = 97,
+  SIMPLECHAIN = 1913,
+  SIMPLECHAIN_TESTNET = 1914,
   ZKSYNC_TESTNET = 280,
   ZKSYNC = 324,
   OPBNB_TESTNET = 5611,
@@ -35,7 +35,7 @@ export type UnifiedChainId = ChainId | NonEVMChainId
 
 export const testnetChainIds = [
   ChainId.GOERLI,
-  ChainId.BSC_TESTNET,
+  ChainId.SIMPLECHAIN_TESTNET,
   ChainId.ZKSYNC_TESTNET,
   ChainId.OPBNB_TESTNET,
   ChainId.ARBITRUM_GOERLI,

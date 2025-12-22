@@ -4,7 +4,7 @@ import { HOOK_CATEGORY, POOL_TYPE, type HookData, type PoolType } from '../../ty
 import { BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN, CL_DYNAMIC_FEE_HOOKS_BY_CHAIN } from './dynamicFeeHook'
 
 export const CL_DYNAMIC_HOOK = {
-  address: CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC_TESTNET],
+  address: CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.SIMPLECHAIN_TESTNET],
   name: 'Dynamic Fees (CLAMM)',
   poolType: POOL_TYPE.CLAMM,
   description: 'It will set lpFee to 3000 i.e 0.3% in afterInitialize',
@@ -19,7 +19,7 @@ export const CL_DYNAMIC_HOOK = {
 }
 
 const BIN_DYNAMIC_HOOK = {
-  address: BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC_TESTNET],
+  address: BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.SIMPLECHAIN_TESTNET],
   name: 'Dynamic Fees (Bin)',
   poolType: POOL_TYPE.Bin,
   description: 'It will set lpFee to 3000 i.e 0.3% in afterInitialize',
@@ -35,7 +35,7 @@ const BIN_DYNAMIC_HOOK = {
 }
 const dynamicHooksList: HookData[] = [CL_DYNAMIC_HOOK, BIN_DYNAMIC_HOOK]
 
-export const bscTestnetHooksList: HookData[] = [
+export const simplechainTestnetHooksList: HookData[] = [
   ...dynamicHooksList,
   {
     address: '0x0A6440c9cfb5f28BE699a9e4e83BF8A89de72498',
@@ -71,7 +71,7 @@ export const bscTestnetHooksList: HookData[] = [
 /**
  * Dynamic hook for each pool type for auto-selection on "Dynamic" fee tier
  */
-export const bscTestnetDynamicHooks: Record<PoolType, HookData> = {
+export const simplechainTestnetDynamicHooks: Record<PoolType, HookData> = {
   CL: CL_DYNAMIC_HOOK,
   Bin: BIN_DYNAMIC_HOOK,
 }

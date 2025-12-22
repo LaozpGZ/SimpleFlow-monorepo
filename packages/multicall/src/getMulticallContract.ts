@@ -19,5 +19,5 @@ export function getMulticallContract({ chainId, client }: Params) {
 }
 
 export function getMulticall3ContractAddress(chainId?: ChainId): Address {
-  return MULTICALL3_ADDRESSES[chainId || ChainId.BSC] || MULTICALL3_ADDRESS
+  return MULTICALL3_ADDRESSES[chainId || ChainId.SIMPLECHAIN] || MULTICALL3_ADDRESS
 }

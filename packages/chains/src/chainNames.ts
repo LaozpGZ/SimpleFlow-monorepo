@@ -3,8 +3,8 @@ import { ChainId, NonEVMChainId, UnifiedChainId } from './chainId'
 export const chainNames: Record<UnifiedChainId, string> = {
   [ChainId.ETHEREUM]: 'eth',
   [ChainId.GOERLI]: 'goerli',
-  [ChainId.BSC]: 'bsc',
-  [ChainId.BSC_TESTNET]: 'bscTestnet',
+  [ChainId.SIMPLECHAIN]: 'simplechain',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'simplechainTestnet',
   [ChainId.ARBITRUM_ONE]: 'arb',
   [ChainId.ARBITRUM_GOERLI]: 'arbGoerli',
   [ChainId.ZKSYNC]: 'zkSync',
@@ -28,8 +28,8 @@ export const chainNames: Record<UnifiedChainId, string> = {
 export const chainFullNames: Record<UnifiedChainId, string> = {
   [ChainId.ETHEREUM]: 'Ethereum',
   [ChainId.GOERLI]: 'Goerli',
-  [ChainId.BSC]: 'BNB Chain',
-  [ChainId.BSC_TESTNET]: 'BNB Chain Testnet',
+  [ChainId.SIMPLECHAIN]: 'SimpleChain',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'SimpleChain Testnet',
   [ChainId.ARBITRUM_ONE]: 'Arbitrum One',
   [ChainId.ARBITRUM_GOERLI]: 'Arbitrum Goerli',
   [ChainId.ZKSYNC]: 'ZKsync Era',
@@ -53,8 +53,8 @@ export const chainFullNames: Record<UnifiedChainId, string> = {
 export const chainNamesInKebabCase = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: 'goerli',
-  [ChainId.BSC]: 'bsc',
-  [ChainId.BSC_TESTNET]: 'bsc-testnet',
+  [ChainId.SIMPLECHAIN]: 'simplechain',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'simplechain-testnet',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.ARBITRUM_GOERLI]: 'arbitrum-goerli',
   [ChainId.ZKSYNC]: 'zksync',
@@ -78,8 +78,8 @@ export const chainNamesInKebabCase = {
 export const mainnetChainNamesInKebabCase = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: 'ethereum',
-  [ChainId.BSC]: 'bsc',
-  [ChainId.BSC_TESTNET]: 'bsc',
+  [ChainId.SIMPLECHAIN]: 'simplechain',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'simplechain',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.ARBITRUM_GOERLI]: 'arbitrum',
   [ChainId.ZKSYNC]: 'zksync',
@@ -99,8 +99,8 @@ export const mainnetChainNamesInKebabCase = {
 } as const
 
 const legacyChainNames: [string, UnifiedChainId][] = [
-  ['Binance Smart Chain', ChainId.BSC],
-  ['BNB Smart Chain', ChainId.BSC],
+  ['SimpleChain', ChainId.SIMPLECHAIN],
+  ['Simple Chain', ChainId.SIMPLECHAIN],
 ]
 
 export const chainNameToChainId = Object.entries(chainNames).reduce((acc, [chainId, chainName]) => {
@@ -141,10 +141,10 @@ export const allCasesNameToChainId = Object.entries({
 // @see https://github.com/DefiLlama/defillama-server/blob/master/common/chainToCoingeckoId.ts
 // @see https://github.com/DefiLlama/chainlist/blob/main/constants/chainIds.json
 export const defiLlamaChainNames: Record<UnifiedChainId, string> = {
-  [ChainId.BSC]: 'bsc',
+  [ChainId.SIMPLECHAIN]: 'simplechain',
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: '',
-  [ChainId.BSC_TESTNET]: '',
+  [ChainId.SIMPLECHAIN_TESTNET]: '',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.ARBITRUM_GOERLI]: '',
   [ChainId.ZKSYNC]: 'era',

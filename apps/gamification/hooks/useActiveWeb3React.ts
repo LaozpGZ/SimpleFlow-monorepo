@@ -21,7 +21,7 @@ export function useNetworkConnectorUpdater() {
     if (loading || !router.isReady) return setPrevChainId()
     const parsedQueryChainId = getChainId(router.query.chain as string)
 
-    if (!parsedQueryChainId && chainId === ChainId.BSC) return setPrevChainId()
+    if (!parsedQueryChainId && chainId === ChainId.SIMPLECHAIN) return setPrevChainId()
     if (parsedQueryChainId !== chainId && chainId && isChainSupported(chainId)) {
       const uriHash = getHashFromRouter(router)?.[0]
       const { chainId: _chainId } = router.query

@@ -8,7 +8,7 @@ export const useTokensByChainWithNativeToken = (chainId: ChainId) => {
   const nativeToken = useNativeCurrency(chainId)
 
   const filterTokens = useMemo(() => {
-    if (chainId === ChainId.BSC) {
+    if (chainId === ChainId.SIMPLECHAIN) {
       // BSC token list has one token same as native token.
       return list.filter((i) => !i.isNative && i.symbol !== nativeToken.symbol)
     }

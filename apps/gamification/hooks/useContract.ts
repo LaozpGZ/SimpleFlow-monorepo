@@ -67,7 +67,7 @@ export function useTokenContract(tokenAddress?: Address) {
 export const useCake = () => {
   const { chainId } = useActiveChainId()
 
-  return useContract((chainId && (CAKE as any)?.[chainId]?.address) ?? CAKE[ChainId.BSC].address, erc20Abi)
+  return useContract((chainId && (CAKE as any)?.[chainId]?.address) ?? CAKE[ChainId.SIMPLECHAIN].address, erc20Abi)
 }
 
 export const useBunnyFactory = () => {

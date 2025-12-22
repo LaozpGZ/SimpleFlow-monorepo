@@ -64,7 +64,7 @@ export const CurrencySearch: React.FC<CurrencySearchProps> = ({
   const showNetworkBases = true
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [selectedChainId, setSelectedChainId] = useState<ChainId>(
-    onlyAcceptChains ?? selectedCurrency?.chainId ?? ChainId.BSC,
+    onlyAcceptChains ?? selectedCurrency?.chainId ?? ChainId.SIMPLECHAIN,
   )
 
   // refs for fixed size lists

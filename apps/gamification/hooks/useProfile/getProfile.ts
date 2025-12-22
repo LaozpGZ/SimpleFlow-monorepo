@@ -33,7 +33,7 @@ export const getNftApi = async (
 
 export const getProfile = async (address: string): Promise<GetProfileResponse | null> => {
   try {
-    const client = publicClient({ chainId: ChainId.BSC })
+    const client = publicClient({ chainId: ChainId.SIMPLECHAIN })
 
     const profileCallsResult = await client.multicall({
       contracts: [

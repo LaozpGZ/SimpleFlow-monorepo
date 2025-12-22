@@ -10,12 +10,17 @@ export interface Chain {
 }
 
 export const Chains: Chain[] = [
-  { id: ChainId.BSC, name: chainNames[ChainId.BSC], fullName: chainFullNames[ChainId.BSC], isEVM: true },
+  {
+    id: ChainId.SIMPLECHAIN,
+    name: chainNames[ChainId.SIMPLECHAIN],
+    fullName: chainFullNames[ChainId.SIMPLECHAIN],
+    isEVM: true,
+  },
   { id: ChainId.LINEA, name: chainNames[ChainId.LINEA], fullName: chainFullNames[ChainId.LINEA], isEVM: true },
   {
-    id: ChainId.BSC_TESTNET,
-    name: chainNames[ChainId.BSC_TESTNET],
-    fullName: chainFullNames[ChainId.BSC_TESTNET],
+    id: ChainId.SIMPLECHAIN_TESTNET,
+    name: chainNames[ChainId.SIMPLECHAIN_TESTNET],
+    fullName: chainFullNames[ChainId.SIMPLECHAIN_TESTNET],
     isEVM: true,
     testnet: true,
   },

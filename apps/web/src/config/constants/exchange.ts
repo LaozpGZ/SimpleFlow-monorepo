@@ -7,8 +7,8 @@ import {
   baseSepoliaTokens,
   baseTestnetTokens,
   baseTokens,
-  bscTestnetTokens,
-  bscTokens,
+  simplechainTokens,
+  simplechainTestnetTokens,
   BUSD,
   lineaTestnetTokens,
   lineaTokens,
@@ -40,8 +40,8 @@ export {
 export const CHAIN_REFRESH_TIME = {
   [ChainId.ETHEREUM]: 12_000,
   [ChainId.GOERLI]: 12_000,
-  [ChainId.BSC]: 6_000,
-  [ChainId.BSC_TESTNET]: 6_000,
+  [ChainId.SIMPLECHAIN]: 6_000,
+  [ChainId.SIMPLECHAIN_TESTNET]: 6_000,
   [ChainId.ARBITRUM_ONE]: 10_000,
   [ChainId.ARBITRUM_GOERLI]: 10_000,
   [ChainId.ZKSYNC]: 3_000,
@@ -64,8 +64,12 @@ export const CHAIN_REFRESH_TIME = {
 export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.ETHEREUM]: [USDC[ChainId.ETHEREUM], USDT[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM], WBTC_ETH],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
-  [ChainId.BSC]: [bscTokens.usdt, bscTokens.cake, bscTokens.btcb],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
+  [ChainId.SIMPLECHAIN]: [simplechainTokens.usdt, simplechainTokens.cake, simplechainTokens.btcb],
+  [ChainId.SIMPLECHAIN_TESTNET]: [
+    simplechainTestnetTokens.wsrw,
+    simplechainTestnetTokens.cake,
+    simplechainTestnetTokens.busd,
+  ],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.weth, arbitrumGoerliTokens.usdc],
   [ChainId.ZKSYNC]: [zksyncTokens.usdcNative, zksyncTokens.usdc, zksyncTokens.weth],
@@ -95,8 +99,18 @@ export const SUGGESTED_BASES: ChainTokenList = {
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.ETHEREUM]: [USDC[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM], USDT[ChainId.ETHEREUM], WBTC_ETH],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
-  [ChainId.BSC]: [bscTokens.wbnb, bscTokens.dai, bscTokens.busd, bscTokens.usdt, bscTokens.cake],
-  [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
+  [ChainId.SIMPLECHAIN]: [
+    simplechainTokens.wsrw,
+    simplechainTokens.dai,
+    simplechainTokens.busd,
+    simplechainTokens.usdt,
+    simplechainTokens.cake,
+  ],
+  [ChainId.SIMPLECHAIN_TESTNET]: [
+    simplechainTestnetTokens.wsrw,
+    simplechainTestnetTokens.cake,
+    simplechainTestnetTokens.busd,
+  ],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.weth, arbitrumGoerliTokens.usdc],
   [ChainId.ZKSYNC]: [zksyncTokens.usdc, zksyncTokens.weth],
@@ -123,10 +137,10 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
     [WBTC_ETH, WNATIVE[ChainId.ETHEREUM]],
     [WNATIVE[ChainId.ETHEREUM], USDT[ChainId.ETHEREUM]],
   ],
-  [ChainId.BSC]: [
-    [bscTokens.cake, bscTokens.wbnb],
-    [bscTokens.busd, bscTokens.usdt],
-    [bscTokens.dai, bscTokens.usdt],
+  [ChainId.SIMPLECHAIN]: [
+    [simplechainTokens.cake, simplechainTokens.wsrw],
+    [simplechainTokens.busd, simplechainTokens.usdt],
+    [simplechainTokens.dai, simplechainTokens.usdt],
   ],
   [ChainId.ARBITRUM_ONE]: [
     [arbitrumTokens.weth, arbitrumTokens.usdt],
@@ -172,8 +186,8 @@ export const ONE_HUNDRED_PERCENT = new Percent('1')
 export const BASE_FEE = new Percent(25n, BIPS_BASE)
 export const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
-// BNB
-export const DEFAULT_INPUT_CURRENCY = 'BNB'
+// SRW (SimpleChain native token)
+export const DEFAULT_INPUT_CURRENCY = 'SRW'
 // CAKE
 export const DEFAULT_OUTPUT_CURRENCY = '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82'
 

@@ -3,38 +3,38 @@ import { ERC20Token } from '@pancakeswap/sdk'
 import { solanaTokens } from './solana'
 
 export const CAKE_MAINNET = new ERC20Token(
-  ChainId.BSC,
+  ChainId.SIMPLECHAIN,
   '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
   18,
   'CAKE',
-  'PancakeSwap Token',
-  'https://pancakeswap.finance/',
+  'SimpleDex Token',
+  'https://simpledex.finance/',
 )
 
 export const CAKE_TESTNET = new ERC20Token(
-  ChainId.BSC_TESTNET,
+  ChainId.SIMPLECHAIN_TESTNET,
   '0x8d008B313C1d6C7fE2982F62d32Da7507cF43551',
   18,
   'CAKE',
-  'PancakeSwap Token',
-  'https://pancakeswap.finance/',
+  'SimpleDex Token',
+  'https://simpledex.finance/',
 )
 
-export const USDC_BSC = new ERC20Token(
-  ChainId.BSC,
-  '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
-  18,
+export const USDC_SIMPLECHAIN = new ERC20Token(
+  ChainId.SIMPLECHAIN,
+  '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769',
+  6,
   'USDC',
-  'Binance-Peg USD Coin',
+  'USD Coin',
   'https://www.centre.io/usdc',
 )
 
-export const USDC_TESTNET = new ERC20Token(
-  ChainId.BSC_TESTNET,
-  '0x64544969ed7EBf5f083679233325356EbE738930',
-  18,
+export const USDC_SIMPLECHAIN_TESTNET = new ERC20Token(
+  ChainId.SIMPLECHAIN_TESTNET,
+  '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769',
+  6,
   'USDC',
-  'Binance-Peg USD Coin',
+  'USD Coin',
   'https://www.centre.io/usdc',
 )
 
@@ -55,22 +55,22 @@ export const USDC_GOERLI = new ERC20Token(
   'test USD Coin',
 )
 
-export const USDT_BSC = new ERC20Token(
-  ChainId.BSC,
-  '0x55d398326f99059fF775485246999027B3197955',
-  18,
+export const USDT_SIMPLECHAIN = new ERC20Token(
+  ChainId.SIMPLECHAIN,
+  '0x3577E5E0E3A47d9a552426638977ee3EddD4552e',
+  6,
   'USDT',
   'Tether USD',
   'https://tether.to/',
 )
 
-export const USD1_BSC = new ERC20Token(
-  ChainId.BSC,
-  '0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d',
-  18,
-  'USD1',
-  'USD1',
-  'https://www.worldlibertyfinancial.com/',
+export const USDT_SIMPLECHAIN_TESTNET = new ERC20Token(
+  ChainId.SIMPLECHAIN_TESTNET,
+  '0x3577E5E0E3A47d9a552426638977ee3EddD4552e',
+  6,
+  'USDT',
+  'Tether USD',
+  'https://tether.to/',
 )
 
 export const USDT_ETH = new ERC20Token(
@@ -82,22 +82,22 @@ export const USDT_ETH = new ERC20Token(
   'https://tether.to/',
 )
 
-export const BUSD_BSC = new ERC20Token(
-  ChainId.BSC,
-  '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+export const DAI_SIMPLECHAIN = new ERC20Token(
+  ChainId.SIMPLECHAIN,
+  '0xA16171a7dadfb86afC934eaF16daCD86cD435120',
   18,
-  'BUSD',
-  'Binance USD',
-  'https://www.paxos.com/busd/',
+  'DAI',
+  'Dai Stablecoin',
+  'https://www.makerdao.com/',
 )
 
-export const BUSD_TESTNET = new ERC20Token(
-  ChainId.BSC_TESTNET,
-  '0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814',
+export const DAI_SIMPLECHAIN_TESTNET = new ERC20Token(
+  ChainId.SIMPLECHAIN_TESTNET,
+  '0xA16171a7dadfb86afC934eaF16daCD86cD435120',
   18,
-  'BUSD',
-  'Binance USD',
-  'https://www.paxos.com/busd/',
+  'DAI',
+  'Dai Stablecoin',
+  'https://www.makerdao.com/',
 )
 
 export const BUSD_ETH = new ERC20Token(
@@ -121,8 +121,8 @@ export const BUSD_GOERLI = new ERC20Token(
 export const BUSD = {
   [ChainId.ETHEREUM]: BUSD_ETH,
   [ChainId.GOERLI]: BUSD_GOERLI,
-  [ChainId.BSC]: BUSD_BSC,
-  [ChainId.BSC_TESTNET]: BUSD_TESTNET,
+  [ChainId.SIMPLECHAIN]: DAI_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: DAI_SIMPLECHAIN_TESTNET,
   [ChainId.ZKSYNC]: new ERC20Token(
     ChainId.ZKSYNC,
     '0x2039bb4116B4EFc145Ec4f0e2eA75012D6C0f181',
@@ -166,8 +166,8 @@ export const CAKE = {
     'PancakeSwap Token',
     'https://pancakeswap.finance/',
   ),
-  [ChainId.BSC]: CAKE_MAINNET,
-  [ChainId.BSC_TESTNET]: CAKE_TESTNET,
+  [ChainId.SIMPLECHAIN]: CAKE_MAINNET,
+  [ChainId.SIMPLECHAIN_TESTNET]: CAKE_TESTNET,
   [ChainId.ZKSYNC_TESTNET]: new ERC20Token(
     ChainId.ZKSYNC_TESTNET,
     '0xFf2FA31273c1aedB67017B52C625633d2F021f67',
@@ -260,8 +260,8 @@ export const CAKE = {
 }
 
 export const USDC = {
-  [ChainId.BSC]: USDC_BSC,
-  [ChainId.BSC_TESTNET]: USDC_TESTNET,
+  [ChainId.SIMPLECHAIN]: USDC_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: USDC_SIMPLECHAIN_TESTNET,
   [ChainId.ETHEREUM]: USDC_ETH,
   [ChainId.GOERLI]: USDC_GOERLI,
   [ChainId.ZKSYNC]: new ERC20Token(
@@ -388,7 +388,8 @@ export const USDC = {
 }
 
 export const USDT = {
-  [ChainId.BSC]: USDT_BSC,
+  [ChainId.SIMPLECHAIN]: USDT_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: USDT_SIMPLECHAIN_TESTNET,
   [ChainId.ETHEREUM]: USDT_ETH,
   [ChainId.ARBITRUM_ONE]: new ERC20Token(
     ChainId.ARBITRUM_ONE,
@@ -507,14 +508,8 @@ export const DAI = {
     'Dai Stablecoin',
     'https://www.makerdao.com/',
   ),
-  [ChainId.BSC]: new ERC20Token(
-    ChainId.BSC,
-    '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',
-    18,
-    'DAI',
-    'Dai Stablecoin',
-    'https://www.makerdao.com/',
-  ),
+  [ChainId.SIMPLECHAIN]: DAI_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: DAI_SIMPLECHAIN_TESTNET,
   [ChainId.ETHEREUM]: new ERC20Token(
     ChainId.ETHEREUM,
     '0x6B175474E89094C44Da98b954EedeAC495271d0F',
@@ -553,8 +548,8 @@ export const WBTC_ETH = new ERC20Token(
 export const STABLE_COIN = {
   [ChainId.ETHEREUM]: USDT[ChainId.ETHEREUM],
   [ChainId.GOERLI]: USDC[ChainId.GOERLI],
-  [ChainId.BSC]: USDT[ChainId.BSC],
-  [ChainId.BSC_TESTNET]: BUSD[ChainId.BSC_TESTNET],
+  [ChainId.SIMPLECHAIN]: USDT[ChainId.SIMPLECHAIN],
+  [ChainId.SIMPLECHAIN_TESTNET]: USDC[ChainId.SIMPLECHAIN_TESTNET],
   [ChainId.ARBITRUM_ONE]: USDC[ChainId.ARBITRUM_ONE],
   [ChainId.ARBITRUM_GOERLI]: USDC[ChainId.ARBITRUM_GOERLI],
   [ChainId.ZKSYNC]: USDC[ChainId.ZKSYNC],

@@ -8,9 +8,9 @@ export default function useNativeCurrency(overrideChainId?: ChainId): NativeCurr
   const { chainId } = useActiveChainId()
   return useMemo(() => {
     try {
-      return Native.onChain(overrideChainId ?? chainId ?? ChainId.BSC)
+      return Native.onChain(overrideChainId ?? chainId ?? ChainId.SIMPLECHAIN)
     } catch (e) {
-      return Native.onChain(ChainId.BSC)
+      return Native.onChain(ChainId.SIMPLECHAIN)
     }
   }, [overrideChainId, chainId])
 }

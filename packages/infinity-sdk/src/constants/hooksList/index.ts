@@ -1,25 +1,25 @@
 import { ChainId } from '@pancakeswap/chains'
-import { bscDynamicHooks, bscHooksList, bscWhitelistLabeledHooks } from './bsc'
-import { bscTestnetDynamicHooks, bscTestnetHooksList } from './bscTestnet'
+import { simplechainDynamicHooks, simplechainHooksList, simplechainWhitelistLabeledHooks } from './simplechain'
+import { simplechainTestnetDynamicHooks, simplechainTestnetHooksList } from './simplechainTestnet'
 import { baseDynamicHooks, baseHooksList } from './base'
 
 export const hooksList = {
-  [ChainId.BSC]: bscHooksList,
-  [ChainId.BSC_TESTNET]: bscTestnetHooksList,
+  [ChainId.SIMPLECHAIN]: simplechainHooksList,
+  [ChainId.SIMPLECHAIN_TESTNET]: simplechainTestnetHooksList,
   [ChainId.BASE]: baseHooksList,
   [ChainId.SEPOLIA]: [],
 }
 
 export const dynamicHooksList = {
-  [ChainId.BSC]: bscDynamicHooks,
-  [ChainId.BSC_TESTNET]: bscTestnetDynamicHooks,
+  [ChainId.SIMPLECHAIN]: simplechainDynamicHooks,
+  [ChainId.SIMPLECHAIN_TESTNET]: simplechainTestnetDynamicHooks,
   [ChainId.BASE]: baseDynamicHooks,
   [ChainId.SEPOLIA]: [],
 }
 
 export const whitelistLabeledHooksList = {
-  [ChainId.BSC]: bscWhitelistLabeledHooks,
-  [ChainId.BSC_TESTNET]: [],
+  [ChainId.SIMPLECHAIN]: simplechainWhitelistLabeledHooks,
+  [ChainId.SIMPLECHAIN_TESTNET]: [],
   [ChainId.BASE]: [],
   [ChainId.SEPOLIA]: [],
 }

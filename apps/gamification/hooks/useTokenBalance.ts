@@ -11,7 +11,7 @@ import { useAccount } from 'wagmi'
 import { useActiveChainId } from './useActiveChainId'
 
 const useTokenBalance = (tokenAddress: Address, forceBSC?: boolean) => {
-  return useTokenBalanceByChain(tokenAddress, forceBSC ? ChainId.BSC : undefined)
+  return useTokenBalanceByChain(tokenAddress, forceBSC ? ChainId.SIMPLECHAIN : undefined)
 }
 
 export const useTokenBalanceByChain = (tokenAddress: Address, chainIdOverride?: ChainId) => {
@@ -42,7 +42,7 @@ export const useGetBnbBalance = () => {
   const { address: account } = useAccount()
 
   const { status, refetch, data } = useBalance({
-    chainId: ChainId.BSC,
+    chainId: ChainId.SIMPLECHAIN,
     address: account,
     query: {
       enabled: !!account,
@@ -70,7 +70,7 @@ export const useGetNativeTokenBalance = () => {
 }
 
 export const useBSCCakeBalance = () => {
-  const { balance, fetchStatus } = useTokenBalance(CAKE[ChainId.BSC]?.address, true)
+  const { balance, fetchStatus } = useTokenBalance(CAKE[ChainId.SIMPLECHAIN]?.address, true)
 
   return { balance: BigInt(balance.toString()), fetchStatus }
 }

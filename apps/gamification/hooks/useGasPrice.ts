@@ -41,14 +41,14 @@ export function useGasPrice(chainIdOverride?: number): bigint | undefined {
       return hexToBigInt(gasPrice as Hex)
     },
 
-    enabled: Boolean(signer && chainId === ChainId.BSC && userGas === GAS_PRICE_GWEI.rpcDefault),
+    enabled: Boolean(signer && chainId === ChainId.SIMPLECHAIN && userGas === GAS_PRICE_GWEI.rpcDefault),
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   })
-  if (chainId === ChainId.BSC) {
+  if (chainId === ChainId.SIMPLECHAIN) {
     return userGas === GAS_PRICE_GWEI.rpcDefault ? bscProviderGasPrice : BigInt(userGas ?? GAS_PRICE_GWEI.default)
   }
-  if (chainId === ChainId.BSC_TESTNET) {
+  if (chainId === ChainId.SIMPLECHAIN_TESTNET) {
     return DEFAULT_BSC_TESTNET_GAS_BIGINT
   }
   return undefined

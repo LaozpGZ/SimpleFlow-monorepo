@@ -7,7 +7,7 @@ export type Addresses = {
 }
 
 export const getAddressFromMap = (address: Addresses, chainId?: number): `0x${string}` => {
-  return (chainId && address[chainId as ChainId] ? address[chainId as ChainId] : address[ChainId.BSC]) ?? '0x'
+  return (chainId && address[chainId as ChainId] ? address[chainId as ChainId] : address[ChainId.SIMPLECHAIN]) ?? '0x'
 }
 
 export const getPancakeProfileAddress = () => {

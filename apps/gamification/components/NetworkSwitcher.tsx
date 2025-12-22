@@ -95,7 +95,7 @@ const WrongNetworkSelect = ({
     },
   )
   const { chain } = useAccount()
-  const localChainId = useLocalNetworkChain() || ChainId.BSC
+  const localChainId = useLocalNetworkChain() || ChainId.SIMPLECHAIN
   const [, setSessionChainId] = useSessionChainId()
 
   const localChainName = chains.find((c) => c.id === localChainId)?.name ?? 'BSC'
@@ -136,8 +136,8 @@ const WrongNetworkSelect = ({
 
 export const SHORT_SYMBOL = {
   [ChainId.ETHEREUM]: 'ETH',
-  [ChainId.BSC]: 'BNB',
-  [ChainId.BSC_TESTNET]: 'tBNB',
+  [ChainId.SIMPLECHAIN]: 'BNB',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'tBNB',
   [ChainId.GOERLI]: 'GOR',
   [ChainId.ARBITRUM_ONE]: 'ARB',
   [ChainId.ARBITRUM_GOERLI]: 'tARB',

@@ -5,7 +5,7 @@ import { nanoid } from '@reduxjs/toolkit'
 import { TaskConfigType } from 'views/DashboardQuestEdit/context/types'
 import { TaskType } from 'views/DashboardQuestEdit/type'
 
-const DEFAULT_CHAIN = ChainId.BSC
+const DEFAULT_CHAIN = ChainId.SIMPLECHAIN
 
 export const generateNewTask = (tasks: TaskConfigType[], taskType: TaskType): TaskConfigType | null => {
   let randomId: string = nanoid(100)

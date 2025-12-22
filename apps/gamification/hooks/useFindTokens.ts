@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import { Address } from 'viem'
 
 export const useFindTokens = (chainId: ChainId, tokenAddress: Address) => {
-  const tokensByChainWithNativeToken = useTokensByChainWithNativeToken((chainId as ChainId) ?? ChainId.BSC)
+  const tokensByChainWithNativeToken = useTokensByChainWithNativeToken((chainId as ChainId) ?? ChainId.SIMPLECHAIN)
 
   const token = useMemo((): Currency => {
     const findToken = tokensByChainWithNativeToken.find((i) =>

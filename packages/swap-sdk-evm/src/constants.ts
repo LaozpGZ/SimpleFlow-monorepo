@@ -23,21 +23,21 @@ export const WETH9 = {
     'Wrapped Ether',
     'https://weth.io',
   ),
-  [ChainId.BSC]: new ERC20Token(
-    ChainId.BSC,
-    '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+  [ChainId.SIMPLECHAIN]: new ERC20Token(
+    ChainId.SIMPLECHAIN,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
     18,
-    'ETH',
-    'Binance-Peg Ethereum Token',
-    'https://ethereum.org',
+    'WSRW',
+    'Wrapped SRW',
+    'https://simplechain.com',
   ),
-  [ChainId.BSC_TESTNET]: new ERC20Token(
-    ChainId.BSC,
-    '0xE7bCB9e341D546b66a46298f4893f5650a56e99E',
+  [ChainId.SIMPLECHAIN_TESTNET]: new ERC20Token(
+    ChainId.SIMPLECHAIN_TESTNET,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
     18,
-    'ETH',
-    'ETH',
-    'https://ethereum.org',
+    'WSRW',
+    'Wrapped SRW',
+    'https://simplechain.com',
   ),
   [ChainId.ARBITRUM_ONE]: new ERC20Token(
     ChainId.ARBITRUM_ONE,
@@ -178,22 +178,6 @@ export const WBNB = {
     'Wrapped BNB',
     'https://www.binance.org',
   ),
-  [ChainId.BSC]: new ERC20Token(
-    ChainId.BSC,
-    '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    18,
-    'WBNB',
-    'Wrapped BNB',
-    'https://www.binance.org',
-  ),
-  [ChainId.BSC_TESTNET]: new ERC20Token(
-    ChainId.BSC_TESTNET,
-    '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
-    18,
-    'WBNB',
-    'Wrapped BNB',
-    'https://www.binance.org',
-  ),
   [ChainId.OPBNB_TESTNET]: new ERC20Token(
     ChainId.OPBNB_TESTNET,
     '0x4200000000000000000000000000000000000006',
@@ -212,11 +196,30 @@ export const WBNB = {
   ),
 }
 
+export const WSRW = {
+  [ChainId.SIMPLECHAIN]: new ERC20Token(
+    ChainId.SIMPLECHAIN,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
+    18,
+    'WSRW',
+    'Wrapped SRW',
+    'https://simplechain.com',
+  ),
+  [ChainId.SIMPLECHAIN_TESTNET]: new ERC20Token(
+    ChainId.SIMPLECHAIN_TESTNET,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
+    18,
+    'WSRW',
+    'Wrapped SRW',
+    'https://simplechain.com',
+  ),
+}
+
 export const WNATIVE = {
   [ChainId.ETHEREUM]: WETH9[ChainId.ETHEREUM],
   [ChainId.GOERLI]: WETH9[ChainId.GOERLI],
-  [ChainId.BSC]: WBNB[ChainId.BSC],
-  [ChainId.BSC_TESTNET]: WBNB[ChainId.BSC_TESTNET],
+  [ChainId.SIMPLECHAIN]: WSRW[ChainId.SIMPLECHAIN],
+  [ChainId.SIMPLECHAIN_TESTNET]: WSRW[ChainId.SIMPLECHAIN_TESTNET],
   [ChainId.ARBITRUM_ONE]: WETH9[ChainId.ARBITRUM_ONE],
   [ChainId.ARBITRUM_GOERLI]: WETH9[ChainId.ARBITRUM_GOERLI],
   [ChainId.ZKSYNC]: WETH9[ChainId.ZKSYNC],
@@ -243,13 +246,19 @@ const BNB = {
   decimals: 18,
 } as const
 
+const SRW = {
+  name: 'SimpleChain Native Token',
+  symbol: 'SRW',
+  decimals: 18,
+} as const
+
 export const NATIVE = {
   [ChainId.ETHEREUM]: ETHER,
   [ChainId.GOERLI]: { name: 'Goerli Ether', symbol: 'GOR', decimals: 18 },
-  [ChainId.BSC]: BNB,
-  [ChainId.BSC_TESTNET]: {
-    name: 'Binance Chain Native Token',
-    symbol: 'tBNB',
+  [ChainId.SIMPLECHAIN]: SRW,
+  [ChainId.SIMPLECHAIN_TESTNET]: {
+    name: 'SimpleChain Testnet Native Token',
+    symbol: 'tSRW',
     decimals: 18,
   },
   [ChainId.ARBITRUM_ONE]: ETHER,

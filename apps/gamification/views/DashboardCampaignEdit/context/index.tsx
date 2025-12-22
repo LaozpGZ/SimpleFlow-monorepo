@@ -12,7 +12,7 @@ export const CampaignEditContext = createContext<EditCampaignContextType | undef
 
 export const CampaignEditProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [state, setState] = useState<CampaignStateType>(() => ({
-    chainId: ChainId.BSC,
+    chainId: ChainId.SIMPLECHAIN,
     completionStatus: CompletionStatus.DRAFTED,
     title: '',
     description: '',

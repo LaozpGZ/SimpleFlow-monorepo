@@ -11,14 +11,14 @@ export const useDomainNameForAddress = (address?: `0x${string}` | string) => {
     address: address as Address,
     chainId: chainId === ChainId.GOERLI ? ChainId.GOERLI : ChainId.ETHEREUM,
     query: {
-      enabled: chainId !== ChainId.BSC && chainId !== ChainId.BSC_TESTNET,
+      enabled: chainId !== ChainId.SIMPLECHAIN && chainId !== ChainId.SIMPLECHAIN_TESTNET,
     },
   })
   const { data: ensAvatar, isLoading: isEnsAvatarLoading } = useEnsAvatar({
     name: ensName as string,
     chainId: chainId === ChainId.GOERLI ? ChainId.GOERLI : ChainId.ETHEREUM,
     query: {
-      enabled: chainId !== ChainId.BSC && chainId !== ChainId.BSC_TESTNET,
+      enabled: chainId !== ChainId.SIMPLECHAIN && chainId !== ChainId.SIMPLECHAIN_TESTNET,
     },
   })
 

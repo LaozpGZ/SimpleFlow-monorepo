@@ -27,7 +27,7 @@ const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
     setOpen(true)
   }
 
-  const wallets = useMemo(() => createWallets(chainId || ChainId.BSC, connectAsync), [chainId, connectAsync])
+  const wallets = useMemo(() => createWallets(chainId || ChainId.SIMPLECHAIN, connectAsync), [chainId, connectAsync])
   const topWallets = useMemo(
     () =>
       TOP_WALLET_MAP[chainId]

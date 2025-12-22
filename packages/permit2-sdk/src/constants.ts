@@ -7,8 +7,8 @@ const PERMIT2_ADDRESSES: Record<ChainId, Address> = {
   [ChainId.GOERLI]: '0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768',
   [ChainId.SEPOLIA]: '0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768',
 
-  [ChainId.BSC]: '0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768',
-  [ChainId.BSC_TESTNET]: '0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768',
+  [ChainId.SIMPLECHAIN]: '0x339b28A97Cb2311F85B75C375cC0CD7D2F2417d0',
+  [ChainId.SIMPLECHAIN_TESTNET]: '0x339b28A97Cb2311F85B75C375cC0CD7D2F2417d0',
 
   // [ChainId.SCROLL]: '0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768',
   [ChainId.SCROLL_SEPOLIA]: '0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768',
@@ -35,7 +35,7 @@ const PERMIT2_ADDRESSES: Record<ChainId, Address> = {
 }
 
 export const getPermit2Address = (chainId: ChainId | undefined): Address | undefined => {
-  if (chainId === undefined) return PERMIT2_ADDRESSES[ChainId.BSC]
+  if (chainId === undefined) return PERMIT2_ADDRESSES[ChainId.SIMPLECHAIN]
   if (!(chainId in PERMIT2_ADDRESSES)) return undefined
   return PERMIT2_ADDRESSES[chainId]
 }

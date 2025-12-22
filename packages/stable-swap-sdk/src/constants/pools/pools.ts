@@ -14,8 +14,8 @@ export const isStableSwapSupported = (chainId: number | undefined): chainId is S
 }
 
 export const STABLE_SUPPORTED_CHAIN_IDS = [
-  ChainId.BSC,
-  ChainId.BSC_TESTNET,
+  ChainId.SIMPLECHAIN,
+  ChainId.SIMPLECHAIN_TESTNET,
   ChainId.ARBITRUM_ONE,
   ChainId.ETHEREUM,
 ] as const

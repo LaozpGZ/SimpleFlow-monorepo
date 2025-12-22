@@ -35,20 +35,8 @@ const MONAD_RPC_URLS = [
 ].filter(Boolean) as [string, ...string[]]
 
 export const SERVER_NODES = {
-  [ChainId.BSC]: [
-    getNodeRealUrl(ChainId.BSC, process.env.SERVER_NODE_REAL_API_ETH) || '',
-    process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
-    getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
-    'https://bsc.publicnode.com',
-    'https://binance.llamarpc.com',
-    'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.bnbchain.org',
-  ].filter(Boolean),
-  [ChainId.BSC_TESTNET]: [
-    'https://bsc-testnet-dataseed.bnbchain.org',
-    'https://bsc-testnet.bnbchain.org',
-    'https://bsc-prebsc-dataseed.bnbchain.org',
-  ],
+  [ChainId.SIMPLECHAIN]: [process.env.NEXT_PUBLIC_NODE_PRODUCTION || '', 'https://rpc.simplechain.com'].filter(Boolean),
+  [ChainId.SIMPLECHAIN_TESTNET]: ['https://testnet-rpc.simplechain.com'],
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://ethereum.publicnode.com',
@@ -95,21 +83,8 @@ export const SERVER_NODES = {
 } satisfies Record<ChainId, readonly string[]>
 
 export const PUBLIC_NODES = {
-  [ChainId.BSC]: [
-    process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
-    getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
-    process.env.NEXT_PUBLIC_NODIES_BSC || '',
-    getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
-    'https://bsc.publicnode.com',
-    'https://binance.llamarpc.com',
-    'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.bnbchain.org',
-  ].filter(Boolean),
-  [ChainId.BSC_TESTNET]: [
-    'https://bsc-testnet-dataseed.bnbchain.org',
-    'https://bsc-testnet.bnbchain.org',
-    'https://bsc-prebsc-dataseed.bnbchain.org',
-  ],
+  [ChainId.SIMPLECHAIN]: [process.env.NEXT_PUBLIC_NODE_PRODUCTION || '', 'https://rpc.simplechain.com'].filter(Boolean),
+  [ChainId.SIMPLECHAIN_TESTNET]: ['https://testnet-rpc.simplechain.com'],
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODIES_ETH || '',

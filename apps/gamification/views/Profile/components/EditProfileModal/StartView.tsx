@@ -91,7 +91,7 @@ const StartPage: React.FC<React.PropsWithChildren<StartPageProps>> = ({ goToAppr
   }, [account, minimumCakeRequired, setNeedsApproval, cakeContract, isProfileCostsLoading])
 
   const handleSwitchNetwork = async (): Promise<void> => {
-    await switchNetworkAsync(ChainId.BSC)
+    await switchNetworkAsync(ChainId.SIMPLECHAIN)
   }
 
   if (!profile) {
@@ -112,7 +112,7 @@ const StartPage: React.FC<React.PropsWithChildren<StartPageProps>> = ({ goToAppr
               )}
             </MessageText>
           </Message>
-          {chainId !== ChainId.BSC ? (
+          {chainId !== ChainId.SIMPLECHAIN ? (
             <Button width="100%" variant="secondary" onClick={handleSwitchNetwork}>
               {t('Switch Network')}
             </Button>

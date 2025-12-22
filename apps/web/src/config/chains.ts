@@ -8,8 +8,6 @@ import {
   base,
   baseGoerli,
   baseSepolia,
-  bscTestnet,
-  bsc as bsc_,
   goerli,
   linea,
   lineaTestnet,
@@ -36,20 +34,58 @@ export const getChainId = memoize((chainName: string) => {
   return CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] ? +CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] : undefined
 })
 
-const bsc = {
-  ...bsc_,
+const SIMPLECHAIN_RPC_URLS = [process.env.NEXT_PUBLIC_NODE_PRODUCTION || 'https://rpc.simplechain.network'].filter(
+  Boolean,
+) as [string, ...string[]]
+
+const simplechain: Chain = {
+  id: ChainId.SIMPLECHAIN,
+  name: 'SimpleChain',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
   rpcUrls: {
-    ...bsc_.rpcUrls,
-    public: {
-      ...bsc_.rpcUrls,
-      http: ['https://bsc-dataseed.bnbchain.org/'],
-    },
+    default: { http: SIMPLECHAIN_RPC_URLS },
+    public: { http: SIMPLECHAIN_RPC_URLS },
+  },
+  blockExplorers: {
     default: {
-      ...bsc_.rpcUrls.default,
-      http: ['https://bsc-dataseed.bnbchain.org/'],
+      name: 'SimpleChain Explorer',
+      url: 'https://explorer.simplechain.network',
     },
   },
-} satisfies Chain
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: false,
+}
+
+const SIMPLECHAIN_TESTNET_RPC_URLS = ['https://rpc-testnet.simplechain.network'].filter(Boolean) as [
+  string,
+  ...string[],
+]
+
+const simplechainTestnet: Chain = {
+  id: ChainId.SIMPLECHAIN_TESTNET,
+  name: 'SimpleChain Testnet',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
+    public: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
+  },
+  blockExplorers: {
+    default: {
+      name: 'SimpleChain Testnet Explorer',
+      url: 'https://explorer-testnet.simplechain.network',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: true,
+}
 
 const MONAD_RPC_URLS = [
   'https://rpc.monad.xyz',
@@ -103,8 +139,8 @@ export const L2_CHAIN_IDS: ChainId[] = [
 ]
 
 export const CHAINS: [Chain, ...Chain[]] = [
-  bsc,
-  bscTestnet,
+  simplechain,
+  simplechainTestnet,
   mainnet,
   goerli,
   sepolia,

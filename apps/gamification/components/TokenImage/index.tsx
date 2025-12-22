@@ -16,7 +16,7 @@ interface TokenPairImageProps extends Omit<UIKitTokenPairImageProps, 'primarySrc
 }
 
 export const tokenImageChainNameMapping: { [key: string]: string } = {
-  [ChainId.BSC]: '',
+  [ChainId.SIMPLECHAIN]: '',
   [ChainId.ETHEREUM]: 'eth/',
   [ChainId.ZKSYNC]: 'zksync/',
   [ChainId.ARBITRUM_ONE]: 'arbitrum/',
@@ -28,7 +28,7 @@ export const tokenImageChainNameMapping: { [key: string]: string } = {
 export const getImageUrlFromToken = (token: Currency) => {
   const address = token?.isNative ? token.wrapped.address : token.address
 
-  return token?.isNative && token.chainId !== ChainId.BSC
+  return token?.isNative && token.chainId !== ChainId.SIMPLECHAIN
     ? `${ASSET_CDN}/web/native/${token.chainId}.png`
     : `https://tokens.pancakeswap.finance/images/${tokenImageChainNameMapping[token.chainId]}${address}.png`
 }
