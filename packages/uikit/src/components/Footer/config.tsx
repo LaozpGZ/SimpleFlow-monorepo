@@ -8,26 +8,26 @@ export const footerLinks: FooterLinkType[] = [
     items: [
       {
         label: "Contact",
-        href: "https://docs.pancakeswap.finance/contact-us",
+        href: "https://docs.simpleflow.finance/contact-us",
       },
       {
         label: "Blog",
-        href: "https://blog.pancakeswap.finance/",
+        href: "https://blog.simpleflow.finance/",
       },
       {
         label: "Community",
-        href: "https://docs.pancakeswap.finance/contact-us/telegram",
+        href: "https://docs.simpleflow.finance/contact-us/telegram",
       },
       {
         label: "CAKE",
-        href: "https://docs.pancakeswap.finance/tokenomics/cake",
+        href: "https://docs.simpleflow.finance/tokenomics/cake",
       },
       {
         label: "—",
       },
       {
         label: "Online Store",
-        href: "https://pancakeswap.creator-spring.com/",
+        href: "https://simpleflow.creator-spring.com/",
         isHighlighted: true,
       },
     ],
@@ -37,15 +37,15 @@ export const footerLinks: FooterLinkType[] = [
     items: [
       {
         label: "Customer",
-        href: "Support https://docs.pancakeswap.finance/welcome-to-pancakeswap/contact-us/faq/help",
+        href: "Support https://docs.simpleflow.finance/welcome-to-simpleflow/contact-us/faq/help",
       },
       {
         label: "Troubleshooting",
-        href: "https://docs.pancakeswap.finance/help/troubleshooting",
+        href: "https://docs.simpleflow.finance/help/troubleshooting",
       },
       {
         label: "Guides",
-        href: "https://docs.pancakeswap.finance/get-started",
+        href: "https://docs.simpleflow.finance/get-started",
       },
     ],
   },
@@ -54,23 +54,23 @@ export const footerLinks: FooterLinkType[] = [
     items: [
       {
         label: "Github",
-        href: "https://github.com/pancakeswap",
+        href: "https://github.com/simpleflow",
       },
       {
         label: "Documentation",
-        href: "https://docs.pancakeswap.finance",
+        href: "https://docs.simpleflow.finance",
       },
       {
         label: "Bug Bounty",
-        href: "https://app.gitbook.com/@pancakeswap-1/s/pancakeswap/code/bug-bounty",
+        href: "https://app.gitbook.com/@simpleflow-1/s/simpleflow/code/bug-bounty",
       },
       {
         label: "Audits",
-        href: "https://docs.pancakeswap.finance/help/faq#is-pancakeswap-safe-has-pancakeswap-been-audited",
+        href: "https://docs.simpleflow.finance/help/faq#is-simpleflow-safe-has-simpleflow-been-audited",
       },
       {
         label: "Careers",
-        href: "https://docs.pancakeswap.finance/hiring/become-a-chef",
+        href: "https://docs.simpleflow.finance/hiring/become-a-chef",
       },
     ],
   },
@@ -80,7 +80,7 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/pancakeswap",
+    href: "https://twitter.com/simpleflow",
   },
   {
     label: "Telegram",
@@ -88,78 +88,78 @@ export const socials = [
     items: [
       {
         label: "English",
-        href: "https://t.me/pancakeswap",
+        href: "https://t.me/simpleflow",
       },
       {
         label: "Bahasa Indonesia",
-        href: "https://t.me/pancakeswapIndonesia",
+        href: "https://t.me/simpleflowIndonesia",
       },
       {
         label: "中文",
-        href: "https://t.me/pancakeswap_CN",
+        href: "https://t.me/simpleflow_CN",
       },
       {
         label: "Tiếng Việt",
-        href: "https://t.me/PancakeSwapVN",
+        href: "https://t.me/SimpleFlowVN",
       },
       {
         label: "русский",
-        href: "https://t.me/pancakeswap_ru",
+        href: "https://t.me/simpleflow_ru",
       },
       {
         label: "Português",
-        href: "https://t.me/pancakeswapPortuguese",
+        href: "https://t.me/simpleflowPortuguese",
       },
       {
         label: "Español",
-        href: "https://t.me/pancakeswapES",
+        href: "https://t.me/simpleflowES",
       },
       {
         label: "日本語",
-        href: "https://t.me/pancakeswapJP",
+        href: "https://t.me/simpleflowJP",
       },
       {
         label: "Filipino",
-        href: "https://t.me/pancakeswap_PH",
+        href: "https://t.me/simpleflow_PH",
       },
       {
         label: "हिन्दी",
-        href: "https://t.me/pancakeswap_INDIA",
+        href: "https://t.me/simpleflow_INDIA",
       },
       {
         label: "한국어",
-        href: "https://t.me/PancakeSwapSouthKorea",
+        href: "https://t.me/SimpleFlowSouthKorea",
       },
       {
         label: "Announcements",
-        href: "https://t.me/PancakeSwapAnn",
+        href: "https://t.me/SimpleFlowAnn",
       },
     ],
   },
   {
     label: "Reddit",
     icon: RedditIcon,
-    href: "https://reddit.com/r/pancakeswap",
+    href: "https://reddit.com/r/simpleflow",
   },
   {
     label: "Instagram",
     icon: InstagramIcon,
-    href: "https://instagram.com/pancakeswapfinance",
+    href: "https://instagram.com/simpleflowfinance",
   },
   {
     label: "Github",
     icon: GithubIcon,
-    href: "https://github.com/pancakeswap/",
+    href: "https://github.com/simpleflow/",
   },
   {
     label: "Discord",
     icon: DiscordIcon,
-    href: "https://discord.gg/pancakeswap",
+    href: "https://discord.gg/simpleflow",
   },
   {
     label: "Youtube",
     icon: YoutubeIcon,
-    href: "https://www.youtube.com/@pancakeswap_official",
+    href: "https://www.youtube.com/@simpleflow_official",
   },
 ];
 

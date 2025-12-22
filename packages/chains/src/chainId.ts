@@ -1,51 +1,16 @@
 export enum ChainId {
-  ETHEREUM = 1,
-  GOERLI = 5,
   BSC = 56,
   BSC_TESTNET = 97,
-  ZKSYNC_TESTNET = 280,
-  ZKSYNC = 324,
-  OPBNB_TESTNET = 5611,
-  OPBNB = 204,
-  ARBITRUM_ONE = 42161,
-  ARBITRUM_GOERLI = 421613,
-  ARBITRUM_SEPOLIA = 421614,
-  SCROLL_SEPOLIA = 534351,
-  LINEA = 59144,
-  LINEA_TESTNET = 59140,
-  BASE = 8453,
-  BASE_TESTNET = 84531,
-  BASE_SEPOLIA = 84532,
-  SEPOLIA = 11155111,
-  MONAD_MAINNET = 143,
-  MONAD_TESTNET = 10143,
   SIMPLECHAIN_TESTNET = 1914,
 }
 
 export enum NonEVMChainId {
-  SOLANA = 8000001001,
-  APTOS = 8000002000,
+  SOLANA = 900901,
+  APTOS = 999999,
 }
 
-export enum SunsetChainId {
-  POLYGON_ZKEVM = 1101,
-  POLYGON_ZKEVM_TESTNET = 1442,
-}
+export enum SunsetChainId {}
 
 export type UnifiedChainId = ChainId | NonEVMChainId
 
-export const testnetChainIds = [
-  ChainId.GOERLI,
-  ChainId.BSC_TESTNET,
-  ChainId.ZKSYNC_TESTNET,
-  ChainId.OPBNB_TESTNET,
-  ChainId.ARBITRUM_GOERLI,
-  ChainId.SCROLL_SEPOLIA,
-  ChainId.LINEA_TESTNET,
-  ChainId.BASE_TESTNET,
-  ChainId.SEPOLIA,
-  ChainId.ARBITRUM_SEPOLIA,
-  ChainId.BASE_SEPOLIA,
-  ChainId.MONAD_TESTNET,
-  ChainId.SIMPLECHAIN_TESTNET,
-]
+export const testnetChainIds = [ChainId.BSC_TESTNET, ChainId.SIMPLECHAIN_TESTNET]

@@ -79,23 +79,6 @@ pnpm build:blog
 
 </details>
 
-## `apps/games`
-
-<details>
-<summary>
-How to start
-</summary>
-
-```sh
-pnpm dev:games
-```
-
-```sh
-pnpm build:games
-```
-
-</details>
-
 ## Packages
 
 | Package                                    | Description                                                                                                 |

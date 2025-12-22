@@ -1,20 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 
-export const SUPPORTED_CHAIN_IDS = [
-  ChainId.BSC,
-  ChainId.BSC_TESTNET,
-  ChainId.ETHEREUM,
-  ChainId.ARBITRUM_ONE,
-  ChainId.ARBITRUM_GOERLI,
-  ChainId.ZKSYNC,
-  ChainId.ZKSYNC_TESTNET,
-  ChainId.BASE,
-  ChainId.LINEA_TESTNET,
-  ChainId.BASE_TESTNET,
-  ChainId.OPBNB,
-  ChainId.BASE,
-  ChainId.SIMPLECHAIN_TESTNET,
-] as const
+export const SUPPORTED_CHAIN_IDS = [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.SIMPLECHAIN_TESTNET] as const
 
 export type SupportedChainId = (typeof SUPPORTED_CHAIN_IDS)[number]
 

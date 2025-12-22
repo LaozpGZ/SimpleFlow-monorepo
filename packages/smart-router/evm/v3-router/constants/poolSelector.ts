@@ -29,22 +29,6 @@ export const INFINITY_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap =
     topNWithEachBaseToken: 1,
     topNWithBaseToken: 1,
   },
-  [ChainId.ETHEREUM]: {
-    topN: 1,
-    topNDirectSwaps: 1,
-    topNTokenInOut: 1,
-    topNSecondHop: 1,
-    topNWithEachBaseToken: 1,
-    topNWithBaseToken: 1,
-  },
-  [ChainId.GOERLI]: {
-    topN: 1,
-    topNDirectSwaps: 1,
-    topNTokenInOut: 1,
-    topNSecondHop: 1,
-    topNWithEachBaseToken: 1,
-    topNWithBaseToken: 1,
-  },
 }
 
 export const V3_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap = {
@@ -64,15 +48,7 @@ export const V3_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap = {
     topNWithEachBaseToken: 3,
     topNWithBaseToken: 4,
   },
-  [ChainId.ETHEREUM]: {
-    topN: 2,
-    topNDirectSwaps: 2,
-    topNTokenInOut: 2,
-    topNSecondHop: 1,
-    topNWithEachBaseToken: 3,
-    topNWithBaseToken: 4,
-  },
-  [ChainId.GOERLI]: {
+  [ChainId.SIMPLECHAIN_TESTNET]: {
     topN: 2,
     topNDirectSwaps: 2,
     topNTokenInOut: 2,
@@ -92,22 +68,6 @@ export const V2_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap = {
     topNWithBaseToken: 3,
   },
   [ChainId.BSC_TESTNET]: {
-    topN: 3,
-    topNDirectSwaps: 2,
-    topNTokenInOut: 2,
-    topNSecondHop: 1,
-    topNWithEachBaseToken: 3,
-    topNWithBaseToken: 3,
-  },
-  [ChainId.ETHEREUM]: {
-    topN: 3,
-    topNDirectSwaps: 2,
-    topNTokenInOut: 2,
-    topNSecondHop: 1,
-    topNWithEachBaseToken: 3,
-    topNWithBaseToken: 3,
-  },
-  [ChainId.GOERLI]: {
     topN: 3,
     topNDirectSwaps: 2,
     topNTokenInOut: 2,

@@ -90,7 +90,7 @@ export const ApproveModalContent: React.FC<ApproveModalContentProps> = ({
 }) => {
   const { t } = useTranslation();
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    <Text>{t("Pancakeswap AMM includes V3, V2 and stable swap.")}</Text>,
+    <Text>{t("SimpleFlow AMM includes V3, V2 and stable swap.")}</Text>,
     { placement: "top" }
   );
 
@@ -122,7 +122,7 @@ export const ApproveModalContent: React.FC<ApproveModalContentProps> = ({
                     <Text fontSize="14px">{t("Swapping thru:")}</Text>
                     {isX ? (
                       <Text ml="4px" fontSize="14px">
-                        PancakeSwap X
+                        SimpleFlow X
                       </Text>
                     ) : isBonus ? (
                       <Text ml="4px" fontSize="14px">
@@ -131,7 +131,7 @@ export const ApproveModalContent: React.FC<ApproveModalContentProps> = ({
                     ) : (
                       <>
                         <TooltipText ml="4px" fontSize="14px" color="textSubtle" ref={targetRef}>
-                          {t("Pancakeswap AMM")}
+                          {t("SimpleFlow AMM")}
                         </TooltipText>
                         {tooltipVisible && tooltip}
                       </>
@@ -196,7 +196,7 @@ export const ApproveCrossChainModalContent = ({ currency, chainName }: { currenc
         $color={theme.colors.primary60}
         onClick={() => {
           window.open(
-            "https://docs.pancakeswap.finance/~/changes/d1gFBwxReM0gH1aeMo0G/readme/help/what-is-an-approval-transaction",
+            "https://docs.simpleflow.finance/~/changes/d1gFBwxReM0gH1aeMo0G/readme/help/what-is-an-approval-transaction",
             "_blank"
           );
         }}

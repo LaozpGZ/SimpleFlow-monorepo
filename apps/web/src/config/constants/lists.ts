@@ -94,13 +94,5 @@ export const DEFAULT_ACTIVE_LIST_URLS: string[] = [
 
 export const MULTI_CHAIN_LIST_URLS: { [chainId: number]: string[] } = {
   [ChainId.BSC]: BSC_URLS,
-  [ChainId.ETHEREUM]: ETH_URLS,
-  [ChainId.ZKSYNC]: ZKSYNC_URLS,
-  [ChainId.ARBITRUM_ONE]: ARBITRUM_URLS,
-  [ChainId.LINEA]: LINEA_URLS,
-  [ChainId.BASE]: BASE_URLS,
-  [ChainId.OPBNB]: OPBNB_URLS,
-  [ChainId.MONAD_MAINNET]: MONAD_URLS,
-  [ChainId.MONAD_TESTNET]: MONAD_TESTNET_URLS,
   [ChainId.SIMPLECHAIN_TESTNET]: SIMPLECHAIN_TESTNET_URLS,
 }

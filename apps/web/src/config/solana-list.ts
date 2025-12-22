@@ -23,7 +23,7 @@ export interface SolanaTokenListConfig {
   parser: Parser
 }
 
-// Filter out PancakeSwap list since it's always enabled
+// Filter out SimpleFlow list since it's always enabled
 export const convertRawTokenInfoIntoSPLToken = (token: TokenInfo) => {
   return new SPLToken({
     address: token.address,
@@ -57,10 +57,10 @@ export const convertSPLTokenIntoRawTokenInfoUserAdded = (token: SPLToken): Token
 export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = {
   [TokenListKey.PANCAKESWAP]: {
     key: TokenListKey.PANCAKESWAP,
-    name: 'PancakeSwap',
-    logoURI: 'https://pancakeswap.finance/logo.png',
-    description: 'PancakeSwap Token List',
-    apiUrl: 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json',
+    name: 'SimpleFlow',
+    logoURI: 'https://simpleflow.finance/logo.png',
+    description: 'SimpleFlow Token List',
+    apiUrl: 'https://tokens.simpleflow.finance/simpleflow-solana-default.json',
     parser: (data: { tokens: TokenInfo[] }) => {
       return (data?.tokens ?? []).map(convertRawTokenInfoIntoSPLToken)
     }, // Default parser for standard token lists
@@ -95,5 +95,5 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
   },
 }
 
-// Filter out PancakeSwap list since it's always enabled
+// Filter out SimpleFlow list since it's always enabled
 export const SOLANA_LISTS = Object.values(SOLANA_LISTS_CONFIG)

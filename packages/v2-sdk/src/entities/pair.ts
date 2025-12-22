@@ -71,10 +71,7 @@ export const computePairAddress = ({
   const key = composeKey(token0, token1)
 
   if (PAIR_ADDRESS_CACHE?.[key] === undefined) {
-    const getCreate2Address_ =
-      token0.chainId === ChainId.ZKSYNC_TESTNET || token1.chainId === ChainId.ZKSYNC
-        ? getCreate2AddressZkSync
-        : getCreate2Address
+    const getCreate2Address_ = getCreate2Address
     PAIR_ADDRESS_CACHE = {
       ...PAIR_ADDRESS_CACHE,
       [key]: getCreate2Address_(

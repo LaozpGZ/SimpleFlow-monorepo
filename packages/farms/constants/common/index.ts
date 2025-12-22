@@ -1,17 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ERC20Token } from '@pancakeswap/sdk'
-import {
-  arbitrumTokens,
-  baseTokens,
-  bscTestnetTokens,
-  bscTokens,
-  ethereumTokens,
-  lineaTokens,
-  monadTokens,
-  opBnbTokens,
-  zkSyncTestnetTokens,
-  zksyncTokens,
-} from '@pancakeswap/tokens'
+import { bscTestnetTokens, bscTokens } from '@pancakeswap/tokens'
 import type { FarmV3SupportedChainId } from '../../src'
 import type { CommonPrice } from '../../src/fetchFarmsV3'
 
@@ -22,9 +11,6 @@ export type PriceHelper = {
 }
 
 export const priceHelperTokens = {
-  [ChainId.ETHEREUM]: {
-    list: [ethereumTokens.weth, ethereumTokens.usdc, ethereumTokens.usdt],
-  },
   [ChainId.BSC]: {
     list: [
       bscTokens.wbnb,
@@ -36,37 +22,10 @@ export const priceHelperTokens = {
       bscTokens.boxy,
     ],
   },
-  [ChainId.ZKSYNC]: {
-    list: [zksyncTokens.weth, zksyncTokens.usdc, zksyncTokens.usdt],
-  },
-  [ChainId.ARBITRUM_ONE]: {
-    list: [
-      arbitrumTokens.weth,
-      arbitrumTokens.usdc,
-      arbitrumTokens.usdt,
-      arbitrumTokens.arb,
-      arbitrumTokens.usdplus,
-      arbitrumTokens.solvBTC,
-      arbitrumTokens.solvBTCena,
-    ],
-  },
-  [ChainId.LINEA]: {
-    list: [lineaTokens.weth, lineaTokens.usdc, lineaTokens.usdt, lineaTokens.wbtc, lineaTokens.dai],
-  },
-  [ChainId.BASE]: {
-    list: [baseTokens.weth, baseTokens.usdbc, baseTokens.dai, baseTokens.cbETH, baseTokens.usdc],
-  },
-  [ChainId.OPBNB]: {
-    list: [opBnbTokens.wbnb, opBnbTokens.usdt],
-  },
-  [ChainId.MONAD_MAINNET]: {
-    list: [monadTokens.wmon, monadTokens.usdc, monadTokens.usdt, monadTokens.busd],
-  },
 } satisfies Record<number, PriceHelper>
 
 // for testing purposes
 export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> = {
-  [ChainId.ETHEREUM]: {},
   [ChainId.BSC]: {},
   [ChainId.BSC_TESTNET]: {
     [bscTestnetTokens.mockA.address]: '10',
@@ -74,15 +33,4 @@ export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> =
     [bscTestnetTokens.busd.address]: '1',
     [bscTestnetTokens.usdc.address]: '1',
   },
-  [ChainId.ZKSYNC_TESTNET]: {
-    [zkSyncTestnetTokens.mock.address]: '10',
-  },
-  [ChainId.ZKSYNC]: {},
-  [ChainId.ARBITRUM_ONE]: {},
-  [ChainId.LINEA]: {},
-  [ChainId.BASE]: {},
-  [ChainId.OPBNB_TESTNET]: {},
-  [ChainId.OPBNB]: {},
-  [ChainId.MONAD_MAINNET]: {},
-  [ChainId.MONAD_TESTNET]: {},
 }

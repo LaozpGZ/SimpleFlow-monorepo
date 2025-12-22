@@ -44,7 +44,7 @@ export const V2_SUBGRAPH_URLS = {
   [ChainId.OPBNB]: `${THE_GRAPH_PROXY_API}/exchange-v2-opbnb`,
 }
 
-export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.pancakeswap.finance'
+export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.simpleflow.finance'
 
 export const V3_SUBGRAPH_URLS = {
   ...V3_SUBGRAPHS,

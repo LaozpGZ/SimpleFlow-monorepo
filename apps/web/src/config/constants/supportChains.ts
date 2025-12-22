@@ -3,17 +3,10 @@ import { supportedChainId } from '@pancakeswap/farms'
 
 export const SUPPORT_ONLY_BSC = [ChainId.BSC]
 export const SUPPORT_FARMS = [...supportedChainId, NonEVMChainId.SOLANA]
-export const LIQUID_STAKING_SUPPORTED_CHAINS = [
-  ChainId.BSC,
-  ChainId.ETHEREUM,
-  ChainId.BSC_TESTNET,
-  ChainId.ARBITRUM_GOERLI,
-  ChainId.MONAD_MAINNET,
-  ChainId.MONAD_TESTNET,
-]
+export const LIQUID_STAKING_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
 
-export const V2_MIGRATE_PAGE_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.ETHEREUM, ChainId.BSC_TESTNET, ChainId.GOERLI]
-export const V3_MIGRATION_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.ETHEREUM]
+export const V2_MIGRATE_PAGE_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
+export const V3_MIGRATION_SUPPORTED_CHAINS = [ChainId.BSC]
 export const V2_BCAKE_MIGRATION_SUPPORTED_CHAINS = [ChainId.BSC]
 
 export const SUPPORT_CAKE_STAKING = [ChainId.BSC, ChainId.BSC_TESTNET]
@@ -22,4 +15,4 @@ export const SUPPORT_CAKE_STAKING = [ChainId.BSC, ChainId.BSC_TESTNET]
 export const LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
 
 // Unsupported chains for price charts
-export const SWAP_CHART_UNSUPPORTED_CHAINS = [ChainId.MONAD_MAINNET, ChainId.MONAD_TESTNET, ChainId.SIMPLECHAIN_TESTNET]
+export const SWAP_CHART_UNSUPPORTED_CHAINS = [ChainId.SIMPLECHAIN_TESTNET]

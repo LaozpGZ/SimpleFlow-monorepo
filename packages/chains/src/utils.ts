@@ -8,14 +8,13 @@ import {
 } from './chainNames'
 
 const MAX_EVM_CHAIN_ID = Math.max(...Object.values(ChainId).filter((v) => typeof v === 'number'))
-const NON_EVM_MIN = Math.min(...Object.values(NonEVMChainId).filter((v) => typeof v === 'number'))
 
 export function getChainName(chainId: UnifiedChainId) {
-  return chainNames[chainId]
+  return chainNames[chainId as ChainId]
 }
 
 export function getChainNameInKebabCase(chainId: UnifiedChainId) {
-  return chainNamesInKebabCase[chainId]
+  return chainNamesInKebabCase[chainId as ChainId]
 }
 
 export function getMainnetChainNameInKebabCase(chainId: keyof typeof mainnetChainNamesInKebabCase) {
@@ -37,23 +36,15 @@ export function isTestnetChainId(chainId: UnifiedChainId) {
 
 export function isEvm(chainId?: number) {
   if (!chainId) return false
-  return chainId <= MAX_EVM_CHAIN_ID && chainId < NON_EVM_MIN
+  return chainId <= MAX_EVM_CHAIN_ID
+}
+
+export function isChainSupported(chainId?: UnifiedChainId) {
+  if (!chainId) return false
+  return Object.values(ChainId).includes(chainId as ChainId)
 }
 
 export function isSolana(chainId?: UnifiedChainId) {
   if (!chainId) return false
   return chainId === NonEVMChainId.SOLANA
-}
-
-export function isAptos(chainId?: UnifiedChainId) {
-  if (!chainId) return false
-  return chainId === NonEVMChainId.APTOS
-}
-
-export function isChainSupported(chainId?: UnifiedChainId) {
-  if (!chainId) return false
-  return (
-    Object.values(ChainId).includes(chainId as ChainId) ||
-    Object.values(NonEVMChainId).includes(chainId as NonEVMChainId)
-  )
 }

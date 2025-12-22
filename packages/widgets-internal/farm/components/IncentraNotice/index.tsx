@@ -28,7 +28,7 @@ export const IncentraNoticeContent: React.FC<IncentraNoticeContentProps> = ({
           {t("Stake your LP token in the Farm and accrue both Incentra and Farm rewards.")}
           <br />
           <br />
-          {t("Claim your Farm rewards on PancakeSwap and your Incentra rewards on")}
+          {t("Claim your Farm rewards on SimpleFlow and your Incentra rewards on")}
           <InlineLink color={linkColor} external display="inline" href={incentraUserLink}>
             {t("Incentra's website")}
           </InlineLink>

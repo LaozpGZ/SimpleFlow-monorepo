@@ -4,7 +4,7 @@ import { ASSET_CDN } from './endpoints'
 import { PageMeta } from './types'
 
 export const DEFAULT_META: PageMeta = {
-  title: 'PancakeSwap',
+  title: 'SimpleFlow',
   description: 'Trade, earn, and own crypto on the all-in-one multichain DEX',
   image: `${ASSET_CDN}/web/og/hero.jpg`,
 }
@@ -47,40 +47,40 @@ const getPathList = memoize((t: ContextApi['t']): PathList => {
       '/info': {
         basePath: true,
         title: `${t('Overview')} - ${t('Info.section_title')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for SimpleFlow exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/info/pairs': {
         title: `${t('Pairs')} - ${t('Info.section_title')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for SimpleFlow exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/info/tokens': {
         title: `${t('Tokens')} - ${t('Info.section_title')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for SimpleFlow exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/info/v3/pairs': {
         title: `${t('Pairs')} - ${t('Info.section_title')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for SimpleFlow exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/info/v3/tokens': {
         title: `${t('Tokens')} - ${t('Info.section_title')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for SimpleFlow exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/liquidity/pool': {
         basePath: true,
         title: `${t('Pool Detail')}`,
-        description: 'View statistics for Pancakeswap pool.',
+        description: 'View statistics for SimpleFlow pool.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/nfts': { title: t('NFT Marketplace'), image: `${ASSET_CDN}/web/og/nft.jpg` },
       '/nfts/collections': { basePath: true, title: t('Collections'), image: `${ASSET_CDN}/web/og/nft.jpg` },
       '/nfts/activity': { title: t('Activity'), image: `${ASSET_CDN}/web/og/nft.jpg` },
       '/profile': { basePath: true, title: t('Profile') },
-      '/pancake-squad': { basePath: true, title: t('Pancake Squad') },
+      '/pancake-squad': { basePath: true, title: t('Simple Squad') },
       '/cake-staking': { basePath: true, title: t('CAKE Staking') },
       '/buy-crypto': { basePath: true, title: t('Buy Crypto') },
       '/burn-dashboard': {
@@ -89,7 +89,7 @@ const getPathList = memoize((t: ContextApi['t']): PathList => {
         image: `${ASSET_CDN}/web/og/burn-dashboard.png`,
       },
     },
-    defaultTitleSuffix: t('PancakeSwap'),
+    defaultTitleSuffix: t('SimpleFlow'),
   }
 })
 
