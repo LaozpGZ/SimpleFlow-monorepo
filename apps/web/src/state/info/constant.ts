@@ -19,6 +19,7 @@ export type MultiChainName =
   | 'OPBNB'
   | 'SOLANA'
   | 'MONAD'
+  | 'LINEA_TESTNET'
 export type MultiChainNameExtend = MultiChainName | 'BSC_TESTNET' | 'ZKSYNC_TESTNET'
 
 export const multiChainName: Record<number | string, MultiChainNameExtend> = {
@@ -26,6 +27,7 @@ export const multiChainName: Record<number | string, MultiChainNameExtend> = {
   [ChainId.ETHEREUM]: 'ETH',
   [ChainId.BSC_TESTNET]: 'BSC_TESTNET',
   [ChainId.ZKSYNC]: 'ZKSYNC',
+  [ChainId.LINEA_TESTNET]: 'LINEA_TESTNET',
   [ChainId.LINEA]: 'LINEA',
   [ChainId.BASE]: 'BASE',
   [ChainId.OPBNB]: 'OPBNB',

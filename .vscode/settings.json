@@ -25,6 +25,7 @@
   "cSpell.words": [
     "Aptos",
     "ARBITRUM",
+    "SIMPLECHAIN",
     "awgmi",
     "bignumber",
     "bips",
@@ -61,6 +62,8 @@
     "wagmi",
     "WBETH",
     "wbnb",
+    "WSOL",
+    "WSRW",
     "ZKEVM",
     "ZKSYNC"
   ]

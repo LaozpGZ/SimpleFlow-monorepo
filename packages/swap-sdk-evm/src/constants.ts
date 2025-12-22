@@ -15,6 +15,22 @@ export const WETH9 = {
     'Wrapped Ether',
     'https://weth.io',
   ),
+  [ChainId.SIMPLECHAIN]: new ERC20Token(
+    ChainId.SIMPLECHAIN,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
+    18,
+    'WSRW',
+    'Wrapped SRW',
+    'https://www.simplechain.com/',
+  ),
+  [ChainId.SIMPLECHAIN_TESTNET]: new ERC20Token(
+    ChainId.SIMPLECHAIN_TESTNET,
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
+    18,
+    'WSRW',
+    'Wrapped SRW',
+    'https://whttps://www.simplechain.com',
+  ),
   [ChainId.GOERLI]: new ERC20Token(
     ChainId.GOERLI,
     '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
@@ -213,6 +229,8 @@ export const WBNB = {
 }
 
 export const WNATIVE = {
+  [ChainId.SIMPLECHAIN]: WETH9[ChainId.SIMPLECHAIN],
+  [ChainId.SIMPLECHAIN_TESTNET]: WETH9[ChainId.SIMPLECHAIN_TESTNET],
   [ChainId.ETHEREUM]: WETH9[ChainId.ETHEREUM],
   [ChainId.GOERLI]: WETH9[ChainId.GOERLI],
   [ChainId.BSC]: WBNB[ChainId.BSC],
@@ -243,7 +261,19 @@ const BNB = {
   decimals: 18,
 } as const
 
+const SRW = {
+  name: 'SimpleChain Native Token',
+  symbol: 'SRW',
+  decimals: 18,
+} as const
+
 export const NATIVE = {
+  [ChainId.SIMPLECHAIN]: SRW,
+  [ChainId.SIMPLECHAIN_TESTNET]: {
+    name: 'SimpleChain Testnet Token',
+    symbol: 'SRW',
+    decimals: 18,
+  },
   [ChainId.ETHEREUM]: ETHER,
   [ChainId.GOERLI]: { name: 'Goerli Ether', symbol: 'GOR', decimals: 18 },
   [ChainId.BSC]: BNB,

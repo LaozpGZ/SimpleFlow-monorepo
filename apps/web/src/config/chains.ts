@@ -20,6 +20,8 @@ import {
   scrollSepolia,
   sepolia,
   zksync,
+  simplechain,
+  simplechainTestnet,
 } from 'wagmi/chains'
 
 export const CHAIN_QUERY_NAME = chainNames
@@ -100,6 +102,8 @@ export const L2_CHAIN_IDS: ChainId[] = [
   ChainId.ARBITRUM_SEPOLIA,
   ChainId.BASE_SEPOLIA,
   ChainId.MONAD_MAINNET,
+  ChainId.SIMPLECHAIN,
+  ChainId.SIMPLECHAIN_TESTNET,
 ]
 
 export const CHAINS: [Chain, ...Chain[]] = [
@@ -122,6 +126,8 @@ export const CHAINS: [Chain, ...Chain[]] = [
   scrollSepolia,
   monad,
   monadTestnet,
+  simplechain,
+  simplechainTestnet,
 ]
 
 // Minimal Solana chain descriptor for explorer and non‑EVM utilities

@@ -13,6 +13,8 @@ export const SUPPORTED_CHAIN_IDS = [
   ChainId.BASE_TESTNET,
   ChainId.OPBNB,
   ChainId.BASE,
+  ChainId.SIMPLECHAIN,
+  ChainId.SIMPLECHAIN_TESTNET,
 ] as const
 
 export type SupportedChainId = (typeof SUPPORTED_CHAIN_IDS)[number]

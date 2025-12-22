@@ -18,6 +18,15 @@ import {
   zksyncSepoliaTestnet,
 } from 'wagmi/chains'
 
+const SIMPLECHAIN_RPC_URLS = ['https://rpc-testnet.simplechain.io', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+  Boolean,
+) as [string, ...string[]]
+
+const SIMPLECHAIN_TESTNET_RPC_URLS = [
+  'https://rpc-testnet.simplechain.io',
+  process.env.NEXT_PUBLIC_SIMPLECHAIN_TESTNET_RPC,
+].filter(Boolean) as [string, ...string[]]
+
 const MONAD_RPC_URLS = [
   process.env.NEXT_PUBLIC_MONAD_RPC,
   process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC,
@@ -92,6 +101,8 @@ export const SERVER_NODES = {
     'https://testnet-rpc2.monad.xyz/52227f026fa8fac9e2014c58fbf5643369b3bfc6',
     ...monadTestnet.rpcUrls.default.http,
   ],
+  [ChainId.SIMPLECHAIN]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.SIMPLECHAIN_TESTNET]: SIMPLECHAIN_TESTNET_RPC_URLS,
 } satisfies Partial<Record<ChainId, readonly string[]>>
 
 export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
@@ -168,4 +179,6 @@ export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
     'https://testnet-rpc2.monad.xyz/52227f026fa8fac9e2014c58fbf5643369b3bfc6',
     ...monadTestnet.rpcUrls.default.http,
   ],
+  [ChainId.SIMPLECHAIN]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.SIMPLECHAIN_TESTNET]: SIMPLECHAIN_TESTNET_RPC_URLS,
 } satisfies Partial<Record<ChainId, readonly string[]>>

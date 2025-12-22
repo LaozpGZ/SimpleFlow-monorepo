@@ -2,6 +2,59 @@ import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { ERC20Token } from '@pancakeswap/sdk'
 import { solanaTokens } from './solana'
 
+export const USDT_SIMPLECHAIN = new ERC20Token(
+  ChainId.SIMPLECHAIN,
+  '0x3577E5E0E3A47d9a552426638977ee3EddD4552e',
+  6,
+  'USDT',
+  'Tether USD',
+  'https://tether.to',
+)
+
+export const USDT_SIMPLECHAIN_TESTNET = new ERC20Token(
+  ChainId.SIMPLECHAIN_TESTNET,
+  '0x3577E5E0E3A47d9a552426638977ee3EddD4552e',
+  6,
+  'USDT',
+  'Tether USD',
+  'https://tether.to',
+)
+
+export const USDC_SIMPLECHAIN = new ERC20Token(
+  ChainId.SIMPLECHAIN,
+  '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769',
+  6,
+  'USDC',
+  'USD Coin',
+  'https://www.circle.com/usdc',
+)
+export const USDC_SIMPLECHAIN_TESTNET = new ERC20Token(
+  ChainId.SIMPLECHAIN_TESTNET,
+  '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769',
+  6,
+  'USDC',
+  'USD Coin',
+  'https://www.circle.com/usdc',
+)
+
+export const SDX = new ERC20Token(
+  ChainId.SIMPLECHAIN,
+  '0x961245FCe30FC5a3C7F4ee8AFa05f85cF5AB8C75',
+  18,
+  'SDX',
+  'SimpleDex Token',
+  'https://www.simpleflow.finance/',
+)
+
+export const SDX_SIMPLECHAIN_TESTNET = new ERC20Token(
+  ChainId.SIMPLECHAIN_TESTNET,
+  '0x961245FCe30FC5a3C7F4ee8AFa05f85cF5AB8C75',
+  18,
+  'SDX_TESTNET',
+  'SimpleDex Token Testnet',
+  'https://www.simpleflow.finance/',
+)
+
 export const CAKE_MAINNET = new ERC20Token(
   ChainId.BSC,
   '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
@@ -384,6 +437,8 @@ export const USDC = {
     'USD Coin',
     'https://www.centre.io/usdc',
   ),
+  [ChainId.SIMPLECHAIN]: USDC_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: USDC_SIMPLECHAIN_TESTNET,
   [NonEVMChainId.SOLANA]: solanaTokens.usdc,
 }
 
@@ -454,6 +509,8 @@ export const USDT = {
     'Tether USD',
     'https://tether.to/',
   ),
+  [ChainId.SIMPLECHAIN]: USDT_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: USDT_SIMPLECHAIN_TESTNET,
   [NonEVMChainId.SOLANA]: solanaTokens.usdt,
 }
 
@@ -571,4 +628,6 @@ export const STABLE_COIN = {
   [ChainId.BASE_SEPOLIA]: USDC[ChainId.BASE_SEPOLIA],
   [ChainId.MONAD_MAINNET]: USDC[ChainId.MONAD_MAINNET],
   [ChainId.MONAD_TESTNET]: USDC[ChainId.MONAD_TESTNET],
+  [ChainId.SIMPLECHAIN]: USDT_SIMPLECHAIN,
+  [ChainId.SIMPLECHAIN_TESTNET]: USDT_SIMPLECHAIN_TESTNET,
 } satisfies Record<ChainId, ERC20Token>
