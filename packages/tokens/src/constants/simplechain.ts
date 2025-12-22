@@ -20,7 +20,7 @@ export const WBTC = new ERC20Token(
   'https://bitcoin.org/',
 )
 
-export const DAI = new ERC20Token(
+export const DAI_SIMPLECHAIN = new ERC20Token(
   ChainId.SIMPLECHAIN,
   '0xA16171a7dadfb86afC934eaF16daCD86cD435120',
   18,
@@ -29,7 +29,7 @@ export const DAI = new ERC20Token(
   'https://makerdao.com',
 )
 
-export const WSOL = new ERC20Token(
+export const WSOL_SIMPLECHAIN = new ERC20Token(
   ChainId.SIMPLECHAIN,
   '0xbB0543b26A291648D67B91a8A0f150f6122FEd03',
   18,
@@ -45,6 +45,9 @@ export const simplechainTokens = {
   sdx: SDX,
   wsrw: WSRW,
   wbtc: WBTC,
-  dai: DAI,
-  wsol: WSOL,
+  dai: DAI_SIMPLECHAIN,
+  wsol: WSOL_SIMPLECHAIN,
 }
+
+// Testnet uses the same tokens as mainnet for now
+export const simplechainTestnetTokens = simplechainTokens

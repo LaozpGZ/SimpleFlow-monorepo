@@ -51,4 +51,6 @@ export const BATCH_MULTICALL_CONFIGS: ChainMap<BatchMulticallConfigs> = {
   [ChainId.BASE_SEPOLIA]: DEFAULT,
   [ChainId.MONAD_MAINNET]: DEFAULT,
   [ChainId.MONAD_TESTNET]: DEFAULT,
+  [ChainId.SIMPLECHAIN]: DEFAULT,
+  [ChainId.SIMPLECHAIN_TESTNET]: DEFAULT,
 }

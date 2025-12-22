@@ -19,6 +19,8 @@ export const ICAKE = {
   [ChainId.LINEA_TESTNET]: '0x',
   [ChainId.OPBNB]: '0x',
   [ChainId.BASE]: '0x',
+  [ChainId.SIMPLECHAIN]: '0x',
+  [ChainId.SIMPLECHAIN_TESTNET]: '0x',
 } as const satisfies ContractAddresses<SupportedChainId>
 
 export const CAKE_VAULT = {
@@ -33,6 +35,8 @@ export const CAKE_VAULT = {
   [ChainId.LINEA_TESTNET]: '0x',
   [ChainId.OPBNB]: '0x',
   [ChainId.BASE]: '0x',
+  [ChainId.SIMPLECHAIN]: '0x',
+  [ChainId.SIMPLECHAIN_TESTNET]: '0x',
 } as const satisfies ContractAddresses<SupportedChainId>
 
 export const CAKE_FLEXIBLE_SIDE_VAULT = {
@@ -47,4 +51,6 @@ export const CAKE_FLEXIBLE_SIDE_VAULT = {
   [ChainId.LINEA_TESTNET]: '0x',
   [ChainId.OPBNB]: '0x',
   [ChainId.BASE]: '0x',
+  [ChainId.SIMPLECHAIN]: '0x',
+  [ChainId.SIMPLECHAIN_TESTNET]: '0x',
 } as const satisfies ContractAddresses<SupportedChainId>

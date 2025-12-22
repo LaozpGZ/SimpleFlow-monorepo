@@ -20,8 +20,6 @@ import {
   scrollSepolia,
   sepolia,
   zksync,
-  simplechain,
-  simplechainTestnet,
 } from 'wagmi/chains'
 
 export const CHAIN_QUERY_NAME = chainNames
@@ -82,6 +80,59 @@ const monad: Chain = {
     },
   },
   testnet: false,
+}
+
+const SIMPLECHAIN_RPC_URLS = ['https://rpc-testnet.simplechain.io', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+  Boolean,
+) as [string, ...string[]]
+
+const simplechain: Chain = {
+  id: ChainId.SIMPLECHAIN,
+  name: 'SimpleChain',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: SIMPLECHAIN_RPC_URLS },
+    public: { http: SIMPLECHAIN_RPC_URLS },
+  },
+  blockExplorers: {
+    default: {
+      name: 'SimpleChain Explorer',
+      url: 'https://explorer.simplechain.io',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: false,
+}
+
+const SIMPLECHAIN_TESTNET_RPC_URLS = [
+  'https://rpc-testnet.simplechain.io',
+  process.env.NEXT_PUBLIC_SIMPLECHAIN_TESTNET_RPC,
+].filter(Boolean) as [string, ...string[]]
+
+const simplechainTestnet: Chain = {
+  id: ChainId.SIMPLECHAIN_TESTNET,
+  name: 'SimpleChain Testnet',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
+    public: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
+  },
+  blockExplorers: {
+    default: {
+      name: 'SimpleChain Explorer',
+      url: 'https://testnet-explorer.simplechain.io',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: true,
 }
 
 /**

@@ -19,6 +19,8 @@ import {
   opBnbTokens,
   scrollSepoliaTokens,
   sepoliaTokens,
+  simplechainTokens,
+  simplechainTestnetTokens,
   zkSyncTestnetTokens,
   zksyncTokens,
 } from '@pancakeswap/tokens'
@@ -44,6 +46,8 @@ export const usdGasTokensByChain = {
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc],
   [ChainId.MONAD_MAINNET]: [monadTokens.usdc],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.usdc],
+  [ChainId.SIMPLECHAIN]: [simplechainTokens.usdt],
+  [ChainId.SIMPLECHAIN_TESTNET]: [simplechainTestnetTokens.usdt],
 } satisfies Record<ChainId, Token[]>
 
 export * from './stableSwap'
