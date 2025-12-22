@@ -99,4 +99,5 @@ export const MULTI_CHAIN_LIST_URLS: { [chainId: number]: string[] } = {
   [ChainId.OPBNB]: OPBNB_URLS,
   [ChainId.MONAD_MAINNET]: MONAD_URLS,
   [ChainId.MONAD_TESTNET]: MONAD_TESTNET_URLS,
+  [ChainId.SIMPLECHAIN_TESTNET]: [], // 使用本地代币配置，无远程 token list
 }

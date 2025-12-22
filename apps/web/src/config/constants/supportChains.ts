@@ -22,4 +22,9 @@ export const SUPPORT_CAKE_STAKING = [ChainId.BSC, ChainId.BSC_TESTNET]
 export const LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
 
 // Unsupported chains for price charts
-export const SWAP_CHART_UNSUPPORTED_CHAINS = [ChainId.MONAD_MAINNET, ChainId.MONAD_TESTNET]
+export const SWAP_CHART_UNSUPPORTED_CHAINS = [
+  ChainId.MONAD_MAINNET,
+  ChainId.MONAD_TESTNET,
+  ChainId.SIMPLECHAIN_MAINNET,
+  ChainId.SIMPLECHAIN_TESTNET,
+]

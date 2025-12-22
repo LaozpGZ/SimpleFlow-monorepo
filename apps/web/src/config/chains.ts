@@ -82,7 +82,7 @@ const monad: Chain = {
   testnet: false,
 }
 
-const SIMPLECHAIN_RPC_URLS = ['https://rpc-testnet.simplechain.io', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+const SIMPLECHAIN_RPC_URLS = ['https://testnet-rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
   Boolean,
 ) as [string, ...string[]]
 
@@ -97,7 +97,7 @@ const simplechain: Chain = {
   blockExplorers: {
     default: {
       name: 'SimpleChain Explorer',
-      url: 'https://explorer.simplechain.io',
+      url: 'https://explorer.simplechain.com',
     },
   },
   contracts: {
@@ -109,7 +109,7 @@ const simplechain: Chain = {
 }
 
 const SIMPLECHAIN_TESTNET_RPC_URLS = [
-  'https://rpc-testnet.simplechain.io',
+  'https://testnet-rpc.simplechain.com',
   process.env.NEXT_PUBLIC_SIMPLECHAIN_TESTNET_RPC,
 ].filter(Boolean) as [string, ...string[]]
 
@@ -124,7 +124,7 @@ const simplechainTestnet: Chain = {
   blockExplorers: {
     default: {
       name: 'SimpleChain Explorer',
-      url: 'https://testnet-explorer.simplechain.io',
+      url: 'https://testnet-explorer.simplechain.com',
     },
   },
   contracts: {

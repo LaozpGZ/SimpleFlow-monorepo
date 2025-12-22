@@ -545,6 +545,38 @@
       "chainId": 204,
       "decimals": 18,
       "logoURI": "https://tokens.pancakeswap.finance/images/symbol/cake.png"
+    },
+    {
+      "name": "Wrapped SRW",
+      "symbol": "WSRW",
+      "address": "0x22608aC253B934D5078cB0d12f7F7e377b51798b",
+      "chainId": 1914,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/symbol/weth.png"
+    },
+    {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "address": "0x3577E5E0E3A47d9a552426638977ee3EddD4552e",
+      "chainId": 1914,
+      "decimals": 6,
+      "logoURI": "https://tokens.pancakeswap.finance/images/symbol/usdt.png"
+    },
+    {
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "address": "0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769",
+      "chainId": 1914,
+      "decimals": 6,
+      "logoURI": "https://tokens.pancakeswap.finance/images/symbol/usdc.png"
+    },
+    {
+      "name": "SimpleDex Token",
+      "symbol": "SDX",
+      "address": "0x961245FCe30FC5a3C7F4ee8AFa05f85cF5AB8C75",
+      "chainId": 1914,
+      "decimals": 18,
+      "logoURI": "https://tokens.pancakeswap.finance/images/symbol/cake.png"
     }
   ]
 }

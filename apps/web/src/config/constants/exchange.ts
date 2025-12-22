@@ -18,6 +18,8 @@ import {
   opBnbTokens,
   scrollSepoliaTokens,
   sepoliaTokens,
+  simplechainTokens,
+  simplechainTestnetTokens,
   solanaTokens,
   USDC,
   USDT,
@@ -58,6 +60,8 @@ export const CHAIN_REFRESH_TIME = {
   [ChainId.ARBITRUM_SEPOLIA]: 6_000,
   [ChainId.MONAD_MAINNET]: 6_000,
   [ChainId.MONAD_TESTNET]: 6_000,
+  [ChainId.SIMPLECHAIN]: 6_000,
+  [ChainId.SIMPLECHAIN_TESTNET]: 6_000,
 } as const satisfies Record<ChainId, number>
 
 // used for display in the default list when adding liquidity
@@ -87,6 +91,12 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.MONAD_MAINNET]: [monadTokens.wmon, monadTokens.usdc, monadTokens.usdt0, monadTokens.ausd],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.wmon, monadTestnetTokens.usdc, monadTestnetTokens.usdt],
+  [ChainId.SIMPLECHAIN]: [simplechainTokens.wsrw, simplechainTokens.usdc, simplechainTokens.usdt],
+  [ChainId.SIMPLECHAIN_TESTNET]: [
+    simplechainTestnetTokens.wsrw,
+    simplechainTestnetTokens.usdc,
+    simplechainTestnetTokens.usdt,
+  ],
   [NonEVMChainId.SOLANA]: [solanaTokens.usdc, solanaTokens.usdt],
   [NonEVMChainId.APTOS]: [],
 }
@@ -113,6 +123,12 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.MONAD_MAINNET]: [monadTokens.usdc, monadTokens.usdt, monadTokens.ausd, monadTokens.busd, monadTokens.wmon],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.usdc, monadTestnetTokens.busd],
+  [ChainId.SIMPLECHAIN]: [simplechainTokens.wsrw, simplechainTokens.usdc, simplechainTokens.usdt],
+  [ChainId.SIMPLECHAIN_TESTNET]: [
+    simplechainTestnetTokens.wsrw,
+    simplechainTestnetTokens.usdc,
+    simplechainTestnetTokens.usdt,
+  ],
   [NonEVMChainId.SOLANA]: [solanaTokens.usdc, solanaTokens.usdt],
   [NonEVMChainId.APTOS]: [],
 }

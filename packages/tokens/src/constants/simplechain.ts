@@ -2,7 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { ERC20Token, WETH9 } from '@pancakeswap/sdk'
 import { SDX, USDC, USDT } from './common'
 
-export const WSRW = new ERC20Token(
+export const WSRW_SIMPLECHAIN = new ERC20Token(
   ChainId.SIMPLECHAIN,
   '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
   18,
@@ -11,9 +11,9 @@ export const WSRW = new ERC20Token(
   '',
 )
 
-export const WBTC = new ERC20Token(
+export const WBTC_SIMPLECHAIN = new ERC20Token(
   ChainId.SIMPLECHAIN,
-  '0x3aAB2285ddcDdaD8edf438C1bAB47e1a9D05a9b4',
+  '0x770556F853a17893b1187A9754F17c6f57776b7c',
   8,
   'WBTC',
   'Wrapped BTC',
@@ -43,11 +43,8 @@ export const simplechainTokens = {
   usdc: USDC[ChainId.SIMPLECHAIN],
   usdt: USDT[ChainId.SIMPLECHAIN],
   sdx: SDX,
-  wsrw: WSRW,
-  wbtc: WBTC,
+  wsrw: WSRW_SIMPLECHAIN,
+  wbtc: WBTC_SIMPLECHAIN,
   dai: DAI_SIMPLECHAIN,
   wsol: WSOL_SIMPLECHAIN,
 }
-
-// Testnet uses the same tokens as mainnet for now
-export const simplechainTestnetTokens = simplechainTokens

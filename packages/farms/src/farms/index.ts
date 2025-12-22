@@ -4,6 +4,7 @@ import { UniversalFarmConfig } from '../types'
 import { getFarmConfigKey } from '../utils'
 import { bscTestnetFarmConfig } from './bscTestnet'
 import { monadFarmConfig, monadTestnetFarmConfig } from './monad'
+import { simplechainFarmConfig, simplechainTestnetFarmConfig } from './simplechain'
 import { zkSyncTestnetFarmConfig } from './zkSyncTestnet'
 
 const chainIds: ChainId[] = [
@@ -15,6 +16,7 @@ const chainIds: ChainId[] = [
   ChainId.BASE,
   ChainId.OPBNB,
   ChainId.MONAD_MAINNET,
+  ChainId.SIMPLECHAIN,
 ]
 
 export const fetchAllUniversalFarms = async (): Promise<UniversalFarmConfig[]> => {
@@ -53,4 +55,5 @@ export const UNIVERSAL_FARMS_WITH_TESTNET: UniversalFarmConfig[] = [
   ...bscTestnetFarmConfig,
   ...zkSyncTestnetFarmConfig,
   ...monadTestnetFarmConfig,
+  ...simplechainTestnetFarmConfig,
 ]

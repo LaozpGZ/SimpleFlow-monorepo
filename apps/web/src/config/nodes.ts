@@ -18,12 +18,12 @@ import {
   zksyncSepoliaTestnet,
 } from 'wagmi/chains'
 
-const SIMPLECHAIN_RPC_URLS = ['https://rpc-testnet.simplechain.io', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+const SIMPLECHAIN_RPC_URLS = ['https://testnet-rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
   Boolean,
 ) as [string, ...string[]]
 
 const SIMPLECHAIN_TESTNET_RPC_URLS = [
-  'https://rpc-testnet.simplechain.io',
+  'https://testnet-rpc.simplechain.com',
   process.env.NEXT_PUBLIC_SIMPLECHAIN_TESTNET_RPC,
 ].filter(Boolean) as [string, ...string[]]
 
