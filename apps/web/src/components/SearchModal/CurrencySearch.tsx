@@ -153,6 +153,26 @@ function CurrencySearch({
   // Use Solana token list if Solana is selected
   const isSolana = selectedChainId === NonEVMChainId.SOLANA
   const allTokens = useAllTokens(selectedChainId)
+  // #region agent log
+  fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      location: 'CurrencySearch.tsx:allTokens',
+      message: 'CurrencySearch allTokens loaded',
+      data: {
+        selectedChainId,
+        allTokensCount: Object.keys(allTokens).length,
+        allTokensSymbols: Object.values(allTokens)
+          .slice(0, 5)
+          .map((t: any) => ({ symbol: t?.symbol, chainId: t?.chainId, address: t?.address })),
+      },
+      timestamp: Date.now(),
+      sessionId: 'debug-session',
+      hypothesisId: 'E',
+    }),
+  }).catch(() => {})
+  // #endregion
   const { tokenList: solanaTokens } = useSolanaTokenList()
   const native = useUnifiedNativeCurrency(selectedChainId)
 
@@ -204,7 +224,29 @@ function CurrencySearch({
     }
     const filterToken = createFilterToken(debouncedQuery, (address) => isAddress(address))
     // Only EVM tokens here
-    return Object.values(tokensToShow || allTokens).filter(filterToken) as Token[]
+    const tokensSource = tokensToShow || allTokens
+    const result = Object.values(tokensSource).filter(filterToken) as Token[]
+    // #region agent log
+    fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'CurrencySearch.tsx:filteredTokens',
+        message: 'filteredTokens computed',
+        data: {
+          selectedChainId,
+          debouncedQuery,
+          tokensSourceCount: Object.keys(tokensSource).length,
+          filteredCount: result.length,
+          filteredSample: result.slice(0, 3).map((t: any) => ({ symbol: t?.symbol, chainId: t?.chainId })),
+        },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'E',
+      }),
+    }).catch(() => {})
+    // #endregion
+    return result
   }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens, otherSelectedCurrency])
 
   const queryTokens = useSortedTokensByQuery(filteredTokens as Token[], debouncedQuery)

@@ -17,6 +17,9 @@ import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
 import { PoolHashHelper } from './PoolHashHelper'
 
+// 需要使用 fallback 查询的主网链（没有 Edge API 支持）
+const FALLBACK_ONLY_MAINNET_CHAINS = [ChainId.SIMPLECHAIN] as const
+
 const poolQueriesFactory = memoize((chainId: ChainId) => {
   const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
   function getCacheKey(args: [PoolQuery, PoolQueryOptions] | [PoolQuery]) {
@@ -247,7 +250,11 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
     return queries.getCandidatePools(query, options)
   }
 
-  if (isTestnetChainId(chainId)) {
+  // 测试网链或没有 Edge API 支持的主网链使用 fallback 查询
+  if (
+    isTestnetChainId(chainId) ||
+    FALLBACK_ONLY_MAINNET_CHAINS.includes(chainId as (typeof FALLBACK_ONLY_MAINNET_CHAINS)[number])
+  ) {
     return fallbackQuery()
   }
   const call = createAsyncCallWithFallbacks(defaultQuery, {

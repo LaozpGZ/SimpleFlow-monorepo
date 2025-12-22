@@ -77,6 +77,47 @@ export function useAllTokens(overrideChainId?: number): { [address: string]: ERC
   const tokenMap = useAtomValue(combinedTokenMapFromActiveUrlsAtom)
   const userAddedTokens = useUserAddedTokens(chainId)
   return useMemo(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'Tokens.ts:useAllTokens',
+        message: 'useAllTokens called',
+        data: {
+          chainId,
+          activeChainId,
+          overrideChainId,
+          userAddedTokensCount: userAddedTokens?.length,
+          tokenMapForChain: tokenMap?.[chainId as keyof typeof tokenMap]
+            ? Object.keys(tokenMap[chainId as keyof typeof tokenMap]).length
+            : 0,
+        },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'D',
+      }),
+    }).catch(() => {})
+    // #endregion
+    const baseTokenMap = mapWithoutUrls(tokenMap, chainId)
+    // #region agent log
+    fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'Tokens.ts:useAllTokens:baseTokenMap',
+        message: 'baseTokenMap result',
+        data: {
+          chainId,
+          baseTokenMapCount: Object.keys(baseTokenMap).length,
+          baseTokenMapKeys: Object.keys(baseTokenMap).slice(0, 5),
+        },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'C',
+      }),
+    }).catch(() => {})
+    // #endregion
     const allTokens = userAddedTokens
       // reduce into all ALL_TOKENS filtered by the current chain
       .reduce<{ [address: string]: ERC20Token }>(
@@ -91,8 +132,27 @@ export function useAllTokens(overrideChainId?: number): { [address: string]: ERC
         },
         // must make a copy because reduce modifies the map, and we do not
         // want to make a copy in every iteration
-        mapWithoutUrls(tokenMap, chainId),
+        baseTokenMap,
       )
+    // #region agent log
+    fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'Tokens.ts:useAllTokens:result',
+        message: 'allTokens result',
+        data: {
+          chainId,
+          allTokensCount: Object.keys(allTokens).length,
+          allTokensAddresses: Object.keys(allTokens).slice(0, 5),
+          userAddedTokens: userAddedTokens?.map((t) => ({ address: t.address, chainId: t.chainId, symbol: t.symbol })),
+        },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        hypothesisId: 'D',
+      }),
+    }).catch(() => {})
+    // #endregion
 
     return allTokens
   }, [userAddedTokens, tokenMap, chainId])

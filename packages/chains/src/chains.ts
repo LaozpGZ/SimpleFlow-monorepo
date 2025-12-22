@@ -26,4 +26,11 @@ export const Chains: Chain[] = [
     isEVM: true,
     testnet: true,
   },
+  {
+    id: ChainId.SIMPLECHAIN_TESTNET,
+    name: chainNames[ChainId.SIMPLECHAIN_TESTNET],
+    fullName: chainFullNames[ChainId.SIMPLECHAIN_TESTNET],
+    isEVM: true,
+    testnet: true,
+  },
 ]
