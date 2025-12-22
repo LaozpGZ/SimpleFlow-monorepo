@@ -10,15 +10,11 @@ import {
   GameIcon,
   MenuItemsType,
   MoreIcon,
-  RocketIcon,
   SwapFillIcon,
   SwapIcon,
-  TradeFilledIcon,
-  TradeIcon,
 } from '@pancakeswap/uikit'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
-import { getPerpetualUrl } from 'utils/getPerpetualUrl'
 import { EVM_CHAIN_IDS } from 'utils/wagmi'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & {
@@ -51,12 +47,7 @@ export const addMenuItemSupported = (item, chainId: number | undefined) => {
   return item
 }
 
-const config: (
-  t: ContextApi['t'],
-  isDark: boolean,
-  languageCode?: string,
-  chainId?: number,
-) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId) =>
+const config: (t: ContextApi['t'], chainId?: number) => ConfigMenuItemsType[] = (t, chainId) =>
   [
     {
       label: t('Trade'),
@@ -85,20 +76,6 @@ const config: (
           supportChainIds: EVM_CHAIN_IDS,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
-    },
-    {
-      label: t('Perps'),
-      icon: TradeIcon,
-      fillIcon: TradeFilledIcon,
-      href: getPerpetualUrl({
-        chainId,
-        languageCode,
-        isDark,
-      }),
-      hideSubNav: true,
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      confirmModalId: 'perpConfirmModal',
-      showItemsOnMobile: false,
     },
     {
       label: t('Earn.verb'),
@@ -147,13 +124,6 @@ const config: (
           ].map((item) => addMenuItemSupported(item, chainId)),
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
-    },
-    {
-      label: t('Prob'),
-      icon: RocketIcon,
-      href: 'https://probable.markets',
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      hideSubNav: true,
     },
     {
       label: t('Play'),

@@ -1,5 +1,4 @@
 import { ChainId } from '@pancakeswap/chains'
-import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { DropdownMenuItems } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -15,15 +14,11 @@ export type UseMenuItemsParams = {
 }
 
 export const useMenuItems = ({ onClick }: UseMenuItemsParams = {}): ConfigMenuItemsType[] => {
-  const {
-    t,
-    currentLanguage: { code: languageCode },
-  } = useTranslation()
+  const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const { isDark } = useTheme()
   const menuItemsStatus = useMenuItemsStatus()
 
-  const menuItems = useMemo(() => config(t, isDark, languageCode, chainId), [t, isDark, languageCode, chainId])
+  const menuItems = useMemo(() => config(t, chainId), [t, chainId])
 
   return useMemo(() => {
     const traverseItems = <T extends ConfigMenuItemsType | ConfigMenuDropDownItemsType>(

@@ -98,12 +98,12 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         <Flex flexDirection="column" width={isDesktop ? undefined : '100%'}>
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
-              <SwapSelection
+              {/* <SwapSelection
                 swapType={limit ? SwapType.LIMIT : SwapType.TWAP}
                 style={{ marginBottom: 16 }}
                 withToolkit
                 outputChainId={outputChainId}
-              />
+              /> */}
               <TWAPPanel limit={limit} />
               <Flex flexDirection={!isDesktop ? 'column-reverse' : 'column'}>
                 {limit && (
