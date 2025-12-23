@@ -138,29 +138,6 @@ const config: (
           label: t('Info.section_title'),
           href: '/info/v3',
         },
-        {
-          label: t('Burn Dashboard'),
-          href: '/burn-dashboard',
-        },
-        {
-          label: t('Voting'),
-          image: '/images/voting/voting-bunny.png',
-          href: '/voting',
-          supportChainIds: SUPPORT_ONLY_BSC,
-        },
-        {
-          type: DropdownMenuItemType.DIVIDER,
-        },
-        {
-          label: t('Blog'),
-          href: 'https://blog.pancakeswap.finance',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
-        {
-          label: t('Docs'),
-          href: 'https://docs.pancakeswap.finance',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))

@@ -34,7 +34,7 @@ export const useJsonAdsConfig = (url: string): AdSlide[] => {
       }
 
       // Filter out specific ads
-      const blockedTexts = ['Trade Tokenized Assets', 'Zero-Fee Predictions', 'probable.markets']
+      const blockedTexts = ['Trade Tokenized Assets', 'Zero-Fee Predictions', 'probable.markets', 'Solana Crosschain']
       const hasBlockedText = config.texts?.some((text) => {
         if (typeof text === 'string') return blockedTexts.some((blocked) => text.includes(blocked))
         if (typeof text === 'object' && 'i18nText' in text) {
