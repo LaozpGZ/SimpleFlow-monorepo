@@ -46,13 +46,9 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
       innerProps={isMobile ? { style: { padding: '0 16px' } } : undefined}
     >
       <Column>
-        <FarmFlexWrapper>
-          <Box style={{ flex: '1 1 100%' }}>
-            {!isMobile ? (
-              <FarmH1 as="h1" scale="xxl" color="secondary" mb="24px">
-                {t('Earn from LP')}
-              </FarmH1>
-            ) : (
+        {isMobile && (
+          <FarmFlexWrapper>
+            <Box style={{ flex: '1 1 100%' }}>
               <FlexGap gap="12px" justifyContent="space-between" alignItems="center">
                 <FlexGap gap="3px">
                   <Text fontSize="20px" bold style={{ whiteSpace: 'nowrap' }}>
@@ -92,35 +88,9 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
                   </Button>
                 </FlexGap>
               </FlexGap>
-            )}
-
-            {!isMobile && (
-              <>
-                <FarmH2 scale="lg" color="text">
-                  {t('Liquidity Pools & Farms')}
-                </FarmH2>
-                <Row flexWrap="wrap" gap="16px">
-                  <LinkExternal
-                    href="https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms"
-                    showExternalIcon={false}
-                  >
-                    <Button p="0" variant="text">
-                      <Text color="primary" bold fontSize="16px" mr="4px">
-                        {t('Learn How')}
-                      </Text>
-                    </Button>
-                  </LinkExternal>
-                  {!!additionLink && (
-                    <>
-                      <VerticalDivider bg={theme.colors.inputSecondary} />
-                      {additionLink}
-                    </>
-                  )}
-                </Row>
-              </>
-            )}
-          </Box>
-        </FarmFlexWrapper>
+            </Box>
+          </FarmFlexWrapper>
+        )}
       </Column>
       <LiquiditySunsetWarning />
     </StyledPageHeader>

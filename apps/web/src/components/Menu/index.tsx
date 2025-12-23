@@ -61,6 +61,7 @@ const Menu = (props) => {
   return (
     <UikitMenu
       linkComponent={LinkComponent}
+      logoComponent={null}
       rightSide={
         <>
           <GlobalSettings />

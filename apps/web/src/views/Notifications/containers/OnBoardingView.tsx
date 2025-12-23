@@ -16,21 +16,19 @@ import webNotificationCheck from '../../../../public/images/web3-notification-ch
 const OnBoardingSteps = [
   {
     key: 'step-1',
-    title: <Trans>Authorize notifications from PancakeSwap</Trans>,
+    title: <Trans>Authorize notifications from SimpleFlow</Trans>,
     icon: webNotificationBunny,
     description: (
       <Trans>
-        Get started with notifications from PancakeSwap. First authorize notifications by signing in your wallet
+        Get started with notifications from SimpleFlow. First authorize notifications by signing in your wallet
       </Trans>
     ),
   },
   {
     key: 'step-2',
-    title: <Trans>Enable Notifications From PancakeSwap</Trans>,
+    title: <Trans>Enable Notifications From SimpleFlow</Trans>,
     icon: '/images/notifications/welcome-notification-bell.png',
-    description: (
-      <Trans>Subscribe to stay informed on the latest news and updates that PancakeSwap has to offer.</Trans>
-    ),
+    description: <Trans>Subscribe to stay informed on the latest news and updates that SimpleFlow has to offer.</Trans>,
   },
   {
     key: 'step-3',

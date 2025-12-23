@@ -70,7 +70,7 @@ export const PancakeNotifications: {
   },
   onBoardingNotification: (t): pushNotification => {
     return {
-      title: t('Welcome to PancakeSwap Notifications'),
+      title: t('Welcome to SimpleFlow Notifications'),
       body: t(
         'You are now susbscribed and will receive alerts and updates on PCS features. If you dont want to receive notifications you can unsubscribe at any time.',
       ),
@@ -86,7 +86,7 @@ export const PUBLIC_VAPID_KEY = process.env.NEXT_PUBLIC_VAPID_KEY ?? ''
 export const Events: { [event in keyof typeof ResponseEvents]: EventInformation } = {
   [ResponseEvents.NotificationsEnabled]: {
     title: (t) => t('Notifications Enabled'),
-    message: (t) => t('You can now opt-in to pancakeswap web notifications'),
+    message: (t) => t('You can now opt-in to SimpleFlow web notifications'),
   },
   [ResponseEvents.NotificationsEnabledError]: {
     title: (t) => t('Error Enabling Notifications'),

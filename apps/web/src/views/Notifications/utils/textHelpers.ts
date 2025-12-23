@@ -13,7 +13,7 @@ export const getOnBoardingButtonText = (
 
   if (isStep1) return t('Enable Notifications')
   if (isStep2) return t('Sign In With Wallet')
-  if (isStep3) return t('Subscribe To PancakeSwap')
+  if (isStep3) return t('Subscribe To SimpleFlow')
 
   return t('Enable Notifications')
 }

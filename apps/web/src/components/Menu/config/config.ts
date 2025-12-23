@@ -129,16 +129,10 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
-      label: '',
-      href: '/info',
+      label: t('Info.section_title'),
+      href: '/info/v3',
       icon: MoreIcon,
       hideSubNav: true,
-      items: [
-        {
-          label: t('Info.section_title'),
-          href: '/info/v3',
-        },
-      ].map((item) => addMenuItemSupported(item, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))
 

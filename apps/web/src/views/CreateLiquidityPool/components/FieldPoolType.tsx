@@ -63,7 +63,7 @@ export const FieldPoolType: React.FC<FieldPoolTypeProps> = ({ ...boxProps }) => 
           text={
             <>
               {t(
-                'PancakeSwap Infinity supports both CLAMM (Concentrated Liquidity AMM) and LBAMM (Liquidity Book AMM) pools.',
+                'SimpleFlow Infinity supports both CLAMM (Concentrated Liquidity AMM) and LBAMM (Liquidity Book AMM) pools.',
               )}
               <br />
               <br />

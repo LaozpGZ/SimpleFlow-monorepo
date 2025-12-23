@@ -23,7 +23,7 @@ const faqConfig: FaqConfig[] = [
       <>
         <Trans
           i18nKey="syrup-pools-instructions"
-          i18nTemplate="Go to the <0>Syrup Pools</0> section on PancakeSwap, choose a pool, and deposit CAKE. Your rewards will start accumulating automatically. You can unstake your CAKE anytime."
+          i18nTemplate="Go to the <0>Syrup Pools</0> section on SimpleFlow, choose a pool, and deposit CAKE. Your rewards will start accumulating automatically. You can unstake your CAKE anytime."
           components={[<strong key="0" />]}
         />
       </>,

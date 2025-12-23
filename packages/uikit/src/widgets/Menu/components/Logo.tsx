@@ -54,11 +54,11 @@ const Logo: React.FC<React.PropsWithChildren<Props>> = ({ href }) => {
   return (
     <Flex alignItems="center">
       {isAbsoluteUrl ? (
-        <StyledLink as="a" href={href} aria-label="Pancake home page">
+        <StyledLink as="a" href={href} aria-label="SimpleFlow home page">
           {innerLogo}
         </StyledLink>
       ) : (
-        <StyledLink href={href} as={linkComponent} aria-label="Pancake home page">
+        <StyledLink href={href} as={linkComponent} aria-label="SimpleFlow home page">
           {innerLogo}
         </StyledLink>
       )}
