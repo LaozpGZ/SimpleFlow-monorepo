@@ -97,11 +97,11 @@ export const WETH9 = {
   ),
   [ChainId.LINEA_TESTNET]: new ERC20Token(
     ChainId.LINEA_TESTNET,
-    '0x2C1b868d6596a18e32E61B901E4060C872647b6C',
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b', // Using SimpleChain Testnet WSRW address
     18,
-    'WETH',
-    'Wrapped Ether',
-    'https://weth.io',
+    'WSRW',
+    'Wrapped SRW',
+    'https://www.simplechain.com',
   ),
   [ChainId.OPBNB_TESTNET]: new ERC20Token(
     ChainId.OPBNB_TESTNET,
@@ -291,7 +291,7 @@ export const NATIVE = {
   [ChainId.ZKSYNC]: ETHER,
   [ChainId.ZKSYNC_TESTNET]: ETHER,
   [ChainId.LINEA]: ETHER,
-  [ChainId.LINEA_TESTNET]: ETHER,
+  [ChainId.LINEA_TESTNET]: SRW, // Using SimpleChain native token
   [ChainId.OPBNB]: BNB,
   [ChainId.OPBNB_TESTNET]: {
     name: 'Binance Chain Native Token',

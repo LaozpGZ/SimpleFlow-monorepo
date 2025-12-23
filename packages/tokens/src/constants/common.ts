@@ -359,11 +359,11 @@ export const USDC = {
   ),
   [ChainId.LINEA_TESTNET]: new ERC20Token(
     ChainId.LINEA_TESTNET,
-    '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
+    '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769', // Using SimpleChain Testnet address
     6,
     'USDC',
     'USD Coin',
-    'https://www.centre.io/usdc',
+    'https://www.circle.com/usdc',
   ),
   [ChainId.BASE_TESTNET]: new ERC20Token(
     ChainId.BASE_TESTNET,
@@ -480,6 +480,14 @@ export const USDT = {
   [ChainId.LINEA]: new ERC20Token(
     ChainId.LINEA,
     '0xA219439258ca9da29E9Cc4cE5596924745e12B93',
+    6,
+    'USDT',
+    'Tether USD',
+    'https://tether.to/',
+  ),
+  [ChainId.LINEA_TESTNET]: new ERC20Token(
+    ChainId.LINEA_TESTNET,
+    '0x3577E5E0E3A47d9a552426638977ee3EddD4552e', // Using SimpleChain Testnet address
     6,
     'USDT',
     'Tether USD',

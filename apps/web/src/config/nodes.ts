@@ -27,6 +27,12 @@ const SIMPLECHAIN_TESTNET_RPC_URLS = [
   process.env.NEXT_PUBLIC_SIMPLECHAIN_TESTNET_RPC,
 ].filter(Boolean) as [string, ...string[]]
 
+// Linea Testnet using SimpleChain Testnet RPC
+const LINEA_TESTNET_RPC_URLS = [
+  'https://testnet-rpc.simplechain.com',
+  process.env.NEXT_PUBLIC_LINEA_TESTNET_RPC,
+].filter(Boolean) as [string, ...string[]]
+
 const MONAD_RPC_URLS = [
   process.env.NEXT_PUBLIC_MONAD_RPC,
   process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC,
@@ -76,11 +82,7 @@ export const SERVER_NODES = {
   ].filter(Boolean),
   [ChainId.ZKSYNC_TESTNET]: zksyncSepoliaTestnet.rpcUrls.default.http,
   [ChainId.LINEA]: linea.rpcUrls.default.http,
-  [ChainId.LINEA_TESTNET]: [
-    'https://rpc.goerli.linea.build',
-    'https://linea-testnet.rpc.thirdweb.com',
-    'https://consensys-zkevm-goerli-prealpha.infura.io/v3/93e8a17747e34ec0ac9a554c1b403965',
-  ],
+  [ChainId.LINEA_TESTNET]: LINEA_TESTNET_RPC_URLS,
   [ChainId.OPBNB_TESTNET]: opBNBTestnet.rpcUrls.default.http,
   [ChainId.OPBNB]: [
     ...opBNB.rpcUrls.default.http,
@@ -149,11 +151,7 @@ export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
   ].filter(Boolean) as readonly string[],
   [ChainId.ZKSYNC_TESTNET]: zksyncSepoliaTestnet.rpcUrls.default.http,
   [ChainId.LINEA]: linea.rpcUrls.default.http,
-  [ChainId.LINEA_TESTNET]: [
-    'https://rpc.goerli.linea.build',
-    'https://linea-testnet.rpc.thirdweb.com',
-    'https://consensys-zkevm-goerli-prealpha.infura.io/v3/93e8a17747e34ec0ac9a554c1b403965',
-  ],
+  [ChainId.LINEA_TESTNET]: LINEA_TESTNET_RPC_URLS,
   [ChainId.OPBNB_TESTNET]: opBNBTestnet.rpcUrls.default.http,
   [ChainId.OPBNB]: [
     ...opBNB.rpcUrls.default.http,

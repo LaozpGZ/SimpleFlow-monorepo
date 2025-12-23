@@ -12,7 +12,6 @@ import {
   bsc as bsc_,
   goerli,
   linea,
-  lineaTestnet,
   mainnet,
   monadTestnet,
   opBNB,
@@ -120,6 +119,34 @@ const simplechainTestnet: Chain = {
   rpcUrls: {
     default: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
     public: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
+  },
+  blockExplorers: {
+    default: {
+      name: 'SimpleChain Explorer',
+      url: 'https://testnet-explorer.simplechain.com',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: true,
+}
+
+// Custom Linea Testnet configuration using SimpleChain Testnet settings
+const LINEA_TESTNET_RPC_URLS = [
+  'https://testnet-rpc.simplechain.com',
+  process.env.NEXT_PUBLIC_LINEA_TESTNET_RPC,
+].filter(Boolean) as [string, ...string[]]
+
+const lineaTestnet: Chain = {
+  id: ChainId.LINEA_TESTNET,
+  name: 'Linea Testnet',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: LINEA_TESTNET_RPC_URLS },
+    public: { http: LINEA_TESTNET_RPC_URLS },
   },
   blockExplorers: {
     default: {

@@ -40,7 +40,7 @@ export const SMART_ROUTER_ADDRESSES = {
   [ChainId.ZKSYNC]: '0xf8b59f3c3Ab33200ec80a8A58b2aA5F5D2a8944C',
   [ChainId.ZKSYNC_TESTNET]: '0x4DC9186c6C5F7dd430c7b6D8D513076637902241',
   [ChainId.LINEA]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
-  [ChainId.LINEA_TESTNET]: '0x21d809FB4052bb1807cfe2418bA638d72F4aEf87',
+  [ChainId.LINEA_TESTNET]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12', // Using SimpleChain Testnet address
   [ChainId.OPBNB]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
   [ChainId.OPBNB_TESTNET]: '0xf317eD77Baed624d0EA2384AA88D91B774a9b009',
   [ChainId.BASE]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
@@ -65,7 +65,7 @@ export const V2_ROUTER_ADDRESS: ChainMap<string> = {
   [ChainId.ZKSYNC]: '0x5aEaF2883FBf30f3D62471154eDa3C0c1b05942d',
   [ChainId.ZKSYNC_TESTNET]: '0xA0Fbd5d1474950bc9417FB00f9d4e2ee0385c560',
   [ChainId.LINEA]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
-  [ChainId.LINEA_TESTNET]: '0xD7A304138D50C125733d1fE8a2041199E4944Aa1',
+  [ChainId.LINEA_TESTNET]: '0x', // V2 Router not deployed on SimpleChain Testnet
   [ChainId.OPBNB]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
   [ChainId.OPBNB_TESTNET]: '0x62FF25CFD64E55673168c3656f4902bD7Aa5F0f4',
   [ChainId.BASE]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
@@ -124,7 +124,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.ZKSYNC]: [zksyncTokens.usdc, zksyncTokens.weth],
   [ChainId.ZKSYNC_TESTNET]: [zkSyncTestnetTokens.usdc, zkSyncTestnetTokens.weth],
   [ChainId.LINEA]: [lineaTokens.usdc, lineaTokens.weth],
-  [ChainId.LINEA_TESTNET]: [lineaTestnetTokens.usdc, lineaTestnetTokens.weth],
+  [ChainId.LINEA_TESTNET]: [lineaTestnetTokens.usdc, lineaTestnetTokens.usdt, lineaTestnetTokens.weth],
   [ChainId.OPBNB]: [opBnbTokens.wbnb, opBnbTokens.usdt],
   [ChainId.OPBNB_TESTNET]: [opBnbTestnetTokens.usdc, opBnbTestnetTokens.wbnb],
   [ChainId.BASE]: [baseTokens.usdc, baseTokens.weth],
