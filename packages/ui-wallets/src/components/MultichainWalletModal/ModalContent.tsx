@@ -7,7 +7,7 @@ import { ASSET_CDN } from '../../config/url'
 import { ConnectData, WalletAdaptedNetwork, WalletConfigV3, WalletIds } from '../../types'
 import { PreviewSection, PreviewStatus } from '../PreviewSection'
 import SocialLogin from '../SocialLogin'
-import SocialLoginButton from '../SocialLoginButton'
+// SocialLoginButton removed
 import { desktopWalletSelectionClass } from '../WalletModal.css'
 import { WalletChainSelect } from '../WalletSelect/WalletChainSelect'
 import { WalletSelect } from '../WalletSelect/WalletSelect'
@@ -202,8 +202,6 @@ export const ModalContent: React.FC<ModalContentProps> = ({
         </RowBetween>
       )}
 
-      <SocialLoginButton onClick={displaySocialLogin} assetCdn={ASSET_CDN} />
-
       <WalletSelect
         wallets={wallets}
         topWallets={topWallets}
@@ -217,18 +215,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
 
   const previewSection = (
     <>
-      {previewStatus === PreviewStatus.Intro && (
-        <AtomBox
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          style={{ gap: '12px' }}
-          textAlign="center"
-          width="100%"
-        >
-          <PreviewSection.Intro docLink={docLink} />
-        </AtomBox>
-      )}
+      {/* Intro section removed */}
       {previewStatus === PreviewStatus.NotInstalled && uninstalledWallet && (
         <PreviewSection.NotInstalled qrCode={qrCode} wallet={uninstalledWallet} />
       )}
@@ -263,12 +250,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
 
   if (isMobile) {
     if (previewStatus === PreviewStatus.Intro) {
-      return (
-        <StyledMobileContainer $fullHeight>
-          {walletsSection}
-          <PreviewSection.Intro docLink={docLink} />
-        </StyledMobileContainer>
-      )
+      return <StyledMobileContainer $fullHeight>{walletsSection}</StyledMobileContainer>
     }
     return (
       <StyledMobileContainer background="gradientCardHeader" $fullHeight={false}>

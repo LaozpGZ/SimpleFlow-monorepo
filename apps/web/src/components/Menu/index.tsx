@@ -87,7 +87,7 @@ const Menu = (props) => {
           ? EMPTY_ARRAY
           : activeSubMenuItem?.items ?? activeMenuItem?.items)
       }
-      footerLinks={getFooterLinks}
+      footerLinks={[]}
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
       activeSubItemChildItem={activeSubChildMenuItem?.href}

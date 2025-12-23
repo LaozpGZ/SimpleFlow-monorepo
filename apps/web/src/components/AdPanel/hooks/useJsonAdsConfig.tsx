@@ -33,6 +33,19 @@ export const useJsonAdsConfig = (url: string): AdSlide[] => {
         }
       }
 
+      // Filter out specific ads
+      const blockedTexts = ['Trade Tokenized Assets', 'Zero-Fee Predictions', 'probable.markets']
+      const hasBlockedText = config.texts?.some((text) => {
+        if (typeof text === 'string') return blockedTexts.some((blocked) => text.includes(blocked))
+        if (typeof text === 'object' && 'i18nText' in text) {
+          const i18n = text.i18nText
+          if (typeof i18n === 'string') return blockedTexts.some((blocked) => i18n.includes(blocked))
+          return blockedTexts.some((blocked) => i18n.mobile?.includes(blocked) || i18n.desktop?.includes(blocked))
+        }
+        return false
+      })
+      if (hasBlockedText) return false
+
       return true
     })
     .map((config) => ({
