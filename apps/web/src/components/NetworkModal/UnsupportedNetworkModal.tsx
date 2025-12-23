@@ -25,7 +25,7 @@ export function UnsupportedNetworkModal({ pageSupportedChains }: { pageSupported
   const { pathname } = useRouter()
 
   const title = useMemo(() => {
-    const menuItems = config(t, false)
+    const menuItems = config(t)
     const activeMenuItem = getActiveMenuItem({ menuConfig: menuItems, pathname })
     const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
 

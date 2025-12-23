@@ -57,24 +57,6 @@ const activeListUrlsAtom = atom((get) => {
 
 const combineTokenMapsWithDefault = (lists: ListsState['byUrl'], urls: string[]) => {
   const defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST as TokenList, 'address')
-  // #region agent log
-  fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      location: 'hooks.ts:combineTokenMapsWithDefault',
-      message: 'Default token map created',
-      data: {
-        defaultTokenMapChains: Object.keys(defaultTokenMap),
-        chain1914Tokens: defaultTokenMap[1914] ? Object.keys(defaultTokenMap[1914]).length : 0,
-        urlsCount: urls?.length,
-      },
-      timestamp: Date.now(),
-      sessionId: 'debug-session',
-      hypothesisId: 'B',
-    }),
-  }).catch(() => {})
-  // #endregion
   if (!urls) return defaultTokenMap
   return combineMaps(combineTokenMaps(lists, urls), defaultTokenMap)
 }

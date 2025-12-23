@@ -111,7 +111,7 @@ export const getV3PoolsWithoutTicksOnChain = createOnChainPoolFactory<V3Pool, V3
     if (!deployerAddress) {
       return []
     }
-    return [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH].map((fee) => ({
+    const metas = [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH].map((fee) => ({
       id: computeV3PoolAddress({
         deployerAddress,
         tokenA: currencyA.wrapped,
@@ -122,6 +122,31 @@ export const getV3PoolsWithoutTicksOnChain = createOnChainPoolFactory<V3Pool, V3
       currencyB,
       fee,
     }))
+    // #region agent log
+    if (typeof fetch !== 'undefined' && currencyA.chainId === 1914) {
+      fetch('http://127.0.0.1:7300/ingest/6eb4557a-7433-4ea8-9e7c-9145e6331316', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          location: 'onChainPoolProviders.ts:getPossiblePoolMetas',
+          message: 'Computed pool addresses',
+          data: {
+            chainId: currencyA.chainId,
+            deployerAddress,
+            tokenA: currencyA.wrapped.address,
+            tokenASymbol: currencyA.symbol,
+            tokenB: currencyB.wrapped.address,
+            tokenBSymbol: currencyB.symbol,
+            poolMetas: metas.map((m) => ({ fee: m.fee, address: m.id })),
+          },
+          timestamp: Date.now(),
+          sessionId: 'debug-session',
+          hypothesisId: 'O',
+        }),
+      }).catch(() => {})
+    }
+    // #endregion
+    return metas
   },
   buildPoolInfoCalls: ({ id: address, currencyA, currencyB }) => [
     {
