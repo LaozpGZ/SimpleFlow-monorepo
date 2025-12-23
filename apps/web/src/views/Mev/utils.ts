@@ -1,10 +1,10 @@
 import { RPCResponse } from './types'
 
-const AD_ASSETS_URL = 'https://assets.pancakeswap.finance/web/mev'
+const AD_ASSETS_URL = 'https://assets.simpleflow.finance/web/mev'
 export const getImageUrl = (asset: string) => `${AD_ASSETS_URL}/${asset}`
 
 export const fetchRPCData = async (method: 'stat_txCount' | 'stat_walletCount'): Promise<number> => {
-  const url = 'https://bscrpc.pancakeswap.finance'
+  const url = 'https://bscrpc.simpleflow.finance'
   const payload = {
     jsonrpc: '2.0',
     method,

@@ -93,7 +93,7 @@ export const InPageBanner = () => {
           <InnerContainer>
             <AIPrediction
               ctaLink="/prediction?token=ETH&chain=arb&utm_source=PredictionPage&utm_medium=website&utm_campaign=Arbitrum&utm_id=PredictionLaunch"
-              learnMoreLink="https://blog.pancakeswap.finance/articles/pancake-swap-introduces-ai-powered-prediction-market-on-arbitrum-up-to-100-fund-protection-and-launching-60-000-arb-campaign?utm_source=PredictionPage&utm_medium=website&utm_campaign=Arbitrum&utm_id=PredictionLaunch"
+              learnMoreLink="https://blog.simpleflow.finance/articles/pancake-swap-introduces-ai-powered-prediction-market-on-arbitrum-up-to-100-fund-protection-and-launching-60-000-arb-campaign?utm_source=PredictionPage&utm_medium=website&utm_campaign=Arbitrum&utm_id=PredictionLaunch"
             />
           </InnerContainer>
         </SpeechBubble>

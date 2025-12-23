@@ -40,7 +40,7 @@ const config = [
       </Box>,
       <Box mt="1rem">
         <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
+        <InlineLink ml="4px" external href="https://docs.simpleflow.finance/products/ifo-initial-farm-offering/icake">
           <Trans>here</Trans>
         </InlineLink>
       </Box>,

@@ -351,13 +351,13 @@ export function useCrossChainFarmPendingTransaction(lpAddress?: string): CrossCh
 
 export const getReadableTransactionType = (t, type?: TransactionType) => {
   if (type === undefined) {
-    return t('PancakeSwap AMM')
+    return t('SimpleFlow AMM')
   }
   switch (type) {
     case 'approve':
       return t('Token Approval')
     case 'swap':
-      return t('PancakeSwap AMM')
+      return t('SimpleFlow AMM')
     case 'wrap':
       return t('Wrap Native Token')
     case 'add-liquidity':

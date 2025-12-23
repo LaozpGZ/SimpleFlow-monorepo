@@ -80,7 +80,7 @@ const faqConfig: FaqConfig[] = [
               key="3"
               target="_blank"
               rel="noreferrer"
-              href="https://docs.pancakeswap.finance/products/vecake/migrate-from-cake-pool"
+              href="https://docs.simpleflow.finance/products/vecake/migrate-from-cake-pool"
             />,
           ]}
         />

@@ -19,7 +19,7 @@ const IfoSubmittedCard: React.FC<IfoSubmittedCardProps> = ({ txHash }) => {
   const getBlockExploreLink = useBlockExploreLink()
 
   useEffect(() => {
-    fetch('https://assets.pancakeswap.finance/web/ifos/submitted.json')
+    fetch('https://assets.simpleflow.finance/web/ifos/submitted.json')
       .then((res) => res.json())
       .then(setAnimationData)
   }, [])

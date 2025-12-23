@@ -34,7 +34,7 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
   const handleLearnMoreClick = useCallback(() => {
     if (typeof window !== 'undefined' && window) {
       window.open(
-        'https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms',
+        'https://docs.simpleflow.finance/products/yield-farming/how-to-use-farms',
         '_blank',
         'noopener noreferrer',
       )
@@ -109,7 +109,7 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
                 </FarmH2>
                 <Row flexWrap="wrap" gap="16px">
                   <LinkExternal
-                    href="https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms"
+                    href="https://docs.simpleflow.finance/products/yield-farming/how-to-use-farms"
                     showExternalIcon={false}
                   >
                     <Button p="0" variant="text">

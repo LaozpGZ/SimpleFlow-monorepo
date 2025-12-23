@@ -123,7 +123,7 @@ const IfoPoolInfoDisplay: React.FC<IfoPoolInfoDisplayProps> = ({ pid, ifoStatus,
       )}
       <br />
       <Link
-        href="https://docs.pancakeswap.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
+        href="https://docs.simpleflow.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
         target="_blank"
       >
         {t('Learn More')}

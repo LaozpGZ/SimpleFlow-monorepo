@@ -184,7 +184,7 @@ export const SolanaWalletModal: React.FC = () => {
                 {t(
                   'By connecting your wallet, you acknowledge that you have read, understand and accept the terms in the',
                 )}{' '}
-                <Link external display="inline" fontSize="14px" href="https://pancakeswap.finance/terms-of-service">
+                <Link external display="inline" fontSize="14px" href="https://simpleflow.finance/terms-of-service">
                   {t('disclaimer')}
                 </Link>
               </DisclaimerBox>

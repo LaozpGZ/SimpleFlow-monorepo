@@ -27,7 +27,7 @@ export const MevSwapDetail: React.FC = () => {
         <RowFixed>
           <QuestionHelperV2
             text={t(
-              'PancakeSwap MEV Guard protects you from frontrunning and sandwich attacks when swapping on BNB Chain.',
+              'SimpleFlow MEV Guard protects you from frontrunning and sandwich attacks when swapping on BNB Chain.',
             )}
             placement="top-start"
           >

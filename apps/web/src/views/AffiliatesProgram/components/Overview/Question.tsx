@@ -83,7 +83,7 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-extended.json"
+                  href="https://tokenlists.org/token-list?url=https://tokens.simpleflow.finance/pancakeswap-extended.json"
                 >
                   <Text color="primary" ml="4px" as="span">
                     {t('BNB Chain')},
@@ -92,7 +92,7 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-arbitrum-default.json"
+                  href="https://tokenlists.org/token-list?url=https://tokens.simpleflow.finance/pancakeswap-arbitrum-default.json"
                 >
                   <Text color="primary" ml="4px" as="span">
                     {t('Arbitrum One')},
@@ -101,7 +101,7 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-base-default.json"
+                  href="https://tokenlists.org/token-list?url=https://tokens.simpleflow.finance/pancakeswap-base-default.json"
                 >
                   <Text color="primary" ml="4px" as="span">
                     {t('Base')},
@@ -110,7 +110,7 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-eth-default.json"
+                  href="https://tokenlists.org/token-list?url=https://tokens.simpleflow.finance/pancakeswap-eth-default.json"
                 >
                   <Text color="primary" ml="4px" as="span">
                     {t('Ethereum')},
@@ -119,7 +119,7 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-linea-default.json"
+                  href="https://tokenlists.org/token-list?url=https://tokens.simpleflow.finance/pancakeswap-linea-default.json"
                 >
                   <Text color="primary" ml="4px" as="span">
                     {t('Linea')},
@@ -128,7 +128,7 @@ const Question = () => {
                 <Link
                   external
                   style={{ display: 'inline-block' }}
-                  href="https://tokenlists.org/token-list?url=https://tokens.pancakeswap.finance/pancakeswap-zksync-default.json"
+                  href="https://tokenlists.org/token-list?url=https://tokens.simpleflow.finance/pancakeswap-zksync-default.json"
                 >
                   <Text color="primary" ml="4px" as="span">
                     {t('zkSync Era')}

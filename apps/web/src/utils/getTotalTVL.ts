@@ -34,7 +34,7 @@ export const getTotalTvl = async () => {
       query userCount($since: ISO8601DateTime, $till: ISO8601DateTime) {
         ethereum: ethereum(network: ethereum) {
           dexTrades(
-            exchangeName: { in: ["Pancake", "Pancake v2", "PancakeSwap"] }
+            exchangeName: { in: ["Pancake", "Pancake v2", "SimpleFlow"] }
             date: { since: $since, till: $till }
           ) {
             count(uniq: senders)
@@ -42,7 +42,7 @@ export const getTotalTvl = async () => {
         }
         bsc: ethereum(network: bsc) {
           dexTrades(
-            exchangeName: { in: ["Pancake", "Pancake v2", "PancakeSwap"] }
+            exchangeName: { in: ["Pancake", "Pancake v2", "SimpleFlow"] }
             date: { since: $since, till: $till }
           ) {
             count(uniq: senders)

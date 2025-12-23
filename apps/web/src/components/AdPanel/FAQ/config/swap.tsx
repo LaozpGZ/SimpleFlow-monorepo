@@ -23,7 +23,7 @@ export const swapFAQConfig: FAQConfig = (t) => ({
   subtitle: t('Need Help?'),
   imageUrl: getImageUrl('faq_bunny'),
   alt: 'FAQ bunny',
-  docsUrl: 'https://docs.pancakeswap.finance/products/pancakeswap-exchange',
+  docsUrl: 'https://docs.simpleflow.finance/products/pancakeswap-exchange',
   data: [
     {
       title: t('How to Swap?'),
@@ -46,13 +46,13 @@ export const swapFAQConfig: FAQConfig = (t) => ({
           <ul style={{ overflow: 'auto' }}>
             <StyledFlex flexWrap="wrap" flexGrow={0}>
               {t('Use the')}
-              <Link m="0 5px" href="https://pancakeswap.finance/buy-crypto" color="primary">
+              <Link m="0 5px" href="https://simpleflow.finance/buy-crypto" color="primary">
                 {t('Buy Crypto')}
               </Link>
               {t('feature to buy.')}
             </StyledFlex>
             <StyledFlex flexWrap="wrap" flexGrow={0}>
-              <Link m="0 5px" href="https://bridge.pancakeswap.finance">
+              <Link m="0 5px" href="https://bridge.simpleflow.finance">
                 {t('Bridge your assets')}
               </Link>
               <Text>{t('from other blockchains.')}</Text>
@@ -90,7 +90,7 @@ export const swapFAQConfig: FAQConfig = (t) => ({
               i18nKey="For more details, <0>read here.</0>"
               components={[
                 <Link
-                  href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq"
+                  href="https://docs.simpleflow.finance/products/pancakeswap-exchange/faq"
                   style={{ textDecoration: 'underline' }}
                 />,
               ]}

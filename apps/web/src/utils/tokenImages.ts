@@ -29,7 +29,7 @@ const getImageUrlFromToken = (token?: UnifiedCurrency) => {
   return token
     ? token.isNative && token.chainId !== ChainId.BSC
       ? `${ASSET_CDN}/web/native/${token.chainId}.png`
-      : `https://tokens.pancakeswap.finance/images/${tokenImageChainNameMapping[token.chainId]}${
+      : `https://tokens.simpleflow.finance/images/${tokenImageChainNameMapping[token.chainId]}${
           isSolana(token.chainId) && !token.isNative ? token.address : safeGetAddress(address)
         }.png`
     : ''

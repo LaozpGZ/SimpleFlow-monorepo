@@ -30,7 +30,7 @@ export const partners: HomePagePartner[] = [
   },
   {
     logo: `${ASSET_CDN}/web/landing/partner/blog.png`,
-    link: 'https://blog.pancakeswap.finance/',
+    link: 'https://blog.simpleflow.finance/',
     name: 'Blog',
   },
 ]

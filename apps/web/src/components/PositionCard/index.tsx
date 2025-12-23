@@ -241,7 +241,7 @@ function MinimalPositionCardView({
                       style={{ display: 'inline' }}
                       ml="4px"
                       external
-                      href="https://docs.pancakeswap.finance/products/stableswap#stableswap-fees"
+                      href="https://docs.simpleflow.finance/products/stableswap#stableswap-fees"
                     />,
                   ]}
                 />

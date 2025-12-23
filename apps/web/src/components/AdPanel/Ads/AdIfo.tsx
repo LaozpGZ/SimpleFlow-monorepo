@@ -30,7 +30,7 @@ export const AdIfo = (props: AdPlayerProps) => {
         mb="8px"
       />
 
-      <AdButton variant="text" isExternalLink href="https://pancakeswap.finance/ifo">
+      <AdButton variant="text" isExternalLink href="https://simpleflow.finance/ifo">
         {t('Get Started')}
       </AdButton>
     </AdCard>

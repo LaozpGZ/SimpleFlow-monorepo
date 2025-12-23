@@ -66,7 +66,7 @@ export function SimpleStakingSunsetModal() {
               bold
               style={{ display: 'inline-flex' }}
               showExternalIcon
-              href="https://blog.pancakeswap.finance/articles/action-required-simple-staking-product-retirement"
+              href="https://blog.simpleflow.finance/articles/action-required-simple-staking-product-retirement"
             >
               {t('Learn more here')}
             </LinkExternal>

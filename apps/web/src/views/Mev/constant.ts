@@ -38,8 +38,8 @@ export const walletPretendToMetamask = [
 // wallet support mev on bsc default, but it not using PCS RPC
 
 export const rpcData = {
-  'Network Name': 'PancakeSwap MEV Guard',
-  'RPC URL': 'https://bscrpc.pancakeswap.finance',
+  'Network Name': 'SimpleFlow MEV Guard',
+  'RPC URL': 'https://bscrpc.simpleflow.finance',
   'Chain ID': '56',
   'Currency symbol': 'BNB',
   'Block Explorer URL': 'https://bscscan.com',

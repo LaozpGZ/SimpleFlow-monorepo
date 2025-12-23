@@ -5,7 +5,7 @@ export const predictionFAQConfig: FAQConfig = (t) => ({
   title: t('Quick start to Prediction'),
   imageUrl: getImageUrl('prediction_telegram_bot'),
   alt: 'Prediction Telegram bot',
-  docsUrl: 'https://docs.pancakeswap.finance/products/prediction',
+  docsUrl: 'https://docs.simpleflow.finance/products/prediction',
   data: [
     {
       title: t('What is the Prediction Feature?'),

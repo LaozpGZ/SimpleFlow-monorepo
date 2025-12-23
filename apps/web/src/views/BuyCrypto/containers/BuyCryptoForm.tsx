@@ -262,7 +262,7 @@ export function BuyCryptoForm({ providerAvailabilities }: { providerAvailabiliti
               style={{ color: `${theme.colors.primary}` }}
               display="flex"
               fontSize="14px"
-              href="https://pancakeswap.finance/terms-of-service"
+              href="https://simpleflow.finance/terms-of-service"
               external
             >
               {t('terms of service')}

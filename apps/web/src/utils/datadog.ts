@@ -9,7 +9,7 @@ try {
     site: process.env.NEXT_PUBLIC_DD_RUM_SITE || '',
     forwardErrorsToLogs: true,
     sessionSampleRate: 100,
-    service: 'pancakeswap-web',
+    service: 'simpleflow-web',
   })
 } catch (e) {
   console.error(e)
@@ -48,7 +48,7 @@ function createDatadogRumManager() {
       applicationId: process.env.NEXT_PUBLIC_DD_RUM_APP_ID || '',
       clientToken: process.env.NEXT_PUBLIC_DD_RUM_CLIENT_TOKEN || '',
       site: process.env.NEXT_PUBLIC_DD_RUM_SITE || '',
-      service: 'pancakeswap-web',
+      service: 'simpleflow-web',
       env,
       sessionSampleRate,
       sessionReplaySampleRate: 10,

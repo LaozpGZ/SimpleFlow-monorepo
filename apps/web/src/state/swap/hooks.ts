@@ -238,7 +238,9 @@ export function useDefaultsFromURLSearch():
 
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
-    if (isSupportedBridgePending && parsed[Field.INPUT].chainId !== parsed[Field.OUTPUT].chainId) {
+    // Only wait for bridge data if this is actually a cross-chain swap
+    const isCrossChain = parsed[Field.INPUT].chainId !== parsed[Field.OUTPUT].chainId
+    if (isCrossChain && isSupportedBridgePending) {
       return
     }
 

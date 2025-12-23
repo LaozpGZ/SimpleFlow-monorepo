@@ -44,7 +44,7 @@ export const V2_SUBGRAPH_URLS = {
   [ChainId.OPBNB]: `${THE_GRAPH_PROXY_API}/exchange-v2-opbnb`,
 }
 
-export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.pancakeswap.finance'
+export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.simpleflow.finance'
 
 export const V3_SUBGRAPH_URLS = {
   ...V3_SUBGRAPHS,
@@ -93,5 +93,5 @@ export const urlConfigs = {
   POOL_KEY_BY_ID: '/cached/v1/pools/info/ids',
   BIRDEYE_TOKEN_PRICE: '/cached/v1/tokens/birdeye/defi/multi_price',
   TOKEN_LIST: 'https://api-v3.raydium.io/mint/list',
-  PCS_TOKEN_LIST: 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json',
+  PCS_TOKEN_LIST: 'https://tokens.simpleflow.finance/pancakeswap-solana-default.json',
 }

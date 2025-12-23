@@ -68,7 +68,7 @@ export const BurnDashboard = () => {
             </StyledGradientCard>
           ) : null}
           <NextLinkFromReactRouter
-            to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"
+            to="https://docs.simpleflow.finance/governance-and-tokenomics/cake-tokenomics"
             target="_blank"
           >
             <Button variant="subtle" width="max-content">

@@ -68,7 +68,7 @@ function listUrlRowHTMLId(listUrl: string) {
 function resolveLogo(list: TokenList): string {
   const uri = list.logoURI
   if (uri?.match(/static\.coingecko\.com/)) {
-    return 'https://tokens.pancakeswap.finance/images/projects/coingecko.png'
+    return 'https://tokens.simpleflow.finance/images/projects/coingecko.png'
   }
   return uri || ''
 }

@@ -58,7 +58,7 @@ export function Blocklist() {
                 components={[
                   <Link
                     style={{ display: 'inline-block' }}
-                    href="https://pancakeswap.finance/terms-of-service"
+                    href="https://simpleflow.finance/terms-of-service"
                     external
                   />,
                 ]}

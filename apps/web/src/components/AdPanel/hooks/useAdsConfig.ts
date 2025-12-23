@@ -31,7 +31,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         ],
         btn: {
           text: t('Add LP Now'),
-          link: 'https://solana.pancakeswap.finance/liquidity-pools',
+          link: 'https://solana.simpleflow.finance/liquidity-pools',
           mt: '32px',
         },
       },
@@ -51,13 +51,13 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           },
           {
             text: t('Trade Now'),
-            link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
+            link: 'https://simpleflow.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
             inline: true,
           },
         ],
         btn: {
           text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/Birthday-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
+          link: 'https://blog.simpleflow.finance/articles/Birthday-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
           mt: !isMobile ? '8px' : undefined,
         },
         ...(isMobile && {
@@ -78,7 +78,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
             ? [
                 {
                   text: t('Trade with %product%', { product: 'Social Login' }),
-                  link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
+                  link: 'https://simpleflow.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
                   inline: true,
                 },
                 {
@@ -92,13 +92,13 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
                 },
                 {
                   text: t('Trade Now'),
-                  link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
+                  link: 'https://simpleflow.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
                 },
               ]),
         ],
         btn: {
           text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/social-login-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
+          link: 'https://blog.simpleflow.finance/articles/social-login-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
           mt: !isMobile ? '8px' : '32px',
         },
         ...(isMobile && {
@@ -121,7 +121,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         ],
         btn: {
           text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/sociallogin',
+          link: 'https://blog.simpleflow.finance/articles/sociallogin',
           mt: !isMobile ? '8px' : undefined,
         },
       },

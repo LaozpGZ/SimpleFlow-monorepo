@@ -719,7 +719,7 @@ describe('split-routes', () => {
         {
           swapInfo: createSwapInfo({
             ammKey: 'GtpsrTHYnfFVm3qkPJtyKVwQLpXT7p2MRy9bp5hYeJnQ',
-            label: 'PancakeSwap',
+            label: 'SimpleFlow',
             inputMint: 'So11111111111111111111111111111111111111112',
             outputMint: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263',
             inAmount: '53000000',
@@ -852,7 +852,7 @@ describe('split-routes', () => {
         {
           swapInfo: createSwapInfo({
             ammKey: 'HJuipW7pcVq6kPQWJ4hovubwcu3gg8Vd2hmkR5bHh1Vs',
-            label: 'PancakeSwap',
+            label: 'SimpleFlow',
             inputMint: 'So11111111111111111111111111111111111111112',
             outputMint: MOCK_TOKEN_2.address,
             inAmount: '9638608',
@@ -1041,7 +1041,7 @@ describe('split-routes', () => {
         {
           swapInfo: createSwapInfo({
             ammKey: '5455YeNwDtgXrAhWZjE4epAbuKVpbGH2yhUrqJ4EYGMw',
-            label: 'PancakeSwap',
+            label: 'SimpleFlow',
             inputMint: MOCK_USDC.address,
             outputMint: MOCK_TOKEN_2.address,
             inAmount: '169254',

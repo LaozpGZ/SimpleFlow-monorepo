@@ -81,7 +81,7 @@ const WelcomePage: React.FC<React.PropsWithChildren<WelcomePageProps>> = ({ isLo
             <Text fontSize="14px" ml="8px">
               {t('*I have read the')}
               <Text display="inline-block" as="span" ml="4px">
-                <Link external href="https://docs.pancakeswap.finance/affiliate-program/terms-and-conditions">
+                <Link external href="https://docs.simpleflow.finance/affiliate-program/terms-and-conditions">
                   {t('terms and conditions')}
                 </Link>
               </Text>

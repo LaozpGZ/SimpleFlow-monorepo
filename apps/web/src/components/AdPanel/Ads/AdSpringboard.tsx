@@ -7,7 +7,7 @@ import { AdCard } from '../Card'
 import { AdPlayerProps } from '../ads.types'
 import { getImageUrl } from '../utils'
 
-const actionLink = 'https://springboard.pancakeswap.finance/'
+const actionLink = 'https://springboard.simpleflow.finance/'
 
 export const AdSpringboard = (props: AdPlayerProps) => {
   const { t } = useTranslation()

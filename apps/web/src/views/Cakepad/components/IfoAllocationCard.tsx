@@ -28,7 +28,7 @@ export const IfoAllocationDisplay: React.FC<IfoAllocationCardProps> = ({
     const chainQueryName = chainId ? CHAIN_QUERY_NAME[chainId] : 'bsc'
     const nativeCurrency = chainId ? Native.onChain(chainId) : Native.onChain(56) // Default to BSC if no chainId
     const nativeSymbol = nativeCurrency.symbol
-    return `https://pancakeswap.finance/swap?chain=${chainQueryName}&inputCurrency=${tokenAddress}&outputCurrency=${nativeSymbol}`
+    return `https://simpleflow.finance/swap?chain=${chainQueryName}&inputCurrency=${tokenAddress}&outputCurrency=${nativeSymbol}`
   }, [chainId, tokenAddress])
 
   return (

@@ -51,7 +51,7 @@ export const MevToggle: React.FC<{ size?: 'sm' | 'md' }> = ({ size = 'md' }) => 
   const { theme } = useTheme()
   const isSmall = size === 'sm'
   const { tooltip, tooltipVisible, targetRef } = useTooltip(
-    t('PancakeSwap MEV Guard protects you from frontrunning and sandwich attacks when swapping on BNB Chain.'),
+    t('SimpleFlow MEV Guard protects you from frontrunning and sandwich attacks when swapping on BNB Chain.'),
     {
       placement: 'auto',
       trigger: 'hover',
@@ -122,7 +122,7 @@ export const MevModal: React.FC<{ isOpen: boolean; onSuccess?: () => void } & In
               <Box width="100%">
                 <Text width="100%">{t('Add automatically on BNB Smart Chain:')}</Text>
                 <Text bold width="100%">
-                  {t('PancakeSwap MEV Guard')}
+                  {t('SimpleFlow MEV Guard')}
                 </Text>
               </Box>
               <ModalImg src={getImageUrl('swap-toggle-modal.png')} alt="swap-toggle-modal" />

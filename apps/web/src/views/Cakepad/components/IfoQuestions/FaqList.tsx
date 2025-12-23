@@ -79,8 +79,8 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
             <br />
             <Trans
               components={[
-                <InlineLink key="user" external href="https://docs.pancakeswap.finance/earn/cakepad/faq-users" />,
-                <InlineLink key="partner" external href="https://docs.pancakeswap.finance/earn/cakepad/faq-partners" />,
+                <InlineLink key="user" external href="https://docs.simpleflow.finance/earn/cakepad/faq-users" />,
+                <InlineLink key="partner" external href="https://docs.simpleflow.finance/earn/cakepad/faq-partners" />,
               ]}
               i18nTemplate="More details: <br /><0>User FAQ</0> | <1>Partner FAQ</1>"
             />
@@ -118,9 +118,9 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
                 <InlineLink
                   key="tokenomics"
                   external
-                  href="https://pancakeswap.finance/voting/proposal/0x79ef496c9737e48d9677a6e291ff2a549dee6729c9996398e453af8ecbf0ceb3"
+                  href="https://simpleflow.finance/voting/proposal/0x79ef496c9737e48d9677a6e291ff2a549dee6729c9996398e453af8ecbf0ceb3"
                 />,
-                <InlineLink key="guide" external href="https://docs.pancakeswap.finance/earn/cakepad/cakepad-guide" />,
+                <InlineLink key="guide" external href="https://docs.simpleflow.finance/earn/cakepad/cakepad-guide" />,
               ]}
               i18nTemplate="Reference: <0>Tokenomics 3.0</0> and <1>User Guide</1>"
             />
@@ -155,9 +155,7 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
 
             <Box mt="1rem">
               <Trans
-                components={[
-                  <InlineLink external href="https://docs.pancakeswap.finance/earn/cakepad/cakepad-guide" />,
-                ]}
+                components={[<InlineLink external href="https://docs.simpleflow.finance/earn/cakepad/cakepad-guide" />]}
                 i18nTemplate="More info: <0>User Guide</0>"
               />
             </Box>
@@ -195,7 +193,7 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
                 components={[
                   <InlineLink
                     external
-                    href="https://docs.pancakeswap.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
+                    href="https://docs.simpleflow.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
                   />,
                 ]}
                 i18nTemplate="Reference: <0>Fee Table</0>"
@@ -256,7 +254,7 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
                 components={[
                   <InlineLink
                     external
-                    href="https://docs.pancakeswap.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
+                    href="https://docs.simpleflow.finance/earn/cakepad/how-cake.pad-taxes-work-in-overflow-sales-with-example"
                   />,
                 ]}
                 i18nTemplate="Reference: <0>Overflow & Allocation Example</0>"
@@ -316,7 +314,7 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
               <Trans
                 components={[
                   <InlineLink external href="https://pancakeswap.notion.site/cakepad" />,
-                  <InlineLink external href="https://docs.pancakeswap.finance/earn/cakepad/faq-partners" />,
+                  <InlineLink external href="https://docs.simpleflow.finance/earn/cakepad/faq-partners" />,
                 ]}
                 i18nTemplate="For more info: <0>CAKE.PAD Partner Terms</0> | <1>Partner FAQ</1>"
               />
