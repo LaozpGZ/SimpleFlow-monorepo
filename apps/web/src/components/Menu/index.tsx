@@ -1,21 +1,18 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { DropdownMenuItemType, Menu as UikitMenu, footerLinks, useModal } from '@pancakeswap/uikit'
+import { DropdownMenuItemType, Menu as UikitMenu, footerLinks } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
-import USCitizenConfirmModal from 'components/Modal/USCitizenConfirmModal'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCakePrice } from 'hooks/useCakePrice'
-import { usePerpUrl } from 'hooks/usePerpUrl'
 import useTheme from 'hooks/useTheme'
-import { IdType, useUserNotUsCitizenAcknowledgement } from 'hooks/useUserIsUsCitizenAcknowledgement'
 import { useWebNotifications } from 'hooks/useWebNotifications'
 import { useRouter } from 'next/router'
-import { Suspense, lazy, useCallback, useMemo } from 'react'
+import { Suspense, lazy, useMemo } from 'react'
 import { styled } from 'styled-components'
 import GlobalSettings from './GlobalSettings'
 import UserMenu from './UserMenu'
-import { UseMenuItemsParams, useMenuItems } from './hooks/useMenuItems'
+import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuChildItem, getActiveSubMenuItem } from './utils'
 
 const Notifications = lazy(() => import('views/Notifications'))
@@ -42,29 +39,7 @@ const Menu = (props) => {
   const cakePrice = useCakePrice()
   const { currentLanguage, t } = useTranslation()
   const { pathname } = useRouter()
-  const perpUrl = usePerpUrl({ chainId, isDark, languageCode: currentLanguage.code })
-  const [perpConfirmed] = useUserNotUsCitizenAcknowledgement(IdType.PERPETUALS)
-
-  const [onPerpConfirmModalPresent] = useModal(
-    <USCitizenConfirmModal title={t('PancakeSwap Perpetuals')} id={IdType.PERPETUALS} href={perpUrl} />,
-    true,
-    false,
-    'perpConfirmModal',
-  )
-  const onSubMenuClick = useCallback<NonNullable<UseMenuItemsParams['onClick']>>(
-    (e, item) => {
-      if (item.confirmModalId === 'perpConfirmModal' && !perpConfirmed) {
-        e.preventDefault()
-        e.stopPropagation()
-        onPerpConfirmModalPresent()
-      }
-    },
-    [perpConfirmed, onPerpConfirmModalPresent],
-  )
-
-  const menuItems = useMenuItems({
-    onClick: onSubMenuClick,
-  })
+  const menuItems = useMenuItems()
 
   const activeMenuItem = useMemo(() => getActiveMenuItem({ menuConfig: menuItems, pathname }), [menuItems, pathname])
   const activeSubMenuItem = useMemo(

@@ -1,24 +1,18 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
-import { SUPPORTED_CHAIN_IDS as PREDICTION_SUPPORTED_CHAINS } from '@pancakeswap/prediction'
 import {
   DropdownMenuItems,
   DropdownMenuItemType,
   EarnFillIcon,
   EarnIcon,
-  GameIcon,
   MenuItemsType,
   MoreIcon,
-  RocketIcon,
   SwapFillIcon,
   SwapIcon,
-  TradeFilledIcon,
-  TradeIcon,
 } from '@pancakeswap/uikit'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
-import { getPerpetualUrl } from 'utils/getPerpetualUrl'
 import { EVM_CHAIN_IDS } from 'utils/wagmi'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & {
@@ -87,20 +81,6 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
-      label: t('Perps'),
-      icon: TradeIcon,
-      fillIcon: TradeFilledIcon,
-      href: getPerpetualUrl({
-        chainId,
-        languageCode,
-        isDark,
-      }),
-      hideSubNav: true,
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      confirmModalId: 'perpConfirmModal',
-      showItemsOnMobile: false,
-    },
-    {
       label: t('Earn.verb'),
       href: '/liquidity/pools',
       icon: EarnIcon,
@@ -145,62 +125,6 @@ const config: (
               supportChainIds: POOL_SUPPORTED_CHAINS,
             },
           ].map((item) => addMenuItemSupported(item, chainId)),
-        },
-      ].map((item) => addMenuItemSupported(item, chainId)),
-    },
-    {
-      label: t('Prob'),
-      icon: RocketIcon,
-      href: 'https://probable.markets',
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      hideSubNav: true,
-    },
-    {
-      label: t('Play'),
-      icon: GameIcon,
-      href: '/prediction',
-      overrideSubNavItems: [
-        {
-          label: t('Prediction'),
-          href: '/prediction',
-        },
-        {
-          label: t('Lottery'),
-          href: '/lottery',
-        },
-      ],
-      items: [
-        {
-          label: t('Springboard'),
-          href: 'https://springboard.pancakeswap.finance',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
-        {
-          label: t('Prediction'),
-          href: '/prediction',
-          image: '/images/decorations/prediction.png',
-          supportChainIds: PREDICTION_SUPPORTED_CHAINS,
-        },
-        {
-          label: t('Lottery'),
-          href: '/lottery',
-          image: '/images/decorations/lottery.png',
-        },
-        {
-          label: t('CAKE.PAD'),
-          href: '/cakepad',
-          image: '/images/ifos/ifo-bunny.png',
-          overrideSubNavItems: [
-            {
-              label: t('Latest'),
-              href: '/cakepad',
-              matchHrefs: ['/cakepad/deposit'],
-            },
-            {
-              label: t('Finished'),
-              href: '/cakepad/history',
-            },
-          ],
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },

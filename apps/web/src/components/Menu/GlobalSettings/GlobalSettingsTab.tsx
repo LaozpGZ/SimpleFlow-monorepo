@@ -5,38 +5,18 @@ import { TOKEN_RISK } from 'components/AccessRisk'
 import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
-import { useWebNotifications } from 'hooks/useWebNotifications'
-import { Suspense, lazy } from 'react'
-import { useSubgraphHealthIndicatorManager, useUserUsernameVisibility } from 'state/user/hooks'
+import { useSubgraphHealthIndicatorManager } from 'state/user/hooks'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { useUserTokenRisk } from 'state/user/hooks/useUserTokenRisk'
-import { styled } from 'styled-components'
-
-const WebNotiToggle = lazy(() => import('./WebNotiToggle'))
-
-const BetaTag = styled.div`
-  border: 2px solid ${({ theme }) => theme.colors.success};
-  border-radius: 16px;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  color: ${({ theme }) => theme.colors.success};
-  margin-left: 6px;
-  font-weight: bold;
-  font-size: 14px;
-`
 
 export const GlobalSettingsTab = () => {
   const { currentLanguage, setLanguage, t } = useTranslation()
 
   const { isDark, setTheme } = useTheme()
   const { chainId } = useActiveChainId()
-  const { enabled } = useWebNotifications()
 
   // Global-specific state
   const [subgraphHealth, setSubgraphHealth] = useSubgraphHealthIndicatorManager()
-  const [userUsernameVisibility, setUserUsernameVisibility] = useUserUsernameVisibility()
   const [showTestnet, setShowTestnet] = useUserShowTestnet()
   const [tokenRisk, setTokenRisk] = useUserTokenRisk()
 
@@ -71,38 +51,6 @@ export const GlobalSettingsTab = () => {
             setSubgraphHealth(!subgraphHealth)
           }}
         />
-      </Flex>
-
-      <Flex justifyContent="space-between" alignItems="center" mb="24px">
-        <Flex alignItems="center">
-          <Text>{t('Show username')}</Text>
-          <QuestionHelper text={t('Shows username of wallet instead of bunnies')} placement="top" ml="4px" />
-        </Flex>
-        <Toggle
-          id="toggle-username-visibility"
-          checked={userUsernameVisibility}
-          scale="md"
-          onChange={() => {
-            setUserUsernameVisibility(!userUsernameVisibility)
-          }}
-        />
-      </Flex>
-
-      <Flex justifyContent="space-between" alignItems="center" mb="24px">
-        <Flex alignItems="center">
-          <Text>{t('Allow notifications')}</Text>
-          <QuestionHelper
-            text={t(
-              'Enables the web notifications feature. If turned off you will be automatically unsubscribed and the notification bell will not be visible',
-            )}
-            placement="top"
-            ml="4px"
-          />
-          <BetaTag>{t('BETA')}</BetaTag>
-        </Flex>
-        <Suspense fallback={null}>
-          <WebNotiToggle enabled={enabled} />
-        </Suspense>
       </Flex>
 
       <Flex justifyContent="space-between" alignItems="center" mb="24px">
