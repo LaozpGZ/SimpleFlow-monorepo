@@ -17,8 +17,7 @@ export enum ChainId {
   BASE_TESTNET = 84531,
   BASE_SEPOLIA = 84532,
   SEPOLIA = 11155111,
-  MONAD_MAINNET = 1913, // SimpleChain (复用 Monad 配置)
-  MONAD_TESTNET = 1914, // SimpleChain Testnet
+  MONAD_MAINNET = 1914, // SimpleChain Testnet (复用 Monad 配置)
 }
 
 export enum NonEVMChainId {
@@ -45,5 +44,4 @@ export const testnetChainIds = [
   ChainId.SEPOLIA,
   ChainId.ARBITRUM_SEPOLIA,
   ChainId.BASE_SEPOLIA,
-  ChainId.MONAD_TESTNET,
 ]

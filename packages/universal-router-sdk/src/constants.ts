@@ -30,7 +30,6 @@ const UNIVERSAL_ROUTER_ADDRESSES: Record<ChainId, Address> = {
   [ChainId.OPBNB_TESTNET]: '0xa8EEA7aa6620712524d18D742821848e55E773B5',
 
   [ChainId.MONAD_MAINNET]: '0xC952F298fEe8479e7dc6E83398c31ff26509b95b', // SimpleChain UniversalRouter
-  [ChainId.MONAD_TESTNET]: '0xC952F298fEe8479e7dc6E83398c31ff26509b95b', // SimpleChain UniversalRouter
 }
 
 export const getUniversalRouterAddress = (chainId: ChainId): Address => {

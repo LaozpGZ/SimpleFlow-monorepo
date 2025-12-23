@@ -94,11 +94,4 @@ export const Chains: Chain[] = [
     fullName: chainFullNames[ChainId.SCROLL_SEPOLIA],
     isEVM: true,
   },
-  {
-    id: ChainId.MONAD_TESTNET,
-    name: chainNames[ChainId.MONAD_TESTNET],
-    fullName: chainFullNames[ChainId.MONAD_TESTNET],
-    isEVM: true,
-    testnet: true,
-  },
 ]

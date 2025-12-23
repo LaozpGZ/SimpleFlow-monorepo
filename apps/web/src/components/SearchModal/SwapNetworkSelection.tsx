@@ -110,7 +110,7 @@ export default function SwapNetworkSelection({
       }
 
       if (
-        chain.id !== ChainId.MONAD_TESTNET &&
+        chain.id !== ChainId.MONAD_MAINNET &&
         (('testnet' in chain && chain.testnet) || evmChains.find((c) => c.id === chain.id)?.testnet)
       ) {
         return false

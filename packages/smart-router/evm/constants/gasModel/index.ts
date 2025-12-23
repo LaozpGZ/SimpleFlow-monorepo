@@ -14,7 +14,6 @@ import {
   lineaTestnetTokens,
   lineaTokens,
   monadTokens,
-  monadTestnetTokens,
   opBnbTestnetTokens,
   opBnbTokens,
   scrollSepoliaTokens,
@@ -43,7 +42,6 @@ export const usdGasTokensByChain = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc],
   [ChainId.MONAD_MAINNET]: [monadTokens.usdc],
-  [ChainId.MONAD_TESTNET]: [monadTestnetTokens.usdc],
 } satisfies Record<ChainId, Token[]>
 
 export * from './stableSwap'

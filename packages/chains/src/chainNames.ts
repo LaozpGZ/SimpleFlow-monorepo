@@ -20,7 +20,6 @@ export const chainNames: Record<UnifiedChainId, string> = {
   [ChainId.ARBITRUM_SEPOLIA]: 'arbSepolia',
   [ChainId.BASE_SEPOLIA]: 'baseSepolia',
   [ChainId.MONAD_MAINNET]: 'simplechain',
-  [ChainId.MONAD_TESTNET]: 'simplechainTestnet',
   [NonEVMChainId.SOLANA]: 'sol',
   [NonEVMChainId.APTOS]: 'aptos',
 }
@@ -45,7 +44,6 @@ export const chainFullNames: Record<UnifiedChainId, string> = {
   [ChainId.ARBITRUM_SEPOLIA]: 'Arbitrum Sepolia',
   [ChainId.BASE_SEPOLIA]: 'Base Sepolia',
   [ChainId.MONAD_MAINNET]: 'SimpleChain',
-  [ChainId.MONAD_TESTNET]: 'SimpleChain Testnet',
   [NonEVMChainId.SOLANA]: 'Solana',
   [NonEVMChainId.APTOS]: 'Aptos',
 }
@@ -70,7 +68,6 @@ export const chainNamesInKebabCase = {
   [ChainId.ARBITRUM_SEPOLIA]: 'arbitrum-sepolia',
   [ChainId.BASE_SEPOLIA]: 'base-sepolia',
   [ChainId.MONAD_MAINNET]: 'simplechain',
-  [ChainId.MONAD_TESTNET]: 'simplechain-testnet',
   [NonEVMChainId.SOLANA]: 'sol',
   [NonEVMChainId.APTOS]: 'aptos',
 } as const
@@ -160,7 +157,6 @@ export const defiLlamaChainNames: Record<UnifiedChainId, string> = {
   [ChainId.ARBITRUM_SEPOLIA]: '',
   [ChainId.BASE_SEPOLIA]: '',
   [ChainId.MONAD_MAINNET]: 'simplechain',
-  [ChainId.MONAD_TESTNET]: '',
   [NonEVMChainId.SOLANA]: '',
   [NonEVMChainId.APTOS]: '',
 }

@@ -44,7 +44,6 @@ export default {
     [ChainId.BASE_TESTNET]: '0xcA11bde05977b3631167028862bE2a173976CA11',
     [ChainId.SCROLL_SEPOLIA]: '0xcA11bde05977b3631167028862bE2a173976CA11',
     [ChainId.MONAD_MAINNET]: '0xcA11bde05977b3631167028862bE2a173976CA11',
-    [ChainId.MONAD_TESTNET]: '0xcA11bde05977b3631167028862bE2a173976CA11',
   },
   pancakeProfile: {
     [ChainId.BSC]: '0xDf4dBf6536201370F95e06A0F8a7a70fE40E388a',
@@ -203,7 +202,6 @@ export default {
     [ChainId.SCROLL_SEPOLIA]: '0x8Ae8592a24CD13b7E09D2763E7d6A39E3c0D6bad',
     [ChainId.SEPOLIA]: '0xbC203d7f83677c7ed3F7acEc959963E7F4ECC5C2',
     [ChainId.MONAD_MAINNET]: '0x', // SimpleChain - 暂未部署
-    [ChainId.MONAD_TESTNET]: '0x', // SimpleChain - 暂未部署
   },
   quoter: V3_QUOTER_ADDRESSES,
   v3Airdrop: {

@@ -45,7 +45,6 @@ export function getV3Subgraphs({ noderealApiKey, theGraphApiKey }: SubgraphParam
     [ChainId.ARBITRUM_SEPOLIA]: null,
     [ChainId.BASE_SEPOLIA]: null,
     [ChainId.MONAD_MAINNET]: null,
-    [ChainId.MONAD_TESTNET]: null,
   } as const satisfies Record<ChainId, string | null>
 }
 

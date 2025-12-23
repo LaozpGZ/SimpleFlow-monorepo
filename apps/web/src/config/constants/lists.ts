@@ -18,7 +18,6 @@ export const PANCAKE_OPBNB_DEFAULT = 'https://tokens.pancakeswap.finance/pancake
 export const PANCAKE_SOLANA_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
 // SimpleChain - 暂无官方代币列表，使用空数组
 export const PANCAKE_MONAD_DEFAULT = '' // SimpleChain Mainnet
-export const PANCAKE_MONAD_TESTNET_DEFAULT = '' // SimpleChain Testnet
 
 const COINGECKO_ETH = 'https://tokens.coingecko.com/uniswap/all.json'
 // export const CMC = 'https://tokens.pancakeswap.finance/cmc.json' // not updated for a while
@@ -36,7 +35,6 @@ const OP_SUPER_CHAIN_URL =
 const BASE_URLS = [PANCAKE_BASE_DEFAULT, OP_SUPER_CHAIN_URL, COINGECKO_BASE]
 const OPBNB_URLS = [PANCAKE_OPBNB_DEFAULT]
 const MONAD_URLS: string[] = [] // SimpleChain - 暂无代币列表
-const MONAD_TESTNET_URLS: string[] = [] // SimpleChain - 暂无代币列表
 
 // List of official tokens list
 export const OFFICIAL_LISTS = [
@@ -66,7 +64,6 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   ...WARNING_LIST_URLS,
   ...OPBNB_URLS,
   ...MONAD_URLS,
-  ...MONAD_TESTNET_URLS,
   ...RWA_URLS,
 ]
 
@@ -99,5 +96,4 @@ export const MULTI_CHAIN_LIST_URLS: { [chainId: number]: string[] } = {
   [ChainId.BASE]: BASE_URLS,
   [ChainId.OPBNB]: OPBNB_URLS,
   [ChainId.MONAD_MAINNET]: MONAD_URLS,
-  [ChainId.MONAD_TESTNET]: MONAD_TESTNET_URLS,
 }

@@ -246,7 +246,7 @@ const EvmTooltipContent = () => {
         <SquareChainIcon src={`${ASSET_CDN}/web/chains/square/${ChainId.ARBITRUM_ONE}.svg`} alt="arbitrum" />
         <SquareChainIcon src={`${ASSET_CDN}/web/chains/square/${ChainId.ZKSYNC}.svg`} alt="zksync" />
         <SquareChainIcon src={`${ASSET_CDN}/web/chains/square/${ChainId.LINEA}.svg`} alt="linea" />
-        <SquareChainIcon src={`${ASSET_CDN}/web/chains/square/${ChainId.MONAD_TESTNET}.svg`} alt="monad" />
+        <SquareChainIcon src={`${ASSET_CDN}/web/chains/square/${ChainId.MONAD_MAINNET}.svg`} alt="monad" />
       </FlexGap>
     </>
   )

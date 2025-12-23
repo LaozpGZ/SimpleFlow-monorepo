@@ -139,14 +139,6 @@ export const BUSD = {
     'Binance USD',
     'https://www.paxos.com/busd/',
   ),
-  [ChainId.MONAD_TESTNET]: new ERC20Token(
-    ChainId.MONAD_TESTNET,
-    '0xcf27F781841484d5CF7e155b44954D7224caF1dD',
-    18,
-    'BUSD',
-    'Binance USD',
-    'https://www.paxos.com/busd/',
-  ),
 }
 
 export const CAKE = {
@@ -376,14 +368,6 @@ export const USDC = {
     'USDC',
     'https://www.centre.io/usdc',
   ),
-  [ChainId.MONAD_TESTNET]: new ERC20Token(
-    ChainId.MONAD_TESTNET,
-    '0xf817257fed379853cDe0fa4F97AB987181B1E5Ea',
-    18,
-    'USDC',
-    'USD Coin',
-    'https://www.centre.io/usdc',
-  ),
   [NonEVMChainId.SOLANA]: solanaTokens.usdc,
 }
 
@@ -445,14 +429,6 @@ export const USDT = {
     'USDT0',
     'USDT0',
     'https://usdt0.to/',
-  ),
-  [ChainId.MONAD_TESTNET]: new ERC20Token(
-    ChainId.MONAD_TESTNET,
-    '0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D',
-    18,
-    'USDT',
-    'Tether USD',
-    'https://tether.to/',
   ),
   [NonEVMChainId.SOLANA]: solanaTokens.usdt,
 }
@@ -570,5 +546,4 @@ export const STABLE_COIN = {
   [ChainId.ARBITRUM_SEPOLIA]: USDC[ChainId.ARBITRUM_SEPOLIA],
   [ChainId.BASE_SEPOLIA]: USDC[ChainId.BASE_SEPOLIA],
   [ChainId.MONAD_MAINNET]: USDC[ChainId.MONAD_MAINNET],
-  [ChainId.MONAD_TESTNET]: USDC[ChainId.MONAD_TESTNET],
 } satisfies Record<ChainId, ERC20Token>

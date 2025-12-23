@@ -17,7 +17,6 @@ import {
   lineaTestnetTokens,
   lineaTokens,
   monadTokens,
-  monadTestnetTokens,
   opBnbTestnetTokens,
   opBnbTokens,
   scrollSepoliaTokens,
@@ -48,7 +47,6 @@ export const SMART_ROUTER_ADDRESSES = {
   [ChainId.ARBITRUM_SEPOLIA]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
   [ChainId.BASE_SEPOLIA]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
   [ChainId.MONAD_MAINNET]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12', // SimpleChain SmartRouter
-  [ChainId.MONAD_TESTNET]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12', // SimpleChain SmartRouter
 } as const satisfies Record<ChainId, string>
 
 export const V2_ROUTER_ADDRESS: ChainMap<string> = {
@@ -71,7 +69,6 @@ export const V2_ROUTER_ADDRESS: ChainMap<string> = {
   [ChainId.ARBITRUM_SEPOLIA]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
   [ChainId.BASE_SEPOLIA]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
   [ChainId.MONAD_MAINNET]: '', // SimpleChain - 暂无V2
-  [ChainId.MONAD_TESTNET]: '', // SimpleChain - 暂无V2
 }
 
 export const STABLE_SWAP_INFO_ADDRESS: ChainMap<string> = {
@@ -93,7 +90,6 @@ export const STABLE_SWAP_INFO_ADDRESS: ChainMap<string> = {
   [ChainId.SEPOLIA]: '',
   [ChainId.ARBITRUM_SEPOLIA]: '',
   [ChainId.BASE_SEPOLIA]: '',
-  [ChainId.MONAD_TESTNET]: '',
   [ChainId.MONAD_MAINNET]: '',
 }
 
@@ -126,7 +122,6 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.MONAD_MAINNET]: [monadTokens.weth, monadTokens.usdc, monadTokens.busd, monadTokens.usdt],
-  [ChainId.MONAD_TESTNET]: [monadTestnetTokens.weth, monadTestnetTokens.usdc, monadTestnetTokens.busd],
 }
 
 const czusd = new ERC20Token(ChainId.BSC, '0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70', 18, 'CZUSD', 'CZUSD')

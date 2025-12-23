@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ["**/next-env.d.ts"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2017,
