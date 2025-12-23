@@ -66,6 +66,7 @@ declare module "@@@next-typesafe-url" {
     "/info/v3/tokens/[address]": StaticRoute;
     "/info/v3/tokens": StaticRoute;
     "/invite/[code]": StaticRoute;
+    "/leaderboard": StaticRoute;
     "/limit-orders": StaticRoute;
     "/liquid-staking/[contract]": StaticRoute;
     "/liquid-staking": StaticRoute;

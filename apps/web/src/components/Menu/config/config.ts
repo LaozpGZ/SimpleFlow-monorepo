@@ -81,56 +81,22 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
-      label: t('Earn.verb'),
+      label: t('Farm / Liquidity'),
       href: '/liquidity/pools',
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
-      image: '/images/decorations/pe2.png',
+      hideSubNav: true,
       supportChainIds: SUPPORT_FARMS,
-      overrideSubNavItems: [
-        {
-          label: t('Farm / Liquidity'),
-          href: '/liquidity/pools',
-          supportChainIds: SUPPORT_FARMS,
-        },
-        {
-          label: t('veCake Redeem'),
-          href: '/cake-staking/redeem',
-          supportChainIds: POOL_SUPPORTED_CHAINS,
-        },
-        {
-          label: t('Syrup Pools'),
-          href: '/pools',
-          supportChainIds: POOL_SUPPORTED_CHAINS,
-        },
-      ].map((item) => addMenuItemSupported(item, chainId)),
-      items: [
-        {
-          label: t('Farm / Liquidity'),
-          href: '/liquidity/pools',
-          matchHrefs: ['/liquidity/positions', '/farms'],
-          supportChainIds: SUPPORT_FARMS,
-        },
-        {
-          label: t('Staking'),
-          items: [
-            {
-              label: t('veCake Redeem'),
-              href: '/cake-staking/redeem',
-              supportChainIds: POOL_SUPPORTED_CHAINS,
-            },
-            {
-              label: t('Syrup Pools'),
-              href: '/pools',
-              supportChainIds: POOL_SUPPORTED_CHAINS,
-            },
-          ].map((item) => addMenuItemSupported(item, chainId)),
-        },
-      ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
       label: t('Info.section_title'),
       href: '/info/v3',
+      icon: MoreIcon,
+      hideSubNav: true,
+    },
+    {
+      label: t('Leaderboard'),
+      href: '/leaderboard',
       icon: MoreIcon,
       hideSubNav: true,
     },
