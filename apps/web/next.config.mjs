@@ -65,6 +65,7 @@ const basicTranspiles = [
 ]
 /** @type {import('next').NextConfig} */
 const config = {
+  output: 'standalone',
   typescript: {
     tsconfigPath: 'tsconfig.json',
     ignoreBuildErrors: true

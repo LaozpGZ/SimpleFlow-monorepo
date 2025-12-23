@@ -2,7 +2,6 @@ import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo } from 'react'
 import { styled } from 'styled-components'
-import { XmasStarEffect } from './XmasStarEffect'
 
 const XMAS_MOUNTAIN_HEIGHT_TABLE = {
   base: '560px',
@@ -181,7 +180,6 @@ export const XmasEffect: React.FC = memo(() => {
     <XmasEffectWrapper id="swap-xmas-effect" aria-hidden="true">
       <XmasScene>
         <XmasBackground />
-        <XmasStarEffect />
         <XmasMountain $isDesktop={isDesktop} $height={mountainHeight} $width={mountainWidth} />
         <XmasSideLeft $left={sideLeft} $width={sideLeftWidth} $height={sideLeftHeight} />
         <XmasSideRight />

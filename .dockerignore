@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+*.md
+.env.local
+.env.development
+.turbo
+.changeset
+.github
+.husky
+.vscode
+.cursor
+.serena
+.spec-workflow
+doc
+patches
