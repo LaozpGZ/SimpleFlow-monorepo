@@ -47,8 +47,8 @@ export const SMART_ROUTER_ADDRESSES = {
   [ChainId.SEPOLIA]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
   [ChainId.ARBITRUM_SEPOLIA]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
   [ChainId.BASE_SEPOLIA]: '0x678Aa4bF4E210cf2166753e054d5b7c31cc7fa86',
-  [ChainId.MONAD_MAINNET]: '0x21114915Ac6d5A2e156931e20B20b038dEd0Be7C',
-  [ChainId.MONAD_TESTNET]: '0xe27dC57FcE896350a38D8d8aDcEefBfb5649D9De',
+  [ChainId.MONAD_MAINNET]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12', // SimpleChain SmartRouter
+  [ChainId.MONAD_TESTNET]: '0xC4E1763C9F2fa88406f5d8aba0a6d30dfC5F8E12', // SimpleChain SmartRouter
 } as const satisfies Record<ChainId, string>
 
 export const V2_ROUTER_ADDRESS: ChainMap<string> = {
@@ -70,8 +70,8 @@ export const V2_ROUTER_ADDRESS: ChainMap<string> = {
   [ChainId.SEPOLIA]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
   [ChainId.ARBITRUM_SEPOLIA]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
   [ChainId.BASE_SEPOLIA]: '0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb',
-  [ChainId.MONAD_MAINNET]: '0xB1Bc24c34e88f7D43D5923034E3a14B24DaACfF9',
-  [ChainId.MONAD_TESTNET]: '0x3a3eBAe0Eec80852FBC7B9E824C6756969cc8dc1',
+  [ChainId.MONAD_MAINNET]: '', // SimpleChain - 暂无V2
+  [ChainId.MONAD_TESTNET]: '', // SimpleChain - 暂无V2
 }
 
 export const STABLE_SWAP_INFO_ADDRESS: ChainMap<string> = {

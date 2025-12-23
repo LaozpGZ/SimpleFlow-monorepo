@@ -16,8 +16,9 @@ export const PANCAKE_LINEA_DEFAULT = 'https://tokens.pancakeswap.finance/pancake
 export const PANCAKE_BASE_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-base-default.json'
 export const PANCAKE_OPBNB_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-opbnb-default.json'
 export const PANCAKE_SOLANA_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
-export const PANCAKE_MONAD_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-monad-default.json'
-export const PANCAKE_MONAD_TESTNET_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-monad-testnet-default.json'
+// SimpleChain - 暂无官方代币列表，使用空数组
+export const PANCAKE_MONAD_DEFAULT = '' // SimpleChain Mainnet
+export const PANCAKE_MONAD_TESTNET_DEFAULT = '' // SimpleChain Testnet
 
 const COINGECKO_ETH = 'https://tokens.coingecko.com/uniswap/all.json'
 // export const CMC = 'https://tokens.pancakeswap.finance/cmc.json' // not updated for a while
@@ -34,8 +35,8 @@ const OP_SUPER_CHAIN_URL =
   'https://raw.githubusercontent.com/ethereum-optimism/ethereum-optimism.github.io/master/optimism.tokenlist.json'
 const BASE_URLS = [PANCAKE_BASE_DEFAULT, OP_SUPER_CHAIN_URL, COINGECKO_BASE]
 const OPBNB_URLS = [PANCAKE_OPBNB_DEFAULT]
-const MONAD_URLS = [PANCAKE_MONAD_DEFAULT]
-const MONAD_TESTNET_URLS = [PANCAKE_MONAD_TESTNET_DEFAULT]
+const MONAD_URLS: string[] = [] // SimpleChain - 暂无代币列表
+const MONAD_TESTNET_URLS: string[] = [] // SimpleChain - 暂无代币列表
 
 // List of official tokens list
 export const OFFICIAL_LISTS = [
@@ -46,7 +47,7 @@ export const OFFICIAL_LISTS = [
   PANCAKE_LINEA_DEFAULT,
   PANCAKE_BASE_DEFAULT,
   PANCAKE_OPBNB_DEFAULT,
-  PANCAKE_MONAD_DEFAULT,
+  // PANCAKE_MONAD_DEFAULT,  // SimpleChain - 暂无
 ]
 
 export const UNSUPPORTED_LIST_URLS: string[] = []
@@ -83,8 +84,8 @@ export const DEFAULT_ACTIVE_LIST_URLS: string[] = [
   COINGECKO_ETH,
   COINGECKO_ARB,
   COINGECKO_BASE,
-  PANCAKE_MONAD_DEFAULT,
-  PANCAKE_MONAD_TESTNET_DEFAULT,
+  // PANCAKE_MONAD_DEFAULT,  // SimpleChain - 暂无
+  // PANCAKE_MONAD_TESTNET_DEFAULT,  // SimpleChain - 暂无
   COINGECKO_LINEA,
   ...RWA_URLS,
 ]

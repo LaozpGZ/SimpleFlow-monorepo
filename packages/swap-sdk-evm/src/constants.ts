@@ -153,19 +153,19 @@ export const WETH9 = {
   ),
   [ChainId.MONAD_MAINNET]: new ERC20Token(
     ChainId.MONAD_MAINNET,
-    '0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A',
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
     18,
-    'WMON',
-    'Wrapped Monad',
-    'https://www.monad.xyz/',
+    'WSRW',
+    'Wrapped SRW',
+    'https://simplechain.com/',
   ),
   [ChainId.MONAD_TESTNET]: new ERC20Token(
     ChainId.MONAD_TESTNET,
-    '0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701',
+    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
     18,
-    'WMON',
-    'Wrapped Monad',
-    'https://www.monad.xyz/',
+    'WSRW',
+    'Wrapped SRW',
+    'https://simplechain.com/',
   ),
 }
 
@@ -287,13 +287,13 @@ export const NATIVE = {
     decimals: 18,
   },
   [ChainId.MONAD_MAINNET]: {
-    name: 'Monad',
-    symbol: 'MON',
+    name: 'SRW',
+    symbol: 'SRW',
     decimals: 18,
   },
   [ChainId.MONAD_TESTNET]: {
-    name: 'Monad Testnet Ether',
-    symbol: 'MON',
+    name: 'SRW',
+    symbol: 'SRW',
     decimals: 18,
   },
 } satisfies Partial<

@@ -14,7 +14,6 @@ import {
   linea,
   lineaTestnet,
   mainnet,
-  monadTestnet,
   opBNB,
   opBNBTestnet,
   scrollSepolia,
@@ -51,35 +50,30 @@ const bsc = {
   },
 } satisfies Chain
 
-const MONAD_RPC_URLS = [
-  'https://rpc.monad.xyz',
-  'https://rpc1.monad.xyz',
-  'https://rpc3.monad.xyz',
-  'https://rpc-mainnet.monadinfra.com',
-  process.env.NEXT_PUBLIC_MONAD_RPC,
-  process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC,
-].filter(Boolean) as [string, ...string[]]
+const SIMPLECHAIN_RPC_URLS = ['https://testnet-rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+  Boolean,
+) as [string, ...string[]]
 
-const monad: Chain = {
+const simplechain: Chain = {
   id: ChainId.MONAD_MAINNET,
-  name: 'Monad',
-  nativeCurrency: { name: 'Monad', symbol: 'MON', decimals: 18 },
+  name: 'SimpleChain',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
   rpcUrls: {
-    default: { http: MONAD_RPC_URLS },
-    public: { http: MONAD_RPC_URLS },
+    default: { http: SIMPLECHAIN_RPC_URLS },
+    public: { http: SIMPLECHAIN_RPC_URLS },
   },
   blockExplorers: {
     default: {
-      name: 'MonadVision',
-      url: 'https://monadvision.com',
+      name: 'SimpleChain Explorer',
+      url: 'https://testnet-explorer.simplechain.com',
     },
   },
   contracts: {
     multicall3: {
-      address: '0x8553AA1615549A86882151784b329B017aA7c832',
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
     },
   },
-  testnet: false,
+  testnet: true,
 }
 
 /**
@@ -120,8 +114,7 @@ export const CHAINS: [Chain, ...Chain[]] = [
   opBNB,
   opBNBTestnet,
   scrollSepolia,
-  monad,
-  monadTestnet,
+  simplechain,
 ]
 
 // Minimal Solana chain descriptor for explorer and non‑EVM utilities

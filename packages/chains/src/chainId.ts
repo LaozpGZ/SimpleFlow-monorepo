@@ -17,8 +17,8 @@ export enum ChainId {
   BASE_TESTNET = 84531,
   BASE_SEPOLIA = 84532,
   SEPOLIA = 11155111,
-  MONAD_MAINNET = 143,
-  MONAD_TESTNET = 10143,
+  MONAD_MAINNET = 1913, // SimpleChain (复用 Monad 配置)
+  MONAD_TESTNET = 1914, // SimpleChain Testnet
 }
 
 export enum NonEVMChainId {

@@ -9,7 +9,6 @@ import {
   baseGoerli,
   baseSepolia,
   linea,
-  monadTestnet,
   opBNB,
   opBNBTestnet,
   scrollSepolia,
@@ -18,14 +17,9 @@ import {
   zksyncSepoliaTestnet,
 } from 'wagmi/chains'
 
-const MONAD_RPC_URLS = [
-  process.env.NEXT_PUBLIC_MONAD_RPC,
-  process.env.NEXT_PUBLIC_MONAD_BACKUP_RPC,
-  'https://rpc-mainnet.monadinfra.com',
-  'https://rpc.monad.xyz',
-  'https://rpc1.monad.xyz',
-  'https://rpc3.monad.xyz',
-].filter(Boolean) as [string, ...string[]]
+const SIMPLECHAIN_RPC_URLS = ['https://testnet-rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+  Boolean,
+) as [string, ...string[]]
 
 const ARBITRUM_NODES = [
   ...arbitrum.rpcUrls.default.http,
@@ -87,11 +81,8 @@ export const SERVER_NODES = {
   [ChainId.SEPOLIA]: sepolia.rpcUrls.default.http,
   [ChainId.ARBITRUM_SEPOLIA]: arbitrumSepolia.rpcUrls.default.http,
   [ChainId.BASE_SEPOLIA]: baseSepolia.rpcUrls.default.http,
-  [ChainId.MONAD_MAINNET]: MONAD_RPC_URLS,
-  [ChainId.MONAD_TESTNET]: [
-    'https://testnet-rpc2.monad.xyz/52227f026fa8fac9e2014c58fbf5643369b3bfc6',
-    ...monadTestnet.rpcUrls.default.http,
-  ],
+  [ChainId.MONAD_MAINNET]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.MONAD_TESTNET]: SIMPLECHAIN_RPC_URLS,
 } satisfies Partial<Record<ChainId, readonly string[]>>
 
 export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
@@ -163,9 +154,6 @@ export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
   [ChainId.SEPOLIA]: sepolia.rpcUrls.default.http,
   [ChainId.ARBITRUM_SEPOLIA]: arbitrumSepolia.rpcUrls.default.http,
   [ChainId.BASE_SEPOLIA]: baseSepolia.rpcUrls.default.http,
-  [ChainId.MONAD_MAINNET]: MONAD_RPC_URLS,
-  [ChainId.MONAD_TESTNET]: [
-    'https://testnet-rpc2.monad.xyz/52227f026fa8fac9e2014c58fbf5643369b3bfc6',
-    ...monadTestnet.rpcUrls.default.http,
-  ],
+  [ChainId.MONAD_MAINNET]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.MONAD_TESTNET]: SIMPLECHAIN_RPC_URLS,
 } satisfies Partial<Record<ChainId, readonly string[]>>
