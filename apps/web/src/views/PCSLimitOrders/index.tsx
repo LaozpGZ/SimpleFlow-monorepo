@@ -1,7 +1,5 @@
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import Page from 'components/Layout/Page'
-import { SwapType } from 'views/Swap/types'
-import { SwapSelection } from 'views/SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { PanelWrapper } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPanel'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { BottomDrawer, Box, FlexGap, Link, useMatchBreakpoints } from '@pancakeswap/uikit'
@@ -82,7 +80,6 @@ export const PCSLimitOrdersView = () => {
           <Box width="100%">
             <LimitOrderFormWrapper>
               <SwapUIV2.SwapTabAndInputPanelWrapper>
-                <SwapSelection swapType={SwapType.LIMIT} withToolkit outputChainId={outputCurrency?.chainId} />
                 <Suspense fallback={<CardFallback height="332px" />}>
                   <LimitOrderForm />
                 </Suspense>

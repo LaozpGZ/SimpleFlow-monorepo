@@ -12,9 +12,7 @@ import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { styled } from 'styled-components'
 
 import { QuoteProvider } from 'quoter/QuoteProvider'
-import { SwapSelection } from '../../SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { SwapFeaturesContext } from '../SwapFeaturesContext'
-import { SwapType } from '../types'
 import { OrderHistory, TWAPPanel } from './Twap'
 
 const ChartWithPriceHeader = dynamic(() => import('components/Chart/ChartWithPriceHeader'), { ssr: false })
@@ -98,12 +96,6 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         <Flex flexDirection="column" width={isDesktop ? undefined : '100%'}>
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
-              <SwapSelection
-                swapType={limit ? SwapType.LIMIT : SwapType.TWAP}
-                style={{ marginBottom: 16 }}
-                withToolkit
-                outputChainId={outputChainId}
-              />
               <TWAPPanel limit={limit} />
               <Flex flexDirection={!isDesktop ? 'column-reverse' : 'column'}>
                 {limit && (

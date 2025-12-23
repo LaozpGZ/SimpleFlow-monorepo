@@ -1,24 +1,17 @@
-import { ChainId } from '@pancakeswap/chains'
 import { languageList, useTranslation } from '@pancakeswap/localization'
 import { Flex, LangSelectorV2, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@pancakeswap/uikit'
-import { TOKEN_RISK } from 'components/AccessRisk'
-import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
 import { useSubgraphHealthIndicatorManager } from 'state/user/hooks'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
-import { useUserTokenRisk } from 'state/user/hooks/useUserTokenRisk'
 
 export const GlobalSettingsTab = () => {
   const { currentLanguage, setLanguage, t } = useTranslation()
 
   const { isDark, setTheme } = useTheme()
-  const { chainId } = useActiveChainId()
 
   // Global-specific state
   const [subgraphHealth, setSubgraphHealth] = useSubgraphHealthIndicatorManager()
   const [showTestnet, setShowTestnet] = useUserShowTestnet()
-  const [tokenRisk, setTokenRisk] = useUserTokenRisk()
 
   return (
     <Flex pb="24px" flexDirection="column">
@@ -66,37 +59,6 @@ export const GlobalSettingsTab = () => {
           }}
         />
       </Flex>
-
-      {chainId === ChainId.BSC && (
-        <>
-          <Flex justifyContent="space-between" alignItems="center" mb="24px">
-            <Flex alignItems="center">
-              <Text>{t('Token Risk Scanning')}</Text>
-              <QuestionHelper
-                text={
-                  <AccessRiskTooltips
-                    hasResult
-                    riskLevel={TOKEN_RISK.SOME_RISK}
-                    riskLevelDescription={t(
-                      'Automatic risk scanning for the selected token. This scanning result is for reference only, and should NOT be taken as investment advice.',
-                    )}
-                  />
-                }
-                placement="top"
-                ml="4px"
-              />
-            </Flex>
-            <Toggle
-              id="toggle-token-risk"
-              checked={tokenRisk}
-              scale="md"
-              onChange={() => {
-                setTokenRisk(!tokenRisk)
-              }}
-            />
-          </Flex>
-        </>
-      )}
     </Flex>
   )
 }

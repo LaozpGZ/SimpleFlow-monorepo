@@ -1,10 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { DropdownMenuItemType, Menu as UikitMenu, footerLinks } from '@pancakeswap/uikit'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useCakePrice } from 'hooks/useCakePrice'
 import useTheme from 'hooks/useTheme'
 import { useWebNotifications } from 'hooks/useWebNotifications'
 import { useRouter } from 'next/router'
@@ -36,7 +34,6 @@ const Menu = (props) => {
   const { enabled } = useWebNotifications()
   const { chainId } = useActiveChainId()
   const { isDark, setTheme } = useTheme()
-  const cakePrice = useCakePrice()
   const { currentLanguage, t } = useTranslation()
   const { pathname } = useRouter()
   const menuItems = useMenuItems()
@@ -81,7 +78,7 @@ const Menu = (props) => {
       isDark={isDark}
       toggleTheme={toggleTheme}
       showLangSelector={false}
-      cakePriceUsd={cakePrice.eq(BIG_ZERO) ? undefined : cakePrice}
+      showCakePrice={false}
       links={filteredLinks}
       subLinks={
         activeSubMenuItem?.overrideSubNavItems ??
@@ -94,8 +91,6 @@ const Menu = (props) => {
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
       activeSubItemChildItem={activeSubChildMenuItem?.href}
-      buyCakeLabel={t('Buy CAKE')}
-      buyCakeLink="/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
       {...props}
     />
   )

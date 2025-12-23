@@ -20,7 +20,6 @@ import { useSwapState } from 'state/swap/hooks'
 import { MevSwapDetail } from 'views/Mev/MevSwapDetail'
 import { MevToggle } from 'views/Mev/MevToggle'
 import { useSolanaUserSlippage } from '@pancakeswap/utils/user'
-import { SwapType } from '../../Swap/types'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { useBuyCryptoInfo } from '../hooks/useBuyCryptoInfo'
 import { useIsPriceImpactTooHigh } from '../hooks/useIsPriceImpactTooHigh'
@@ -31,7 +30,6 @@ import { CommitButton } from './CommitButton'
 import { FormMain } from './FormMainInfinity'
 import { PricingAndSlippage } from './PricingAndSlippage'
 import { RefreshButton } from './RefreshButton'
-import { SwapSelection } from './SwapSelectionTab'
 import { TradeDetails } from './TradeDetails'
 import { TradingFee } from './TradingFee'
 import { UnwrapTips } from './UnwrapTips'
@@ -92,7 +90,6 @@ export const InfinitySwapForm = memo(() => {
   return (
     <SwapUIV2.SwapFormWrapper>
       <SwapUIV2.SwapTabAndInputPanelWrapper>
-        <SwapSelection swapType={SwapType.MARKET} outputChainId={outputChainId} withToolkit />
         <FormMain
           tradeLoading={!tradeLoaded}
           inputAmount={bestOrder?.trade?.inputAmount}
