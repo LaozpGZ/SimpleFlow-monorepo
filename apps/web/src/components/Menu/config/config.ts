@@ -89,6 +89,12 @@ const config: (
       supportChainIds: SUPPORT_FARMS,
     },
     {
+      label: t('My Positions'),
+      href: '/liquidity/positions',
+      icon: EarnIcon,
+      hideSubNav: true,
+    },
+    {
       label: t('Info.section_title'),
       href: '/info/v3',
       icon: MoreIcon,
