@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 
-import { MobileCard } from 'components/AdPanel/MobileCard'
 import { useUnifiedCurrency } from 'hooks/Tokens'
 import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -121,8 +120,6 @@ const InfinitySwapInner = () => {
           </StyledSwapContainer>
         </Flex>
       </Flex>
-
-      <MobileCard />
     </Page>
   )
 }

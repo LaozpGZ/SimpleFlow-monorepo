@@ -15,9 +15,8 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
-import { PickAdSlides } from 'components/AdPanel/PickAdSlides'
 import LiquiditySunsetWarning from 'components/Liquidity/LiquiditySunsetWarning'
-import { Suspense, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useUserPancakePicks } from 'state/user/hooks/useUserPancakePicks'
 import styled from 'styled-components'
 import { FarmFlexWrapper, FarmH1, FarmH2 } from 'views/Farms/styled'
@@ -46,13 +45,6 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
       style={isMobile ? { padding: '16px 0' } : undefined}
       innerProps={isMobile ? { style: { padding: '0 16px' } } : undefined}
     >
-      {isPancakePicks && isMobile && (
-        <FlexGap width="100%" justifyContent="center" alignItems="center" mb="12px">
-          <Suspense>
-            <PickAdSlides isDismissible={false} />
-          </Suspense>
-        </FlexGap>
-      )}
       <Column>
         <FarmFlexWrapper>
           <Box style={{ flex: '1 1 100%' }}>
@@ -126,13 +118,6 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
                   )}
                 </Row>
               </>
-            )}
-          </Box>
-          <Box>
-            {!isMobile && (
-              <Suspense>
-                <PickAdSlides isDismissible={false} />
-              </Suspense>
             )}
           </Box>
         </FarmFlexWrapper>

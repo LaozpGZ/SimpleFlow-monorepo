@@ -1,6 +1,5 @@
 import { PredictionStatus } from '@pancakeswap/prediction'
 import { Box, Flex, Link } from '@pancakeswap/uikit'
-import { MobileCard } from 'components/AdPanel/MobileCard'
 import { memo } from 'react'
 import { useGetPredictionsStatus, useIsChartPaneOpen, useIsHistoryPaneOpen } from 'state/predictions/hooks'
 import { styled } from 'styled-components'
@@ -89,9 +88,6 @@ const Mobile: React.FC<React.PropsWithChildren> = () => {
         {view === PageView.CHART && <MobileChart />}
         {view === PageView.HISTORY && <History />}
       </Box>
-      <Flex my="24px" justifyContent="center">
-        <MobileCard />
-      </Flex>
       <MobileMenu />
     </StyledMobile>
   )
