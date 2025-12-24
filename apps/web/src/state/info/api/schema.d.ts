@@ -1438,6 +1438,7 @@ export interface components {
       | 'arbitrum'
       | 'sol'
       | 'monad'
+      | 'simplechain'
     /**
      * @description Protocol version
      * @default v2
@@ -1789,6 +1790,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -1933,6 +1935,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2077,6 +2080,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2221,6 +2225,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2360,6 +2365,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2400,6 +2406,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2440,6 +2447,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2481,6 +2489,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2521,6 +2530,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2591,6 +2601,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -2633,6 +2644,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description EVM (0x…) or Solana base-58 address */
@@ -2679,6 +2691,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2723,6 +2736,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description EVM (0x…) or Solana base-58 address */
@@ -2766,6 +2780,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description EVM (0x…) or Solana base-58 address */
@@ -2809,6 +2824,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2875,6 +2891,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2918,6 +2935,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2953,6 +2971,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2988,6 +3007,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -3023,6 +3043,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -3081,6 +3102,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -3145,6 +3167,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -3209,6 +3232,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -3273,6 +3297,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -3337,6 +3362,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -3452,6 +3478,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Pool address */
         pool: string
       }
@@ -3495,6 +3522,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Pool address */
         pool: string
       }
@@ -3535,6 +3563,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Infinity pool ID */
         pool: string
         /** @description EVM (0x…) or Solana base-58 address */
@@ -3577,6 +3606,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Infinity pool ID */
         pool: string
       }
@@ -3617,6 +3647,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         owner: string
       }
@@ -3657,6 +3688,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         owner: string
       }
@@ -3697,6 +3729,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Pool ID (EVM 0x… or Solana base58) */
         address: string
       }
@@ -3740,6 +3773,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Pool ID (EVM 0x… or Solana base58) */
         address: string
       }
@@ -3780,6 +3814,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Infinity pool ID */
         address: string
       }
@@ -3823,6 +3858,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Pool ID (EVM 0x… or Solana base58) */
@@ -3866,6 +3902,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Pool ID (EVM 0x… or Solana base58) */
@@ -3956,6 +3993,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -3991,6 +4029,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -4055,6 +4094,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -4088,6 +4128,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -4121,6 +4162,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -4154,6 +4196,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Pool ID */
         id: string
       }
@@ -5130,6 +5173,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         currencyA: string
         /** @description EVM (0x…) or Solana base-58 address */
@@ -5258,6 +5302,7 @@ export interface operations {
               | 'arbitrum'
               | 'sol'
               | 'monad'
+              | 'simplechain'
             )
           | (
               | 'bsc'
@@ -5271,6 +5316,7 @@ export interface operations {
               | 'arbitrum'
               | 'sol'
               | 'monad'
+              | 'simplechain'
             )[]
         /** @description Filter by pool id with chain id prefix */
         pools?: string | string[]
@@ -5361,6 +5407,7 @@ export interface operations {
               | 'arbitrum'
               | 'sol'
               | 'monad'
+              | 'simplechain'
             )
           | (
               | 'bsc'
@@ -5374,6 +5421,7 @@ export interface operations {
               | 'arbitrum'
               | 'sol'
               | 'monad'
+              | 'simplechain'
             )[]
         pageSize?: number
         minTvl?: number
@@ -5461,6 +5509,7 @@ export interface operations {
               | 'arbitrum'
               | 'sol'
               | 'monad'
+              | 'simplechain'
             )
           | (
               | 'bsc'
@@ -5474,6 +5523,7 @@ export interface operations {
               | 'arbitrum'
               | 'sol'
               | 'monad'
+              | 'simplechain'
             )[]
       }
       header?: never
@@ -5542,6 +5592,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Infinity pool ID */
         address: string
       }
@@ -5652,6 +5703,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Infinity pool ID */
         address: string
       }
@@ -5762,6 +5814,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -5858,6 +5911,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -6012,6 +6066,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6083,6 +6138,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6154,6 +6210,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6219,6 +6276,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6330,6 +6388,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6438,6 +6497,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -6479,6 +6539,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Pool ID */
         pool: string
       }
@@ -6526,6 +6587,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6638,6 +6700,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6735,6 +6798,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
       }
       cookie?: never
     }
@@ -6937,6 +7001,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -6978,6 +7043,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7018,6 +7084,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7085,6 +7152,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7158,6 +7226,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7204,6 +7273,7 @@ export interface operations {
           | 'arbitrum'
           | 'sol'
           | 'monad'
+          | 'simplechain'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }

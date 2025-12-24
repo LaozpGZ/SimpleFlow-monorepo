@@ -48,22 +48,6 @@
       "documentation": "apps/solana/CLAUDE.md"
     },
     {
-      "name": "gamification",
-      "path": "apps/gamification",
-      "type": "app",
-      "language": "TypeScript",
-      "description": "游戏化和任务系统",
-      "documentation": "apps/gamification/CLAUDE.md"
-    },
-    {
-      "name": "games",
-      "path": "apps/games",
-      "type": "app",
-      "language": "TypeScript",
-      "description": "游戏中心平台",
-      "documentation": "apps/games/CLAUDE.md"
-    },
-    {
       "name": "bridge",
       "path": "apps/bridge",
       "type": "app",

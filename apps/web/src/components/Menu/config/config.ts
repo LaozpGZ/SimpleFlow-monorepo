@@ -1,13 +1,11 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
-import { SUPPORTED_CHAIN_IDS as PREDICTION_SUPPORTED_CHAINS } from '@pancakeswap/prediction'
 import {
   DropdownMenuItems,
   DropdownMenuItemType,
   EarnFillIcon,
   EarnIcon,
-  GameIcon,
   MenuItemsType,
   MoreIcon,
   RocketIcon,
@@ -156,35 +154,18 @@ const config: (
       hideSubNav: true,
     },
     {
-      label: t('Play'),
-      icon: GameIcon,
-      href: '/prediction',
-      overrideSubNavItems: [
-        {
-          label: t('Prediction'),
-          href: '/prediction',
-        },
-        {
-          label: t('Lottery'),
-          href: '/lottery',
-        },
-      ],
+      label: '',
+      href: '/info',
+      icon: MoreIcon,
+      hideSubNav: true,
       items: [
         {
-          label: t('Springboard'),
-          href: 'https://springboard.pancakeswap.finance',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
+          label: t('Info.section_title'),
+          href: '/info/v3',
         },
         {
-          label: t('Prediction'),
-          href: '/prediction',
-          image: '/images/decorations/prediction.png',
-          supportChainIds: PREDICTION_SUPPORTED_CHAINS,
-        },
-        {
-          label: t('Lottery'),
-          href: '/lottery',
-          image: '/images/decorations/lottery.png',
+          label: t('Burn Dashboard'),
+          href: '/burn-dashboard',
         },
         {
           label: t('CAKE.PAD'),
@@ -201,22 +182,6 @@ const config: (
               href: '/cakepad/history',
             },
           ],
-        },
-      ].map((item) => addMenuItemSupported(item, chainId)),
-    },
-    {
-      label: '',
-      href: '/info',
-      icon: MoreIcon,
-      hideSubNav: true,
-      items: [
-        {
-          label: t('Info.section_title'),
-          href: '/info/v3',
-        },
-        {
-          label: t('Burn Dashboard'),
-          href: '/burn-dashboard',
         },
         {
           label: t('Voting'),

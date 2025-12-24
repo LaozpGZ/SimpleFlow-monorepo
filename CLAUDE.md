@@ -18,7 +18,7 @@ Pancake Frontend 是一个基于 pnpm workspace 的 monorepo 项目，为 Pancak
 - **多链支持**：EVM 链（BSC、Ethernet、Polygon 等）、Aptos、Solana
 - **模块化架构**：采用 monorepo 管理，apps 和 packages 分离
 - **统一 SDK**：提供 swap-sdk、v3-sdk、smart-router 等核心 SDK
-- **多应用**：包含 web（主应用）、aptos、solana、gamification、games 等独立应用
+- **多应用**：包含 web（主应用）、aptos、solana 等独立应用
 
 ---
 
@@ -44,8 +44,6 @@ SimpleFlow-monorepo/
 │   ├── web/                # 主 Web 应用（EVM 多链）
 │   ├── aptos/              # Aptos 链专用应用
 │   ├── solana/             # Solana 链专用应用
-│   ├── gamification/       # 游戏化应用
-│   ├── games/              # 游戏中心
 │   ├── bridge/             # 跨链桥应用
 │   ├── ton/                # TON 链应用
 │   ├── blog/               # 博客应用
@@ -93,8 +91,6 @@ graph TD
     APPS --> WEB["web - 主 Web 应用"]
     APPS --> APTOS["aptos - Aptos 应用"]
     APPS --> SOLANA["solana - Solana 应用"]
-    APPS --> GAMIFICATION["gamification - 游戏化"]
-    APPS --> GAMES["games - 游戏中心"]
     APPS --> BRIDGE["bridge - 跨链桥"]
     APPS --> BLOG["blog - 博客"]
     APPS --> E2E["e2e - E2E 测试"]
@@ -123,8 +119,6 @@ graph TD
     click WEB "./apps/web/CLAUDE.md" "查看 web 应用文档"
     click APTOS "./apps/aptos/CLAUDE.md" "查看 aptos 应用文档"
     click SOLANA "./apps/solana/CLAUDE.md" "查看 solana 应用文档"
-    click GAMIFICATION "./apps/gamification/CLAUDE.md" "查看 gamification 应用文档"
-    click GAMES "./apps/games/CLAUDE.md" "查看 games 应用文档"
 
     click SMART_ROUTER "./packages/smart-router/CLAUDE.md" "查看 smart-router 文档"
     click V3_SDK "./packages/v3-sdk/CLAUDE.md" "查看 v3-sdk 文档"
@@ -142,8 +136,6 @@ graph TD
 | `apps/web` | 应用 | TypeScript | 主 Web 应用，支持 EVM 多链 DEX 功能 | [CLAUDE.md](./apps/web/CLAUDE.md) |
 | `apps/aptos` | 应用 | TypeScript | Aptos 链专用 DEX 应用 | [CLAUDE.md](./apps/aptos/CLAUDE.md) |
 | `apps/solana` | 应用 | TypeScript | Solana 链专用 DEX 应用（Jupiter 集成） | [CLAUDE.md](./apps/solana/CLAUDE.md) |
-| `apps/gamification` | 应用 | TypeScript | 游戏化和任务系统 | [CLAUDE.md](./apps/gamification/CLAUDE.md) |
-| `apps/games` | 应用 | TypeScript | 游戏中心平台 | [CLAUDE.md](./apps/games/CLAUDE.md) |
 | `apps/bridge` | 应用 | TypeScript | 跨链桥应用（LayerZero） | [CLAUDE.md](./apps/bridge/CLAUDE.md) |
 | `apps/blog` | 应用 | TypeScript | PancakeSwap 博客 | - |
 | `apps/e2e` | 测试 | TypeScript | Cypress E2E 测试 | - |
@@ -198,12 +190,6 @@ pnpm dev:aptos
 
 # Solana 应用
 pnpm dev:solana
-
-# 游戏化应用
-pnpm dev:gamification
-
-# 游戏中心
-pnpm dev:games
 
 # 博客
 pnpm dev:blog

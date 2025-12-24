@@ -6,7 +6,6 @@ import storage from 'redux-persist/lib/storage'
 import farmsReducer from './farms'
 import { updateVersion } from './global/actions'
 import globalReducer from './global/reducer'
-import lotteryReducer from './lottery'
 import notifications from './notifications/reducer'
 import poolsReducer from './pools'
 import transactions from './transactions/reducer'
@@ -28,7 +27,6 @@ const persistedReducer = persistReducer(
     global: globalReducer,
     farms: farmsReducer,
     pools: poolsReducer,
-    lottery: lotteryReducer,
 
     // Exchange
     user,

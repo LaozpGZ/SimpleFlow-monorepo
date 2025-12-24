@@ -1,10 +1,33 @@
 import { Flex, Text, Button, Box, PageSection, Link } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { styled } from 'styled-components'
+import { styled, keyframes } from 'styled-components'
 import useTheme from 'hooks/useTheme'
 // import Calculator from 'views/AffiliatesProgram/components/Overview/Calculator'
 import CommissionStructure from 'views/AffiliatesProgram/components/Overview/CommissionStructure'
-import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
+
+const floatingStarsLeft = keyframes`
+  from {
+    transform: translate(0,  0px);
+  }
+  50% {
+    transform: translate(10px, 10px);
+  }
+  to {
+    transform: translate(0, -0px);
+  }
+`
+
+const floatingStarsRight = keyframes`
+  from {
+    transform: translate(0,  0px);
+  }
+  50% {
+    transform: translate(-10px, 10px);
+  }
+  to {
+    transform: translate(0, -0px);
+  }
+`
 
 const Decorations = styled(Box)`
   position: absolute;

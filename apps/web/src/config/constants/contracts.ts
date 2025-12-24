@@ -272,6 +272,14 @@ export default {
     [ChainId.BSC_TESTNET]: '0x5F1076A98a1b9AA8584DaC02F38C616C3A431794',
   },
 
+  // Chainlink Oracle addresses (moved from @pancakeswap/prediction)
+  chainlinkOracleBNB: {
+    [ChainId.BSC]: '0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE',
+  },
+  chainlinkOracleCAKE: {
+    [ChainId.BSC]: '0xB6064eD41d4f67e353768aA239cA86f4F73665a1',
+  },
+
   // inifinity
   poolManagerCL: INFI_CL_POOL_MANAGER_ADDRESSES,
   poolManagerBin: INFI_BIN_POOL_MANAGER_ADDRESSES,

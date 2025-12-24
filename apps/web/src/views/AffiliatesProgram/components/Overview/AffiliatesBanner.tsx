@@ -1,10 +1,31 @@
-import { styled } from 'styled-components'
+import { styled, keyframes } from 'styled-components'
 import { Flex, Text, Button, Box, PageSection, Link } from '@pancakeswap/uikit'
 import { SlideSvgDark, SlideSvgLight } from 'components/SlideSvg'
 import { useTranslation } from '@pancakeswap/localization'
-import Image from 'next/image'
-import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
-import bunnyImage from '../../../../../public/images/affiliates-program/banner.png'
+
+const floatingStarsLeft = keyframes`
+  from {
+    transform: translate(0,  0px);
+  }
+  50% {
+    transform: translate(10px, 10px);
+  }
+  to {
+    transform: translate(0, -0px);
+  }
+`
+
+const floatingStarsRight = keyframes`
+  from {
+    transform: translate(0,  0px);
+  }
+  50% {
+    transform: translate(-10px, 10px);
+  }
+  to {
+    transform: translate(0, -0px);
+  }
+`
 
 const StyledBannerSection = styled(PageSection)`
   padding-top: 16px;
@@ -148,7 +169,11 @@ const AffiliatesBanner = () => {
             width={['227px', '257px', '327px', '560px']}
             height={['306px', '356px', '406px', '639px']}
           >
-            <Image src={bunnyImage} alt="banner-image" />
+            <img
+              src="/images/affiliates-program/banner.png"
+              alt="affiliates program banner"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
           </Box>
           <Flex
             m={['22px 0 0 0 0', '22px 0 0 0 0', '22px 0 0 0 0', '0 0 0 48px']}

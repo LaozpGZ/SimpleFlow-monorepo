@@ -1,5 +1,4 @@
 import { ChainId } from '@pancakeswap/chains'
-import { PredictionUser, Profile } from 'state/types'
 
 type TokenBase = {
   id: `0x${string}`
@@ -46,12 +45,6 @@ export type HomePageCurrency = {
   logo: string
 }
 
-export type HomePageUser = {
-  user: PredictionUser
-  hasRegistered: boolean
-  profile?: Profile
-}
-
 export type HomePageData = {
   tokens: HomePageToken[]
   pools: HomePagePoolInfo[]
@@ -59,7 +52,6 @@ export type HomePageData = {
   chains: HomepageChain[]
   stats: SiteStats
   partners: HomePagePartner[]
-  topWinner: HomePageUser
 }
 
 // Supporting types (you may need to adjust according to your actual implementation)

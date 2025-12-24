@@ -76,7 +76,6 @@ declare module "@@@next-typesafe-url" {
     "/liquidity/pool/[chainName]/[id]": StaticRoute;
     "/liquidity/pools": StaticRoute;
     "/liquidity/positions": StaticRoute;
-    "/lottery": StaticRoute;
     "/mev": StaticRoute;
     "/migration/bcake": StaticRoute;
     "/migration": StaticRoute;
@@ -89,8 +88,6 @@ declare module "@@@next-typesafe-url" {
     "/pools/[chainName]/[id]": StaticRoute;
     "/pools/history": StaticRoute;
     "/pools": StaticRoute;
-    "/prediction": StaticRoute;
-    "/prediction/leaderboard": StaticRoute;
     "/profile/[accountAddress]/achievements": StaticRoute;
     "/profile/[accountAddress]/activity": StaticRoute;
     "/profile/[accountAddress]": StaticRoute;

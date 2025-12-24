@@ -1,9 +1,9 @@
 import { ChainId } from '@pancakeswap/chains'
-import { chainlinkOracleCAKE } from '@pancakeswap/prediction'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
+import contracts from 'config/constants/contracts'
 import { FAST_INTERVAL } from 'config/constants'
 import { publicClient } from 'utils/wagmi'
 import { formatUnits } from 'viem'
@@ -23,7 +23,7 @@ export const useCakePrice = ({ enabled = true } = {}) => {
 export const getCakePriceFromOracle = async () => {
   const data = await publicClient({ chainId: ChainId.BSC }).readContract({
     abi: chainlinkOracleABI,
-    address: chainlinkOracleCAKE[ChainId.BSC],
+    address: contracts.chainlinkOracleCAKE[ChainId.BSC],
     functionName: 'latestAnswer',
   })
 

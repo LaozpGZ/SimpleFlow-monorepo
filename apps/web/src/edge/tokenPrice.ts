@@ -1,11 +1,11 @@
 import { ChainId } from '@pancakeswap/chains'
-import { chainlinkOracleCAKE } from '@pancakeswap/prediction'
 import { CurrencyParams, getCurrencyUsdPrice } from '@pancakeswap/price-api-sdk'
 import { Native } from '@pancakeswap/sdk'
 import { OnChainProvider, PoolType, SmartRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, getCurrencyAddress, TradeType } from '@pancakeswap/swap-sdk-core'
 import { CAKE, STABLE_COIN } from '@pancakeswap/tokens'
 import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
+import contracts from 'config/constants/contracts'
 import { getMulticallGasLimit } from 'quoter/hook/useMulticallGasLimit'
 import { edgeQueries } from 'quoter/utils/edgePoolQueries'
 import { getProvider } from 'quoter/utils/edgeQueries.util'
@@ -149,7 +149,7 @@ const getCakePriceFromOracle = async (provider: OnChainProvider) => {
     }
     const data = await client.readContract({
       abi: chainlinkOracleABI,
-      address: chainlinkOracleCAKE[ChainId.BSC],
+      address: contracts.chainlinkOracleCAKE[ChainId.BSC],
       functionName: 'latestAnswer',
     })
 

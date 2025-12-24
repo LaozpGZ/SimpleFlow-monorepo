@@ -1,5 +1,4 @@
 import { PoolIds } from '@pancakeswap/ifos'
-import { BetPosition } from '@pancakeswap/prediction'
 import { BridgeStatus } from 'views/Swap/Bridge/types'
 import { getChainFullName } from 'views/universalFarms/utils'
 
@@ -451,28 +450,6 @@ export const logGTMFiatOnRampModalEvent = (provider: string | undefined) => {
     action: GTMAction.ClickFiatOnRampModalButton,
     category: GTMCategory.FiatOnRamp,
     label: `Provider: ${provider || 'Unknown'}`,
-  })
-}
-
-export const logGTMPredictionBetEvent = (position: BetPosition, address?: string) => {
-  console.info(`---PredictionBet${position}---`, address)
-  window?.dataLayer?.push({
-    event: GTMEvent.PredictionBet,
-    action: position === BetPosition.BULL ? GTMAction.ClickBetUpButton : GTMAction.ClickBetDownButton,
-    category: GTMCategory.Prediction,
-    desc: address,
-  })
-}
-
-export const logGTMPredictionBetPlacedEvent = (position: string, address?: string, predictedToken?: string) => {
-  console.info('---PredictionBetPlaced---', { address, predictedToken })
-  window?.dataLayer?.push({
-    event: GTMEvent.PredictionBetPlaced,
-    action: GTMAction.PredictionBetPlaced,
-    category: GTMCategory.Prediction,
-    label: `Position: ${position}`,
-    desc: address,
-    predictedToken,
   })
 }
 

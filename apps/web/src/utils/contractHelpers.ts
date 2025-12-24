@@ -19,7 +19,6 @@ import {
   getCrossFarmingVaultAddress,
   getFixedStakingAddress,
   getInfinityPositionManagerAddress,
-  getLotteryV2Address,
   getMasterChefV2Address,
   getMasterChefV3Address,
   getNftMarketAddress,
@@ -28,7 +27,6 @@ import {
   getPancakeSquadAddress,
   getPancakeVeSenderV2Address,
   getPointCenterIfoAddress,
-  getPredictionsV1Address,
   getRevenueSharingCakePoolAddress,
   getRevenueSharingPoolAddress,
   getRevenueSharingPoolGatewayAddress,
@@ -46,13 +44,6 @@ import {
 } from 'utils/addressHelpers'
 
 // ABI
-import {
-  PredictionContractVersion,
-  predictionsV1ABI,
-  predictionsV21ABI,
-  predictionsV2ABI,
-  predictionsV3ABI,
-} from '@pancakeswap/prediction'
 import { crossFarmingProxyABI } from 'config/abi/crossFarmingProxy'
 import { crossFarmingSenderABI } from 'config/abi/crossFarmingSender'
 import { crossFarmingVaultABI } from 'config/abi/crossFarmingVault'
@@ -75,7 +66,6 @@ import { cakePoolAbi } from 'config/abi/cakePool'
 import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
 import { crossFarmingReceiverABI } from 'config/abi/crossFarmingReceiver'
 import { fixedStakingABI } from 'config/abi/fixedStaking'
-import { lotteryV2ABI } from 'config/abi/lotteryV2'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { nftMarketABI } from 'config/abi/nftMarket'
 import { pancakeProfileABI } from 'config/abi/pancakeProfile'
@@ -172,10 +162,6 @@ export const getBunnyFactoryContract = (signer?: WalletClient) => {
   return getContract({ abi: bunnyFactoryABI, address: getBunnyFactoryAddress(), signer })
 }
 
-export const getLotteryV2Contract = (signer?: WalletClient) => {
-  return getContract({ abi: lotteryV2ABI, address: getLotteryV2Address(), signer })
-}
-
 export const getTradingCompetitionContractEaster = (signer?: WalletClient) => {
   return getContract({
     abi: tradingCompetitionEasterABI,
@@ -222,44 +208,6 @@ export const getCakeFlexibleSideVaultV2Contract = (signer?: WalletClient, chainI
     signer,
     chainId,
   })
-}
-
-export const getPredictionsV3Contract = (address: Address, chainId?: number, signer?: WalletClient) => {
-  return getContract({ abi: predictionsV3ABI, address, signer, chainId })
-}
-
-export const getPredictionsV2Contract = (address: Address, chainId?: number, signer?: WalletClient) => {
-  return getContract({ abi: predictionsV2ABI, address, signer, chainId })
-}
-
-export const getPredictionsV21Contract = (address: Address, chainId?: number, signer?: WalletClient) => {
-  return getContract({ abi: predictionsV21ABI, address, signer, chainId })
-}
-
-export const getPredictionsV1Contract = (signer?: WalletClient) => {
-  return getContract({ abi: predictionsV1ABI, address: getPredictionsV1Address(), signer })
-}
-
-export const getPredictionsContract = (
-  version: PredictionContractVersion,
-  address: Address,
-  chainId: number,
-  signer?: WalletClient,
-) => {
-  if (version === PredictionContractVersion.V2) {
-    return getPredictionsV2Contract(address, chainId, signer)
-  }
-  if (version === PredictionContractVersion.V2_1) {
-    return getPredictionsV21Contract(address, chainId, signer)
-  }
-  if (version === PredictionContractVersion.V3) {
-    return getPredictionsV3Contract(address, chainId, signer)
-  }
-  if (version === PredictionContractVersion.V1) {
-    return getPredictionsV1Contract(signer)
-  }
-
-  return null
 }
 
 export const getChainlinkOracleContract = (address: Address, signer?: WalletClient, chainId?: number) => {

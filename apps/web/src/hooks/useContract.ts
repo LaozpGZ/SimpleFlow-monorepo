@@ -7,7 +7,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import addresses from 'config/constants/contracts'
 import { useEffect, useMemo, useState } from 'react'
-import { getMulticallAddress, getPredictionsV1Address } from 'utils/addressHelpers'
+import { getMulticallAddress } from 'utils/addressHelpers'
 import {
   getAffiliateProgramContract,
   getAnniversaryAchievementContract,
@@ -26,18 +26,12 @@ import {
   getIfoCreditAddressContract,
   getInfinityBinPositionManagerContract,
   getInfinityCLPositionManagerContract,
-  getLotteryV2Contract,
   getMasterChefContract,
   getMasterChefV3Contract,
   getNftMarketContract,
   getNftSaleContract,
   getPancakeVeSenderV2Contract,
   getPointCenterIfoContract,
-  getPredictionsContract,
-  getPredictionsV1Contract,
-  getPredictionsV2Contract,
-  getPredictionsV21Contract,
-  getPredictionsV3Contract,
   getProfileContract,
   getRevenueSharingCakePoolContract,
   getRevenueSharingPoolContract,
@@ -77,7 +71,6 @@ import { VaultKey } from 'state/types'
 import { erc721CollectionABI } from 'config/abi/erc721collection'
 import { infoStableSwapABI } from 'config/abi/infoStableSwap'
 import { wethABI } from 'config/abi/weth'
-import { PredictionContractVersion } from '@pancakeswap/prediction'
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
@@ -120,11 +113,6 @@ export const useBunnyFactory = () => {
 export const useProfileContract = () => {
   const { data: signer } = useWalletClient()
   return useMemo(() => getProfileContract(signer ?? undefined), [signer])
-}
-
-export const useLotteryV2Contract = () => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getLotteryV2Contract(signer ?? undefined), [signer])
 }
 
 export const useMasterchef = () => {
@@ -223,19 +211,6 @@ export const useCakeVaultV1Contract = (targetChain?: ChainId) => {
 
 export const useIfoCreditAddressContract = () => {
   return useMemo(() => getIfoCreditAddressContract(), [])
-}
-
-export const usePredictionsContract = (address: Address, version?: PredictionContractVersion) => {
-  const { data: signer } = useWalletClient()
-  const { chainId } = useActiveChainId()
-
-  return useMemo(() => {
-    if (address === getPredictionsV1Address() || version === PredictionContractVersion.V1) {
-      return getPredictionsV1Contract(signer ?? undefined)
-    }
-
-    return version ? getPredictionsContract(version, address, chainId, signer ?? undefined) : null
-  }, [address, chainId, signer, version])
 }
 
 export const useChainlinkOracleContract = (address) => {
