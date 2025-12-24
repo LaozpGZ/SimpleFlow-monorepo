@@ -6,8 +6,10 @@ import { config } from './config';
 import { AppCacheModule } from './common/cache/cache.module';
 import { RpcModule } from './common/rpc/rpc.module';
 import { AppLoggerModule } from './common/logger/logger.module';
+import { MiddlewareModule } from './common/middleware/middleware.module';
 import { HealthModule } from './modules/health/health.module';
 import { TokensModule } from './modules/tokens/tokens.module';
+import { PoolsModule } from './modules/pools/pools.module';
 // import { FarmsModule } from './modules/farms/farms.module';
 // import { RoutingModule } from './modules/routing/routing.module';
 
@@ -24,10 +26,12 @@ import { TokensModule } from './modules/tokens/tokens.module';
     AppCacheModule,
     RpcModule,
     AppLoggerModule,
+    MiddlewareModule,
 
     // 功能模块
     HealthModule,
     TokensModule,
+    PoolsModule,
     // FarmsModule, // 暂时禁用，等待 workspace 包编译问题修复
     // RoutingModule, // 暂时禁用，等待 workspace 包编译问题修复
   ],
