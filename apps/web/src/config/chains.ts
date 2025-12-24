@@ -50,17 +50,44 @@ const bsc = {
   },
 } satisfies Chain
 
-const SIMPLECHAIN_RPC_URLS = ['https://testnet-rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
+const SIMPLECHAIN_RPC_URLS = ['https://rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
   Boolean,
 ) as [string, ...string[]]
 
+const SIMPLECHAIN_TESTNET_RPC_URLS = [
+  'https://testnet-rpc.simplechain.com',
+  process.env.NEXT_PUBLIC_SIMPLECHAIN_TESTNET_RPC,
+].filter(Boolean) as [string, ...string[]]
+
 const simplechain: Chain = {
-  id: ChainId.MONAD_MAINNET,
+  id: ChainId.SIMPLECHAIN,
   name: 'SimpleChain',
   nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
   rpcUrls: {
     default: { http: SIMPLECHAIN_RPC_URLS },
     public: { http: SIMPLECHAIN_RPC_URLS },
+  },
+  blockExplorers: {
+    default: {
+      name: 'SimpleChain Explorer',
+      url: 'https://explorer.simplechain.com',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
+  testnet: false,
+}
+
+const simplechainTestnet: Chain = {
+  id: ChainId.SIMPLECHAIN_TESTNET,
+  name: 'SimpleChain Testnet',
+  nativeCurrency: { name: 'SRW', symbol: 'SRW', decimals: 18 },
+  rpcUrls: {
+    default: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
+    public: { http: SIMPLECHAIN_TESTNET_RPC_URLS },
   },
   blockExplorers: {
     default: {
@@ -85,7 +112,7 @@ export const L2_CHAIN_IDS: ChainId[] = [
   ChainId.ARBITRUM_GOERLI,
   ChainId.ZKSYNC,
   ChainId.ZKSYNC_TESTNET,
-  ChainId.LINEA_TESTNET,
+  ChainId.SIMPLECHAIN_TESTNET,
   ChainId.LINEA,
   ChainId.BASE,
   ChainId.BASE_TESTNET,
@@ -93,7 +120,7 @@ export const L2_CHAIN_IDS: ChainId[] = [
   ChainId.OPBNB_TESTNET,
   ChainId.ARBITRUM_SEPOLIA,
   ChainId.BASE_SEPOLIA,
-  ChainId.MONAD_MAINNET,
+  ChainId.SIMPLECHAIN,
 ]
 
 export const CHAINS: [Chain, ...Chain[]] = [
@@ -115,6 +142,7 @@ export const CHAINS: [Chain, ...Chain[]] = [
   opBNBTestnet,
   scrollSepolia,
   simplechain,
+  simplechainTestnet,
 ]
 
 // Minimal Solana chain descriptor for explorer and non‑EVM utilities

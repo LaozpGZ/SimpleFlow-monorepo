@@ -363,7 +363,7 @@ type FetchAllPoolsParams = {
     | 'linea'
     | 'arbitrum'
     | 'sol'
-    | 'monad'
+    | 'simplechain'
   >
   pools?: string[]
   tokens?: string[]

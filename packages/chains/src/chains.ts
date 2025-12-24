@@ -26,9 +26,9 @@ export const Chains: Chain[] = [
   },
   { id: ChainId.BASE, name: chainNames[ChainId.BASE], fullName: chainFullNames[ChainId.BASE], isEVM: true },
   {
-    id: ChainId.MONAD_MAINNET,
-    name: chainNames[ChainId.MONAD_MAINNET],
-    fullName: chainFullNames[ChainId.MONAD_MAINNET],
+    id: ChainId.SIMPLECHAIN,
+    name: chainNames[ChainId.SIMPLECHAIN],
+    fullName: chainFullNames[ChainId.SIMPLECHAIN],
     isEVM: true,
   },
   {
@@ -95,9 +95,9 @@ export const Chains: Chain[] = [
     isEVM: true,
   },
   {
-    id: ChainId.MONAD_TESTNET,
-    name: chainNames[ChainId.MONAD_TESTNET],
-    fullName: chainFullNames[ChainId.MONAD_TESTNET],
+    id: ChainId.SIMPLECHAIN_TESTNET,
+    name: chainNames[ChainId.SIMPLECHAIN_TESTNET],
+    fullName: chainFullNames[ChainId.SIMPLECHAIN_TESTNET],
     isEVM: true,
     testnet: true,
   },

@@ -81,8 +81,8 @@ export const SERVER_NODES = {
   [ChainId.SEPOLIA]: sepolia.rpcUrls.default.http,
   [ChainId.ARBITRUM_SEPOLIA]: arbitrumSepolia.rpcUrls.default.http,
   [ChainId.BASE_SEPOLIA]: baseSepolia.rpcUrls.default.http,
-  [ChainId.MONAD_MAINNET]: SIMPLECHAIN_RPC_URLS,
-  [ChainId.MONAD_TESTNET]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.SIMPLECHAIN]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.SIMPLECHAIN_TESTNET]: SIMPLECHAIN_RPC_URLS,
 } satisfies Partial<Record<ChainId, readonly string[]>>
 
 export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
@@ -154,6 +154,6 @@ export const PUBLIC_NODES: Partial<Record<ChainId, readonly string[]>> = {
   [ChainId.SEPOLIA]: sepolia.rpcUrls.default.http,
   [ChainId.ARBITRUM_SEPOLIA]: arbitrumSepolia.rpcUrls.default.http,
   [ChainId.BASE_SEPOLIA]: baseSepolia.rpcUrls.default.http,
-  [ChainId.MONAD_MAINNET]: SIMPLECHAIN_RPC_URLS,
-  [ChainId.MONAD_TESTNET]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.SIMPLECHAIN]: SIMPLECHAIN_RPC_URLS,
+  [ChainId.SIMPLECHAIN_TESTNET]: SIMPLECHAIN_RPC_URLS,
 } satisfies Partial<Record<ChainId, readonly string[]>>

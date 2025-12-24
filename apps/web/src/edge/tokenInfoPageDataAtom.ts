@@ -53,8 +53,8 @@ const chainNameForQuery = (chain: string) => {
       return 'base'
     case 'opbnb':
       return 'opbnb'
-    case 'monad':
-      return 'monad'
+    case 'simplechain':
+      return 'simplechain'
     default:
       return 'bsc'
   }

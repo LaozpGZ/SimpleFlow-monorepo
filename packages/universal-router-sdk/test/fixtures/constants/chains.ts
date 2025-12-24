@@ -10,7 +10,6 @@ import {
   goerli,
   lineaTestnet,
   mainnet,
-  monadTestnet,
   scrollSepolia as scrollSepolia_,
   zksync,
   zksyncSepoliaTestnet,
@@ -125,5 +124,4 @@ export const CHAINS = [
   baseGoerli,
   opbnbTestnet,
   scrollSepolia,
-  monadTestnet,
 ]

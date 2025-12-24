@@ -7,7 +7,7 @@ import {
   bscTokens,
   ethereumTokens,
   lineaTokens,
-  monadTokens,
+  simplechainTokens,
   opBnbTokens,
   zkSyncTestnetTokens,
   zksyncTokens,
@@ -59,8 +59,8 @@ export const priceHelperTokens = {
   [ChainId.OPBNB]: {
     list: [opBnbTokens.wbnb, opBnbTokens.usdt],
   },
-  [ChainId.MONAD_MAINNET]: {
-    list: [monadTokens.wmon, monadTokens.usdc, monadTokens.usdt, monadTokens.busd],
+  [ChainId.SIMPLECHAIN]: {
+    list: [simplechainTokens.wmon, simplechainTokens.usdc, simplechainTokens.usdt, simplechainTokens.busd],
   },
 } satisfies Record<number, PriceHelper>
 
@@ -83,6 +83,6 @@ export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> =
   [ChainId.BASE]: {},
   [ChainId.OPBNB_TESTNET]: {},
   [ChainId.OPBNB]: {},
-  [ChainId.MONAD_MAINNET]: {},
-  [ChainId.MONAD_TESTNET]: {},
+  [ChainId.SIMPLECHAIN]: {},
+  [ChainId.SIMPLECHAIN_TESTNET]: {},
 }

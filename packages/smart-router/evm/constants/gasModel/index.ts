@@ -13,8 +13,8 @@ import {
   goerliTestnetTokens,
   lineaTestnetTokens,
   lineaTokens,
-  monadTokens,
-  monadTestnetTokens,
+  simplechainTokens,
+  simplechainTestnetTokens,
   opBnbTestnetTokens,
   opBnbTokens,
   scrollSepoliaTokens,
@@ -42,8 +42,8 @@ export const usdGasTokensByChain = {
   [ChainId.SEPOLIA]: [sepoliaTokens.usdc],
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc],
-  [ChainId.MONAD_MAINNET]: [monadTokens.usdc],
-  [ChainId.MONAD_TESTNET]: [monadTestnetTokens.usdc],
+  [ChainId.SIMPLECHAIN]: [simplechainTokens.usdc],
+  [ChainId.SIMPLECHAIN_TESTNET]: [simplechainTestnetTokens.usdc],
 } satisfies Record<ChainId, Token[]>
 
 export * from './stableSwap'

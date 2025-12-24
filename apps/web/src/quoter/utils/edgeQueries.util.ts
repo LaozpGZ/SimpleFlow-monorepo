@@ -110,8 +110,8 @@ export function getEdgeChainName(chainId: UnifiedChainId): APIChain {
       return 'arbitrum'
     case NonEVMChainId.SOLANA:
       return 'sol'
-    case ChainId.MONAD_MAINNET:
-      return 'monad'
+    case ChainId.SIMPLECHAIN:
+      return 'simplechain'
     default:
       throw new Error('Invalid chain id')
   }
@@ -127,7 +127,7 @@ export type APIChain =
   | 'linea'
   | 'arbitrum'
   | 'sol'
-  | 'monad'
+  | 'simplechain'
 
 export const safeGetAddress = (address: Address) => {
   try {

@@ -13,7 +13,7 @@ const BACKGROUND = {
   [ChainId.ETHEREUM]: '#627AD8',
   [ChainId.GOERLI]: '#627AD8',
   [ChainId.ARBITRUM_ONE]: '#2D364D',
-  [ChainId.MONAD_MAINNET]: '#6954F6',
+  [ChainId.SIMPLECHAIN]: '#6954F6',
 }
 
 const Container = styled(Box)`
@@ -65,7 +65,7 @@ export const IfoChainBoard = memo(function IfoChainBoard({ chainId, isHistory = 
         <img
           alt={`chain-${chainId}`}
           src={boardImageUrl}
-          width={chainId === ChainId.MONAD_MAINNET ? 70 : 100}
+          width={chainId === ChainId.SIMPLECHAIN ? 70 : 100}
           height={85}
         />
       )}
