@@ -4,7 +4,7 @@ import { join } from 'path';
 
 import { CacheService } from '@/common/cache/cache.service';
 
-interface TokenInfo {
+export interface TokenInfo {
   chainId: number;
   address: string;
   symbol: string;
@@ -13,7 +13,7 @@ interface TokenInfo {
   logoURI?: string;
 }
 
-interface TokenList {
+export interface TokenList {
   name: string;
   timestamp: string;
   version: { major: number; minor: number; patch: number };
@@ -45,20 +45,50 @@ export class TokensService implements OnModuleInit {
       const extendedPath = join(distDir, 'simpleflow-extended.json');
 
       if (existsSync(defaultPath)) {
-        this.defaultList = JSON.parse(readFileSync(defaultPath, 'utf-8'));
-        this.logger.log(
-          `Loaded default list with ${this.defaultList.tokens.length} tokens`,
-        );
+        const defaultData = JSON.parse(readFileSync(defaultPath, 'utf-8'));
+        // 验证是否为有效的 TokenList 结构
+        if (
+          defaultData &&
+          typeof defaultData === 'object' &&
+          'tokens' in defaultData
+        ) {
+          this.defaultList = defaultData;
+          this.logger.log(
+            `Loaded default list with ${
+              this.defaultList.tokens?.length || 0
+            } tokens`,
+          );
+        } else {
+          this.logger.warn(
+            'Invalid default token list format, using empty list',
+          );
+          this.defaultList = this.createEmptyList('Default');
+        }
       } else {
         this.logger.warn('Default token list not found, using empty list');
         this.defaultList = this.createEmptyList('Default');
       }
 
       if (existsSync(extendedPath)) {
-        this.extendedList = JSON.parse(readFileSync(extendedPath, 'utf-8'));
-        this.logger.log(
-          `Loaded extended list with ${this.extendedList.tokens.length} tokens`,
-        );
+        const extendedData = JSON.parse(readFileSync(extendedPath, 'utf-8'));
+        // 验证是否为有效的 TokenList 结构
+        if (
+          extendedData &&
+          typeof extendedData === 'object' &&
+          'tokens' in extendedData
+        ) {
+          this.extendedList = extendedData;
+          this.logger.log(
+            `Loaded extended list with ${
+              this.extendedList.tokens?.length || 0
+            } tokens`,
+          );
+        } else {
+          this.logger.warn(
+            'Invalid extended token list format, using empty list',
+          );
+          this.extendedList = this.createEmptyList('Extended');
+        }
       } else {
         this.logger.warn('Extended token list not found, using empty list');
         this.extendedList = this.createEmptyList('Extended');

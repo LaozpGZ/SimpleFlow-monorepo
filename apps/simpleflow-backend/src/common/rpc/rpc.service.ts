@@ -4,12 +4,14 @@ import { createPublicClient, http } from 'viem';
 import { mainnet, bsc } from 'viem/chains';
 import { ChainId } from '@pancakeswap/chains';
 
+// 简化类型定义，避免 TypeScript 类型实例化过深
+type PublicClient = any;
+
 @Injectable()
 export class RpcService implements OnModuleInit {
   private readonly logger = new Logger(RpcService.name);
 
-  private clients: Map<ChainId, ReturnType<typeof createPublicClient>> =
-    new Map();
+  private clients: Map<ChainId, PublicClient> = new Map();
 
   // eslint-disable-next-line no-useless-constructor
   constructor(private configService: ConfigService) {}
@@ -65,9 +67,7 @@ export class RpcService implements OnModuleInit {
     this.logger.log(`RPC clients initialized for ${this.clients.size} chains`);
   }
 
-  getClient(
-    chainId: ChainId,
-  ): ReturnType<typeof createPublicClient> | undefined {
+  getClient(chainId: ChainId): PublicClient | undefined {
     return this.clients.get(chainId);
   }
 
