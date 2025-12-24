@@ -1,0 +1,25 @@
+import { Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+
+@Injectable()
+export class CacheService {
+  // eslint-disable-next-line no-useless-constructor
+  constructor(private cacheManager: Cache) {}
+
+  async get<T>(key: string): Promise<T | undefined> {
+    // eslint-disable-next-line no-return-await
+    return await this.cacheManager.get<T>(key);
+  }
+
+  async set(key: string, value: any, ttl?: number): Promise<void> {
+    await this.cacheManager.set(key, value, ttl);
+  }
+
+  async del(key: string): Promise<void> {
+    await this.cacheManager.del(key);
+  }
+
+  async reset(): Promise<void> {
+    await this.cacheManager.reset();
+  }
+}
