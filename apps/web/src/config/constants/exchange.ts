@@ -85,14 +85,9 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.SEPOLIA]: [scrollSepoliaTokens.usdc, scrollSepoliaTokens.weth],
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
-  [ChainId.SIMPLECHAIN]: [
-    simplechainTokens.wmon,
-    simplechainTokens.usdc,
-    simplechainTokens.usdt0,
-    simplechainTokens.ausd,
-  ],
+  [ChainId.SIMPLECHAIN]: [simplechainTokens.wsrw, simplechainTokens.usdc, simplechainTokens.usdt],
   [ChainId.SIMPLECHAIN_TESTNET]: [
-    simplechainTestnetTokens.wmon,
+    simplechainTestnetTokens.wsrw,
     simplechainTestnetTokens.usdc,
     simplechainTestnetTokens.usdt,
   ],
@@ -121,13 +116,17 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.SIMPLECHAIN]: [
+    simplechainTokens.wsrw,
     simplechainTokens.usdc,
     simplechainTokens.usdt,
-    simplechainTokens.ausd,
-    simplechainTokens.busd,
-    simplechainTokens.wmon,
+    simplechainTokens.dai,
   ],
-  [ChainId.SIMPLECHAIN_TESTNET]: [simplechainTestnetTokens.usdc, simplechainTestnetTokens.busd],
+  [ChainId.SIMPLECHAIN_TESTNET]: [
+    simplechainTestnetTokens.wsrw,
+    simplechainTestnetTokens.usdc,
+    simplechainTestnetTokens.usdt,
+    simplechainTestnetTokens.dai,
+  ],
   [NonEVMChainId.SOLANA]: [solanaTokens.usdc, solanaTokens.usdt],
   [NonEVMChainId.APTOS]: [],
 }
@@ -157,8 +156,16 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
   [ChainId.BASE]: [[baseTokens.usdc, baseTokens.weth]],
   [ChainId.BASE_TESTNET]: [[baseTestnetTokens.usdc, baseTestnetTokens.weth]],
   [ChainId.SCROLL_SEPOLIA]: [[scrollSepoliaTokens.usdc, scrollSepoliaTokens.weth]],
-  [ChainId.SIMPLECHAIN]: [[simplechainTokens.wmon, simplechainTokens.usdc]],
-  [ChainId.SIMPLECHAIN_TESTNET]: [[simplechainTestnetTokens.usdc, simplechainTestnetTokens.wmon]],
+  [ChainId.SIMPLECHAIN]: [
+    [simplechainTokens.wsrw, simplechainTokens.usdc],
+    [simplechainTokens.wsrw, simplechainTokens.usdt],
+    [simplechainTokens.usdc, simplechainTokens.usdt],
+  ],
+  [ChainId.SIMPLECHAIN_TESTNET]: [
+    [simplechainTestnetTokens.wsrw, simplechainTestnetTokens.usdc],
+    [simplechainTestnetTokens.wsrw, simplechainTestnetTokens.usdt],
+    [simplechainTestnetTokens.usdc, simplechainTestnetTokens.usdt],
+  ],
 }
 
 export const BIG_INT_ZERO = 0n

@@ -126,15 +126,16 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.SIMPLECHAIN]: [
-    simplechainTokens.weth,
+    simplechainTokens.wsrw,
     simplechainTokens.usdc,
-    simplechainTokens.busd,
     simplechainTokens.usdt,
+    simplechainTokens.dai,
   ],
   [ChainId.SIMPLECHAIN_TESTNET]: [
-    simplechainTestnetTokens.weth,
+    simplechainTestnetTokens.wsrw,
     simplechainTestnetTokens.usdc,
-    simplechainTestnetTokens.busd,
+    simplechainTestnetTokens.usdt,
+    simplechainTestnetTokens.dai,
   ],
 }
 

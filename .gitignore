@@ -66,3 +66,6 @@ scripts/dev/**
 
 AGENTS.md
 .codex
+
+#docs
+./docs  

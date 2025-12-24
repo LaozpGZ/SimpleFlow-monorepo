@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "projectName": "pancake-frontend",
+    "lastUpdated": "2025-12-24T19:35:00Z",
+    "timestamp": "2025-12-24 19:35:00",
+    "version": "3.0.0"
+  },
+  "summary": {
+    "totalModules": 32,
+    "documentedModules": 32,
+    "totalFilesEstimate": 10000,
+    "scannedFiles": 5600,
+    "coveragePercent": 56,
+    "detailedModules": 18,
+    "truncated": false
+  },
+  "root": {
+    "path": "/Users/gz/Documents/GitHub/SimpleFlow-monorepo",
+    "documentation": "CLAUDE.md",
+    "readme": "README.md",
+    "contributing": "CONTRIBUTING.md"
+  },
+  "modules": [
+    {
+      "name": "web",
+      "path": "apps/web",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "主 Web 应用，支持 EVM 多链 DEX 功能",
+      "documentation": "apps/web/CLAUDE.md",
+      "hasDetailedViews": true,
+      "viewsDocumentation": "apps/web/src/views/CLAUDE.md"
+    },
+    {
+      "name": "aptos",
+      "path": "apps/aptos",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "Aptos 链专用 DEX 应用",
+      "documentation": "apps/aptos/CLAUDE.md"
+    },
+    {
+      "name": "solana",
+      "path": "apps/solana",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "Solana 链专用 DEX 应用（Jupiter 集成）",
+      "documentation": "apps/solana/CLAUDE.md"
+    },
+    {
+      "name": "gamification",
+      "path": "apps/gamification",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "游戏化和任务系统",
+      "documentation": "apps/gamification/CLAUDE.md"
+    },
+    {
+      "name": "games",
+      "path": "apps/games",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "游戏中心平台",
+      "documentation": "apps/games/CLAUDE.md"
+    },
+    {
+      "name": "bridge",
+      "path": "apps/bridge",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "跨链桥应用（LayerZero）",
+      "documentation": "apps/bridge/CLAUDE.md"
+    },
+    {
+      "name": "blog",
+      "path": "apps/blog",
+      "type": "app",
+      "language": "TypeScript",
+      "description": "PancakeSwap 博客",
+      "documentation": null
+    },
+    {
+      "name": "e2e",
+      "path": "apps/e2e",
+      "type": "test",
+      "language": "TypeScript",
+      "description": "Cypress E2E 测试",
+      "documentation": null
+    },
+    {
+      "name": "swap-sdk-evm",
+      "path": "packages/swap-sdk-evm",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "EVM 链 Swap SDK，包含 V2/V3 交易逻辑",
+      "documentation": "packages/swap-sdk-evm/CLAUDE.md"
+    },
+    {
+      "name": "v3-sdk",
+      "path": "packages/v3-sdk",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "V3 协议 SDK，池子、头寸、路由计算",
+      "documentation": "packages/v3-sdk/CLAUDE.md"
+    },
+    {
+      "name": "v2-sdk",
+      "path": "packages/v2-sdk",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "V2 协议 SDK，配对、路由、交易",
+      "documentation": "packages/v2-sdk/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "keyAlgorithms": ["Pair地址计算(Create2)", "最优交易算法", "储备比例计算"]
+    },
+    {
+      "name": "smart-router",
+      "path": "packages/smart-router",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "智能路由，自动寻找最优交易路径",
+      "documentation": "packages/smart-router/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "evmDocumentation": "packages/smart-router/evm/CLAUDE.md",
+      "keyAlgorithms": ["Gas模型", "混合路由编码", "价格影响计算", "路由分拆算法"]
+    },
+    {
+      "name": "routing-sdk",
+      "path": "packages/routing-sdk",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "路由计算核心 SDK",
+      "documentation": "packages/routing-sdk/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "keyAlgorithms": ["图算法路由", "流分拆算法", "路由合并", "价格计算器"]
+    },
+    {
+      "name": "solana-core-sdk",
+      "path": "packages/solana-core-sdk",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "Solana 核心 SDK（基于 Raydium fork）",
+      "documentation": "packages/solana-core-sdk/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "keyAlgorithms": ["流动性计算", "Stable Swap", "SOL/WSOL转换"]
+    },
+    {
+      "name": "solana-clmm-sdk",
+      "path": "packages/solana-clmm-sdk",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "Solana CLMM SDK（集中流动性）",
+      "documentation": "packages/solana-clmm-sdk/CLAUDE.md",
+      "hasDetailedDoc": true
+    },
+    {
+      "name": "solana-router-sdk",
+      "path": "packages/solana-router-sdk",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "Solana 路由 SDK（Jupiter 集成）",
+      "documentation": "packages/solana-router-sdk/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "keyAlgorithms": ["Jupiter聚合", "最优路由", "SOL/WSOL处理"]
+    },
+    {
+      "name": "chains",
+      "path": "packages/chains",
+      "type": "config",
+      "language": "TypeScript",
+      "description": "链配置单一数据源（chainId, RPC, 子图等）",
+      "documentation": "packages/chains/CLAUDE.md"
+    },
+    {
+      "name": "farms",
+      "path": "packages/farms",
+      "type": "logic",
+      "language": "TypeScript",
+      "description": "农场数据获取和计算逻辑",
+      "documentation": "packages/farms/CLAUDE.md"
+    },
+    {
+      "name": "uikit",
+      "path": "packages/uikit",
+      "type": "ui",
+      "language": "TypeScript",
+      "description": "UI 组件库（Storybook）",
+      "documentation": "packages/uikit/CLAUDE.md",
+      "hasDetailedWidgets": true,
+      "widgetsDocumentation": "packages/uikit/src/widgets/CLAUDE.md"
+    },
+    {
+      "name": "localization",
+      "path": "packages/localization",
+      "type": "i18n",
+      "language": "TypeScript",
+      "description": "国际化库（26 种语言）",
+      "documentation": "packages/localization/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "keyFeatures": ["LRU缓存", "动态加载", "插值翻译"]
+    },
+    {
+      "name": "hooks",
+      "path": "packages/hooks",
+      "type": "logic",
+      "language": "TypeScript",
+      "description": "共享 React Hooks",
+      "documentation": "packages/hooks/CLAUDE.md",
+      "hasDetailedDoc": true,
+      "keyHooks": ["useTheme", "useDebounce", "useInterval", "useLastUpdated"]
+    },
+    {
+      "name": "routing-api",
+      "path": "apis/routing",
+      "type": "api",
+      "language": "TypeScript",
+      "description": "路由计算 Cloudflare Workers API",
+      "documentation": "apis/routing/CLAUDE.md"
+    },
+    {
+      "name": "farms-api",
+      "path": "apis/farms",
+      "type": "api",
+      "language": "TypeScript",
+      "description": "农场数据 Cloudflare Workers API",
+      "documentation": "apis/farms/CLAUDE.md"
+    },
+    {
+      "name": "jupiter-terminal",
+      "path": "packages/jupiter-terminal",
+      "type": "sdk",
+      "language": "TypeScript",
+      "description": "Jupiter 终端组件",
+      "documentation": null
+    }
+  ],
+  "gaps": [],
+  "nextSteps": [
+    "补充 packages/jupiter-terminal 详细文档",
+    "补充 packages/aptos-swap-sdk 详细文档",
+    "补充 packages/awgmi 详细文档"
+  ],
+  "keyDiscoveries": [
+    "Gas模型：将Gas费用转换为代币金额，在路由计算中考虑Gas成本",
+    "混合路由：支持跨不同池类型（V2、V3、Stable、Infinity）的交易路径",
+    "流分拆算法：将大额交易分成多个小交易以减少价格影响",
+    "Create2地址计算：V2配对地址可通过Create2确定性计算",
+    "图算法：使用图论算法寻找最优交易路径",
+    "Modal系统：支持手势关闭、移动端底部抽屉、特殊平台处理",
+    "Jupiter聚合：Solana使用Jupiter聚合器而非本地路由计算",
+    "CLMM vs V3：Solana CLMM类似EVM V3，但使用账户模型而非NFT",
+    "LRU缓存：翻译使用LRU缓存优化性能",
+    "跨链兼容：SOL/WSOL转换，统一接口设计"
+  ],
+  "ignorePatterns": [
+    "node_modules/**",
+    ".git/**",
+    ".github/**",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "__pycache__/**",
+    "*.lock",
+    "*.log",
+    "*.bin",
+    "*.pdf",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.gif",
+    "*.mp4",
+    "*.zip",
+    "*.tar",
+    "*.gz"
+  ]
+}
