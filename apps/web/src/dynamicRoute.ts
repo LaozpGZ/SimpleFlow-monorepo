@@ -32,12 +32,7 @@ export const zProtocolV3 = z.literal('v3')
 export const zProtocolSolanaV3 = z.literal('v3')
 export const zProtocolV2 = z.literal('v2')
 export const zProtocolStable = z.literal('stableSwap')
-export const zProtocol = zProtocolInfinity
-  .or(zProtocolV3)
-  .or(zProtocolSolanaV3)
-  .or(zProtocolV2)
-  .or(zProtocolStable)
-  .optional()
+export const zProtocol = zProtocolV3.or(zProtocolV2).or(zProtocolInfinity).or(zProtocolStable).optional()
 
 export const zCurrencyId = z.string()
 export const zAddress = z

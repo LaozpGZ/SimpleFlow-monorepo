@@ -8,6 +8,62 @@ const LogoWrapper = styled(Box)`
   align-items: center;
 `
 
+const OverlapLogo = styled.img<{
+  gap: number
+  size: number
+  isFirstSmall: boolean
+  index: number
+  borderRadius: string
+  isActive: boolean
+}>(({ gap, size, isFirstSmall, index, borderRadius, isActive, theme }) => {
+  const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
+
+  return `
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.3s;
+    width: ${logoSize};
+    opacity: ${isActive ? 1 : 0};
+    height: auto;
+    flex-shrink: 0;
+    border: ${gap < 0 ? `3px solid ${theme.colors.card}` : 'none'};
+    border-radius: ${borderRadius};
+    will-change: opacity;
+  `
+})
+
+const ExpandLogo = styled.img<{
+  gap: number
+  size: number
+  isFirstSmall: boolean
+  index: number
+  borderRadius: string
+  isActive: boolean
+  isMobile: boolean
+}>(({ size, isFirstSmall, isMobile, index, isActive }) => {
+  const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
+
+  return `
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: ${isMobile ? logoSize : 'auto'};
+    height: ${!isMobile ? `${logoSize} !important` : 'auto'};
+    max-width: none !important;
+    max-height: none !important;
+    opacity: ${isActive ? 1 : 0};
+    transition: all 0.3s;
+    transform: scale(${isActive ? 2 : 1});
+    transform-origin: ${isMobile ? 'top left' : 'center'};
+    will-change: transform, opacity;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: '16px';
+    z-index: 2;
+  `
+})
+
 const ImageContainer = styled.div<{
   gap: number
   isFirstSmall: boolean
@@ -90,62 +146,6 @@ const ImageContainerExpandableMobile = styled.div<{
 `
 })
 
-const OverlapLogo = styled.img<{
-  gap: number
-  size: number
-  isFirstSmall: boolean
-  index: number
-  borderRadius: string
-  isActive: boolean
-}>(({ gap, size, isFirstSmall, index, borderRadius, isActive, theme }) => {
-  const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
-
-  return `
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: all 0.3s;
-    width: ${logoSize};
-    opacity: ${isActive ? 1 : 0};
-    height: auto;
-    flex-shrink: 0;
-    border: ${gap < 0 ? `3px solid ${theme.colors.card}` : 'none'};
-    border-radius: ${borderRadius};
-    will-change: opacity;
-  `
-})
-
-const ExpandLogo = styled.img<{
-  gap: number
-  size: number
-  isFirstSmall: boolean
-  index: number
-  borderRadius: string
-  isActive: boolean
-  isMobile: boolean
-}>(({ size, isFirstSmall, isMobile, index, isActive }) => {
-  const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
-
-  return `
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: ${isMobile ? logoSize : 'auto'};
-    height: ${!isMobile ? `${logoSize} !important` : 'auto'};
-    max-width: none !important;
-    max-height: none !important;
-    opacity: ${isActive ? 1 : 0};
-    transition: all 0.3s;
-    transform: scale(${isActive ? 2 : 1});
-    transform-origin: ${isMobile ? 'top left' : 'center'};
-    will-change: transform, opacity;
-    height: auto;
-    flex-shrink: 0;
-    border-radius: '16px';
-    z-index: 2;
-  `
-})
-
 const ExtraCount = styled(Box)<{ gap: number; size: number; borderRadius: string }>`
   display: flex;
   width: ${({ size }) => `${size}px`};
@@ -218,7 +218,7 @@ export const MultipleLogos = ({
     return () => {
       document.removeEventListener('scroll', handleScroll)
       document.removeEventListener('touchmove', handleTap)
-      document.addEventListener('click', handleTap)
+      document.removeEventListener('click', handleTap)
     }
   }, [expandIndex, isMobile])
 

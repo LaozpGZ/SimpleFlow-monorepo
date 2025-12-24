@@ -20,7 +20,6 @@ import { StyledSwapContainer } from '../Swap/styles'
 import { SwapFeaturesContext } from '../Swap/SwapFeaturesContext'
 import { InfinitySwapForm } from './InfinitySwap'
 import { chartDisplayAtom } from './InfinitySwap/atoms'
-import { XmasEffect } from './InfinitySwap/XmasEffect'
 
 const ChartWithPriceHeader = dynamic(() => import('components/Chart/ChartWithPriceHeader'), { ssr: false })
 
@@ -64,7 +63,6 @@ const InfinitySwapInner = () => {
 
   return (
     <Page removePadding hideFooterOnDesktop={isChartExpanded || false} showExternalLink={false} showHelpLink={false}>
-      <XmasEffect />
       <Flex
         width="100%"
         height="100%"

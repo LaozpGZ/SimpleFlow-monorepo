@@ -43,6 +43,7 @@ export const CardRowSectionButton = ({ link, text, alwaysShow = false, hover }: 
     <StyledButton
       show={isHover || alwaysShow}
       isMobile={isMobile}
+      isTablet={isTablet}
       isHover={isHover}
       style={{ width }}
       onClick={() => {
@@ -66,6 +67,7 @@ export const CardRowSectionButton = ({ link, text, alwaysShow = false, hover }: 
 const StyledButton = styled(Button)<{
   show: boolean
   isMobile: boolean
+  isTablet: boolean
   isHover?: boolean
 }>`
   transition: width 0.5s ease;

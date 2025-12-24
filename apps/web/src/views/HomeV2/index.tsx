@@ -20,9 +20,8 @@ import { RowLayout } from './component/RowLayout'
 import { ScrollableFullScreen } from './component/ScrollableFullScreen'
 import { FavoriteDEXBanner } from './FavoriteDEXBanner'
 import { PancakeBanner } from './PancakeBanner'
-import { SwapWithBestPriceCard } from './cards/SwapWithBestPriceCard'
-import { EarnTradingFeesCard } from './cards/EarnTradingFeesCard'
-import { BridgeCryptoCard } from './cards/BridgeCryptoCard'
+import { StatsRotatingCard } from './cards/StatsRotatingCard'
+import { TopAssetsCard } from './cards/TopAssetsCard'
 
 const MobileContainer = styled(Box)`
   scroll-snap-align: start;
@@ -78,7 +77,7 @@ export const HomeV2 = () => {
   )
 }
 const HomeV2Inner = () => {
-  const { tokens, chains, pools, currencies } = useAtomValue(homePageDataAtom)
+  const { tokens, chains, pools, stats } = useAtomValue(homePageDataAtom)
 
   const { isMobile, isTablet } = useMatchBreakpoints()
   const Container = isTablet || isMobile ? MobileContainer : ScrollableFullScreen
@@ -133,18 +132,8 @@ const HomeV2Inner = () => {
           marginTop: getMarginTop(isMobile, isTablet, 24),
         }}
       >
-        <SwapWithBestPriceCard tokens={tokens} />
-        <EarnTradingFeesCard pairs={pools} />
-      </RowLayout>
-
-      <RowLayout
-        sidePadding={getSidePadding(isMobile, isTablet)}
-        mt={getMarginTop(isMobile, isTablet, 24)}
-        style={{
-          marginTop: getMarginTop(isMobile, isTablet, 24),
-        }}
-      >
-        <BridgeCryptoCard chains={chains} currencies={currencies} />
+        <TopAssetsCard tokens={tokens} pairs={pools} />
+        <StatsRotatingCard stats={stats} />
       </RowLayout>
 
       <FeaturesCard />

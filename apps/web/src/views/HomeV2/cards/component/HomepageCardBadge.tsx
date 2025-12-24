@@ -72,7 +72,7 @@ export const HomepageCardBadge: React.FC<HomepageCardBadgeProps> = ({ text, pric
         <Percent>
           {priceChange > 0 && <TriangleUpIcon />}
           {priceChange < 0 && <TriangleDownIcon />}
-          <Text bold color="textSubtitle" ml="4px">
+          <Text bold color="textSubtle" ml="4px">
             {priceChange.toFixed(2)}%
           </Text>
         </Percent>

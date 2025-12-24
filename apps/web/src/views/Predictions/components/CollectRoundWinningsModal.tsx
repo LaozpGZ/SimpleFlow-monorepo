@@ -31,6 +31,7 @@ import { Bet } from 'state/types'
 import { styled } from 'styled-components'
 import { Address } from 'viem'
 import { useTokenUsdPriceBigNumber } from 'views/Predictions/hooks/useTokenPrice'
+import { WhiteBunny } from 'views/Lottery/svgs'
 import { getPayout } from './History/helpers'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
@@ -147,7 +148,7 @@ const CollectRoundWinningsModal: React.FC<React.PropsWithChildren<CollectRoundWi
   return (
     <Modal minWidth="288px" position="relative" mt="124px">
       <BunnyDecoration>
-        <img src="/images/decorations/prize-bunny.png" alt="bunny decoration" height="124px" width="168px" />
+        <WhiteBunny width="120px" height="120px" />
       </BunnyDecoration>
       <ModalHeader>
         <ModalTitle>

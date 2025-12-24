@@ -32,6 +32,7 @@ const BannerMediaContainer = styled.div`
   top: -50px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 0;
 `
 
 const BannerVideo = styled.video`

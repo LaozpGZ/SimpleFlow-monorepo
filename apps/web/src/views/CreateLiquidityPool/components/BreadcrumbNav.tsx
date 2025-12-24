@@ -55,11 +55,7 @@ export const BreadcrumbNav: React.FC = () => {
 
       {protocolFromQuery && (
         <TabMenu
-          tabs={[
-            { value: 'infinity', label: 'Infinity', disabled: !isInfinitySupported },
-            { value: 'v3', label: 'V3' },
-            { value: 'v2', label: 'V2', disabled: !isV2Supported(chainId) },
-          ]}
+          tabs={[{ value: 'v3', label: 'V3' }]}
           defaultTab={{
             value: protocolName as 'infinity' | 'v3' | 'v2',
             label: protocolName,

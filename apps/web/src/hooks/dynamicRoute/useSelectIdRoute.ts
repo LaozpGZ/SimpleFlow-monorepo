@@ -25,16 +25,13 @@ export const useSelectIdRoute = () => {
 
   const protocolName = useMemo(() => {
     return (
-      // if no protocol and infinity is supported, set to infinity
+      // if protocol value is supported (v3, stable), set to that protocol
       (
-        (!protocolFromQuery || protocolFromQuery === 'infinity') && INFINITY_SUPPORTED_CHAINS.includes(activeChainId)
-          ? 'infinity'
-          : // if other protocol value is supported (v2, v3, stable), set to that protocol
-          isSupportedProtocol(protocolFromQuery as Protocol)
+        isSupportedProtocol(protocolFromQuery as Protocol)
           ? protocolFromQuery
           : // if protocol is not supported, default to v3
             'v3'
-      ) as 'infinity' | 'v3' | 'v2' | 'stable'
+      ) as 'v3' | 'stableSwap' | 'infinity' | 'v2'
     )
   }, [activeChainId, router.query, protocolFromQuery])
 
@@ -92,17 +89,17 @@ export const useSelectIdRouteParams = () => {
   const { isV2Supported, isInfinitySupported, isStableSwapSupported, isV3Supported } = useProtocolSupported()
 
   const fallbackToSupportedProtocol = useCallback(
-    (protocol?: 'infinity' | 'v3' | 'v2' | 'stableSwap', chainId?: number) => {
+    (protocol?: 'v3' | 'v2' | 'infinity' | 'stableSwap', chainId?: number) => {
       if (!protocol || !chainId) return protocol
 
       const isSupported = (p: (typeof LIQUIDITY_TYPES)[number]): boolean => {
         switch (p) {
-          case 'infinity':
-            return isInfinitySupported(chainId)
           case 'v3':
             return isV3Supported(chainId)
           case 'v2':
             return isV2Supported(chainId)
+          case 'infinity':
+            return isInfinitySupported(chainId)
           case 'stableSwap':
             return isStableSwapSupported(chainId)
           default:
@@ -115,7 +112,7 @@ export const useSelectIdRouteParams = () => {
       const firstSupported = LIQUIDITY_TYPES.find(isSupported)
       return firstSupported ?? 'v3'
     },
-    [isV2Supported, isInfinitySupported, isStableSwapSupported, isV3Supported],
+    [isV3Supported, isV2Supported, isInfinitySupported, isStableSwapSupported],
   )
 
   const updateParams = useCallback(
@@ -130,15 +127,16 @@ export const useSelectIdRouteParams = () => {
             selectId: hasOnlyChainId
               ? [
                   getChainName(p.chainId!),
-                  fallbackToSupportedProtocol(params.protocol, p.chainId),
-                  params.protocol !== 'stableSwap' ? getUnifiedNativeCurrency(p.chainId!).symbol : params.currencyIdA,
-                  params.protocol !== 'stableSwap'
-                    ? CAKE[p.chainId!]?.address ?? USDC[p.chainId!]?.address ?? params.currencyIdB
-                    : params.currencyIdB,
+                  fallbackToSupportedProtocol(params.protocol as 'v3' | 'v2' | 'infinity' | 'stableSwap', p.chainId),
+                  getUnifiedNativeCurrency(p.chainId!).symbol,
+                  CAKE[p.chainId!]?.address ?? USDC[p.chainId!]?.address ?? params.currencyIdB,
                 ]
               : [
                   getChainName(p.chainId ?? params.chainId),
-                  fallbackToSupportedProtocol(p.protocol ?? params.protocol, p.chainId ?? params.chainId),
+                  fallbackToSupportedProtocol(
+                    (p.protocol ?? params.protocol) as 'v3' | 'v2' | 'infinity' | 'stableSwap',
+                    p.chainId ?? params.chainId,
+                  ),
                   p.currencyIdA ?? params.currencyIdA,
                   p.currencyIdB ?? params.currencyIdB,
                 ],

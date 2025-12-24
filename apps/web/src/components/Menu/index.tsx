@@ -4,16 +4,13 @@ import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
-import { useWebNotifications } from 'hooks/useWebNotifications'
 import { useRouter } from 'next/router'
-import { Suspense, lazy, useMemo } from 'react'
+import { useMemo } from 'react'
 import { styled } from 'styled-components'
 import GlobalSettings from './GlobalSettings'
 import UserMenu from './UserMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuChildItem, getActiveSubMenuItem } from './utils'
-
-const Notifications = lazy(() => import('views/Notifications'))
 
 const LinkComponent = (linkProps) => {
   const { href, type, ...props } = linkProps
@@ -31,7 +28,6 @@ const LinkComponent = (linkProps) => {
 const EMPTY_ARRAY = []
 
 const Menu = (props) => {
-  const { enabled } = useWebNotifications()
   const { chainId } = useActiveChainId()
   const { isDark, setTheme } = useTheme()
   const { currentLanguage, t } = useTranslation()
@@ -65,11 +61,6 @@ const Menu = (props) => {
       rightSide={
         <>
           <GlobalSettings />
-          {enabled && (
-            <Suspense fallback={null}>
-              <Notifications />
-            </Suspense>
-          )}
           <NetworkSwitcher />
           <UserMenu />
         </>
@@ -116,16 +107,10 @@ const SharedComponentWithOutMenuWrapper = styled.div`
 `
 
 export const SharedComponentWithOutMenu: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { enabled } = useWebNotifications()
   return (
     <>
       <SharedComponentWithOutMenuWrapper>
         <GlobalSettings />
-        {enabled && (
-          <Suspense fallback={null}>
-            <Notifications />
-          </Suspense>
-        )}
         <NetworkSwitcher />
         <UserMenu />
       </SharedComponentWithOutMenuWrapper>

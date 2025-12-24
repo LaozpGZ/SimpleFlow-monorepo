@@ -90,6 +90,7 @@ declare module "@@@next-typesafe-url" {
     "/pools/[chainName]/[id]": StaticRoute;
     "/pools/history": StaticRoute;
     "/pools": StaticRoute;
+    "/portfolio": StaticRoute;
     "/prediction": StaticRoute;
     "/prediction/leaderboard": StaticRoute;
     "/profile/[accountAddress]/achievements": StaticRoute;

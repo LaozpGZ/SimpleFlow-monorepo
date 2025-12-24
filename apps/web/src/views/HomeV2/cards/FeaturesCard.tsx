@@ -4,7 +4,6 @@ import { useAtomValue } from 'jotai'
 import styled from 'styled-components'
 import { homePageDataAtom } from '../atom/homePageDataAtom'
 import { RowLayout } from '../component/RowLayout'
-import { PerpetualCard } from './PerpetualsCard'
 import { PredictionCard } from './PredictionCard'
 import { CardSection } from './component/CardSection'
 
@@ -17,7 +16,6 @@ export const FeaturesCard = () => {
     return (
       <RowLayout style={{ marginTop: '20px' }} sidePadding="16px">
         <CardSection title={t('Featured on SimpleFlow')}>
-          <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
           <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} winner={topWinner} />
         </CardSection>
       </RowLayout>
@@ -36,7 +34,6 @@ export const FeaturesCard = () => {
             marginTop: '30px',
           }}
         >
-          <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
           <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} winner={topWinner} />
         </RowLayout>
       </>
@@ -55,7 +52,6 @@ export const FeaturesCard = () => {
           marginTop: '40px',
         }}
       >
-        <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
         <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} winner={topWinner} />
       </RowLayout>
     </>

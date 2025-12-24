@@ -10,6 +10,7 @@ import { useLottery } from 'state/lottery/hooks'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
 import ClaimPrizesInner from './ClaimPrizesInner'
+import { WhiteBunny } from '../../svgs'
 
 const StyledModal = styled(ModalContainer)`
   position: relative;
@@ -68,7 +69,7 @@ const ClaimPrizesModal: React.FC<React.PropsWithChildren<ClaimPrizesModalModalPr
   return (
     <StyledModal minWidth="280px">
       <BunnyDecoration>
-        <img src="/images/decorations/prize-bunny.png" alt="bunny decoration" height="124px" width="168px" />
+        <WhiteBunny width="120px" height="120px" />
       </BunnyDecoration>
       <StyledModalHeader>
         <ModalTitle>

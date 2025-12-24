@@ -4,6 +4,7 @@ import { ArrowBackIcon, Card, CardBody, Heading, Button } from '@pancakeswap/uik
 import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
 import { usePredictionConfigs } from 'views/Predictions/hooks/usePredictionConfigs'
+import { WhiteBunny } from 'views/Lottery/svgs'
 
 interface NotificationProps {
   title: string
@@ -64,7 +65,7 @@ const Notification: React.FC<React.PropsWithChildren<NotificationProps>> = ({ ti
             router.push(router)
           }}
         >
-          <img src="/images/decorations/hiccup-bunny.png" alt="bunny decoration" height="121px" width="130px" />
+          <WhiteBunny width="120px" height="120px" />
         </BunnyDecoration>
         <Card>
           <CardBody>

@@ -6,6 +6,7 @@ import pkg from './package.json'
 
 export default defineConfig({
   build: {
+    emptyOutDir: true,
     lib: {
       entry: 'src/index.ts',
       fileName: 'index',

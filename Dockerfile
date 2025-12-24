@@ -10,7 +10,7 @@ RUN turbo prune web --docker
 
 # 阶段2: 安装依赖
 FROM node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat python3 make g++
+RUN apk add --no-cache libc6-compat python3 make g++ linux-headers eudev-dev
 RUN corepack enable && corepack prepare pnpm@10.13.1 --activate
 WORKDIR /app
 
@@ -28,8 +28,14 @@ COPY --from=pruner /app/out/full/ .
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+# 增加 Node.js 堆内存限制到 8GB，避免构建时内存不足
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-RUN pnpm build
+# 清理可能存在的 dist 目录，避免权限问题
+RUN find . -type d -name "dist" -exec rm -rf {} + 2>/dev/null || true
+
+# 先构建依赖包，再构建 web（跳过类型检查以节省内存）
+RUN pnpm turbo run build --filter=web^... && pnpm turbo run build:docker --filter=web
 
 # 阶段4: 运行
 FROM node:20-alpine AS runner

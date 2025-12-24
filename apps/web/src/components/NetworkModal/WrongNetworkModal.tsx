@@ -11,6 +11,7 @@ import { useCallback } from 'react'
 import { Chain } from 'viem'
 import * as allChains from 'viem/chains'
 import { useAccount } from 'wagmi'
+import { WhiteBunny } from 'views/Lottery/svgs'
 import Dots from '../Loader/Dots'
 
 const getChain = (chainId: number | undefined) => {
@@ -69,7 +70,7 @@ export function WrongNetworkModal({ currentChain, onDismiss }: { currentChain: C
           })}
         </Text>
         <div style={{ textAlign: 'center' }}>
-          <Image width={184} height={140} src="/images/decorations/3d-pan-bunny.png" alt="check your network" />
+          <WhiteBunny width="120px" height="120px" />
         </div>
         <Message variant="warning" icon={false} p="8px 12px">
           <MessageText>

@@ -81,6 +81,28 @@ const config: (
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
     {
+      label: t('Dashboard'),
+      href: '/info/v3',
+      icon: MoreIcon,
+      hideSubNav: true,
+    },
+    {
+      label: t('LP'),
+      href: '/liquidity/select',
+      icon: MoreIcon,
+      hideSubNav: true,
+      items: [
+        {
+          label: t('Create Pool'),
+          href: '/liquidity/create',
+        },
+        {
+          label: t('Add Liquidity'),
+          href: '/add',
+        },
+      ],
+    },
+    {
       label: t('Farm / Liquidity'),
       href: '/liquidity/pools',
       icon: EarnIcon,
@@ -89,15 +111,9 @@ const config: (
       supportChainIds: SUPPORT_FARMS,
     },
     {
-      label: t('My Positions'),
-      href: '/liquidity/positions',
+      label: t('Portfolio'),
+      href: '/portfolio',
       icon: EarnIcon,
-      hideSubNav: true,
-    },
-    {
-      label: t('Info.section_title'),
-      href: '/info/v3',
-      icon: MoreIcon,
       hideSubNav: true,
     },
     {

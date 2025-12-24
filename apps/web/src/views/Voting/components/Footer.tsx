@@ -3,6 +3,7 @@ import { styled } from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import Link from 'next/link'
 import Container from 'components/Layout/Container'
+import { WhiteBunny } from 'views/Lottery/svgs'
 import DesktopImage from './DesktopImage'
 
 const StyledFooter = styled(Box)`
@@ -35,7 +36,7 @@ const Footer = () => {
               <Button startIcon={<ProposalIcon color="currentColor" width="24px" />}>{t('Make a Proposal')}</Button>
             </Link>
           </Box>
-          <DesktopImage src="/images/voting/voting-bunny.png" width={173} height={234} />
+          <WhiteBunny width="120px" height="120px" />
         </Flex>
       </Container>
     </StyledFooter>

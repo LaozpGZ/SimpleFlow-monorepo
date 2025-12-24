@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
+import { WhiteBunny } from 'views/Lottery/svgs'
 import { V1History, getAllV1History } from './helpers'
 
 const Modal = styled(ModalContainer)`
@@ -104,7 +105,7 @@ const CollectRoundWinningsModal: React.FC<React.PropsWithChildren<InjectedModalP
   return (
     <Modal minWidth="288px" position="relative" mt="124px">
       <BunnyDecoration>
-        <img src="/images/decorations/prize-bunny.png" alt="bunny decoration" height="124px" width="168px" />
+        <WhiteBunny width="120px" height="120px" />
       </BunnyDecoration>
       <ModalHeader>
         <ModalTitle>
