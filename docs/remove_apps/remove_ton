@@ -1,0 +1,55 @@
+我来帮你分析一下 apps/ton 和 apps/web 之间的构建依赖关系。
+
+根据我的分析：
+
+结论：apps/ton 和 apps/web 是独立的应用
+不是的，apps/ton 和 apps/web 之间没有直接依赖关系。
+
+关键发现：
+apps/web/package.json 中没有依赖 ton 这个 workspace 包（搜索到的 "ton" 只是 gelatonetwork/limit-orders-lib 包名的一部分）
+apps/ton/package.json 是一个独立的 Next.js 应用，只有基础依赖（react, react-dom, next），没有被 apps/web 引用
+pnpm-workspace.yaml 中 apps/* 表示所有 apps 目录下的包都是 workspace 成员，但这只是让它们可以被引用，不代表它们会被自动构建
+turbo.json 的 build 任务使用 "dependsOn": ["^build"]，意味着只会构建被依赖的包
+构建行为：
+当你运行 pnpm build 时：
+
+如果你在 apps/web 目录下运行，只会构建 web 及其依赖的 packages
+如果你在根目录运行 pnpm build --filter web，同样只构建 web 相关
+apps/ton 不会被构建，除非你显式指定它
+所以你的理解是对的：apps/ton 是完全独立的应用，不管 apps/web 是否支持 TON 链，构建 apps/web 时都不会涉及 apps/ton。如果你想删除 TON 相关的东西，可以直接删除 apps/ton 目录，不会影响 apps/web 的构建。
+
+
+那web中切换ton链是怎样的逻辑
+Fast Context
+TON chain switching logic in web app, how TON network is handled
+in 4.22s
+搜索结果显示 apps/web 中的链切换逻辑主要是针对 EVM 链 和 Solana 的，没有看到 TON 链的处理。让我进一步确认：
+
+搜索 "ton" 小写匹配到的是 button、skeleton 等单词中的 "ton"，不是 TON 链。让我更精确地搜索：
+
+现在我有了完整的答案：
+
+结论：apps/web 中没有 TON 链的支持
+根据我的分析：
+
+关键发现
+packages/chains/src/chainId.ts 中定义的链：
+EVM 链：Ethereum, BSC, zkSync, opBNB, Arbitrum, Linea, Base, Sepolia, SimpleChain 等
+非 EVM 链：只有 SOLANA 和 APTOS
+没有 TON
+链切换逻辑 (useSwitchNetworkV2.ts:171-236)：
+typescript
+if (isEvm(requestChainId)) {
+  // EVM 链处理逻辑
+}
+// Solana 处理逻辑
+if (!SOLANA_SUPPORTED_PATH.some((p) => path.startsWith(p))) {
+  window.open('https://solana.pancakeswap.finance', '_self')
+}
+只处理 EVM 链 和 Solana，没有 TON 的逻辑。
+apps/ton 是一个完全独立的 Next.js 应用，有自己的域名/部署，不是 apps/web 的一部分。
+总结
+项目	说明
+apps/web	支持 EVM 链 + Solana，不支持 TON
+apps/ton	独立应用，专门处理 TON 链
+所以 apps/web 中根本没有"切换到 TON 链"的逻辑。TON 链的功能完全在 apps/ton 这个独立应用中。如果你删除 apps/ton，对 apps/web 没有任何影响。
