@@ -1,335 +1,780 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-useless-constructor */
-/* eslint-disable no-await-in-loop */
+/**
+ * PoolsService - 池子数据服务
+ *
+ * 数据获取策略（参考 PancakeSwap Smart-Router）：
+ * 1. V3池子：TVL API + 链上数据 (Primary) -> Subgraph (Fallback)
+ * 2. V2池子：链上数据 (Primary) -> Subgraph (Fallback)
+ * 3. Stable池子：PancakeSwap SDK API
+ */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ChainId } from '@pancakeswap/chains';
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { GraphQLClient } from 'graphql-request';
+import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk';
+import { pancakeV3PoolABI } from '@pancakeswap/v3-sdk';
+import { getAddress, createPublicClient, http } from 'viem';
+import { defineChain } from 'viem';
+
 import { CacheService } from '@/common/cache/cache.service';
 import { RpcService } from '@/common/rpc/rpc.service';
-import {
-  V3PoolInfo,
-  V2PoolInfo,
-  StablePoolInfo,
-  PoolsResponse,
-} from './dto/pool-response.dto';
 
-// V3 池子 ABI - 只包含需要的函数
-const V3_POOL_ABI = [
-  {
-    inputs: [],
-    name: 'liquidity',
-    outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'slot0',
-    outputs: [
-      { internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
-      { internalType: 'int24', name: 'tick', type: 'int24' },
-      { internalType: 'uint16', name: 'observationIndex', type: 'uint16' },
-      {
-        internalType: 'uint16',
-        name: 'observationCardinality',
-        type: 'uint16',
-      },
-      {
-        internalType: 'uint16',
-        name: 'observationCardinalityNext',
-        type: 'uint16',
-      },
-      { internalType: 'uint32', name: 'feeProtocol', type: 'uint32' },
-      { internalType: 'bool', name: 'unlocked', type: 'bool' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-] as const;
-
-// V2 池子 ABI
-const V2_PAIR_ABI = [
-  {
-    inputs: [],
-    name: 'getReserves',
-    outputs: [
-      { internalType: 'uint112', name: 'reserve0', type: 'uint112' },
-      { internalType: 'uint112', name: 'reserve1', type: 'uint112' },
-      { internalType: 'uint32', name: 'blockTimestampLast', type: 'uint32' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'totalSupply',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-] as const;
-
-// 链上池子数据类型
-interface V3PoolOnChainData {
-  sqrtPriceX96: bigint;
-  tick: number;
-  liquidity: bigint;
-}
-
-interface V2PoolOnChainData {
-  reserve0: bigint;
-  reserve1: bigint;
-  totalSupply: bigint;
-}
-
-// Farms 配置文件中的池子类型
-interface FarmPoolConfig {
-  pid: number;
-  chainId: number;
-  protocol: string;
+/**
+ * 池子数据接口
+ */
+export interface SwapPool {
+  address: string;
   token0: {
+    address: string;
     symbol: string;
     name: string;
     decimals: number;
-    address: string;
-    isNative: boolean;
   };
   token1: {
+    address: string;
     symbol: string;
     name: string;
     decimals: number;
-    address: string;
-    isNative: boolean;
   };
-  feeAmount: number;
-  lpAddress: string;
-  poolId?: string;
+  reserve0?: string;
+  reserve1?: string;
+  liquidity?: string;
+  sqrtPriceX96?: string;
+  tick?: number;
+  fee?: number;
+  tvlUsd?: string;
+  poolType: 'v2' | 'v3' | 'stable';
+}
+
+/**
+ * TVL API 返回的池子引用
+ */
+interface V3PoolTvlReference {
+  address: string;
+  tvlUSD: string;
+}
+
+/**
+ * V3 Subgraph 查询
+ */
+const queryAllV3Pools = `
+  query getPools($pageSize: Int!, $id: String) {
+    pools(first: $pageSize, where: { id_gt: $id }) {
+      id
+      tick
+      token0 {
+        symbol
+        id
+        decimals
+      }
+      token1 {
+        symbol
+        id
+        decimals
+      }
+      sqrtPrice
+      feeTier
+      liquidity
+      totalValueLockedUSD
+    }
+  }
+`;
+
+/**
+ * 支持的链列表
+ */
+const SUPPORTED_CHAINS = [
+  ChainId.BSC,
+  ChainId.BSC_TESTNET,
+  ChainId.ETHEREUM,
+  ChainId.ARBITRUM_ONE,
+  ChainId.OPBNB,
+  ChainId.BASE,
+  ChainId.LINEA,
+  ChainId.ZKSYNC,
+  ChainId.SIMPLECHAIN,
+  ChainId.SIMPLECHAIN_TESTNET,
+];
+
+/**
+ * PancakeSwap TVL API URL 模板
+ */
+const TVL_API_URL = (chainId: number) =>
+  `https://routing-api.pancakeswap.com/v0/v3-pools-tvl/${chainId}`;
+
+/**
+ * V3 Subgraph URL 配置
+ */
+function getV3SubgraphUrl(chainId: number): string | null {
+  const subgraphs: Record<number, string> = {
+    [ChainId.ETHEREUM]:
+      'https://api.thegraph.com/subgraphs/id/CJYGNhb7RvnhfBDjqpRnD3oxgyhibzc7fkAMa38YV3oS',
+    [ChainId.BSC]:
+      'https://api.thegraph.com/subgraphs/id/Hv1GncLY5docZoGtXjo4kwbTvxm3MAhVZqBZE4sUT9eZ',
+    [ChainId.BSC_TESTNET]:
+      'https://api.thegraph.com/subgraphs/id/7xd5KmL3FbzRYbmAM9SSe4wdrsJV71pJQhCBqzU7y8Qi',
+    [ChainId.ARBITRUM_ONE]:
+      'https://api.thegraph.com/subgraphs/id/251MHFNN1rwjErXD2efWMpNS73SANZN8Ua192zw6iXve',
+    [ChainId.ZKSYNC]:
+      'https://api.thegraph.com/subgraphs/id/3dKr3tYxTuwiRLkU9vPj3MvZeUmeuGgWURbFC72ZBpYY',
+    [ChainId.LINEA]:
+      'https://api.thegraph.com/subgraphs/id/6gCTVX98K3A9Hf9zjvgEKwjz7rtD4C1V173RYEdbeMFX',
+    [ChainId.BASE]:
+      'https://api.thegraph.com/subgraphs/id/5YYKGBcRkJs6tmDfB3RpHdbK2R5KBACHQebXVgbUcYQp',
+    [ChainId.OPBNB]:
+      'https://api.studio.thegraph.com/query/46533/exchange-v3-opbnb/version/latest',
+  };
+  return subgraphs[chainId] || null;
+}
+
+/**
+ * 链配置 - 用于 viem public client
+ */
+function getChainConfig(chainId: number) {
+  const configs: Record<number, ReturnType<typeof defineChain>> = {
+    [ChainId.BSC]: defineChain({
+      id: 56,
+      name: 'BNB Smart Chain',
+      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+      rpcUrls: {
+        default: { http: ['https://bsc-dataseed1.binance.org'] },
+      },
+    }),
+    [ChainId.ETHEREUM]: defineChain({
+      id: 1,
+      name: 'Ethereum',
+      nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+      rpcUrls: {
+        default: { http: ['https://eth.llamarpc.com'] },
+      },
+    }),
+    // 其他链可以按需添加
+  };
+  return configs[chainId] || null;
+}
+
+/**
+ * 池子数据缓存
+ */
+interface PoolsCache {
+  v2: SwapPool[];
+  v3: SwapPool[];
+  stable: SwapPool[];
 }
 
 @Injectable()
 export class PoolsService implements OnModuleInit {
   private readonly logger = new Logger(PoolsService.name);
-
-  // 支持的链列表
-  private readonly supportedChains = [
-    ChainId.ETHEREUM,
-    ChainId.BSC,
-    ChainId.BSC_TESTNET,
-    ChainId.ARBITRUM_ONE,
-    ChainId.OPBNB,
-    ChainId.BASE,
-    ChainId.LINEA,
-    ChainId.SIMPLECHAIN,
-    ChainId.ZKSYNC,
-  ];
-
-  // 缓存 farms 配置数据
-  private farmsConfig: Map<number, FarmPoolConfig[]> = new Map();
+  private poolsCache: Map<number, PoolsCache> = new Map();
+  private viemClients: Map<number, ReturnType<typeof createPublicClient>> =
+    new Map();
 
   constructor(
     private cacheService: CacheService,
     private rpcService: RpcService,
   ) {}
 
-  onModuleInit() {
+  async onModuleInit() {
     this.logger.log(
-      `PoolsService initialized for ${this.supportedChains.length} chains`,
+      `PoolsService initialized for ${SUPPORTED_CHAINS.length} chains`,
     );
-    // 预加载 farms 配置
-    this.loadFarmsConfig();
+    // 初始化 BSC 的 viem client
+    this.initViemClient(ChainId.BSC);
   }
 
   /**
-   * 从 @pancakeswap/farms 包加载配置
+   * 初始化 viem client
    */
-  private loadFarmsConfig() {
-    // 尝试从构建后的 farms 包读取配置
-    const configPaths = [
-      join(process.cwd(), '../../packages/farms/lists/56.json'),
-      join(process.cwd(), '../../packages/farms/dist/lists/56.json'),
-    ];
-
-    for (const configPath of configPaths) {
-      if (existsSync(configPath)) {
-        try {
-          const data = JSON.parse(
-            readFileSync(configPath, 'utf-8'),
-          ) as FarmPoolConfig[];
-          this.farmsConfig.set(ChainId.BSC, data);
-          this.logger.log(`Loaded ${data.length} pools from farms config`);
-          return;
-        } catch (e) {
-          // 继续尝试下一个路径
-        }
-      }
+  private initViemClient(chainId: number) {
+    const chainConfig = getChainConfig(chainId);
+    if (!chainConfig) {
+      this.logger.warn(`No chain config for chainId: ${chainId}`);
+      return;
     }
-    this.logger.warn('Could not load farms config, pools will be empty');
+
+    const client = createPublicClient({
+      chain: chainConfig,
+      transport: http(),
+    });
+
+    this.viemClients.set(chainId, client);
+    this.logger.log(`Initialized viem client for chain ${chainId}`);
+  }
+
+  /**
+   * 获取 viem client
+   */
+  private getViemClient(chainId: number) {
+    let client = this.viemClients.get(chainId);
+    if (!client) {
+      this.initViemClient(chainId);
+      client = this.viemClients.get(chainId);
+    }
+    return client;
+  }
+
+  /**
+   * 创建 GraphQL 客户端
+   */
+  private createGraphqlClient(url: string): GraphQLClient {
+    return new GraphQLClient(url, {
+      fetch: (url, options) =>
+        fetch(url as string, {
+          ...options,
+          signal: AbortSignal.timeout(10000),
+        }),
+    });
   }
 
   /**
    * 检查链是否支持
    */
   isChainSupported(chainId: number): boolean {
-    return this.supportedChains.includes(chainId as ChainId);
+    return SUPPORTED_CHAINS.includes(chainId as ChainId);
+  }
+
+  /**
+   * 获取支持的链列表
+   */
+  getSupportedChains(): number[] {
+    return [...SUPPORTED_CHAINS];
   }
 
   /**
    * 获取指定链的所有池子数据
-   * @param chainId 链 ID
-   * @param options 选项
-   * @param options.enrich 是否从链上获取详细数据（liquidity, reserves 等），默认 false
-   * @param options.limit 限制返回的池子数量，用于 enrich 模式避免请求过慢
    */
   async getPools(
     chainId: number,
-    options: { enrich?: boolean; limit?: number } = {},
-  ): Promise<PoolsResponse> {
-    const { enrich = false, limit } = options;
+    options: { limit?: number } = {},
+  ): Promise<{
+    chainId: number;
+    pools: SwapPool[];
+  }> {
+    const { limit } = options;
 
     if (!this.isChainSupported(chainId)) {
-      return this.emptyResponse(chainId);
+      return { chainId, pools: [] };
     }
 
-    const cacheKey = `pools:${chainId}:${enrich ? 'enriched' : 'basic'}`;
-    const cached = await this.cacheService.get<PoolsResponse>(cacheKey);
+    const cacheKey = `pools:swap:${chainId}`;
+    const cached = await this.cacheService.get<{ pools: SwapPool[] }>(cacheKey);
     if (cached) {
-      return cached;
-    }
-
-    // 从 farms 配置获取池子数据
-    const pools = this.farmsConfig.get(chainId as ChainId) || [];
-
-    // 分类池子
-    const v3Pools: V3PoolInfo[] = [];
-    const v2Pools: V2PoolInfo[] = [];
-
-    const poolsToProcess = limit ? pools.slice(0, limit) : pools;
-
-    for (const pool of poolsToProcess) {
-      // 根据协议分类
-      if (pool.protocol === 'v3' || pool.protocol.startsWith('infinity')) {
-        v3Pools.push({
-          address: pool.lpAddress || pool.poolId || '',
-          token0: {
-            address: pool.token0.address || 'native',
-            symbol: pool.token0.symbol,
-            name: pool.token0.name,
-            decimals: pool.token0.decimals,
-          },
-          token1: {
-            address: pool.token1.address || 'native',
-            symbol: pool.token1.symbol,
-            name: pool.token1.name,
-            decimals: pool.token1.decimals,
-          },
-          fee: pool.feeAmount,
-          tvlUsd: 0, // TODO: 需要代币价格来计算
-        });
-      } else if (pool.protocol === 'v2') {
-        v2Pools.push({
-          address: pool.lpAddress || '',
-          token0: {
-            address: pool.token0.address || 'native',
-            symbol: pool.token0.symbol,
-            name: pool.token0.name,
-            decimals: pool.token0.decimals,
-          },
-          token1: {
-            address: pool.token1.address || 'native',
-            symbol: pool.token1.symbol,
-            name: pool.token1.name,
-            decimals: pool.token1.decimals,
-          },
-          tvlUsd: 0, // TODO: 需要代币价格来计算
-        });
-      }
-    }
-
-    // 如果需要链上数据，进行批量获取
-    let enrichedV3Pools = v3Pools;
-    let enrichedV2Pools = v2Pools;
-
-    if (enrich) {
-      // 只对真正的 V3 池子进行 enrich（Infinity 池子地址不是合约地址）
-      const realV3Pools = v3Pools.filter((p) => p.address.length === 42);
-      const infinityPools = v3Pools.filter((p) => p.address.length !== 42);
-
-      this.logger.log(
-        `Enriching ${realV3Pools.length} V3 pools and ${v2Pools.length} V2 pools with on-chain data (${infinityPools.length} Infinity pools skipped)...`,
-      );
-
-      // 限制并发，避免 RPC 限流
-      const enrichLimit = limit || realV3Pools.length;
-      const poolsToEnrich = realV3Pools.slice(0, enrichLimit);
-
-      const enrichedRealV3 = await this.batchEnrichPools(
-        poolsToEnrich,
+      return {
         chainId,
-        this.enrichV3PoolWithOnChainData.bind(this),
-        10, // 每批 10 个
-      );
-
-      // 合并结果：未处理的 V3 + 已处理的 V3 + Infinity 池子
-      enrichedV3Pools = [
-        ...enrichedRealV3,
-        ...realV3Pools.slice(enrichLimit),
-        ...infinityPools,
-      ];
-
-      const v2EnrichLimit = limit || v2Pools.length;
-      const v2PoolsToEnrich = v2Pools.slice(0, v2EnrichLimit);
-      enrichedV2Pools = [...v2PoolsToEnrich, ...v2Pools.slice(v2EnrichLimit)];
-
-      enrichedV2Pools = await this.batchEnrichPools(
-        enrichedV2Pools,
-        chainId,
-        this.enrichV2PoolWithOnChainData.bind(this),
-        10,
-      );
-
-      this.logger.log(`Enriched pools complete`);
+        pools: limit ? cached.pools.slice(0, limit) : cached.pools,
+      };
     }
 
-    const response: PoolsResponse = {
+    // 并行获取所有类型的池子
+    const [v3Pools, v2Pools, stablePools] = await Promise.all([
+      this.getV3Pools(chainId),
+      this.getV2Pools(chainId),
+      this.getStablePools(chainId),
+    ]);
+
+    const allPools = [...v3Pools, ...v2Pools, ...stablePools];
+
+    const response = {
       chainId,
-      v3Pools: enrichedV3Pools,
-      v2Pools: enrichedV2Pools,
-      stablePools: [], // 暂不支持
-      _cache: {
-        maxAge: enrich ? 60 : 600, // 链上数据缓存时间短一点
-      },
+      pools: allPools,
     };
 
-    // 缓存结果
-    await this.cacheService.set(cacheKey, response, enrich ? 60 : 600);
-
+    await this.cacheService.set(cacheKey, response, 300);
     return response;
   }
 
   /**
-   * 获取 V3 池子
+   * 获取 V3 池子 - TVL API + 链上数据 (Primary) -> Subgraph (Fallback)
    */
-  async getV3Pools(chainId: number): Promise<V3PoolInfo[]> {
-    const pools = await this.getPools(chainId);
-    return pools.v3Pools;
-  }
+  async getV3Pools(chainId: number, limit = 100): Promise<SwapPool[]> {
+    if (!this.isChainSupported(chainId)) {
+      return [];
+    }
 
-  /**
-   * 获取 V2 池子
-   */
-  async getV2Pools(chainId: number): Promise<V2PoolInfo[]> {
-    const pools = await this.getPools(chainId);
-    return pools.v2Pools;
-  }
+    const cacheKey = `pools:v3:${chainId}`;
+    const cached = await this.cacheService.get<SwapPool[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
 
-  /**
-   * 获取 Stable 池子
-   */
+    // 尝试从 TVL API + 链上获取
+    try {
+      const pools = await this.getV3PoolsFromOnChain(chainId, limit);
+      if (pools.length > 0) {
+        this.logger.log(
+          `Fetched ${pools.length} V3 pools from on-chain for chain ${chainId}`,
+        );
+        await this.cacheService.set(cacheKey, pools, 300);
+        return pools;
+      }
+    } catch (error) {
+      this.logger.warn(
+        `Failed to fetch V3 pools from on-chain, trying subgraph`,
+        error,
+      );
+    }
 
-  async getStablePools(_chainId: number): Promise<StablePoolInfo[]> {
-    // 暂不支持 Stable 池子
+    // Fallback: 尝试从 Subgraph 获取
+    try {
+      const pools = await this.getV3PoolsFromSubgraph(chainId, limit);
+      if (pools.length > 0) {
+        this.logger.log(
+          `Fetched ${pools.length} V3 pools from subgraph for chain ${chainId}`,
+        );
+        await this.cacheService.set(cacheKey, pools, 300);
+        return pools;
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to fetch V3 pools from subgraph for chain ${chainId}`,
+        error,
+      );
+    }
+
     return [];
+  }
+
+  /**
+   * 从 TVL API + 链上获取 V3 池子
+   */
+  private async getV3PoolsFromOnChain(
+    chainId: number,
+    limit: number,
+  ): Promise<SwapPool[]> {
+    // 1. 获取 TVL API 数据
+    const tvlResponse = await fetch(TVL_API_URL(chainId));
+    if (!tvlResponse.ok) {
+      throw new Error(`TVL API returned ${tvlResponse.status}`);
+    }
+
+    const tvlRefs: V3PoolTvlReference[] = await tvlResponse.json();
+    this.logger.debug(
+      `Got ${tvlRefs.length} pools from TVL API for chain ${chainId}`,
+    );
+
+    // 2. 按 TVL 排序，取前 N 个
+    const sortedPools = tvlRefs
+      .sort((a, b) => parseFloat(b.tvlUSD) - parseFloat(a.tvlUSD))
+      .slice(0, limit);
+
+    // 3. 从链上获取池子详细数据
+    const client = this.getViemClient(chainId);
+    if (!client) {
+      throw new Error(`No viem client for chain ${chainId}`);
+    }
+
+    const pools: SwapPool[] = [];
+
+    // 批量获取池子数据（每批10个，避免超时）
+    const batchSize = 10;
+    // eslint-disable-next-line no-await-in-loop
+    for (let i = 0; i < sortedPools.length; i += batchSize) {
+      const batch = sortedPools.slice(i, i + batchSize);
+
+      // eslint-disable-next-line no-await-in-loop
+      const results = await Promise.allSettled(
+        batch.map(async (poolRef) => {
+          try {
+            const poolAddress = getAddress(poolRef.address);
+
+            // 获取池子数据
+            const [token0, token1, fee, liquidity, slot0] = await Promise.all([
+              client.readContract({
+                address: poolAddress as `0x${string}`,
+                abi: pancakeV3PoolABI,
+                functionName: 'token0',
+              }),
+              client.readContract({
+                address: poolAddress as `0x${string}`,
+                abi: pancakeV3PoolABI,
+                functionName: 'token1',
+              }),
+              client.readContract({
+                address: poolAddress as `0x${string}`,
+                abi: pancakeV3PoolABI,
+                functionName: 'fee',
+              }),
+              client.readContract({
+                address: poolAddress as `0x${string}`,
+                abi: pancakeV3PoolABI,
+                functionName: 'liquidity',
+              }),
+              client.readContract({
+                address: poolAddress as `0x${string}`,
+                abi: pancakeV3PoolABI,
+                functionName: 'slot0',
+              }),
+            ]);
+
+            return {
+              address: poolAddress,
+              token0: {
+                address: token0 as string,
+                symbol: '', // 需要从 ERC20 获取，这里先留空
+                name: '',
+                decimals: 18,
+              },
+              token1: {
+                address: token1 as string,
+                symbol: '',
+                name: '',
+                decimals: 18,
+              },
+              liquidity: (liquidity as bigint).toString(),
+              sqrtPriceX96: (slot0[0] as bigint).toString(),
+              tick: slot0[1] as number,
+              fee: Number(fee) / 10000,
+              tvlUsd: poolRef.tvlUSD,
+              poolType: 'v3' as const,
+            };
+          } catch (error) {
+            this.logger.debug(
+              `Failed to fetch pool ${poolRef.address}:`,
+              error,
+            );
+            return null;
+          }
+        }),
+      );
+
+      for (const result of results) {
+        if (result.status === 'fulfilled' && result.value) {
+          pools.push(result.value);
+        }
+      }
+    }
+
+    return pools;
+  }
+
+  /**
+   * 从 Subgraph 获取 V3 池子
+   */
+  private async getV3PoolsFromSubgraph(
+    chainId: number,
+    limit: number,
+  ): Promise<SwapPool[]> {
+    const subgraphUrl = getV3SubgraphUrl(chainId);
+    if (!subgraphUrl) {
+      throw new Error(`No V3 subgraph for chain ${chainId}`);
+    }
+
+    const client = this.createGraphqlClient(subgraphUrl);
+    const pools: SwapPool[] = [];
+    let hasMore = true;
+    let lastId = '';
+
+    // eslint-disable-next-line no-await-in-loop
+    while (hasMore && pools.length < limit) {
+      const data = await client.request<{
+        pools: Array<{
+          id: string;
+          tick: string;
+          sqrtPrice: string;
+          feeTier: string;
+          liquidity: string;
+          totalValueLockedUSD: string;
+          token0: {
+            id: string;
+            symbol: string;
+            decimals: string;
+          };
+          token1: {
+            id: string;
+            symbol: string;
+            decimals: string;
+          };
+        }>;
+      }>(queryAllV3Pools, {
+        pageSize: Math.min(1000, limit - pools.length),
+        id: lastId,
+      });
+
+      if (!data.pools || data.pools.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      const formattedPools = data.pools.map((p) => ({
+        address: p.id,
+        token0: {
+          address: p.token0.id,
+          symbol: p.token0.symbol,
+          name: p.token0.symbol,
+          decimals: Number(p.token0.decimals),
+        },
+        token1: {
+          address: p.token1.id,
+          symbol: p.token1.symbol,
+          name: p.token1.symbol,
+          decimals: Number(p.token1.decimals),
+        },
+        liquidity: p.liquidity,
+        sqrtPriceX96: p.sqrtPrice,
+        tick: Number(p.tick),
+        fee: Number(p.feeTier) / 10000,
+        tvlUsd: p.totalValueLockedUSD,
+        poolType: 'v3' as const,
+      }));
+
+      pools.push(...formattedPools);
+      lastId = data.pools[data.pools.length - 1].id;
+
+      if (data.pools.length < 1000) {
+        hasMore = false;
+      }
+    }
+
+    return pools;
+  }
+
+  /**
+   * 获取 V2 池子 - 从链上获取
+   *
+   * V2池子没有TVL API，使用热门代币对从Factory获取池子地址
+   */
+  async getV2Pools(chainId: number, limit = 100): Promise<SwapPool[]> {
+    if (!this.isChainSupported(chainId)) {
+      return [];
+    }
+
+    const cacheKey = `pools:v2:${chainId}`;
+    const cached = await this.cacheService.get<SwapPool[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const pools = await this.getV2PoolsFromOnChain(chainId, limit);
+      if (pools.length > 0) {
+        this.logger.log(
+          `Fetched ${pools.length} V2 pools from on-chain for chain ${chainId}`,
+        );
+        await this.cacheService.set(cacheKey, pools, 300);
+        return pools;
+      }
+    } catch (error) {
+      this.logger.error(`Failed to get V2 pools for chain ${chainId}`, error);
+    }
+
+    return [];
+  }
+
+  /**
+   * 从链上获取 V2 池子
+   */
+  private async getV2PoolsFromOnChain(
+    chainId: number,
+    limit: number,
+  ): Promise<SwapPool[]> {
+    // 只支持 BSC
+    if (chainId !== ChainId.BSC) {
+      return [];
+    }
+
+    const client = this.getViemClient(chainId);
+    if (!client) {
+      throw new Error(`No viem client for chain ${chainId}`);
+    }
+
+    // PancakeSwap V2 Factory 地址
+    const V2_FACTORY = '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73';
+
+    // 热门代币对（BSC）
+    const HOT_TOKEN_PAIRS: [string, string][] = [
+      [
+        '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+      ], // USDC/WBNB
+      [
+        '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+      ], // CAKE/WBNB
+      [
+        '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+        '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+      ], // USDC/CAKE
+      [
+        '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+      ], // ETH/WBNB
+      [
+        '0x1AF3F329e8BE154074D8769D1FFa4eE058B15DB0',
+        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+      ], // BTCB/WBNB
+    ];
+
+    // PancakePair ABI - 简化版
+    const pancakePairABI = [
+      {
+        inputs: [],
+        name: 'token0',
+        outputs: [{ internalType: 'address', name: '', type: 'address' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+      {
+        inputs: [],
+        name: 'token1',
+        outputs: [{ internalType: 'address', name: '', type: 'address' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+      {
+        inputs: [],
+        name: 'getReserves',
+        outputs: [
+          { internalType: 'uint112', name: 'reserve0', type: 'uint112' },
+          { internalType: 'uint112', name: 'reserve1', type: 'uint112' },
+          {
+            internalType: 'uint32',
+            name: 'blockTimestampLast',
+            type: 'uint32',
+          },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ] as const;
+
+    // Factory ABI
+    const factoryABI = [
+      {
+        inputs: [
+          { internalType: 'address', name: 'tokenA', type: 'address' },
+          { internalType: 'address', name: 'tokenB', type: 'address' },
+        ],
+        name: 'getPair',
+        outputs: [{ internalType: 'address', name: 'pair', type: 'address' }],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ] as const;
+
+    const pools: SwapPool[] = [];
+
+    // eslint-disable-next-line no-await-in-loop
+    for (const [tokenA, tokenB] of HOT_TOKEN_PAIRS.slice(0, limit)) {
+      try {
+        // 从 Factory 获取池子地址
+        // eslint-disable-next-line no-await-in-loop
+        const poolAddress = await client.readContract({
+          address: V2_FACTORY as `0x${string}`,
+          abi: factoryABI,
+          functionName: 'getPair',
+          args: [
+            getAddress(tokenA) as `0x${string}`,
+            getAddress(tokenB) as `0x${string}`,
+          ],
+        });
+
+        if (
+          (poolAddress as string).toLowerCase() ===
+          '0x0000000000000000000000000000000000000000'
+        ) {
+          continue;
+        }
+
+        // 获取池子数据
+        // eslint-disable-next-line no-await-in-loop
+        const [token0, token1, reserves] = await Promise.all([
+          client.readContract({
+            address: poolAddress as `0x${string}`,
+            abi: pancakePairABI,
+            functionName: 'token0',
+          }),
+          client.readContract({
+            address: poolAddress as `0x${string}`,
+            abi: pancakePairABI,
+            functionName: 'token1',
+          }),
+          client.readContract({
+            address: poolAddress as `0x${string}`,
+            abi: pancakePairABI,
+            functionName: 'getReserves',
+          }),
+        ]);
+
+        const reserve0 = (reserves as readonly [bigint, bigint, number])[0];
+        const reserve1 = (reserves as readonly [bigint, bigint, number])[1];
+
+        pools.push({
+          address: getAddress(poolAddress as string),
+          token0: {
+            address: token0 as string,
+            symbol: '',
+            name: '',
+            decimals: 18,
+          },
+          token1: {
+            address: token1 as string,
+            symbol: '',
+            name: '',
+            decimals: 18,
+          },
+          reserve0: reserve0.toString(),
+          reserve1: reserve1.toString(),
+          poolType: 'v2' as const,
+          tvlUsd: '0',
+        });
+      } catch (error) {
+        this.logger.debug(
+          `Failed to fetch V2 pool for ${tokenA}/${tokenB}:`,
+          error,
+        );
+      }
+    }
+
+    return pools;
+  }
+
+  /**
+   * 获取 Stable 池子 - 从 PancakeSwap SDK
+   */
+  async getStablePools(chainId: number): Promise<SwapPool[]> {
+    if (!this.isChainSupported(chainId)) {
+      return [];
+    }
+
+    const cacheKey = `pools:stable:${chainId}`;
+    const cached = await this.cacheService.get<SwapPool[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const stableSwapData = await getStableSwapPools(chainId as ChainId);
+
+      const pools: SwapPool[] = stableSwapData.map((p) => ({
+        address: p.lpAddress,
+        token0: {
+          address: p.token.address,
+          symbol: p.token.symbol,
+          name: p.token.name,
+          decimals: p.token.decimals,
+        },
+        token1: {
+          address: p.quoteToken.address,
+          symbol: p.quoteToken.symbol,
+          name: p.quoteToken.name,
+          decimals: p.quoteToken.decimals,
+        },
+        tvlUsd: '0',
+        poolType: 'stable' as const,
+      }));
+
+      this.logger.log(
+        `Fetched ${pools.length} Stable pools for chain ${chainId}`,
+      );
+      await this.cacheService.set(cacheKey, pools, 300);
+      return pools;
+    } catch (error) {
+      this.logger.error(
+        `Failed to get Stable pools for chain ${chainId}`,
+        error,
+      );
+      return [];
+    }
   }
 
   /**
@@ -338,211 +783,49 @@ export class PoolsService implements OnModuleInit {
   async getPoolDetail(
     chainId: number,
     address: string,
-  ): Promise<V3PoolInfo | V2PoolInfo | StablePoolInfo | null> {
-    const pools = await this.getPools(chainId);
+  ): Promise<SwapPool | null> {
+    if (!this.isChainSupported(chainId)) {
+      return null;
+    }
 
-    // 在 V3 池子中查找
-    const v3Pool = pools.v3Pools.find(
+    // 尝试从V3池子中查找
+    const v3Pools = await this.getV3Pools(chainId);
+    const found = v3Pools.find(
       (p) => p.address.toLowerCase() === address.toLowerCase(),
     );
-    if (v3Pool) return v3Pool;
+    if (found) {
+      return found;
+    }
 
-    // 在 V2 池子中查找
-    const v2Pool = pools.v2Pools.find(
+    // 尝试从V2池子中查找
+    const v2Pools = await this.getV2Pools(chainId);
+    const v2Found = v2Pools.find(
       (p) => p.address.toLowerCase() === address.toLowerCase(),
     );
-    if (v2Pool) return v2Pool;
+    if (v2Found) {
+      return v2Found;
+    }
 
-    // 在 Stable 池子中查找
-    const stablePool = pools.stablePools.find(
+    // 尝试从Stable池子中查找
+    const stablePools = await this.getStablePools(chainId);
+    const stableFound = stablePools.find(
       (p) => p.address.toLowerCase() === address.toLowerCase(),
     );
-    if (stablePool) return stablePool;
+    if (stableFound) {
+      return stableFound;
+    }
 
     return null;
   }
 
   /**
-   * 从链上获取 V3 池子数据
-   * 注意：Infinity 池子使用 poolId（66 字符）而非合约地址，需要跳过
+   * 清除缓存
    */
-  private async getV3PoolOnChainData(
-    poolAddress: string,
-    chainId: number,
-  ): Promise<V3PoolOnChainData | null> {
-    try {
-      // 跳过 Infinity 池子（地址长度不是 42 字符）
-      // Infinity 池子使用 poolId (66 chars) 而非标准合约地址 (42 chars)
-      if (poolAddress.length !== 42) {
-        return null;
-      }
-
-      const client = this.rpcService.getClient(chainId as ChainId);
-      if (!client) {
-        return null;
-      }
-
-      // 批量读取 slot0 和 liquidity
-      const [slot0, liquidity] = await Promise.all([
-        client.readContract({
-          address: poolAddress as `0x${string}`,
-          abi: V3_POOL_ABI,
-          functionName: 'slot0',
-        }),
-        client.readContract({
-          address: poolAddress as `0x${string}`,
-          abi: V3_POOL_ABI,
-          functionName: 'liquidity',
-        }),
-      ]);
-
-      return {
-        sqrtPriceX96: slot0[0] as bigint,
-        tick: slot0[1] as number,
-        liquidity: liquidity as bigint,
-      };
-    } catch (error) {
-      this.logger.debug(
-        `Failed to fetch V3 pool data for ${poolAddress}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
-      return null;
+  clearCache(chainId?: number): void {
+    if (chainId) {
+      this.poolsCache.delete(chainId);
+    } else {
+      this.poolsCache.clear();
     }
-  }
-
-  /**
-   * 从链上获取 V2 池子数据
-   */
-  private async getV2PoolOnChainData(
-    pairAddress: string,
-    chainId: number,
-  ): Promise<V2PoolOnChainData | null> {
-    try {
-      const client = this.rpcService.getClient(chainId as ChainId);
-      if (!client) {
-        return null;
-      }
-
-      // 批量读取 reserves 和 totalSupply
-      const [reserves, totalSupply] = await Promise.all([
-        client.readContract({
-          address: pairAddress as `0x${string}`,
-          abi: V2_PAIR_ABI,
-          functionName: 'getReserves',
-        }),
-        client.readContract({
-          address: pairAddress as `0x${string}`,
-          abi: V2_PAIR_ABI,
-          functionName: 'totalSupply',
-        }),
-      ]);
-
-      return {
-        reserve0: reserves[0] as bigint,
-        reserve1: reserves[1] as bigint,
-        totalSupply: totalSupply as bigint,
-      };
-    } catch (error) {
-      this.logger.debug(
-        `Failed to fetch V2 pool data for ${pairAddress}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
-      return null;
-    }
-  }
-
-  /**
-   * 计算 V3 池子的 TVL（简化版，只返回原始数据，USD 价格需要后续添加）
-   */
-  private async enrichV3PoolWithOnChainData(
-    pool: V3PoolInfo,
-    chainId: number,
-  ): Promise<V3PoolInfo> {
-    const poolAddress = pool.address.startsWith('0x')
-      ? pool.address
-      : `0x${pool.address}`;
-
-    const onChainData = await this.getV3PoolOnChainData(poolAddress, chainId);
-    if (!onChainData) {
-      return pool;
-    }
-
-    return {
-      ...pool,
-      liquidity: onChainData.liquidity.toString(),
-      sqrtPriceX96: onChainData.sqrtPriceX96.toString(),
-      tick: onChainData.tick,
-      // tvlUsd 需要代币价格，暂时保持 0
-      tvlUsd: pool.tvlUsd,
-    };
-  }
-
-  /**
-   * 计算 V2 池子的 TVL（简化版，只返回原始数据）
-   */
-  private async enrichV2PoolWithOnChainData(
-    pool: V2PoolInfo,
-    chainId: number,
-  ): Promise<V2PoolInfo> {
-    const poolAddress = pool.address.startsWith('0x')
-      ? pool.address
-      : `0x${pool.address}`;
-
-    const onChainData = await this.getV2PoolOnChainData(poolAddress, chainId);
-    if (!onChainData) {
-      return pool;
-    }
-
-    return {
-      ...pool,
-      reserve0: onChainData.reserve0.toString(),
-      reserve1: onChainData.reserve1.toString(),
-      // tvlUsd 需要代币价格，暂时保持 0
-      tvlUsd: pool.tvlUsd,
-    };
-  }
-
-  /**
-   * 批量获取池子的链上数据（限制并发数）
-   */
-
-  private async batchEnrichPools<T extends V3PoolInfo | V2PoolInfo>(
-    pools: T[],
-    chainId: number,
-    enrichFn: (pool: T, chainId: number) => Promise<T>,
-    batchSize = 20,
-  ): Promise<T[]> {
-    const results: T[] = [];
-    for (let i = 0; i < pools.length; i += batchSize) {
-      const batch = pools.slice(i, i + batchSize);
-      const enrichedBatch = await Promise.all(
-        batch.map((pool) => enrichFn(pool, chainId)),
-      );
-      results.push(...enrichedBatch);
-
-      // 添加小延迟避免请求过快
-      if (i + batchSize < pools.length) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
-    }
-    return results;
-  }
-
-  /**
-   * 返回空响应
-   */
-
-  private emptyResponse(chainId: number): PoolsResponse {
-    return {
-      chainId,
-      v3Pools: [],
-      v2Pools: [],
-      stablePools: [],
-      _cache: {
-        maxAge: 60, // 不支持的链缓存时间短一点
-      },
-    };
   }
 }

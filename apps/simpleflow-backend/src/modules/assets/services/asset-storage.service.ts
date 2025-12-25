@@ -1,7 +1,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-useless-constructor */
 /* eslint-disable no-await-in-loop */
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -23,8 +28,8 @@ export class AssetStorageService {
 
   private readonly symbolsDir: string;
 
-  constructor(private readonly configService: ConfigService) {
-    this.assetsBaseDir = this.configService.get<string>(
+  constructor(@Optional() private readonly configService?: ConfigService) {
+    this.assetsBaseDir = this.getConfig<string>(
       'assets.storagePath',
       './public/assets',
     );
@@ -33,6 +38,16 @@ export class AssetStorageService {
     this.symbolsDir = path.join(this.assetsBaseDir, 'symbols');
 
     this.ensureDirectories();
+  }
+
+  /**
+   * 安全地获取配置值
+   */
+  private getConfig<T>(key: string, defaultValue: T): T {
+    if (!this.configService) {
+      return defaultValue;
+    }
+    return this.configService.get<T>(key, defaultValue);
   }
 
   /**

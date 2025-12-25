@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "transform": {
+      "legacyDecorator": true,
+      "decoratorMetadata": true
+    },
+    "experimental": {
+      "cacheRoot": "./node_modules/.cache/swc"
+    },
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@/common/*": ["common/*"],
+      "@/config/*": ["config/*"],
+      "@/modules/*": ["modules/*"]
+    },
+    "keepClassNames": true
+  },
+  "module": {
+    "type": "commonjs",
+    "strictMode": false
+  },
+  "minify": false,
+  "isModule": true,
+  "sourceMaps": true,
+  "exclude": ["node_modules", "dist"],
+  "ignore": [
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
+}

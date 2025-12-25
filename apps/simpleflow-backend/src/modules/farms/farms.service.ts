@@ -1,12 +1,30 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-useless-constructor */
-/* eslint-disable no-await-in-loop */
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ChainId } from '@pancakeswap/chains';
 import BN from 'bignumber.js';
 
 import { CacheService } from '@/common/cache/cache.service';
 import { RpcService } from '@/common/rpc/rpc.service';
+
+// 导入 PancakeSwap SDK
+import {
+  createFarmFetcher,
+  createFarmFetcherV3,
+  fetchAllUniversalFarms,
+  defineFarmV3ConfigsFromUniversalFarm,
+  Protocol,
+  UniversalFarmConfig,
+  UniversalFarmConfigV3,
+} from '@pancakeswap/farms';
+
+// 类型守卫函数
+function isUniversalFarmConfigV3(
+  farm: UniversalFarmConfig,
+): farm is UniversalFarmConfigV3 {
+  return farm.protocol === Protocol.V3;
+}
 
 /**
  * 农场数据响应类型
@@ -23,14 +41,56 @@ interface V2FarmsResponse {
   regularCakePerBlock: string;
   totalRegularAllocPoint: string;
   totalSpecialAllocPoint: string;
-  farms: any[];
+  farms: V2FarmData[];
 }
 
 interface V3FarmsResponse {
   poolLength: number;
   cakePerSecond: string;
   totalAllocPoint: string;
-  farms: any[];
+  farms: V3FarmData[];
+}
+
+interface V2FarmData {
+  pid: number;
+  lpAddress: string;
+  token: {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+  };
+  quoteToken: {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+  };
+  tvlUsd: string;
+  apr: string;
+}
+
+interface V3FarmData {
+  pid: number;
+  lpAddress: string;
+  token: {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+  };
+  quoteToken: {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+  };
+  tvlUsd: string;
+  apr: string;
+  poolWeight: string;
+  multiplier: string;
+  tokenPriceUsd: string;
+  quoteTokenPriceUsd: string;
 }
 
 /**
@@ -43,44 +103,21 @@ interface CakePriceData {
 }
 
 /**
- * MasterChef 数据
- */
-interface MasterChefData {
-  poolLength: number;
-  totalRegularAllocPoint: string;
-  totalSpecialAllocPoint: string;
-  cakePerBlock: string;
-  updatedAt: string;
-}
-
-/**
  * 支持的链ID（V2 农场）
  */
-const SUPPORTED_CHAINS_V2 = [1, 56, 97]; // Ethereum, BSC, BSC Testnet
+const SUPPORTED_CHAINS_V2 = [56, 97, 1]; // BSC, BSC Testnet, Ethereum
 
 /**
  * 支持的链ID（V3 农场）
  */
-const SUPPORTED_CHAINS_V3 = [1, 56]; // Ethereum, BSC
-
-/**
- * 农场价格配置列表（从远程获取）
- */
-const FARMS_CONFIG_URL = 'https://farms-config.pages.dev';
-
-/**
- * BSC 出块时间（秒）
- */
-const BSC_BLOCK_TIME = 3;
-
-/**
- * CAKE 每年产出（基于每块产出）
- */
-const CAKE_PER_YEAR = (365 * 24 * 60 * 60) / BSC_BLOCK_TIME;
+const SUPPORTED_CHAINS_V3 = [56, 1]; // BSC, Ethereum
 
 @Injectable()
-export class FarmsService {
+export class FarmsService implements OnModuleInit {
   private readonly logger = new Logger(FarmsService.name);
+
+  // V3 农场配置缓存
+  private v3FarmConfigs: Map<number, any[]> = new Map();
 
   constructor(
     private configService: ConfigService,
@@ -88,10 +125,52 @@ export class FarmsService {
     private rpcService: RpcService,
   ) {}
 
+  async onModuleInit() {
+    this.logger.log('FarmsService initialized');
+    // 预加载 V3 农场配置
+    await this.loadV3FarmConfigs();
+  }
+
+  /**
+   * 创建 Provider 函数，用于 SDK
+   */
+  private createProvider() {
+    return ({ chainId }: { chainId: number }) => {
+      const client = this.rpcService.getClient(chainId as ChainId);
+      if (!client) {
+        throw new Error(`No RPC client for chainId: ${chainId}`);
+      }
+      return client;
+    };
+  }
+
+  /**
+   * 加载 V3 农场配置
+   */
+  private async loadV3FarmConfigs() {
+    try {
+      const universalFarms = await fetchAllUniversalFarms();
+      this.logger.log(`Loaded ${universalFarms.length} universal farm configs`);
+
+      // 按链ID分组，只选择 V3 协议的农场
+      for (const chainId of SUPPORTED_CHAINS_V3) {
+        const chainFarms = universalFarms
+          .filter((f) => f.chainId === chainId)
+          .filter(isUniversalFarmConfigV3);
+        const computedFarms = defineFarmV3ConfigsFromUniversalFarm(chainFarms);
+        this.v3FarmConfigs.set(chainId, computedFarms);
+        this.logger.log(
+          `Loaded ${computedFarms.length} V3 farms for chain ${chainId}`,
+        );
+      }
+    } catch (error) {
+      this.logger.error('Failed to load V3 farm configs', error);
+    }
+  }
+
   /**
    * 检查链是否支持
    */
-
   isChainSupported(chainId: number, version: 'v2' | 'v3' = 'v2'): boolean {
     const supported =
       version === 'v2' ? SUPPORTED_CHAINS_V2 : SUPPORTED_CHAINS_V3;
@@ -101,7 +180,6 @@ export class FarmsService {
   /**
    * 获取支持的链列表
    */
-
   getSupportedChains(): { v2: number[]; v3: number[] } {
     return {
       v2: [...SUPPORTED_CHAINS_V2],
@@ -110,45 +188,13 @@ export class FarmsService {
   }
 
   /**
-   * 获取农场配置
-   */
-  private async fetchFarmsConfig(chainId: number): Promise<any[]> {
-    const cacheKey = `farms:config:${chainId}`;
-    const cached = await this.cacheService.get(cacheKey);
-    if (cached) {
-      return cached as any[];
-    }
-
-    try {
-      const response = await fetch(`${FARMS_CONFIG_URL}/${chainId}.json`);
-      if (!response.ok) {
-        this.logger.warn(
-          `Failed to fetch farms config for chain ${chainId}: ${response.statusText}`,
-        );
-        return [];
-      }
-      const data = await response.json();
-
-      // 缓存 10 分钟
-      await this.cacheService.set(cacheKey, data, 600);
-      return data;
-    } catch (error) {
-      this.logger.error(
-        `Failed to fetch farms config for chain ${chainId}`,
-        error,
-      );
-      return [];
-    }
-  }
-
-  /**
-   * 获取农场数据（简化实现）
+   * 获取农场数据
    */
   async getFarms(chainId: number): Promise<FarmsResponse> {
     const cacheKey = `farms:${chainId}`;
-    const cached = await this.cacheService.get(cacheKey);
+    const cached = await this.cacheService.get<FarmsResponse>(cacheKey);
     if (cached) {
-      return cached as FarmsResponse;
+      return cached;
     }
 
     const results: FarmsResponse = {
@@ -156,22 +202,88 @@ export class FarmsService {
       updatedAt: new Date().toISOString(),
     };
 
-    // 获取 V2 农场配置
+    const provider = this.createProvider();
+
+    // 获取 V3 农场数据
+    if (this.isChainSupported(chainId, 'v3')) {
+      try {
+        const farmFetcherV3 = createFarmFetcherV3(provider);
+        const farms = this.v3FarmConfigs.get(chainId) || [];
+
+        if (farms.length > 0) {
+          // 获取代币价格（空对象表示使用默认价格）
+          const v3Data = await farmFetcherV3.fetchFarms({
+            farms,
+            chainId: chainId as any,
+            commonPrice: {},
+          });
+
+          results.v3 = {
+            poolLength: v3Data.poolLength,
+            cakePerSecond: v3Data.cakePerSecond,
+            totalAllocPoint: v3Data.totalAllocPoint,
+            farms: v3Data.farmsWithPrice.map((farm: any) => ({
+              pid: farm.pid,
+              lpAddress: farm.lpAddress,
+              token: {
+                address: farm.token.address,
+                symbol: farm.token.symbol,
+                name: farm.token.name,
+                decimals: farm.token.decimals,
+              },
+              quoteToken: {
+                address: farm.quoteToken.address,
+                symbol: farm.quoteToken.symbol,
+                name: farm.quoteToken.name,
+                decimals: farm.quoteToken.decimals,
+              },
+              tvlUsd: farm.tvlUsd || '0',
+              apr: farm.apr || '0',
+              poolWeight: farm.poolWeight || '0',
+              multiplier: farm.multiplier || '0X',
+              tokenPriceUsd: farm.tokenPriceUsd || '0',
+              quoteTokenPriceUsd: farm.quoteTokenPriceUsd || '0',
+            })),
+          };
+
+          this.logger.log(
+            `Fetched ${results.v3.farms.length} V3 farms for chain ${chainId}`,
+          );
+        }
+      } catch (error) {
+        this.logger.error(
+          `Failed to fetch V3 farms for chain ${chainId}`,
+          error,
+        );
+      }
+    }
+
+    // 获取 V2 农场数据
     if (this.isChainSupported(chainId, 'v2')) {
       try {
-        const farmsConfig = await this.fetchFarmsConfig(chainId);
+        const farmFetcher = createFarmFetcher(provider);
+        const isTestnet = chainId === ChainId.BSC_TESTNET;
+
+        // 使用空数组作为farms配置，SDK会返回所有池子信息
+        const v2Data = await farmFetcher.fetchFarms({
+          isTestnet,
+          farms: [],
+          chainId,
+        });
+
+        // 获取详细信息（需要farms配置）
+        // 这里先用简化版本，后续可以从配置文件加载
         results.v2 = {
-          poolLength: farmsConfig.length,
-          regularCakePerBlock: '40', // 默认值
-          totalRegularAllocPoint: '0', // 需要从链上获取
-          totalSpecialAllocPoint: '0', // 需要从链上获取
-          farms: farmsConfig.map((farm, index) => ({
-            pid: index,
-            ...farm,
-            apr: '0', // TODO: 计算实际 APR
-            tvl: '0', // TODO: 计算实际 TVL
-          })),
+          poolLength: v2Data.poolLength,
+          regularCakePerBlock: v2Data.regularCakePerBlock.toString(),
+          totalRegularAllocPoint: v2Data.totalRegularAllocPoint,
+          totalSpecialAllocPoint: '0', // V2 特殊分配点，暂时返回0
+          farms: [], // TODO: 添加实际农场配置
         };
+
+        this.logger.log(
+          `Fetched V2 master chef data for chain ${chainId}: ${v2Data.poolLength} pools`,
+        );
       } catch (error) {
         this.logger.error(
           `Failed to fetch V2 farms for chain ${chainId}`,
@@ -191,7 +303,7 @@ export class FarmsService {
    */
   async getCakePrice(): Promise<CakePriceData> {
     const cacheKey = 'price:cake';
-    const cached = await this.cacheService.get(cacheKey);
+    const cached = await this.cacheService.get<CakePriceData>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -230,10 +342,10 @@ export class FarmsService {
   }
 
   /**
-   * 获取 MasterChef 数据
+   * 获取 MasterChef V2 数据
    */
-  async getMasterChefData(chainId: number): Promise<MasterChefData> {
-    const cacheKey = `masterchef:data:${chainId}`;
+  async getMasterChefData(chainId: number): Promise<any> {
+    const cacheKey = `masterchef:v2:data:${chainId}`;
     const cached = await this.cacheService.get(cacheKey);
     if (cached) {
       return cached;
@@ -243,37 +355,123 @@ export class FarmsService {
       throw new Error(`Unsupported chainId for V2 farms: ${chainId}`);
     }
 
-    // TODO: 从链上获取 MasterChef 数据
-    const result: MasterChefData = {
-      poolLength: 0,
-      totalRegularAllocPoint: '0',
-      totalSpecialAllocPoint: '0',
-      cakePerBlock: '40',
-      updatedAt: new Date().toISOString(),
-    };
+    try {
+      const farmFetcher = createFarmFetcher(this.createProvider());
+      const isTestnet = chainId === ChainId.BSC_TESTNET;
 
-    await this.cacheService.set(cacheKey, result, 60); // 1分钟缓存
-    return result;
+      const v2Data = await farmFetcher.fetchFarms({
+        isTestnet,
+        farms: [],
+        chainId,
+      });
+
+      const result = {
+        poolLength: v2Data.poolLength,
+        totalRegularAllocPoint: v2Data.totalRegularAllocPoint,
+        cakePerBlock: v2Data.regularCakePerBlock.toString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      await this.cacheService.set(cacheKey, result, 60); // 1分钟缓存
+      return result;
+    } catch (error) {
+      this.logger.error(
+        `Failed to fetch MasterChef V2 data for chain ${chainId}`,
+        error,
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * 获取 MasterChef V3 数据
+   */
+  async getMasterChefV3Data(chainId: number): Promise<any> {
+    const cacheKey = `masterchef:v3:data:${chainId}`;
+    const cached = await this.cacheService.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    if (!this.isChainSupported(chainId, 'v3')) {
+      throw new Error(`Unsupported chainId for V3 farms: ${chainId}`);
+    }
+
+    try {
+      const farmFetcherV3 = createFarmFetcherV3(this.createProvider());
+      const farms = this.v3FarmConfigs.get(chainId) || [];
+
+      if (farms.length === 0) {
+        throw new Error(`No V3 farm configs for chain ${chainId}`);
+      }
+
+      const v3Data = await farmFetcherV3.fetchFarms({
+        farms,
+        chainId: chainId as any,
+        commonPrice: {},
+      });
+
+      const result = {
+        poolLength: v3Data.poolLength,
+        totalAllocPoint: v3Data.totalAllocPoint,
+        cakePerSecond: v3Data.cakePerSecond,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await this.cacheService.set(cacheKey, result, 60);
+      return result;
+    } catch (error) {
+      this.logger.error(
+        `Failed to fetch MasterChef V3 data for chain ${chainId}`,
+        error,
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * 计算 V3 农场的 APR 和 TVL
+   */
+  async getFarmV3AprAndTvl(
+    chainId: number,
+    pid: number,
+  ): Promise<{ apr: string; tvlUsd: string } | null> {
+    try {
+      // const farmFetcherV3 = createFarmFetcherV3(this.createProvider()); // TODO: 待实现
+      const farms = this.v3FarmConfigs.get(chainId) || [];
+      const farm = farms.find((f) => f.pid === pid);
+
+      if (!farm) {
+        return null;
+      }
+
+      // 这里需要调用 SDK 的 getCakeAprAndTVL 方法
+      // 暂时返回默认值
+      return {
+        apr: '0',
+        tvlUsd: '0',
+      };
+    } catch (error) {
+      this.logger.error(`Failed to get farm APR/TVL for pid ${pid}`, error);
+      return null;
+    }
   }
 
   /**
    * 计算农场 APR（简化实现）
-   *
-   * 公式：APR = (cakePerYear * cakePrice * poolWeight / totalAllocPoint) / tvl * 100
    */
-
   calculateFarmApr(params: {
     poolWeight: string;
     tvlUsd: string;
     cakePriceUsd: string;
-    cakePerBlock?: string;
+    cakePerSecond?: string;
     precision?: number;
   }): string {
     const {
       poolWeight,
       tvlUsd,
       cakePriceUsd,
-      cakePerBlock = '40',
+      cakePerSecond = '1',
       precision = 2,
     } = params;
 
@@ -282,11 +480,13 @@ export class FarmsService {
       return '0';
     }
 
-    const cakePerYear = new BN(cakePerBlock).times(CAKE_PER_YEAR);
-    const cakePerYearUsd = cakePerYear.times(new BN(cakePriceUsd));
-    const poolRewardsUsd = cakePerYearUsd
-      .times(new BN(poolWeight))
-      .div(new BN(10000)); // poolWeight 是基点（10000 = 100%）
+    // CAKE 每秒产出转换为 USD
+    const cakePerSecondUsd = new BN(cakePerSecond).times(new BN(cakePriceUsd));
+    const cakePerYearUsd = cakePerSecondUsd.times(31536000); // 一年的秒数
+
+    // 根据池权重分配奖励
+    const poolRewardsUsd = cakePerYearUsd.times(new BN(poolWeight));
+
     const apr = poolRewardsUsd.div(tvl).times(100).decimalPlaces(precision);
 
     return apr.toString();
@@ -295,7 +495,6 @@ export class FarmsService {
   /**
    * 计算池子的 TVL
    */
-
   calculateTvl(params: {
     token0Amount: string;
     token0Price: string;

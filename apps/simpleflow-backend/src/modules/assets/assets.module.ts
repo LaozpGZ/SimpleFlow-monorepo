@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
-import { ConfigModule } from '@nestjs/config';
 import { AssetsController } from './assets.controller';
 import { AssetsService } from './services/assets.service';
 import { AssetStorageService } from './services/asset-storage.service';
@@ -16,7 +15,6 @@ import { AssetStorageService } from './services/asset-storage.service';
  */
 @Module({
   imports: [
-    ConfigModule,
     // Multer 配置，用于处理文件上传
     MulterModule.register({
       limits: {

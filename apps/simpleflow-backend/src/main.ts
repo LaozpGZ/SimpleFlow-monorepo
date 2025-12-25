@@ -1,3 +1,9 @@
+/**
+ * ⚠️ 必须作为第一行导入！
+ * NestJS 依赖注入完全依赖 reflect-metadata 来获取类型元数据
+ * 没有它，@Injectable() 装饰器的类无法正确注入依赖
+ */
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -80,10 +86,13 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
 
+  // eslint-disable-next-line no-console
   console.log(`🚀 Server running on http://localhost:${port}`);
 
+  // eslint-disable-next-line no-console
   console.log(`📚 API Docs: http://localhost:${port}/api-docs`);
 
+  // eslint-disable-next-line no-console
   console.log(
     `📍 CORS: ${
       process.env.CORS_ORIGIN === '*' || !process.env.CORS_ORIGIN

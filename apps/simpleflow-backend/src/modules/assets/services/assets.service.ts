@@ -1,7 +1,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-useless-constructor */
 /* eslint-disable no-await-in-loop */
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { AssetStorageService } from './asset-storage.service';
@@ -71,24 +76,32 @@ export class AssetsService {
 
   constructor(
     private readonly storageService: AssetStorageService,
-    private readonly configService: ConfigService,
+    @Optional() private readonly configService?: ConfigService,
   ) {
-    this.pcsTokenCdn = this.configService.get<string>(
+    // 使用辅助方法安全地获取配置值
+    this.pcsTokenCdn = this.getConfig<string>(
       'assets.pcsTokenCdnUrl',
       'https://tokens.pancakeswap.finance',
     );
-    this.pcsAssetsCdn = this.configService.get<string>(
+    this.pcsAssetsCdn = this.getConfig<string>(
       'assets.pcsAssetsCdnUrl',
       'https://assets.pancakeswap.finance',
     );
-    this.trustWalletCdn = this.configService.get<string>(
+    this.trustWalletCdn = this.getConfig<string>(
       'assets.trustWalletUrl',
       'https://assets-cdn.trustwallet.com',
     );
-    this.proxyEnabled = this.configService.get<boolean>(
-      'assets.proxyEnabled',
-      true,
-    );
+    this.proxyEnabled = this.getConfig<boolean>('assets.proxyEnabled', true);
+  }
+
+  /**
+   * 安全地获取配置值
+   */
+  private getConfig<T>(key: string, defaultValue: T): T {
+    if (!this.configService) {
+      return defaultValue;
+    }
+    return this.configService.get<T>(key, defaultValue);
   }
 
   /**

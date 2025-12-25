@@ -9,7 +9,7 @@
   "dependencies": {
     "@pancakeswap/worker-utils": "workspace:*",
     "itty-router": "^4.0.20",
-    "itty-router-extras": "^0.1.3"
+    "itty-router-extras": "^0.4.6"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231218.0",

@@ -23,8 +23,18 @@
       "@/common/*": ["src/common/*"],
       "@/config/*": ["src/config/*"],
       "@/modules/*": ["src/modules/*"]
-    }
+    },
+    "skipDefaultLibCheck": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "../../packages",
+    "**/node_modules"
+  ],
+  "ts-node": {
+    "transpileOnly": true
+  }
 }
