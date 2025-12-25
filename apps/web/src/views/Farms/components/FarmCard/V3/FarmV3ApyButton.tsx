@@ -22,7 +22,7 @@ import { useCakePrice } from 'hooks/useCakePrice'
 import { useContext, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { Bound } from 'config/constants/types'
 import { usePoolAvgInfo } from 'hooks/usePoolAvgInfo'
 import { usePairTokensPrice } from 'hooks/v3/usePairTokensPrice'

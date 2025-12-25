@@ -31,7 +31,7 @@ import { getBlockExploreLink, safeGetAddress, isAddressEqual } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 
 import { CAKE, USDT } from '@pancakeswap/tokens'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { getSelectInfinityLiquidityURL } from 'config/constants/liquidity'
 import { ChainLinkSupportChains, multiChainId, multiChainScan } from 'state/info/constant'

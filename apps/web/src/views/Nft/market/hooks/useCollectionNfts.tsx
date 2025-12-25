@@ -1,4 +1,4 @@
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import fromPairs from 'lodash/fromPairs'
 import isEmpty from 'lodash/isEmpty'

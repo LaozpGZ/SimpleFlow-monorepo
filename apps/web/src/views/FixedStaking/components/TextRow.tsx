@@ -1,6 +1,6 @@
 import { Text, Flex } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 
 interface DiffTextPropsType {
   value: string

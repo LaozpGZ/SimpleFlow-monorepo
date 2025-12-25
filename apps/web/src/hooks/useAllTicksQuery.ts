@@ -1,6 +1,6 @@
 import { isSolana } from '@pancakeswap/chains'
 import { Protocol } from '@pancakeswap/farms'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { useQuery } from '@tanstack/react-query'
 import { INFINITY_PROTOCOLS, InfinityProtocol } from 'config/constants/protocols'
 import { useMemo } from 'react'

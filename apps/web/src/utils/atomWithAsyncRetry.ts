@@ -1,4 +1,4 @@
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { atom } from 'jotai'
 import { getLogger } from './datadog'
 

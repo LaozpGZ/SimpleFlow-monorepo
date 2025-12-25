@@ -46,6 +46,32 @@ export const V2_SUBGRAPH_URLS = {
 
 export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.pancakeswap.finance'
 
+/**
+ * 后端API地址（用于代币图标等资源）
+ */
+export const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3000'
+
+/**
+ * 获取代币图标URL（优先使用后端API）
+ */
+export const getTokenIconUrl = (chainId: number, address: string): string => {
+  return `${BACKEND_API}/assets/token/${chainId}/${address}`
+}
+
+/**
+ * 获取链图标URL（优先使用后端API）
+ */
+export const getChainIconUrl = (chainId: number): string => {
+  return `${BACKEND_API}/assets/chain/${chainId}`
+}
+
+/**
+ * 获取符号图标URL（优先使用后端API）
+ */
+export const getSymbolIconUrl = (symbol: string): string => {
+  return `${BACKEND_API}/assets/symbol/${symbol}`
+}
+
 export const V3_SUBGRAPH_URLS = {
   ...V3_SUBGRAPHS,
   [ChainId.BASE]: `${THE_GRAPH_PROXY_API}/exchange-v3-base`,

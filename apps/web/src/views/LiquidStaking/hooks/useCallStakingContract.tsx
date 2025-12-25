@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { Multicall, toHex } from '@pancakeswap/v3-sdk'
 import { unwrappedEth } from 'config/abi/unwrappedEth'
 import { UNWRAPPED_ETH_ADDRESS } from 'config/constants/liquidStaking'

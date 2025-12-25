@@ -11,7 +11,7 @@ import {
   Text,
   WarningIcon,
 } from '@pancakeswap/uikit'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { useEffect, useMemo, useState } from 'react'
 import { keyframes, styled } from 'styled-components'

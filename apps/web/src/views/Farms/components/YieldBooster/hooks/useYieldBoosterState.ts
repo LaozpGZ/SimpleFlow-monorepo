@@ -1,4 +1,4 @@
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useBCakeFarmBoosterContract } from 'hooks/useContract'
 import { useReadContract } from '@pancakeswap/wagmi'

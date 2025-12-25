@@ -13,7 +13,7 @@ import {
   promotedGradient,
   useTooltip,
 } from '@pancakeswap/uikit'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { useQuery } from '@tanstack/react-query'
 import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
 import { ACCESS_TOKEN_SUPPORT_CHAIN_IDS } from 'components/AccessRisk/config/supportedChains'

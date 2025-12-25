@@ -2,7 +2,7 @@ import { StyledLink, Text, useToast } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 
 import { useTranslation } from '@pancakeswap/localization'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { isUndefinedOrNull } from 'utils/isUndefinedOrNull'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
