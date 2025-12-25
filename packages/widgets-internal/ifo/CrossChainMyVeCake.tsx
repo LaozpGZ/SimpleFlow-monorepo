@@ -56,7 +56,7 @@ const OutdatedSyncBadge = () => {
 };
 
 interface CrossChainMyVeCakeProps extends BoxProps {
-  veCakeAmount: string | number | BigNumber;
+  veSDXAmount: string | number | BigNumber;
   isSynced: boolean;
   toBeSynced?: boolean;
 
@@ -66,7 +66,7 @@ interface CrossChainMyVeCakeProps extends BoxProps {
   onClick?: () => void;
 }
 export const CrossChainMyVeCake = ({
-  veCakeAmount,
+  veSDXAmount,
   isSynced,
   toBeSynced,
   isVeCakeSynced,
@@ -76,8 +76,8 @@ export const CrossChainMyVeCake = ({
 }: CrossChainMyVeCakeProps) => {
   const { t } = useTranslation();
 
-  const veCakeAmountNumber = useMemo(() => new BigNumber(veCakeAmount).toNumber(), [veCakeAmount]);
-  const hasPreviouslySynced = useMemo(() => BN(veCakeAmount).gt(BN("0")), [veCakeAmount]);
+  const veSDXAmountNumber = useMemo(() => new BigNumber(veSDXAmount).toNumber(), [veSDXAmount]);
+  const hasPreviouslySynced = useMemo(() => BN(veSDXAmount).gt(BN("0")), [veSDXAmount]);
 
   return (
     <GreyCard {...props}>
@@ -88,20 +88,20 @@ export const CrossChainMyVeCake = ({
         </Flex>
         <Box>
           <Text color="textSubtle" fontSize="15px" bold>
-            {t("My veCAKE on %chainName%", {
+            {t("My veSDX on %chainName%", {
               chainName: ChainNameMap[chainId],
             })}
           </Text>
-          <Text mt="-6px" fontSize="24px" color={BN(veCakeAmount).eq(BN("0")) ? "textDisabled" : "text"} bold>
-            {BN(veCakeAmount).eq(BN("0")) ? (
+          <Text mt="-6px" fontSize="24px" color={BN(veSDXAmount).eq(BN("0")) ? "textDisabled" : "text"} bold>
+            {BN(veSDXAmount).eq(BN("0")) ? (
               "0.00"
             ) : (
               <BalanceDisplay
                 fontSize="20px"
-                // Should gray out only if veCake is not synced, not dependent on profile not being synced/inactive or not
+                // Should gray out only if veSDX is not synced, not dependent on profile not being synced/inactive or not
                 color={!isVeCakeSynced ? "textDisabled" : "text"}
-                value={veCakeAmountNumber}
-                decimals={veCakeAmountNumber < 1 ? 4 : 2}
+                value={veSDXAmountNumber}
+                decimals={veSDXAmountNumber < 1 ? 4 : 2}
                 bold
               />
             )}
@@ -114,13 +114,13 @@ export const CrossChainMyVeCake = ({
       <Box mt="14px" p="0 16px 16px">
         {(isSynced || hasPreviouslySynced || toBeSynced) && (
           <Flex my="8px" justifyContent="space-between">
-            <Text color="textSubtle">{t("Profile & veCAKE")}</Text>
+            <Text color="textSubtle">{t("Profile & veSDX")}</Text>
             {isSynced ? <SyncedBadge /> : toBeSynced ? <ToBeSyncedBadge /> : <OutdatedSyncBadge />}
           </Flex>
         )}
 
         <Button mt="8px" width="100%" onClick={() => onClick?.()}>
-          {!isSynced && !hasPreviouslySynced ? t("Sync veCAKE") : t("Sync again")}
+          {!isSynced && !hasPreviouslySynced ? t("Sync veSDX") : t("Sync again")}
         </Button>
       </Box>
     </GreyCard>

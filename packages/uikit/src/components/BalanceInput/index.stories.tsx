@@ -81,7 +81,7 @@ export const UnitDisplay: React.FC<React.PropsWithChildren> = () => {
           value={cakeValue}
           currencyValue={cakeToUSD(cakeValue)}
           placeholder="0.0"
-          unit="CAKE"
+          unit="SDX"
         />
       </Box>
       {/* Long token names with spaces */}
@@ -100,8 +100,8 @@ export const UnitDisplay: React.FC<React.PropsWithChildren> = () => {
 
 export const SwitchUnits: React.FC<React.PropsWithChildren> = () => {
   const CAKE_PRICE = 69;
-  const [editingUnit, setEditingUnit] = useState<"CAKE" | "USD">("CAKE");
-  const conversionUnit = editingUnit === "CAKE" ? "USD" : "CAKE";
+  const [editingUnit, setEditingUnit] = useState<"SDX" | "USD">("SDX");
+  const conversionUnit = editingUnit === "SDX" ? "USD" : "SDX";
   const [values, setValues] = useState({
     CAKE: "1006.086957",
     USD: `${1006.086957 * CAKE_PRICE}`,
@@ -115,7 +115,7 @@ export const SwitchUnits: React.FC<React.PropsWithChildren> = () => {
     : "0.00";
 
   const switchEditingUnits = () => {
-    const editingUnitAfterChange = editingUnit === "CAKE" ? "USD" : "CAKE";
+    const editingUnitAfterChange = editingUnit === "SDX" ? "USD" : "SDX";
     // This is needed to persist same value as shown for currencyValue after switching
     // otherwise user will see lots of decimals
     const valuesAfterChange = { ...values };
@@ -128,7 +128,7 @@ export const SwitchUnits: React.FC<React.PropsWithChildren> = () => {
 
   const handleCakeChange = (input: string) => {
     const inputAsFloat = parseFloat(input);
-    if (editingUnit === "CAKE") {
+    if (editingUnit === "SDX") {
       setValues({
         CAKE: input,
         USD: Number.isNaN(inputAsFloat) ? "" : `${inputAsFloat * CAKE_PRICE}`,

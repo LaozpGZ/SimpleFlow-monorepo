@@ -130,7 +130,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
                 style={{ minWidth: '32px' }}
                 src={
                   notEnoughVeCake
-                    ? '/images/cake-staking/not-enough-veCAKE.png'
+                    ? '/images/cake-staking/not-enough-veSDX.png'
                     : '/images/cake-staking/token-vecake.png'
                 }
               />

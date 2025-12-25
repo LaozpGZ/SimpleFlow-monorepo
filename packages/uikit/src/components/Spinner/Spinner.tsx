@@ -10,8 +10,8 @@ const Spinner: React.FC<React.PropsWithChildren<SpinnerProps>> = ({ size = 128 }
       <Image
         width={size}
         height={size * 1.197}
-        src={`${ASSET_CDN}/web/pancake-3d-spinner-v2.gif`}
-        alt="pancake-3d-spinner"
+        src={`${ASSET_CDN}/web/simpleflow-spinner.png`}
+        alt="simpleflow-spinner"
       />
     </Box>
   );

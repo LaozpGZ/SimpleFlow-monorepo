@@ -9,7 +9,7 @@ type Props = {
   // Unix timestamp of the snapshot
   snapshot?: number;
 
-  // Ratio applied to veCAKE when calculating iCAKE
+  // Ratio applied to veSDX when calculating iCAKE
   ratio?: number;
 };
 
@@ -50,9 +50,7 @@ export function ICakeInfo({ snapshot, ratio = 1, ...props }: Props & SpaceProps)
       <InfoItem
         label={t("Ratio")}
         value={`${ratio}x`}
-        labelTooltip={t(
-          "Your iCAKE is calculated by applying this ratio on the number of veCAKE at the snapshot time."
-        )}
+        labelTooltip={t("Your iCAKE is calculated by applying this ratio on the number of veSDX at the snapshot time.")}
       />
     </FlexGap>
   );

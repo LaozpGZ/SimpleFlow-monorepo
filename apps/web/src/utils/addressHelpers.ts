@@ -144,7 +144,7 @@ export const getFixedStakingAddress = (chainId?: number) => {
 }
 
 export const getVeCakeAddress = (chainId?: number) => {
-  return getAddressFromMap(addresses.veCake, chainId)
+  return getAddressFromMap(addresses.veSDX, chainId)
 }
 
 export const getPancakeVeSenderV2Address = (chainId?: number) => {

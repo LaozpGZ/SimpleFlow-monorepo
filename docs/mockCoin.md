@@ -38,10 +38,3 @@
 
 - **Mainnet**: `packages/tokens/src/constants/simplechain.ts`
 - **Testnet**: `packages/tokens/src/constants/simplechainTestnet.ts`
-
-## 兼容性别名
-
-为兼容旧代码，以下别名指向相同地址：
-- `wmon`, `weth` → WSRW (包装原生代币)
-- `busd`, `ausd` → USDC
-- `usdt0` → USDT

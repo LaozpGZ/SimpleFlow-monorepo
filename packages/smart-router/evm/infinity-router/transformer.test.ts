@@ -73,7 +73,7 @@ describe('Infinity Router Transformer', () => {
         {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
       ],
       pools: [
@@ -82,7 +82,7 @@ describe('Infinity Router Transformer', () => {
           token0: {
             address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
             decimals: 18,
-            symbol: 'CAKE',
+            symbol: 'SDX',
           },
           token1: {
             address: '0x4200000000000000000000000000000000000006',
@@ -100,7 +100,7 @@ describe('Infinity Router Transformer', () => {
             currency: {
               address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
               decimals: 18,
-              symbol: 'CAKE',
+              symbol: 'SDX',
             },
             value: '34339042604161103151',
           },
@@ -134,7 +134,7 @@ describe('Infinity Router Transformer', () => {
         currency: {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
         value: '4983293793789930646',
       },
@@ -150,7 +150,7 @@ describe('Infinity Router Transformer', () => {
         currency: {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
         value: '4983293793686075663',
       },
@@ -158,7 +158,7 @@ describe('Infinity Router Transformer', () => {
         currency: {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
         value: '103854983',
       },
@@ -188,7 +188,7 @@ describe('Infinity Router Transformer', () => {
             {
               address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
               decimals: 18,
-              symbol: 'CAKE',
+              symbol: 'SDX',
             },
           ],
           pools: [
@@ -197,7 +197,7 @@ describe('Infinity Router Transformer', () => {
               token0: {
                 address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
                 decimals: 18,
-                symbol: 'CAKE',
+                symbol: 'SDX',
               },
               token1: {
                 address: '0x4200000000000000000000000000000000000006',
@@ -215,7 +215,7 @@ describe('Infinity Router Transformer', () => {
                 currency: {
                   address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
                   decimals: 18,
-                  symbol: 'CAKE',
+                  symbol: 'SDX',
                 },
                 value: '34339042604161103151',
               },
@@ -249,7 +249,7 @@ describe('Infinity Router Transformer', () => {
             currency: {
               address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
               decimals: 18,
-              symbol: 'CAKE',
+              symbol: 'SDX',
             },
             value: '4983293793789930646',
           },
@@ -265,7 +265,7 @@ describe('Infinity Router Transformer', () => {
             currency: {
               address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
               decimals: 18,
-              symbol: 'CAKE',
+              symbol: 'SDX',
             },
             value: '4983293793686075663',
           },
@@ -273,7 +273,7 @@ describe('Infinity Router Transformer', () => {
             currency: {
               address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
               decimals: 18,
-              symbol: 'CAKE',
+              symbol: 'SDX',
             },
             value: '103854983',
           },
@@ -301,7 +301,7 @@ describe('Infinity Router Transformer', () => {
         currency: {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
         value: '103854983',
       },
@@ -317,7 +317,7 @@ describe('Infinity Router Transformer', () => {
         currency: {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
         value: '4983293793686075663',
       },
@@ -334,7 +334,7 @@ describe('Infinity Router Transformer', () => {
         currency: {
           address: '0x2779106e4F4A8A28d77A24c18283651a2AE22D1C',
           decimals: 18,
-          symbol: 'CAKE',
+          symbol: 'SDX',
         },
         value: '4983293793789930646',
       },

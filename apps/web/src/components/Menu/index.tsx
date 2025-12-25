@@ -106,7 +106,7 @@ const Menu = (props) => {
       isDark={isDark}
       toggleTheme={toggleTheme}
       showLangSelector={false}
-      cakePriceUsd={cakePrice.eq(BIG_ZERO) ? undefined : cakePrice}
+      // cakePriceUsd={cakePrice.eq(BIG_ZERO) ? undefined : cakePrice}
       links={filteredLinks}
       subLinks={
         activeSubMenuItem?.overrideSubNavItems ??
@@ -119,8 +119,8 @@ const Menu = (props) => {
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
       activeSubItemChildItem={activeSubChildMenuItem?.href}
-      buyCakeLabel={t('Buy CAKE')}
-      buyCakeLink="/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
+      // buyCakeLabel={t('Buy CAKE')}
+      // buyCakeLink="/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
       {...props}
     />
   )

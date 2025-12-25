@@ -12,14 +12,14 @@ const faqs = [
         <Trans>You're redeeming:</Trans>
         <ul>
           <li>
-            <Trans>Underlying CAKE (from your veCAKE position)</Trans>
+            <Trans>Underlying CAKE (from your veSDX position)</Trans>
           </li>
           <li>
             <Trans>Legacy CAKE Pool rewards</Trans>
           </li>
           <li>
             <Trans>
-              Unclaimed rewards: This includes revenue sharing rewards and any remaining veCAKE gauge voting rewards.
+              Unclaimed rewards: This includes revenue sharing rewards and any remaining veSDX gauge voting rewards.
             </Trans>
           </li>
         </ul>
@@ -34,26 +34,26 @@ const faqs = [
     title: <Trans>How long will this redemption page be available?</Trans>,
     description: (
       <Trans>
-        You'll have 6 months to redeem your veCAKE and other unclaimed rewards, from April 23, 2025 at 8:00 AM UTC until
+        You'll have 6 months to redeem your veSDX and other unclaimed rewards, from April 23, 2025 at 8:00 AM UTC until
         October 23, 2025.
       </Trans>
     ),
   },
   {
-    title: <Trans>What if I used a veCAKE manager (e.g., Aster, StakeDAO, CakePie)?</Trans>,
+    title: <Trans>What if I used a veSDX manager (e.g., Aster, StakeDAO, CakePie)?</Trans>,
     description: (
       <>
         <ul>
           <li>
             <Trans>
-              If your veCAKE is managed through platforms like Aster, StakeDAO, or Cakepie, these protocols will launch
-              a redemption page on their interfaces, allowing users who have staked with them to redeem their xCAKE for
-              CAKE on a 1:1 basis. Please refer to the veCAKE Managers’ respective announcements for more detail.
+              If your veSDX is managed through platforms like Aster, StakeDAO, or Cakepie, these protocols will launch a
+              redemption page on their interfaces, allowing users who have staked with them to redeem their xCAKE for
+              CAKE on a 1:1 basis. Please refer to the veSDX Managers’ respective announcements for more detail.
             </Trans>
           </li>
           <li>
             <Trans>
-              PancakeSwap cannot process redemptions for externally managed veCAKE — please check directly with those
+              PancakeSwap cannot process redemptions for externally managed veSDX — please check directly with those
               platforms.
             </Trans>
           </li>
@@ -62,12 +62,12 @@ const faqs = [
     ),
   },
   {
-    title: <Trans>What’s happening to veCAKE and gauge voting?</Trans>,
+    title: <Trans>What’s happening to veSDX and gauge voting?</Trans>,
     description: (
       <>
         <ul>
           <li>
-            <Trans>Starting 00:00 AM UTC April 23, 2025, veCAKE and all gauge voting will be retired.</Trans>
+            <Trans>Starting 00:00 AM UTC April 23, 2025, veSDX and all gauge voting will be retired.</Trans>
           </li>
           <li>
             <Trans>The final round of gauge voting will end on 00:00 AM UTC, April 23, 2025 (Epoch 37).</Trans>
@@ -77,13 +77,13 @@ const faqs = [
           </li>
           <li>
             <Trans>
-              Gauges rewards, including veCAKE Pool APR and Bribe APR, will continue to accrue until May 7, 2025.
+              Gauges rewards, including veSDX Pool APR and Bribe APR, will continue to accrue until May 7, 2025.
             </Trans>
           </li>
           <li>
             <Trans>
-              To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC,
-              May 7, 2025.
+              To earn all final APRs (veSDX Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC, May
+              7, 2025.
             </Trans>
           </li>
         </ul>
@@ -97,7 +97,7 @@ const faqs = [
         <ul>
           <li>
             <Trans>
-              Yield farming boosts (from veCAKE) will be phased out across position managers, Syrup Pools, and farming
+              Yield farming boosts (from veSDX) will be phased out across position managers, Syrup Pools, and farming
               activities between April 24 and May 7, 2025.
             </Trans>
           </li>
@@ -166,7 +166,7 @@ export const RedeemFaqs = () => (
           external
           href="https://docs.simpleflow.finance/welcome-to-pancakeswap/vecake-sunset"
         >
-          <Trans>Product Doc: veCAKE Redemption Guide</Trans>
+          <Trans>Product Doc: veSDX Redemption Guide</Trans>
         </Link>
       </div>
     </CardBody>

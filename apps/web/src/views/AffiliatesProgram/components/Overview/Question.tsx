@@ -79,7 +79,7 @@ const Question = () => {
                 {t('Trading pairs must meet the following eligibility criteria:')}
               </StyledListText>
               <StyledListText ml="16px" color="textSubtle">
-                {t('Pairs must be in the PancakeSwap Token list for the following chains (')}
+                {t('Pairs must be in the SimpleFlow Token list for the following chains (')}
                 <Link
                   external
                   style={{ display: 'inline-block' }}

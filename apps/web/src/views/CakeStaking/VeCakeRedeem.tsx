@@ -3,7 +3,7 @@ import { Box, Button, Card, ChevronDownIcon, Flex, Text } from '@pancakeswap/uik
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { WEEK } from 'config/constants/veCake'
+import { WEEK } from 'config/constants/veSDX'
 import { createWriteContractCallback } from 'hooks/createWriteContractCallback'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -45,30 +45,30 @@ export const VeCakeRedeem: React.FC = () => {
     availableClaim,
     availableClaimUSD,
     cakePoolRewards,
-    veCakeRewards,
+    veSDXRewards,
     cakeLockExpired,
     proxyCakeLockedAmount,
     cakeV1Amount,
-    nativeCakeLockedAmount,
+    nativeSDXLockedAmount,
     refetchRevenueShareVeCake,
     refetchRevenueShareCake,
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
   const unlockTimeDisplay = unlockTime ? formatTime(unlockTime) : '-'
 
-  const totalAmount = cakePoolRewards.plus(veCakeRewards).plus(lockedCake)
+  const totalAmount = cakePoolRewards.plus(veSDXRewards).plus(lockedCake)
   const totalAmountUSD = totalAmount.times(cakePrice)
-  const userHasRewards = isWalletConnected && (cakePoolRewards.gt(0) || veCakeRewards.gt(0))
+  const userHasRewards = isWalletConnected && (cakePoolRewards.gt(0) || veSDXRewards.gt(0))
   const earlyWithdraw = useWriteEarlyWithdrawCallback()
   const withdrawAll = useWriteCakePoolWithdrawAllCallback()
   const withdrawV1All = useWriteCakePoolV1WithdrawAllCallback()
-  const veCakeWithdrawAll = useWriteWithdrawCallback()
+  const veSDXWithdrawAll = useWriteWithdrawCallback()
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const claimAll = useClaimAll()
 
   const proxyCakeLockedAmountDisplay = useDisplayValue(proxyCakeLockedAmount)
   const cakeV1AmountDisplay = useDisplayValue(cakeV1Amount)
-  const nativeCakeDisplay = useDisplayValue(nativeCakeLockedAmount)
+  const nativeSDXDisplay = useDisplayValue(nativeSDXLockedAmount)
 
   const handleClaim = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
@@ -76,12 +76,12 @@ export const VeCakeRedeem: React.FC = () => {
     if (userHasRewards) {
       const cakePoolAddress = getRevenueSharingCakePoolAddress(chainId)
       const cakePoolLength = Math.ceil((currentBlockTimestamp - poolStartWeekCursors[cakePoolAddress]) / WEEK / 52)
-      const veCakeAddress = getRevenueSharingVeCakeAddress(chainId)
-      const veCakePoolLength = Math.ceil((currentBlockTimestamp - poolStartWeekCursors[veCakeAddress]) / WEEK / 52)
+      const veSDXAddress = getRevenueSharingVeCakeAddress(chainId)
+      const veSDXPoolLength = Math.ceil((currentBlockTimestamp - poolStartWeekCursors[veSDXAddress]) / WEEK / 52)
 
       const revenueSharingPools = [
         ...Array(cakePoolLength).fill(cakePoolAddress),
-        ...Array(veCakePoolLength).fill(veCakeAddress),
+        ...Array(veSDXPoolLength).fill(veSDXAddress),
       ]
       const uniq = [...new Set(revenueSharingPools)]
 
@@ -110,32 +110,32 @@ export const VeCakeRedeem: React.FC = () => {
 
     if (userStaked) {
       if (cakeLockExpired) {
-        await veCakeWithdrawAll.callMethod([account], {
+        await veSDXWithdrawAll.callMethod([account], {
           successToast: {
-            title: t('veCAKE Redeem Successfully'),
-            description: `${nativeCakeDisplay} ${t('CAKE has been sent to your wallet.')}`,
+            title: t('veSDX Redeem Successfully'),
+            description: `${nativeSDXDisplay} ${t('CAKE has been sent to your wallet.')}`,
           },
         })
       } else {
-        await earlyWithdraw.callMethod([account, BigInt(nativeCakeLockedAmount)], {
+        await earlyWithdraw.callMethod([account, BigInt(nativeSDXLockedAmount)], {
           successToast: {
-            title: t('veCAKE Redeem Successfully'),
-            description: `${nativeCakeDisplay} ${t('CAKE has been sent to your wallet.')}`,
+            title: t('veSDX Redeem Successfully'),
+            description: `${nativeSDXDisplay} ${t('CAKE has been sent to your wallet.')}`,
           },
         })
       }
     }
   }, [
     t,
-    nativeCakeDisplay,
+    nativeSDXDisplay,
     earlyWithdraw,
     userStaked,
     account,
     chainId,
     currentBlockTimestamp,
     cakeLockExpired,
-    veCakeWithdrawAll,
-    nativeCakeLockedAmount,
+    veSDXWithdrawAll,
+    nativeSDXLockedAmount,
   ])
 
   const handleCakePool = useCallback(async () => {
@@ -178,7 +178,7 @@ export const VeCakeRedeem: React.FC = () => {
       {
         key: 'vecake',
         handler: handleVeCake,
-        enabled: nativeCakeLockedAmount > 0,
+        enabled: nativeSDXLockedAmount > 0,
       },
       {
         key: 'claimall',
@@ -191,7 +191,7 @@ export const VeCakeRedeem: React.FC = () => {
       handleCakeV1Pool,
       proxyCakeLockedAmount,
       handleVeCake,
-      nativeCakeLockedAmount,
+      nativeSDXLockedAmount,
       handleClaim,
       userHasRewards,
       cakeV1Amount,
@@ -221,7 +221,7 @@ export const VeCakeRedeem: React.FC = () => {
 
   return (
     <>
-      <SmartWalletWarning productName={t('veCake Redeem')} />
+      <SmartWalletWarning productName={t('veSDX Redeem')} />
       <Bg>
         <Page>
           <Container>
@@ -235,12 +235,12 @@ export const VeCakeRedeem: React.FC = () => {
                 <SectionTitle isMobile={isMobile}>{t('MY CAKE STAKING POSITION')}</SectionTitle>
 
                 <FieldGroup>
-                  <VeCakeExitField label={t('My veCAKE')} value={myVeCake} />
+                  <VeCakeExitField label={t('My veSDX')} value={myVeCake} />
 
                   <VeCakeExitField
                     label={t('My Locked CAKE')}
                     value={lockedCake}
-                    symbol="CAKE"
+                    symbol="SDX"
                     valueStyles={{
                       fontWeight: 600,
                       fontSize: '16px',
@@ -253,7 +253,7 @@ export const VeCakeRedeem: React.FC = () => {
                     )}
                   />
 
-                  {Boolean(nativeCakeLockedAmount > 0 && unlockTime > 0) && (
+                  {Boolean(nativeSDXLockedAmount > 0 && unlockTime > 0) && (
                     <VeCakeExitField
                       label={t('Unlock Date')}
                       value={
@@ -287,7 +287,7 @@ export const VeCakeRedeem: React.FC = () => {
                         {!allSettled && availableClaim.gt(0) && (
                           <DisplayValue
                             value={availableClaim}
-                            symbol="CAKE"
+                            symbol="SDX"
                             style={{
                               fontSize: '16px',
                               fontWeight: 600,
@@ -297,15 +297,15 @@ export const VeCakeRedeem: React.FC = () => {
                         {!allSettled && availableClaim.gt(0) && <ChevronDownIcon color="primary60" />}
                       </Flex>
                     }
-                    symbol="CAKE"
+                    symbol="SDX"
                     usdValue={availableClaimUSD}
                   />
 
                   {!allSettled && expand && (
                     <>
                       <SubField>
-                        <VeCakeExitField label={t('CAKE Pool Rewards')} value={cakePoolRewards} symbol="CAKE" />
-                        <VeCakeExitField label={t('Revenue Sharing Rewards')} value={veCakeRewards} symbol="CAKE" />
+                        <VeCakeExitField label={t('CAKE Pool Rewards')} value={cakePoolRewards} symbol="SDX" />
+                        <VeCakeExitField label={t('Revenue Sharing Rewards')} value={veSDXRewards} symbol="SDX" />
                       </SubField>
                     </>
                   )}
@@ -320,10 +320,10 @@ export const VeCakeRedeem: React.FC = () => {
                       <Box>
                         <RedeemTitle>{t('REDEEM NOW')}</RedeemTitle>
                         <RedeemLabel>{t('Total amount')}</RedeemLabel>
-                        {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="CAKE" usdValue={totalAmountUSD} /> */}
+                        {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="SDX" usdValue={totalAmountUSD} /> */}
                       </Box>
                       <Box>
-                        <StyledRedeemValue symbol="CAKE" value={totalAmount} />
+                        <StyledRedeemValue symbol="SDX" value={totalAmount} />
                         <DisplayUSDValue value={totalAmountUSD} />
                       </Box>
                     </Flex>

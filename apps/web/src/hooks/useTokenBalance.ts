@@ -73,7 +73,7 @@ export const useBSCCakeBalance = () => {
   return { balance: BigInt(balance.toString()), fetchStatus }
 }
 
-// veCake only deploy on bsc/bscTestnet
+// veSDX only deploy on bsc/bscTestnet
 export const useVeCakeBalance = (targetChainId?: ChainId) => {
   const { chainId } = useActiveChainId()
   const { balance, fetchStatus } = useTokenBalance(getVeCakeAddress(targetChainId ?? chainId), false, targetChainId)

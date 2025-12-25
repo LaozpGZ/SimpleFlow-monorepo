@@ -1,6 +1,6 @@
 export const iCakeABI = [
   {
-    inputs: [{ internalType: 'address', name: '_veCakeAddress', type: 'address' }],
+    inputs: [{ internalType: 'address', name: '_veSDXAddress', type: 'address' }],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -230,7 +230,7 @@ export const iCakeABI = [
   },
   {
     inputs: [],
-    name: 'veCakeAddress',
+    name: 'veSDXAddress',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',

@@ -84,20 +84,20 @@ const config: (
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
-    {
-      label: t('Perps'),
-      icon: TradeIcon,
-      fillIcon: TradeFilledIcon,
-      href: getPerpetualUrl({
-        chainId,
-        languageCode,
-        isDark,
-      }),
-      hideSubNav: true,
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      confirmModalId: 'perpConfirmModal',
-      showItemsOnMobile: false,
-    },
+    // {
+    //   label: t('Perps'),
+    //   icon: TradeIcon,
+    //   fillIcon: TradeFilledIcon,
+    //   href: getPerpetualUrl({
+    //     chainId,
+    //     languageCode,
+    //     isDark,
+    //   }),
+    //   hideSubNav: true,
+    //   type: DropdownMenuItemType.EXTERNAL_LINK,
+    //   confirmModalId: 'perpConfirmModal',
+    //   showItemsOnMobile: false,
+    // },
     {
       label: t('Earn.verb'),
       href: '/liquidity/pools',
@@ -112,15 +112,15 @@ const config: (
           supportChainIds: SUPPORT_FARMS,
         },
         {
-          label: t('veCake Redeem'),
+          label: t('veSDX Redeem'),
           href: '/cake-staking/redeem',
           supportChainIds: POOL_SUPPORTED_CHAINS,
         },
-        {
-          label: t('Syrup Pools'),
-          href: '/pools',
-          supportChainIds: POOL_SUPPORTED_CHAINS,
-        },
+        // {
+        //   label: t('Syrup Pools'),
+        //   href: '/pools',
+        //   supportChainIds: POOL_SUPPORTED_CHAINS,
+        // },
       ].map((item) => addMenuItemSupported(item, chainId)),
       items: [
         {
@@ -133,77 +133,77 @@ const config: (
           label: t('Staking'),
           items: [
             {
-              label: t('veCake Redeem'),
+              label: t('veSDX Redeem'),
               href: '/cake-staking/redeem',
               supportChainIds: POOL_SUPPORTED_CHAINS,
             },
-            {
-              label: t('Syrup Pools'),
-              href: '/pools',
-              supportChainIds: POOL_SUPPORTED_CHAINS,
-            },
+            // {
+            //   label: t('Syrup Pools'),
+            //   href: '/pools',
+            //   supportChainIds: POOL_SUPPORTED_CHAINS,
+            // },
           ].map((item) => addMenuItemSupported(item, chainId)),
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
-    {
-      label: t('Prob'),
-      icon: RocketIcon,
-      href: 'https://probable.markets',
-      type: DropdownMenuItemType.EXTERNAL_LINK,
-      hideSubNav: true,
-    },
-    {
-      label: '',
-      href: '/info',
-      icon: MoreIcon,
-      hideSubNav: true,
-      items: [
-        {
-          label: t('Info.section_title'),
-          href: '/info/v3',
-        },
-        {
-          label: t('Burn Dashboard'),
-          href: '/burn-dashboard',
-        },
-        {
-          label: t('CAKE.PAD'),
-          href: '/cakepad',
-          image: '/images/ifos/ifo-bunny.png',
-          overrideSubNavItems: [
-            {
-              label: t('Latest'),
-              href: '/cakepad',
-              matchHrefs: ['/cakepad/deposit'],
-            },
-            {
-              label: t('Finished'),
-              href: '/cakepad/history',
-            },
-          ],
-        },
-        {
-          label: t('Voting'),
-          image: '/images/voting/voting-bunny.png',
-          href: '/voting',
-          supportChainIds: SUPPORT_ONLY_BSC,
-        },
-        {
-          type: DropdownMenuItemType.DIVIDER,
-        },
-        {
-          label: t('Blog'),
-          href: 'https://blog.simpleflow.finance',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
-        {
-          label: t('Docs'),
-          href: 'https://docs.simpleflow.finance',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
-      ].map((item) => addMenuItemSupported(item, chainId)),
-    },
+    // {
+    //   label: t('Prob'),
+    //   icon: RocketIcon,
+    //   href: 'https://probable.markets',
+    //   type: DropdownMenuItemType.EXTERNAL_LINK,
+    //   hideSubNav: true,
+    // },
+    // {
+    //   label: '',
+    //   href: '/info',
+    //   icon: MoreIcon,
+    //   hideSubNav: true,
+    //   items: [
+    //     {
+    //       label: t('Info.section_title'),
+    //       href: '/info/v3',
+    //     },
+    //     // {
+    //     //   label: t('Burn Dashboard'),
+    //     //   href: '/burn-dashboard',
+    //     // },
+    //     // {
+    //     //   label: t('CAKE.PAD'),
+    //     //   href: '/cakepad',
+    //     //   image: '/images/ifos/ifo-bunny.png',
+    //     //   overrideSubNavItems: [
+    //     //     {
+    //     //       label: t('Latest'),
+    //     //       href: '/cakepad',
+    //     //       matchHrefs: ['/cakepad/deposit'],
+    //     //     },
+    //     //     {
+    //     //       label: t('Finished'),
+    //     //       href: '/cakepad/history',
+    //     //     },
+    //     //   ],
+    //     // },
+    //     // {
+    //     //   label: t('Voting'),
+    //     //   image: '/images/voting/voting-bunny.png',
+    //     //   href: '/voting',
+    //     //   supportChainIds: SUPPORT_ONLY_BSC,
+    //     // },
+    //     // {
+    //     //   type: DropdownMenuItemType.DIVIDER,
+    //     // },
+    //     // {
+    //     //   label: t('Blog'),
+    //     //   href: 'https://blog.simpleflow.finance',
+    //     //   type: DropdownMenuItemType.EXTERNAL_LINK,
+    //     // },
+    //     {
+    //       label: t('Docs'),
+    //       href: 'https://docs.simpleflow.finance',
+    //       type: DropdownMenuItemType.EXTERNAL_LINK,
+    //     },
+    //   ].map((item) => addMenuItemSupported(item, chainId)),
+    // },
   ].map((item) => addMenuItemSupported(item, chainId))
 
 export default config

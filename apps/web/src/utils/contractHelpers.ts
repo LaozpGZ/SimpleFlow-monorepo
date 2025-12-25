@@ -82,7 +82,7 @@ import { v2BCakeWrapperABI } from 'config/abi/v2BCakeWrapper'
 import { v3AirdropABI } from 'config/abi/v3Airdrop'
 import { v3MigratorABI } from 'config/abi/v3Migrator'
 import { vCakeABI } from 'config/abi/vCake'
-import { veCakeABI } from 'config/abi/veCake'
+import { veSDXABI } from 'config/abi/veCake'
 import { zkSyncAirDropABI } from 'config/abi/zksyncAirdrop'
 import { getViemClients, viemClients } from 'utils/viem'
 import {
@@ -441,12 +441,12 @@ export const getFixedStakingContract = (signer?: WalletClient, chainId?: number)
   })
 }
 
-export const getVeCakeContract: GetContractFn<typeof veCakeABI, WalletClient> = (
+export const getVeCakeContract: GetContractFn<typeof veSDXABI, WalletClient> = (
   signer?: WalletClient,
   chainId?: number,
 ) => {
   return getContract({
-    abi: veCakeABI,
+    abi: veSDXABI,
     address: getVeCakeAddress(chainId) ?? getVeCakeAddress(ChainId.BSC),
     signer,
     chainId,

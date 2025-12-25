@@ -80,7 +80,7 @@ export const getTotalTvl = async () => {
       getStats('stable', [ChainId.ARBITRUM_ONE, ChainId.BSC]),
       fetch('https://farms-api.simpleflow.finance/price/cake').then((res) => res.json()),
       getCakeContract().read.balanceOf([getCakeVaultAddress()]),
-      getCakeContract().read.balanceOf([addresses.veCake[ChainId.BSC]]),
+      getCakeContract().read.balanceOf([addresses.veSDX[ChainId.BSC]]),
     ])
 
     const cakePrice = cakePriceResponse.price

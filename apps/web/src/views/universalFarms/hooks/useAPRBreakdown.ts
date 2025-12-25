@@ -49,7 +49,7 @@ export const useAPRBreakdown = ({ currency0, currency1, lpApr, cakeApr, tvlUSD: 
         {
           apr: cakeApr.value,
           currency: bscTokens.cake,
-          title: 'CAKE',
+          title: 'SDX',
           rewardPerDay: `${farmingRewardPerday} ${bscTokens.cake?.symbol}`,
         },
       ] as IRewardCardProps['rewards'],

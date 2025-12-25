@@ -153,9 +153,9 @@ export const CrossChainVeCakeModal: React.FC<{
   const { isDesktop } = useMatchBreakpoints()
   const { address: account, chain } = useAccount()
   const { switchNetwork } = useSwitchNetwork()
-  const veCakeSenderV2Contract = usePancakeVeSenderV2Contract(ChainId.BSC)
+  const veSDXSenderV2Contract = usePancakeVeSenderV2Contract(ChainId.BSC)
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const { balance: veCakeOnBsc } = useVeCakeBalance(ChainId.BSC)
+  const { balance: veSDXOnBsc } = useVeCakeBalance(ChainId.BSC)
   const { balance: bnbBalance } = useGetBnbBalance()
 
   const [selectChainId, setSelectChainId] = useState<ChainId | undefined>(targetChainId || undefined)
@@ -197,7 +197,7 @@ export const CrossChainVeCakeModal: React.FC<{
 
   const syncVeCake = useCallback(
     async (chainId: ChainId) => {
-      if (!account || !veCakeSenderV2Contract || !chainId || !isInitialized) return
+      if (!account || !veSDXSenderV2Contract || !chainId || !isInitialized) return
       setModalState('ready')
       let syncFee = BigInt(
         new BigNumber(CROSS_CHAIN_CONFIG[chainId].layerZeroFee.toString())
@@ -207,7 +207,7 @@ export const CrossChainVeCakeModal: React.FC<{
       )
 
       try {
-        const feeData = await veCakeSenderV2Contract.read.getEstimateGasFees(
+        const feeData = await veSDXSenderV2Contract.read.getEstimateGasFees(
           [CROSS_CHAIN_CONFIG[chainId].eid, CROSS_CHAIN_CONFIG[chainId].dstGas],
           { account },
         )
@@ -227,7 +227,7 @@ export const CrossChainVeCakeModal: React.FC<{
 
       if (bnbBalance <= syncFee) return
       const receipt = await fetchWithCatchTxError(async () => {
-        return veCakeSenderV2Contract.write.sendSyncMsg(
+        return veSDXSenderV2Contract.write.sendSyncMsg(
           [CROSS_CHAIN_CONFIG[chainId].eid, account, true, hasProfile, CROSS_CHAIN_CONFIG[chainId].dstGas],
           {
             account,
@@ -238,9 +238,9 @@ export const CrossChainVeCakeModal: React.FC<{
       })
       if (receipt?.status) {
         toastSuccess(
-          `${t('Syncing veCAKE')}!`,
+          `${t('Syncing veSDX')}!`,
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-            {t('Your veCAKE is Syncing to')} {CROSS_CHAIN_CONFIG[chainId].name}
+            {t('Your veSDX is Syncing to')} {CROSS_CHAIN_CONFIG[chainId].name}
           </ToastDescriptionWithTx>,
         )
         setTxByChain((prev) => ({ ...prev, [chainId]: receipt.transactionHash }))
@@ -253,7 +253,7 @@ export const CrossChainVeCakeModal: React.FC<{
       bnbBalance,
       hasProfile,
       isInitialized,
-      veCakeSenderV2Contract,
+      veSDXSenderV2Contract,
       t,
       setTxByChain,
       toastSuccess,
@@ -275,9 +275,9 @@ export const CrossChainVeCakeModal: React.FC<{
             <StyledModalHeader headerBorderColor="transparent">
               <ModalTitle>
                 <Flex flexDirection="column">
-                  <Heading scale="md">{modalTitle ?? t('veCAKE Sync')}</Heading>
+                  <Heading scale="md">{modalTitle ?? t('veSDX Sync')}</Heading>
                   <Text fontSize={14} color="textSubtle">
-                    {t('Sync your veCAKE and Pancake Profile across all supported networks.')}
+                    {t('Sync your veSDX and Pancake Profile across all supported networks.')}
                   </Text>
                 </Flex>
               </ModalTitle>
@@ -285,7 +285,7 @@ export const CrossChainVeCakeModal: React.FC<{
             </StyledModalHeader>
             <ModalBody>
               <Text fontSize={12} color="textSubtle" textTransform="uppercase" fontWeight={600} mb="8px">
-                {t('My veCAKE')}
+                {t('My veSDX')}
               </Text>
               <BinanceChainCard />
               <Text fontSize={12} color="textSubtle" textTransform="uppercase" fontWeight={600} mt="24px" mb="8px">
@@ -301,7 +301,7 @@ export const CrossChainVeCakeModal: React.FC<{
                       onSelected={setSelectChainId}
                       Icon={config.Icon}
                       isSelected={selectChainId === config.chainId}
-                      veCakeOnBsc={veCakeOnBsc}
+                      veSDXOnBsc={veSDXOnBsc}
                       hash={txByChain[config.chainId]}
                     />
                   ),
@@ -364,9 +364,9 @@ const InfoBox = () => {
   const { t } = useTranslation()
   return (
     <StyleUl>
-      <li>{t('Once synced, your veCAKE on the selected network will stay in sync with BNB Chain.')}</li>
+      <li>{t('Once synced, your veSDX on the selected network will stay in sync with BNB Chain.')}</li>
       <li>{t('You will need to sync again after extending or adding more CAKE to your CAKE Staking position.')}</li>
-      <li>{t('Your Pancake Profile will be synced along with your veCAKE.')}</li>
+      <li>{t('Your Pancake Profile will be synced along with your veSDX.')}</li>
     </StyleUl>
   )
 }
@@ -393,7 +393,7 @@ const OtherChainsCard: React.FC<{
   Icon: React.ReactElement
   onSelected: (chainId: ChainId) => void
   isSelected: boolean
-  veCakeOnBsc: BigNumber
+  veSDXOnBsc: BigNumber
   hash?: string
 }> = ({ chainName, chainId, Icon, onSelected, isSelected, hash }) => {
   const { balance } = useVeCakeBalance(chainId)
@@ -433,7 +433,7 @@ const OtherChainsCard: React.FC<{
       <Flex style={{ gap: 10 }}>
         <Flex flexDirection="column">
           <Text fontSize="14px" color="textSubtle">
-            {t('veCAKE')}
+            {t('veSDX')}
           </Text>
           {isLayerZeroHashProcessing && !isVeCakeWillSync ? (
             <Flex alignItems="center" justifyContent="center" mt="7px" pb="4px">
@@ -463,7 +463,7 @@ const ReadyToSyncView: React.FC<{ chainId: ChainId; nativeFee: bigint; bnbBalanc
     <Flex flexDirection="column" alignItems="center" justifyContent="center" style={{ gap: 10 }}>
       <Spinner size={120} />
       <Text fontSize={16} fontWeight={600} mt="16px">
-        {t('veCAKE Sync')}
+        {t('veSDX Sync')}
       </Text>
       <Text fontSize={12} mt="12px">
         {t('From %chain% to', { chain: 'BSC' })} {CROSS_CHAIN_CONFIG[chainId].name}
@@ -496,7 +496,7 @@ const SubmittedView: React.FC<{ chainId: ChainId; hash: string }> = ({ chainId, 
     <Flex flexDirection="column" alignItems="center" justifyContent="center" style={{ gap: 10 }}>
       <ArrowUpIcon color="success" width="90px" />
       <Text fontSize={16} fontWeight={600} mt="16px">
-        {t('veCAKE Sync Submitted')}
+        {t('veSDX Sync Submitted')}
       </Text>
       <Text fontSize={12} mt="12px">
         {t('From %chain% to', { chain: 'BSC' })} {CROSS_CHAIN_CONFIG[chainId].name}

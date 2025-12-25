@@ -14,7 +14,7 @@ import { Divider, GradientCard, TwoColumns } from "./styles";
 dayjs.extend(relativeTime);
 
 interface CrossChainLockInfoCardProps extends BoxProps {
-  veCakeAmount: string | number | BigNumber;
+  veSDXAmount: string | number | BigNumber;
 
   cakeLocked: string | number | BigNumber;
   usdPrice: string | number | BigNumber;
@@ -25,7 +25,7 @@ interface CrossChainLockInfoCardProps extends BoxProps {
 }
 
 export const CrossChainLockInfoCard = ({
-  veCakeAmount,
+  veSDXAmount,
 
   cakeLocked,
   usdPrice,
@@ -38,7 +38,7 @@ export const CrossChainLockInfoCard = ({
 }: CrossChainLockInfoCardProps) => {
   const { t } = useTranslation();
 
-  const veCakeAmountNum = useMemo(() => new BigNumber(veCakeAmount).toNumber(), [veCakeAmount]);
+  const veSDXAmountNum = useMemo(() => new BigNumber(veSDXAmount).toNumber(), [veSDXAmount]);
 
   const cakeLockedNum = useMemo(() => new BigNumber(cakeLocked).toNumber(), [cakeLocked]);
   const cakeLockedUsdAmount = useMemo(() => {
@@ -57,12 +57,12 @@ export const CrossChainLockInfoCard = ({
         </Flex>
         <Box>
           <Text color="textSubtle" fontSize="15px" bold>
-            {t("My veCAKE on %chainName%", {
+            {t("My veSDX on %chainName%", {
               chainName: ChainNameMap[targetChainId],
             })}
           </Text>
           <Text mt="-5.5px" bold>
-            <BalanceDisplay value={veCakeAmountNum} decimals={veCakeAmountNum < 1 ? 4 : 2} fontSize="21px" bold />
+            <BalanceDisplay value={veSDXAmountNum} decimals={veSDXAmountNum < 1 ? 4 : 2} fontSize="21px" bold />
           </Text>
         </Box>
       </FlexGap>

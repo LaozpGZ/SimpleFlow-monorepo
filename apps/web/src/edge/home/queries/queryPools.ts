@@ -41,7 +41,7 @@ function scorePools(
 
 export const queryPools = cacheByLRU(async () => {
   const { tokenMap, topTokens } = await queryTokens()
-  const cake = topTokens.find((x) => x.symbol === 'CAKE')!
+  const cake = topTokens.find((x) => x.symbol === 'SDX')!
   const cakePrice = cake.price
 
   const poolsInfo = await fetchExplorerFarmPools()

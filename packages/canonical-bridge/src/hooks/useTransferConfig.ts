@@ -45,7 +45,7 @@ export function useTransferConfig(supportedChains: IChainConfig[]): ICustomizedB
         defaultAmount: '',
         chainOrders: [56, 1, 137, 324, 42161, 59144, 8453, 204],
         tokenOrders: [
-          'CAKE',
+          'SDX',
           'USDC',
           'USDT',
           'FDUSD',
@@ -213,7 +213,7 @@ function handleDeBridgeConfig(rawConfig: IDeBridgeTransferConfig) {
           address: '0x152649eA73beAb28c5b49B26eb48f7EAD6d4c898',
           symbol: 'Cake',
           decimals: 18,
-          name: 'PancakeSwap Token',
+          name: 'SimpleFlow Token',
           logoURI: '',
           eip2612: false,
           tags: ['tokens'],

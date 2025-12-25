@@ -19,7 +19,7 @@ export const footerLinks: FooterLinkType[] = [
         href: "https://docs.simpleflow.finance/contact-us/telegram",
       },
       {
-        label: "CAKE",
+        label: "SDX",
         href: "https://docs.simpleflow.finance/tokenomics/cake",
       },
       {

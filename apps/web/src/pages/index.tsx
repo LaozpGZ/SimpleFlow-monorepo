@@ -1,10 +1,11 @@
 import { Suspense } from 'react'
-import { HomeV2 } from 'views/HomeV2'
+// import { HomeV2 } from 'views/HomeV2'
 
 const IndexPage = () => {
   return (
     <Suspense>
-      <HomeV2 />
+      {/* <HomeV2 /> */}
+      <div style={{ minHeight: '100vh' }} />
     </Suspense>
   )
 }

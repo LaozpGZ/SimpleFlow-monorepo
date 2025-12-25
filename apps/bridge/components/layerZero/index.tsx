@@ -73,11 +73,11 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
             const currencies = rawCurrencies.slice()
             app.bridgeStore.currencies.length = 0
 
-            const list = currencies.filter((i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId !== 158)
+            const list = currencies.filter((i: any) => i?.symbol?.toUpperCase() === 'SDX' && i?.chainId !== 158)
             app.bridgeStore.addCurrencies(list)
 
             const srcCake = app.bridgeStore.currencies.find(
-              (i: any) => i?.symbol?.toUpperCase() === 'CAKE' && i?.chainId === 102,
+              (i: any) => i?.symbol?.toUpperCase() === 'SDX' && i?.chainId === 102,
             )
             app.bridgeStore.setSrcCurrency(srcCake)
           } catch (error) {

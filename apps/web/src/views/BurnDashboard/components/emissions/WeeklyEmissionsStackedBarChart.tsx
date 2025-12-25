@@ -20,7 +20,7 @@ const TIME_FILTERS = {
 } as const
 
 type TimeFilterKey = keyof typeof TIME_FILTERS | 'Max'
-type CurrencyTab = 'CAKE' | 'USD'
+type CurrencyTab = 'SDX' | 'USD'
 
 // Memoized tooltip component
 const CustomTooltip = ({ active, payload, isUSD }: { active?: boolean; payload?: any[]; isUSD: boolean }) => {
@@ -64,7 +64,7 @@ const CustomTooltip = ({ active, payload, isUSD }: { active?: boolean; payload?:
 
 export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
   const { t } = useTranslation()
-  const [currencyTab, setCurrencyTab] = useState<CurrencyTab>('CAKE')
+  const [currencyTab, setCurrencyTab] = useState<CurrencyTab>('SDX')
   const [timeTab, setTimeTab] = useState<TimeFilterKey>('3m')
 
   const { data } = useBurnStats()
@@ -146,7 +146,7 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
         </FlexGap>
         <FlexGap gap="6px" alignItems="center" flexWrap="wrap">
           <TabMenu
-            tabs={['CAKE', 'USD']}
+            tabs={['SDX', 'USD']}
             defaultTab={currencyTab}
             onTabChange={(tab) => setCurrencyTab(tab as CurrencyTab)}
           />

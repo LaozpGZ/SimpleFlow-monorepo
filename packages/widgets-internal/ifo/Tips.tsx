@@ -35,9 +35,9 @@ export function ZeroVeCakeTips({ amount = 0, ...props }: Props) {
     <Box {...props}>
       <WarningMessage>
         <FlexGap flexDirection="column" gap="1rem">
-          <MessageText>{t("You have no veCAKE at the snapshot time.")}</MessageText>
+          <MessageText>{t("You have no veSDX at the snapshot time.")}</MessageText>
           <MessageText>
-            {t("To participate, lock CAKE to get veCAKE. Or extend your veCAKE position beyond the snapshot time.")}
+            {t("To participate, lock CAKE to get veSDX. Or extend your veSDX position beyond the snapshot time.")}
           </MessageText>
         </FlexGap>
       </WarningMessage>
@@ -57,7 +57,7 @@ export function MigrateVeCakeTips(props: SpaceProps) {
       <WarningMessage>
         <FlexGap flexDirection="column" gap="1rem">
           <MessageText>
-            {t("To participate, you need to migrate your fixed-term CAKE staking position to veCAKE.")}
+            {t("To participate, you need to migrate your fixed-term CAKE staking position to veSDX.")}
           </MessageText>
           <LinkMessageText bold>
             <Link href="https://simpleflow.finance">
@@ -79,7 +79,7 @@ export function InsufficientNativeVeCakeTips(props: SpaceProps) {
         <FlexGap flexDirection="column" gap="1rem">
           <MessageText>
             {t(
-              "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veCAKE position."
+              "Position migrated from CAKE Pool can not be extended or topped up. To extend or add more CAKE, set up a native veSDX position."
             )}
           </MessageText>
           <LinkMessageText bold>

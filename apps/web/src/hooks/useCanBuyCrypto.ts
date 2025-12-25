@@ -2,7 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { useMemo } from 'react'
 
 const SUPPORTED_ONRAMP_TOKENS = {
-  [ChainId.BSC]: ['BNB', 'CAKE', 'USDT', 'USDC'],
+  [ChainId.BSC]: ['BNB', 'SDX', 'USDT', 'USDC'],
   [ChainId.ETHEREUM]: ['ETH', 'USDT', 'USDC', 'DAI', 'WBTC'],
   [ChainId.ZKSYNC]: ['ETH'],
   [ChainId.ARBITRUM_ONE]: ['ETH', 'USDC'],

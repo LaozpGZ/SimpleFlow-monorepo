@@ -1,4 +1,4 @@
-export const veCakeABI = [
+export const veSDXABI = [
   {
     inputs: [
       { internalType: 'contract ICakePool', name: '_cakePool', type: 'address' },

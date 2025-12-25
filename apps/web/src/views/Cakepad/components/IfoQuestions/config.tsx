@@ -53,13 +53,13 @@ const config = [
     title: <Trans>How can I get more iCAKE?</Trans>,
     description: [
       <Trans>
-        Your iCAKE number for each IFOs is calculated based on your veCAKE balance at the snapshot time of each IFOs.
+        Your iCAKE number for each IFOs is calculated based on your veSDX balance at the snapshot time of each IFOs.
         Usually the snapshot time is the end time of each IFOs. Therefore, iCAKE can varies between different IFOs.
       </Trans>,
       <Box mt="1rem">
         <Trans>
-          To get more iCAKE, simply get more veCAKE by locking more CAKE in your veCAKE position, or extending your
-          veCAKE position.
+          To get more iCAKE, simply get more veSDX by locking more CAKE in your veSDX position, or extending your veSDX
+          position.
         </Trans>
       </Box>,
     ],

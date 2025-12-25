@@ -106,9 +106,9 @@ describe('fetchFarmsV3', () => {
             "decimals": 18,
             "isNative": false,
             "isToken": true,
-            "name": "PancakeSwap Token",
+            "name": "SimpleFlow Token",
             "projectLink": "https://simpleflow.finance/",
-            "symbol": "CAKE",
+            "symbol": "SDX",
           },
           "quoteTokenPriceBusd": "40",
           "token": ERC20Token {
@@ -139,9 +139,9 @@ describe('fetchFarmsV3', () => {
             "decimals": 18,
             "isNative": false,
             "isToken": true,
-            "name": "PancakeSwap Token",
+            "name": "SimpleFlow Token",
             "projectLink": "https://simpleflow.finance/",
-            "symbol": "CAKE",
+            "symbol": "SDX",
           },
           "quoteTokenPriceBusd": "40",
           "token": ERC20Token {

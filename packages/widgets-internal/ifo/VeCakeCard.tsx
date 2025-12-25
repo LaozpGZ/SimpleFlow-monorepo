@@ -61,7 +61,7 @@ export function MyICake({ amount = 0 }: { amount?: number | BigNumber }) {
         <QuestionHelper
           size="1.375rem"
           text={t(
-            "Your available iCAKE is calculated with the veCAKE balance at the snapshot time, multiplied by a fixed ratio."
+            "Your available iCAKE is calculated with the veSDX balance at the snapshot time, multiplied by a fixed ratio."
           )}
           color={color}
           placement="top-start"

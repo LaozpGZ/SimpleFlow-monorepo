@@ -62,7 +62,7 @@ const CustomTooltip = ({ active, payload, isUSD }: CustomTooltipProps) => {
 export const WeeklyBurnStackedChart = (props: CardProps) => {
   const { t } = useTranslation()
   const [selectedTab, setSelectedTab] = useState('3m')
-  const [selectedCurrency, setSelectedCurrency] = useState('CAKE')
+  const [selectedCurrency, setSelectedCurrency] = useState('SDX')
 
   const { data } = useBurnStats()
   const { burnTimeSeries } = data || {}
@@ -116,7 +116,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
           </QuestionHelperV2>
         </FlexGap>
         <FlexGap gap="8px" flexWrap="wrap">
-          <TabMenu tabs={['CAKE', 'USD']} defaultTab="CAKE" onTabChange={handleCurrencyChange} />
+          <TabMenu tabs={['SDX', 'USD']} defaultTab="SDX" onTabChange={handleCurrencyChange} />
           <TabMenu tabs={['3m', '6m', '1y', 'Max']} defaultTab="3m" onTabChange={handleTabChange} />
         </FlexGap>
       </FlexGap>

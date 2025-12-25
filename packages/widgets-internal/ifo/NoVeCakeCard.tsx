@@ -36,7 +36,7 @@ export const NoVeCakeCard = ({
             <img srcSet="/images/cake-staking/token-vecake.png 2x" alt="cross-chain-vecake" width={38} />
             <ChainLogo ml="-8px" chainId={nativeChainId} />
             <Text ml="6px" fontSize="16px" bold>
-              {t("veCAKE on %chainName%", {
+              {t("veSDX on %chainName%", {
                 chainName: ChainNameMap[nativeChainId],
               })}
             </Text>
@@ -49,11 +49,11 @@ export const NoVeCakeCard = ({
 
         <Box p="4px 16px 16px">
           <Text color="textSubtle" small>
-            {t("You have no veCAKE at Snapshot time")}
+            {t("You have no veSDX at Snapshot time")}
           </Text>
           <br />
           <Text color="textSubtle" small>
-            {t("To participate, get veCAKE or extend your veCAKE position beyond the snapshot time.")}
+            {t("To participate, get veSDX or extend your veSDX position beyond the snapshot time.")}
           </Text>
 
           {!isConnected && ConnectWalletButton ? (

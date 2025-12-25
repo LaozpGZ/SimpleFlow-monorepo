@@ -63,7 +63,7 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.replace(/pancake/gi, '')
   const { lpAddress } = farm
-  const isPromotedFarm = farm.token.symbol === 'CAKE'
+  const isPromotedFarm = farm.token.symbol === 'SDX'
   const merklUserLink = useMerklUserLink()
   const { hasMerkl, merklApr } = useMerklInfo(lpAddress)
   const merklLink = getMerklLink({ hasMerkl, chainId, lpAddress, poolProtocol: Protocol.V3 })

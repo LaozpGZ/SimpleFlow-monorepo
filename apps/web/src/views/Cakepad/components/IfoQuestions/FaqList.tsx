@@ -107,7 +107,7 @@ const FaqList: React.FC<{ ifoFaqs?: IFOFAQs }> = ({ ifoFaqs }) => {
               </li>
               <li>
                 <Text as="span" bold>
-                  <Trans>iCAKE / veCAKE not used.</Trans>
+                  <Trans>iCAKE / veSDX not used.</Trans>
                 </Text>
               </li>
             </ul>

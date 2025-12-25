@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
-import { veCakeABI } from 'config/abi/veCake'
+import { veSDXABI } from 'config/abi/veCake'
 import { FAST_INTERVAL } from 'config/constants'
 import { getVeCakeAddress } from 'utils/addressHelpers'
 import { publicClient } from 'utils/wagmi'
@@ -21,7 +21,7 @@ export const useMultichainVeCakeWellSynced = (
   const { address: account } = useAccount()
   const enabled = Boolean(account) && Boolean(targetChainId)
   const { data, isLoading } = useQuery({
-    queryKey: [account, 'veCakeSyncData', targetChainId, targetTime],
+    queryKey: [account, 'veSDXSyncData', targetChainId, targetTime],
 
     queryFn: () => {
       if (!account) throw new Error('account is required')
@@ -54,7 +54,7 @@ export const getVCakeAndProxyData = async (address: Address, targetChainId: Chai
       contracts: [
         {
           address: getVeCakeAddress(ChainId.BSC),
-          abi: veCakeABI,
+          abi: veSDXABI,
           functionName: 'getUserInfo',
           args: [address],
         },
@@ -67,13 +67,13 @@ export const getVCakeAndProxyData = async (address: Address, targetChainId: Chai
       contracts: [
         {
           address: getVeCakeAddress(ChainId.BSC),
-          abi: veCakeABI,
+          abi: veSDXABI,
           functionName: 'balanceOfAtTime',
           args: [address, BigInt(finalTargetTime)],
         },
         {
           address: getVeCakeAddress(ChainId.BSC),
-          abi: veCakeABI,
+          abi: veSDXABI,
           functionName: 'balanceOfAtTime',
           args: [userInfo?.[2], BigInt(finalTargetTime)],
         },
@@ -84,13 +84,13 @@ export const getVCakeAndProxyData = async (address: Address, targetChainId: Chai
       contracts: [
         {
           address: getVeCakeAddress(targetChainId),
-          abi: veCakeABI,
+          abi: veSDXABI,
           functionName: 'balanceOfAtTime',
           args: [address, BigInt(finalTargetTime)],
         },
         {
           address: getVeCakeAddress(targetChainId),
-          abi: veCakeABI,
+          abi: veSDXABI,
           functionName: 'balanceOfAtTime',
           args: [userInfo?.[2] ?? '0x0000000000000000000000000000000000000000', BigInt(finalTargetTime)],
         },
@@ -100,7 +100,7 @@ export const getVCakeAndProxyData = async (address: Address, targetChainId: Chai
     const [{ result: bscBalance }, { result: bscProxyBalance }] = callsResultBsc
 
     const [{ result: targetChainBalance }, { result: targetChainProxyBalance }] = callsResultTargetChain
-    // console.info({ bscBalance, bscProxyBalance, targetChainBalance, targetChainProxyBalance }, 'veCakeSyncData')
+    // console.info({ bscBalance, bscProxyBalance, targetChainBalance, targetChainProxyBalance }, 'veSDXSyncData')
 
     if (
       bscBalance === undefined ||

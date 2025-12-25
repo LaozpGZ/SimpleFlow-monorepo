@@ -50,16 +50,16 @@ export const useVeCakeUserInfo = (
   isLoading: boolean
   refetch: () => void
 } => {
-  const veCakeContract = useVeCakeContract(targetChain)
+  const veSDXContract = useVeCakeContract(targetChain)
   const { address: account } = useAccount()
 
   const { data, refetch, isLoading, isPending } = useReadContract({
-    chainId: targetChain ?? veCakeContract?.chain?.id,
-    abi: veCakeContract.abi,
-    address: veCakeContract.address,
+    chainId: targetChain ?? veSDXContract?.chain?.id,
+    abi: veSDXContract.abi,
+    address: veSDXContract.address,
     functionName: 'getUserInfo',
     query: {
-      enabled: Boolean(veCakeContract?.address && account),
+      enabled: Boolean(veSDXContract?.address && account),
       select: useCallback((d: readonly [bigint, bigint, `0x${string}`, bigint, number, number, number, number]) => {
         if (!d) return undefined
         const [amount, end, cakePoolProxy, cakeAmount, lockEndTime, migrationTime, cakePoolType, withdrawFlag] = d
@@ -92,7 +92,7 @@ export const useCakeLockStatus = (
   status: CakeLockStatus
   shouldMigrate: boolean
   cakeLockedAmount: bigint
-  nativeCakeLockedAmount: bigint
+  nativeSDXLockedAmount: bigint
   proxyCakeLockedAmount: bigint
   cakeV1Amount: bigint
   cakeLocked: boolean
@@ -147,7 +147,7 @@ export const useCakeLockStatus = (
     return currentTimestamp > userInfo!.lockEndTime
   }, [cakePoolLocked, currentTimestamp, userInfo])
 
-  const nativeCakeLockedAmount = useMemo(() => {
+  const nativeSDXLockedAmount = useMemo(() => {
     if (!userInfo) return BigInt(0)
     return userInfo.amount ?? 0n
   }, [userInfo])
@@ -195,8 +195,8 @@ export const useCakeLockStatus = (
   }, [cakePoolV1Info])
 
   const cakeLockedAmount = useMemo(() => {
-    return nativeCakeLockedAmount + proxyCakeLockedAmount
-  }, [nativeCakeLockedAmount, proxyCakeLockedAmount])
+    return nativeSDXLockedAmount + proxyCakeLockedAmount
+  }, [nativeSDXLockedAmount, proxyCakeLockedAmount])
 
   const cakePoolUnlockTime = useMemo(() => {
     if (!cakePoolLocked) return 0
@@ -216,7 +216,7 @@ export const useCakeLockStatus = (
     status,
     shouldMigrate,
     cakeLockedAmount,
-    nativeCakeLockedAmount,
+    nativeSDXLockedAmount,
     proxyCakeLockedAmount,
     cakeV1Amount,
     delegated,

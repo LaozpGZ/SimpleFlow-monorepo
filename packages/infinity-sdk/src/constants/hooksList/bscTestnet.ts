@@ -39,7 +39,7 @@ export const bscTestnetHooksList: HookData[] = [
   ...dynamicHooksList,
   {
     address: '0x0A6440c9cfb5f28BE699a9e4e83BF8A89de72498',
-    name: 'veCake Exclusive (CLAMM)',
+    name: 'veSDX Exclusive (CLAMM)',
     poolType: POOL_TYPE.CLAMM,
     description:
       'This multi-feature contract allows for liquidity locks, TWAMM (Time weighted average market maker), and impermanent loss hedging on pools. Check the Github readme for more details.',
@@ -55,9 +55,9 @@ export const bscTestnetHooksList: HookData[] = [
   },
   {
     address: '0x0284ceB8F3Ad42131A6feB69E3F324990837Ef2c',
-    name: 'veCake Exclusive (Bin)',
+    name: 'veSDX Exclusive (Bin)',
     poolType: POOL_TYPE.Bin,
-    description: 'Exclusive to holders of veCake (0x3c3C66383690d3cf08205cD3Ba862bc4F6348829)',
+    description: 'Exclusive to holders of veSDX (0x3c3C66383690d3cf08205cD3Ba862bc4F6348829)',
     github: 'https://testnet.bscscan.com/address/0x0284ceB8F3Ad42131A6feB69E3F324990837Ef2c',
     category: [HOOK_CATEGORY.Others],
     isVerified: true,

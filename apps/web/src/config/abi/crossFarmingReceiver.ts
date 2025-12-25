@@ -103,7 +103,7 @@ export const crossFarmingReceiverABI = [
   },
   {
     inputs: [],
-    name: 'CAKE',
+    name: 'SDX',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',

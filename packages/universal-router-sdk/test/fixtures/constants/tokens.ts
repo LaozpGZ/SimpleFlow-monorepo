@@ -29,8 +29,8 @@ export const CAKE = {
   ...Tokens.CAKE,
 
   // @notice: temporary ignore missed testnet address
-  [ChainId.OPBNB_TESTNET]: new ERC20Token(ChainId.OPBNB_TESTNET, zeroAddress, 0, 'CAKE'),
-  [ChainId.SCROLL_SEPOLIA]: new ERC20Token(ChainId.SCROLL_SEPOLIA, zeroAddress, 0, 'CAKE'),
+  [ChainId.OPBNB_TESTNET]: new ERC20Token(ChainId.OPBNB_TESTNET, zeroAddress, 0, 'SDX'),
+  [ChainId.SCROLL_SEPOLIA]: new ERC20Token(ChainId.SCROLL_SEPOLIA, zeroAddress, 0, 'SDX'),
 }
 
 export const USDT = {

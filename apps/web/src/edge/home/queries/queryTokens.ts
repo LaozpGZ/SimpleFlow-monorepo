@@ -36,7 +36,7 @@ const tokens: HomePageToken[] = [
   {
     id: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
     chainId: 56,
-    symbol: 'CAKE',
+    symbol: 'SDX',
     price: 0,
     icon: '',
     percent: 0,

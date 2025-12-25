@@ -12,7 +12,7 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
     title: <Trans>What is CAKE staking?</Trans>,
     description: [
       <Trans key="cake-staking-desc">
-        CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veCAKE, which
+        CAKE staking allows you to lock your CAKE tokens to earn rewards. When locked, CAKE generates veSDX, which
         determines your benefits based on the amount staked and the lock duration.
       </Trans>,
     ],
@@ -30,8 +30,8 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
           <Trans>4 years</Trans>
         </strong>
         <Trans>
-          . The longer you lock, the more veCAKE you receive. Once locked, CAKE cannot be withdrawn until the lock
-          period ends.
+          . The longer you lock, the more veSDX you receive. Once locked, CAKE cannot be withdrawn until the lock period
+          ends.
         </Trans>
       </>,
     ],
@@ -52,7 +52,7 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
           .
         </li>
         <li>
-          <strong>Gauge voting</strong>: <Trans>Use veCAKE to vote on where CAKE emissions are allocated.</Trans>
+          <strong>Gauge voting</strong>: <Trans>Use veSDX to vote on where CAKE emissions are allocated.</Trans>
         </li>
         <li>
           <strong>Boosted yield</strong>:{' '}
@@ -90,7 +90,7 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
         </strong>
       </>,
       <>
-        <Trans>You can do this directly from the veCAKE staking page.</Trans>
+        <Trans>You can do this directly from the veSDX staking page.</Trans>
       </>,
     ],
   },
@@ -99,7 +99,7 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
     description: [
       <>
         <Trans>
-          Cross-chain CAKE allows veCAKE holders to participate in gauges voting on multiple chains, including Ethereum
+          Cross-chain CAKE allows veSDX holders to participate in gauges voting on multiple chains, including Ethereum
           and Arbitrum. Through
         </Trans>{' '}
         <strong>
@@ -118,10 +118,10 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
     ],
   },
   {
-    title: <Trans>Can I transfer or trade my staked CAKE or veCAKE?</Trans>,
+    title: <Trans>Can I transfer or trade my staked CAKE or veSDX?</Trans>,
     description: [
       <Trans key="transfer-trade-desc">
-        No, veCAKE is non-transferable and remains in your wallet until your CAKE unlocks.
+        No, veSDX is non-transferable and remains in your wallet until your CAKE unlocks.
       </Trans>,
     ],
   },

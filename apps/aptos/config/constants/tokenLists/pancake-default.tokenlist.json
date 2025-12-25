@@ -212,7 +212,7 @@
       "logoURI": "https://tokens.simpleflow.finance/images/symbol/usdc.png"
     },
     {
-      "name": "PancakeSwap Token",
+      "name": "SimpleFlow Token",
       "symbol": "CAKE",
       "chainId": 1,
       "decimals": 8,

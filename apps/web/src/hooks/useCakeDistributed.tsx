@@ -5,7 +5,7 @@ const INITIAL_INCENTIVE = 0n
 
 export const useCakeDistributed = (): bigint => {
   const cakePool = useRevenueSharingCakePoolContract()
-  const veCake = useRevenueSharingVeCakeContract()
+  const veSDX = useRevenueSharingVeCakeContract()
 
   const { data: fromCakePool = 0n } = useQuery({
     queryKey: ['cakeDistributed/cakePool', cakePool.address, cakePool.chain?.id],
@@ -23,11 +23,11 @@ export const useCakeDistributed = (): bigint => {
     placeholderData: keepPreviousData,
   })
   const { data: fromVeCake = 0n } = useQuery({
-    queryKey: ['cakeDistributed/veCake', veCake.address, veCake.chain?.id],
+    queryKey: ['cakeDistributed/veSDX', veSDX.address, veSDX.chain?.id],
 
     queryFn: async () => {
       try {
-        const amount = (await veCake.read.totalDistributed()) ?? 0n
+        const amount = (await veSDX.read.totalDistributed()) ?? 0n
         return amount
       } catch (error) {
         console.warn(error)

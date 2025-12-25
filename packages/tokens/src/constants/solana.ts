@@ -27,7 +27,7 @@ export const solanaTokens = {
     programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     logoURI: 'https://tokens.simpleflow.finance/images/solana/4qQeZ5LwSz6HuupUu8jCtgXyW1mYQcNbFAW1sWZp89HL.png',
     symbol: 'Cake',
-    name: 'PancakeSwap Token',
+    name: 'SimpleFlow Token',
     decimals: 9,
   }),
 }

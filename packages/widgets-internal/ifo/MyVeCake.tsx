@@ -20,7 +20,7 @@ export function MyVeCake({ amount = 0 }: PropsWithChildren<{ amount?: number | B
 
   const label = showLabel ? (
     <Text fontSize="1.25rem" bold lineHeight="1.375rem" color="white">
-      {t("veCAKE")}
+      {t("veSDX")}
     </Text>
   ) : null;
 

@@ -1,5 +1,5 @@
 import BN from 'bignumber.js'
-import { MAX_VECAKE_LOCK_WEEKS, WEEK } from 'config/constants/veCake'
+import { MAX_VECAKE_LOCK_WEEKS, WEEK } from 'config/constants/veSDX'
 
 export const getVeCakeAmount = (cakeToLocked: number | bigint | string, seconds: number | string): number => {
   return new BN(String(cakeToLocked || 0))

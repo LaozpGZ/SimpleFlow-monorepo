@@ -29,7 +29,7 @@ export function PoolCard<T>({
   const { sousId, stakingToken, earningToken, isFinished, totalStaked } = pool;
   const { t } = useTranslation();
 
-  const isCakePool = earningToken?.symbol === "CAKE" && stakingToken?.symbol === "CAKE";
+  const isCakePool = earningToken?.symbol === "SDX" && stakingToken?.symbol === "SDX";
 
   const showBoostedTag = useMemo(() => !isFinished && isBoostedPool, [isFinished, isBoostedPool]);
 

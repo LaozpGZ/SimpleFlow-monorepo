@@ -113,7 +113,7 @@ export const BCakeWrapperFarmAprTipContent = () => {
   const { t } = useTranslation()
   return (
     <Text mt="15px">
-      {t('bCAKE only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.')}
+      {t('bSDX only boosts Farm APR. Actual boost multiplier is subject to farm and pool conditions.')}
     </Text>
   )
 }

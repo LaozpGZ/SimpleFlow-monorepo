@@ -1,7 +1,7 @@
 import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
-import { WEEK } from 'config/constants/veCake'
+import { WEEK } from 'config/constants/veSDX'
 import { publicClient } from 'utils/wagmi'
 import { useAccount } from 'wagmi'
 import {

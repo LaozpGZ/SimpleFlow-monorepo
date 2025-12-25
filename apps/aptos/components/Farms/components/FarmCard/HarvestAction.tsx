@@ -63,7 +63,7 @@ const HarvestAction: React.FC<React.PropsWithChildren<FarmCardActionsProps>> = (
     const receipt = await fetchWithCatchTxError(() => onReward())
 
     if (receipt?.status) {
-      const displaySymbol = dual?.token ? `CAKE + ${dual?.token?.symbol}` : 'CAKE'
+      const displaySymbol = dual?.token ? `CAKE + ${dual?.token?.symbol}` : 'SDX'
       toastSuccess(
         `${t('Harvested')}!`,
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>

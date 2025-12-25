@@ -12,24 +12,6 @@ export const simplechainTestnetTokens = {
     'Wrapped SRW',
     'https://simplechain.com/',
   ),
-  // 作为 wmon 的别名，兼容旧代码
-  wmon: new ERC20Token(
-    ChainId.SIMPLECHAIN_TESTNET,
-    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
-    18,
-    'WSRW',
-    'Wrapped SRW',
-    'https://simplechain.com/',
-  ),
-  // 作为 weth 的别名，兼容旧代码
-  weth: new ERC20Token(
-    ChainId.SIMPLECHAIN_TESTNET,
-    '0x22608aC253B934D5078cB0d12f7F7e377b51798b',
-    18,
-    'WSRW',
-    'Wrapped SRW',
-    'https://simplechain.com/',
-  ),
   usdt: new ERC20Token(
     ChainId.SIMPLECHAIN_TESTNET,
     '0x3577E5E0E3A47d9a552426638977ee3EddD4552e',
@@ -48,7 +30,7 @@ export const simplechainTestnetTokens = {
   ),
   wbtc: new ERC20Token(
     ChainId.SIMPLECHAIN_TESTNET,
-    '0x770556F853a17893b1187A9754F17c6f57776b7c',
+    '0xc48DC2507A162E2Ab63e12055CA5C79cf9b19BF2',
     8,
     'WBTC',
     'Wrapped Bitcoin',
@@ -79,33 +61,6 @@ export const simplechainTestnetTokens = {
     'DAI',
     'Dai Stablecoin',
     'https://makerdao.com/',
-  ),
-  // 兼容旧代码的 busd alias (指向 usdc)
-  busd: new ERC20Token(
-    ChainId.SIMPLECHAIN_TESTNET,
-    '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769',
-    6,
-    'USDC',
-    'USD Coin',
-    'https://www.circle.com/',
-  ),
-  // 兼容旧代码的 ausd alias (指向 usdc)
-  ausd: new ERC20Token(
-    ChainId.SIMPLECHAIN_TESTNET,
-    '0xf373DeaAc4a65d92c6543C4ad879bebA55ef9769',
-    6,
-    'USDC',
-    'USD Coin',
-    'https://www.circle.com/',
-  ),
-  // 兼容旧代码的 usdt0 alias
-  usdt0: new ERC20Token(
-    ChainId.SIMPLECHAIN_TESTNET,
-    '0x3577E5E0E3A47d9a552426638977ee3EddD4552e',
-    6,
-    'USDT',
-    'Tether USD',
-    'https://tether.to/',
   ),
   // 测试代币
   test1: new ERC20Token(

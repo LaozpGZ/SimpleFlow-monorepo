@@ -1,6 +1,6 @@
 import { ContextApi, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, Modal } from '@pancakeswap/uikit'
-import ApproveCakeView from './ApproveCakeView'
+import ApproveSDXView from './ApproveSDXView'
 import ChangeProfilePicView from './ChangeProfilePicView'
 import PauseProfileView from './PauseProfileView'
 import StartView from './StartView'
@@ -46,7 +46,7 @@ const EditProfileModal: React.FC<React.PropsWithChildren<EditProfileModalProps>>
         )}
         {currentView === Views.REMOVE && <PauseProfileView onDismiss={onDismiss} onSuccess={onSuccess} />}
         {currentView === Views.CHANGE && <ChangeProfilePicView onDismiss={onDismiss} onSuccess={onSuccess} />}
-        {currentView === Views.APPROVE && <ApproveCakeView goToChange={goToChange} onDismiss={onDismiss} />}
+        {currentView === Views.APPROVE && <ApproveSDXView goToChange={goToChange} onDismiss={onDismiss} />}
       </div>
     </Modal>
   )

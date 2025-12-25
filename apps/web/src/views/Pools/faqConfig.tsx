@@ -71,7 +71,7 @@ const faqConfig: FaqConfig[] = [
       <>
         <Trans
           i18nKey="legacy-pools"
-          i18nTemplate="The <0>Auto CAKE and Manual CAKE Pools</0> have been upgraded to <1>veCAKE</1> staking. If you still have CAKE staked in the legacy pools, you'll need to <2>migrate to veCAKE</2> to continue earning rewards. <3>Learn how to migrate here</3>"
+          i18nTemplate="The <0>Auto CAKE and Manual CAKE Pools</0> have been upgraded to <1>veSDX</1> staking. If you still have CAKE staked in the legacy pools, you'll need to <2>migrate to veSDX</2> to continue earning rewards. <3>Learn how to migrate here</3>"
           components={[
             <strong key="0" />,
             <strong key="1" />,

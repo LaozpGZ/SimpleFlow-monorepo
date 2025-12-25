@@ -48,7 +48,7 @@ export const SwitchToBnbChainModal: React.FC<{
       <ModalContainer style={{ minHeight: 350 }}>
         <GradientModalHeader>
           <ModalTitle>
-            <Heading scale="lg">{t('Stake %symbol%', { symbol: 'CAKE' })}</Heading>
+            <Heading scale="lg">{t('Stake %symbol%', { symbol: 'SDX' })}</Heading>
           </ModalTitle>
           <ModalCloseButton onDismiss={onDismiss} />
         </GradientModalHeader>
@@ -60,7 +60,7 @@ export const SwitchToBnbChainModal: React.FC<{
               <img width="100%" srcSet="/images/cake-staking/benefit-farm-boost.png 2x" alt="ve-cake" />
             </Box>
             <Text mt="30px" color={theme.isDark ? '#280D5F' : 'white'}>
-              {t('Stake CAKE to obtain bCAKE – to boost farm yields.')}
+              {t('Stake CAKE to obtain bSDX – to boost farm yields.')}
             </Text>
             <Box position="absolute" width="120px" right="-90px">
               <img width="100%" srcSet="/images/cake-staking/boost-bsc.png 2x" alt="b-cake" />
