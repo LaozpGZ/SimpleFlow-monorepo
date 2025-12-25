@@ -224,7 +224,7 @@ export const bscTokens = {
     18,
     'SYRUP',
     'SyrupBar Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   pha: new ERC20Token(
     ChainId.BSC,
@@ -2963,7 +2963,7 @@ export const bscTokens = {
     18,
     'DLP',
     'WBNB-RDNT Pancake LP',
-    'https://pancakeswap.finance',
+    'https://simpleflow.finance',
   ),
   mdlp: new ERC20Token(
     ChainId.BSC,

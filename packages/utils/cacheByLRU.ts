@@ -187,7 +187,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
               uploadR2(pkey, result)
                 .then((updated) => {
                   if (updated) {
-                    console.log(`[persist] cache succ: https://proofs.pancakeswap.com/cache/${pkey}, ${cacheKey}`)
+                    console.log(`[persist] cache succ: https://proofs.simpleflow.finance/cache/${pkey}, ${cacheKey}`)
                   }
                 })
                 .catch((ex) => {
@@ -258,7 +258,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
 async function existsR2(key: string) {
   try {
-    const resp = await fetch(`https://obj-cache.pancakeswap.com/cache/${key}`, {
+    const resp = await fetch(`https://obj-cache.simpleflow.finance/cache/${key}`, {
       method: 'HEAD',
     })
     return resp.ok
@@ -274,7 +274,7 @@ async function uploadR2(key: string, value: any) {
   if (await existsR2(key)) {
     return false
   }
-  await fetch(`https://obj-cache.pancakeswap.com`, {
+  await fetch(`https://obj-cache.simpleflow.finance`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -286,8 +286,8 @@ async function uploadR2(key: string, value: any) {
 }
 
 async function _fetchR2Cache(key: string) {
-  const resp = await fetch(`https://proofs.pancakeswap.com/cache/${key}`)
-  console.log(`[fetch] cache https://proofs.pancakeswap.com/cache/${key}`)
+  const resp = await fetch(`https://proofs.simpleflow.finance/cache/${key}`)
+  console.log(`[fetch] cache https://proofs.simpleflow.finance/cache/${key}`)
   if (resp.ok) {
     return resp.json()
   }

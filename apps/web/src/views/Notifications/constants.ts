@@ -63,8 +63,8 @@ export const PancakeNotifications: {
     return {
       title: t('New LP Position Added'),
       body: t('New LP position successfully added. You will be notified on important updates.'),
-      icon: `https://pancakeswap.finance/logo.png`,
-      url: 'https://pancakeswap.finance',
+      icon: `https://simpleflow.finance/logo.png`,
+      url: 'https://simpleflow.finance',
       type: SubsctiptionType.Liquidity,
     }
   },
@@ -74,12 +74,12 @@ export const PancakeNotifications: {
       body: t(
         'You are now susbscribed and will receive alerts and updates on PCS features. If you dont want to receive notifications you can unsubscribe at any time.',
       ),
-      icon: `https://pancakeswap.finance/logo.png`,
+      icon: `https://simpleflow.finance/logo.png`,
       type: SubsctiptionType.Alerts,
     }
   },
 }
-export const APP_DOMAIN = 'pancakeswap.finance'
+export const APP_DOMAIN = 'simpleflow.finance'
 
 export const PUBLIC_VAPID_KEY = process.env.NEXT_PUBLIC_VAPID_KEY ?? ''
 

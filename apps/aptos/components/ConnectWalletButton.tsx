@@ -34,7 +34,7 @@ export const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
         fullSize={false}
         mevDocLink={null}
         docText={t('Learn How to Create and Connect')}
-        docLink="https://docs.pancakeswap.finance/get-started-aptos/wallet-guide"
+        docLink="https://docs.simpleflow.finance/get-started-aptos/wallet-guide"
         isOpen={open}
         topWallets={TOP_WALLET_MAP}
         wallets={wallets}

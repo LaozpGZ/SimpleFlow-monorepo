@@ -20,7 +20,9 @@ export const useVerifyHookAddress = ({ chainId, hookAddress }: { chainId?: numbe
       const resp = await rewardApiClient.GET('/farms/verification/verify-contract', {
         // @todo @ChefJerry remove this after the backend is ready
         baseUrl:
-          chainId === ChainId.BSC_TESTNET ? 'https://test.v4.pancakeswap.com/' : 'https://infinity.pancakeswap.com/',
+          chainId === ChainId.BSC_TESTNET
+            ? 'https://test.v4.simpleflow.finance/'
+            : 'https://infinity.simpleflow.finance/',
         params: {
           query: {
             address: hookAddress,

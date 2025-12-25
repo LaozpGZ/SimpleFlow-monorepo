@@ -72,7 +72,7 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
           <Link
             style={{ display: 'inline' }}
             external
-            href="https://docs.pancakeswap.finance/trading-tools/pancakeswap-mev-guard"
+            href="https://docs.simpleflow.finance/trading-tools/pancakeswap-mev-guard"
           />,
         ]}
       />
@@ -220,7 +220,7 @@ const EvmMevSupportMessage = () => {
               fontWeight="normal !important"
               fontSize="12px"
               external
-              href="https://docs.pancakeswap.finance/trading-tools/pancakeswap-mev-guard"
+              href="https://docs.simpleflow.finance/trading-tools/pancakeswap-mev-guard"
             />,
           ]}
         />

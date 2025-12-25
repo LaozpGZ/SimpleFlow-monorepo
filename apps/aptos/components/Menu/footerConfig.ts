@@ -19,7 +19,7 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
       },
       {
         label: t('Play'),
-        href: 'https://pancakeswap.finance/prediction',
+        href: 'https://simpleflow.finance/prediction',
       },
     ],
   },
@@ -28,19 +28,19 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t('CAKE Incentives'),
-        href: 'https://docs.pancakeswap.finance/ecosystem-and-partnerships/business-partnerships/syrup-pools-and-farms',
+        href: 'https://docs.simpleflow.finance/ecosystem-and-partnerships/business-partnerships/syrup-pools-and-farms',
       },
       {
         label: t('Staking Pools'),
-        href: 'https://pancakeswap.finance/pools',
+        href: 'https://simpleflow.finance/pools',
       },
       {
         label: t('Token Launches'),
-        href: 'https://docs.pancakeswap.finance/ecosystem-and-partnerships/business-partnerships/initial-farm-offerings-ifos',
+        href: 'https://docs.simpleflow.finance/ecosystem-and-partnerships/business-partnerships/initial-farm-offerings-ifos',
       },
       {
         label: t('Brand Assets'),
-        href: 'https://docs.pancakeswap.finance/ecosystem-and-partnerships/brand',
+        href: 'https://docs.simpleflow.finance/ecosystem-and-partnerships/brand',
       },
     ],
   },
@@ -49,7 +49,7 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t('Contributing'),
-        href: 'https://docs.pancakeswap.finance/developers/contributing',
+        href: 'https://docs.simpleflow.finance/developers/contributing',
       },
       {
         label: t('Github'),
@@ -57,7 +57,7 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
       },
       {
         label: t('Bug Bounty'),
-        href: 'https://docs.pancakeswap.finance/developers/bug-bounty',
+        href: 'https://docs.simpleflow.finance/developers/bug-bounty',
       },
     ],
   },
@@ -66,23 +66,23 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t('Get Help'),
-        href: 'https://docs.pancakeswap.finance/welcome-to-pancakeswap/contact-us/faq/help',
+        href: 'https://docs.simpleflow.finance/welcome-to-pancakeswap/contact-us/faq/help',
       },
       {
         label: t('Troubleshooting'),
-        href: 'https://docs.pancakeswap.finance/readme/help/troubleshooting',
+        href: 'https://docs.simpleflow.finance/readme/help/troubleshooting',
       },
       {
         label: t('Documentation'),
-        href: 'https://docs.pancakeswap.finance/',
+        href: 'https://docs.simpleflow.finance/',
       },
       {
         label: t('Audits'),
-        href: 'https://docs.pancakeswap.finance/readme/audits',
+        href: 'https://docs.simpleflow.finance/readme/audits',
       },
       {
         label: t('Legacy products'),
-        href: 'https://docs.pancakeswap.finance/products/legacy-products',
+        href: 'https://docs.simpleflow.finance/products/legacy-products',
       },
     ],
   },
@@ -91,23 +91,23 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t('Tokenomics'),
-        href: 'https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics',
+        href: 'https://docs.simpleflow.finance/governance-and-tokenomics/cake-tokenomics',
       },
       {
         label: t('CAKE Burn Dashboard'),
-        href: 'https://pancakeswap.finance/burn-dashboard',
+        href: 'https://simpleflow.finance/burn-dashboard',
       },
       {
         label: t('Blog'),
-        href: 'https://blog.pancakeswap.finance/',
+        href: 'https://blog.simpleflow.finance/',
       },
       {
         label: t('Careers'),
-        href: 'https://docs.pancakeswap.finance/team/become-a-chef',
+        href: 'https://docs.simpleflow.finance/team/become-a-chef',
       },
       {
         label: t('Terms Of Service'),
-        href: 'https://pancakeswap.finance/terms-of-service',
+        href: 'https://simpleflow.finance/terms-of-service',
       },
     ],
   },

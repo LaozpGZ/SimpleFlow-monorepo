@@ -3,7 +3,7 @@ import { Link, LinkExternal } from "../../components/Link";
 import { renderWithProvider } from "../../testHelpers";
 
 it("renders link correctly", () => {
-  const { asFragment } = renderWithProvider(<Link href="https://pancakeswap.finance">Link</Link>);
+  const { asFragment } = renderWithProvider(<Link href="https://simpleflow.finance">Link</Link>);
   expect(asFragment()).toMatchInlineSnapshot(`
     <DocumentFragment>
       .c0 {
@@ -26,7 +26,7 @@ it("renders link correctly", () => {
 
     <a
         class="c0 c1"
-        href="https://pancakeswap.finance"
+        href="https://simpleflow.finance"
       >
         Link
       </a>
@@ -35,7 +35,7 @@ it("renders link correctly", () => {
 });
 
 it("renders link external link correctly", () => {
-  const { asFragment } = renderWithProvider(<LinkExternal href="https://pancakeswap.finance">Link</LinkExternal>);
+  const { asFragment } = renderWithProvider(<LinkExternal href="https://simpleflow.finance">Link</LinkExternal>);
   expect(asFragment()).toMatchInlineSnapshot(`
     <DocumentFragment>
       .c0 {
@@ -72,7 +72,7 @@ it("renders link external link correctly", () => {
 
     <a
         class="c0 c1"
-        href="https://pancakeswap.finance"
+        href="https://simpleflow.finance"
         rel="noreferrer noopener"
         target="_blank"
       >

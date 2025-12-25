@@ -9,7 +9,7 @@ describe('tryParseAmount', () => {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   )
 
   const mockSolanaToken = new SPLToken({

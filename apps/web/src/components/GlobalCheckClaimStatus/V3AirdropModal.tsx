@@ -53,7 +53,7 @@ export interface WhitelistType {
   }
 }
 
-const GITHUB_ENDPOINT = 'https://raw.githubusercontent.com/pancakeswap/airdrop-v3-users/master'
+const GITHUB_ENDPOINT = 'https://raw.githubusercontent.com/simpleflow-finance/airdrop-v3-users/master'
 
 const V3AirdropModal: React.FC = () => {
   const { t } = useTranslation()

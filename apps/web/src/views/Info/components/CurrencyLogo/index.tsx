@@ -37,10 +37,10 @@ export const CurrencyLogo: React.FC<
   const checkedsummedAddress = safeGetAddress(address)
 
   let srcFromPCS = checkedsummedAddress
-    ? `https://tokens.pancakeswap.finance/images/${imagePath}${checkedsummedAddress}.png`
+    ? `https://tokens.simpleflow.finance/images/${imagePath}${checkedsummedAddress}.png`
     : ''
   if (checkedsummedAddress && isAddressEqual(checkedsummedAddress, zeroAddress)) {
-    srcFromPCS = `https://assets.pancakeswap.finance/web/native/${multiChainId[chainName]}.png`
+    srcFromPCS = `https://assets.simpleflow.finance/web/native/${multiChainId[chainName]}.png`
   }
 
   return <StyledLogo size={size} srcs={src ? [srcFromPCS, src] : [srcFromPCS]} alt="token logo" {...rest} />

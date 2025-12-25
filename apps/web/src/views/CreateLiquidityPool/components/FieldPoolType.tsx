@@ -68,7 +68,7 @@ export const FieldPoolType: React.FC<FieldPoolTypeProps> = ({ ...boxProps }) => 
               <br />
               <br />
               <LinkExternal
-                href="https://docs.pancakeswap.finance/trade/pancakeswap-infinity/pool-types"
+                href="https://docs.simpleflow.finance/trade/pancakeswap-infinity/pool-types"
                 fontSize="14px"
               >
                 {t('Learn More')}

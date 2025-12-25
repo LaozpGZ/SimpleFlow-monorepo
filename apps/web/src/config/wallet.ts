@@ -123,9 +123,9 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
         // && metaMaskConnector.ready
       },
       connectorId: ConnectorNames.Injected,
-      deepLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
+      deepLink: 'https://metamask.app.link/dapp/simpleflow.finance/',
       qrCode,
-      downloadLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
+      downloadLink: 'https://metamask.app.link/dapp/simpleflow.finance/',
       MEVSupported: true,
     },
     {
@@ -136,7 +136,7 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       get installed() {
         return !!getTrustWalletProvider()
       },
-      deepLink: 'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://pancakeswap.finance/',
+      deepLink: 'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://simpleflow.finance/',
       downloadLink: 'https://trustwallet.com/browser-extension',
       guide: {
         desktop: 'https://trustwallet.com/browser-extension',
@@ -155,7 +155,7 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       },
       downloadLink: 'https://www.okx.com/download',
       deepLink:
-        'https://www.okx.com/download?deeplink=okx%3A%2F%2Fwallet%2Fdapp%2Furl%3FdappUrl%3Dhttps%253A%252F%252Fpancakeswap.finance',
+        'https://www.okx.com/download?deeplink=okx%3A%2F%2Fwallet%2Fdapp%2Furl%3FdappUrl%3Dhttps%253A%252F%252Fsimpleflow.finance',
       guide: {
         desktop: 'https://www.okx.com/web3',
         mobile: 'https://www.okx.com/web3',
@@ -345,7 +345,7 @@ const docLangCodeMapping: Record<string, string> = {
 
 export const getDocLink = (code: string) =>
   docLangCodeMapping[code]
-    ? `https://docs.pancakeswap.finance/v/${docLangCodeMapping[code]}/get-started/wallet-guide`
-    : `https://docs.pancakeswap.finance/get-started/wallet-guide`
+    ? `https://docs.simpleflow.finance/v/${docLangCodeMapping[code]}/get-started/wallet-guide`
+    : `https://docs.simpleflow.finance/get-started/wallet-guide`
 
-export const mevDocLink = 'https://docs.pancakeswap.finance/trading-tools/pancakeswap-mev-guard'
+export const mevDocLink = 'https://docs.simpleflow.finance/trading-tools/pancakeswap-mev-guard'

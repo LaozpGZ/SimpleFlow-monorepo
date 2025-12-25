@@ -28,7 +28,7 @@ export const Intro = ({ docLink }: { docLink: string }) => {
           as="a"
           color="backgroundAlt"
           variant="text"
-          href="https://pancakeswap.finance/terms-of-service"
+          href="https://simpleflow.finance/terms-of-service"
           scale="xs"
           p="0"
         >

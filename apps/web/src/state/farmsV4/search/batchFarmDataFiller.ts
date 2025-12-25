@@ -30,7 +30,7 @@ interface FillItem<T> {
   value: T
 }
 
-const SOLANA_POOL_INFO_ENDPOINT = 'https://sol-explorer.pancakeswap.com/api/cached/v1/pools/info/ids'
+const SOLANA_POOL_INFO_ENDPOINT = 'https://sol-explorer.simpleflow.finance/api/cached/v1/pools/info/ids'
 
 type SolanaAprSummary = {
   lpApr: number

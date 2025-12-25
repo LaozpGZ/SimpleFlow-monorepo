@@ -4,7 +4,7 @@ import { Address, PublicClient } from 'viem'
 
 const WEEK = 7
 const YEAR = 365
-const API_URL = 'https://perp.pancakeswap.finance/bapi/futures/v1/public/future/apx/fee/info?chain='
+const API_URL = 'https://perp.simpleflow.finance/bapi/futures/v1/public/future/apx/fee/info?chain='
 
 const CONTRACT_ADDRESS: Record<number, Address> = {
   [ChainId.OPBNB]: '0x5A5454A6030FB50ceb3eb78977D140198A27be5e',

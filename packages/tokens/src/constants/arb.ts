@@ -253,7 +253,7 @@ export const arbitrumTokens = {
     18,
     'DLP',
     'RDNT-WETH',
-    'https://pancakeswap.finance',
+    'https://simpleflow.finance',
   ),
   mdlp: new ERC20Token(
     ChainId.ARBITRUM_ONE,

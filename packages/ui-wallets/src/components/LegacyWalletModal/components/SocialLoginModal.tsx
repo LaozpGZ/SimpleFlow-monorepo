@@ -16,7 +16,7 @@ import {
 import { MouseEvent } from 'react'
 import styled from 'styled-components'
 
-const ASSET_CDN = 'https://assets.pancakeswap.finance'
+const ASSET_CDN = 'https://assets.simpleflow.finance'
 
 interface SocialLoginModalProps {
   isOpen: boolean

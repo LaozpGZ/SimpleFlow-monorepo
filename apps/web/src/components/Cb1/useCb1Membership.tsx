@@ -7,7 +7,7 @@ interface CB1State {
   expired: number
 }
 
-const BASE_URI = 'https://attestation-api.pancakeswap.com'
+const BASE_URI = 'https://attestation-api.simpleflow.finance'
 
 const EXPIRE = 1000 * 24 * 3600
 

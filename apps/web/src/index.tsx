@@ -58,7 +58,7 @@ export function Blocklist() {
                 components={[
                   <Link
                     style={{ display: 'inline-block' }}
-                    href="https://pancakeswap.finance/terms-of-service"
+                    href="https://simpleflow.finance/terms-of-service"
                     external
                   />,
                 ]}
@@ -66,8 +66,8 @@ export function Blocklist() {
             </Text>
             <Text>
               <Trans
-                i18nKey="If you believe that your address has been misclassified, please email <0>info@pancakeswap.com</0>"
-                components={[<Link style={{ display: 'inline-block' }} href="mailto:info@pancakeswap.com" />]}
+                i18nKey="If you believe that your address has been misclassified, please email <0>info@simpleflow.finance</0>"
+                components={[<Link style={{ display: 'inline-block' }} href="mailto:info@simpleflow.finance" />]}
               />
             </Text>
           </Grid>

@@ -152,7 +152,7 @@ export const ClaimZksyncAirdropModal: React.FC<{
                     account: account ?? '',
                   })}
             </Text>
-            <Link href="https://blog.pancakeswap.finance/articles/pancake-swap-airdrops-2-4-million-zk-tokens-to-the-community">
+            <Link href="https://blog.simpleflow.finance/articles/pancake-swap-airdrops-2-4-million-zk-tokens-to-the-community">
               {t('Learn more about the campaign')}
             </Link>
             {account ? (

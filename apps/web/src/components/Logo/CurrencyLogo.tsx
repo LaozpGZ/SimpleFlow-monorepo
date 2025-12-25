@@ -86,6 +86,6 @@ const basicTokensList = ['USDT', 'USDC', 'DAI', 'WBNB', 'WETH', 'WBTC', 'BNB', '
 export const getBasicTokensImage = (token: UnifiedCurrency | undefined) => {
   if (!token) return ''
   return basicTokensList.includes(token?.symbol)
-    ? `https://tokens.pancakeswap.finance/images/symbol/${token?.symbol?.toLowerCase() ?? ''}.png`
+    ? `https://tokens.simpleflow.finance/images/symbol/${token?.symbol?.toLowerCase() ?? ''}.png`
     : ''
 }

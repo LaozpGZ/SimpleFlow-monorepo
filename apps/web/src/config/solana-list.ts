@@ -58,9 +58,9 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
   [TokenListKey.PANCAKESWAP]: {
     key: TokenListKey.PANCAKESWAP,
     name: 'PancakeSwap',
-    logoURI: 'https://pancakeswap.finance/logo.png',
+    logoURI: 'https://simpleflow.finance/logo.png',
     description: 'PancakeSwap Token List',
-    apiUrl: 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json',
+    apiUrl: 'https://tokens.simpleflow.finance/pancakeswap-solana-default.json',
     parser: (data: { tokens: TokenInfo[] }) => {
       return (data?.tokens ?? []).map(convertRawTokenInfoIntoSPLToken)
     }, // Default parser for standard token lists

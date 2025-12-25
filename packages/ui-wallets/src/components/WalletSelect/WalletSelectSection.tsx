@@ -98,7 +98,7 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
           style={{ display: 'inline' }}
           fontWeight="normal !important"
           external
-          href="https://docs.pancakeswap.finance/trading-tools/pancakeswap-mev-guard"
+          href="https://docs.simpleflow.finance/trading-tools/pancakeswap-mev-guard"
         />,
       ]}
     />,

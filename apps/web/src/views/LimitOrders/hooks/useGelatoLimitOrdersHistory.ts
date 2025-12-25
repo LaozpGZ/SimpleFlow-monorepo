@@ -106,7 +106,7 @@ const useExistingOrders = (turnOn: boolean): ExistingOrder[] => {
       }
 
       try {
-        const response = await fetch(`https://proofs.pancakeswap.com/gelato/v1/${account}.log`)
+        const response = await fetch(`https://proofs.simpleflow.finance/gelato/v1/${account}.log`)
 
         if (response.status === 404) {
           return undefined

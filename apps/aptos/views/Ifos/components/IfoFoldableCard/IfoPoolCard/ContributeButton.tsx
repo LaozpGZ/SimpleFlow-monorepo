@@ -67,7 +67,7 @@ const ContributeButton: React.FC<React.PropsWithChildren<Props>> = ({ poolId, if
     <IfoGetTokenModal
       symbol={ifo.currency.symbol}
       address={ifo.currency.address}
-      imageSrc={`https://tokens.pancakeswap.finance/images/aptos/${ifo.currency.address}.png`}
+      imageSrc={`https://tokens.simpleflow.finance/images/aptos/${ifo.currency.address}.png`}
     />,
     false,
   )

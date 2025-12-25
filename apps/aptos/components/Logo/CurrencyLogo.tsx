@@ -11,7 +11,7 @@ import { aptosLogoClass } from './CurrencyLogo.css'
 const getTokenLogoURL = memoize(
   (token?: Token) => {
     if (token && token.chainId === ChainId.MAINNET) {
-      return `https://tokens.pancakeswap.finance/images/aptos/${token.address}.png` // hex encoding
+      return `https://tokens.simpleflow.finance/images/aptos/${token.address}.png` // hex encoding
     }
     return null
   },
@@ -24,7 +24,7 @@ const StyledLogo = styled(TokenLogo)<{ size: string }>`
   border-radius: 50%;
 `
 
-const APT_SRCS = ['https://tokens.pancakeswap.finance/images/symbol/apt.png']
+const APT_SRCS = ['https://tokens.simpleflow.finance/images/symbol/apt.png']
 
 export function AptosCoinLogo({ size = '24px', style }: { size?: string; style?: React.CSSProperties }) {
   return (

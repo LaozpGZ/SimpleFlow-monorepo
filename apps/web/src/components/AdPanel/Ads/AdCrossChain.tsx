@@ -7,7 +7,7 @@ import { AdCard } from '../Card'
 import { AdPlayerProps } from '../ads.types'
 
 const learnMoreLink =
-  'https://blog.pancakeswap.finance/articles/crosschain-swaps?utm_source=Website&utm_medium=banner&utm_campaign=homepage&utm_id=Crosschain'
+  'https://blog.simpleflow.finance/articles/crosschain-swaps?utm_source=Website&utm_medium=banner&utm_campaign=homepage&utm_id=Crosschain'
 const actionLink = '/swap?utm_source=Website&utm_medium=banner&utm_campaign=homepage&utm_id=Crosschain'
 const imgURL = `${ASSET_CDN}/web/banners/crosschain_banner_desktop.png`
 

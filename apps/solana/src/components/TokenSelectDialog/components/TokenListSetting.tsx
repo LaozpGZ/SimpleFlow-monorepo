@@ -41,7 +41,7 @@ export default function TokenListSetting({ onClick }: { onClick: () => void }) {
     <Box height="50vh">
       <TokenListRowItem
         name={`Official ${t('Token List')}`}
-        logoUrl="https://pancakeswap.finance/logo.png"
+        logoUrl="https://simpleflow.finance/logo.png"
         tokenCount={officialTokenListTokenCount}
         isOpen={isOfficialTokenListSwitchOn}
         onOpen={() => handleSwitchChange('official', true)}

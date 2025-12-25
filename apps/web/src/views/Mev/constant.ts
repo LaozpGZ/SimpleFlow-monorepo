@@ -39,7 +39,7 @@ export const walletPretendToMetamask = [
 
 export const rpcData = {
   'Network Name': 'PancakeSwap MEV Guard',
-  'RPC URL': 'https://bscrpc.pancakeswap.finance',
+  'RPC URL': 'https://bscrpc.simpleflow.finance',
   'Chain ID': '56',
   'Currency symbol': 'BNB',
   'Block Explorer URL': 'https://bscscan.com',

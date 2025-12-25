@@ -10,7 +10,7 @@ export const OFFERING_TOKEN = new ERC20Token(
   18,
   'MOC',
   'MOCK OC Token',
-  'https://pancakeswap.finance/',
+  'https://simpleflow.finance/',
 )
 
 export const ifos: BaseIfoConfig[] = [
@@ -29,7 +29,7 @@ export const ifos: BaseIfoConfig[] = [
     currency: goerliTestnetTokens.cake,
     token: OFFERING_TOKEN,
     campaignId: '512200000',
-    articleUrl: 'https://pancakeswap.finance/voting/',
+    articleUrl: 'https://simpleflow.finance/voting/',
     tokenOfferingPrice: 0.5782,
     version: 7,
     twitterUrl: 'https://twitter.com/pancakeswap',

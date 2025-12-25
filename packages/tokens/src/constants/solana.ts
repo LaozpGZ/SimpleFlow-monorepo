@@ -25,7 +25,7 @@ export const solanaTokens = {
     chainId: NonEVMChainId.SOLANA,
     address: '4qQeZ5LwSz6HuupUu8jCtgXyW1mYQcNbFAW1sWZp89HL',
     programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    logoURI: 'https://tokens.pancakeswap.finance/images/solana/4qQeZ5LwSz6HuupUu8jCtgXyW1mYQcNbFAW1sWZp89HL.png',
+    logoURI: 'https://tokens.simpleflow.finance/images/solana/4qQeZ5LwSz6HuupUu8jCtgXyW1mYQcNbFAW1sWZp89HL.png',
     symbol: 'Cake',
     name: 'PancakeSwap Token',
     decimals: 9,

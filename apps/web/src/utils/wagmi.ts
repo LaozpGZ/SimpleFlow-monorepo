@@ -23,7 +23,7 @@ export const injectedConnector = injected({
 
 export const coinbaseConnector = coinbaseWallet({
   appName: 'PancakeSwap',
-  appLogoUrl: 'https://pancakeswap.com/logo.png',
+  appLogoUrl: 'https://simpleflow.finance/logo.png',
 })
 
 export const walletConnectConnector = walletConnect({

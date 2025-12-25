@@ -80,7 +80,7 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
       subtitle={t('Perpetuals')}
       button={{
         text: t('See All'),
-        link: 'https://perp.pancakeswap.finance/',
+        link: 'https://perp.simpleflow.finance/',
       }}
     >
       {tokens.map((token, index) => (

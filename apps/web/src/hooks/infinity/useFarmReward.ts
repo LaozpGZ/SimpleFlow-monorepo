@@ -49,7 +49,9 @@ const fetchUserFarmRewards = async ({ chainId, address, poolId, timestamp, signa
     {
       // @todo @ChefJerry remove this after the backend is ready
       baseUrl:
-        chainId === ChainId.BSC_TESTNET ? 'https://test.v4.pancakeswap.com/' : 'https://infinity.pancakeswap.com/',
+        chainId === ChainId.BSC_TESTNET
+          ? 'https://test.v4.simpleflow.finance/'
+          : 'https://infinity.simpleflow.finance/',
       params: {
         path,
       },
@@ -394,7 +396,9 @@ export const useUserAllFarmRewardsByChainIdFromAPI = ({ chainId, user, timestamp
       const resp = await rewardApiClient.GET('/farms/users/{chainId}/{address}/{timestamp}', {
         // @todo @ChefJerry remove this after the backend is ready
         baseUrl:
-          chainId === ChainId.BSC_TESTNET ? 'https://test.v4.pancakeswap.com/' : 'https://infinity.pancakeswap.com/',
+          chainId === ChainId.BSC_TESTNET
+            ? 'https://test.v4.simpleflow.finance/'
+            : 'https://infinity.simpleflow.finance/',
         params: {
           path: {
             chainId,

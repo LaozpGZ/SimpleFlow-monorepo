@@ -146,7 +146,7 @@ export const RedeemFaqs = () => (
             marginTop: '10px',
           }}
           external
-          href="https://docs.pancakeswap.finance/protocol/cake-tokenomics"
+          href="https://docs.simpleflow.finance/protocol/cake-tokenomics"
         >
           <Trans>CAKE Tokenomics 3.0 Docs</Trans>
         </Link>
@@ -155,7 +155,7 @@ export const RedeemFaqs = () => (
             marginTop: '10px',
           }}
           external
-          href="https://blog.pancakeswap.finance/articles/implementation-of-cake-tokenomics-3-0-what-you-need-to-know"
+          href="https://blog.simpleflow.finance/articles/implementation-of-cake-tokenomics-3-0-what-you-need-to-know"
         >
           <Trans>Blog Post: What You Need to Know</Trans>
         </Link>
@@ -164,7 +164,7 @@ export const RedeemFaqs = () => (
             marginTop: '10px',
           }}
           external
-          href="https://docs.pancakeswap.finance/welcome-to-pancakeswap/vecake-sunset"
+          href="https://docs.simpleflow.finance/welcome-to-pancakeswap/vecake-sunset"
         >
           <Trans>Product Doc: veCAKE Redemption Guide</Trans>
         </Link>

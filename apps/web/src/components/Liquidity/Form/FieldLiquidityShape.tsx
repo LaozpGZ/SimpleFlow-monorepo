@@ -15,7 +15,7 @@ export const FieldLiquidityShape: React.FC<FieldLiquidityShapeProps> = ({ ...box
       <RowBetween>
         <PreTitle>{t('Choose Liquidity Shape')}</PreTitle>
         <ScanLink
-          href="https://docs.pancakeswap.finance/trade/pancakeswap-infinity/pool-types"
+          href="https://docs.simpleflow.finance/trade/pancakeswap-infinity/pool-types"
           fontSize="12px"
           textTransform="uppercase"
           color="primary60"

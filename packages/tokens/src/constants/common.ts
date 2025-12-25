@@ -8,7 +8,7 @@ export const CAKE_MAINNET = new ERC20Token(
   18,
   'CAKE',
   'PancakeSwap Token',
-  'https://pancakeswap.finance/',
+  'https://simpleflow.finance/',
 )
 
 export const CAKE_TESTNET = new ERC20Token(
@@ -17,7 +17,7 @@ export const CAKE_TESTNET = new ERC20Token(
   18,
   'CAKE',
   'PancakeSwap Token',
-  'https://pancakeswap.finance/',
+  'https://simpleflow.finance/',
 )
 
 export const USDC_BSC = new ERC20Token(
@@ -156,7 +156,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.GOERLI]: new ERC20Token(
     ChainId.GOERLI,
@@ -164,7 +164,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.BSC]: CAKE_MAINNET,
   [ChainId.BSC_TESTNET]: CAKE_TESTNET,
@@ -174,7 +174,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.ZKSYNC]: new ERC20Token(
     ChainId.ZKSYNC,
@@ -182,7 +182,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.ARBITRUM_ONE]: new ERC20Token(
     ChainId.ARBITRUM_ONE,
@@ -190,7 +190,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.ARBITRUM_GOERLI]: new ERC20Token(
     ChainId.ARBITRUM_GOERLI,
@@ -198,7 +198,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.LINEA]: new ERC20Token(
     ChainId.LINEA,
@@ -206,7 +206,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.BASE]: new ERC20Token(
     ChainId.BASE,
@@ -214,7 +214,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.SIMPLECHAIN]: new ERC20Token(
     ChainId.SIMPLECHAIN,
@@ -222,7 +222,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.BASE_TESTNET]: new ERC20Token(
     ChainId.BASE_TESTNET,
@@ -230,7 +230,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.LINEA_TESTNET]: new ERC20Token(
     ChainId.LINEA_TESTNET,
@@ -238,7 +238,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.OPBNB]: new ERC20Token(
     ChainId.OPBNB,
@@ -246,7 +246,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [ChainId.OPBNB_TESTNET]: new ERC20Token(
     ChainId.OPBNB_TESTNET,
@@ -254,7 +254,7 @@ export const CAKE = {
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   [NonEVMChainId.SOLANA]: solanaTokens.cake,
 }

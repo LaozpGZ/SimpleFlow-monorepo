@@ -48,7 +48,7 @@ export const PoolTypeModal: React.FC<PoolTypeModalProps> = ({ poolType, onDismis
             </Text>
           </AutoColumn>
 
-          <LinkExternal href="https://docs.pancakeswap.finance/trade/pancakeswap-infinity/pool-types" marginTop="auto">
+          <LinkExternal href="https://docs.simpleflow.finance/trade/pancakeswap-infinity/pool-types" marginTop="auto">
             <Text fontSize={16} color="primary" bold>
               {t("View details in Docs")}
             </Text>

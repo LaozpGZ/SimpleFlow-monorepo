@@ -897,7 +897,7 @@ function K(h, e) {
   const t = e || x()
   return new J(h, t)
 }
-const A = 'https://assets.pancakeswap.finance',
+const A = 'https://assets.simpleflow.finance',
   U = `${A}/web/charts/charting_library/`,
   G = `${A}/web/charts/datafeeds/`
 function X(h, e = {}) {

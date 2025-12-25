@@ -84,7 +84,7 @@ export const queryTokens = cacheByLRU(async () => {
   const topTokens = tokens.map((x, i) => {
     const price = prices[i]
     const addr = checksumAddress(x.id)
-    const logo = tokenMap[`${x.chainId}-${addr}`]?.logoURI || `https://tokens.pancakeswap.finance/images/${addr}.png`
+    const logo = tokenMap[`${x.chainId}-${addr}`]?.logoURI || `https://tokens.simpleflow.finance/images/${addr}.png`
     return {
       ...x,
       id: addr,

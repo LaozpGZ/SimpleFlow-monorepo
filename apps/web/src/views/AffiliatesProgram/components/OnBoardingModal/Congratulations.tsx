@@ -27,7 +27,7 @@ const Congratulations = () => {
         </Link>
         <Link
           external
-          href="https://perp.pancakeswap.finance/en/futures/BTCUSDT"
+          href="https://perp.simpleflow.finance/en/futures/BTCUSDT"
           width="100% !important"
           onClick={(e) => {
             if (!userNotUsCitizenAcknowledgement) {
@@ -41,7 +41,7 @@ const Congratulations = () => {
             {t('Try out our Perpetuals Platform')}
           </Button>
         </Link>
-        <Link external href="https://docs.pancakeswap.finance/affiliate-program" width="100% !important">
+        <Link external href="https://docs.simpleflow.finance/affiliate-program" width="100% !important">
           <Button width="100%" variant="secondary">
             {t('Learn More')}
           </Button>

@@ -1,8 +1,9 @@
 import { bscTokens } from '@pancakeswap/tokens'
 import groupBy from 'lodash/groupBy'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
-import { Address, createPublicClient, http } from 'viem'
-import { bsc } from 'viem/chains'
+import { Address } from 'viem'
+// import { createPublicClient, http } from 'viem'
+// import { bsc } from 'viem/chains'
 import { ADMINS, PANCAKE_SPACE } from './config'
 import { getScores } from './getScores'
 
@@ -68,10 +69,10 @@ type GetCakeVotingPowerType = {
   cakeBalance: number
 }
 
-const nodeRealProvider = createPublicClient({
-  transport: http(`https://bsc-mainnet.nodereal.io/v1/${process.env.NEXT_PUBLIC_NODE_REAL_API_ETH}`),
-  chain: bsc,
-})
+// const nodeRealProvider = createPublicClient({
+//   transport: http(process.env.NEXT_PUBLIC_BSC_RPC_URL || 'https://bsc-dataseed.binance.org'),
+//   chain: bsc,
+// })
 
 export const getCakeVotingPower = async (account: Address, blockNumber?: bigint): Promise<GetCakeVotingPowerType> => {
   // Use erc20-balance-of strategy to get CAKE balance as voting power

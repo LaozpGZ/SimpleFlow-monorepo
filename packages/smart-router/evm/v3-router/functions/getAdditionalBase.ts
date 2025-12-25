@@ -6,7 +6,7 @@ import { ADDITIONAL_BASES, ADDITIONAL_BASES_TABLE } from '../../constants'
 
 const fetchConfig = memoize(
   async () => {
-    const url = `https://proofs.pancakeswap.com/cms-config/routing-base-config.json`
+    const url = `https://proofs.simpleflow.finance/cms-config/routing-base-config.json`
     try {
       const response = await fetch(url)
       const data: {

@@ -111,7 +111,7 @@ const calcV3PoolApr = ({
     Number(totalLiquidity) === 0
       ? BIG_ZERO
       : new BigNumber(totalBoostLiquidity.toString()).dividedBy(totalLiquidity.toString())
-  // @fixme @ChefJerry use batched https://farms-api.pancakeswap.com/v3/{chainId}/liquidity/{lp}
+  // @fixme @ChefJerry use batched https://farms-api.simpleflow.finance/v3/{chainId}/liquidity/{lp}
   // to calculate active pool TVL
   const poolTvlUsd = new BigNumber(pool.tvlUsd ?? 0)
 

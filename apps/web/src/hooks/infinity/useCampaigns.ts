@@ -33,7 +33,9 @@ export const fetchCampaigns = memoizeAsync(
 
     const { data } = await rewardApiClient.GET('/farms/campaigns/{chainId}/{includeInactive}', {
       baseUrl:
-        chainId === ChainId.BSC_TESTNET ? 'https://test.v4.pancakeswap.com/' : 'https://infinity.pancakeswap.com/',
+        chainId === ChainId.BSC_TESTNET
+          ? 'https://test.v4.simpleflow.finance/'
+          : 'https://infinity.simpleflow.finance/',
       params: {
         path: { chainId, includeInactive },
         query: {

@@ -82,7 +82,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 {t('Looking for v1 CAKE syrup pools?')}
               </Text>
               <FinishedTextLink
-                href="https://v1-farms.pancakeswap.finance/pools/history"
+                href="https://v1-farms.simpleflow.finance/pools/history"
                 fontSize={['16px', null, '20px']}
                 color="failure"
               >
@@ -163,7 +163,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </Text>
             {isMobile ? (
               <PinnedFAQButton
-                docLink="https://docs.pancakeswap.finance/products/syrup-pool/syrup-pool-guide"
+                docLink="https://docs.simpleflow.finance/products/syrup-pool/syrup-pool-guide"
                 faqConfig={faqConfig}
               />
             ) : null}

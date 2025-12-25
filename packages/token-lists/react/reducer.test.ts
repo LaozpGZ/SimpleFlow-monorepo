@@ -5,7 +5,7 @@ import { fetchTokenList, acceptListUpdate, addList, removeList, enableList, upda
 import { ListsState, createTokenListReducer, NEW_LIST_STATE, type ListByUrlState } from './reducer'
 
 const DEFAULT_ACTIVE_LIST_URLS: string[] = []
-const DEFAULT_LIST_OF_LISTS = ['https://tokens.pancakeswap.finance/pancakeswap-extended.json']
+const DEFAULT_LIST_OF_LISTS = ['https://tokens.simpleflow.finance/pancakeswap-extended.json']
 const STUB_TOKEN_LIST = {
   name: '',
   timestamp: '',

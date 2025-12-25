@@ -16,7 +16,7 @@ export const PoolTvlWarning = ({ poolInfo }: { poolInfo: PoolInfo }) => {
 
   const version = `${protocol === Protocol.V3 ? '/v3/' : ''}`
   const stableSwap = `${protocol === Protocol.STABLE ? '?type=stableSwap' : ''}`
-  const link = `https://pancakeswap.finance/info/${version}${chain}/pairs/${id}${stableSwap}`
+  const link = `https://simpleflow.finance/info/${version}${chain}/pairs/${id}${stableSwap}`
   if (protocol === Protocol.InfinityBIN || protocol === Protocol.InfinityCLAMM) {
     return null
   }

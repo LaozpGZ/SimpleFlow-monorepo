@@ -57,7 +57,7 @@ export function useFarmV2PublicAPI() {
     queryKey: ['farm-v2-pubic-api', chainId],
 
     queryFn: async () => {
-      return fetch(`https://farms-api.pancakeswap.com/${chainId}`)
+      return fetch(`https://farms-api.simpleflow.finance/${chainId}`)
         .then((res) => res.json())
         .then((res) => res.data)
     },

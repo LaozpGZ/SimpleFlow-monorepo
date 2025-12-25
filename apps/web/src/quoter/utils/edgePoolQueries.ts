@@ -315,7 +315,7 @@ function fillTvl(tvlMap: Record<`0x${string}`, string>, pools: Pool[]) {
 export const poolTvlMap = async (protocols: Protocol[], chain: APIChain) => {
   try {
     const remotePools = await fetchAllPools({
-      baseUrl: 'https://explorer.pancakeswap.com/api/cached/pools/tvl-refs',
+      baseUrl: 'https://explorer.simpleflow.finance/api/cached/pools/tvl-refs',
       protocols,
       chains: [chain],
       orderBy: 'tvlUSD',

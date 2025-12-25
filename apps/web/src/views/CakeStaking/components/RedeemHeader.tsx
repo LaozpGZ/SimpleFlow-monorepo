@@ -4,7 +4,7 @@ import { ASSET_CDN } from 'config/constants/endpoints'
 import React from 'react'
 import styled from 'styled-components'
 
-const link = 'https://docs.pancakeswap.finance/protocol/cake-tokenomics'
+const link = 'https://docs.simpleflow.finance/protocol/cake-tokenomics'
 export const RedeemHeader: React.FC = () => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()

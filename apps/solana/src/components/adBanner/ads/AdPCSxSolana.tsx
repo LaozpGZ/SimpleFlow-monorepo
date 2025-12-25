@@ -8,7 +8,7 @@ import { AdCard } from '../Card'
 
 import { getImageUrl } from '../utils'
 
-const learnMoreLink = 'https://blog.pancakeswap.finance/articles/expanding-solana-s-accessibility'
+const learnMoreLink = 'https://blog.simpleflow.finance/articles/expanding-solana-s-accessibility'
 
 export const AdPCSxSolana = (props: Omit<AdPlayerProps, 'config'>) => {
   const { t } = useTranslation()

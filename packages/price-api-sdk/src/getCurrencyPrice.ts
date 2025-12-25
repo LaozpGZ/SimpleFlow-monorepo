@@ -2,7 +2,7 @@ import { ChainId, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@panca
 
 import { Address } from './types/common'
 
-const API_ENDPOINT = process.env.NEXT_PUBLIC_WALLET_API || 'https://wallet-api.pancakeswap.com'
+const API_ENDPOINT = process.env.NEXT_PUBLIC_WALLET_API || 'https://wallet-api.simpleflow.finance'
 const WALLET_API = `${API_ENDPOINT}/v1/prices/list/`
 const getWalletPriceUrl = (chainName: string) => `${API_ENDPOINT}/${chainName}/v1/prices/list/`
 

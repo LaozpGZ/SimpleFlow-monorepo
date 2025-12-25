@@ -7,8 +7,8 @@ import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'
 
-const learnMoreLink = 'https://blog.pancakeswap.finance/articles/expanding-solana-s-accessibility'
-const actionLink = process.env.SOLANA_SWAP_PAGE ?? 'https://solana.pancakeswap.finance/swap'
+const learnMoreLink = 'https://blog.simpleflow.finance/articles/expanding-solana-s-accessibility'
+const actionLink = process.env.SOLANA_SWAP_PAGE ?? 'https://solana.simpleflow.finance/swap'
 const imgURL = `${ASSET_CDN}/solana/promotions/img_swap.png`
 
 export const AdSolana = (props: Omit<AdPlayerProps, 'config'>) => {

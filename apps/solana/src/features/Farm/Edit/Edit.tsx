@@ -360,7 +360,7 @@ export default function FarmEdit() {
           <Text fontSize="sm" color={colors.textSubtle}>
             {t('Before creating a farm, make sure to check the')}{' '}
             <Link
-              href="https://docs.pancakeswap.finance/" // TODO: Add docs link for farms
+              href="https://docs.simpleflow.finance/" // TODO: Add docs link for farms
               isExternal
               fontWeight="600"
               color={colors.primary}

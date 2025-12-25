@@ -104,7 +104,7 @@ export const ApproveModalContentV3: React.FC<ApproveModalContentV3Props> = ({
         <LinkExternal
           mt="8px"
           mx="auto"
-          href="https://docs.pancakeswap.finance/~/changes/d1gFBwxReM0gH1aeMo0G/readme/help/what-is-an-approval-transaction"
+          href="https://docs.simpleflow.finance/~/changes/d1gFBwxReM0gH1aeMo0G/readme/help/what-is-an-approval-transaction"
           showExternalIcon={false}
           style={{ textDecoration: "none" }}
         >

@@ -1,5 +1,5 @@
-export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.pancakeswap.finance'
-export const APEX_DOMAIN = process.env.NEXT_PUBLIC_APEX_URL || 'https://pancakeswap.finance'
+export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.simpleflow.finance'
+export const APEX_DOMAIN = process.env.NEXT_PUBLIC_APEX_URL || 'https://simpleflow.finance'
 
 interface RPCConfType {
   url: string
@@ -31,4 +31,4 @@ const parseRPCConf = (): RPCConfType[] => {
 
 export const rpcs = parseRPCConf()
 
-export const quoteApi = 'https://sol-swap.pancakeswap.com/api'
+export const quoteApi = 'https://sol-swap.simpleflow.finance/api'

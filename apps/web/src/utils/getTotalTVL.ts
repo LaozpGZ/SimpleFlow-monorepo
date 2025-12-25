@@ -78,7 +78,7 @@ export const getTotalTvl = async () => {
       ),
       getStats('v3', mainnetChainIds),
       getStats('stable', [ChainId.ARBITRUM_ONE, ChainId.BSC]),
-      fetch('https://farms-api.pancakeswap.com/price/cake').then((res) => res.json()),
+      fetch('https://farms-api.simpleflow.finance/price/cake').then((res) => res.json()),
       getCakeContract().read.balanceOf([getCakeVaultAddress()]),
       getCakeContract().read.balanceOf([addresses.veCake[ChainId.BSC]]),
     ])

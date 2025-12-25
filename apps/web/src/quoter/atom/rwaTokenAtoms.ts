@@ -6,8 +6,8 @@ import { atomFamily } from 'jotai/utils'
 import { RWA_URLS } from 'config/constants/lists'
 import { listsAtom } from 'state/lists/lists'
 
-const RWA_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/status'
-const RWA_MARKET_STATUS_ENDPOINT = 'https://raw-api.pancakeswap.com/ondo/market-status'
+const RWA_STATUS_ENDPOINT = 'https://raw-api.simpleflow.finance/ondo/status'
+const RWA_MARKET_STATUS_ENDPOINT = 'https://raw-api.simpleflow.finance/ondo/market-status'
 const MEMOIZE_TTL_MS = 30 * 1000
 
 export const USDON_TOKEN_ADDRESS: Partial<Record<number, string>> = {

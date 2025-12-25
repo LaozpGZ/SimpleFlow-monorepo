@@ -36,7 +36,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
       },
       {
         label: t('Bridge'),
-        href: 'https://bridge.pancakeswap.finance/aptos',
+        href: 'https://bridge.simpleflow.finance/aptos',
         type: DropdownMenuItemType.EXTERNAL_LINK,
       },
     ],
@@ -70,7 +70,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
       },
       {
         label: t('Blog'),
-        href: 'https://blog.pancakeswap.finance',
+        href: 'https://blog.simpleflow.finance',
         type: DropdownMenuItemType.EXTERNAL_LINK,
       },
     ],

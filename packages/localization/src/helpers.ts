@@ -1,6 +1,6 @@
 import { EN, languages } from './config/languages'
 
-const publicUrl = process.env.NEXT_PUBLIC_I18N_BASE_URL || 'https://locales.pancakeswap.finance'
+const publicUrl = process.env.NEXT_PUBLIC_I18N_BASE_URL || 'https://locales.simpleflow.finance'
 
 export const LS_KEY = 'pancakeswap_language'
 

@@ -38,7 +38,7 @@ const IfoGetTokenModal: React.FC<React.PropsWithChildren<Props>> = ({ symbol, ad
           mt="1rem"
           as={Link}
           external
-          href="https://pancakeswap.finance/bridge"
+          href="https://simpleflow.finance/bridge"
           color="invertedContrast"
           endIcon={<OpenNewIcon color="invertedContrast" />}
           minWidth="100%" // Bypass the width="fit-content" on Links

@@ -10,7 +10,7 @@ export const CL_DYNAMIC_HOOK: HookData = {
   description:
     'PancakeSwap’s Dynamic Fee Hook adjusts swap fees based on market volatility—penalizing arbitrageurs and rewarding LPs during turbulence, while keeping fees low in stable conditions for smoother trading.',
   github: 'https://github.com/pancakeswap/',
-  learnMoreLink: 'https://docs.pancakeswap.finance/trade/pancakeswap-infinity/hooks/dynamic-fee-hook',
+  learnMoreLink: 'https://docs.simpleflow.finance/trade/pancakeswap-infinity/hooks/dynamic-fee-hook',
   category: [HOOK_CATEGORY.DynamicFees],
   isVerified: false,
   isUpgradable: false,

@@ -111,7 +111,7 @@ const StakeModalContainer = ({
       account={account}
       handleConfirmClick={handleConfirmClick}
       isRemovingStake={isRemovingStake}
-      imageUrl="https://tokens.pancakeswap.finance/images/aptos/"
+      imageUrl="https://tokens.simpleflow.finance/images/aptos/"
     />
   )
 }

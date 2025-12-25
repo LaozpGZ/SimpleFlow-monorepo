@@ -39,8 +39,8 @@ const TermsOfService = () => {
         <Text as="span">
           These Terms of Service (the “Agreement”) explains the terms and conditions by which you may access and use
         </Text>
-        <Link m="0 4px" display="inline !important" href="https://pancakeswap.finance">
-          https://pancakeswap.finance
+        <Link m="0 4px" display="inline !important" href="https://simpleflow.finance">
+          https://simpleflow.finance
         </Link>
         <Text as="span">
           and any subdomains associated with the Website. You must read this Agreement carefully as it governs your use
@@ -79,8 +79,8 @@ const TermsOfService = () => {
           material modifications, we will notify you by updating the date at the top of the Agreement and by maintaining
           a current version of the Agreement at
         </Text>
-        <Link m="0 4px" display="inline !important" href="https://pancakeswap.finance/terms-of-service">
-          https://pancakeswap.finance/terms-of-service.
+        <Link m="0 4px" display="inline !important" href="https://simpleflow.finance/terms-of-service">
+          https://simpleflow.finance/terms-of-service.
         </Link>
         <Text as="span">
           All modifications will be effective when they are posted, and your continued accessing or use of the Website
@@ -400,7 +400,7 @@ const TermsOfService = () => {
       <Text as="h3">Dispute Resolution</Text>
       <Text as="p">
         We will use our best efforts to resolve any potential disputes through informal, good faith negotiations. If a
-        potential dispute arises, you must contact us by sending an email to info@pancakeswap.come so that we can
+        potential dispute arises, you must contact us by sending an email to info@simpleflow.financee so that we can
         attempt to resolve it without resorting to formal dispute resolution. If we aren't able to reach an informal
         resolution within sixty days of your email, then you and we both agree to resolve the potential dispute
         according to the process set forth below.

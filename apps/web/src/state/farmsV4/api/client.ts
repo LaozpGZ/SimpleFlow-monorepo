@@ -1,7 +1,7 @@
 import createClient, { type Middleware } from 'openapi-fetch'
 import { paths } from './schema'
 
-const endpoints = process.env.NEXT_PUBLIC_REWARD_API_ENDPOINT || 'https://infinity.pancakeswap.com/'
+const endpoints = process.env.NEXT_PUBLIC_REWARD_API_ENDPOINT || 'https://infinity.simpleflow.finance/'
 
 export const throwOnError: Middleware = {
   async onResponse({ response: res }) {

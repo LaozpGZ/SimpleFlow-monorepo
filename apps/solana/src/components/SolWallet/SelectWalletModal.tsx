@@ -152,7 +152,7 @@ export default function SelectWalletModal({ wallets, isOpen, onSelectWallet, onC
             <Box overflow="hidden" display="flex" flexDirection="column">
               <Box mb={5} color={colors.textPrimary} fontSize="14px">
                 {t('By connecting your wallet, you acknowledge that you have read, understand and accept the terms in the')}{' '}
-                <Link href="https://pancakeswap.finance/terms-of-service" isExternal>
+                <Link href="https://simpleflow.finance/terms-of-service" isExternal>
                   {t('disclaimer')}
                 </Link>
               </Box>

@@ -196,7 +196,7 @@ export const ApproveCrossChainModalContent = ({ currency, chainName }: { currenc
         $color={theme.colors.primary60}
         onClick={() => {
           window.open(
-            "https://docs.pancakeswap.finance/~/changes/d1gFBwxReM0gH1aeMo0G/readme/help/what-is-an-approval-transaction",
+            "https://docs.simpleflow.finance/~/changes/d1gFBwxReM0gH1aeMo0G/readme/help/what-is-an-approval-transaction",
             "_blank"
           );
         }}

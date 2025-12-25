@@ -267,7 +267,7 @@ export default function CreateClmmPool() {
               description={
                 <Text>
                   {t('This tool is for advanced users. For detailed instructions, read the guide for')}
-                  <Link isExternal color={colors.primary60} href="https://docs.pancakeswap.finance/earn/pancakeswap-pools">
+                  <Link isExternal color={colors.primary60} href="https://docs.simpleflow.finance/earn/pancakeswap-pools">
                     {' '}
                     {t('CLMM pools')}
                   </Link>

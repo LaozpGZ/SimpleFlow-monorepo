@@ -52,17 +52,17 @@ export const wallets: LegacyWalletConfig<ConnectorNames>[] = [
   {
     id: LegacyWalletIds.Trust,
     title: 'Trust Wallet',
-    icon: 'https://pancakeswap.finance/images/wallets/trust.png',
+    icon: 'https://simpleflow.finance/images/wallets/trust.png',
     get installed() {
       return typeof window !== 'undefined' && Boolean(window.aptos) && Boolean((window.aptos as any)?.isTrust)
     },
-    deepLink: 'https://link.trustwallet.com/open_url?coin_id=637&url=https://aptos.pancakeswap.finance/',
+    deepLink: 'https://link.trustwallet.com/open_url?coin_id=637&url=https://aptos.simpleflow.finance/',
     connectorId: ConnectorNames.TrustWallet,
   },
   {
     id: LegacyWalletIds.SafePal,
     title: 'SafePal',
-    icon: 'https://pancakeswap.finance/images/wallets/safepal.png',
+    icon: 'https://simpleflow.finance/images/wallets/safepal.png',
     get installed() {
       return typeof window !== 'undefined' && Boolean(window.safePal) && Boolean((window.safePal as any)?.sfpPlatform)
     },

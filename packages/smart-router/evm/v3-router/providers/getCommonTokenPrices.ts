@@ -150,7 +150,7 @@ export const getCommonTokenPricesByLlma = createCommonTokenPriceProvider<BySubgr
   }),
 )
 
-const WALLET_API_ENDPOINT = process.env.NEXT_PUBLIC_WALLET_API || 'https://wallet-api.pancakeswap.com'
+const WALLET_API_ENDPOINT = process.env.NEXT_PUBLIC_WALLET_API || 'https://wallet-api.simpleflow.finance'
 export const getCommonTokenPricesByWalletApi = createCommonTokenPriceProvider<BySubgraphEssentials>(
   createGetTokenPriceFromLlmaWithCache({
     endpoint: `${WALLET_API_ENDPOINT}/v1/prices`,

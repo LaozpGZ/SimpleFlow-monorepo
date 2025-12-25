@@ -13,7 +13,7 @@ export const bscTestnetTokens = {
     18,
     'SYRUP',
     'SyrupBar Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   hbtc: new ERC20Token(ChainId.BSC_TESTNET, '0x3Fb6a6C06c7486BD194BB99a078B89B9ECaF4c82', 18, 'HBTC', 'Huobi BTC'),
   wbtc: new ERC20Token(ChainId.BSC_TESTNET, '0xfC8bFbe9644e1BC836b8821660593e7de711e564', 8, 'WBTC', 'Wrapped BTC'),
@@ -43,7 +43,7 @@ export const bscTestnetTokens = {
     18,
     'CAKE2',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://simpleflow.finance/',
   ),
   MNova: new ERC20Token(
     ChainId.BSC_TESTNET,

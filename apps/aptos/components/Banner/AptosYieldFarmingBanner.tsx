@@ -35,7 +35,7 @@ const Desc = () => {
   return <BannerDesc>{t('Stake LP Tokens to Earn Cake and APT')}</BannerDesc>
 }
 const learnMoreLink =
-  'https://blog.pancakeswap.finance/articles/step-by-step-guide-farming-liquidity-provisioning-and-bridging-on-aptos?utm_source=AptosFarm&utm_medium=Website&utm_campaign=Farm&utm_id=AptosFarmPage'
+  'https://blog.simpleflow.finance/articles/step-by-step-guide-farming-liquidity-provisioning-and-bridging-on-aptos?utm_source=AptosFarm&utm_medium=Website&utm_campaign=Farm&utm_id=AptosFarmPage'
 
 export const AptosYieldFarmingBanner = () => {
   const { t } = useTranslation()

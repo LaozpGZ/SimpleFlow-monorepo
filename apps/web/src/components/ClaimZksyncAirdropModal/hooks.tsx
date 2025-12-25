@@ -23,7 +23,7 @@ interface ZksyncAirDropWhiteListData {
 }
 
 export const fetchZksyncAirDropWhitelist = async (account: Address): Promise<ZksyncAirDropWhiteListData> => {
-  const response = await fetch(`https://proofs.pancakeswap.com/zksync-airdrop/v9/${account}`)
+  const response = await fetch(`https://proofs.simpleflow.finance/zksync-airdrop/v9/${account}`)
   if (!response.ok) {
     throw new Error('User is not in whitelist')
   }

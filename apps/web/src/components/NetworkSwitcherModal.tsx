@@ -77,7 +77,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
       },
       [NonEVMChainId.APTOS]: {
         onClick: () => {
-          window.open('https://aptos.pancakeswap.finance', '_self')
+          window.open('https://aptos.simpleflow.finance', '_self')
           onDismiss()
         },
       },

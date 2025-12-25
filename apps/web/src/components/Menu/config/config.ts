@@ -194,12 +194,12 @@ const config: (
         },
         {
           label: t('Blog'),
-          href: 'https://blog.pancakeswap.finance',
+          href: 'https://blog.simpleflow.finance',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
         {
           label: t('Docs'),
-          href: 'https://docs.pancakeswap.finance',
+          href: 'https://docs.simpleflow.finance',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
