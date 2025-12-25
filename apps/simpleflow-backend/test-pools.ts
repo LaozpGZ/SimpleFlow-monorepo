@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 测试池子数据获取
- */
+
 import { PoolsService } from './src/modules/pools/pools.service';
 import { CacheService } from './src/common/cache/cache.service';
 import { RpcService } from './src/common/rpc/rpc.service';

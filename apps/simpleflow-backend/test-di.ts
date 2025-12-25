@@ -1,15 +1,9 @@
 /**
- * 测试 NestJS + tsx 依赖注入
- *
- * 验证：
- * 1. reflect-metadata 是否工作
- * 2. 装饰器元数据是否正确发射
- * 3. 路径别名是否解析
+ * 测试脚本
  */
-
 /* eslint-disable no-console */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
+
 import 'reflect-metadata';
 
 // ⚠️ 重要：装饰器必须在类定义之前定义！

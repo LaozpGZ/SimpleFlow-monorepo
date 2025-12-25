@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 测试新的 PoolsService
- */
+
 import { PoolsService } from './dist/modules/pools/pools.service';
 import { CacheService } from './dist/common/cache/cache.service';
 import { RpcService } from './dist/common/rpc/rpc.service';

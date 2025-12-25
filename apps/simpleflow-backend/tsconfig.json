@@ -26,7 +26,7 @@
     },
     "skipDefaultLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test-*.ts", "scripts/**/*"],
   "exclude": [
     "node_modules",
     "dist",

@@ -466,6 +466,7 @@ export class PoolsService implements OnModuleInit {
 
     // eslint-disable-next-line no-await-in-loop
     while (hasMore && pools.length < limit) {
+      // eslint-disable-next-line no-await-in-loop
       const data = await client.request<{
         pools: Array<{
           id: string;

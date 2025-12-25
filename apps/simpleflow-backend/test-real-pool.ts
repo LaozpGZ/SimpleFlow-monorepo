@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 测试使用TVL API返回的真实池子地址获取链上数据
- */
+
 import { pancakeV3PoolABI } from '@pancakeswap/v3-sdk';
 import { createPublicClient, http, getAddress, defineChain } from 'viem';
 

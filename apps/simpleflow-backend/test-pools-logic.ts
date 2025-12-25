@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 直接测试 PoolsService 核心逻辑（不依赖 NestJS DI）
- */
+
 import { ChainId } from '@pancakeswap/chains';
 import { pancakeV3PoolABI } from '@pancakeswap/v3-sdk';
 import { getAddress, createPublicClient, http, defineChain } from 'viem';

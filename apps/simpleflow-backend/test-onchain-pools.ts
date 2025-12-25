@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 测试从链上获取 V3 池子数据
- */
+
 import { ChainId } from '@pancakeswap/chains';
 import { DEPLOYER_ADDRESSES, FeeAmount, pancakeV3PoolABI } from '@pancakeswap/v3-sdk';
 import { computeV3PoolAddress } from '@pancakeswap/v3-sdk';

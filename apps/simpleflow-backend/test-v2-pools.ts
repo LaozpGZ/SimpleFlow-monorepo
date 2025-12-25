@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 测试 V2 池子链上数据获取 - 简化版
- */
+
 import { ChainId } from '@pancakeswap/chains';
 import { getAddress, createPublicClient, http, defineChain } from 'viem';
 

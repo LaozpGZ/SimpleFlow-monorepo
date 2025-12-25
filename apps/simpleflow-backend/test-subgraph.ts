@@ -1,9 +1,9 @@
 /**
+ * 测试脚本
  */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
- * 直接测试 Subgraph 数据获取
- */
+
 import { GraphQLClient } from 'graphql-request';
 import { ChainId, V3_SUBGRAPHS, V2_SUBGRAPHS } from '@pancakeswap/chains';
 import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk';
