@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 import BundleAnalyzer from '@next/bundle-analyzer'
 import { withWebSecurityHeaders } from '@pancakeswap/next-config/withWebSecurityHeaders'
 import smartRouterPkgs from '@pancakeswap/smart-router/package.json' with { type: 'json' }
-import { withSentryConfig } from '@sentry/nextjs'
+// import { withSentryConfig } from '@sentry/nextjs' // 暂时禁用 Sentry
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
 import vercelToolbarPlugin from '@vercel/toolbar/plugins/next'
 import { RetryChunkLoadPlugin } from 'webpack-retry-chunk-load-plugin'
@@ -65,6 +65,7 @@ const basicTranspiles = [
 ]
 /** @type {import('next').NextConfig} */
 const config = {
+  output: 'standalone',
   typescript: {
     tsconfigPath: 'tsconfig.json',
     ignoreBuildErrors: true
@@ -321,7 +322,7 @@ const withTooling = (cfg) =>
     ? withVercelToolbar(
         withBundleAnalyzer(
           withVanillaExtract(
-            withSentryConfig(withWebSecurityHeaders(cfg), sentryWebpackPluginOptions)
+            withWebSecurityHeaders(cfg) // 暂时禁用 Sentry: withSentryConfig(withWebSecurityHeaders(cfg), sentryWebpackPluginOptions)
           )
         )
       )

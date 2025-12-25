@@ -17,7 +17,7 @@ export interface AccountChainState {
 export const currentConnectorAtom = atom<Connector | null>(null)
 
 const _accountActiveChainAtom = atom<AccountChainState>({
-  chainId: getQueryChainId() || ChainId.BSC, // Mount with initial chain ID
+  chainId: getQueryChainId() || ChainId.SIMPLECHAIN, // Mount with initial chain ID
   isWrongNetwork: false,
   status: null,
   solanaAccount: null,

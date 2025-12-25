@@ -5,7 +5,7 @@ import { edgeQueries } from 'quoter/utils/edgePoolQueries'
 import { parseCandidatesQuery } from 'quoter/utils/edgeQueries.util'
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
 }
 
 export default async function handler(req: NextRequest) {

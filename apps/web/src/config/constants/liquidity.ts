@@ -18,7 +18,25 @@ export const DISABLED_ADD_LIQUIDITY_CHAINS: {
   [chainId in ChainId]?: {
     sunsetDate: number
   }
-} = {}
+} = {
+  [ChainId.BSC]: { sunsetDate: 0 },
+  [ChainId.ETHEREUM]: { sunsetDate: 0 },
+  [ChainId.BASE]: { sunsetDate: 0 },
+  [ChainId.ARBITRUM_ONE]: { sunsetDate: 0 },
+  [ChainId.ZKSYNC]: { sunsetDate: 0 },
+  [ChainId.LINEA]: { sunsetDate: 0 },
+  [ChainId.OPBNB]: { sunsetDate: 0 },
+  [ChainId.BSC_TESTNET]: { sunsetDate: 0 },
+  [ChainId.GOERLI]: { sunsetDate: 0 },
+  [ChainId.SEPOLIA]: { sunsetDate: 0 },
+  [ChainId.ARBITRUM_GOERLI]: { sunsetDate: 0 },
+  [ChainId.ARBITRUM_SEPOLIA]: { sunsetDate: 0 },
+  [ChainId.LINEA_TESTNET]: { sunsetDate: 0 },
+  [ChainId.BASE_TESTNET]: { sunsetDate: 0 },
+  [ChainId.BASE_SEPOLIA]: { sunsetDate: 0 },
+  [ChainId.OPBNB_TESTNET]: { sunsetDate: 0 },
+  [ChainId.SCROLL_SEPOLIA]: { sunsetDate: 0 },
+}
 
 export const getCreateInfinityPoolPageURL = ({
   chainId,

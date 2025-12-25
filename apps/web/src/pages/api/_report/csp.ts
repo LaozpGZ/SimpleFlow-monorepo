@@ -17,7 +17,7 @@ const zBody = zObject({
 })
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
 }
 
 export default async (req: NextRequest) => {

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 type SupportedType = 'swap' | 'v3' | 'stableSwap'
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
 }
 
 export default async function handler(req: NextRequest) {

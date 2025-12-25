@@ -1,4 +1,4 @@
-import { withSentryConfig } from '@sentry/nextjs'
+// import { withSentryConfig } from '@sentry/nextjs' // 暂时禁用 Sentry
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
 import path from 'path'
 
@@ -64,4 +64,5 @@ const sentryWebpackPluginOptions =
         dryRun: !process.env.SENTRY_AUTH_TOKEN
       }
 
-export default withVanillaExtract(withSentryConfig(nextConfig, sentryWebpackPluginOptions))
+// 暂时禁用 Sentry
+export default withVanillaExtract(nextConfig)

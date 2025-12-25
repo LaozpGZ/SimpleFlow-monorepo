@@ -4,7 +4,7 @@ import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 export function getQueryChainId() {
   const window = safeGetWindow()
   if (!window) {
-    return ChainId.BSC
+    return ChainId.SIMPLECHAIN
   }
   const params = new URL(window.location.href).searchParams
   const chainId = getChainIdByChainName(params.get('chain') || '')

@@ -2,23 +2,23 @@ import { ChainId, NonEVMChainId, chainNames } from '@pancakeswap/chains'
 import memoize from '@pancakeswap/utils/memoize'
 import {
   Chain,
-  arbitrum,
-  arbitrumGoerli,
-  arbitrumSepolia,
-  base,
-  baseGoerli,
-  baseSepolia,
-  bscTestnet,
-  bsc as bsc_,
-  goerli,
-  linea,
-  lineaTestnet,
-  mainnet,
-  opBNB,
-  opBNBTestnet,
-  scrollSepolia,
-  sepolia,
-  zksync,
+  // arbitrum,
+  // arbitrumGoerli,
+  // arbitrumSepolia,
+  // base,
+  // baseGoerli,
+  // baseSepolia,
+  // bscTestnet,
+  // bsc as bsc_,
+  // goerli,
+  // linea,
+  // lineaTestnet,
+  // mainnet,
+  // opBNB,
+  // opBNBTestnet,
+  // scrollSepolia,
+  // sepolia,
+  // zksync,
 } from 'wagmi/chains'
 
 export const CHAIN_QUERY_NAME = chainNames
@@ -35,20 +35,20 @@ export const getChainId = memoize((chainName: string) => {
   return CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] ? +CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] : undefined
 })
 
-const bsc = {
-  ...bsc_,
-  rpcUrls: {
-    ...bsc_.rpcUrls,
-    public: {
-      ...bsc_.rpcUrls,
-      http: ['https://bsc-dataseed.bnbchain.org/'],
-    },
-    default: {
-      ...bsc_.rpcUrls.default,
-      http: ['https://bsc-dataseed.bnbchain.org/'],
-    },
-  },
-} satisfies Chain
+// const bsc = {
+//   ...bsc_,
+//   rpcUrls: {
+//     ...bsc_.rpcUrls,
+//     public: {
+//       ...bsc_.rpcUrls,
+//       http: ['https://bsc-dataseed.bnbchain.org/'],
+//     },
+//     default: {
+//       ...bsc_.rpcUrls.default,
+//       http: ['https://bsc-dataseed.bnbchain.org/'],
+//     },
+//   },
+// } satisfies Chain
 
 const SIMPLECHAIN_RPC_URLS = ['https://rpc.simplechain.com', process.env.NEXT_PUBLIC_SIMPLECHAIN_RPC].filter(
   Boolean,
@@ -123,27 +123,7 @@ export const L2_CHAIN_IDS: ChainId[] = [
   ChainId.SIMPLECHAIN,
 ]
 
-export const CHAINS: [Chain, ...Chain[]] = [
-  bsc,
-  bscTestnet,
-  mainnet,
-  goerli,
-  sepolia,
-  zksync,
-  arbitrum,
-  arbitrumGoerli,
-  arbitrumSepolia,
-  linea,
-  lineaTestnet,
-  base,
-  baseGoerli,
-  baseSepolia,
-  opBNB,
-  opBNBTestnet,
-  scrollSepolia,
-  simplechain,
-  simplechainTestnet,
-]
+export const CHAINS: [Chain, ...Chain[]] = [simplechain, simplechainTestnet]
 
 // Minimal Solana chain descriptor for explorer and non‑EVM utilities
 export const SOLANA_CHAIN = {

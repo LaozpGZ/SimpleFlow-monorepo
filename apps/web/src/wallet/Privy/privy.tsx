@@ -14,10 +14,9 @@ export function PrivyProvider({ children }: PropsWithChildren) {
 
   // Validate required environment variables
   const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID
-  const clientId = process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID
 
-  if (!appId || !clientId) {
-    console.error('Missing required Privy environment variables')
+  if (!appId) {
+    console.error('Missing required Privy environment variable: NEXT_PUBLIC_PRIVY_APP_ID')
   }
 
   // Show wallet UIs only on bridge pages
@@ -26,7 +25,6 @@ export function PrivyProvider({ children }: PropsWithChildren) {
   return (
     <Provider
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID ?? ''}
-      clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID ?? ''}
       config={{
         defaultChain: CHAINS[0],
         customAuth: {

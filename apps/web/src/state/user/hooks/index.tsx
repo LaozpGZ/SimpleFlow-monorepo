@@ -288,6 +288,7 @@ export function useFeeDataWithGasPrice(chainIdOverride?: number): {
 
 const DEFAULT_BSC_GAS_BIGINT = BigInt(GAS_PRICE_GWEI.default)
 const DEFAULT_BSC_TESTNET_GAS_BIGINT = BigInt(GAS_PRICE_GWEI.testnet)
+const DEFAULT_SIMPLECHAIN_TESTNET_GAS_BIGINT = 1000000000n // 1 Gwei minimum required by SimpleChain Testnet
 
 /**
  * Note that this hook will only works well for BNB chain
@@ -332,6 +333,9 @@ export function useGasPrice(chainIdOverride?: number): bigint | undefined {
   }
   if (chainId === ChainId.BSC_TESTNET) {
     return DEFAULT_BSC_TESTNET_GAS_BIGINT
+  }
+  if (chainId === ChainId.SIMPLECHAIN_TESTNET) {
+    return DEFAULT_SIMPLECHAIN_TESTNET_GAS_BIGINT
   }
   return undefined
 }

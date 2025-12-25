@@ -7,7 +7,7 @@ import { getViemClients } from 'utils/viem.server'
 import { Address } from 'viem/accounts'
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
 }
 
 export default async function handler(req: NextRequest) {
