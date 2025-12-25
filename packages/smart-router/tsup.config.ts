@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { defineConfig } from 'tsup'
 import { exec } from 'child_process'
 
@@ -8,11 +9,17 @@ export default defineConfig((options) => ({
   },
   format: ['esm', 'cjs'],
   skipNodeModulesBundle: true,
-  noExternal: ['@pancakeswap/utils'],
+  // 移除 noExternal，让 utils 保持 external
   dts: false,
   treeshake: true,
   splitting: true,
   clean: !options.watch,
+  esbuildOptions(opts) {
+    opts.loader = {
+      ...opts.loader,
+      '.ts': 'ts',
+    }
+  },
   onSuccess: async () => {
     exec('tsc --emitDeclarationOnly --declaration', (err, stdout) => {
       if (err) {

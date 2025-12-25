@@ -7,7 +7,8 @@ export default defineConfig((options) => ({
   },
   sourcemap: false,
   skipNodeModulesBundle: true,
-  noExternal: ['@pancakeswap/utils'],
+  // 移除 noExternal，使用 external 让包作为外部依赖处理
+  external: ['@pancakeswap/*', 'viem'],
   format: ['esm', 'cjs'],
   dts: false,
   clean: !options.watch,

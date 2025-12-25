@@ -18,11 +18,11 @@
   "dependencies": {
     "@pancakeswap/chains": "workspace:*",
     "@pancakeswap/sdk": "workspace:*",
+    "@pancakeswap/utils": "workspace:*",
     "viem": "catalog:"
   },
   "devDependencies": {
     "@pancakeswap/tsconfig": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
     "tsup": "^6.7.0"
   },
   "exports": {

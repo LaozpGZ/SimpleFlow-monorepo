@@ -15,11 +15,11 @@
   "dependencies": {
     "@pancakeswap/chains": "workspace:*",
     "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/token-lists": "workspace:*"
+    "@pancakeswap/token-lists": "workspace:*",
+    "@pancakeswap/utils": "workspace:*"
   },
   "devDependencies": {
     "@pancakeswap/solana-core-sdk": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
     "tsup": "^6.7.0"
   },
   "exports": {

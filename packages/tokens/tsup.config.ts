@@ -7,7 +7,8 @@ export default defineConfig((options) => {
       index: './src/index.ts',
     },
     format: ['esm', 'cjs'],
-    noExternal: ['@pancakeswap/utils', '@pancakeswap/solana-core-sdk'],
+    // 移除 noExternal，使用 external 让包作为外部依赖处理
+    external: ['@pancakeswap/*', 'viem'],
     dts: false,
     clean: !options.watch,
     treeshake: true,

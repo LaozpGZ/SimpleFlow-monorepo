@@ -29,6 +29,7 @@
     "@pancakeswap/chains": "workspace:*",
     "@pancakeswap/sdk": "workspace:*",
     "@pancakeswap/swap-sdk-core": "workspace:*",
+    "@pancakeswap/utils": "workspace:*",
     "big.js": "^5.2.2",
     "decimal.js-light": "^2.5.0",
     "tiny-invariant": "^1.3.0",
@@ -37,7 +38,6 @@
     "viem": "catalog:"
   },
   "devDependencies": {
-    "@pancakeswap/utils": "workspace:*",
     "tsup": "^6.7.0"
   },
   "engines": {

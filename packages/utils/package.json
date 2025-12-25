@@ -5,6 +5,273 @@
     "test": "vitest --run"
   },
   "private": true,
+  "exports": {
+    "./enumValues": {
+      "types": "./enumValues.ts",
+      "import": "./enumValues.ts",
+      "require": "./enumValues.ts"
+    },
+    "./formatFractions": {
+      "types": "./formatFractions.ts",
+      "import": "./formatFractions.ts",
+      "require": "./formatFractions.ts"
+    },
+    "./memoize": {
+      "types": "./memoize.ts",
+      "import": "./memoize.ts",
+      "require": "./memoize.ts"
+    },
+    "./tryParseAmount": {
+      "types": "./tryParseAmount.ts",
+      "import": "./tryParseAmount.ts",
+      "require": "./tryParseAmount.ts"
+    },
+    "./RemoteLogger": {
+      "types": "./RemoteLogger.ts",
+      "import": "./RemoteLogger.ts",
+      "require": "./RemoteLogger.ts"
+    },
+    "./Graph": {
+      "types": "./Graph.ts",
+      "import": "./Graph.ts",
+      "require": "./Graph.ts"
+    },
+    "./abortControl": {
+      "types": "./abortControl.ts",
+      "import": "./abortControl.ts",
+      "require": "./abortControl.ts"
+    },
+    "./toBigInt": {
+      "types": "./toBigInt.ts",
+      "import": "./toBigInt.ts",
+      "require": "./toBigInt.ts"
+    },
+    "./viem/isAbortError": {
+      "types": "./viem/isAbortError.ts",
+      "import": "./viem/isAbortError.ts",
+      "require": "./viem/isAbortError.ts"
+    },
+    "./viem/formatUnits": {
+      "types": "./viem/formatUnits.ts",
+      "import": "./viem/formatUnits.ts",
+      "require": "./viem/formatUnits.ts"
+    },
+    "./viem/parseUnits": {
+      "types": "./viem/parseUnits.ts",
+      "import": "./viem/parseUnits.ts",
+      "require": "./viem/parseUnits.ts"
+    },
+    "./bigNumber": {
+      "types": "./bigNumber.ts",
+      "import": "./bigNumber.ts",
+      "require": "./bigNumber.ts"
+    },
+    "./chunk": {
+      "types": "./chunk.ts",
+      "import": "./chunk.ts",
+      "require": "./chunk.ts"
+    },
+    "./equalsIgnoreCase": {
+      "types": "./equalsIgnoreCase.ts",
+      "import": "./equalsIgnoreCase.ts",
+      "require": "./equalsIgnoreCase.ts"
+    },
+    "./cacheByLRU": {
+      "types": "./cacheByLRU.ts",
+      "import": "./cacheByLRU.ts",
+      "require": "./cacheByLRU.ts"
+    },
+    "./cacheByMem": {
+      "types": "./cacheByMem.ts",
+      "import": "./cacheByMem.ts",
+      "require": "./cacheByMem.ts"
+    },
+    "./uniqBy": {
+      "types": "./uniqBy.ts",
+      "import": "./uniqBy.ts",
+      "require": "./uniqBy.ts"
+    },
+    "./uniqWith": {
+      "types": "./uniqWith.ts",
+      "import": "./uniqWith.ts",
+      "require": "./uniqWith.ts"
+    },
+    "./isUndefinedOrNull": {
+      "types": "./isUndefinedOrNull.ts",
+      "import": "./isUndefinedOrNull.ts",
+      "require": "./isUndefinedOrNull.ts"
+    },
+    "./formatNumber": {
+      "types": "./formatNumber.ts",
+      "import": "./formatNumber.ts",
+      "require": "./formatNumber.ts"
+    },
+    "./formatBalance": {
+      "types": "./formatBalance.ts",
+      "import": "./formatBalance.ts",
+      "require": "./formatBalance.ts"
+    },
+    "./geoBlock": {
+      "types": "./geoBlock.ts",
+      "import": "./geoBlock.ts",
+      "require": "./geoBlock.ts"
+    },
+    "./formatFiatNumber": {
+      "types": "./formatFiatNumber.ts",
+      "import": "./formatFiatNumber.ts",
+      "require": "./formatFiatNumber.ts"
+    },
+    "./formatInfoNumbers": {
+      "types": "./formatInfoNumbers.ts",
+      "import": "./formatInfoNumbers.ts",
+      "require": "./formatInfoNumbers.ts"
+    },
+    "./formatTimestamp": {
+      "types": "./formatTimestamp.ts",
+      "import": "./formatTimestamp.ts",
+      "require": "./formatTimestamp.ts"
+    },
+    "./displayApr": {
+      "types": "./displayApr.ts",
+      "import": "./displayApr.ts",
+      "require": "./displayApr.ts"
+    },
+    "./displayBalance": {
+      "types": "./displayBalance.ts",
+      "import": "./displayBalance.ts",
+      "require": "./displayBalance.ts"
+    },
+    "./groupBy": {
+      "types": "./groupBy.ts",
+      "import": "./groupBy.ts",
+      "require": "./groupBy.ts"
+    },
+    "./keyBy": {
+      "types": "./keyBy.ts",
+      "import": "./keyBy.ts",
+      "require": "./keyBy.ts"
+    },
+    "./isZero": {
+      "types": "./isZero.ts",
+      "import": "./isZero.ts",
+      "require": "./isZero.ts"
+    },
+    "./isPositionOutOfRange": {
+      "types": "./isPositionOutOfRange.ts",
+      "import": "./isPositionOutOfRange.ts",
+      "require": "./isPositionOutOfRange.ts"
+    },
+    "./compoundApyHelpers": {
+      "types": "./compoundApyHelpers.ts",
+      "import": "./compoundApyHelpers.ts",
+      "require": "./compoundApyHelpers.ts"
+    },
+    "./multiplyPriceByAmount": {
+      "types": "./multiplyPriceByAmount.ts",
+      "import": "./multiplyPriceByAmount.ts",
+      "require": "./multiplyPriceByAmount.ts"
+    },
+    "./removeTrailingZeros": {
+      "types": "./removeTrailingZeros.ts",
+      "import": "./removeTrailingZeros.ts",
+      "require": "./removeTrailingZeros.ts"
+    },
+    "./getFullDecimalMultiplier": {
+      "types": "./getFullDecimalMultiplier.ts",
+      "import": "./getFullDecimalMultiplier.ts",
+      "require": "./getFullDecimalMultiplier.ts"
+    },
+    "./getTimePeriods": {
+      "types": "./getTimePeriods.ts",
+      "import": "./getTimePeriods.ts",
+      "require": "./getTimePeriods.ts"
+    },
+    "./latinise": {
+      "types": "./latinise.ts",
+      "import": "./latinise.ts",
+      "require": "./latinise.ts"
+    },
+    "./truncateHash": {
+      "types": "./truncateHash.ts",
+      "import": "./truncateHash.ts",
+      "require": "./truncateHash.ts"
+    },
+    "./trimEnd": {
+      "types": "./trimEnd.ts",
+      "import": "./trimEnd.ts",
+      "require": "./trimEnd.ts"
+    },
+    "./trimTrailZero": {
+      "types": "./trimTrailZero.ts",
+      "import": "./trimTrailZero.ts",
+      "require": "./trimTrailZero.ts"
+    },
+    "./copyText": {
+      "types": "./copyText.ts",
+      "import": "./copyText.ts",
+      "require": "./copyText.ts"
+    },
+    "./safeGetWindow": {
+      "types": "./safeGetWindow.ts",
+      "import": "./safeGetWindow.ts",
+      "require": "./safeGetWindow.ts"
+    },
+    "./withFallback": {
+      "types": "./withFallback.ts",
+      "import": "./withFallback.ts",
+      "require": "./withFallback.ts"
+    },
+    "./withTimeout": {
+      "types": "./withTimeout.ts",
+      "import": "./withTimeout.ts",
+      "require": "./withTimeout.ts"
+    },
+    "./escapeRegExp": {
+      "types": "./escapeRegExp.ts",
+      "import": "./escapeRegExp.ts",
+      "require": "./escapeRegExp.ts"
+    },
+    "./fns": {
+      "types": "./fns.ts",
+      "import": "./fns.ts",
+      "require": "./fns.ts"
+    },
+    "./promise": {
+      "types": "./promise.ts",
+      "import": "./promise.ts",
+      "require": "./promise.ts"
+    },
+    "./observe": {
+      "types": "./observe.ts",
+      "import": "./observe.ts",
+      "require": "./observe.ts"
+    },
+    "./lru": {
+      "types": "./lru.ts",
+      "import": "./lru.ts",
+      "require": "./lru.ts"
+    },
+    "./clientRouter": {
+      "types": "./clientRouter.ts",
+      "import": "./clientRouter.ts",
+      "require": "./clientRouter.ts"
+    },
+    "./replaceBrowserHistory": {
+      "types": "./replaceBrowserHistory.ts",
+      "import": "./replaceBrowserHistory.ts",
+      "require": "./replaceBrowserHistory.ts"
+    },
+    "./replaceBrowserHistoryMultiple": {
+      "types": "./replaceBrowserHistoryMultiple.ts",
+      "import": "./replaceBrowserHistoryMultiple.ts",
+      "require": "./replaceBrowserHistoryMultiple.ts"
+    },
+    "./uriToHttp": {
+      "types": "./uriToHttp.ts",
+      "import": "./uriToHttp.ts",
+      "require": "./uriToHttp.ts"
+    }
+  },
   "peerDependencies": {
     "@pancakeswap/localization": "workspace:*",
     "dayjs": "^1.11.10",

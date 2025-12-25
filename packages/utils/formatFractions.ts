@@ -1,14 +1,6 @@
 /* eslint-disable no-param-reassign */
-import {
-  Currency,
-  CurrencyAmount,
-  Fraction,
-  Percent,
-  Price,
-  Rounding,
-  UnifiedCurrency,
-  UnifiedCurrencyAmount,
-} from '@pancakeswap/swap-sdk-core'
+import type { Currency, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Fraction, Percent, Price, Rounding, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 
 export function formatPercent(percent?: Percent, precision?: number) {
   return percent ? formatFraction(percent.asFraction.multiply(100), precision) : undefined

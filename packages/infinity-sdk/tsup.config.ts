@@ -8,7 +8,8 @@ export default defineConfig((options) => ({
   format: ['esm', 'cjs'],
   dts: false,
   clean: !options.watch,
-  noExternal: ['@pancakeswap/utils'],
+  // 移除 noExternal，使用 external 让包作为外部依赖处理
+  external: ['@pancakeswap/*', 'viem', 'bignumber.js'],
   treeshake: true,
   splitting: true,
   onSuccess: async () => {

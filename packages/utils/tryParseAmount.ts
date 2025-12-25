@@ -1,5 +1,6 @@
-import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { parseUnits } from './viem/parseUnits'
+import type { Currency, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 
 // try to parse a user entered amount for a given token
 function tryParseAmount<T extends Currency>(value?: string, currency?: T | null): CurrencyAmount<T> | undefined
