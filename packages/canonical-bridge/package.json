@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/canonical-bridge",
+  "name": "@simpleflow/canonical-bridge",
   "version": "4.0.1",
   "sideEffects": false,
   "private": true,
@@ -17,8 +17,8 @@
   "peerDependencies": {
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@pancakeswap/localization": "workspace:*",
-    "@pancakeswap/uikit": "workspace:*",
+    "@simpleflow/l10n": "workspace:*",
+    "@simpleflow/uikit": "workspace:*",
     "@solana/spl-token": "^0",
     "@solana/wallet-adapter-react": "catalog:",
     "@solana/web3.js": "catalog:",
@@ -32,15 +32,15 @@
     "wagmi": "catalog:",
     "@bnb-chain/canonical-bridge-sdk": "0.7.2",
     "@bnb-chain/canonical-bridge-widget": "0.10.3",
-    "@pancakeswap/chains": "workspace:*"
+    "@simpleflow/chains": "workspace:*"
   },
   "dependencies": {
     "axios": "~1.6.8",
     "polished": "^4.2.2"
   },
   "devDependencies": {
-    "@pancakeswap/localization": "workspace:*",
-    "@pancakeswap/uikit": "workspace:*",
+    "@simpleflow/l10n": "workspace:*",
+    "@simpleflow/uikit": "workspace:*",
     "@types/lodash": "^4.14.168",
     "@types/react": "catalog:",
     "@types/react-dom": "^18.0.6",

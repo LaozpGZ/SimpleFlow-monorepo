@@ -3,7 +3,7 @@ import duration from 'dayjs/plugin/duration'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { STABLE_SUPPORTED_CHAIN_IDS } from '@pancakeswap/stable-swap-sdk'
+import { STABLE_SUPPORTED_CHAIN_IDS } from '@simpleflow/stable-swap-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import { Transaction, TransactionType, TvlChartEntry, VolumeChartEntry } from 'state/info/types'

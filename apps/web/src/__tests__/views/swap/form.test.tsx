@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { handleCurrencySelectFn } from 'views/SwapSimplify/InfinitySwap/FormMainInfinity'
 import { Field } from 'state/swap/actions'
-import { baseTokens, bscTokens } from '@pancakeswap/tokens'
-import { ChainId } from '@pancakeswap/chains'
+import { baseTokens, bscTokens } from '@simpleflow/tokens'
+import { ChainId } from '@simpleflow/chains'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 
 describe('handleCurrencySelect', () => {

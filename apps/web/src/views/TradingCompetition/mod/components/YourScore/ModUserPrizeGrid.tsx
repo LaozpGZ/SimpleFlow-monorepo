@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { BlockIcon, CheckmarkCircleIcon, Flex, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { BlockIcon, CheckmarkCircleIcon, Flex, Text } from '@simpleflow/uikit'
 
 import { styled } from 'styled-components'
 import { modPrizes } from '../../../../../config/constants/trading-competition/prizes'

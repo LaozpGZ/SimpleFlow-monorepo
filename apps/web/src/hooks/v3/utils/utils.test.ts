@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 
 import { tryParsePrice } from './index'
 

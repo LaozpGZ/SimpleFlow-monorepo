@@ -1,6 +1,6 @@
 import { styled } from 'styled-components'
-import { Box, BoxProps, Flex, Skeleton, Text } from '@pancakeswap/uikit'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { Box, BoxProps, Flex, Skeleton, Text } from '@simpleflow/uikit'
+import isUndefinedOrNull from '@simpleflow/utils/isUndefinedOrNull'
 
 export interface StatBoxItemProps extends BoxProps {
   title: string

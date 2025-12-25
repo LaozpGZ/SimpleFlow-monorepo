@@ -1,4 +1,4 @@
-import { Currency, Price, TradeType, ZERO } from '@pancakeswap/sdk'
+import { Currency, Price, TradeType, ZERO } from '@simpleflow/sdk'
 
 import { SmartRouterTrade } from '../types'
 

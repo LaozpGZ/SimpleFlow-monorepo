@@ -1,4 +1,4 @@
-import { Text, TextProps, breakpoints } from "@pancakeswap/uikit";
+import { Text, TextProps, breakpoints } from "@simpleflow/uikit";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
 

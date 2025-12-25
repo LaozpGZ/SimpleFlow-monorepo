@@ -1,8 +1,8 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { PreTitle, Flex, Box, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { PreTitle, Flex, Box, Text } from '@simpleflow/uikit'
 import { GreyCard } from 'components/Card'
-import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Percent } from '@simpleflow/sdk'
+import { Currency } from '@simpleflow/swap-sdk-core'
 
 import FixedStakingOverview from './FixedStakingOverview'
 import { AmountWithUSDSub } from './AmountWithUSDSub'

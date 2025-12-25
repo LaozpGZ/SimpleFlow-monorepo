@@ -7,10 +7,10 @@ import {
   SortArrowIcon,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'

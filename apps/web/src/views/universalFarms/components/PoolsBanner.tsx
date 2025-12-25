@@ -1,5 +1,5 @@
-import { useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -13,8 +13,8 @@ import {
   Row,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { VerticalDivider } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { VerticalDivider } from '@simpleflow/widgets-internal'
 import { PickAdSlides } from 'components/AdPanel/PickAdSlides'
 import LiquiditySunsetWarning from 'components/Liquidity/LiquiditySunsetWarning'
 import { Suspense, useCallback } from 'react'

@@ -1,4 +1,4 @@
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { describe, expect, it } from 'vitest'
 import { AptosCoin } from './aptosCoin'
 import { Coin } from './coin'

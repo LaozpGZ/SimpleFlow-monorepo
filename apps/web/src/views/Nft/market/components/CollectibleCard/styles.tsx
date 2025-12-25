@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   BinanceIcon,
   Box,
@@ -11,7 +11,7 @@ import {
   Skeleton,
   Text,
   WalletFilledIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import BigNumber from 'bignumber.js'
 import { ReactElement } from 'react'
 import { styled } from 'styled-components'

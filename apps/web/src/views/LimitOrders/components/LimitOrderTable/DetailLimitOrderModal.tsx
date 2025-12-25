@@ -9,11 +9,11 @@ import {
   Tag,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { ConfirmationPendingContent, TransactionErrorContent } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ConfirmationPendingContent, TransactionErrorContent } from '@simpleflow/widgets-internal'
 
 import { Order } from '@gelatonetwork/limit-orders-lib'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { TransactionSubmittedContent } from 'components/TransactionConfirmationModal'
 import useGelatoLimitOrdersHandlers from 'hooks/limitOrders/useGelatoLimitOrdersHandlers'
 import { useActiveChainId } from 'hooks/useActiveChainId'

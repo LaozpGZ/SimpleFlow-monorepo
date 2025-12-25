@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useUnifiedCurrency } from 'hooks/Tokens'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { BridgeStatus } from '../types'

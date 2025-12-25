@@ -1,6 +1,6 @@
-import { useAccount, useBalance, APTOS_COIN } from '@pancakeswap/awgmi'
+import { useAccount, useBalance, APTOS_COIN } from '@simpleflow/awgmi'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -12,7 +12,7 @@ import {
   Skeleton,
   Text,
   AptosIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useAuth } from 'hooks/useAuth'
 
 import { useActiveChainId } from 'hooks/useNetwork'

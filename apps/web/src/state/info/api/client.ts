@@ -1,4 +1,4 @@
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
 import { queryOptions, type QueryFunction } from '@tanstack/react-query'
 import createClient, { type MaybeOptionalInit, type Middleware } from 'openapi-fetch'
 import type { HasRequiredKeys, PathsWithMethod } from 'openapi-typescript-helpers'
@@ -104,6 +104,5 @@ export const chainIdToExplorerInfoChainName = {
   [ChainId.BASE]: 'base',
   [ChainId.OPBNB]: 'opbnb',
   [ChainId.SIMPLECHAIN]: 'simplechain',
-  [ChainId.SIMPLECHAIN_TESTNET]: 'simplechain-testnet',
   [NonEVMChainId.SOLANA]: 'sol',
 } as const

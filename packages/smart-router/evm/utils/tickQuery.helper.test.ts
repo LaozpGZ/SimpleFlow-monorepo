@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
-import { FeeAmount, Tick, TICK_SPACINGS } from '@pancakeswap/v3-sdk'
+import { FeeAmount, Tick, TICK_SPACINGS } from '@simpleflow/v3-sdk'
 import { Address, Hex, decodeFunctionResult, encodeFunctionData } from 'viem'
 import { queryDataAbi } from '../abis/QueryData'
 import { InfinityClPool, PoolType, V3Pool } from '../v3-router/types'

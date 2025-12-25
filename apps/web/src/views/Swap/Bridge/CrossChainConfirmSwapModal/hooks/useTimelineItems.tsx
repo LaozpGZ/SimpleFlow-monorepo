@@ -1,8 +1,8 @@
-import { PriceOrder } from '@pancakeswap/price-api-sdk'
+import { PriceOrder } from '@simpleflow/price-api-sdk'
 
 import { useMemo } from 'react'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import { BridgeStatus, BridgeStatusData, Command } from '../../types'
 

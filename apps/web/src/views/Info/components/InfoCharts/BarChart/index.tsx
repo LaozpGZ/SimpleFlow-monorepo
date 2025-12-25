@@ -3,9 +3,9 @@ import useTheme from 'hooks/useTheme'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { BarChartLoader } from 'components/ChartLoaders'
 import { createChart, IChartApi } from 'lightweight-charts'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import dayjs from 'dayjs'
-import { lightColors, darkColors } from '@pancakeswap/uikit'
+import { lightColors, darkColors } from '@simpleflow/uikit'
 
 export type LineChartProps = {
   data: any[]

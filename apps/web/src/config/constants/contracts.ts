@@ -1,15 +1,15 @@
-import { ChainId } from '@pancakeswap/chains'
-import { masterChefV3Addresses } from '@pancakeswap/farms'
-import { ICAKE } from '@pancakeswap/ifos'
+import { ChainId } from '@simpleflow/chains'
+import { masterChefV3Addresses } from '@simpleflow/farms'
+import { ICAKE } from '@simpleflow/ifos'
 import {
   INFI_BIN_POOL_MANAGER_ADDRESSES,
   INFI_BIN_POSITION_MANAGER_ADDRESSES,
   INFI_CL_POOL_MANAGER_ADDRESSES,
   INFI_CL_POSITION_MANAGER_ADDRESSES,
-} from '@pancakeswap/infinity-sdk'
-import { CAKE_VAULT } from '@pancakeswap/pools'
-import { V3_QUOTER_ADDRESSES } from '@pancakeswap/smart-router'
-import { DEPLOYER_ADDRESSES, NFT_POSITION_MANAGER_ADDRESSES } from '@pancakeswap/v3-sdk'
+} from '@simpleflow/infinity-sdk'
+import { CAKE_VAULT } from '@simpleflow/pools'
+import { V3_QUOTER_ADDRESSES } from '@simpleflow/smart-router'
+import { DEPLOYER_ADDRESSES, NFT_POSITION_MANAGER_ADDRESSES } from '@simpleflow/v3-sdk'
 
 export default {
   masterChef: {
@@ -272,7 +272,7 @@ export default {
     [ChainId.BSC_TESTNET]: '0x5F1076A98a1b9AA8584DaC02F38C616C3A431794',
   },
 
-  // Chainlink Oracle addresses (moved from @pancakeswap/prediction)
+  // Chainlink Oracle addresses (moved from @simpleflow/prediction)
   chainlinkOracleBNB: {
     [ChainId.BSC]: '0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE',
   },

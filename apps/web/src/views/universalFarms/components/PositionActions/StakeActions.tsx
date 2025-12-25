@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Button, IconButton, MinusIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AddIcon, Button, IconButton, MinusIcon } from '@simpleflow/uikit'
 
 type StakeActionsProps = {
   increaseDisabled?: boolean

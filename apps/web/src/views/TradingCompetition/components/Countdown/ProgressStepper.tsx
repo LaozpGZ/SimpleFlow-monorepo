@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex } from '@simpleflow/uikit'
 import _uniqueId from 'lodash/uniqueId'
 import { Fragment } from 'react'
 import { styled } from 'styled-components'

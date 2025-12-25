@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoRow, Button, ChevronDownIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoRow, Button, ChevronDownIcon, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Dispatch, ReactNode, SetStateAction } from 'react'
 import styled from 'styled-components'

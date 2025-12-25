@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { dehydrate, QueryClient } from '@tanstack/react-query'
 import { pancakeProfileABI } from 'config/abi/pancakeProfile'
 import { getCollections } from 'state/nftMarket/helpers'

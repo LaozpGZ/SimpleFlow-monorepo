@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/routing-sdk-addon-v2",
+  "name": "@simpleflow/routing-sdk-addon-v2",
   "version": "5.0.4",
   "description": "Routing sdk addon for pcs v2",
   "repository": {
@@ -24,17 +24,17 @@
     "dist"
   ],
   "peerDependencies": {
-    "@pancakeswap/routing-sdk": "workspace:*"
+    "@simpleflow/routing-sdk": "workspace:*"
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/v2-sdk": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/v2-sdk": "workspace:*",
     "tiny-invariant": "^1.3.0"
   },
   "devDependencies": {
-    "@pancakeswap/routing-sdk": "workspace:*",
-    "@pancakeswap/tsconfig": "workspace:*",
+    "@simpleflow/routing-sdk": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
     "tsup": "^6.7.0"
   },
   "exports": {

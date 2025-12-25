@@ -1,7 +1,7 @@
-import { Protocol } from '@pancakeswap/farms'
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, QuestionHelper, Tag, TagProps } from '@pancakeswap/uikit'
-import { styleVariants } from '@pancakeswap/uikit/components/Tag/theme'
+import { Protocol } from '@simpleflow/farms'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, QuestionHelper, Tag, TagProps } from '@simpleflow/uikit'
+import { styleVariants } from '@simpleflow/uikit/components/Tag/theme'
 import { ReactNode } from 'react'
 
 type IRangeTagType = {

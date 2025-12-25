@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 import { INFINITY_SUPPORTED_CHAINS } from '../constants'
 

@@ -1,5 +1,5 @@
-import { Coin } from '@pancakeswap/aptos-swap-sdk'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Coin } from '@simpleflow/aptos-swap-sdk'
+import { Pool } from '@simpleflow/widgets-internal'
 import { useQueryClient } from '@tanstack/react-query'
 import poolRelatedQueries from 'components/Pools/utils/poolRelatedQueries'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

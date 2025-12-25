@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useProfile } from 'state/profile/hooks'
-import { Box, useMatchBreakpoints, PageSection } from '@pancakeswap/uikit'
+import { Box, useMatchBreakpoints, PageSection } from '@simpleflow/uikit'
 import { useTradingCompetitionContractFanToken } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { API_PROFILE } from 'config/constants/endpoints'
@@ -13,7 +13,7 @@ import {
   OVER,
   REGISTRATION,
 } from 'config/constants/trading-competition/phases'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { DARKBG, MIDBLUEBG, MIDBLUEBG_DARK } from './pageSectionStyles'
 import Countdown from './components/Countdown'

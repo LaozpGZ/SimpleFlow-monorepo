@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/sdk'
 
 import { SupportedChainId } from './supportedChains'
 

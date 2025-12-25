@@ -2,8 +2,8 @@ import {
   FARMING_OFFCHAIN_CL_HELPER_ABI,
   INFI_CL_LP_FEES_HELPER_ADDRESSES,
   INFI_CL_POSITION_MANAGER_ADDRESSES,
-} from '@pancakeswap/infinity-sdk'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/infinity-sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import isUndefined from 'lodash/isUndefined'

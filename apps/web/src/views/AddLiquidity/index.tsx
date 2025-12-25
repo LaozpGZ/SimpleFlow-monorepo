@@ -1,7 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Pair, Percent, Price, Token } from '@pancakeswap/sdk'
-import { useModal } from '@pancakeswap/uikit'
-import { useUserSlippage } from '@pancakeswap/utils/user'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount, Pair, Percent, Price, Token } from '@simpleflow/sdk'
+import { useModal } from '@simpleflow/uikit'
+import { useUserSlippage } from '@simpleflow/utils/user'
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { V2_ROUTER_ADDRESS } from 'config/constants/exchange'

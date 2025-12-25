@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   ChevronRightIcon,
@@ -9,7 +9,7 @@ import {
   SwapLoading,
   Text,
   useModalV2,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useMemo } from 'react'
 
 import {
@@ -17,12 +17,12 @@ import {
   TransactionListItemTitle,
   TransactionListItemV2,
   TransactionStatusV2,
-} from '@pancakeswap/widgets-internal'
+} from '@simpleflow/widgets-internal'
 
 import styled from 'styled-components'
 
-import { UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
+import { UnifiedCurrencyAmount } from '@simpleflow/swap-sdk-core'
+import { formatScientificToDecimal } from '@simpleflow/utils/formatNumber'
 import { useQuery } from '@tanstack/react-query'
 import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
@@ -33,7 +33,7 @@ import { bridgeStatusQueryKey } from 'views/Swap/Bridge/hooks/useBridgeStatus'
 import { ActiveBridgeOrderMetadata, BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
 import { getBridgeTitle } from 'views/Swap/Bridge/utils/bridgeTitle'
 import { customBridgeStatus } from 'views/Swap/Bridge/utils/customBridgeStatus'
-import { chainNames, isSolana } from '@pancakeswap/chains'
+import { chainNames, isSolana } from '@simpleflow/chains'
 import upperCase from 'lodash/upperCase'
 
 const StyledChainLogo = styled(ChainLogo)`

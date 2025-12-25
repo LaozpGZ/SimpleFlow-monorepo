@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
+import { ChainId } from '@simpleflow/chains'
+import { RemoteLogger } from '@simpleflow/utils/RemoteLogger'
 import { INFI_SUPPORTED_CHAINS } from '../../constants/infinity'
 import { QuoteProvider, QuoterConfig, QuoterOptions, RouteType, RouteWithQuote, RouteWithoutQuote } from '../types'
 import { isInfinityBinPool, isInfinityClPool, isV3Pool } from '../utils'

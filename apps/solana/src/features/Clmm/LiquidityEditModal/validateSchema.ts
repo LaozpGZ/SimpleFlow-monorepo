@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 import Decimal from 'decimal.js'
-import { type TranslateFunction } from '@pancakeswap/localization'
+import { type TranslateFunction } from '@simpleflow/l10n'
 
 const numberTransform = yup.number().transform((value) => (Number.isNaN(value) ? 0 : value))
 

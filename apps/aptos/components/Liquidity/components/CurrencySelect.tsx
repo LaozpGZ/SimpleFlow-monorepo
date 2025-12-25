@@ -1,5 +1,5 @@
-import { useAccount, useBalance } from '@pancakeswap/awgmi'
-import { useTranslation } from '@pancakeswap/localization'
+import { useAccount, useBalance } from '@simpleflow/awgmi'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ArrowDropDownIcon,
   AutoRow,
@@ -10,7 +10,7 @@ import {
   Flex,
   Text,
   useModal,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { CurrencyLogo } from 'components/Logo/CurrencyLogo'
 import CurrencySearchModal, { CurrencySearchModalProps } from 'components/SearchModal/CurrencySearchModal'
 

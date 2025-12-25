@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button as UIKitButton, AutoRenewIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button as UIKitButton, AutoRenewIcon } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
 interface ConfirmButtonProps {

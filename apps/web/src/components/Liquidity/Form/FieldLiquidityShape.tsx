@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, BoxProps, PreTitle, RowBetween, ScanLink } from '@pancakeswap/uikit'
-import { Liquidity } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, BoxProps, PreTitle, RowBetween, ScanLink } from '@simpleflow/uikit'
+import { Liquidity } from '@simpleflow/widgets-internal'
 import React from 'react'
 import { useLiquidityShapeQueryState } from 'state/infinity/shared'
 

@@ -2,8 +2,8 @@
 /* eslint-disable vars-on-top */
 import { parse } from 'querystring'
 import { Mock, vi } from 'vitest'
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { UnifiedNativeCurrency } from '@pancakeswap/swap-sdk-core'
+import { NonEVMChainId } from '@simpleflow/chains'
+import { UnifiedNativeCurrency } from '@simpleflow/swap-sdk-core'
 import { Field } from './actions'
 import { queryParametersToSwapState, normalizeCurrencySelectionForChain } from './hooks'
 

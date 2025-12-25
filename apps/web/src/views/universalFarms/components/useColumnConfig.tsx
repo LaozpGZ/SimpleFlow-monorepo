@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { getCurrencyAddress, Percent } from '@pancakeswap/swap-sdk-core'
+import { useTranslation } from '@simpleflow/l10n'
+import { getCurrencyAddress, Percent } from '@simpleflow/swap-sdk-core'
 import {
   Box,
   Grid,
@@ -11,8 +11,8 @@ import {
   WarningIcon,
   useMatchBreakpoints,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { FeeTierTooltip, FiatNumberDisplay, Liquidity, TokenOverview } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { FeeTierTooltip, FiatNumberDisplay, Liquidity, TokenOverview } from '@simpleflow/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { TokenPairLogo } from 'components/TokenImage'
 import { useMemo } from 'react'

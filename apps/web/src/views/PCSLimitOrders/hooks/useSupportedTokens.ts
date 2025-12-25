@@ -1,4 +1,4 @@
-import { getCurrencyAddress, ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
+import { getCurrencyAddress, ZERO_ADDRESS } from '@simpleflow/swap-sdk-core'
 import { useTokensByChainId } from 'hooks/Tokens'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useAtomValue } from 'jotai'

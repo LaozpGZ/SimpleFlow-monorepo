@@ -1,4 +1,4 @@
-import { Button } from '@pancakeswap/uikit'
+import { Button } from '@simpleflow/uikit'
 import {
   Badge,
   Box,
@@ -15,10 +15,10 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, TokenInfo } from '@simpleflow/solana-core-sdk'
 import Decimal from 'decimal.js'
 import React from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { panelCard } from '@/theme/cssBlocks'
 import TokenAvatar from '@/components/TokenAvatar'
 import TokenAvatarPair from '@/components/TokenAvatarPair'

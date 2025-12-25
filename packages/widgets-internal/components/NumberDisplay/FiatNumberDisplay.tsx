@@ -1,9 +1,9 @@
 import BigNumber from "bignumber.js";
-import { Text, useTooltip, type TextProps } from "@pancakeswap/uikit";
-import { formatNumberWithFullDigits } from "@pancakeswap/utils/formatNumber";
-import { formatFiatNumber, valueWithSymbol } from "@pancakeswap/utils/formatFiatNumber";
+import { Text, useTooltip, type TextProps } from "@simpleflow/uikit";
+import { formatNumberWithFullDigits } from "@simpleflow/utils/formatNumber";
+import { formatFiatNumber, valueWithSymbol } from "@simpleflow/utils/formatFiatNumber";
 import { type ReactNode, memo, useMemo, type ElementType, CSSProperties } from "react";
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 
 export type FiatNumberDisplayProps = {
   fiatSymbol?: string;

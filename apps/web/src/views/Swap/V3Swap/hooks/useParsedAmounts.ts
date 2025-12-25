@@ -1,6 +1,6 @@
-import { PriceOrder } from '@pancakeswap/price-api-sdk'
-import { UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { PriceOrder } from '@simpleflow/price-api-sdk'
+import { UnifiedCurrency, UnifiedCurrencyAmount } from '@simpleflow/sdk'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
 
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'

@@ -1,4 +1,4 @@
-import { MaxUint256 } from '@pancakeswap/sdk'
+import { MaxUint256 } from '@simpleflow/sdk'
 import { describe, it, expect } from 'vitest'
 import { encodeSqrtRatioX96 } from './encodeSqrtRatioX96'
 import { maxLiquidityForAmounts } from './maxLiquidityForAmounts'

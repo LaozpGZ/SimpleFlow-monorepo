@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { FlexGap, Text } from '@pancakeswap/uikit'
+import { FlexGap, Text } from '@simpleflow/uikit'
 
 export const DetailInfoTitle = styled.div<{ $isMobile?: boolean }>`
   display: flex;

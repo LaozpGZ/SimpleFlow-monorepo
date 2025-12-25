@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoRenewIcon, Button, Flex, useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoRenewIcon, Button, Flex, useToast } from '@simpleflow/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'

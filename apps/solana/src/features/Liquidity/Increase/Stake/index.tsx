@@ -1,7 +1,7 @@
 import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState, useRef } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import Decimal from 'decimal.js'
 import Button from '@/components/Button'

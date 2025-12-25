@@ -1,5 +1,5 @@
 import { Connection } from '@solana/web3.js'
-import { fetchMultipleInfo, AmmV4Keys, AmmV5Keys } from '@pancakeswap/solana-core-sdk'
+import { fetchMultipleInfo, AmmV4Keys, AmmV5Keys } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'

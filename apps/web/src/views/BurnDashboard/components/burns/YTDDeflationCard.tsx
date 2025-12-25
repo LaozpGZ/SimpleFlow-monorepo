@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { CardProps, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'

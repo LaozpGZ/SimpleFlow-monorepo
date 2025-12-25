@@ -1,6 +1,6 @@
-import { type SVMOrder, OrderType, SVMTrade } from '@pancakeswap/price-api-sdk'
-import { PoolType, Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
-import type { SolRouterTrade, RouterPlan } from '@pancakeswap/solana-router-sdk'
+import { type SVMOrder, OrderType, SVMTrade } from '@simpleflow/price-api-sdk'
+import { PoolType, Route, RouteType, SVMPool } from '@simpleflow/smart-router'
+import type { SolRouterTrade, RouterPlan } from '@simpleflow/solana-router-sdk'
 import {
   Currency,
   CurrencyAmount,
@@ -9,7 +9,7 @@ import {
   UnifiedCurrencyAmount,
   SPLToken,
   SPLNativeCurrency,
-} from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/swap-sdk-core'
 import { SVMQuoteQuery } from 'quoter/quoter.types'
 
 // Extended type to support both SPLToken and SPLNative currencies

@@ -1,4 +1,4 @@
-import { ACTIONS, ACTIONS_ABI, InfinityUsedAction } from '@pancakeswap/infinity-sdk'
+import { ACTIONS, ACTIONS_ABI, InfinityUsedAction } from '@simpleflow/infinity-sdk'
 import { decodeAbiParameters, decodeFunctionData, Hex, ParseAbiParameters, toBytes } from 'viem'
 import { UniversalRouterABI } from '../abis/UniversalRouter'
 import { CommandType } from '../router.types'

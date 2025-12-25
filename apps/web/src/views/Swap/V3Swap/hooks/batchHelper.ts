@@ -1,11 +1,11 @@
-import { getPermit2Address, Permit2ABI, PERMIT_EXPIRATION, toDeadline } from '@pancakeswap/permit2-sdk'
-import { PriceOrder } from '@pancakeswap/price-api-sdk'
-import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
-import { ConfirmModalState } from '@pancakeswap/widgets-internal'
+import { getPermit2Address, Permit2ABI, PERMIT_EXPIRATION, toDeadline } from '@simpleflow/permit2-sdk'
+import { PriceOrder } from '@simpleflow/price-api-sdk'
+import { CurrencyAmount, Token } from '@simpleflow/swap-sdk-core'
+import { ConfirmModalState } from '@simpleflow/widgets-internal'
 import { Calldata } from 'hooks/usePermit2'
 import { Address, encodeFunctionData, erc20Abi, Hex, hexToBigInt } from 'viem'
 import { isBridgeOrder, isClassicOrder } from 'views/Swap/utils'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { isZero } from '../utils/isZero'
 
 export interface BatchCall {

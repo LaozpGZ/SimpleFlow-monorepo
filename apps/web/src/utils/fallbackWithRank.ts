@@ -1,4 +1,4 @@
-import { memoizeAsync } from '@pancakeswap/utils/memoize'
+import { memoizeAsync } from '@simpleflow/utils/memoize'
 import { Chain, createTransport, FallbackTransport, FallbackTransportConfig, Prettify, Transport } from 'viem'
 
 type OnResponseFn = (

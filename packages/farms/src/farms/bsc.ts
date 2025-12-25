@@ -1,4 +1,4 @@
-import { bscTokens } from '@pancakeswap/tokens'
+import { bscTokens } from '@simpleflow/tokens'
 import { getAddress } from 'viem'
 import { CAKE_BNB_LP_MAINNET } from '../../constants/common'
 import { SerializedFarmConfig } from '../types'

@@ -1,6 +1,6 @@
-import { Box, Button, Text, Heading, ProposalIcon, Flex } from '@pancakeswap/uikit'
+import { Box, Button, Text, Heading, ProposalIcon, Flex } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Link from 'next/link'
 import Container from 'components/Layout/Container'
 import DesktopImage from './DesktopImage'

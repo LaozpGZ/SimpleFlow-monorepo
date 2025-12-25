@@ -1,5 +1,5 @@
-import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { usePreloadImages, useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AtomBox,
   Button,
@@ -21,7 +21,7 @@ import {
   Text,
   useMatchBreakpoints,
   WarningIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useAtom } from 'jotai'
 import { lazy, MouseEvent, PropsWithChildren, Suspense, useCallback, useMemo, useState } from 'react'
 import { isMobile as isMobileDevice } from 'react-device-detect'

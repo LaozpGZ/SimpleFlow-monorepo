@@ -1,4 +1,4 @@
-import { solToWSol } from '@pancakeswap/solana-core-sdk'
+import { solToWSol } from '@simpleflow/solana-core-sdk'
 import { CandlestickData } from 'lightweight-charts'
 import { useMemo } from 'react'
 import useSWRInfinite from 'swr/infinite'

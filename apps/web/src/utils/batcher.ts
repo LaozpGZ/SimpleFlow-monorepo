@@ -1,4 +1,4 @@
-import { CurrencyParams, CurrencyUsdResult, getCurrencyKey, getCurrencyListUsdPrice } from '@pancakeswap/price-api-sdk'
+import { CurrencyParams, CurrencyUsdResult, getCurrencyKey, getCurrencyListUsdPrice } from '@simpleflow/price-api-sdk'
 import { create, windowedFiniteBatchScheduler } from '@yornaath/batshit'
 
 export const usdPriceBatcher = create<CurrencyUsdResult, CurrencyParams, number>({

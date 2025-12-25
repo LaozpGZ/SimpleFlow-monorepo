@@ -1,4 +1,4 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { styled, useTheme } from "styled-components";
 import { Button, OpenNewIcon, Text } from "../../components";
 import { Link } from "../../components/Link";

@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { styled } from 'styled-components'
-import { Flex, UserMenuItem } from '@pancakeswap/uikit'
+import { Flex, UserMenuItem } from '@simpleflow/uikit'
 import { useShowOnceAirdropModal } from 'hooks/useShowOnceAirdropModal'
 
 const Dot = styled.div`

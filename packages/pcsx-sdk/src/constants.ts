@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { getPermit2Address } from '@pancakeswap/permit2-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { getPermit2Address } from '@simpleflow/permit2-sdk'
 import type { Address } from 'viem'
 
 export const SupportedChainId = [

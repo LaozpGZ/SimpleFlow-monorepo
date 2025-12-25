@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { FlexGap, Text, ErrorIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { FlexGap, Text, ErrorIcon } from '@simpleflow/uikit'
 
 interface MaxDepositExceedProps {
   show: boolean

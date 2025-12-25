@@ -15,12 +15,12 @@ import { safeGetAddress } from 'utils'
 import { getTokenAddressFromSymbolAlias } from 'utils/getTokenAlias'
 import { isAddress } from 'viem'
 
-import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { useDebounce, useSortedTokensByQuery } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
+import { useDebounce, useSortedTokensByQuery } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 /* eslint-disable no-restricted-syntax */
-import { getTokenComparator, isSolWSolToken, Token, UnifiedCurrency } from '@pancakeswap/sdk'
-import { createFilterToken, WrappedTokenInfo } from '@pancakeswap/token-lists'
+import { getTokenComparator, isSolWSolToken, Token, UnifiedCurrency } from '@simpleflow/sdk'
+import { createFilterToken, WrappedTokenInfo } from '@simpleflow/token-lists'
 import {
   AutoColumn,
   Box,
@@ -32,11 +32,11 @@ import {
   ModalTitle,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { useAudioPlay } from '@pancakeswap/utils/user'
-import { SPLToken, UnifiedToken } from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/uikit'
+import { useAudioPlay } from '@simpleflow/utils/user'
+import { SPLToken, UnifiedToken } from '@simpleflow/swap-sdk-core'
 
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
 import { useAllTokens, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 import Row from '../Layout/Row'
 import CommonBases, { BaseWrapper } from './CommonBases'

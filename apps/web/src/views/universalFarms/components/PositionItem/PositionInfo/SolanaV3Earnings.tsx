@@ -1,10 +1,10 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AtomBoxProps, Grid, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AtomBoxProps, Grid, useMatchBreakpoints } from '@simpleflow/uikit'
 import { SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import { SolanaV3PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
 import { useSolanaV3RewardInfoFromSimulation } from 'views/universalFarms/hooks/useSolanaV3RewardInfoFromSimulation'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { TokenInfo } from '@simpleflow/solana-core-sdk'
 import { DetailInfoLabel } from './styled'
 import { EarningsWithToken } from './EarningsWithToken'
 

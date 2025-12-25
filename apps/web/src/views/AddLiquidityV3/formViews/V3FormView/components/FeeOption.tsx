@@ -1,11 +1,11 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Skeleton, Text } from '@pancakeswap/uikit'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn, Skeleton, Text } from '@simpleflow/uikit'
+import { FeeAmount } from '@simpleflow/v3-sdk'
 import { PoolState } from 'hooks/v3/types'
 import { useFeeTierDistribution } from 'hooks/v3/useFeeTierDistribution'
 import { styled } from 'styled-components'
 
-import { LightSecondaryCard } from '@pancakeswap/widgets-internal'
+import { LightSecondaryCard } from '@simpleflow/widgets-internal'
 import { FEE_AMOUNT_DETAIL } from './shared'
 
 const FeeOptionContainer = styled.div<{ active: boolean }>`

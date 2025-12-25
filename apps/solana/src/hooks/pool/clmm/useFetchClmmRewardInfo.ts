@@ -9,7 +9,7 @@ import {
   ApiV3Token,
   ZERO,
   DecreaseLiquidityEventLayout
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { AccountInfo, Transaction } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'

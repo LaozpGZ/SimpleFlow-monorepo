@@ -52,21 +52,21 @@
       "outputs": ["dist/**"]
     },
     "build:jupiter": {
-      "dependsOn": ["@pancakeswap/next-config#build", "@pancakeswap/jupiter-terminal#build"],
+      "dependsOn": ["@simpleflow/next-config#build", "@simpleflow/jupiter-terminal#build"],
       "cache": false,
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["@pancakeswap/next-config#build"],
+      "dependsOn": ["@simpleflow/next-config#build"],
       "outputs": []
     },
     "dev": {
-      "dependsOn": ["@pancakeswap/next-config#build"],
+      "dependsOn": ["@simpleflow/next-config#build"],
       "cache": false,
       "persistent": true
     },
     "dev:jupiter": {
-      "dependsOn": ["@pancakeswap/next-config#build", "@pancakeswap/jupiter-terminal#dev"],
+      "dependsOn": ["@simpleflow/next-config#build", "@simpleflow/jupiter-terminal#dev"],
       "cache": false,
       "persistent": true
     },

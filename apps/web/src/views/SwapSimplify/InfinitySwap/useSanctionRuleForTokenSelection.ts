@@ -1,8 +1,8 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Native, Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { Native, Token, UnifiedCurrency } from '@simpleflow/sdk'
 import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
-import { USDT } from '@pancakeswap/tokens'
+import { USDT } from '@simpleflow/tokens'
 import { isRwaTokenAtom, rwaTokenListAtom, usdonTokenAtom } from 'quoter/atom/rwaTokenAtoms'
 
 type RwaPanelConfig = {

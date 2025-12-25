@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   BlockIcon,
   Button,
@@ -12,7 +12,7 @@ import {
   Skeleton,
   Text,
   useModal,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { LIVE, REGISTRATION } from 'config/constants/trading-competition/phases'
 import useGetUsernameWithVisibility from 'hooks/useUsernameWithVisibility'
 import { ReactNode } from 'react'

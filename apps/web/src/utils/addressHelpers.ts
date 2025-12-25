@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { bCakeFarmBoosterV3VeCakeAddress } from '@pancakeswap/farms/constants/v3'
-import { PoolType } from '@pancakeswap/infinity-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { bCakeFarmBoosterV3VeCakeAddress } from '@simpleflow/farms/constants/v3'
+import { PoolType } from '@simpleflow/infinity-sdk'
 
 import addresses from 'config/constants/contracts'
 import { Address } from 'viem'

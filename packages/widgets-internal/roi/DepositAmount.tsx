@@ -1,9 +1,9 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Currency, CurrencyAmount } from "@pancakeswap/sdk";
+import { useTranslation } from "@simpleflow/l10n";
+import { Currency, CurrencyAmount } from "@simpleflow/sdk";
 import { memo, useCallback } from "react";
 import { styled } from "styled-components";
 
-import { BalanceInput, Box, Button, Card, CardBody, Flex, QuestionHelper, RowBetween, Text } from "@pancakeswap/uikit";
+import { BalanceInput, Box, Button, Card, CardBody, Flex, QuestionHelper, RowBetween, Text } from "@simpleflow/uikit";
 import { CurrencyLogo } from "../components/CurrencyLogo";
 
 type Props = UsdAmountInputProps & TokenAmountsDisplayProps;

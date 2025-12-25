@@ -1,8 +1,8 @@
-import { Box, BoxProps } from '@pancakeswap/uikit'
+import { Box, BoxProps } from '@simpleflow/uikit'
 import { FieldDepositAmount } from 'components/Liquidity/Form/FieldDepositAmount'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { isSolana } from '@pancakeswap/chains'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { isSolana } from '@simpleflow/chains'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { useCreateDepositAmounts, useCreateDepositAmountsEnabled } from '../hooks/useCreateDepositAmounts'
 import { useCurrencies } from '../hooks/useCurrencies'
 

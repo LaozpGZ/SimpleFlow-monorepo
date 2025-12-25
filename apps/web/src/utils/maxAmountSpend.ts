@@ -1,5 +1,5 @@
-import { isSolana } from '@pancakeswap/chains'
-import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { isSolana } from '@simpleflow/chains'
+import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@simpleflow/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { BIG_INT_ZERO, MIN_BNB, MIN_SOL_RESERVER } from 'config/constants/exchange'
 

@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { CardBody, CardFooter, Box, Text, AddIcon, AtomBox } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { CardBody, CardFooter, Box, Text, AddIcon, AtomBox } from "@simpleflow/uikit";
 
 export function ChoosePairView({
   selectCurrencyA,

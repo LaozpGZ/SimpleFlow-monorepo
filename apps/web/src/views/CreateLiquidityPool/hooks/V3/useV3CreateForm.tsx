@@ -7,14 +7,14 @@ import { useV3MintActionHandlers } from 'views/AddLiquidityV3/formViews/V3FormVi
 import { tryParsePrice } from 'hooks/v3/utils'
 import { V3SubmitButton } from 'views/AddLiquidityV3/components/V3SubmitButton'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Currency,
   CurrencyAmount,
   isUnifiedCurrencySorted,
   NativeCurrency,
   UnifiedCurrency,
-} from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/swap-sdk-core'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
@@ -24,14 +24,14 @@ import {
   logGTMClickAddLiquidityConfirmEvent,
   logGTMClickAddLiquidityEvent,
 } from 'utils/customGTMEventTracking'
-import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
+import { useIsExpertMode, useUserSlippage } from '@simpleflow/utils/user'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { useV3NFTPositionManagerContract } from 'hooks/useContract'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import V3RangeSelector from 'views/AddLiquidityV3/formViews/V3FormView/components/V3RangeSelector'
 import { useRangeHopCallbacks } from 'views/AddLiquidityV3/formViews/V3FormView/form/hooks/useRangeHopCallbacks'
 import { getViemErrorMessage } from 'utils/errors'
-import { Bound, ZoomLevels } from '@pancakeswap/widgets-internal'
+import { Bound, ZoomLevels } from '@simpleflow/widgets-internal'
 import {
   AutoColumn,
   Box,
@@ -46,10 +46,10 @@ import {
   Text,
   useModalV2,
   useToast,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { NonfungiblePositionManager, priceToClosestTick } from '@pancakeswap/v3-sdk'
+import { NonfungiblePositionManager, priceToClosestTick } from '@simpleflow/v3-sdk'
 import { basisPointsToPercent } from 'utils/exchange'
 import { hexToBigInt } from 'viem/utils'
 import { getViemClients } from 'utils/viem'

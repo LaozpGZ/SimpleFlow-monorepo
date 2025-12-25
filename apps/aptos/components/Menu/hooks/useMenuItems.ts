@@ -1,4 +1,4 @@
-import { ContextApi, useTranslation } from '@pancakeswap/localization'
+import { ContextApi, useTranslation } from '@simpleflow/l10n'
 import {
   DropdownMenuItems,
   DropdownMenuItemType,
@@ -8,7 +8,7 @@ import {
   MoreIcon,
   SwapFillIcon,
   SwapIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import { useMenuItemsStatus } from './useMenuItemsStatus'
 

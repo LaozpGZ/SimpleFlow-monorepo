@@ -1,4 +1,4 @@
-import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
+import { INFINITY_SUPPORTED_CHAINS } from '@simpleflow/infinity-sdk'
 import { InfinityProvider } from 'hooks/infinity/useInfinityContext'
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'

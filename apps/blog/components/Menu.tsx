@@ -1,7 +1,7 @@
-import { Box, Flex, Logo, ThemeSwitcher, Link, Button, LangSelector } from '@pancakeswap/uikit'
+import { Box, Flex, Logo, ThemeSwitcher, Link, Button, LangSelector } from '@simpleflow/uikit'
 import { useTheme as useNextTheme } from 'next-themes'
-import { useTranslation, languageList } from '@pancakeswap/localization'
-import { useTheme } from '@pancakeswap/hooks'
+import { useTranslation, languageList } from '@simpleflow/l10n'
+import { useTheme } from '@simpleflow/hooks'
 import NoSSR from 'components/NoSSR'
 
 const Menu = () => {

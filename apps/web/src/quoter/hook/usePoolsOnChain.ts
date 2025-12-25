@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow, no-await-in-loop, no-constant-condition, no-console */
-import { BigintIsh, Currency } from '@pancakeswap/sdk'
-import { OnChainProvider, Pool, SmartRouter } from '@pancakeswap/smart-router'
+import { BigintIsh, Currency } from '@simpleflow/sdk'
+import { OnChainProvider, Pool, SmartRouter } from '@simpleflow/smart-router'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 

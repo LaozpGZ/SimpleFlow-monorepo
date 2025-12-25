@@ -1,6 +1,6 @@
-import { Token } from '@pancakeswap/sdk'
-import { TokenLogo } from '@pancakeswap/uikit'
-import { chainName as CHAIN_PATH } from '@pancakeswap/widgets-internal'
+import { Token } from '@simpleflow/sdk'
+import { TokenLogo } from '@simpleflow/uikit'
+import { chainName as CHAIN_PATH } from '@simpleflow/widgets-internal'
 import React, { useMemo } from 'react'
 
 import { multiChainId, MultiChainNameExtend } from 'state/info/constant'

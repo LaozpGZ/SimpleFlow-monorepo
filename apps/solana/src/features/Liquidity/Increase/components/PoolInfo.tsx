@@ -14,7 +14,7 @@ import {
   PopoverBody,
   useClipboard
 } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Decimal from 'decimal.js'
 import TokenAvatar from '@/components/TokenAvatar'
 import { aprColors, PoolListItemAprLine } from '@/features/Pools/components/PoolListItemAprLine'

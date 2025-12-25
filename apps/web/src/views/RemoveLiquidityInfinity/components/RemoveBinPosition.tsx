@@ -1,7 +1,7 @@
-import { useIsMounted, useTheme } from '@pancakeswap/hooks'
-import { PoolKey } from '@pancakeswap/infinity-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { useIsMounted, useTheme } from '@simpleflow/hooks'
+import { PoolKey } from '@simpleflow/infinity-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import {
   ArrowDownIcon,
   Box,
@@ -18,9 +18,9 @@ import {
   Text,
   Toggle,
   useModal,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import { useUserSlippage } from '@pancakeswap/utils/user'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
+import { useUserSlippage } from '@simpleflow/utils/user'
 import { LightGreyCard } from 'components/Card'
 import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/FormattedCurrencyAmount'
 import { BinRangeSelector } from 'components/Liquidity/Form/BinRangeSelector'

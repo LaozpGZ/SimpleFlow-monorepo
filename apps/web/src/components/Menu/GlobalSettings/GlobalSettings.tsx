@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, PreTitle, FlexGap } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, PreTitle, FlexGap } from '@simpleflow/uikit'
 import { useCallback, useMemo, useState } from 'react'
 
 import { GlobalSettingsTab } from './GlobalSettingsTab'
@@ -34,16 +34,18 @@ const GlobalSettings: React.FC = () => {
         label: t('Global Settings'),
         component: <GlobalSettingsTab />,
       },
-      {
-        index: GlobalSettingsTabIndex.EVM_SETTINGS,
-        label: t('EVM Settings'),
-        component: <EVMSettingsTab />,
-      },
-      {
-        index: GlobalSettingsTabIndex.SOLANA_SETTINGS,
-        label: t('Solana Settings'),
-        component: <SolanaSettingsTab />,
-      },
+      // Hidden: EVM Settings
+      // {
+      //   index: GlobalSettingsTabIndex.EVM_SETTINGS,
+      //   label: t('EVM Settings'),
+      //   component: <EVMSettingsTab />,
+      // },
+      // Hidden: Solana Settings
+      // {
+      //   index: GlobalSettingsTabIndex.SOLANA_SETTINGS,
+      //   label: t('Solana Settings'),
+      //   component: <SolanaSettingsTab />,
+      // },
     ],
     [t],
   )

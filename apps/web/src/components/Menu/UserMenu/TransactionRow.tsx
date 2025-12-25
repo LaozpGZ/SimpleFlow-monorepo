@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { BlockIcon, BscScanIcon, CheckmarkCircleIcon, Flex, RefreshIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { BlockIcon, BscScanIcon, CheckmarkCircleIcon, Flex, RefreshIcon } from '@simpleflow/uikit'
 import { useAppDispatch } from 'state'
 import { pickFarmTransactionTx } from 'state/global/actions'
 import { FarmTransactionStatus, TransactionType } from 'state/transactions/actions'

@@ -1,4 +1,4 @@
-import { Currency, Pair, Price } from '@pancakeswap/aptos-swap-sdk'
+import { Currency, Pair, Price } from '@simpleflow/aptos-swap-sdk'
 import maxBy from 'lodash/maxBy'
 import _uniqBy from 'lodash/uniqBy'
 import { PairState } from '../hooks/usePairs'

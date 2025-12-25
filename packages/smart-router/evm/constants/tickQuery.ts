@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { Address } from 'viem'
 
 export const TICK_QUERY_HELPER_ADDRESSES: Partial<Record<ChainId, Address>> = {

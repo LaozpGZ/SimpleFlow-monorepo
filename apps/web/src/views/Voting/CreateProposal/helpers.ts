@@ -1,4 +1,4 @@
-import { ContextApi } from '@pancakeswap/localization'
+import { ContextApi } from '@simpleflow/l10n'
 import dayjs from 'dayjs'
 import { MINIMUM_CHOICES } from './Choices'
 import { FormState } from './types'

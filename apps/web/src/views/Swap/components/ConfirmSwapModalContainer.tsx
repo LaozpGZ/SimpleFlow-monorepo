@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { BoxProps, Modal } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { BoxProps, Modal } from '@simpleflow/uikit'
 
 interface ConfirmSwapModalContainerProps extends BoxProps {
   hideTitleAndBackground?: boolean

@@ -1,4 +1,4 @@
-import { Multicall } from '@pancakeswap/v3-sdk'
+import { Multicall } from '@simpleflow/v3-sdk'
 import { encodeFunctionData, Hex } from 'viem'
 
 export const encodeMulticall = (calldatas: Hex | Hex[]): Hex => {

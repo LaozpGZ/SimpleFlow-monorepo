@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { AutoColumn, Button, ErrorIcon, Flex, Text } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { AutoColumn, Button, ErrorIcon, Flex, Text } from "@simpleflow/uikit";
 import { ReactElement } from "react";
 import { styled } from "styled-components";
 import { StepTitleAnimationContainer } from "./ApproveModalContent";

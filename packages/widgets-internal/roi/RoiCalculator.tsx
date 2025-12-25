@@ -1,15 +1,15 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from "@pancakeswap/sdk";
-import { BIG_ZERO } from "@pancakeswap/utils/bigNumber";
-import { formatFraction, formatPercent, formatPrice } from "@pancakeswap/utils/formatFractions";
-import { isPositionOutOfRange } from "@pancakeswap/utils/isPositionOutOfRange";
-import { FeeAmount, FeeCalculator, TICK_SPACINGS, TickMath, sqrtRatioX96ToPrice } from "@pancakeswap/v3-sdk";
+import { useTranslation } from "@simpleflow/l10n";
+import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from "@simpleflow/sdk";
+import { BIG_ZERO } from "@simpleflow/utils/bigNumber";
+import { formatFraction, formatPercent, formatPrice } from "@simpleflow/utils/formatFractions";
+import { isPositionOutOfRange } from "@simpleflow/utils/isPositionOutOfRange";
+import { FeeAmount, FeeCalculator, TICK_SPACINGS, TickMath, sqrtRatioX96ToPrice } from "@simpleflow/v3-sdk";
 import BigNumber from "bignumber.js";
 import { useCallback, useMemo, useState } from "react";
 
-import { Button, DynamicSection, Flex, useMatchBreakpoints } from "@pancakeswap/uikit";
+import { Button, DynamicSection, Flex, useMatchBreakpoints } from "@simpleflow/uikit";
 
-import { ScrollableContainer } from "@pancakeswap/uikit/components/RoiCalculatorModal/RoiCalculatorModal";
+import { ScrollableContainer } from "@simpleflow/uikit/components/RoiCalculatorModal/RoiCalculatorModal";
 import { LiquidityChartRangeInput } from "../swap/LiquidityChartRangeInput";
 import { useDensityChartData } from "../swap/LiquidityChartRangeInput/hooks";
 import { AnimatedArrow } from "./AnimationArrow";

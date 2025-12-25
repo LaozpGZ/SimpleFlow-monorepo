@@ -1,5 +1,5 @@
 import { Box, Collapse, Flex, HStack, Spacer, useDisclosure } from '@chakra-ui/react'
-import { Text } from '@pancakeswap/uikit'
+import { Text } from '@simpleflow/uikit'
 import { ReactNode } from 'react'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import { colors } from '@/theme/cssVariables'

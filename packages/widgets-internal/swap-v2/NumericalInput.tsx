@@ -1,6 +1,6 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { SwapCSS } from "@pancakeswap/uikit";
-import { escapeRegExp } from "@pancakeswap/utils/escapeRegExp";
+import { useTranslation } from "@simpleflow/l10n";
+import { SwapCSS } from "@simpleflow/uikit";
+import { escapeRegExp } from "@simpleflow/utils/escapeRegExp";
 import clsx from "clsx";
 import { memo, useMemo } from "react";
 import { styled } from "styled-components";

@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Swap } from '@pancakeswap/widgets-internal'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Swap } from '@simpleflow/widgets-internal'
 import { EXCHANGE_HELP_URLS } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 

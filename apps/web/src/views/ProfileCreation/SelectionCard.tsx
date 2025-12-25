@@ -1,4 +1,4 @@
-import { Card, Radio } from '@pancakeswap/uikit'
+import { Card, Radio } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
 interface SelectionCardProps {

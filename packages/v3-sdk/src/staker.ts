@@ -1,4 +1,4 @@
-import { BigintIsh, Token, validateAndParseAddress } from '@pancakeswap/sdk'
+import { BigintIsh, Token, validateAndParseAddress } from '@simpleflow/sdk'
 import { Address, encodeAbiParameters, encodeFunctionData, Hex, parseAbiParameters } from 'viem'
 import { v3StakerABI } from './abi/V3Staker'
 import { MethodParameters, toHex } from './utils/calldata'

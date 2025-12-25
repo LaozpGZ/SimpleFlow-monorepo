@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoRow,
   CalculateIcon,
@@ -12,17 +12,17 @@ import {
   TooltipText,
   useModalV2,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { Position, TICK_SPACINGS, TickMath, encodeSqrtRatioX96 } from '@pancakeswap/v3-sdk'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
-import { RoiCalculatorModalV2, useRoi } from '@pancakeswap/widgets-internal/roi'
+} from '@simpleflow/uikit'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { Position, TICK_SPACINGS, TickMath, encodeSqrtRatioX96 } from '@simpleflow/v3-sdk'
+import { FarmWidget } from '@simpleflow/widgets-internal'
+import { RoiCalculatorModalV2, useRoi } from '@simpleflow/widgets-internal/roi'
 import BigNumber from 'bignumber.js'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useContext, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import isUndefinedOrNull from '@simpleflow/utils/isUndefinedOrNull'
 import { Bound } from 'config/constants/types'
 import { usePoolAvgInfo } from 'hooks/usePoolAvgInfo'
 import { usePairTokensPrice } from 'hooks/v3/usePairTokensPrice'

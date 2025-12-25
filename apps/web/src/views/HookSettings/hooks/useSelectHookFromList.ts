@@ -1,4 +1,4 @@
-import { type HookData } from '@pancakeswap/infinity-sdk'
+import { type HookData } from '@simpleflow/infinity-sdk'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useHookByAddress } from 'hooks/infinity/useHooksList'
 import { useCallback } from 'react'

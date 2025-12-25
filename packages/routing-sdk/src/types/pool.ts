@@ -1,4 +1,4 @@
-import type { Currency, CurrencyAmount, Price } from '@pancakeswap/swap-sdk-core'
+import type { Currency, CurrencyAmount, Price } from '@simpleflow/swap-sdk-core'
 
 export type PoolQuoteResult = {
   quote: CurrencyAmount<Currency>

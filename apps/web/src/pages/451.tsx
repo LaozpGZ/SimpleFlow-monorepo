@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Text, LogoIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Text, LogoIcon } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
 const StyledNotFound = styled.div`

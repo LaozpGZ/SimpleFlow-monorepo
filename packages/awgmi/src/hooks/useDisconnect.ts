@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import { disconnect as disconnectCore } from '@pancakeswap/awgmi/core'
+import { disconnect as disconnectCore } from '@simpleflow/awgmi/core'
 import { useMutation } from '@tanstack/react-query'
 
 export type UseDisconnectConfig = {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { Token } from '@simpleflow/swap-sdk-core'
 
 const useSortedTokensByQuery = (tokens: Token[] | undefined, searchQuery: string): Token[] => {
   return useMemo(() => {

@@ -1,6 +1,6 @@
 import { Badge, Box, HStack, Tag, Text, VStack } from '@chakra-ui/react'
 import Decimal from 'decimal.js'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import useClmmBalance, { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'

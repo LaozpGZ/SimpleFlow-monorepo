@@ -1,4 +1,4 @@
-import { Text } from '@pancakeswap/uikit'
+import { Text } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
 const Wrapper = styled(Text)<{ fontWeight: number; fontSize: string; negative: boolean }>`

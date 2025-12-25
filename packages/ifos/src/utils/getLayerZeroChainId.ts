@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/sdk'
 
 import { LZ_CHAIN_MAP, LZ_MAP_REVERSE } from '../constants/lzChainMap'
 

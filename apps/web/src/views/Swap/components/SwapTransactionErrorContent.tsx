@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { LinkExternal, Text } from '@pancakeswap/uikit'
-import { TransactionErrorContent } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { LinkExternal, Text } from '@simpleflow/uikit'
+import { TransactionErrorContent } from '@simpleflow/widgets-internal'
 import { useCallback } from 'react'
 
 const PancakeRouterSlippageErrorMsg =

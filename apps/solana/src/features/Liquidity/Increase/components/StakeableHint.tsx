@@ -1,5 +1,5 @@
 import { Grid, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import ExclaimationOctagon from '@/icons/misc/ExclaimationOctagon'
 import { colors } from '@/theme/cssVariables'

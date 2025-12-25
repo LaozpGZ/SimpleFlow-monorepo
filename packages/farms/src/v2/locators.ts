@@ -1,7 +1,7 @@
-import { WBNB } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
-import { BUSD } from '@pancakeswap/tokens'
-import { equalsIgnoreCase } from '@pancakeswap/utils/equalsIgnoreCase'
+import { WBNB } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { BUSD } from '@simpleflow/tokens'
+import { equalsIgnoreCase } from '@simpleflow/utils/equalsIgnoreCase'
 import { FarmData } from '../types'
 
 /**

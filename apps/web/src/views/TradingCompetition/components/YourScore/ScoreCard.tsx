@@ -12,12 +12,12 @@ import {
   LaurelRightIcon,
   CheckmarkCircleIcon,
   useModal,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { CLAIM, OVER } from 'config/constants/trading-competition/phases'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId } from '@simpleflow/chains'
 import ClaimModal from '../ClaimModal'
 import CardUserInfo from './CardUserInfo'
 import ShareImageModal from '../ShareImageModal'

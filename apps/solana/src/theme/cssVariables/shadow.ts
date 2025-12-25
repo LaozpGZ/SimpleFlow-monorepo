@@ -1,4 +1,4 @@
-import { shadows as PCSShadows } from '@pancakeswap/uikit'
+import { shadows as PCSShadows } from '@simpleflow/uikit'
 import { colors } from './colors'
 
 export const shadows: typeof PCSShadows & { bigCard: string; appMask: string } = {

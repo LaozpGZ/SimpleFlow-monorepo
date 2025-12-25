@@ -1,5 +1,5 @@
 import { formatUnits } from '@ethersproject/units'
-import { fetchBalance, FetchBalanceArgs, FetchCoinResult } from '@pancakeswap/awgmi/core'
+import { fetchBalance, FetchBalanceArgs, FetchCoinResult } from '@simpleflow/awgmi/core'
 import { useQuery } from '@tanstack/react-query'
 import { QueryConfig } from '../types'
 import { useCoin } from './useCoin'

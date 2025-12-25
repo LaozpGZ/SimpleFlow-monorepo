@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import type { Address } from 'viem'
 
 import { InfinitySupportedChains } from '../addresses'

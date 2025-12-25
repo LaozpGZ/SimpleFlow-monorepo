@@ -1,5 +1,5 @@
-import { BinPool, Bytes32, Pool as CLPool, DYNAMIC_FEE_FLAG, PoolType } from '@pancakeswap/infinity-sdk'
-import { BigintIsh, Currency, sortCurrencies, Token } from '@pancakeswap/swap-sdk-core'
+import { BinPool, Bytes32, Pool as CLPool, DYNAMIC_FEE_FLAG, PoolType } from '@simpleflow/infinity-sdk'
+import { BigintIsh, Currency, sortCurrencies, Token } from '@simpleflow/swap-sdk-core'
 import { BinPoolInfo } from 'state/farmsV4/state/accountPositions/fetcher/infinity/getPoolInfo'
 import { LruMap } from 'utils/lru'
 import { Address } from 'viem'

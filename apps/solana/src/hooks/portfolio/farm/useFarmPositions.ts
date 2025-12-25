@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react'
-import { FarmPositionData } from '@pancakeswap/solana-core-sdk'
+import { FarmPositionData } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import Decimal from 'decimal.js'

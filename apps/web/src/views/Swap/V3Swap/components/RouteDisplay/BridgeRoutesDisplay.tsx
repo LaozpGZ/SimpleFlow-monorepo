@@ -1,4 +1,4 @@
-import { RouteType, SmartRouter } from '@pancakeswap/smart-router'
+import { RouteType, SmartRouter } from '@simpleflow/smart-router'
 import {
   AtomBox,
   AutoColumn,
@@ -10,10 +10,10 @@ import {
   Text,
   useMatchBreakpoints,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { ChainLogo, CurrencyLogo, LightCard, LightGreyCard } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ChainLogo, CurrencyLogo, LightCard, LightGreyCard } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -21,7 +21,7 @@ import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { RouterPoolBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
 import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
 import { isSolanaBridge } from 'views/Swap/utils'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { Pair, RouteDisplayEssentials } from './types'
 import { EVMPairNodes } from './pairNode'
 

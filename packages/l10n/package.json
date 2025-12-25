@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/localization",
+  "name": "@simpleflow/l10n",
   "license": "MIT",
   "version": "6.2.0",
   "description": "A minimal internationalization library",

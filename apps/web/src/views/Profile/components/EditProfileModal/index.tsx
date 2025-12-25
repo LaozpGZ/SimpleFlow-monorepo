@@ -1,5 +1,5 @@
-import { ContextApi, useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, Modal } from '@pancakeswap/uikit'
+import { ContextApi, useTranslation } from '@simpleflow/l10n'
+import { InjectedModalProps, Modal } from '@simpleflow/uikit'
 import ApproveSDXView from './ApproveSDXView'
 import ChangeProfilePicView from './ChangeProfilePicView'
 import PauseProfileView from './PauseProfileView'

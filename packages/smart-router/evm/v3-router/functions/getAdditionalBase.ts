@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Token } from '@pancakeswap/swap-sdk-core'
-import memoize from '@pancakeswap/utils/memoize'
+import { ChainId } from '@simpleflow/chains'
+import { Token } from '@simpleflow/swap-sdk-core'
+import memoize from '@simpleflow/utils/memoize'
 import { Address, checksumAddress } from 'viem'
 import { ADDITIONAL_BASES, ADDITIONAL_BASES_TABLE } from '../../constants'
 

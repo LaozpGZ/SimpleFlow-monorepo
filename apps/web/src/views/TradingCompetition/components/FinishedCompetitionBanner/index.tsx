@@ -1,9 +1,9 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import { StaticImageData } from 'next/dist/client/legacy/image'
-import { Flex, Heading, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Heading, useMatchBreakpoints } from '@simpleflow/uikit'
 import Image from 'next/image'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 const Wrapper = styled(Flex)<{ background: string }>`
   position: relative;

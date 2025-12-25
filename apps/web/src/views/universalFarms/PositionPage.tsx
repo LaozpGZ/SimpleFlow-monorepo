@@ -1,6 +1,6 @@
-import { Protocol } from '@pancakeswap/farms'
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { Protocol } from '@simpleflow/farms'
+import { useIntersectionObserver } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Button,
   ButtonMenu,
@@ -14,8 +14,8 @@ import {
   Toggle,
   useMatchBreakpoints,
   useModal,
-} from '@pancakeswap/uikit'
-import { Liquidity } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { Liquidity } from '@simpleflow/widgets-internal'
 import TransactionsModal from 'components/App/Transactions/TransactionsModal'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'

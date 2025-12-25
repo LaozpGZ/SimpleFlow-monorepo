@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Link, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Link, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'

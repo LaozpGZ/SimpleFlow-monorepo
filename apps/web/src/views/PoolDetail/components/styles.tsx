@@ -1,4 +1,4 @@
-import { Button } from '@pancakeswap/uikit'
+import { Button } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 export const ActionButton = styled(Button).attrs({

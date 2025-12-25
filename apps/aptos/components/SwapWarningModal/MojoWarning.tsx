@@ -1,5 +1,5 @@
-import { LinkExternal, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { LinkExternal, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 
 const MojitoWarning = () => {
   const { t } = useTranslation()

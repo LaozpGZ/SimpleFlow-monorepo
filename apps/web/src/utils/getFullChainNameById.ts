@@ -1,4 +1,4 @@
-import { getChainName } from '@pancakeswap/chains'
+import { getChainName } from '@simpleflow/chains'
 import memoize from 'lodash/memoize'
 import { chainNameConverter } from './chainNameConverter'
 import { chains } from './wagmi'

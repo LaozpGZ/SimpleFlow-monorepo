@@ -1,7 +1,7 @@
-import { Flex, Heading } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Flex, Heading } from '@simpleflow/uikit'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { UnlockedFixedTag } from './UnlockedFixedTag'
 
 export function ModalTitle({

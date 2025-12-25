@@ -1,4 +1,4 @@
-import { RaydiumApiBatchRequestParams } from '@pancakeswap/solana-core-sdk'
+import { RaydiumApiBatchRequestParams } from '@simpleflow/solana-core-sdk'
 
 export type SSRData = Omit<RaydiumApiBatchRequestParams, 'api'>
 export type ValueOf<T> = T[keyof T]

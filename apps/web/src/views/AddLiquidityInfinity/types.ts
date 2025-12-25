@@ -1,4 +1,4 @@
-import { PoolType } from '@pancakeswap/infinity-sdk'
+import { PoolType } from '@simpleflow/infinity-sdk'
 import { Address, Hex } from 'viem'
 
 export type PoolData = {

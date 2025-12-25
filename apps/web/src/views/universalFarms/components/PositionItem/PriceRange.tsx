@@ -1,7 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Price, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
-import { Flex, FlexGap, IconButton, SwapHorizIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { Bound } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Price, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
+import { Flex, FlexGap, IconButton, SwapHorizIcon, useMatchBreakpoints } from '@simpleflow/uikit'
+import { Bound } from '@simpleflow/widgets-internal'
 import { formatTickPrice } from 'hooks/v3/utils/formatTickPrice'
 import { memo, useCallback, useMemo, useState } from 'react'
 

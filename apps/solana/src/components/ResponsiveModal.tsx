@@ -1,4 +1,4 @@
-import { Button } from '@pancakeswap/uikit'
+import { Button } from '@simpleflow/uikit'
 import {
   Drawer,
   DrawerBody,
@@ -19,7 +19,7 @@ import {
   SystemStyleObject,
   VStack
 } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import { colors } from '@/theme/cssVariables'
 

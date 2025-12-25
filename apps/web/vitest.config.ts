@@ -11,10 +11,10 @@ export default defineConfig({
   plugins: [tsconfigPaths({ projects: ['tsconfig.test.json'] }), react(), vanillaExtractPlugin()],
   resolve: {
     alias: {
-      '@pancakeswap/wagmi/connectors/blocto': r('../../packages/wagmi/connectors/blocto/index.ts'),
-      '@pancakeswap/wagmi/connectors/trustWallet': r('../../packages/wagmi/connectors/trustWallet/index.ts'),
-      '@pancakeswap/uikit': r('../../packages/uikit/src'),
-      '@pancakeswap/localization': r('../../packages/localization/src'),
+      '@simpleflow/wagmi/connectors/blocto': r('../../packages/wagmi/connectors/blocto/index.ts'),
+      '@simpleflow/wagmi/connectors/trustWallet': r('../../packages/wagmi/connectors/trustWallet/index.ts'),
+      '@simpleflow/uikit': r('../../packages/uikit/src'),
+      '@simpleflow/localization': r('../../packages/localization/src'),
     },
   },
   test: {

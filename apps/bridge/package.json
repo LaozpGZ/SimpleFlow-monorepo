@@ -25,11 +25,11 @@
     ]
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:^",
-    "@pancakeswap/hooks": "workspace:*",
-    "@pancakeswap/localization": "workspace:^",
-    "@pancakeswap/uikit": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/chains": "workspace:^",
+    "@simpleflow/hooks": "workspace:*",
+    "@simpleflow/l10n": "workspace:^",
+    "@simpleflow/uikit": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "@vanilla-extract/next-plugin": "^2.3.0",
     "@wagmi/core": "catalog:",
     "ethers": "^5.0.0",
@@ -46,8 +46,8 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "14.2.3",
-    "@pancakeswap/next-config": "workspace:*",
-    "@pancakeswap/tsconfig": "workspace:*",
+    "@simpleflow/next-config": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
     "@types/node": "18.0.4",
     "@types/react": "catalog:",
     "@types/react-dom": "^18.0.6",

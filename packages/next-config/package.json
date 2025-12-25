@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/next-config",
+  "name": "@simpleflow/next-config",
   "version": "0.0.1",
   "sideEffects": false,
   "private": true,

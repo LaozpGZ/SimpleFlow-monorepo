@@ -1,4 +1,4 @@
-import { Currency, isCurrencySorted, Price, sortCurrencies, Token } from '@pancakeswap/swap-sdk-core'
+import { Currency, isCurrencySorted, Price, sortCurrencies, Token } from '@simpleflow/swap-sdk-core'
 import { Q192 } from '../internalConstants'
 import { encodeSqrtRatioX96 } from './encodeSqrtRatioX96'
 import { TickMath } from './tickMath'

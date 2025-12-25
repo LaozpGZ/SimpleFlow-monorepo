@@ -1,4 +1,4 @@
-import { Currency, Percent, Price } from '@pancakeswap/sdk'
+import { Currency, Percent, Price } from '@simpleflow/sdk'
 
 const getRatePercentageDifference = (
   currentMarketRate?: Price<Currency, Currency>,

@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { ERC20Token } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { ERC20Token } from '@simpleflow/sdk'
 
 // SimpleChain Mainnet Tokens
 export const simplechainTokens = {

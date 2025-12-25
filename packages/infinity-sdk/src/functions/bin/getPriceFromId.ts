@@ -1,4 +1,4 @@
-import { Currency, Price } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price } from '@simpleflow/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import invariant from 'tiny-invariant'
 import { maxUint128, maxUint256 } from 'viem'

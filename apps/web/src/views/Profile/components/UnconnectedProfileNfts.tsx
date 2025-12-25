@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Grid, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Grid, Text } from '@simpleflow/uikit'
 import { NftToken } from 'state/nftMarket/types'
 import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
 import { CollectibleLinkCard } from '../../Nft/market/components/CollectibleCard'

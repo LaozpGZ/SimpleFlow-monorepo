@@ -1,6 +1,6 @@
 import '../css/theme.css'
 
-import { ResetCSS, ToastListener, type PancakeTheme } from '@pancakeswap/uikit'
+import { ResetCSS, ToastListener, type PancakeTheme } from '@simpleflow/uikit'
 import BigNumber from 'bignumber.js'
 import { Menu } from 'components/Menu'
 import Providers from 'components/Providers'

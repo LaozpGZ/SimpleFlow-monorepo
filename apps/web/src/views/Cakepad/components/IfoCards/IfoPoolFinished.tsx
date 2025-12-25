@@ -1,4 +1,4 @@
-import { FlexGap } from '@pancakeswap/uikit'
+import { FlexGap } from '@simpleflow/uikit'
 import type { IFOStatus } from '../../hooks/ifo/useIFOStatus'
 import { ClaimDisplay } from './ClaimDisplay'
 import { Divider } from './Divider'

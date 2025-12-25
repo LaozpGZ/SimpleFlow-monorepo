@@ -1,8 +1,8 @@
 import { styled } from "styled-components";
 import { ReactNode } from "react";
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 //  should be ok to import type from sdk
-import type { FeeAmount } from "@pancakeswap/v3-sdk";
+import type { FeeAmount } from "@simpleflow/v3-sdk";
 import {
   Text,
   Button,
@@ -17,7 +17,7 @@ import {
   AutoRow,
   RowBetween,
   Tag,
-} from "@pancakeswap/uikit";
+} from "@simpleflow/uikit";
 import Tags from "../Tags";
 
 const { FarmAuctionTag, V3FeeTag } = Tags;

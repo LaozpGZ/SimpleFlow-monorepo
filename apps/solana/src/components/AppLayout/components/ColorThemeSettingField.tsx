@@ -1,6 +1,6 @@
 import { useColorMode } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { ThemeSwitcher } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { ThemeSwitcher } from '@simpleflow/uikit'
 import { useTheme } from 'next-themes'
 import { useCallback } from 'react'
 import { SettingField } from './SettingField'

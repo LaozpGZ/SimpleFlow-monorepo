@@ -1,4 +1,4 @@
-import { BigintIsh, Token } from '@pancakeswap/swap-sdk-core'
+import { BigintIsh, Token } from '@simpleflow/swap-sdk-core'
 import { encodeFunctionData, Hash } from 'viem'
 import { selfPermitABI } from './abi/SelfPermit'
 

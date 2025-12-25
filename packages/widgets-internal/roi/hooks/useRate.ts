@@ -1,7 +1,7 @@
-import { ZERO_PERCENT } from "@pancakeswap/sdk";
+import { ZERO_PERCENT } from "@simpleflow/sdk";
 import { useMemo } from "react";
 
-import { formatFraction } from "@pancakeswap/utils/formatFractions";
+import { formatFraction } from "@simpleflow/utils/formatFractions";
 import { getAccrued } from "../aprHelper";
 import { floatToPercent as formatDecimalToPercent } from "../utils";
 

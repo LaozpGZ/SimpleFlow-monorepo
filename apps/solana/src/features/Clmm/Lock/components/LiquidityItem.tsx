@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Tag, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import { colors } from '@/theme/cssVariables'
 import TokenAvatarPair from '@/components/TokenAvatarPair'

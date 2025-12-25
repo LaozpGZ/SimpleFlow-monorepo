@@ -1,7 +1,7 @@
-import { useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { TokenInfo, wSolToSolToken } from '@pancakeswap/solana-core-sdk'
-import { Percent, UnifiedCurrency, UnifiedCurrencyAmount, Price } from '@pancakeswap/swap-sdk-core'
+import { useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { TokenInfo, wSolToSolToken } from '@simpleflow/solana-core-sdk'
+import { Percent, UnifiedCurrency, UnifiedCurrencyAmount, Price } from '@simpleflow/swap-sdk-core'
 import {
   ArrowForwardIcon,
   AutoColumn,
@@ -19,9 +19,9 @@ import {
   Text,
   TokenLogo,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { formatPercent } from '@pancakeswap/utils/formatFractions'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
+} from '@simpleflow/uikit'
+import { formatPercent } from '@simpleflow/utils/formatFractions'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
@@ -41,7 +41,7 @@ import { SolanaV3Pool } from 'state/pools/solana'
 import styled from 'styled-components'
 import { maxUnifiedAmountSpend } from 'utils/maxAmountSpend'
 import { SolanaLiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { PriceRangeDisplay } from 'views/PoolDetail/components/ProtocolPositionsTables'
 import { SolanaV3PoolInfoHeader } from './PooInfoHeader'
 

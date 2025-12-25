@@ -1,5 +1,5 @@
-import { useTranslation, Trans } from '@pancakeswap/localization'
-import { Box, Text, Link, LinkExternal } from '@pancakeswap/uikit'
+import { useTranslation, Trans } from '@simpleflow/l10n'
+import { Box, Text, Link, LinkExternal } from '@simpleflow/uikit'
 
 const BTTWarning = () => {
   const { t } = useTranslation()

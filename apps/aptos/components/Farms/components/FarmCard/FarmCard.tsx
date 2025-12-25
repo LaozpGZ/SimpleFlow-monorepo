@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Card, FarmMultiplierInfo, Flex, HelpIcon, LinkExternal, Skeleton, Text, useTooltip } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Card, FarmMultiplierInfo, Flex, HelpIcon, LinkExternal, Skeleton, Text, useTooltip } from '@simpleflow/uikit'
 import BigNumber from 'bignumber.js'
 import { useFarms } from 'state/farms/hook'
 import { styled } from 'styled-components'

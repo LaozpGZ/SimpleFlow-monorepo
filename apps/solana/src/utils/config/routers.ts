@@ -1,4 +1,4 @@
-import { MayFunction, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { MayFunction, TokenInfo } from '@simpleflow/solana-core-sdk'
 
 import { ParsedUrlQuery } from 'querystring'
 import { PoolPageQuery } from '@/features/Pools/Pools'

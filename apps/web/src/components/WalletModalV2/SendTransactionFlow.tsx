@@ -1,6 +1,6 @@
-import { ChainId, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Token, Native } from '@pancakeswap/sdk'
+import { ChainId, NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, Token, Native } from '@simpleflow/sdk'
 import {
   AutoColumn,
   Box,
@@ -12,9 +12,9 @@ import {
   Link,
   Spinner,
   Text,
-} from '@pancakeswap/uikit'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
-import { ConfirmationPendingContent } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
+import { ConfirmationPendingContent } from '@simpleflow/widgets-internal'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { ASSET_CDN } from 'config/constants/endpoints'

@@ -13,7 +13,7 @@ import {
   Token,
   sortedInsert,
   computePriceImpact,
-} from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/swap-sdk-core'
 
 import { Pair } from './pair'
 import { Route } from './route'

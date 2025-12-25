@@ -1,12 +1,12 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Text, Box } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Text, Box } from '@simpleflow/uikit'
 
 import { LightGreyCard } from 'components/Card'
 
 import { ReactNode, useMemo } from 'react'
 import { formatUnixTime } from 'utils/formatTime'
 
-import { CurrencyAmount, Percent, Currency } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Percent, Currency } from '@simpleflow/swap-sdk-core'
 import { AmountWithUSDSub } from './AmountWithUSDSub'
 import { StakedLimitEndOn } from './StakedLimitEndOn'
 import { useCurrentDay } from '../hooks/useStakedPools'

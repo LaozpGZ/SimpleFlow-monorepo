@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Tag } from '@pancakeswap/uikit'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Tag } from '@simpleflow/uikit'
+import { FeeAmount } from '@simpleflow/v3-sdk'
 import { PoolState } from 'hooks/v3/types'
 import { useFeeTierDistribution } from 'hooks/v3/useFeeTierDistribution'
 

@@ -1,4 +1,4 @@
-import { CurrencyAmount, Price, type Currency } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Price, type Currency } from '@simpleflow/swap-sdk-core'
 import type { Address } from 'viem'
 import type { PoolInfo } from '../../ifov2.types'
 

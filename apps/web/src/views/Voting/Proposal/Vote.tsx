@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Balance,
   Button,
@@ -15,7 +15,7 @@ import {
   useModal,
   useToast,
   VoteIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import fromPairs from 'lodash/fromPairs'

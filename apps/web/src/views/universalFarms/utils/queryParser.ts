@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { SORT_ORDER } from '@pancakeswap/uikit'
+import { Protocol } from '@simpleflow/farms'
+import { SORT_ORDER } from '@simpleflow/uikit'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
 import { DEFAULT_CHAINS, DEFAULT_PROTOCOLS } from 'state/farmsV4/state/farmPools/fetcher'

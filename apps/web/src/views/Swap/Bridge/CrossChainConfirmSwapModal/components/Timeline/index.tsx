@@ -7,7 +7,7 @@ import {
   ScanLink,
   SwapSpinner,
   WarningIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useBlockExploreLink } from 'utils'

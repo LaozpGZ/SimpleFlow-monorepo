@@ -1,5 +1,5 @@
-import { Native } from '@pancakeswap/sdk'
-import { CAKE } from '@pancakeswap/tokens'
+import { Native } from '@simpleflow/sdk'
+import { CAKE } from '@simpleflow/tokens'
 import { atom } from 'jotai'
 import { atomFamily, unwrap } from 'jotai/utils'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'

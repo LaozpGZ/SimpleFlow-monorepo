@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { TradeType } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { TradeType } from '@simpleflow/sdk'
 import { Address } from 'viem'
 import { z } from 'zod'
 import { PoolType } from './types'

@@ -1,4 +1,4 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import { BoxProps, Flex } from "../../components/Box";

@@ -7,12 +7,12 @@ import { useListState } from 'state/lists/lists'
 import { styled } from 'styled-components'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 
-import { UnifiedChainId } from '@pancakeswap/chains'
-import { usePreviousValue } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { SPLToken, Token, UnifiedCurrency } from '@pancakeswap/sdk'
-import { TokenList, WrappedTokenInfo } from '@pancakeswap/token-lists'
-import { enableList, removeList, useFetchListCallback } from '@pancakeswap/token-lists/react'
+import { UnifiedChainId } from '@simpleflow/chains'
+import { usePreviousValue } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { SPLToken, Token, UnifiedCurrency } from '@simpleflow/sdk'
+import { TokenList, WrappedTokenInfo } from '@simpleflow/token-lists'
+import { enableList, removeList, useFetchListCallback } from '@simpleflow/token-lists/react'
 import {
   CopyButton,
   FlexGap,
@@ -25,8 +25,8 @@ import {
   ModalHeader,
   ModalTitle,
   Text,
-} from '@pancakeswap/uikit'
-import { CurrencyLogo, ImportList } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { CurrencyLogo, ImportList } from '@simpleflow/widgets-internal'
 
 import CurrencySearch from './CurrencySearch'
 import ImportToken from './ImportToken'

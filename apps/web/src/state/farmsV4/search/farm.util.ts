@@ -1,5 +1,5 @@
-import { ChainId, isEvm, NonEVMChainId } from '@pancakeswap/chains'
-import { FarmV4SupportedChainId, supportedChainIdV4 } from '@pancakeswap/farms'
+import { ChainId, isEvm, NonEVMChainId } from '@simpleflow/chains'
+import { FarmV4SupportedChainId, supportedChainIdV4 } from '@simpleflow/farms'
 import {
   BinPoolManagerAbi,
   CLPoolManagerAbi,
@@ -9,10 +9,10 @@ import {
   PoolType as IPoolType,
   PoolKey,
   Slot0,
-} from '@pancakeswap/infinity-sdk'
-import { zeroAddress } from '@pancakeswap/price-api-sdk'
-import { InfinityBinPool, InfinityClPool, InfinityRouter, Pool, PoolType, SmartRouter } from '@pancakeswap/smart-router'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/infinity-sdk'
+import { zeroAddress } from '@simpleflow/price-api-sdk'
+import { InfinityBinPool, InfinityClPool, InfinityRouter, Pool, PoolType, SmartRouter } from '@simpleflow/smart-router'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { InfinityFeeTierPoolParams } from 'hooks/infinity/useInfinityFeeTier'
 import qs from 'qs'
 import { ALLOWED_PROTOCOLS } from 'quoter/utils/edgeQueries.util'

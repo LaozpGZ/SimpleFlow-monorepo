@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@simpleflow/uikit'
 import { HomePageToken } from 'edge/home/types'
 import React from 'react'
 import styled from 'styled-components'

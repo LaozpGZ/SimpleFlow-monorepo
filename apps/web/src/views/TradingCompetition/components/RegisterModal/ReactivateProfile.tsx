@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Heading, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Heading, Text } from '@simpleflow/uikit'
 import { useRouter } from 'next/router'
 import { CompetitionProps } from 'views/TradingCompetition/types'
 import { useAccount } from 'wagmi'

@@ -1,5 +1,5 @@
-import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
-import { useModal } from '@pancakeswap/uikit'
+import { Token, UnifiedCurrency } from '@simpleflow/sdk'
+import { useModal } from '@simpleflow/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
@@ -13,7 +13,7 @@ import { useSwapState } from 'state/swap/hooks'
 import { safeGetAddress } from 'utils'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { usePreviousValue } from '@pancakeswap/hooks'
+import { usePreviousValue } from '@simpleflow/hooks'
 import SwapWarningModal from '../components/SwapWarningModal'
 
 export default function useWarningImport() {

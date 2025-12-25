@@ -1,5 +1,5 @@
 /* eslint-disable  no-unused-expressions */
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -16,13 +16,13 @@ import {
   Toggle,
   useMatchBreakpoints,
   WalletFilledIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { WalletReadyState } from '@solana/wallet-adapter-base'
 import { useWallet, Wallet } from '@solana/wallet-adapter-react'
 import { useAtom } from 'jotai'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { solanaWalletModalAtom } from './atoms/solanaWalletAtoms'

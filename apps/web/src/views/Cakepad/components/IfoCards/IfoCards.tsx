@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, Spinner } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, CardHeader, Spinner } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import useTheme from 'hooks/useTheme'
 

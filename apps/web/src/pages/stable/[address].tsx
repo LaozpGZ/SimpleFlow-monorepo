@@ -9,8 +9,8 @@ import {
   MessageText,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { AppHeader } from 'components/App'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
@@ -22,10 +22,10 @@ import { styled } from 'styled-components'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
 
-import { Protocol } from '@pancakeswap/farms'
-import { useTranslation } from '@pancakeswap/localization'
-import { CurrencyAmount } from '@pancakeswap/sdk'
-import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
+import { Protocol } from '@simpleflow/farms'
+import { useTranslation } from '@simpleflow/l10n'
+import { CurrencyAmount } from '@simpleflow/sdk'
+import { formatFiatNumber } from '@simpleflow/utils/formatFiatNumber'
 import { LightGreyCard } from 'components/Card'
 import { CurrencyLogo } from 'components/Logo'
 import { usePoolTokenPercentage, useTotalUSDValue } from 'components/PositionCard'

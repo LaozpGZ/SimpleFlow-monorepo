@@ -1,4 +1,4 @@
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { TradeType } from '@simpleflow/swap-sdk-core'
 
 import { Trade } from '../types'
 

@@ -1,5 +1,5 @@
-import { useTranslation, Trans } from '@pancakeswap/localization'
-import { Grid, Link, Modal, ModalV2, Text } from '@pancakeswap/uikit'
+import { useTranslation, Trans } from '@simpleflow/l10n'
+import { Grid, Link, Modal, ModalV2, Text } from '@simpleflow/uikit'
 import { useQuery } from '@tanstack/react-query'
 import { WALLET_API } from 'config/constants/endpoints'
 import { UpdatePositionsReminder } from 'views/Farms/components/UpdatePositionsReminder'

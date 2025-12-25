@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ERC20Token, Percent, Price, TradeType, Pair as V2Pair } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, ERC20Token, Percent, Price, TradeType, Pair as V2Pair } from '@simpleflow/sdk'
 import { Address } from 'viem'
 
 import { RouteType } from './bestTrade'

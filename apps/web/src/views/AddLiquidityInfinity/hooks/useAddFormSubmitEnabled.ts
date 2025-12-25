@@ -1,4 +1,4 @@
-import { BinPool, Pool } from '@pancakeswap/infinity-sdk'
+import { BinPool, Pool } from '@simpleflow/infinity-sdk'
 import { useCLPriceRange } from 'hooks/infinity/useCLPriceRange'
 import { useMemo } from 'react'
 import { useBinRangeQueryState, useClRangeQueryState } from 'state/infinity/shared'

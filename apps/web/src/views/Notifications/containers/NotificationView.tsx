@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   CircleLoader,
@@ -11,7 +11,7 @@ import {
   Text,
   Toggle,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { NotifyClientTypes } from '@walletconnect/notify-client'
 
 import React, { useCallback, useMemo, useState } from 'react'

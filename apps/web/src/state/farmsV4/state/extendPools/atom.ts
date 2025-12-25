@@ -1,5 +1,5 @@
-import { ChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
+import { ChainId, UnifiedChainId } from '@simpleflow/chains'
+import { Protocol, supportedChainIdV4 } from '@simpleflow/farms'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import isEqual from 'lodash/isEqual'
 import uniqWith from 'lodash/uniqWith'

@@ -1,9 +1,9 @@
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { getCakeContract } from 'utils/contractHelpers'
 import { useBCakeProxyContractAddress } from 'hooks/useBCakeProxyContractAddress'
-import { useReadContract } from '@pancakeswap/wagmi'
+import { useReadContract } from '@simpleflow/wagmi'
 import { useCallback } from 'react'
 
 const useProxyCAKEBalance = () => {

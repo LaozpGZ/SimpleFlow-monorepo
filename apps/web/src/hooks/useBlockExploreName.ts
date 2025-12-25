@@ -1,6 +1,6 @@
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
 import { useAtomValue } from 'jotai'
-import { solanaExplorerAtom } from '@pancakeswap/utils/user'
+import { solanaExplorerAtom } from '@simpleflow/utils/user'
 import { multiChainScanName } from 'state/info/constant'
 import { bsc } from 'wagmi/chains'
 import { chains } from 'utils/wagmi'

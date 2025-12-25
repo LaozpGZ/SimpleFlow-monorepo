@@ -1,4 +1,4 @@
-import { Currency, Price } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price } from '@simpleflow/swap-sdk-core'
 
 export const formatRangeSelectorPrice = (price: Price<Currency, Currency> | undefined) => {
   if (!price) return ''

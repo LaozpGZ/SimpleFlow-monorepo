@@ -1,4 +1,4 @@
-import { PoolType } from '@pancakeswap/smart-router'
+import { PoolType } from '@simpleflow/smart-router'
 
 import type { PoolTypeKey } from './types'
 

@@ -1,7 +1,7 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Button, Checkbox, Flex, InjectedModalProps, Message, Modal, Text, usePrompt } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { Button, Checkbox, Flex, InjectedModalProps, Message, Modal, Text, usePrompt } from "@simpleflow/uikit";
 import { useCallback, useState } from "react";
-import { useExpertMode, useUserExpertModeAcknowledgement } from "@pancakeswap/utils/user";
+import { useExpertMode, useUserExpertModeAcknowledgement } from "@simpleflow/utils/user";
 
 interface ExpertModalProps extends InjectedModalProps {
   setShowConfirmExpertModal: (show: boolean) => void;

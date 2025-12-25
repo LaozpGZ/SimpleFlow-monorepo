@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Flex } from "@pancakeswap/uikit";
+import { Flex } from "@simpleflow/uikit";
 
 export const StatWrapper: React.FC<React.PropsWithChildren<{ label: ReactNode }>> = ({ children, label }) => {
   return (

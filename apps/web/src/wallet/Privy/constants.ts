@@ -1,4 +1,4 @@
-import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
 import { FirebaseApp, initializeApp } from 'firebase/app'
 
 const firebaseConfig = {

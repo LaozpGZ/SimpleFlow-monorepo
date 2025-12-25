@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Protocol } from '@simpleflow/farms'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'

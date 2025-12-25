@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Token, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import {
   AddIcon,
   Button,
@@ -10,8 +10,8 @@ import {
   FlexGap,
   PreTitle,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { PoolTypeFilter, getCurrencyAddress } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { PoolTypeFilter, getCurrencyAddress } from '@simpleflow/widgets-internal'
 import { NetworkSelector } from 'components/NetworkSelector'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { CHAIN_QUERY_NAME } from 'config/chains'
@@ -22,16 +22,16 @@ import styled from 'styled-components'
 import currencyId from 'utils/currencyId'
 import { TokenFilterContainer } from 'views/AddLiquidityInfinity/components/styles'
 import { usePoolTypes } from 'views/universalFarms/constants'
-import { Chain } from '@pancakeswap/chains'
+import { Chain } from '@simpleflow/chains'
 
-import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
+import { INFINITY_SUPPORTED_CHAINS } from '@simpleflow/infinity-sdk'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useStableSwapSupportedTokens } from 'hooks/useStableSwapSupportedTokens'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { COMPACT_LIQUIDITY_TYPES, LIQUIDITY_TYPES, LiquidityType } from 'utils/types'
-import { bscTokens } from '@pancakeswap/tokens'
-import { isStableSwapSupported } from '@pancakeswap/stable-swap-sdk'
+import { bscTokens } from '@simpleflow/tokens'
+import { isStableSwapSupported } from '@simpleflow/stable-swap-sdk'
 import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { usePoolTypeQuery } from './hooks/usePoolTypeQuery'
 

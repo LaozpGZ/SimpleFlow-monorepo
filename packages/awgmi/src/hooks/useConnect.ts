@@ -1,4 +1,4 @@
-import { ConnectArgs, ConnectResult, connect as connectCore } from '@pancakeswap/awgmi/core'
+import { ConnectArgs, ConnectResult, connect as connectCore } from '@simpleflow/awgmi/core'
 import { useMutation } from '@tanstack/react-query'
 import * as React from 'react'
 import { useClient } from '../context'

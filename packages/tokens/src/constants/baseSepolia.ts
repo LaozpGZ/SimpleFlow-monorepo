@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { WETH9 } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { WETH9 } from '@simpleflow/sdk'
 import { USDC } from './common'
 
 export const baseSepoliaTokens = {

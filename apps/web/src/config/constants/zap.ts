@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 // Empty array whitelists all pools for the chain, omitting the chain means ZAP is unsupported.
 export const ZAP_V3_POOL_ADDRESSES: Record<number, string[]> = {

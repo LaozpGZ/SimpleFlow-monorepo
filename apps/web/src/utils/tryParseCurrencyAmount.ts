@@ -1,5 +1,5 @@
 import { parseUnits } from 'viem'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 
 /**
  * Parses a CurrencyAmount from the passed string.

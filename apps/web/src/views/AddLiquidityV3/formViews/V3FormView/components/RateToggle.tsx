@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/sdk'
-import { Button, Flex, SyncAltIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency } from '@simpleflow/sdk'
+import { Button, Flex, SyncAltIcon, Text } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
 const RateToggleButton = styled(Button)`

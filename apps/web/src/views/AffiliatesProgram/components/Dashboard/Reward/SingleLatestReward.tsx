@@ -1,8 +1,8 @@
-import { Flex, Text, Button } from '@pancakeswap/uikit'
+import { Flex, Text, Button } from '@simpleflow/uikit'
 import { LightGreyCard } from 'components/Card'
-import { useTranslation } from '@pancakeswap/localization'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { ChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { formatNumber } from '@simpleflow/utils/formatBalance'
+import { ChainId } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SingleLatestRewardProps {

@@ -1,4 +1,4 @@
-import { Price, UnifiedCurrency, UnifiedToken } from '@pancakeswap/sdk'
+import { Price, UnifiedCurrency, UnifiedToken } from '@simpleflow/sdk'
 import { Bound } from 'config/constants/types'
 import { formatPrice } from 'utils/formatCurrencyAmount'
 

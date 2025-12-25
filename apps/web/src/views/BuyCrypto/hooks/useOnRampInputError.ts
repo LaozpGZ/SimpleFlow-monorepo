@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import type { Currency } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import type { Currency } from '@simpleflow/sdk'
 import { useMemo } from 'react'
 import formatLocaleNumber from 'utils/formatLocaleNumber'
 import { isFiat, type OnRampChainId } from '../constants'

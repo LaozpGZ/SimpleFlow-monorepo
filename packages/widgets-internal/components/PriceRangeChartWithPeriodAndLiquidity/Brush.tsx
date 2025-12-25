@@ -1,8 +1,8 @@
-import { usePreviousValue, useTheme } from "@pancakeswap/hooks";
+import { usePreviousValue, useTheme } from "@simpleflow/hooks";
 import { BrushBehavior, brushY, D3BrushEvent, ScaleLinear, select } from "d3";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { styled } from "styled-components";
-import { useMatchBreakpoints } from "@pancakeswap/uikit";
+import { useMatchBreakpoints } from "@simpleflow/uikit";
 
 import {
   brushHandleAccentPath,

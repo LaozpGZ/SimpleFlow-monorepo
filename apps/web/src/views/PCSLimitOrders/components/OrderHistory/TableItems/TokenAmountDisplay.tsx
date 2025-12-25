@@ -1,6 +1,6 @@
-import { Currency } from '@pancakeswap/sdk'
-import { FlexGap } from '@pancakeswap/uikit'
-import { CurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
+import { Currency } from '@simpleflow/sdk'
+import { FlexGap } from '@simpleflow/uikit'
+import { CurrencyLogo, NumberDisplay } from '@simpleflow/widgets-internal'
 
 interface TokenAmountDisplayProps {
   currency: Currency

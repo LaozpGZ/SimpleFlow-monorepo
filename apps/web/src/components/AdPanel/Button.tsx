@@ -6,7 +6,7 @@ import {
   ChevronsExpandIcon,
   Link,
   OpenNewIcon,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 

@@ -1,4 +1,4 @@
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
 
 export const X_API_TIMEOUT = 5_000
 

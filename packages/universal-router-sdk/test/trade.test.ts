@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import {
   CurrencyAmount,
   ERC20Token,
@@ -8,9 +8,9 @@ import {
   TradeType,
   Route as V2Route,
   Trade as V2Trade,
-} from '@pancakeswap/sdk'
-import { MSG_SENDER, PoolType, SmartRouter, SmartRouterTrade, V2Pool, V3Pool } from '@pancakeswap/smart-router'
-import { Pool, Route as V3Route, Trade as V3Trade } from '@pancakeswap/v3-sdk'
+} from '@simpleflow/sdk'
+import { MSG_SENDER, PoolType, SmartRouter, SmartRouterTrade, V2Pool, V3Pool } from '@simpleflow/smart-router'
+import { Pool, Route as V3Route, Trade as V3Trade } from '@simpleflow/v3-sdk'
 import { Address, isHex, parseEther, parseUnits, stringify } from 'viem'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { PancakeSwapUniversalRouter } from '../src'

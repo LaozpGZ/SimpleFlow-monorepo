@@ -1,4 +1,4 @@
-import { UNLOCK_FREE_DURATION } from '@pancakeswap/pools'
+import { UNLOCK_FREE_DURATION } from '@simpleflow/pools'
 import BigNumber from 'bignumber.js'
 
 export const isStaked = ({ userShares }: { userShares?: BigNumber }): boolean => Boolean(userShares && userShares.gt(0))

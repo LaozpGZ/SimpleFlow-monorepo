@@ -4,7 +4,7 @@ import { ApiCollectionDistribution, ApiResponseCollectionTokens, ApiSingleTokenD
 import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 import mapValues from 'lodash/mapValues'
 import { publicClient } from 'utils/wagmi'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { pancakeBunniesABI } from 'config/abi/pancakeBunnies'
 import { useQuery } from '@tanstack/react-query'
 import { pancakeBunniesAddress } from '../constants'

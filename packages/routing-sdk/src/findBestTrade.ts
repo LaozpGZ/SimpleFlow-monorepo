@@ -1,8 +1,8 @@
-import { Currency, CurrencyAmount, Fraction, Token, TradeType } from '@pancakeswap/swap-sdk-core'
-import { formatFraction } from '@pancakeswap/utils/formatFractions'
+import { Currency, CurrencyAmount, Fraction, Token, TradeType } from '@simpleflow/swap-sdk-core'
+import { formatFraction } from '@simpleflow/utils/formatFractions'
 import invariant from 'tiny-invariant'
 
-import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
+import { RemoteLogger } from '@simpleflow/utils/RemoteLogger'
 import { PriceCalculator, createGraph, createPriceCalculator, getNeighbour } from './graph'
 import { isSameRoute, mergeRoute } from './route'
 import { DEFAULT_STREAM, getBestStreamsConfig } from './stream'

@@ -1,5 +1,5 @@
 import { TransactionPayloadResponse } from '@aptos-labs/ts-sdk'
-import { ChainId } from '@pancakeswap/aptos-swap-sdk'
+import { ChainId } from '@simpleflow/aptos-swap-sdk'
 import { createAction } from '@reduxjs/toolkit'
 
 export type TransactionType = 'approve' | 'swap' | 'add-liquidity' | 'remove-liquidity'

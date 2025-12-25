@@ -1,4 +1,4 @@
-import { Box, Text, PageSection } from '@pancakeswap/uikit'
+import { Box, Text, PageSection } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import useTheme from 'hooks/useTheme'
 

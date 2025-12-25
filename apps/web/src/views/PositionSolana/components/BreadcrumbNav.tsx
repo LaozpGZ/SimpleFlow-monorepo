@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Breadcrumbs, Button, CopyButton, Flex, CopyIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Breadcrumbs, Button, CopyButton, Flex, CopyIcon, Text, useMatchBreakpoints } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { NextSeo } from 'next-seo'
 import { usePoolCurrencies } from '../hooks/usePoolCurrencies'
 

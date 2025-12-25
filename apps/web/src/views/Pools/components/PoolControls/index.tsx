@@ -1,8 +1,8 @@
 import { useAccount } from 'wagmi'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Pool } from '@simpleflow/widgets-internal'
 import { useUserPoolStakedOnly, useUserPoolsViewMode } from 'state/user/hooks'
 import { useInitialBlockTimestamp } from 'state/block/hooks'
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 
 const POOL_START_THRESHOLD = 60 * 4
 

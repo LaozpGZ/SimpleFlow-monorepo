@@ -1,9 +1,9 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Progress, ProgressBar, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Flex, Progress, ProgressBar, Text } from '@simpleflow/uikit'
 import { ReactNode, useMemo, useState, useEffect } from 'react'
 import { styled } from 'styled-components'
 
-import { IfoStatus } from '@pancakeswap/ifos'
+import { IfoStatus } from '@simpleflow/ifos'
 import useTheme from 'hooks/useTheme'
 import { IfoChainBoard } from 'views/Ifos/components/IfoChainBoard'
 import LiveTimer, { SoonTimer } from './Timer'

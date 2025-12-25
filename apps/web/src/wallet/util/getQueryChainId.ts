@@ -1,5 +1,5 @@
-import { isAptos, ChainId, getChainIdByChainName } from '@pancakeswap/chains'
-import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
+import { isAptos, ChainId, getChainIdByChainName } from '@simpleflow/chains'
+import safeGetWindow from '@simpleflow/utils/safeGetWindow'
 
 export function getQueryChainId() {
   const window = safeGetWindow()

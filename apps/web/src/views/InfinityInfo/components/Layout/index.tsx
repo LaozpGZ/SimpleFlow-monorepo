@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { SubMenuItems } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { SubMenuItems } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import { multiChainQueryStableClient } from 'state/info/constant'
 import { useChainNameByQuery, useMultiChainPath } from 'state/info/hooks'

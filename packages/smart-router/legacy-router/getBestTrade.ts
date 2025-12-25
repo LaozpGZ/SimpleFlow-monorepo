@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/sdk'
 import { getBestTradeFromStablePools } from './getBestTradeFromStablePools'
 
 import { getBestTradeFromV2ExactIn, getBestTradeFromV2ExactOut } from './getBestTradeFromV2'

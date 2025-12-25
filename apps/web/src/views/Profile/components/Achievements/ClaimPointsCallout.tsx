@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Card, CardBody, CardHeader, Flex, Heading, PrizeIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Card, CardBody, CardHeader, Flex, Heading, PrizeIcon } from '@simpleflow/uikit'
 import sumBy from 'lodash/sumBy'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from 'state'

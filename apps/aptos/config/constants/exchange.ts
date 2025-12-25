@@ -1,4 +1,4 @@
-import { ChainId, ONE_HUNDRED_PERCENT, Percent, Token, Coin } from '@pancakeswap/aptos-swap-sdk'
+import { ChainId, ONE_HUNDRED_PERCENT, Percent, Token, Coin } from '@simpleflow/aptos-swap-sdk'
 import { APT, CE_USDC, L0_USDC, WH_USDC, CAKE, CE_BNB_MAINNET } from 'config/coins'
 import { ChainTokenList } from './types'
 

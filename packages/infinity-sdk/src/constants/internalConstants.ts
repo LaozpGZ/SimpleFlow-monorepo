@@ -1,4 +1,4 @@
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { Percent } from '@simpleflow/swap-sdk-core'
 
 // constants used internally but not expected to be used externally
 export const NEGATIVE_ONE = BigInt(-1)

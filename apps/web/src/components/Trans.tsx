@@ -1,3 +1,3 @@
-import { Trans } from '@pancakeswap/localization'
+import { Trans } from '@simpleflow/l10n'
 
 export default Trans

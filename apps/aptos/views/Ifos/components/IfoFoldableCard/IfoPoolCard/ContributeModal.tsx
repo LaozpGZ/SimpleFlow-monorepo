@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   BalanceInput,
   Box,
@@ -10,8 +10,8 @@ import {
   ModalBody,
   Text,
   IfoHasVestingNotice,
-} from '@pancakeswap/uikit'
-import { formatNumber, getBalanceAmount, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+} from '@simpleflow/uikit'
+import { formatNumber, getBalanceAmount, getDecimalAmount } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { ConfirmButton } from 'components/ConfirmButton'
 import splitTypeTag from 'utils/splitTypeTag'

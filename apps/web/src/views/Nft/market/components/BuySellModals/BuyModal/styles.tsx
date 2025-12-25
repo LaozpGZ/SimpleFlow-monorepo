@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { Modal, Grid, Flex, Text, BinanceIcon, Skeleton } from '@pancakeswap/uikit'
+import { Modal, Grid, Flex, Text, BinanceIcon, Skeleton } from '@simpleflow/uikit'
 import { useBNBPrice } from 'hooks/useBNBPrice'
 import { BuyingStage } from './types'
 

@@ -1,11 +1,11 @@
 {
-  "extends": "@pancakeswap/tsconfig/react-library",
+  "extends": "@simpleflow/tsconfig/react-library",
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true,
     "paths": {
-      "@pancakeswap/awgmi/core": ["./core/src/index.ts"]
+      "@simpleflow/awgmi/core": ["./core/src/index.ts"]
     }
   }
 }

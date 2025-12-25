@@ -1,6 +1,6 @@
 import { ReactElement, createContext, useCallback, useEffect, useMemo } from "react";
 import { ExternalToast, toast as sonnerToast, ToastT } from "sonner";
-import { useIsWindowVisible } from "@pancakeswap/hooks";
+import { useIsWindowVisible } from "@simpleflow/hooks";
 import { Toast, ToastData, types } from "../../components/Toast";
 import { ToastContextApi } from "./types";
 

@@ -1,4 +1,4 @@
-import { fetchAnsAddress, FetchAnsAddressArgs, FetchAnsAddressResult } from '@pancakeswap/awgmi/core'
+import { fetchAnsAddress, FetchAnsAddressArgs, FetchAnsAddressResult } from '@simpleflow/awgmi/core'
 import { QueryFunction, useQuery } from '@tanstack/react-query'
 import { QueryConfig } from '../types'
 import { useNetwork } from './useNetwork'

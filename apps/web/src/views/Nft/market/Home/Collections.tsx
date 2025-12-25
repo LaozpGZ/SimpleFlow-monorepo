@@ -1,9 +1,9 @@
-import { Button, ChevronRightIcon, Flex, Grid, Heading, Text } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { Button, ChevronRightIcon, Flex, Grid, Heading, Text } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { Collection } from 'state/nftMarket/types'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
 

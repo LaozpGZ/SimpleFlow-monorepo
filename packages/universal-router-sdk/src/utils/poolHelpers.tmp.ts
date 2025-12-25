@@ -1,5 +1,5 @@
-import { Currency } from '@pancakeswap/sdk'
-import { Pool, SmartRouter } from '@pancakeswap/smart-router'
+import { Currency } from '@simpleflow/sdk'
+import { Pool, SmartRouter } from '@simpleflow/smart-router'
 
 export function getInputCurrency(pool: Pool, currencyIn: Currency): Currency {
   const list = getCurrencies(pool)

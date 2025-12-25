@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 
-import { ChainId, getChainIdByChainName } from '@pancakeswap/chains'
-import { getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+import { ChainId, getChainIdByChainName } from '@simpleflow/chains'
+import { getCurrencyAddress } from '@simpleflow/swap-sdk-core'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import isEqual from 'lodash/isEqual'

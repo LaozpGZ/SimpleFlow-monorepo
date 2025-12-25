@@ -1,6 +1,6 @@
-import { getChainName as defaultGetChainName } from "@pancakeswap/chains";
-import { Currency, UnifiedCurrency } from "@pancakeswap/sdk";
-import { Flex, Skeleton, Text } from "@pancakeswap/uikit";
+import { getChainName as defaultGetChainName } from "@simpleflow/chains";
+import { Currency, UnifiedCurrency } from "@simpleflow/sdk";
+import { Flex, Skeleton, Text } from "@simpleflow/uikit";
 import { styled } from "styled-components";
 import { ChainLogo, DoubleCurrencyLogo } from "../CurrencyLogo";
 

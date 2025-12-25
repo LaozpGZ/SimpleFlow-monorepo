@@ -1,11 +1,11 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiV3PoolInfoConcentratedItem, ApiV3PoolInfoItem, ApiV3PoolInfoStandardItem } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoConcentratedItem, ApiV3PoolInfoItem, ApiV3PoolInfoStandardItem } from '@simpleflow/solana-core-sdk'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Steps, { StepsRef } from '@/components/Steps'
 import SubPageNote from '@/components/SubPageNote'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'

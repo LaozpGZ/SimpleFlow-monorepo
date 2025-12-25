@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/ifos",
+  "name": "@simpleflow/ifos",
   "version": "7.0.3",
   "sideEffects": false,
   "private": true,
@@ -9,21 +9,21 @@
   },
   "type": "module",
   "peerDependencies": {
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/tokens": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/tokens": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "viem": "catalog:"
   },
   "dependencies": {
     "@layerzerolabs/scan-client": "^0.0.6",
-    "@pancakeswap/chains": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
     "bignumber.js": "^9.0.0"
   },
   "devDependencies": {
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/tokens": "workspace:*",
-    "@pancakeswap/tsconfig": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/tokens": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "viem": "catalog:"
   }
 }

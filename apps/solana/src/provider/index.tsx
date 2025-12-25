@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { SWRConfig } from 'swr'
-import { LanguageProvider } from '@pancakeswap/localization'
+import { LanguageProvider } from '@simpleflow/l10n'
 import { skipRetryStatus } from '@/api/axios'
 import WalletProvider from './WalletProvider'
 import ThemeProvider from './ThemeProvider'

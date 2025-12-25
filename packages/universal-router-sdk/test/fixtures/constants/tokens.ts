@@ -1,9 +1,9 @@
-import { ERC20Token, Ether } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
-import * as Tokens from '@pancakeswap/tokens'
+import { ERC20Token, Ether } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
+import * as Tokens from '@simpleflow/tokens'
 import { zeroAddress } from 'viem'
 
-export { WETH9 } from '@pancakeswap/sdk'
+export { WETH9 } from '@simpleflow/sdk'
 
 const MockToken: Record<ChainId, ERC20Token> = (() => {
   const tokens: Record<ChainId, ERC20Token> = {} as Record<ChainId, ERC20Token>

@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { atom } from 'jotai'
 
 import currencyId from 'utils/currencyId'

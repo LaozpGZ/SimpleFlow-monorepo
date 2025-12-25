@@ -1,5 +1,5 @@
-import { Flex, StarCircle, Text } from '@pancakeswap/uikit'
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { Flex, StarCircle, Text } from '@simpleflow/uikit'
+import { Token } from '@simpleflow/swap-sdk-core'
 
 import { FixedStakingCalculator } from './FixedStakingCalculator'
 import { useFixedStakeAPR } from '../hooks/useFixedStakeAPR'

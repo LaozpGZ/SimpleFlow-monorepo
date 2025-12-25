@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/infinity-sdk",
+  "name": "@simpleflow/infinity-sdk",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -26,18 +26,18 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/v3-sdk": "workspace:*",
-    "@pancakeswap/permit2-sdk": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/v3-sdk": "workspace:*",
+    "@simpleflow/permit2-sdk": "workspace:*",
     "bignumber.js": "^9.0.0",
     "tiny-invariant": "^1.3.3",
     "viem": "catalog:"
   },
   "devDependencies": {
-    "@pancakeswap/swap-sdk-evm": "workspace:*",
+    "@simpleflow/swap-sdk-evm": "workspace:*",
     "tsup": "^6.7.0",
-    "@pancakeswap/utils": "workspace:*"
+    "@simpleflow/utils": "workspace:*"
   },
   "engines": {
     "node": ">=10"

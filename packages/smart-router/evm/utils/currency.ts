@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, Native, Token, WNATIVE } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { Currency, CurrencyAmount, Native, Token, WNATIVE } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 
 export function wrappedCurrency(currency: Currency | undefined, chainId: ChainId): Token | undefined {
   return currency?.isNative ? WNATIVE[chainId] : currency?.isToken ? currency : undefined

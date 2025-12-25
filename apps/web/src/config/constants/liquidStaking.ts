@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { Address } from 'viem'
 
 export const WBETH: Record<number, Address> = {

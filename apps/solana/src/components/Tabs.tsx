@@ -1,5 +1,5 @@
-import { ButtonMenuProps, ButtonMenu, ButtonMenuItem, type ButtonMenuItemProps } from '@pancakeswap/uikit'
-import { Scale, Variant } from '@pancakeswap/uikit/components/Button/types'
+import { ButtonMenuProps, ButtonMenu, ButtonMenuItem, type ButtonMenuItemProps } from '@simpleflow/uikit'
+import { Scale, Variant } from '@simpleflow/uikit/components/Button/types'
 import { TabListProps as CTabListProps, SystemStyleObject, TooltipProps } from '@chakra-ui/react'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 

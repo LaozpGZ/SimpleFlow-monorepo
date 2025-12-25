@@ -1,11 +1,11 @@
-import { Currency, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency, UnifiedCurrency } from '@simpleflow/sdk'
 import {
   ImageProps,
   TokenImage as UIKitTokenImage,
   TokenPairImage as UIKitTokenPairImage,
   TokenPairImageProps as UIKitTokenPairImageProps,
   TokenPairLogo as UIKitTokenPairLogo,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useMemo, forwardRef } from 'react'
 import { getCurrencyLogoSrcs, tokenImageChainNameMapping } from 'utils/tokenImages'

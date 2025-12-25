@@ -1,8 +1,8 @@
-import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Box, Flex, Text, useMatchBreakpoints } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 import { css, keyframes, styled } from 'styled-components'
 
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 import PoolStatsInfo from '../../PoolStatsInfo'
 import Harvest from './Harvest'
 import Stake from './Stake'

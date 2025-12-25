@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
-import { Protocol } from '@pancakeswap/farms'
-import { useTranslation } from '@pancakeswap/localization'
+import { Protocol } from '@simpleflow/farms'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Price,
   UnifiedCurrency,
@@ -10,7 +10,7 @@ import {
   Token,
   SPLToken,
   sortUnifiedCurrencies,
-} from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/swap-sdk-core'
 //
 import { useUnifiedUSDPriceAmount } from 'hooks/useStablecoinPrice'
 import {
@@ -32,9 +32,9 @@ import {
   useMatchBreakpoints,
   useModal,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { useIsExpertMode } from '@pancakeswap/utils/user'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
+} from '@simpleflow/uikit'
+import { useIsExpertMode } from '@simpleflow/utils/user'
+import { FeeAmount } from '@simpleflow/v3-sdk'
 import {
   ConfirmationModalContent,
   Liquidity,
@@ -43,7 +43,7 @@ import {
   ZOOM_LEVELS,
   ZoomLevels,
   DoubleCurrencyLogo,
-} from '@pancakeswap/widgets-internal'
+} from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
@@ -87,7 +87,7 @@ import { formatTickPrice } from 'hooks/v3/utils/formatTickPrice'
 //
 import { useRaydium } from 'hooks/solana/useRaydium'
 import { useCreatePosition } from 'hooks/solana/useCreatePosition'
-import { usePreviousValue } from '@pancakeswap/hooks'
+import { usePreviousValue } from '@simpleflow/hooks'
 import { CreatePoolBuildData, useCreateClmmPool } from 'hooks/solana/useCreateClmmPool'
 import { useUnifiedTokenUsdPrice } from 'hooks/useUnifiedTokenUsdPrice'
 import { useQuickActionConfigs } from 'views/AddLiquidityV3/hooks/useQuickActionConfigs'

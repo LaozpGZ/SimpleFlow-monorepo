@@ -1,4 +1,4 @@
-import { Skeleton } from '@pancakeswap/uikit'
+import { Skeleton } from '@simpleflow/uikit'
 import { Container } from './styled'
 
 export const PositionItemSkeleton = () => {

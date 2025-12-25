@@ -1,4 +1,4 @@
-import { PancakeTheme, ResetCSS, ToastListener } from '@pancakeswap/uikit'
+import { PancakeTheme, ResetCSS, ToastListener } from '@simpleflow/uikit'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import Script from 'next/script'

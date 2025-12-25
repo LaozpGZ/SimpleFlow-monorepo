@@ -62,7 +62,7 @@ export const footerLinks: FooterLinkType[] = [
       },
       {
         label: "Bug Bounty",
-        href: "https://app.gitbook.com/@pancakeswap-1/s/pancakeswap/code/bug-bounty",
+        href: "https://app.gitbook.com/@simpleflow-1/s/pancakeswap/code/bug-bounty",
       },
       {
         label: "Audits",
@@ -159,7 +159,7 @@ export const socials = [
   {
     label: "Youtube",
     icon: YoutubeIcon,
-    href: "https://www.youtube.com/@pancakeswap_official",
+    href: "https://www.youtube.com/@simpleflow_official",
   },
 ];
 

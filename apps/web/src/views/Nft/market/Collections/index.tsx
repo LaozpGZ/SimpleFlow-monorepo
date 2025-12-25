@@ -18,8 +18,8 @@ import {
   Select,
   OptionProps,
   ToggleView,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import orderBy from 'lodash/orderBy'
 import { getLeastMostPriceInCollection } from 'state/nftMarket/helpers'
@@ -27,7 +27,7 @@ import { ViewMode } from 'state/user/actions'
 import { Collection } from 'state/nftMarket/types'
 import { styled } from 'styled-components'
 import { useGetShuffledCollections } from 'state/nftMarket/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Page from 'components/Layout/Page'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 import PageLoader from 'components/Loader/PageLoader'

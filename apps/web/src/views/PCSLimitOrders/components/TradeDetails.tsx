@@ -1,7 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Box, BoxProps, DottedHelpText, QuestionHelperV2, RowBetween, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn, Box, BoxProps, DottedHelpText, QuestionHelperV2, RowBetween, Text } from '@simpleflow/uikit'
 import { useAtomValue } from 'jotai'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
 import { outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
 

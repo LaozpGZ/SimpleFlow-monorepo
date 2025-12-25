@@ -1,7 +1,7 @@
 import { ErrorBoundary as SErrorBoundary } from '@sentry/nextjs'
 import Page from 'components/Layout/Page'
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Text, LogoIcon, Flex, IconButton, CopyIcon, copyText } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Text, LogoIcon, Flex, IconButton, CopyIcon, copyText } from '@simpleflow/uikit'
 import { useCallback } from 'react'
 
 export function SentryErrorBoundary({ children }) {

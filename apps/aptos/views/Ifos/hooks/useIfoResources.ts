@@ -1,4 +1,4 @@
-import { useAccountResources } from '@pancakeswap/awgmi'
+import { useAccountResources } from '@simpleflow/awgmi'
 import { parseTypeTag } from '@aptos-labs/ts-sdk'
 import splitTypeTag from 'utils/splitTypeTag'
 import {

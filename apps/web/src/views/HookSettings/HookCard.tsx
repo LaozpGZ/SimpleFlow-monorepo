@@ -1,6 +1,6 @@
-import { HookData } from '@pancakeswap/infinity-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Flex, FlexGap, GithubIcon, ScanLink, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { HookData } from '@simpleflow/infinity-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Button, Flex, FlexGap, GithubIcon, ScanLink, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import styled from 'styled-components'
 import { truncateText } from 'utils'
 

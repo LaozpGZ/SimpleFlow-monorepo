@@ -1,4 +1,4 @@
-import { API_URLS } from '@pancakeswap/solana-core-sdk'
+import { API_URLS } from '@simpleflow/solana-core-sdk'
 
 export const urlConfigs = {
   ...API_URLS,

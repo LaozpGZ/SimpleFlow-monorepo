@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import SwapWarningTokensConfig from 'config/constants/swapWarningTokens'
 import USDPlusWarning from './USDPlusWarning'
 

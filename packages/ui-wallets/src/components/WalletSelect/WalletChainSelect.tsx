@@ -1,5 +1,5 @@
 import React from 'react'
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@simpleflow/l10n'
 import {
   InfoIcon,
   ShieldCheckIcon,
@@ -21,10 +21,10 @@ import {
   Message,
   Checkbox,
   MessageText,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import styled from 'styled-components'
-import { ChainId } from '@pancakeswap/chains'
-import { useTheme } from '@pancakeswap/hooks'
+import { ChainId } from '@simpleflow/chains'
+import { useTheme } from '@simpleflow/hooks'
 import { WalletConfigV3, WalletAdaptedNetwork } from '../../types'
 import { ASSET_CDN } from '../../config/url'
 import { useMetamaskVersionWarning } from '../../hooks/useMetamaskVersionWarning'

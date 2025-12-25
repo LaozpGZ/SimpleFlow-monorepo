@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { createFarmFetcher, getLegacyFarmConfig, SerializedFarm, SerializedFarmsState } from '@pancakeswap/farms'
+import { ChainId } from '@simpleflow/chains'
+import { createFarmFetcher, getLegacyFarmConfig, SerializedFarm, SerializedFarmsState } from '@simpleflow/farms'
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import type {
   UnknownAsyncThunkFulfilledAction,

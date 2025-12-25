@@ -1,4 +1,4 @@
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import { useQuery } from '@tanstack/react-query'
 import { QUERY_SETTINGS_IMMUTABLE, QUERY_SETTINGS_WITHOUT_INTERVAL_REFETCH } from 'config/constants'
 import { explorerApiClient } from 'state/info/api/client'

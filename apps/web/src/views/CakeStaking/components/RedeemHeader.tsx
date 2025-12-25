@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ArrowForwardIcon, Link, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { ArrowForwardIcon, Link, useMatchBreakpoints } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import React from 'react'
 import styled from 'styled-components'

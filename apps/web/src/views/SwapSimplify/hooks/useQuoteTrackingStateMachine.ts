@@ -1,5 +1,5 @@
-import { PriceOrder } from '@pancakeswap/price-api-sdk'
-import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { PriceOrder } from '@simpleflow/price-api-sdk'
+import { UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useEffect, useMemo } from 'react'
 import { Field } from 'state/swap/actions'

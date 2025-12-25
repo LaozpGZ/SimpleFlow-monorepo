@@ -1,5 +1,5 @@
-import { Currency, ERC20Token, WNATIVE } from '@pancakeswap/sdk'
-import { feeOnTransferDetectorAddresses, fetchTokenFeeOnTransfer } from '@pancakeswap/smart-router'
+import { Currency, ERC20Token, WNATIVE } from '@simpleflow/sdk'
+import { feeOnTransferDetectorAddresses, fetchTokenFeeOnTransfer } from '@simpleflow/smart-router'
 import { atom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { isEqualCurrency } from 'quoter/utils/PoolHashHelper'

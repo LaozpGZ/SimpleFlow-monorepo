@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { ERC20Token } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { ERC20Token } from '@simpleflow/sdk'
 import { STABLE_SWAP_API } from '../../config/endpoint'
 import { StableSwapPool } from '../../types'
 import { isStableSwapSupported, STABLE_SUPPORTED_CHAIN_IDS } from './pools'

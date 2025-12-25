@@ -1,10 +1,10 @@
 import { CSSProperties, useCallback, useMemo, useRef } from 'react'
 import dynamic from 'next/dynamic'
 
-import { AutoColumn, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { AutoColumn, useMatchBreakpoints } from '@simpleflow/uikit'
 
-import { useTheme } from '@pancakeswap/hooks'
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { useTheme } from '@simpleflow/hooks'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import { LottieRefCurrentProps } from 'lottie-react'
 
 import styled, { keyframes } from 'styled-components'

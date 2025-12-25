@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Message, MessageText } from '@pancakeswap/uikit'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Message, MessageText } from '@simpleflow/uikit'
 import { useAccount } from 'wagmi'
 
 const ZkSyncWarning = () => {

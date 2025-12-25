@@ -1,5 +1,5 @@
-import { CAKE } from '@pancakeswap/tokens'
-import { getBalanceAmount, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { CAKE } from '@simpleflow/tokens'
+import { getBalanceAmount, getFullDisplayBalance } from '@simpleflow/utils/formatBalance'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'

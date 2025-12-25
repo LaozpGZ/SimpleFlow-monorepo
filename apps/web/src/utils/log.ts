@@ -1,4 +1,4 @@
-import { TradeType, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { TradeType, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 
 import { logger } from './datadog'
 

@@ -1,6 +1,6 @@
-import { useIsMounted } from "@pancakeswap/hooks";
-import { useTranslation } from "@pancakeswap/localization";
-import { AutoColumn, IconButton, PencilIcon, RowBetween, Text, TextProps } from "@pancakeswap/uikit";
+import { useIsMounted } from "@simpleflow/hooks";
+import { useTranslation } from "@simpleflow/l10n";
+import { AutoColumn, IconButton, PencilIcon, RowBetween, Text, TextProps } from "@simpleflow/uikit";
 import { PropsWithChildren, ReactNode } from "react";
 
 type SwapInfoType = {

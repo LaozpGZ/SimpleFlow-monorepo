@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoColumn,
   Box,
@@ -12,8 +12,8 @@ import {
   Spinner,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import dayjs from 'dayjs'
 
 import Page from 'components/Layout/Page'

@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/chains",
+  "name": "@simpleflow/chains",
   "license": "MIT",
   "version": "0.7.0",
   "description": "The single source of truth for Pancakeswap chain-related information",

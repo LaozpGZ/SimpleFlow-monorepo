@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import * as yup from 'yup'
 
 const numberTransform = yup.number().transform((value) => (Number.isNaN(value) ? 0 : value))

@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useMemo } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoRenewIcon,
   Box,
@@ -21,9 +21,9 @@ import {
   useModal,
   useToast,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
+import truncateHash from '@simpleflow/utils/truncateHash'
 import snapshot from '@snapshot-labs/snapshot.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'

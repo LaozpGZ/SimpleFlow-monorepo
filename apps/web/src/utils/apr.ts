@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { YEAR_IN_SECONDS } from '@pancakeswap/utils/getTimePeriods'
+import { ChainId } from '@simpleflow/chains'
+import { YEAR_IN_SECONDS } from '@simpleflow/utils/getTimePeriods'
 import BigNumber from 'bignumber.js'
 import { BLOCKS_PER_YEAR } from 'config'
 import lpAprs1 from 'config/constants/lpAprs/1.json'

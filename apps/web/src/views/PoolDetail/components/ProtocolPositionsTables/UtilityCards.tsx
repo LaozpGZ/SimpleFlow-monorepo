@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, CardBody, Flex, Spinner, Text } from '@pancakeswap/uikit'
-import { LightCard } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, CardBody, Flex, Spinner, Text } from '@simpleflow/uikit'
+import { LightCard } from '@simpleflow/widgets-internal'
 
 export const LoadingCard: React.FC = () => {
   const { t } = useTranslation()

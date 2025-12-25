@@ -1,5 +1,5 @@
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { SPLToken, TOKEN_WSOL } from '@pancakeswap/sdk'
+import { NonEVMChainId } from '@simpleflow/chains'
+import { SPLToken, TOKEN_WSOL } from '@simpleflow/sdk'
 
 export const solanaTokens = {
   usdc: new SPLToken({

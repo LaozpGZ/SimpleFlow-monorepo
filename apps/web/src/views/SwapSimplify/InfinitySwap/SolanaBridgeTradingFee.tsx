@@ -1,13 +1,13 @@
-import { BridgeOrder } from '@pancakeswap/price-api-sdk'
-import { SkeletonV2, Text } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { BridgeOrder } from '@simpleflow/price-api-sdk'
+import { SkeletonV2, Text } from '@simpleflow/uikit'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 import { memo, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSolanaTokenPrices } from 'hooks/solana/useSolanaTokenPrice'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
 
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 export const SolanaBridgeEVMToSolanaTradingFee = memo(

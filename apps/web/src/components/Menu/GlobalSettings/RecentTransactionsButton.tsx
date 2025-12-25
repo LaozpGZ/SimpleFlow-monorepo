@@ -1,4 +1,4 @@
-import { ButtonProps, Flex, HistoryIcon, IconButton, ModalV2, useModalV2 } from '@pancakeswap/uikit'
+import { ButtonProps, Flex, HistoryIcon, IconButton, ModalV2, useModalV2 } from '@simpleflow/uikit'
 
 import { RecentTransactionsTab } from './SettingsModalV2/RecentTransactionsTab'
 

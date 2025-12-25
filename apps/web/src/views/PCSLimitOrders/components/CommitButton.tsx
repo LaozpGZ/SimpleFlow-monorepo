@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ArrowForwardIcon,
   AutoColumn,
@@ -14,17 +14,17 @@ import {
   SwapHorizIcon,
   Text,
   useModalV2,
-} from '@pancakeswap/uikit'
-import { DualCurrencyDisplay, LightGreyCard } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { DualCurrencyDisplay, LightGreyCard } from '@simpleflow/widgets-internal'
 import { useAtomValue } from 'jotai'
 import { Suspense, useCallback, useMemo, useState } from 'react'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { BigNumber as BN } from 'bignumber.js'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'

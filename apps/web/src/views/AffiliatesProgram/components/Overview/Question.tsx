@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Card, CardBody, CardHeader, Flex, Heading, Link, PageSection, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Card, CardBody, CardHeader, Flex, Heading, Link, PageSection, Text } from '@simpleflow/uikit'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'

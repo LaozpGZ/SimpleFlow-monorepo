@@ -1,5 +1,5 @@
-import { useDebounce } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { useDebounce } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoRenewIcon,
   Button,
@@ -14,9 +14,9 @@ import {
   Input as UIKitInput,
   WarningIcon,
   useToast,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useSignMessage } from '@pancakeswap/wagmi'
+import { useSignMessage } from '@simpleflow/wagmi'
 import { API_PROFILE } from 'config/constants/endpoints'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'

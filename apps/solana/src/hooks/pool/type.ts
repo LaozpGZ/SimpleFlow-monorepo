@@ -6,7 +6,7 @@ import {
   ApiV3Token,
   PoolFarmRewardInfo,
   PoolFetchType
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import Decimal from 'decimal.js'
 
 export type WeeklyRewardData = { orgAmount: string; amount: string; token: ApiV3Token; startTime?: number; endTime?: number }[]

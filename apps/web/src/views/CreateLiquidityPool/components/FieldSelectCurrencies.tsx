@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Box, BoxProps, FlexGap, PreTitle, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AddIcon, Box, BoxProps, FlexGap, PreTitle, useMatchBreakpoints } from '@simpleflow/uikit'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'

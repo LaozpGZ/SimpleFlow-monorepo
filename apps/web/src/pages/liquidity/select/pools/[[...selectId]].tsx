@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
-import { Breadcrumbs, Container } from '@pancakeswap/uikit'
+import { Breadcrumbs, Container } from '@simpleflow/uikit'
 import PageLoader from 'components/Loader/PageLoader'
 import { SelectIdRoute } from 'dynamicRoute'
 import { useDefaultSelectIdRoute, useSelectIdRoute } from 'hooks/dynamicRoute/useSelectIdRoute'

@@ -1,4 +1,4 @@
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { useMemo } from 'react'
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
 import { BinTickDataItem, useBinDensityChartData } from 'views/AddLiquidityInfinity/hooks/useDensityChartData'

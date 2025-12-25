@@ -1,8 +1,8 @@
 import { styled } from 'styled-components'
-import { Text, Button, Input, InputProps, Flex, Link } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Text, Button, Input, InputProps, Flex, Link } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { parseUnits } from 'viem'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { formatBigInt } from '@simpleflow/utils/formatBalance'
 
 interface ModalInputProps {
   max: string

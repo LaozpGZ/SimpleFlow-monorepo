@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { ERC20Token, Token, WNATIVE } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { ERC20Token, Token, WNATIVE } from '@simpleflow/sdk'
 import {
   BUSD,
   USDC,
@@ -24,7 +24,7 @@ import {
   sepoliaTokens,
   zkSyncTestnetTokens,
   zksyncTokens,
-} from '@pancakeswap/tokens'
+} from '@simpleflow/tokens'
 
 import { ChainMap, ChainTokenList } from '../types'
 

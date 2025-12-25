@@ -1,9 +1,9 @@
-import { SwapHorizIcon, WaterIcon } from '@pancakeswap/uikit'
+import { SwapHorizIcon, WaterIcon } from '@simpleflow/uikit'
 import { Box, ColorMode, SimpleGrid, Text, VStack, useColorMode } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import BackpackIcon from '@/icons/pageNavigation/BackpackIcon'
 import { colors } from '@/theme/cssVariables'

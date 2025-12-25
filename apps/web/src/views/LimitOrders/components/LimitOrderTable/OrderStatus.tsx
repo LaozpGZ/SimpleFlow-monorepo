@@ -1,5 +1,5 @@
-import { Tag, Text, TagVariant } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Tag, Text, TagVariant } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import React from 'react'
 import { FormattedOrderData } from 'views/LimitOrders/hooks/useFormattedOrderData'
 

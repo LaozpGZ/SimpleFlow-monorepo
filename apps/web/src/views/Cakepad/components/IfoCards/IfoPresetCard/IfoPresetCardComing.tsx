@@ -1,10 +1,10 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, CardBody, CheckmarkCircleIcon, FlexGap, Text } from '@pancakeswap/uikit'
-import { CurrencyLogo, DoubleCurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Card, CardBody, CheckmarkCircleIcon, FlexGap, Text } from '@simpleflow/uikit'
+import { CurrencyLogo, DoubleCurrencyLogo, NumberDisplay } from '@simpleflow/widgets-internal'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import useIfo from 'views/Cakepad/hooks/useIfo'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { StyledLogo } from '../../Icons'
 
 const SaleInfoWrapper = styled(FlexGap)`

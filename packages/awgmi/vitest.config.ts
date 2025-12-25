@@ -6,7 +6,7 @@ const r = (p: string) => resolve(__dirname, p)
 export default defineConfig({
   resolve: {
     alias: {
-      '@pancakeswap/awgmi/core': r('./core/src/index.ts'),
+      '@simpleflow/awgmi/core': r('./core/src/index.ts'),
     },
   },
   test: {

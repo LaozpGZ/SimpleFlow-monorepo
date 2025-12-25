@@ -1,4 +1,4 @@
-import { FlexGap } from '@pancakeswap/uikit'
+import { FlexGap } from '@simpleflow/uikit'
 import { ClaimedCard } from './ClaimedCard'
 import { IfoSaleInfoCard } from './IfoSaleInfoCard'
 import { IfoPoolLive } from './IfoPoolLive'

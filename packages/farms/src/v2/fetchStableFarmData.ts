@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import chunk from '@pancakeswap/utils/chunk'
+import { ChainId } from '@simpleflow/chains'
+import chunk from '@simpleflow/utils/chunk'
 import { PublicClient, parseUnits } from 'viem'
 import { SerializedStableFarmConfig } from '../types'
 

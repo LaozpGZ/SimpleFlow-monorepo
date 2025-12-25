@@ -1,4 +1,4 @@
-import { ArrowDownIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ArrowDownIcon, useMatchBreakpoints } from '@simpleflow/uikit'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { handleHomepageSnapDown } from 'views/HomeV2/util/handleHomepageSnapDown'

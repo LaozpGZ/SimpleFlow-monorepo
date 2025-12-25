@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { initialize } from '@solflare-wallet/wallet-adapter'
 import { useSetAtom } from 'jotai'
-import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
+import safeGetWindow from '@simpleflow/utils/safeGetWindow'
 import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 
 initialize()

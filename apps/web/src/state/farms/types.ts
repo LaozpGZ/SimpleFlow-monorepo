@@ -1,4 +1,4 @@
-import { DeserializedFarm, FarmV3DataWithPriceAndUserInfo } from '@pancakeswap/farms'
+import { DeserializedFarm, FarmV3DataWithPriceAndUserInfo } from '@simpleflow/farms'
 
 export interface V3FarmWithoutStakedValue extends FarmV3DataWithPriceAndUserInfo {
   version: 3

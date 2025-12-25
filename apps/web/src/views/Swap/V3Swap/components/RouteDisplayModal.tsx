@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
+import { useTranslation } from '@simpleflow/l10n'
+import { Route, RouteType, SVMPool } from '@simpleflow/smart-router'
 import {
   AutoColumn,
   ButtonProps,
@@ -11,19 +11,19 @@ import {
   Text,
   UseModalV2Props,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { memo, useMemo, useState } from 'react'
 
 import { RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { CurrencyLogoWrapper, RouterBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
 import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
-import { Currency, SPLToken, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency, SPLToken, UnifiedCurrency } from '@simpleflow/sdk'
 import { useUnifiedCurrency } from 'hooks/Tokens'
 import { TertiaryButton } from 'views/Swap/components/SlippageButton'
-import { useTheme } from '@pancakeswap/hooks'
+import { useTheme } from '@simpleflow/hooks'
 
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { BridgeRoutesDisplay } from './RouteDisplay/BridgeRoutesDisplay'
 import { EVMPairNodes } from './RouteDisplay/pairNode'
 import { JupPairNodes } from './RouteDisplay/JupPairNodes'

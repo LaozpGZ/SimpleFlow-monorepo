@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useAtomValue } from 'jotai'
 import styled from 'styled-components'
 import { homePageDataAtom } from '../atom/homePageDataAtom'

@@ -1,5 +1,5 @@
-import { useIsMounted, usePreviousValue } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { useIsMounted, usePreviousValue } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   BalanceInput,
   Box,
@@ -12,9 +12,9 @@ import {
   Text,
   useMatchBreakpoints,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
-import { formatPrice } from '@pancakeswap/utils/formatFractions'
+} from '@simpleflow/uikit'
+import { escapeRegExp } from '@simpleflow/utils/escapeRegExp'
+import { formatPrice } from '@simpleflow/utils/formatFractions'
 import BigNumber from 'bignumber.js'
 import { usePoolMarketPrice } from 'hooks/usePoolMarketPriceSlippage'
 import { tryParsePrice } from 'hooks/v3/utils'
@@ -22,9 +22,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useInverted } from 'state/infinity/shared'
 import styled from 'styled-components'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { truncateText } from 'utils'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { useCurrencies } from '../../hooks/useCurrencies'
 
 export type FieldStartingPriceProps = {

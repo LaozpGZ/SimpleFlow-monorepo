@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/price-api-sdk",
+  "name": "@simpleflow/price-api-sdk",
   "version": "11.1.1",
   "description": "SDK for pancakeswap price api",
   "repository": {
@@ -23,35 +23,35 @@
     "dist"
   ],
   "peerDependencies": {
-    "@pancakeswap/permit2-sdk": "workspace:*",
-    "@pancakeswap/smart-router": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/pcsx-sdk": "workspace:*"
+    "@simpleflow/permit2-sdk": "workspace:*",
+    "@simpleflow/smart-router": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/pcsx-sdk": "workspace:*"
   },
   "peerDependenciesMeta": {
-    "@pancakeswap/permit2-sdk": {
+    "@simpleflow/permit2-sdk": {
       "optional": true
     },
-    "@pancakeswap/swap-sdk-core": {
+    "@simpleflow/swap-sdk-core": {
       "optional": true
     },
-    "@pancakeswap/smart-router": {
+    "@simpleflow/smart-router": {
       "optional": true
     },
-    "@pancakeswap/pcsx-sdk": {
+    "@simpleflow/pcsx-sdk": {
       "optional": true
     }
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*"
+    "@simpleflow/chains": "workspace:*"
   },
   "devDependencies": {
-    "@pancakeswap/permit2-sdk": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/smart-router": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/pcsx-sdk": "workspace:*",
-    "@pancakeswap/tsconfig": "workspace:*",
+    "@simpleflow/permit2-sdk": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/smart-router": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/pcsx-sdk": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
     "tsup": "^6.7.0"
   },
   "exports": {

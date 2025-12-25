@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { css, styled } from "styled-components";
 
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import {
   AlpIcon,
   Balance,
@@ -17,8 +17,8 @@ import {
   useMatchBreakpoints,
   useModal,
   useTooltip,
-} from "@pancakeswap/uikit";
-import { BIG_ZERO } from "@pancakeswap/utils/bigNumber";
+} from "@simpleflow/uikit";
+import { BIG_ZERO } from "@simpleflow/utils/bigNumber";
 import BigNumber from "bignumber.js";
 
 import { DeserializedPool } from "./types";

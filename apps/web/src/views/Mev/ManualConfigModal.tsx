@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Card,
   CopyIcon,
@@ -10,7 +10,7 @@ import {
   ModalBody,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import { rpcData, walletConfig } from './constant'
 import { getImageUrl } from './utils'

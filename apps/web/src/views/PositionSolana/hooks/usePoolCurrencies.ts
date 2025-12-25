@@ -1,5 +1,5 @@
 import { useUnifiedCurrency } from 'hooks/Tokens'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { usePoolInfoByQuery } from './usePoolInfoByQuery'
 
 export const usePoolCurrencies = () => {

@@ -1,4 +1,4 @@
-import { Button, type ButtonProps } from '@pancakeswap/uikit'
+import { Button, type ButtonProps } from '@simpleflow/uikit'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useCallback } from 'react'
 

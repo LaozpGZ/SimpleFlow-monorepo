@@ -9,12 +9,12 @@ import {
   LazyAnimatePresence,
   Text,
   WalletFilledV2Icon
-} from '@pancakeswap/uikit'
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/uikit'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
+import { ApiV3Token, SOL_INFO, TokenInfo } from '@simpleflow/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { ReactNode, RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { NumericFormat } from 'react-number-format'
 import styled from 'styled-components'
 import useTokenPrice from '@/hooks/token/useTokenPrice'

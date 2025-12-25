@@ -1,9 +1,9 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AtomBox, Button, ButtonProps, ModalV2, MotionModal, NotificationDot, useModalV2 } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AtomBox, Button, ButtonProps, ModalV2, MotionModal, NotificationDot, useModalV2 } from '@simpleflow/uikit'
 
 import { ReactNode, useCallback } from 'react'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { CustomizeRoutingTab } from './CustomizeRoutingTab'
 

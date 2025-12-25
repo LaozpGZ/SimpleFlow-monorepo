@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Card, CardBody, CardHeader, FlexGap, Image, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Card, CardBody, CardHeader, FlexGap, Image, Text } from '@simpleflow/uikit'
 import useTheme from 'hooks/useTheme'
 import NextLink from 'next/link'
 import { styled } from 'styled-components'

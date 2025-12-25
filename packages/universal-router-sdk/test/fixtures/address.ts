@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { BinPoolParameter, CLPoolParameter, getPoolId, PoolKey } from '@pancakeswap/infinity-sdk'
-import { getPermit2Address } from '@pancakeswap/permit2-sdk'
-import { Currency, CurrencyAmount, ERC20Token, Native, Pair, Percent, ZERO_ADDRESS } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { BinPoolParameter, CLPoolParameter, getPoolId, PoolKey } from '@simpleflow/infinity-sdk'
+import { getPermit2Address } from '@simpleflow/permit2-sdk'
+import { Currency, CurrencyAmount, ERC20Token, Native, Pair, Percent, ZERO_ADDRESS } from '@simpleflow/sdk'
 import {
   BaseInfinityPool,
   InfinityBinPool,
@@ -11,7 +11,7 @@ import {
   StablePool,
   V2Pool,
   V3Pool,
-} from '@pancakeswap/smart-router'
+} from '@simpleflow/smart-router'
 import {
   computePoolAddress,
   DEPLOYER_ADDRESSES,
@@ -21,7 +21,7 @@ import {
   Pool,
   TICK_SPACINGS,
   TickMath,
-} from '@pancakeswap/v3-sdk'
+} from '@simpleflow/v3-sdk'
 import { getUniversalRouterAddress } from '../../src'
 import { currencyAddressInfinity } from '../../src/utils/currencyAddressInfinity'
 import { Provider } from './clients'

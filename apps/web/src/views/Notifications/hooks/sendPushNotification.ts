@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { useToast } from '@simpleflow/uikit'
 import { NOTIFICATION_HUB_BASE_URL } from 'config/constants/endpoints'
 import crypto from 'crypto'
 import {

@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/ui-wallets",
+  "name": "@simpleflow/ui-wallets",
   "version": "0.0.2",
   "main": "src/index.ts",
   "sideEffects": [
@@ -14,12 +14,12 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@pancakeswap/hooks": "workspace:*",
-    "@pancakeswap/localization": "workspace:*",
-    "@pancakeswap/uikit": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
-    "@pancakeswap/wagmi": "workspace:*",
-    "@pancakeswap/chains": "workspace:*",
+    "@simpleflow/hooks": "workspace:*",
+    "@simpleflow/l10n": "workspace:*",
+    "@simpleflow/uikit": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
+    "@simpleflow/wagmi": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
     "@solana/wallet-adapter-base": "catalog:",
     "@solana/wallet-adapter-react": "catalog:",
     "@solana/wallet-adapter-react-ui": "catalog:",

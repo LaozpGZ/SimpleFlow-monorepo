@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { AutoColumn, Box, ColumnCenter, Flex, Spinner, Text, TooltipText, useTooltip } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { AutoColumn, Box, ColumnCenter, Flex, Spinner, Text, TooltipText, useTooltip } from "@simpleflow/uikit";
 
 interface ApproveModalContentProps {
   title: string;

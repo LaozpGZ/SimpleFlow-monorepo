@@ -1,5 +1,5 @@
-import { Box, QuestionHelperV2, RowBetween, ScanLink, Text, TextWithUnderline } from '@pancakeswap/uikit'
-import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
+import { Box, QuestionHelperV2, RowBetween, ScanLink, Text, TextWithUnderline } from '@simpleflow/uikit'
+import { formatTimestamp, Precision } from '@simpleflow/utils/formatTimestamp'
 import { ChainLinkSupportChains } from 'state/info/constant'
 import { getBlockExploreLink } from 'utils'
 import { isAddress } from 'viem/utils'

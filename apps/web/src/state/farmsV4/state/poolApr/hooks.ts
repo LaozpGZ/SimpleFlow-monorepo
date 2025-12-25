@@ -1,4 +1,4 @@
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
 import { useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'
 import sha256 from 'crypto-js/sha256'

@@ -1,4 +1,4 @@
-import { TranslateFunction } from '@pancakeswap/localization'
+import { TranslateFunction } from '@simpleflow/l10n'
 import { HttpRequestError } from 'viem'
 import { parseViemError } from './errors'
 import { getLogger } from './datadog'

@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { FlexGap, Text } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { FlexGap, Text } from "@simpleflow/uikit";
 import { PropsWithChildren, useMemo } from "react";
 import styled from "styled-components";
 import { BigNumber } from "bignumber.js";

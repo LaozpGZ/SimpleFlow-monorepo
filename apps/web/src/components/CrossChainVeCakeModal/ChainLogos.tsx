@@ -1,4 +1,4 @@
-import { Svg, SvgProps } from '@pancakeswap/uikit'
+import { Svg, SvgProps } from '@simpleflow/uikit'
 
 export const BinanceIcon: React.FC<SvgProps> = (props) => {
   return (

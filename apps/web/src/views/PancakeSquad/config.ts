@@ -1,4 +1,4 @@
-import { ContextApi } from '@pancakeswap/localization'
+import { ContextApi } from '@simpleflow/l10n'
 import { SaleStatusEnum } from './types'
 import { getAltText, getEventStepStatus, getEventText } from './utils'
 

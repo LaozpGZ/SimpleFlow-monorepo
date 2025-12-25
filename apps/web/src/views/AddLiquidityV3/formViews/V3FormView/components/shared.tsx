@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { FeeAmount } from '@simpleflow/v3-sdk'
 import type { ReactNode } from 'react'
 import { styled } from 'styled-components'
 import { EVM_CHAIN_IDS } from 'utils/wagmi'

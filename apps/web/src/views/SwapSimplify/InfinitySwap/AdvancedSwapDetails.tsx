@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Currency,
   CurrencyAmount,
@@ -7,14 +7,14 @@ import {
   TradeType,
   UnifiedCurrency,
   UnifiedCurrencyAmount,
-} from '@pancakeswap/sdk'
-import { LegacyPair as Pair } from '@pancakeswap/smart-router/legacy-router'
-import { AutoColumn, Box, Link, QuestionHelperV2, SkeletonV2, Text } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+} from '@simpleflow/sdk'
+import { LegacyPair as Pair } from '@simpleflow/smart-router/legacy-router'
+import { AutoColumn, Box, Link, QuestionHelperV2, SkeletonV2, Text } from '@simpleflow/uikit'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 import { memo, useMemo, useState } from 'react'
 
-import { BridgeOrder, OrderType, PriceOrder } from '@pancakeswap/price-api-sdk'
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { BridgeOrder, OrderType, PriceOrder } from '@simpleflow/price-api-sdk'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { LightGreyCard } from 'components/Card'
 import { RowBetween, RowFixed } from 'components/Layout/Row'

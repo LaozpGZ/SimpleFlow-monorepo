@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { SerializedFarm } from '@pancakeswap/farms'
+import { ChainId } from '@simpleflow/chains'
+import { SerializedFarm } from '@simpleflow/farms'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import chunk from 'lodash/chunk'
 import { farmFetcher } from 'state/farms'

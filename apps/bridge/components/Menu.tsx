@@ -1,4 +1,4 @@
-import { Box, DropdownMenu, DropdownMenuItemType, Flex, Logo, ThemeSwitcher } from '@pancakeswap/uikit'
+import { Box, DropdownMenu, DropdownMenuItemType, Flex, Logo, ThemeSwitcher } from '@simpleflow/uikit'
 import { useTheme as useNextTheme } from 'next-themes'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'

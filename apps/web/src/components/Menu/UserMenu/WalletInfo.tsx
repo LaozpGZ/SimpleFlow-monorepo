@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { WNATIVE } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { WNATIVE } from '@simpleflow/sdk'
 import {
   Box,
   Button,
@@ -16,14 +16,14 @@ import {
   Text,
   TooltipText,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 import { FetchStatus } from 'config/constants/types'
 import useAuth from 'hooks/useAuth'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import useTokenBalance, { useBSCCakeBalance } from 'hooks/useTokenBalance'
 
-import { formatBigInt, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { formatBigInt, getFullDisplayBalance } from '@simpleflow/utils/formatBalance'
 import InternalLink from 'components/Links'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { useState } from 'react'

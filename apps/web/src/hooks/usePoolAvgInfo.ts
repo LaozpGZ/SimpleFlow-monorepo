@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useQuery } from '@tanstack/react-query'
 
 import { chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'

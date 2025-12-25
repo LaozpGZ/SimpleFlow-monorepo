@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 
 import {
   DEFAULT_POOL_SELECTOR_CONFIG,

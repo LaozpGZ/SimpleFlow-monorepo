@@ -1,4 +1,4 @@
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Pool } from '@simpleflow/widgets-internal'
 import { useQueryClient } from '@tanstack/react-query'
 import { SMARTCHEF_ADDRESS } from 'contracts/smartchef/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

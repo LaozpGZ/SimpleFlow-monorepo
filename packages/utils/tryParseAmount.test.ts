@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { Token } from '@simpleflow/swap-sdk-core'
 import { describe, it, expect } from 'vitest'
 import tryParseAmount from './tryParseAmount'
 

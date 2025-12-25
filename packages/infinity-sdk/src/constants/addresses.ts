@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { Address } from 'viem'
 
 export const INFINITY_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.SEPOLIA, ChainId.BASE] as const
@@ -106,5 +106,5 @@ export const INFI_BIN_PROTOCOL_FEE_CONTROLLER_ADDRESSES: Record<InfinitySupporte
 export const INFI_CL_TICK_LENS_ADDRESSES: { [key in ChainId]?: Address } = {
   [ChainId.BSC_TESTNET]: '0x05a732bb9A23256F57f9FdF255212979368Ece39',
   [ChainId.BSC]: '0x8BcF30285413F25032fb983C2bF4deFe29a33f3a',
-  [ChainId.BASE]: '0x8bcf30285413f25032fb983c2bf4defe29a33f3a',
+  [ChainId.BASE]: '0x8BcF30285413F25032fb983C2bF4deFe29a33f3a',
 }

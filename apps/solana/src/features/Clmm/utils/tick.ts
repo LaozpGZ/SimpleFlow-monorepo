@@ -1,4 +1,4 @@
-import { TickUtils, ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
+import { TickUtils, ApiV3PoolInfoConcentratedItem } from '@simpleflow/solana-core-sdk'
 import Decimal from 'decimal.js'
 
 export function getPriceBoundary({ baseIn, poolInfo }: { baseIn: boolean; poolInfo: ApiV3PoolInfoConcentratedItem }):

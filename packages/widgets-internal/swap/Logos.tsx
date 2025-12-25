@@ -1,5 +1,5 @@
-import { Currency } from "@pancakeswap/swap-sdk-core";
-import { Box, Spinner as Sp, SpinnerProps, Svg } from "@pancakeswap/uikit";
+import { Currency } from "@simpleflow/swap-sdk-core";
+import { Box, Spinner as Sp, SpinnerProps, Svg } from "@simpleflow/uikit";
 import { useRef } from "react";
 import { styled, useTheme } from "styled-components";
 import { CurrencyLogo } from "../components/CurrencyLogo";

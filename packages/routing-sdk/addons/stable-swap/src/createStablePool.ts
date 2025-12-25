@@ -1,6 +1,6 @@
-import { Price, Currency } from '@pancakeswap/swap-sdk-core'
-import { getSwapOutput, getQuoteExactIn, getQuoteExactOut } from '@pancakeswap/stable-swap-sdk'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { Price, Currency } from '@simpleflow/swap-sdk-core'
+import { getSwapOutput, getQuoteExactIn, getQuoteExactOut } from '@simpleflow/stable-swap-sdk'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
 import invariant from 'tiny-invariant'
 
 import type { StablePool, StablePoolData } from './types'

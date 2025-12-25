@@ -1,7 +1,7 @@
-import { isSolana } from '@pancakeswap/chains'
-import { supportedChainIdV4 } from '@pancakeswap/farms'
-import { Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
-import { TokenInfo } from '@pancakeswap/token-lists'
+import { isSolana } from '@simpleflow/chains'
+import { supportedChainIdV4 } from '@simpleflow/farms'
+import { Native, ZERO_ADDRESS } from '@simpleflow/sdk'
+import { TokenInfo } from '@simpleflow/token-lists'
 import { atom } from 'jotai'
 import { listsAtom } from 'state/lists/lists'
 

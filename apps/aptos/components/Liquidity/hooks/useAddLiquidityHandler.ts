@@ -1,9 +1,9 @@
-import { Currency, CurrencyAmount, Router } from '@pancakeswap/aptos-swap-sdk'
-import { SimulateTransactionError, UserRejectedRequestError } from '@pancakeswap/awgmi/core'
-import { useTranslation } from '@pancakeswap/localization'
+import { Currency, CurrencyAmount, Router } from '@simpleflow/aptos-swap-sdk'
+import { SimulateTransactionError, UserRejectedRequestError } from '@simpleflow/awgmi/core'
+import { useTranslation } from '@simpleflow/l10n'
 import { useCallback, useContext, useMemo, useState } from 'react'
 
-import { useUserSlippage } from '@pancakeswap/utils/user'
+import { useUserSlippage } from '@simpleflow/utils/user'
 import useSimulationAndSendTransaction from 'hooks/useSimulationAndSendTransaction'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { calculateSlippageAmount } from 'utils/exchange'

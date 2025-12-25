@@ -1,4 +1,4 @@
-import { Trans } from '@pancakeswap/localization'
+import { Trans } from '@simpleflow/l10n'
 import { ReactNode } from 'react'
 
 interface CommissionType {

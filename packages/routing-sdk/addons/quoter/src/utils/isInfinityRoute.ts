@@ -1,10 +1,10 @@
-import type { Pool } from '@pancakeswap/routing-sdk'
+import type { Pool } from '@simpleflow/routing-sdk'
 import {
   InfinityBinPool,
   InfinityCLPool,
   isInfinityBinPool,
   isInfinityCLPool,
-} from '@pancakeswap/routing-sdk-addon-infinity'
+} from '@simpleflow/routing-sdk-addon-infinity'
 
 type Route<P extends Pool = Pool> = {
   pools: P[]

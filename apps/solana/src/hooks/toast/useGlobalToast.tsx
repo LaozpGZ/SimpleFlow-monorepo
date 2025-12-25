@@ -1,6 +1,6 @@
 import { ToastId, ToastPosition, useToast, UseToastOptions, Text } from '@chakra-ui/react'
 import { ReactNode, useEffect } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { Subject } from 'rxjs'
 import { v4 as uuid } from 'uuid'
 

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { useToast } from '@simpleflow/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { atom, useAtom } from 'jotai'

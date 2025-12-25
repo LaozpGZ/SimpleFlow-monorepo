@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, useToast } from '@simpleflow/uikit'
 import { useCallback, useMemo } from 'react'
 
 import {
@@ -14,7 +14,7 @@ import {
   IBridgeConfig,
   EventTypes,
 } from '@bnb-chain/canonical-bridge-widget'
-import { allCasesNameToChainId } from '@pancakeswap/chains'
+import { allCasesNameToChainId } from '@simpleflow/chains'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
 import { RefreshingIcon } from '../components/RefreshingIcon'

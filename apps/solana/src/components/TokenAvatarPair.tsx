@@ -1,5 +1,5 @@
 import { Flex, FlexProps } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, TokenInfo } from '@simpleflow/solana-core-sdk'
 import TokenAvatar, { TokenAvatarSize } from './TokenAvatar'
 
 type RawTokenAvatarPairProps = {

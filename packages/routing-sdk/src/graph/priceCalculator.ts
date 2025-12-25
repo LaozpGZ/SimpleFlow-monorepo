@@ -1,5 +1,5 @@
-import { type Token, CurrencyAmount, Price } from '@pancakeswap/swap-sdk-core'
-import { Native } from '@pancakeswap/swap-sdk-evm'
+import { type Token, CurrencyAmount, Price } from '@simpleflow/swap-sdk-core'
+import { Native } from '@simpleflow/swap-sdk-evm'
 import invariant from 'tiny-invariant'
 
 import { Edge, Graph, Vertice } from '../types'

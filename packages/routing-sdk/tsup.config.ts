@@ -8,7 +8,7 @@ export default defineConfig((options) => ({
   sourcemap: false,
   skipNodeModulesBundle: true,
   format: ['esm', 'cjs'],
-  noExternal: ['@pancakeswap/utils'],
+  noExternal: ['@simpleflow/utils'],
   dts: false,
   clean: !options.watch,
   treeshake: true,

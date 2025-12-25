@@ -1,5 +1,5 @@
 import { InputGenerateTransactionPayloadData, InputGenerateTransactionOptions } from '@aptos-labs/ts-sdk'
-import { equalsIgnoreCase } from '@pancakeswap/utils/equalsIgnoreCase'
+import { equalsIgnoreCase } from '@simpleflow/utils/equalsIgnoreCase'
 
 import { getAccount } from '../accounts/account'
 import { ChainMismatchError, ConnectorNotFoundError, WalletProviderError, UserRejectedRequestError } from '../errors'

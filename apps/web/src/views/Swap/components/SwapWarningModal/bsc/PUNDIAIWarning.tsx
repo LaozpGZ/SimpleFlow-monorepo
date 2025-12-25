@@ -1,5 +1,5 @@
-import { Box, Link, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Box, Link, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 
 const PUNDIAIWarning = () => {
   const { t } = useTranslation()

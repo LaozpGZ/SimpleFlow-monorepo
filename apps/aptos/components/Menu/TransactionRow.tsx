@@ -1,6 +1,6 @@
-import { BlockIcon, CheckmarkCircleIcon, Flex, Link, OpenNewIcon, RefreshIcon } from '@pancakeswap/uikit'
+import { BlockIcon, CheckmarkCircleIcon, Flex, Link, OpenNewIcon, RefreshIcon } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { TransactionDetails } from 'state/transactions/reducer'
 import { getBlockExploreLink } from 'utils'
 

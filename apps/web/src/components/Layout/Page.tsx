@@ -1,6 +1,6 @@
 import { styled } from 'styled-components'
 import { NextSeo } from 'next-seo'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useRouter } from 'next/router'
 import { DEFAULT_META, getCustomMeta } from 'config/constants/meta'
 import Container from './Container'

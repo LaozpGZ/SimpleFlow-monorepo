@@ -1,4 +1,4 @@
-import { Box, Flex, Text, TooltipText, useTooltip } from '@pancakeswap/uikit'
+import { Box, Flex, Text, TooltipText, useTooltip } from '@simpleflow/uikit'
 import { ReactNode } from 'react'
 import { isMobile } from 'react-device-detect'
 

@@ -1,4 +1,4 @@
-import { BinLiquidityShape, PoolType } from '@pancakeswap/infinity-sdk'
+import { BinLiquidityShape, PoolType } from '@simpleflow/infinity-sdk'
 import { useCallback, useMemo } from 'react'
 import {
   useActiveIdQueryState,

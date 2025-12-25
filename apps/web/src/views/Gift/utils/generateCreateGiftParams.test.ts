@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { CurrencyAmount, Native, ERC20Token } from '@pancakeswap/sdk'
+import { CurrencyAmount, Native, ERC20Token } from '@simpleflow/sdk'
 import { generateCreateGiftParams } from './generateCreateGiftParams'
 
 // NOTE: don't remove this test or you get fired

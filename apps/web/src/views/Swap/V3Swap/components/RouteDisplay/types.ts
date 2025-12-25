@@ -1,5 +1,5 @@
-import { Route } from '@pancakeswap/smart-router'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Route } from '@simpleflow/smart-router'
+import { Currency } from '@simpleflow/swap-sdk-core'
 
 export type RouteDisplayEssentials = Pick<Route, 'path' | 'pools' | 'inputAmount' | 'outputAmount' | 'percent' | 'type'>
 

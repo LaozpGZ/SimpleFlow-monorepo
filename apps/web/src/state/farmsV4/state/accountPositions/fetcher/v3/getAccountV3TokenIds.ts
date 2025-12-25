@@ -1,4 +1,4 @@
-import { masterChefV3ABI, NFT_POSITION_MANAGER_ADDRESSES } from '@pancakeswap/v3-sdk'
+import { masterChefV3ABI, NFT_POSITION_MANAGER_ADDRESSES } from '@simpleflow/v3-sdk'
 import { getMasterChefV3Address } from 'utils/addressHelpers'
 import { publicClient } from 'utils/viem'
 import { Address, isAddress } from 'viem'

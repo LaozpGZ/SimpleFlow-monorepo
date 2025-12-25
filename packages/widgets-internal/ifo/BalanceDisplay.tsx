@@ -1,4 +1,4 @@
-import { Balance, BalanceProps } from "@pancakeswap/uikit";
+import { Balance, BalanceProps } from "@simpleflow/uikit";
 import { useMemo } from "react";
 
 function getMinNumberToDisplay(decimals = 2) {

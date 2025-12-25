@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { colors } from '@/theme/cssVariables'
 import PanelCard from '@/components/PanelCard'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'

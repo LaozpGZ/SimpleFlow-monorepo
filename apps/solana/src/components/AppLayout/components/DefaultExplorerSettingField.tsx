@@ -1,6 +1,6 @@
 import { Flex, HStack, Image, Text } from '@chakra-ui/react'
-import { Button } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Button } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useEvent } from '@/hooks/useEvent'
 import { EXPLORER_KEY, supportedExplorers, useAppStore } from '@/store'
 import { setStorageItem } from '@/utils/localStorage'

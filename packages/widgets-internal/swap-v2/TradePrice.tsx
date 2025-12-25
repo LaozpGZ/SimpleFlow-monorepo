@@ -1,6 +1,6 @@
-import { Currency, Price } from "@pancakeswap/swap-sdk-core";
-import { FlexGap, SkeletonV2, SwapHorizIcon, Text } from "@pancakeswap/uikit";
-import { formatPrice } from "@pancakeswap/utils/formatFractions";
+import { Currency, Price } from "@simpleflow/swap-sdk-core";
+import { FlexGap, SkeletonV2, SwapHorizIcon, Text } from "@simpleflow/uikit";
+import { formatPrice } from "@simpleflow/utils/formatFractions";
 import { useState } from "react";
 import { displaySymbolWithChainName } from "../utils/displaySymbolWithChainName";
 

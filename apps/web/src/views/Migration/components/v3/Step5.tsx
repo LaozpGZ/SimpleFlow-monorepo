@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Heading, AtomBox } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Heading, AtomBox } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useFarmsV3WithPositionsAndBooster } from 'state/farmsV3/hooks'

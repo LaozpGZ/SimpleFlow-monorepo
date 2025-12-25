@@ -1,4 +1,4 @@
-import { getNetwork, watchNetwork } from '@pancakeswap/awgmi/core'
+import { getNetwork, watchNetwork } from '@simpleflow/awgmi/core'
 import { useSyncExternalStoreWithTracked } from './useSyncExternalStoreWithTracked'
 
 export function useNetwork() {

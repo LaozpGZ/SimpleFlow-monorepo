@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { ApiV3PoolInfoConcentratedItem, Price, toToken } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoConcentratedItem, Price, toToken } from '@simpleflow/solana-core-sdk'
 
 export const convertPoolPrice = ({
   pool,

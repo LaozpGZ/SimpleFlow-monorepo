@@ -1,4 +1,4 @@
-import { goerliTestnetTokens } from '@pancakeswap/tokens'
+import { goerliTestnetTokens } from '@simpleflow/tokens'
 import { getAddress } from 'viem'
 import { SerializedFarmConfig } from '../..'
 

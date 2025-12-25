@@ -1,10 +1,10 @@
-import { Balance, Box, Flex, Skeleton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Balance, Box, Flex, Skeleton, Text, useMatchBreakpoints } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 
-import { Token } from '@pancakeswap/sdk'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Token } from '@simpleflow/sdk'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { getBalanceNumber } from '@simpleflow/utils/formatBalance'
 
 interface StakedCellProps {
   pool: Pool.DeserializedPool<Token>

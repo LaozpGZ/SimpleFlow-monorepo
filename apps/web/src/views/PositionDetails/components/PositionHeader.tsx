@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from '@pancakeswap/uikit'
+import { Flex, Heading, Text } from '@simpleflow/uikit'
 
 interface LiquidityDetailHeaderProps {
   title: string

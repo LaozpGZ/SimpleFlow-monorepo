@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { request, gql } from 'graphql-request'
 import { GRAPH_HEALTH } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSlowRefreshEffect } from './useRefreshEffect'
 

@@ -1,4 +1,4 @@
-import { Radio, Text } from '@pancakeswap/uikit'
+import { Radio, Text } from '@simpleflow/uikit'
 import { Dispatch } from 'react'
 import { Proposal, ProposalState } from 'state/types'
 import { SingleVoteState } from 'views/Voting/Proposal/VoteType/types'

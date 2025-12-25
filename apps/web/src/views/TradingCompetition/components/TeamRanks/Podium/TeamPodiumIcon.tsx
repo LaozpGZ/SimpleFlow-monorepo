@@ -1,4 +1,4 @@
-import { Flex, Image, Skeleton } from '@pancakeswap/uikit'
+import { Flex, Image, Skeleton } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo } from 'react'
 import { styled } from 'styled-components'

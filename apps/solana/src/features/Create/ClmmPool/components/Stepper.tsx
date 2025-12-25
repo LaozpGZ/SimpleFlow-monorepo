@@ -1,5 +1,5 @@
 import { RefObject } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Steps, { StepsRef } from '@/components/Steps'
 import { useAppStore } from '@/store'
 

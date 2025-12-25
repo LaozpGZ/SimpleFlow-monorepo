@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { Modal, ModalBody, Flex } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Modal, ModalBody, Flex } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { LightGreyCard } from 'components/Card'
 import { useFarmHarvestTransaction } from 'state/global/hooks'
 import { useAllTransactions } from 'state/transactions/hooks'

@@ -1,4 +1,4 @@
-import { isLoadable, Loadable } from '@pancakeswap/utils/Loadable'
+import { isLoadable, Loadable } from '@simpleflow/utils/Loadable'
 import { Atom, atom, Getter } from 'jotai'
 import { unwrap } from 'jotai/utils'
 

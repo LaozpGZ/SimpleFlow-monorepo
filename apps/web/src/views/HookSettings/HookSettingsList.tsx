@@ -1,5 +1,5 @@
-import { type HookData } from '@pancakeswap/infinity-sdk'
-import { useTranslation } from '@pancakeswap/localization'
+import { type HookData } from '@simpleflow/infinity-sdk'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Button,
   CopyButton,
@@ -10,8 +10,8 @@ import {
   Text,
   TextProps,
   useModalV2,
-} from '@pancakeswap/uikit'
-import { scales } from '@pancakeswap/uikit/components/Button/types'
+} from '@simpleflow/uikit'
+import { scales } from '@simpleflow/uikit/components/Button/types'
 import Divider from 'components/Divider'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useHooksList } from 'hooks/infinity/useHooksList'

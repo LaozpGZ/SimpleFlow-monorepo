@@ -1,4 +1,4 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { useMemo, memo } from "react";
 import { styled } from "styled-components";
 import { SpaceProps } from "styled-system";
@@ -11,7 +11,7 @@ import {
   Box,
   Text,
   BunnyKnownPlaceholder,
-} from "@pancakeswap/uikit";
+} from "@simpleflow/uikit";
 import { PriceData } from "./types";
 import { FullWidthButtonMenu } from "./FullWidthButtonMenu";
 

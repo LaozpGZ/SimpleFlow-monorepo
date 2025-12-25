@@ -1,4 +1,4 @@
-import { FetchLedgerArgs, fetchLedgerInfo, FetchLedgerResult } from '@pancakeswap/awgmi/core'
+import { FetchLedgerArgs, fetchLedgerInfo, FetchLedgerResult } from '@simpleflow/awgmi/core'
 import { QueryFunction, useQuery } from '@tanstack/react-query'
 import { QueryConfig } from '../types'
 import { useNetwork } from './useNetwork'

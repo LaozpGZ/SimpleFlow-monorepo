@@ -1,4 +1,4 @@
-import { ChainId, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { ChainId, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
 
 import { Address } from './types/common'
 

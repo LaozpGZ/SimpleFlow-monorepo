@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Text, Skeleton, AccountFilledIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Text, Skeleton, AccountFilledIcon } from '@simpleflow/uikit'
 import { StyledVolumeText } from 'views/TradingCompetition/components/TeamRanks/Podium/styles'
 
 interface NewUsersProps {

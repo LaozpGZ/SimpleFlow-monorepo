@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, GridItem, Highlight, HStack, Tag, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import router from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { wSolToSol } from '@/utils/token'
 import Button from '@/components/Button'
 import { Desktop, Mobile } from '@/components/MobileDesktop'

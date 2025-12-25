@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Heading, Skeleton, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Heading, Skeleton, Text } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
 import { TC_MOBOX_SUBGRAPH } from 'config/constants/endpoints'

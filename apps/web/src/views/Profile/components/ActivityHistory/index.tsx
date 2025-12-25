@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Card, Flex, PaginationButton, Table, Text, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Card, Flex, PaginationButton, Table, Text, Th, useMatchBreakpoints } from '@simpleflow/uikit'
 import TableLoader from 'components/TableLoader'
 import { useBNBPrice } from 'hooks/useBNBPrice'
 import useTheme from 'hooks/useTheme'

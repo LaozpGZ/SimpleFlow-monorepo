@@ -1,4 +1,4 @@
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import { InfinityProtocol } from 'config/constants/protocols'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'

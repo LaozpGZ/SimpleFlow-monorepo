@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { solanaTokenAtomFamily, solanaTokenListAtom } from 'state/token/solanaTokenAtoms'
 
-import { SPLToken } from '@pancakeswap/swap-sdk-core'
+import { SPLToken } from '@simpleflow/swap-sdk-core'
 import { useSolanaTokenInfo } from './useSolanaTokenInfo'
 
 export function useSolanaToken(address?: string): SPLToken | undefined {

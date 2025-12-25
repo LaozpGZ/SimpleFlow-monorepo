@@ -1,5 +1,5 @@
-import { Liquidity } from '@pancakeswap/widgets-internal'
-import { TickFormat } from '@pancakeswap/widgets-internal/components/PriceRangeChartWithPeriodAndLiquidity/AxisBottom'
+import { Liquidity } from '@simpleflow/widgets-internal'
+import { TickFormat } from '@simpleflow/widgets-internal/components/PriceRangeChartWithPeriodAndLiquidity/AxisBottom'
 import { BigNumber as BN } from 'bignumber.js'
 import { timeDay, timeFormat, timeHour, timeMinute } from 'd3'
 

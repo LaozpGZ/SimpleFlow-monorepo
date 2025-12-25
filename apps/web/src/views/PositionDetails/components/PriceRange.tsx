@@ -1,4 +1,4 @@
-import { BackForwardIcon, Button, Flex, Text } from '@pancakeswap/uikit'
+import { BackForwardIcon, Button, Flex, Text } from '@simpleflow/uikit'
 import { UnsafeCurrency } from 'config/constants/types'
 import React from 'react'
 import { styled } from 'styled-components'

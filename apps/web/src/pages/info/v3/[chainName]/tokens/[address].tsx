@@ -1,4 +1,4 @@
-import { Flex, Spinner } from '@pancakeswap/uikit'
+import { Flex, Spinner } from '@simpleflow/uikit'
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
 import { Suspense } from 'react'

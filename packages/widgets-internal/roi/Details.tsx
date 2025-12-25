@@ -1,9 +1,9 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Percent, ZERO_PERCENT } from "@pancakeswap/sdk";
-import { Box, ExpandableLabel, Flex, Grid, Text } from "@pancakeswap/uikit";
-import { BulletList, Footer } from "@pancakeswap/uikit/components/RoiCalculatorModal/RoiCalculatorFooter";
-import { formatPercent } from "@pancakeswap/utils/formatFractions";
-import { formatAmount } from "@pancakeswap/utils/formatInfoNumbers";
+import { useTranslation } from "@simpleflow/l10n";
+import { Percent, ZERO_PERCENT } from "@simpleflow/sdk";
+import { Box, ExpandableLabel, Flex, Grid, Text } from "@simpleflow/uikit";
+import { BulletList, Footer } from "@simpleflow/uikit/components/RoiCalculatorModal/RoiCalculatorFooter";
+import { formatPercent } from "@simpleflow/utils/formatFractions";
+import { formatAmount } from "@simpleflow/utils/formatInfoNumbers";
 import { ReactNode, memo, useState } from "react";
 import { styled } from "styled-components";
 

@@ -1,4 +1,4 @@
-import { APTOS_COIN, FetchBalanceArgs } from '@pancakeswap/awgmi/core'
+import { APTOS_COIN, FetchBalanceArgs } from '@simpleflow/awgmi/core'
 import { QueryConfig } from '../types'
 
 import { useAccountBalances, UseAccountBalancesQueryResult, UseAccountBalancesResult } from './useAccountBalances'

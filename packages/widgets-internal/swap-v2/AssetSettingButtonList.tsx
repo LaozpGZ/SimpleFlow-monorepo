@@ -1,4 +1,4 @@
-import { MotionFlexGap, Text } from "@pancakeswap/uikit";
+import { MotionFlexGap, Text } from "@simpleflow/uikit";
 import { memo } from "react";
 import { styled } from "styled-components";
 

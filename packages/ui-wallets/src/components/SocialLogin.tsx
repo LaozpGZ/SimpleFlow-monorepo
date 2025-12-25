@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   FlexGap,
   Button,
@@ -15,9 +15,9 @@ import {
   ArrowBackIcon,
   Message,
   MessageText,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import styled, { useTheme } from 'styled-components'
-import { chainFullNames, ChainId } from '@pancakeswap/chains'
+import { chainFullNames, ChainId } from '@simpleflow/chains'
 import { ASSET_CDN } from '../config/url'
 
 interface SocialLoginProps {

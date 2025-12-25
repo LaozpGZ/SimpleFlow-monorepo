@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { format } from 'd3'
 import { CSSProperties, ReactNode, useCallback, useMemo, useRef } from 'react'
 import { BarChart2, CloudOff, Inbox } from 'react-feather'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import Loader from '@/components/Loader'
 import useElementSizeRectDetector from '@/hooks/useElementSizeRectDetector'

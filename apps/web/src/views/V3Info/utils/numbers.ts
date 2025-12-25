@@ -1,4 +1,4 @@
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import isUndefinedOrNull from '@simpleflow/utils/isUndefinedOrNull'
 
 // using a currency library here in case we want to add more in future
 export const formatDollarAmount = (num: number | undefined, digits = 2, round = true) => {

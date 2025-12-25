@@ -1,4 +1,4 @@
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo } from 'react'
 import { styled } from 'styled-components'

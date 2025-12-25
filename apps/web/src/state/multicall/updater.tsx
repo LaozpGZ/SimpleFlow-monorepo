@@ -1,4 +1,4 @@
-import { useDebounce } from '@pancakeswap/hooks'
+import { useDebounce } from '@simpleflow/hooks'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useWorker } from 'hooks/useWorker'
 import { useAtom } from 'jotai'

@@ -1,12 +1,12 @@
-import { Currency, CurrencyAmount, isCurrencySorted } from '@pancakeswap/swap-sdk-core'
-import { isSolana } from '@pancakeswap/chains'
+import { Currency, CurrencyAmount, isCurrencySorted } from '@simpleflow/swap-sdk-core'
+import { isSolana } from '@simpleflow/chains'
 import {
   encodeSqrtRatioX96,
   maxLiquidityForAmount0Imprecise,
   maxLiquidityForAmount1,
   SqrtPriceMath,
   TickMath,
-} from '@pancakeswap/v3-sdk'
+} from '@simpleflow/v3-sdk'
 import { useCLPriceRange } from 'hooks/infinity/useCLPriceRange'
 import { atom, useAtom } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'

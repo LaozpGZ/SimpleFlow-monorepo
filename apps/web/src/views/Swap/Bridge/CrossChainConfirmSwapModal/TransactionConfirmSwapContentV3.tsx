@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
-import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/sdk'
+import { ConfirmationModalContent } from '@simpleflow/widgets-internal'
 import { memo, useCallback, useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import { maxUnifiedAmountSpend } from 'utils/maxAmountSpend'

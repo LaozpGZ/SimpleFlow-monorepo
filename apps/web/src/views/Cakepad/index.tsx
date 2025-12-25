@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, LogoWithTextIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, LogoWithTextIcon } from '@simpleflow/uikit'
 import ConnectW3WButton, { DisconnectW3WButton } from 'components/ConnectW3WButton'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'

@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, Price, ONE, ZERO } from '@pancakeswap/swap-sdk-core'
-import { logCurrency } from '@pancakeswap/routing-sdk'
+import { Currency, CurrencyAmount, Price, ONE, ZERO } from '@simpleflow/swap-sdk-core'
+import { logCurrency } from '@simpleflow/routing-sdk'
 import {
   encodeSqrtRatioX96,
   TickList,
@@ -8,7 +8,7 @@ import {
   LiquidityMath,
   TICK_SPACINGS,
   FeeAmount,
-} from '@pancakeswap/v3-sdk'
+} from '@simpleflow/v3-sdk'
 import invariant from 'tiny-invariant'
 import memoize from 'lodash/memoize.js'
 

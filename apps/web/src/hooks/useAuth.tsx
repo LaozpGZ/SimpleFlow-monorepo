@@ -1,12 +1,12 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   EvmConnectorNames,
   WalletAdaptedNetwork,
   WalletConfigV3,
   WalletConnectorNotFoundError,
   WalletSwitchChainError,
-} from '@pancakeswap/ui-wallets'
-import { ConnectData } from '@pancakeswap/ui-wallets/src/types'
+} from '@simpleflow/ui-wallets'
+import { ConnectData } from '@simpleflow/ui-wallets/src/types'
 import { usePrivy } from '@privy-io/react-auth'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'

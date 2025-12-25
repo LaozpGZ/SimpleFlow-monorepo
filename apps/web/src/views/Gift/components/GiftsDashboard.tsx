@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoRenewIcon,
   Box,
@@ -10,9 +10,9 @@ import {
   Spinner,
   Text,
   Toggle,
-} from '@pancakeswap/uikit'
-import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { formatTimestamp, Precision } from '@simpleflow/utils/formatTimestamp'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { SecondaryCard } from 'components/SecondaryCard'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { SEND_ENTRY, ViewState } from 'components/WalletModalV2/type'

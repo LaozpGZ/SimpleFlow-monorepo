@@ -1,7 +1,7 @@
 import noop from "lodash/noop";
 import React, { useState } from "react";
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Language } from "@pancakeswap/localization";
+import { Language } from "@simpleflow/l10n";
 import { BrowserRouter, Link, MemoryRouter } from "react-router-dom";
 import { SubMenuItemsType } from "../../components";
 import Box from "../../components/Box/Box";

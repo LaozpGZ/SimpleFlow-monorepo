@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { Flex, TwitterIcon, TelegramIcon, RedditIcon, Link, DiscordIcon } from '@pancakeswap/uikit'
+import { Flex, TwitterIcon, TelegramIcon, RedditIcon, Link, DiscordIcon } from '@simpleflow/uikit'
 import { useRouter } from 'next/router'
 
 const StyledLink = styled(Link)`

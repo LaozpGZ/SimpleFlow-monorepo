@@ -1,4 +1,4 @@
-import { Native } from '@pancakeswap/sdk'
+import { Native } from '@simpleflow/sdk'
 import { describe, expect, it } from 'vitest'
 
 import { getCurrencyKey, zeroAddress } from './getCurrencyPrice'

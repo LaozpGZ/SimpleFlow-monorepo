@@ -1,7 +1,7 @@
 import { memo, ReactNode } from "react";
 import { styled } from "styled-components";
-import { useTranslation } from "@pancakeswap/localization";
-import { LinkExternal, Flex, Svg, Image, Button } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { LinkExternal, Flex, Svg, Image, Button } from "@simpleflow/uikit";
 
 const Wrapper = styled.div<{ $isSide: boolean }>`
   width: 100%;

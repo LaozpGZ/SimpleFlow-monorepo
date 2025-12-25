@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { getCpLockPda, CpmmLockInfo } from '@pancakeswap/solana-core-sdk'
+import { getCpLockPda, CpmmLockInfo } from '@simpleflow/solana-core-sdk'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'
 import useSWR from 'swr'

@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js'
-import { Protocol } from '@pancakeswap/farms'
-import { HookData } from '@pancakeswap/infinity-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import { Percent, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { Protocol } from '@simpleflow/farms'
+import { HookData } from '@simpleflow/infinity-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Percent, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import {
   AutoColumn,
   Box,
@@ -18,9 +18,9 @@ import {
   Tag,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import { CurrencyLogo, DoubleCurrencyLogo, FeeTierTooltip, Liquidity } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
+import { CurrencyLogo, DoubleCurrencyLogo, FeeTierTooltip, Liquidity } from '@simpleflow/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { LinkType, MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
 import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'

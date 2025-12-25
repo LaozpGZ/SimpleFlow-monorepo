@@ -1,5 +1,5 @@
-import { Trans, useTranslation } from '@pancakeswap/localization'
-import { Button, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Trans, useTranslation } from '@simpleflow/l10n'
+import { Button, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import React from 'react'
 import { styled } from 'styled-components'

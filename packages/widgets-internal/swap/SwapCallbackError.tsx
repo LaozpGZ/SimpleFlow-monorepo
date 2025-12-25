@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { ErrorIcon } from "@pancakeswap/uikit";
+import { ErrorIcon } from "@simpleflow/uikit";
 
 const SwapCallbackErrorInner = styled.div`
   background-color: ${({ theme }) => `${theme.colors.failure33}`};

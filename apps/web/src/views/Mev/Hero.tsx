@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, FlexGap, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import styled, { css, keyframes } from 'styled-components'

@@ -1,5 +1,5 @@
-import { SerializedFarmsState } from '@pancakeswap/farms'
-import { SerializedPoolWithInfo } from '@pancakeswap/pools'
+import { SerializedFarmsState } from '@simpleflow/farms'
+import { SerializedPoolWithInfo } from '@simpleflow/pools'
 import { CampaignType, Team, TranslatableText } from 'config/constants/types'
 import { Address, parseEther } from 'viem'
 import { NftToken } from './nftMarket/types'

@@ -1,4 +1,4 @@
-import { useMatchBreakpoints } from "@pancakeswap/uikit";
+import { useMatchBreakpoints } from "@simpleflow/uikit";
 import { AdPlayer } from "./AdPlayer";
 import { StaticContainer } from "./StaticContainer";
 import { AdPanelCardProps } from "./types";

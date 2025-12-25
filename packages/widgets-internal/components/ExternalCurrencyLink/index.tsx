@@ -1,5 +1,5 @@
 import { ReactNode, useCallback } from "react";
-import { FlexGap, Text, OpenNewIcon, Link } from "@pancakeswap/uikit";
+import { FlexGap, Text, OpenNewIcon, Link } from "@simpleflow/uikit";
 import { space, SpaceProps } from "styled-system";
 import styled from "styled-components";
 

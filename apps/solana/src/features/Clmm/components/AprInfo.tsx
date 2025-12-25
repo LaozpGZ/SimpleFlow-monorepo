@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts'
 import AprMDSwitchWidget from '@/components/AprMDSwitchWidget'
 import Tabs from '@/components/Tabs'

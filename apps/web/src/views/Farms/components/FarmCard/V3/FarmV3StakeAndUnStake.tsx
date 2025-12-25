@@ -1,6 +1,6 @@
-import { PositionDetails } from '@pancakeswap/farms'
-import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { PositionDetails } from '@simpleflow/farms'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token } from '@simpleflow/swap-sdk-core'
 import {
   AutoRow,
   Balance,
@@ -12,7 +12,7 @@ import {
   StyledLink,
   SyncAltIcon,
   Text,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import BigNumber from 'bignumber.js'
 import { RangeTag } from 'components/RangeTag'
 import { Bound } from 'config/constants/types'

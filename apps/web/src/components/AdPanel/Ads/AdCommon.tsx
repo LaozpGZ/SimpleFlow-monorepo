@@ -1,4 +1,4 @@
-import { Link, Text } from '@pancakeswap/uikit'
+import { Link, Text } from '@simpleflow/uikit'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'

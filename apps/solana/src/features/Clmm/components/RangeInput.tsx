@@ -1,6 +1,6 @@
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 import { ReactNode } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { SimpleGrid } from '@chakra-ui/react'
 import { PriceRangeInputBox, Side } from '@/features/Create/ClmmPool/components/SetPriceAndRange'
 

@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
-import { SmartRouter } from '@pancakeswap/smart-router'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/sdk'
+import { SmartRouter } from '@simpleflow/smart-router'
 import {
   AutoColumn,
   Box,
@@ -12,10 +12,10 @@ import {
   Text,
   WarningIcon,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import { CurrencyLogo as CurrencyLogoWidget } from '@pancakeswap/widgets-internal'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
+import { CurrencyLogo as CurrencyLogoWidget } from '@simpleflow/widgets-internal'
 import { AutoRow, RowBetween, RowFixed } from 'components/Layout/Row'
 import { useGasToken } from 'hooks/useGasToken'
 import { memo, useMemo, useState } from 'react'
@@ -34,7 +34,7 @@ import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/s
 import { BridgeOrderWithCommands, EVMInterfaceOrder, isBridgeOrder, isSolanaBridge, isXOrder } from 'views/Swap/utils'
 import { SolanaBridgeTradingFee } from 'views/SwapSimplify/InfinitySwap/SolanaBridgeTradingFee'
 
-import { BridgeOrder, OrderType } from '@pancakeswap/price-api-sdk'
+import { BridgeOrder, OrderType } from '@simpleflow/price-api-sdk'
 import BigNumber from 'bignumber.js'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import dayjs from 'dayjs'

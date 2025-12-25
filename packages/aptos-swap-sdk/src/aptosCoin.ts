@@ -1,4 +1,4 @@
-import { NativeCurrency, SerializedToken } from '@pancakeswap/swap-sdk-core'
+import { NativeCurrency, SerializedToken } from '@simpleflow/swap-sdk-core'
 import { TypeTagStruct, parseTypeTag } from '@aptos-labs/ts-sdk'
 import { Coin } from './coin'
 import { Currency } from './currency'

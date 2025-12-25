@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import BigNumber from 'bignumber.js'
 import fromPairs from 'lodash/fromPairs'
 import uniq from 'lodash/uniq'

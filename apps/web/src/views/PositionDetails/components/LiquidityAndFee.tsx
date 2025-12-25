@@ -1,4 +1,4 @@
-import { Button, Flex, Text, Toggle } from '@pancakeswap/uikit'
+import { Button, Flex, Text, Toggle } from '@simpleflow/uikit'
 import { CurrencyLogo } from 'components/Logo'
 import { UnsafeCurrency } from 'config/constants/types'
 import React from 'react'

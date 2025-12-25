@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/permit2-sdk",
+  "name": "@simpleflow/permit2-sdk",
   "version": "1.1.7",
   "description": "An sdk for interacting with permit2.",
   "main": "dist/index.js",
@@ -33,8 +33,8 @@
     "ethereum"
   ],
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
     "tiny-invariant": "^1.3.1",
     "viem": "catalog:"
   },

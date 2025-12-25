@@ -1,4 +1,4 @@
-import { getBoostedPoolApr } from '@pancakeswap/pools'
+import { getBoostedPoolApr } from '@simpleflow/pools'
 import { useQuery } from '@tanstack/react-query'
 import { getViemClients } from 'utils/viem'
 import { Address } from 'viem'

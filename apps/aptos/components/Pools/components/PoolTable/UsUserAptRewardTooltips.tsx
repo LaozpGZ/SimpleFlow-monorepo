@@ -1,7 +1,7 @@
-import { Coin } from '@pancakeswap/aptos-swap-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Text, TooltipText, WarningIcon, useTooltip } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Coin } from '@simpleflow/aptos-swap-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Text, TooltipText, WarningIcon, useTooltip } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 import { useIsAptosRewardToken } from 'components/Pools/hooks/useIsAptosRewardToken'
 
 interface UsUserAptRewardTooltips {

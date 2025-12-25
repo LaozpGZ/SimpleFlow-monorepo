@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { CurrencyAmount, WNATIVE } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { CurrencyAmount, WNATIVE } from '@simpleflow/sdk'
 import {
   ArrowDownIcon,
   AutoColumn,
@@ -18,12 +18,12 @@ import {
   Text,
   Toggle,
   useModal,
-} from '@pancakeswap/uikit'
-import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ConfirmationModalContent } from '@simpleflow/widgets-internal'
 
-import { useDebouncedChangeHandler } from '@pancakeswap/hooks'
-import { useUserSlippage } from '@pancakeswap/utils/user'
-import { MasterChefV3, NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
+import { useDebouncedChangeHandler } from '@simpleflow/hooks'
+import { useUserSlippage } from '@simpleflow/utils/user'
+import { MasterChefV3, NonfungiblePositionManager } from '@simpleflow/v3-sdk'
 import { AppBody, AppHeader } from 'components/App'
 import { LightGreyCard } from 'components/Card'
 import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/FormattedCurrencyAmount'

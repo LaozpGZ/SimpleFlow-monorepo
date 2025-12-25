@@ -1,5 +1,5 @@
-import { AtomBox, FlexGap, Heading, Image, Loading, Message, MessageText, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { AtomBox, FlexGap, Heading, Image, Loading, Message, MessageText, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useAtomValue } from 'jotai'
 import { errorEvmAtom, errorSolanaAtom } from '../../state/atom'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'

@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, GridItem, HStack, Text, useDisclosure } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import Decimal from 'decimal.js'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useAppStore } from '@/store/useAppStore'
 import { colors } from '@/theme/cssVariables'
 import { isArray } from '@/utils/judges/judgeType'

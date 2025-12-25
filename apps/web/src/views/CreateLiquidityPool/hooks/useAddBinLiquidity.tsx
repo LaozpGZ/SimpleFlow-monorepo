@@ -1,16 +1,16 @@
-import type { ChainId } from '@pancakeswap/chains'
+import type { ChainId } from '@simpleflow/chains'
 import {
   AddBinLiquidityMulticallParams,
   BinLiquidityShape,
   type PoolKey,
   addBinLiquidityMulticall,
   getIsInitializedByPoolKey,
-} from '@pancakeswap/infinity-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import type { Currency } from '@pancakeswap/swap-sdk-core'
-import { Modal, useModal } from '@pancakeswap/uikit'
-import type { Permit2Signature } from '@pancakeswap/universal-router-sdk'
-import { ConfirmationPendingContent } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/infinity-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import type { Currency } from '@simpleflow/swap-sdk-core'
+import { Modal, useModal } from '@simpleflow/uikit'
+import type { Permit2Signature } from '@simpleflow/universal-router-sdk'
+import { ConfirmationPendingContent } from '@simpleflow/widgets-internal'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useInfinityBinPositionManagerContract } from 'hooks/useContract'
 import { usePublicNodeWaitForTransaction } from 'hooks/usePublicNodeWaitForTransaction'

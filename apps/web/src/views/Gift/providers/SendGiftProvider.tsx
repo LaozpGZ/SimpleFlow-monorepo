@@ -1,6 +1,6 @@
 // Create a provider for the SendGiftView
 
-import { ChainId, CurrencyAmount, NativeCurrency } from '@pancakeswap/sdk'
+import { ChainId, CurrencyAmount, NativeCurrency } from '@simpleflow/sdk'
 import { useGetNativeTokenBalance } from 'hooks/useTokenBalance'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 

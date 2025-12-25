@@ -1,8 +1,8 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { memo, useMemo } from 'react'
-import { Box, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import styled from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getChainBasedImageUrl } from '../helpers'

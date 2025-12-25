@@ -1,5 +1,5 @@
-import type { Pool } from '@pancakeswap/routing-sdk'
-import { isV3Pool, V3Pool } from '@pancakeswap/routing-sdk-addon-v3'
+import type { Pool } from '@simpleflow/routing-sdk'
+import { isV3Pool, V3Pool } from '@simpleflow/routing-sdk-addon-v3'
 
 type Route<P extends Pool = Pool> = {
   pools: P[]

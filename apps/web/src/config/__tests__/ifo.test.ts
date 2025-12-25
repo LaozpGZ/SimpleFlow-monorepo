@@ -1,7 +1,7 @@
-import { getIfoConfig } from '@pancakeswap/ifos'
-import { ChainId } from '@pancakeswap/sdk'
+import { getIfoConfig } from '@simpleflow/ifos'
+import { ChainId } from '@simpleflow/sdk'
 
-import { campaigns } from '@pancakeswap/achievements'
+import { campaigns } from '@simpleflow/achievements'
 
 // TODO: multichain support
 describe('Config IFOs', async () => {

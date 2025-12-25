@@ -1,8 +1,8 @@
-import { useAccount } from '@pancakeswap/awgmi'
-import type { DeserializedFarm } from '@pancakeswap/farms'
-import { FarmWithStakedValue, filterFarmsByQuery } from '@pancakeswap/farms'
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { useAccount } from '@simpleflow/awgmi'
+import type { DeserializedFarm } from '@simpleflow/farms'
+import { FarmWithStakedValue, filterFarmsByQuery } from '@simpleflow/farms'
+import { useIntersectionObserver } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Flex,
@@ -17,8 +17,8 @@ import {
   Text,
   Toggle,
   ToggleView,
-} from '@pancakeswap/uikit'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import useLpRewardsAprs from 'components/Farms/hooks/useLpRewardsAprs'
 import Page from 'components/Layout/Page'

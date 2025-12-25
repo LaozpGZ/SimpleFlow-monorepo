@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text } from '@simpleflow/uikit'
 import capitalize from 'lodash/capitalize'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'

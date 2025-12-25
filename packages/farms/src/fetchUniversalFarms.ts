@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { ERC20Token, Native } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { ERC20Token, Native } from '@simpleflow/sdk'
 import { isAddressEqual, zeroAddress } from 'viem'
 import { FARMS_API } from '../config/endpoint'
 import { Protocol, UniversalFarmConfig } from './types'

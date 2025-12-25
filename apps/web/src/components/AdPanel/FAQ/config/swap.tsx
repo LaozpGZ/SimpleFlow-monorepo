@@ -1,5 +1,5 @@
-import { Box, FlexGap, Link, Text } from '@pancakeswap/uikit'
-import { Trans } from '@pancakeswap/localization'
+import { Box, FlexGap, Link, Text } from '@simpleflow/uikit'
+import { Trans } from '@simpleflow/l10n'
 import { getImageUrl } from 'components/AdPanel/utils'
 import { styled } from 'styled-components'
 import { FAQConfig } from '../types'

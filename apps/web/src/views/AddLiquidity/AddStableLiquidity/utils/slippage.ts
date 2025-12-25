@@ -1,4 +1,4 @@
-import { Percent } from '@pancakeswap/sdk'
+import { Percent } from '@simpleflow/sdk'
 
 import { BIPS_BASE } from 'config/constants/exchange'
 

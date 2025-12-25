@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { IconButton, useTooltip, BridgeIcon } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { IconButton, useTooltip, BridgeIcon } from '@simpleflow/uikit'
 
 interface BridgeInfo {
   platform: string

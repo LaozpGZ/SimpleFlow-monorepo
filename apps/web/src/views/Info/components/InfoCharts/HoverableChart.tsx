@@ -1,4 +1,4 @@
-import { Box, Skeleton, Text } from '@pancakeswap/uikit'
+import { Box, Skeleton, Text } from '@simpleflow/uikit'
 import dayjs from 'dayjs'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { ProtocolData, TvlChartEntry, VolumeChartEntry } from 'state/info/types'

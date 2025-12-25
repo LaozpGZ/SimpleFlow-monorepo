@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePreviousValue } from "@pancakeswap/hooks";
-import { useTranslation } from "@pancakeswap/localization";
+import { usePreviousValue } from "@simpleflow/hooks";
+import { useTranslation } from "@simpleflow/l10n";
 import {
   Box,
   Button,
@@ -11,8 +11,8 @@ import {
   RowBetween,
   Text,
   useMatchBreakpoints,
-} from "@pancakeswap/uikit";
-import isUndefinedOrNull from "@pancakeswap/utils/isUndefinedOrNull";
+} from "@simpleflow/uikit";
+import isUndefinedOrNull from "@simpleflow/utils/isUndefinedOrNull";
 import styled, { css } from "styled-components";
 import { ZoomLevels } from "./constants";
 import {

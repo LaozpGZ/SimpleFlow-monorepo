@@ -1,4 +1,4 @@
-import { Ether, Token } from '@pancakeswap/sdk'
+import { Ether, Token } from '@simpleflow/sdk'
 import { describe, expect, test } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from '../constants'
 import { encodeSqrtRatioX96 } from '../utils'

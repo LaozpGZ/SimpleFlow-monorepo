@@ -1,4 +1,4 @@
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import { useAtom } from 'jotai'
 import { styled } from 'styled-components'
 import { swapDetailsCollapseAtom } from './atoms'

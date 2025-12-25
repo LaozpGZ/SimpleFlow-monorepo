@@ -1,6 +1,6 @@
-import { isSolana } from '@pancakeswap/chains'
-import { OrderType } from '@pancakeswap/price-api-sdk'
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { isSolana } from '@simpleflow/chains'
+import { OrderType } from '@simpleflow/price-api-sdk'
+import { Percent } from '@simpleflow/swap-sdk-core'
 import { BridgeOrderWithCommands, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import {
   computeTradePriceBreakdown,

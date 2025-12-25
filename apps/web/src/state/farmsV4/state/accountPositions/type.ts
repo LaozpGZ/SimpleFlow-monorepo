@@ -1,9 +1,9 @@
-import type { Protocol } from '@pancakeswap/farms'
-import type { PoolKey } from '@pancakeswap/infinity-sdk'
-import type { ERC20Token, Pair } from '@pancakeswap/sdk'
-import type { LegacyStableSwapPair } from '@pancakeswap/smart-router/legacy-router'
-import { PositionInfoLayout } from '@pancakeswap/solana-core-sdk'
-import type { CurrencyAmount, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import type { Protocol } from '@simpleflow/farms'
+import type { PoolKey } from '@simpleflow/infinity-sdk'
+import type { ERC20Token, Pair } from '@simpleflow/sdk'
+import type { LegacyStableSwapPair } from '@simpleflow/smart-router/legacy-router'
+import { PositionInfoLayout } from '@simpleflow/solana-core-sdk'
+import type { CurrencyAmount, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import type { Address, Hex } from 'viem'
 
 export enum POSITION_STATUS {

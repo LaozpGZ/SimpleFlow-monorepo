@@ -1,5 +1,5 @@
 import { shallow } from 'zustand/shallow'
-import { solToWSol, WSOLMint } from '@pancakeswap/solana-core-sdk'
+import { solToWSol, WSOLMint } from '@simpleflow/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import useSWR from 'swr'

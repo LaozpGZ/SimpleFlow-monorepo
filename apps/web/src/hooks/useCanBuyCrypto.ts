@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useMemo } from 'react'
 
 const SUPPORTED_ONRAMP_TOKENS = {

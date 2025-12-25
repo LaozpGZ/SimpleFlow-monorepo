@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Box, Flex, Image, Text, useColorMode, useMediaQuery } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { WalletReadyState } from '@solana/wallet-adapter-base'
 import RaydiumLogo from '@/icons/RaydiumLogo'

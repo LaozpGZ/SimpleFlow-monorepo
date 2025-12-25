@@ -1,4 +1,4 @@
-import { Loadable } from '@pancakeswap/utils/Loadable'
+import { Loadable } from '@simpleflow/utils/Loadable'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { quoteTraceAtom } from 'quoter/perf/quoteTracker'

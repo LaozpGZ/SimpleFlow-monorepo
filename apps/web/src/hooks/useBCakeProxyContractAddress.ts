@@ -1,4 +1,4 @@
-import { bCakeSupportedChainId } from '@pancakeswap/farms'
+import { bCakeSupportedChainId } from '@simpleflow/farms'
 import { useQuery } from '@tanstack/react-query'
 import { NO_PROXY_CONTRACT } from 'config/constants'
 import { useBCakeFarmBoosterContract } from 'hooks/useContract'

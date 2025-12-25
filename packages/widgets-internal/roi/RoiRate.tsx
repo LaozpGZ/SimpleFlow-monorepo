@@ -1,7 +1,7 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { memo } from "react";
 
-import { Flex, Text } from "@pancakeswap/uikit";
+import { Flex, Text } from "@simpleflow/uikit";
 import {
   RoiCardInner,
   RoiCardWrapper,
@@ -9,7 +9,7 @@ import {
   RoiDisplayContainer,
   MILLION,
   TRILLION,
-} from "@pancakeswap/uikit/components/RoiCalculatorModal/RoiCard";
+} from "@simpleflow/uikit/components/RoiCalculatorModal/RoiCard";
 
 interface Props {
   usdAmount?: number;

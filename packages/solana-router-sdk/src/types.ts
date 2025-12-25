@@ -1,5 +1,5 @@
-import { BigintIsh, Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
-import { AbortControl } from '@pancakeswap/utils/abortControl'
+import { BigintIsh, Currency, CurrencyAmount, TradeType } from '@simpleflow/sdk'
+import { AbortControl } from '@simpleflow/utils/abortControl'
 
 export interface SmartRouterTrade<TTradeType extends TradeType> {
   tradeType: TTradeType

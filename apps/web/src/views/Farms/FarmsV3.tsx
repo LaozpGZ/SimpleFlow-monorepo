@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { FarmWithStakedValue, filterFarmsByQuery, supportedChainIdV2, supportedChainIdV3 } from '@pancakeswap/farms'
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { ChainId } from '@simpleflow/chains'
+import { FarmWithStakedValue, filterFarmsByQuery, supportedChainIdV2, supportedChainIdV3 } from '@simpleflow/farms'
+import { useIntersectionObserver } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Flex,
@@ -16,11 +16,11 @@ import {
   Text,
   Toggle,
   ToggleView,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import partition from 'lodash/partition'
 
-import { BIG_ONE, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { FarmWidget, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { BIG_ONE, BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { FarmWidget, NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import { V2_BCAKE_MIGRATION_SUPPORTED_CHAINS, V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'

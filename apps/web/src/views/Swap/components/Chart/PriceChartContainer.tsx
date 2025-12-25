@@ -1,4 +1,4 @@
-import { Currency, WNATIVE } from '@pancakeswap/sdk'
+import { Currency, WNATIVE } from '@simpleflow/sdk'
 import useTheme from 'hooks/useTheme'
 import { useCallback, useState } from 'react'
 import BnbWbnbNotice from './BnbWbnbNotice'

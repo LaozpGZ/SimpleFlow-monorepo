@@ -3,7 +3,7 @@ import { useMemo, useCallback } from 'react'
 import BN from 'bignumber.js'
 import { useAtomValue } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
 import { SOLANA_BALANCES_QUERY_KEY, walletBalancesAtomFamily } from './atomFamily'
 
 /**

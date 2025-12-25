@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { RAYMint, ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { RAYMint, ApiV3Token } from '@simpleflow/solana-core-sdk'
 
 import Decimal from 'decimal.js'
 import { useTokenAccountStore, useTokenStore } from '@/store'

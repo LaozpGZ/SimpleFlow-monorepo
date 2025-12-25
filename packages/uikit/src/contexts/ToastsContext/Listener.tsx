@@ -1,4 +1,4 @@
-import { useTheme } from "@pancakeswap/hooks";
+import { useTheme } from "@simpleflow/hooks";
 import { Toaster } from "sonner";
 
 const ToastListener = () => {

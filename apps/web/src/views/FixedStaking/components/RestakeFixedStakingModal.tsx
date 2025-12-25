@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
-import { Box, Flex, Message, MessageText, ModalV2, PreTitle, Text, useModalV2 } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount } from '@simpleflow/sdk'
+import { Box, Flex, Message, MessageText, ModalV2, PreTitle, Text, useModalV2 } from '@simpleflow/uikit'
 import { LightGreyCard } from 'components/Card'
 import { ReactNode } from 'react'
 

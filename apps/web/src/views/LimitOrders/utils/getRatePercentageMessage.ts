@@ -1,5 +1,5 @@
-import { TranslateFunction } from '@pancakeswap/localization'
-import { Percent } from '@pancakeswap/sdk'
+import { TranslateFunction } from '@simpleflow/l10n'
+import { Percent } from '@simpleflow/sdk'
 
 export enum PercentageDirection {
   ABOVE = 'above',

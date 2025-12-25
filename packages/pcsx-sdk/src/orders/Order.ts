@@ -1,4 +1,4 @@
-import type { PermitTransferFrom, PermitTransferFromData, Witness } from '@pancakeswap/permit2-sdk'
+import type { PermitTransferFrom, PermitTransferFromData, Witness } from '@simpleflow/permit2-sdk'
 import type { Address, Hex } from 'viem'
 import type { XSupportedChainId } from '../constants'
 

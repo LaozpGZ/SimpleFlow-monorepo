@@ -1,5 +1,5 @@
 import { encodeFunctionData, Hex } from 'viem'
-import { BigintIsh, CurrencyAmount, ONE, Token, validateAndParseAddress, ZERO } from '@pancakeswap/sdk'
+import { BigintIsh, CurrencyAmount, ONE, Token, validateAndParseAddress, ZERO } from '@simpleflow/sdk'
 import invariant from 'tiny-invariant'
 import { ADDRESS_ZERO } from './constants'
 import { Position } from './entities'

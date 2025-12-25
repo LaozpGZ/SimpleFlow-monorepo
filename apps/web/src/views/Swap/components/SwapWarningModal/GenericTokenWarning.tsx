@@ -1,7 +1,7 @@
-import { Box, Link, Text } from '@pancakeswap/uikit'
-import { useTranslation, Trans } from '@pancakeswap/localization'
+import { Box, Link, Text } from '@simpleflow/uikit'
+import { useTranslation, Trans } from '@simpleflow/l10n'
 import { useMemo } from 'react'
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 
 interface GenericTokenWarningProps {
   token: Token

@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 import { HOOK_CATEGORY, POOL_TYPE, type HookData, type PoolType } from '../../types'
 import { BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN, CL_DYNAMIC_FEE_HOOKS_BY_CHAIN } from './dynamicFeeHook'

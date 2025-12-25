@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { CurrencyAmount, InsufficientInputAmountError, Token, sortedInsert } from '@pancakeswap/swap-sdk-core'
+import { ChainId } from '@simpleflow/chains'
+import { CurrencyAmount, InsufficientInputAmountError, Token, sortedInsert } from '@simpleflow/swap-sdk-core'
 import { describe, expect, it } from 'vitest'
 
 import { Pair } from '../src/entities'

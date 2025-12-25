@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { PoolState } from './getPool'
 
 export const hasInvolvedCurrency = (pool: Pick<PoolState, 'currency0' | 'currency1'>, currency: Currency) => {

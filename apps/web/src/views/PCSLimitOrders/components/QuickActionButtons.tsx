@@ -1,5 +1,5 @@
-import { Trans, useTranslation } from '@pancakeswap/localization'
-import { FlexGap, Button, useMatchBreakpoints, RowBetween, Text, Box, Input, Message, Link } from '@pancakeswap/uikit'
+import { Trans, useTranslation } from '@simpleflow/l10n'
+import { FlexGap, Button, useMatchBreakpoints, RowBetween, Text, Box, Input, Message, Link } from '@simpleflow/uikit'
 import styled from 'styled-components'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'

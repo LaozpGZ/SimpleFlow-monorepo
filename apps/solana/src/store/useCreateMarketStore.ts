@@ -6,12 +6,12 @@ import {
   LOOKUP_TABLE_CACHE,
   CreatePoolAddress,
   MarketExtInfo
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { PublicKey, Transaction, VersionedTransaction, TransactionMessage, SystemProgram } from '@solana/web3.js'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token-0.4'
 import BN from 'bn.js'
 import { v4 as uuidv4 } from 'uuid'
-import { TranslateFunction } from '@pancakeswap/localization'
+import { TranslateFunction } from '@simpleflow/l10n'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '@/types/tx'
 import ToPublicKey, { isValidPublicKey } from '@/utils/publicKey'

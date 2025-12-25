@@ -1,5 +1,5 @@
-import { useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ButtonMenu,
   ButtonMenuItem,
@@ -10,14 +10,14 @@ import {
   TooltipText,
   useMatchBreakpoints,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useIsSmartAccount } from 'hooks/useIsSmartAccount'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
-import { isEvm } from '@pancakeswap/chains'
+import { isEvm } from '@simpleflow/chains'
 import { SWAP_CHART_UNSUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { chartDisplayAtom } from './atoms'
 

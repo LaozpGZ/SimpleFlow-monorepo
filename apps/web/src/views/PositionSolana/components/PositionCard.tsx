@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
-import { TokenInfo, wSolToSolToken } from '@pancakeswap/solana-core-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { TokenInfo, wSolToSolToken } from '@simpleflow/solana-core-sdk'
 import {
   AutoColumn,
   Card,
@@ -12,9 +12,9 @@ import {
   RowBetween,
   Text,
   TokenLogo,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import { formatPercent } from '@pancakeswap/utils/formatFractions'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
+import { formatPercent } from '@simpleflow/utils/formatFractions'
 import BN from 'bn.js'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
 import { getCurrencyLogoSrcs } from 'components/TokenImage'
@@ -25,7 +25,7 @@ import { SolanaV3PositionDetail } from 'state/farmsV4/state/accountPositions/typ
 import { SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import Divider from 'components/Divider'
-import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
+import { formatFiatNumber } from '@simpleflow/utils/formatFiatNumber'
 import { SolanaV3PositionActions } from 'views/universalFarms/components/PositionActions/SolanaV3PositionActions'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useIsV3PositionOwner } from 'state/token/solanaPositionOwner'

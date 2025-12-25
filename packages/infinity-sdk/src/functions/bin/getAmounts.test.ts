@@ -1,4 +1,4 @@
-import { WNATIVE } from '@pancakeswap/swap-sdk-evm'
+import { WNATIVE } from '@simpleflow/swap-sdk-evm'
 import { maxUint128 } from 'viem'
 import { beforeEach, describe, expect, test } from 'vitest'
 import { MAX_PROTOCOL_FEE, TEN_PERCENT_FEE } from '../../constants/fee'

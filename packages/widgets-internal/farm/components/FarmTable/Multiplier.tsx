@@ -1,4 +1,4 @@
-import { FarmMultiplierInfo, HelpIcon, Skeleton, useTooltip } from "@pancakeswap/uikit";
+import { FarmMultiplierInfo, HelpIcon, Skeleton, useTooltip } from "@simpleflow/uikit";
 import { styled } from "styled-components";
 import { FarmTableMultiplierProps } from "../../types";
 

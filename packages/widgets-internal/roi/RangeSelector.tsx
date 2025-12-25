@@ -1,9 +1,9 @@
-import { Currency, Price } from "@pancakeswap/sdk";
-import { useTranslation } from "@pancakeswap/localization";
-import { formatPrice } from "@pancakeswap/utils/formatFractions";
+import { Currency, Price } from "@simpleflow/sdk";
+import { useTranslation } from "@simpleflow/l10n";
+import { formatPrice } from "@simpleflow/utils/formatFractions";
 import { memo } from "react";
 
-import { FlexGap } from "@pancakeswap/uikit";
+import { FlexGap } from "@simpleflow/uikit";
 import { Bound } from "../swap/LiquidityChartRangeInput";
 import { StepCounter } from "./StepCounter";
 

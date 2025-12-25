@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -14,8 +14,8 @@ import {
   ModalTitle,
   ModalWrapper,
   Text,
-} from '@pancakeswap/uikit'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+} from '@simpleflow/uikit'
+import { formatBigInt } from '@simpleflow/utils/formatBalance'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
 import { SaleStatusEnum } from 'views/PancakeSquad/types'

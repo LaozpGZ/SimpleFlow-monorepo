@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { BinPool, getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
+import { Protocol } from '@simpleflow/farms'
+import { BinPool, getCurrencyPriceFromId } from '@simpleflow/infinity-sdk'
 import useAllTicksQuery, { BinTickData, BinTicks } from 'hooks/useAllTicksQuery'
 import { TickProcessed } from 'hooks/v3/types'
 import { useActiveLiquidityByPool } from 'hooks/v3/usePoolTickData'

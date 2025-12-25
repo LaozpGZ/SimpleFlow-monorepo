@@ -1,4 +1,4 @@
-import { ChainId, getChainIdByChainName } from '@pancakeswap/chains'
+import { ChainId, getChainIdByChainName } from '@simpleflow/chains'
 import {
   V2TokenDataQuery,
   fetchV2ChartsTvlData,

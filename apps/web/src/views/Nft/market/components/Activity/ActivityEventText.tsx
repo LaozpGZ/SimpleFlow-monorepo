@@ -1,5 +1,5 @@
-import { Text, TextProps } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Text, TextProps } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { MarketEvent } from '../../../../../state/nftMarket/types'
 
 interface ActivityEventTextProps extends TextProps {

@@ -1,4 +1,4 @@
-import { type TranslateFunction } from '@pancakeswap/localization'
+import { type TranslateFunction } from '@simpleflow/l10n'
 
 export const getTxMeta = ({ values = {}, t }: { values?: Record<string, unknown>; t: TranslateFunction }) => {
   // Filter values to only allow string, number, or undefined

@@ -1,4 +1,4 @@
-import { ChainId, NonEVMChainId, testnetChainIds } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId, testnetChainIds } from '@simpleflow/chains'
 import addresses from 'config/constants/contracts'
 import dayjs from 'dayjs'
 import { gql } from 'graphql-request'

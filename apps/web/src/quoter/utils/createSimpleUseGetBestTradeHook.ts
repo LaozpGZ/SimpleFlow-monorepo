@@ -1,4 +1,4 @@
-import { SmartRouter } from '@pancakeswap/smart-router'
+import { SmartRouter } from '@simpleflow/smart-router'
 import { useCallback } from 'react'
 
 export function createSimpleUseGetBestTradeHook<T>(

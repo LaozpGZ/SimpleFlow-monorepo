@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@types/itty-router-extras": "^0.4.0",
-    "@pancakeswap/tsconfig": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
     "@cloudflare/workers-types": "^3.10.0",
     "wrangler": "catalog:"
   },

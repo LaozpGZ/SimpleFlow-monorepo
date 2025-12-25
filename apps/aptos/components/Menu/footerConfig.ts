@@ -1,5 +1,5 @@
-import { ContextApi } from '@pancakeswap/localization'
-import { FooterLinkType } from '@pancakeswap/uikit'
+import { ContextApi } from '@simpleflow/l10n'
+import { FooterLinkType } from '@simpleflow/uikit'
 
 export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
   {

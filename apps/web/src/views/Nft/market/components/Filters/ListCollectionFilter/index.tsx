@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -10,7 +10,7 @@ import {
   InputGroup,
   SearchIcon,
   Text,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import orderBy from 'lodash/orderBy'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useGetCollections } from 'state/nftMarket/hooks'

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import fs from 'fs'
 import path from 'path'
 import lpHelpers1 from '../constants/priceHelperLps/1'

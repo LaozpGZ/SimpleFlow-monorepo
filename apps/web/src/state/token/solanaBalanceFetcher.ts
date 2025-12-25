@@ -1,4 +1,4 @@
-import { parseTokenAccountResp, TokenAccount } from '@pancakeswap/solana-core-sdk'
+import { parseTokenAccountResp, TokenAccount } from '@simpleflow/solana-core-sdk'
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
 import { Connection, PublicKey } from '@solana/web3.js'
 

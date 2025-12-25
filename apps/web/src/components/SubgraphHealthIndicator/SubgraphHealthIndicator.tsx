@@ -1,9 +1,9 @@
-import { useTranslation, TranslateFunction } from '@pancakeswap/localization'
+import { useTranslation, TranslateFunction } from '@simpleflow/l10n'
 import { styled } from 'styled-components'
-import { Card, Flex, Box, InfoIcon, Text, useTooltip } from '@pancakeswap/uikit'
+import { Card, Flex, Box, InfoIcon, Text, useTooltip } from '@simpleflow/uikit'
 import { useSubgraphHealthIndicatorManager } from 'state/user/hooks'
 import useSubgraphHealth, { SubgraphStatus } from 'hooks/useSubgraphHealth'
-import { AVERAGE_CHAIN_BLOCK_TIMES, ChainId, chainNames, getChainName } from '@pancakeswap/chains'
+import { AVERAGE_CHAIN_BLOCK_TIMES, ChainId, chainNames, getChainName } from '@simpleflow/chains'
 import { useMemo } from 'react'
 
 const StyledCard = styled(Card)`

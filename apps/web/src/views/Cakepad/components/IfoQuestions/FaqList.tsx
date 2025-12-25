@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@simpleflow/l10n'
 import {
   Card,
   CardBody,
@@ -10,7 +10,7 @@ import {
   Box,
   useMatchBreakpoints,
   ReactMarkdown,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { safeGetAddress } from 'utils'

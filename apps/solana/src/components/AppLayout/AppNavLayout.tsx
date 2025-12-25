@@ -9,11 +9,11 @@ import {
   MotionModal,
   useMatchBreakpoints,
   useModalV2
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { ReactNode } from 'react'
-import { languageList, useTranslation } from '@pancakeswap/localization'
+import { languageList, useTranslation } from '@simpleflow/l10n'
 import { colors } from '@/theme/cssVariables'
 import { appLayoutPaddingX } from '@/theme/detailConfig'
 import { pageRoutePathnames } from '@/utils/config/routers'

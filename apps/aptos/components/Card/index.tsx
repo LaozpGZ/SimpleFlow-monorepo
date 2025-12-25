@@ -1,4 +1,4 @@
-import { AtomBox, AtomBoxProps } from '@pancakeswap/uikit'
+import { AtomBox, AtomBoxProps } from '@simpleflow/uikit'
 
 const Card = (props: AtomBoxProps) => <AtomBox width="100%" padding="20px" borderRadius="default" {...props} />
 

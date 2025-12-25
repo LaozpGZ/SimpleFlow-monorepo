@@ -1,5 +1,5 @@
-import { Chain, ChainId, Chains, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
+import { Chain, ChainId, Chains, isTestnetChainId, NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -17,7 +17,7 @@ import {
   UserMenuDivider,
   UserMenuItem,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useHover } from 'hooks/useHover'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'

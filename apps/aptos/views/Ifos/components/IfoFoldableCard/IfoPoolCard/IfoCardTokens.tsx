@@ -1,7 +1,7 @@
-import { Currency } from '@pancakeswap/aptos-swap-sdk'
-import { useAccount } from '@pancakeswap/awgmi'
-import { getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
-import { useTranslation } from '@pancakeswap/localization'
+import { Currency } from '@simpleflow/aptos-swap-sdk'
+import { useAccount } from '@simpleflow/awgmi'
+import { getBalanceNumber, getFullDisplayBalance } from '@simpleflow/utils/formatBalance'
+import { useTranslation } from '@simpleflow/l10n'
 
 import {
   Text,
@@ -18,7 +18,7 @@ import {
   IfoPercentageOfTotal,
   IfoVestingAvailableToClaim,
   BalanceWithLoading,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { TokenImage, TokenPairImage } from 'components/TokenImage'
 import { Ifo, PoolIds } from 'config/constants/types'
 import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'

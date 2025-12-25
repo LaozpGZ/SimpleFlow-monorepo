@@ -2,7 +2,7 @@ import { AbsoluteCenter, Box, Center, HStack, Spinner, Text } from '@chakra-ui/r
 import { ReactNode } from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, TooltipProps } from 'recharts'
 import { NameType, ValueType } from 'recharts/src/component/DefaultTooltipContent'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { panelCard } from '@/theme/cssBlocks'

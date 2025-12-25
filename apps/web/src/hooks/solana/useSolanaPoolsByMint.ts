@@ -1,5 +1,5 @@
-import { PoolInfo } from '@pancakeswap/solana-clmm-sdk'
-import { PoolTypeItem } from '@pancakeswap/solana-core-sdk'
+import { PoolInfo } from '@simpleflow/solana-clmm-sdk'
+import { PoolTypeItem } from '@simpleflow/solana-core-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { solExplorerApiClient } from 'state/info/api/client'

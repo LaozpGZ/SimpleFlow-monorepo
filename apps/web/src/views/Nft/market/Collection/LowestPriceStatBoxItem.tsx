@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { getLeastMostPriceInCollection } from 'state/nftMarket/helpers'
 import { useQuery } from '@tanstack/react-query'
 import { StatBoxItem, StatBoxItemProps } from '../components/StatBox'

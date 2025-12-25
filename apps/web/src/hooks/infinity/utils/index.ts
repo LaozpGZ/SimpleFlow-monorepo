@@ -1,6 +1,6 @@
-import { Q192 } from '@pancakeswap/routing-sdk-addon-v3'
-import { Currency, Price, sortCurrencies } from '@pancakeswap/swap-sdk-core'
-import { encodeSqrtRatioX96, nearestUsableTick, TickMath } from '@pancakeswap/v3-sdk'
+import { Q192 } from '@simpleflow/routing-sdk-addon-v3'
+import { Currency, Price, sortCurrencies } from '@simpleflow/swap-sdk-core'
+import { encodeSqrtRatioX96, nearestUsableTick, TickMath } from '@simpleflow/v3-sdk'
 
 export function tryParseTick(price: Price<Currency, Currency> | boolean, tickSpacing: number): number | undefined {
   if (!price || !tickSpacing || typeof price === 'boolean') {

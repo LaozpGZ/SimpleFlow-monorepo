@@ -1,5 +1,5 @@
-import { Button, Card, CardBody, Flex, Heading, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Button, Card, CardBody, Flex, Heading, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import Link from 'next/link'
 
 const NoProfileCard = () => {

@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@pancakeswap/uikit'
+import { Button, ButtonProps } from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSwitchNetworkLoading } from 'hooks/useSwitchNetworkLoading'
 import { useSetAtom } from 'jotai'

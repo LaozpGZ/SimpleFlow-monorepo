@@ -1,5 +1,5 @@
 import { Flex, HStack, Link, Text, useClipboard } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import CopyIcon from '@/icons/misc/CopyIcon'
 import ExternalLinkLargeIcon from '@/icons/misc/ExternalLinkLargeIcon'

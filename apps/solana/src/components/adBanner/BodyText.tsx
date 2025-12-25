@@ -1,4 +1,4 @@
-import { Text, TextProps } from '@pancakeswap/uikit'
+import { Text, TextProps } from '@simpleflow/uikit'
 import { PropsWithChildren } from 'react'
 
 interface BodyTextProps extends TextProps, PropsWithChildren {}

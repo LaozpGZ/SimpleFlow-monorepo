@@ -2,8 +2,8 @@ import {
   UNIVERSAL_FARMS_WITH_TESTNET,
   fetchAllUniversalFarms,
   formatUniversalFarmToSerializedFarm,
-} from '@pancakeswap/farms'
-import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
+} from '@simpleflow/farms'
+import { cacheByLRU } from '@simpleflow/utils/cacheByLRU'
 import { NextApiHandler } from 'next'
 import { stringify } from 'viem'
 

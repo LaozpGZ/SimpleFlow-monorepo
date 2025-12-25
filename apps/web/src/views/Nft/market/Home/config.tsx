@@ -1,5 +1,5 @@
-import { ContextApi } from '@pancakeswap/localization'
-import { LinkExternal } from '@pancakeswap/uikit'
+import { ContextApi } from '@simpleflow/l10n'
+import { LinkExternal } from '@simpleflow/uikit'
 
 const config = (t: ContextApi['t']) => {
   return [

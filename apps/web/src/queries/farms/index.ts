@@ -1,4 +1,4 @@
-import { ChainId, getChainNameInKebabCase } from '@pancakeswap/chains'
+import { ChainId, getChainNameInKebabCase } from '@simpleflow/chains'
 import BN from 'bignumber.js'
 
 import { explorerApiClient } from 'state/info/api/client'

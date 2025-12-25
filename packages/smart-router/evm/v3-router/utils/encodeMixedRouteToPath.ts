@@ -1,5 +1,5 @@
 import { Hex, encodePacked } from 'viem'
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 
 import { BaseRoute, Pool } from '../types'
 import { getOutputCurrency, isV3Pool } from './pool'

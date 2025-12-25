@@ -1,4 +1,4 @@
-import { Currency, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+import { Currency, getCurrencyAddress } from '@simpleflow/swap-sdk-core'
 
 function isCurrency(a: any): a is Currency {
   if (a == null || typeof a !== 'object') return false

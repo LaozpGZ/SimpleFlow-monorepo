@@ -1,4 +1,4 @@
-import { Currency, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+import { Currency, getCurrencyAddress } from '@simpleflow/swap-sdk-core'
 
 import { Vertice } from '../types'
 

@@ -1,5 +1,5 @@
-import { Card, CardBody, Flex, Heading, ProfileAvatar } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { Card, CardBody, Flex, Heading, ProfileAvatar } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import { css, styled } from 'styled-components'
 

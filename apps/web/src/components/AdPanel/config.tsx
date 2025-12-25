@@ -1,4 +1,4 @@
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { useTradingCompetitionAds } from 'components/AdPanel/Ads/AdTradingCompetition'
 import { useMemo } from 'react'
 import { ExpandableAd } from './Expandable/ExpandableAd'

@@ -1,4 +1,4 @@
-import { Currency, Price } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price } from '@simpleflow/swap-sdk-core'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import { batch } from 'react-redux'

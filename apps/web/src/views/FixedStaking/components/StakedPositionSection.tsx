@@ -1,12 +1,12 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core'
-import { AddIcon, Box, Button, ChevronRightIcon, Flex, IconButton, MinusIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount, Percent } from '@simpleflow/swap-sdk-core'
+import { AddIcon, Box, Button, ChevronRightIcon, Flex, IconButton, MinusIcon, Text } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 
 import dayjs from 'dayjs'
 import { styled } from 'styled-components'
 
-import { bscTokens } from '@pancakeswap/tokens'
+import { bscTokens } from '@simpleflow/tokens'
 import { useCalculateProjectedReturnAmount } from '../hooks/useCalculateProjectedReturnAmount'
 import { useFixedStakeAPR } from '../hooks/useFixedStakeAPR'
 import { useCurrentDay } from '../hooks/useStakedPools'

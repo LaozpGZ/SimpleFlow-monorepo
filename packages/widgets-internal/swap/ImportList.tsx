@@ -1,6 +1,6 @@
-import { useTheme } from "@pancakeswap/hooks";
-import { useTranslation } from "@pancakeswap/localization";
-import { AutoColumn, Box, Button, Checkbox, Flex, Link, Message, RowBetween, RowFixed, Text } from "@pancakeswap/uikit";
+import { useTheme } from "@simpleflow/hooks";
+import { useTranslation } from "@simpleflow/l10n";
+import { AutoColumn, Box, Button, Checkbox, Flex, Link, Message, RowBetween, RowFixed, Text } from "@simpleflow/uikit";
 import { useState } from "react";
 import { styled } from "styled-components";
 import { ListLogo } from "./ListLogo";

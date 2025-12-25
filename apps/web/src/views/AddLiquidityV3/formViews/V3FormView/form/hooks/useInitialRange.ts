@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { Token } from '@simpleflow/swap-sdk-core'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'

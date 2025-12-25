@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
-import { useTheme } from "@pancakeswap/hooks";
+import { useTheme } from "@simpleflow/hooks";
 import { IOptionType, ISelectItem } from "./types";
 import { Box, Flex } from "../Box";
 import { CrossIcon } from "../Svg";

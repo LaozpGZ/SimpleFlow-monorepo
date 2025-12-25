@@ -1,4 +1,4 @@
-import { Box, BoxProps, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, BoxProps, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 

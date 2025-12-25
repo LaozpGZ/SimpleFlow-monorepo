@@ -1,4 +1,4 @@
-import { Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { HomePagePartner } from 'edge/home/types'
 import styled from 'styled-components'
 

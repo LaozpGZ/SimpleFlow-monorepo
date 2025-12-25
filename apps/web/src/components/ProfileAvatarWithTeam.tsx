@@ -1,4 +1,4 @@
-import { NoProfileAvatarIcon } from '@pancakeswap/uikit'
+import { NoProfileAvatarIcon } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { Profile } from 'state/types'
 import { styled } from 'styled-components'

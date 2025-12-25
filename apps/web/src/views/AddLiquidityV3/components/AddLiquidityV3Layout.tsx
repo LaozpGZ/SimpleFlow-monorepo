@@ -1,5 +1,5 @@
 import React from 'react'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { AddSolanaLiquidityV3Layout } from './AddSolanaLiquidityV3Layout'

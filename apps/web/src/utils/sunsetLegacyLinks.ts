@@ -1,4 +1,4 @@
-import { SunsetChainId } from '@pancakeswap/chains'
+import { SunsetChainId } from '@simpleflow/chains'
 
 const SUNSET_LEGACY_LINKS: Record<SunsetChainId, string> = {
   [SunsetChainId.POLYGON_ZKEVM]: 'https://legacy-zkevm.simpleflow.finance/',

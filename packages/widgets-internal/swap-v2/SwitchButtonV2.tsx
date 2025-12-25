@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { keyframes, styled } from "styled-components";
 
-import { ArrowUpDownIcon, ButtonProps, IconButton } from "@pancakeswap/uikit";
+import { ArrowUpDownIcon, ButtonProps, IconButton } from "@simpleflow/uikit";
 
 const switchAnimation = keyframes`
   from {transform: rotate(0deg);}

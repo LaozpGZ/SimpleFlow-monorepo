@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 import { useFeeDataWithGasPrice } from 'state/user/hooks'
 import { bCakeStakeFarm, crossChainStakeFarm, stakeFarm } from 'utils/calls'
 import { useOraclePrice } from 'views/Farms/hooks/useFetchOraclePrice'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 const useStakeFarms = (pid: number, vaultPid?: number) => {
   const { account, chainId } = useAccountActiveChain()

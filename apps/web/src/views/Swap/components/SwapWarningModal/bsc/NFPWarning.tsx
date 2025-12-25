@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, LinkExternal, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, LinkExternal, Text } from '@simpleflow/uikit'
 
 const NFPWarning = () => {
   const { t } = useTranslation()

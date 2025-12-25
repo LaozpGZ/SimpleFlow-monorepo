@@ -1,4 +1,4 @@
-import { AtomBox } from '@pancakeswap/uikit'
+import { AtomBox } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 export const StyledMobileContainer = styled(AtomBox)<{ $fullHeight?: boolean }>`

@@ -1,5 +1,5 @@
-import type { Pool } from '@pancakeswap/routing-sdk'
-import { isInfinityBinPool, isInfinityCLPool } from '@pancakeswap/routing-sdk-addon-infinity'
+import type { Pool } from '@simpleflow/routing-sdk'
+import { isInfinityBinPool, isInfinityCLPool } from '@simpleflow/routing-sdk-addon-infinity'
 
 import { SupportedPool, V3SupportedPool } from '../types'
 

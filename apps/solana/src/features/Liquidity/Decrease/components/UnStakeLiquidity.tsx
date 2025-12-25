@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState, useRef } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import Decimal from 'decimal.js'
 import { Select } from '@/components/Select'

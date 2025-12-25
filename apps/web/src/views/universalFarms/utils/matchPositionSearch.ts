@@ -1,4 +1,4 @@
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import { getDefaultStore } from 'jotai'
 import {
   InfinityBinPositionDetail,
@@ -6,8 +6,8 @@ import {
   SolanaV3PositionDetail,
   UnifiedPositionDetail,
 } from 'state/farmsV4/state/accountPositions/type'
-import { Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
-import { isSolana } from '@pancakeswap/chains'
+import { Native, ZERO_ADDRESS } from '@simpleflow/sdk'
+import { isSolana } from '@simpleflow/chains'
 import { tokensMapAtom } from '../atom/tokensMapAtom'
 
 const store = getDefaultStore()

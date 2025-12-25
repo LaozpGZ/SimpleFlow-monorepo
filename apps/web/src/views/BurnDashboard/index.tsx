@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoColumn,
   Box,
@@ -9,8 +9,8 @@ import {
   Skeleton,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { LightGreyCard } from 'components/Card'
 import styled from 'styled-components'
 import { BurnLastSevenDaysCard } from './components/burns/BurnLastSevenDaysCard'

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { UnifiedCurrencyAmount } from '@simpleflow/sdk'
 import {
   AutoColumn,
   Box,
@@ -14,8 +14,8 @@ import {
   RowFixed,
   SkeletonV2,
   Text,
-} from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+} from '@simpleflow/uikit'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 import { LightGreyCard } from 'components/Card'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
@@ -26,8 +26,8 @@ import styled from 'styled-components'
 import { computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter } from 'views/Swap/V3Swap/utils/exchange'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
-import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { formatScientificToDecimal } from '@simpleflow/utils/formatNumber'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import { BridgeFeeToolTip, TradingFeeToolTip } from '../../components/FeeToolTip'
 import { useBridgeStatus } from '../../hooks'
 import { ActiveBridgeOrderMetadata, BridgeStatus, BridgeStatusData } from '../../types'

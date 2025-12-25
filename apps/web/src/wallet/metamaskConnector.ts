@@ -1,4 +1,4 @@
-import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
+import safeGetWindow from '@simpleflow/utils/safeGetWindow'
 import { chains } from 'utils/wagmi'
 import { createConnector } from 'wagmi'
 import { eip6963Providers } from './WalletProvider'

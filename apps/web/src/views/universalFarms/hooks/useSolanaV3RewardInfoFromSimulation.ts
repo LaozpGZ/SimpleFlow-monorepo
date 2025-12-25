@@ -4,7 +4,7 @@ import {
   TickArrayLayout,
   TickUtils,
   TokenInfo,
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { useCallback, useMemo } from 'react'
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { SolanaV3PositionDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -17,7 +17,7 @@ import BigNumber from 'bignumber.js'
 import PQueue from 'p-queue'
 import { useRaydium } from 'hooks/solana/useRaydium'
 import uniq from 'lodash/uniq'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
 import { PublicKey } from '@solana/web3.js'
 import { removeLiquidity } from 'state/pools/solana/actions'
 

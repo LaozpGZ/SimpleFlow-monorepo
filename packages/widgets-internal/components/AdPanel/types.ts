@@ -1,4 +1,4 @@
-import { BoxProps } from "@pancakeswap/uikit";
+import { BoxProps } from "@simpleflow/uikit";
 
 export interface AdSlide {
   id: string;

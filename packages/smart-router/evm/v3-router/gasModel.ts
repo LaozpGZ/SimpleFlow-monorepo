@@ -1,6 +1,6 @@
-import { BigintIsh, Currency, CurrencyAmount, Native, Price } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { BigintIsh, Currency, CurrencyAmount, Native, Price } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
 import sum from 'lodash/sum.js'
 
 import {

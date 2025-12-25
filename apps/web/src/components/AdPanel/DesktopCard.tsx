@@ -1,4 +1,4 @@
-import { Box, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useAtomValue } from 'jotai'
 import styled from 'styled-components'
 import { swapDetailsCollapseAtom, chartDisplayAtom } from 'views/SwapSimplify/InfinitySwap/atoms'

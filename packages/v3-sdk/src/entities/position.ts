@@ -1,4 +1,4 @@
-import { BigintIsh, MaxUint256, Percent, Price, CurrencyAmount, Token } from '@pancakeswap/sdk'
+import { BigintIsh, MaxUint256, Percent, Price, CurrencyAmount, Token } from '@simpleflow/sdk'
 import invariant from 'tiny-invariant'
 import { ZERO } from '../internalConstants'
 import { maxLiquidityForAmounts } from '../utils/maxLiquidityForAmounts'

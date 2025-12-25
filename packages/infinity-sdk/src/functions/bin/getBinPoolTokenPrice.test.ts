@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { Token } from '@simpleflow/swap-sdk-core'
 import { describe, expect, test } from 'vitest'
 
 import { getBinPoolTokenPrice } from './getBinPoolTokenPrice'

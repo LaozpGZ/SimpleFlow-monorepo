@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { ChainId } from '@simpleflow/chains'
+import { Percent } from '@simpleflow/swap-sdk-core'
 
 import { ERC20Token } from './entities/erc20Token'
 

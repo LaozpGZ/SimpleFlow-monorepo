@@ -1,10 +1,10 @@
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 
-import { SPLToken } from '@pancakeswap/swap-sdk-core'
+import { SPLToken } from '@simpleflow/swap-sdk-core'
 import { TokenListKey } from 'config/solana-list'
 import { atomWithStorageSync } from 'utils/atomWithStorageSync'
-import { solanaTokens } from '@pancakeswap/tokens'
+import { solanaTokens } from '@simpleflow/tokens'
 
 // Atom to store the list of SPLToken
 export const solanaTokenListAtom = atom<SPLToken[]>([solanaTokens.cake, solanaTokens.usdc, solanaTokens.usdt])

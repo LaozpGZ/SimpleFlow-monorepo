@@ -1,8 +1,8 @@
 import { useState, KeyboardEvent, useEffect, useCallback } from 'react'
-import { Button, Flex, FlexGap, Input, QuestionHelper, Spinner, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Button, Flex, FlexGap, Input, QuestionHelper, Spinner, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useAtom, useAtomValue } from 'jotai'
-import { isValidUrl, isCustomRpcAtom, rpcUrlAtom, validateRpcEndpoint, rpcs } from '@pancakeswap/utils/user'
+import { isValidUrl, isCustomRpcAtom, rpcUrlAtom, validateRpcEndpoint, rpcs } from '@simpleflow/utils/user'
 
 export function RPCConnectionSettingField() {
   const { t } = useTranslation()

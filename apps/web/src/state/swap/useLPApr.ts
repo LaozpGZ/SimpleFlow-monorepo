@@ -1,4 +1,4 @@
-import { ERC20Token } from '@pancakeswap/sdk'
+import { ERC20Token } from '@simpleflow/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'
 import { useAtomValue } from 'jotai/index'

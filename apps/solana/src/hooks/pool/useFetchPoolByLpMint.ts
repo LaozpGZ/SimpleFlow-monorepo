@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { ApiV3PoolInfoStandardItem, FetchPoolParams } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoStandardItem, FetchPoolParams } from '@simpleflow/solana-core-sdk'
 import useSWR, { KeyedMutator } from 'swr'
 import { shallow } from 'zustand/shallow'
 import { AxiosResponse } from 'axios'

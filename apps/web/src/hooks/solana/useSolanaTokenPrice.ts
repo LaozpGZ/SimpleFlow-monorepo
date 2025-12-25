@@ -6,7 +6,7 @@ import { isEqual } from 'utils/hash'
 import BigNumber from 'bignumber.js'
 
 import { PublicKey } from '@solana/web3.js'
-import { TOKEN_WSOL } from '@pancakeswap/solana-core-sdk'
+import { TOKEN_WSOL } from '@simpleflow/solana-core-sdk'
 import { WALLET_API } from 'config/constants/endpoints'
 
 const WALLET_PRICE_URL = `${WALLET_API}/sol/v1/prices/list`

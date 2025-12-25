@@ -1,5 +1,5 @@
-import { Trans } from '@pancakeswap/localization'
-import { Box, Link } from '@pancakeswap/uikit'
+import { Trans } from '@simpleflow/l10n'
+import { Box, Link } from '@simpleflow/uikit'
 
 export const BnbSnbnbFaq = () => [
   {

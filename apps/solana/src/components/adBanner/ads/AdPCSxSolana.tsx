@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Text } from '@pancakeswap/uikit'
-import { AdPlayerProps } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Text } from '@simpleflow/uikit'
+import { AdPlayerProps } from '@simpleflow/widgets-internal'
 
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'

@@ -1,4 +1,4 @@
-import { Coin } from '@pancakeswap/aptos-swap-sdk'
+import { Coin } from '@simpleflow/aptos-swap-sdk'
 import { useCheckIsUserIpPass } from 'components/Farms/hooks/useCheckIsUserIpPass'
 import { APT } from 'config/coins'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

@@ -1,4 +1,4 @@
-import { ErrorIcon, Message, MessageText } from '@pancakeswap/uikit'
+import { ErrorIcon, Message, MessageText } from '@simpleflow/uikit'
 import { Flex, HStack, Text } from '@chakra-ui/react'
 import { colors } from '@/theme/cssVariables'
 

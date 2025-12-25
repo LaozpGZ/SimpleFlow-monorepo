@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { allCasesNameToChainId } from '@pancakeswap/chains'
+import { allCasesNameToChainId } from '@simpleflow/chains'
 import { useSwitchNetworkV2 } from './useSwitchNetworkV2'
 
 export const useSyncPersistChain = () => {

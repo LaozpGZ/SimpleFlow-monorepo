@@ -1,9 +1,9 @@
 import { useCallback, useMemo, memo } from 'react'
-import { Currency, Trade, TradeType } from '@pancakeswap/aptos-swap-sdk'
+import { Currency, Trade, TradeType } from '@simpleflow/aptos-swap-sdk'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { Field } from 'state/swap'
 import { computeSlippageAdjustedAmounts } from 'utils/exchange'
-import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
+import { ConfirmationModalContent } from '@simpleflow/widgets-internal'
 
 import SwapModalFooter from './SwapModalFooter'
 import SwapModalHeader from './SwapModalHeader'

@@ -1,4 +1,4 @@
-import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoConcentratedItem } from '@simpleflow/solana-core-sdk'
 import { atom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 

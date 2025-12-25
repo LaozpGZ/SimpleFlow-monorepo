@@ -1,4 +1,4 @@
-import { fetchCoin, FetchCoinArgs, FetchCoinResult } from '@pancakeswap/awgmi/core'
+import { fetchCoin, FetchCoinArgs, FetchCoinResult } from '@simpleflow/awgmi/core'
 import { QueryFunction, useQuery } from '@tanstack/react-query'
 import { QueryConfig } from '../types'
 import { useNetwork } from './useNetwork'

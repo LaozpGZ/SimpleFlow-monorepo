@@ -1,4 +1,4 @@
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { TradeType } from '@simpleflow/swap-sdk-core'
 import { QuoteResult, UseBetterQuoteOptions } from '../quoter.types'
 
 export function getBetterQuote<A extends QuoteResult, B extends QuoteResult>(

@@ -1,13 +1,13 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { Breadcrumbs, Link, Text } from '@pancakeswap/uikit'
+import { Breadcrumbs, Link, Text } from '@simpleflow/uikit'
 import { useRouter } from 'next/router'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { useSelectIdRoute } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { TabMenu } from 'views/BurnDashboard/components/TabMenu'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { getChainName } from '@pancakeswap/chains'
+import { getChainName } from '@simpleflow/chains'
 import { useProtocolSupported } from '../hooks/useProtocolSupported'
 
 const StyledLink = styled(NextLinkFromReactRouter)`

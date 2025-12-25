@@ -1,4 +1,4 @@
-import { useTheme } from '@pancakeswap/hooks'
+import { useTheme } from '@simpleflow/hooks'
 import html2canvas from 'html2canvas'
 import { useCallback, useMemo, useState } from 'react'
 

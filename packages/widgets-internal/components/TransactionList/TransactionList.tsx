@@ -1,4 +1,4 @@
-import { FlexGap } from "@pancakeswap/uikit";
+import { FlexGap } from "@simpleflow/uikit";
 import { styled } from "styled-components";
 
 export const TransactionList = styled(FlexGap).attrs({

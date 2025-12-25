@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { PublicClient, createPublicClient, http, Chain, Client, WalletClient, createWalletClient, fallback } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
 import { CHAINS } from './constants/chains'

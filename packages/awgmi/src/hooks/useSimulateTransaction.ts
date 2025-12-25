@@ -1,4 +1,4 @@
-import { simulateTransaction, SimulateTransactionArgs, SimulateTransactionResult } from '@pancakeswap/awgmi/core'
+import { simulateTransaction, SimulateTransactionArgs, SimulateTransactionResult } from '@simpleflow/awgmi/core'
 import { useMutation } from '@tanstack/react-query'
 import * as React from 'react'
 import { MutationConfig } from '../types'

@@ -1,4 +1,4 @@
-import { Tag } from '@pancakeswap/uikit'
+import { Tag } from '@simpleflow/uikit'
 import { GiftStatus } from '../types'
 
 const getStatusVariant = (status: GiftStatus) => {

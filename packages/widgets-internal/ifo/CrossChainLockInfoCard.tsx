@@ -1,7 +1,7 @@
-import { ChainId } from "@pancakeswap/chains";
-import { useTranslation } from "@pancakeswap/localization";
-import { Box, BoxProps, Flex, FlexGap, Text } from "@pancakeswap/uikit";
-import { formatUnixTimestamp } from "@pancakeswap/utils/formatTimestamp";
+import { ChainId } from "@simpleflow/chains";
+import { useTranslation } from "@simpleflow/l10n";
+import { Box, BoxProps, Flex, FlexGap, Text } from "@simpleflow/uikit";
+import { formatUnixTimestamp } from "@simpleflow/utils/formatTimestamp";
 import { BigNumber } from "bignumber.js";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";

@@ -1,4 +1,4 @@
-import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import { useUnifiedCurrency } from 'hooks/Tokens'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'

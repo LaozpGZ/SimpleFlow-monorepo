@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import AffiliatesProgramLayout from 'views/AffiliatesProgram/components/AffiliatesProgramLayout'
 import Banner from 'views/AffiliatesProgram/components/Dashboard/Banner'
 import Podium from 'views/AffiliatesProgram/components/LeaderBoard/Podium'

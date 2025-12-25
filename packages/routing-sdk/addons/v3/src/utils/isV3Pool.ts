@@ -1,4 +1,4 @@
-import type { Pool } from '@pancakeswap/routing-sdk'
+import type { Pool } from '@simpleflow/routing-sdk'
 
 import { V3_POOL_TYPE } from '../constants'
 import { V3Pool } from '../types'

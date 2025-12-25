@@ -1,5 +1,5 @@
-import { Permit2ABI, getPermit2Address } from '@pancakeswap/permit2-sdk'
-import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
+import { Permit2ABI, getPermit2Address } from '@simpleflow/permit2-sdk'
+import { CurrencyAmount, Token } from '@simpleflow/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { useCallback, useMemo } from 'react'

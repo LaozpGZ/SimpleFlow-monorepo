@@ -1,5 +1,5 @@
-import { TranslateFunction } from '@pancakeswap/localization'
-import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
+import { TranslateFunction } from '@simpleflow/l10n'
+import { ammConfigs, PancakeClmmProgramId } from '@simpleflow/solana-clmm-sdk'
 import {
   ApiClmmConfigInfo,
   ApiV3PoolInfoConcentratedItem,
@@ -23,7 +23,7 @@ import {
   TxBuildData,
   TxV0BuildData,
   TxVersion
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { PublicKey, RpcResponseAndContext, SimulatedTransactionResponse } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'

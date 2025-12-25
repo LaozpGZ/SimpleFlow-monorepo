@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, getChainName } from '@simpleflow/chains'
 import { SUPPORTED_CHAIN_IDS } from '../constants'
 import { BaseIfoConfig, Ifo } from '../types'
 import { getDestChains } from './getDestChains'

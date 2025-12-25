@@ -1,4 +1,4 @@
-import { Box, Flex } from '@pancakeswap/uikit'
+import { Box, Flex } from '@simpleflow/uikit'
 import AptosBridgeFooter from 'components/layerZero/AptosBridgeFooter'
 import { LayerZeroWidget } from 'components/layerZero/LayerZeroWidget'
 import { FEE_COLLECTOR, FEE_TENTH_BPS, LAYER_ZERO_JS, PARTNER_ID } from 'components/layerZero/config'

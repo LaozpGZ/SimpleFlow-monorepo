@@ -1,5 +1,5 @@
-import { useTranslation, Trans } from '@pancakeswap/localization'
-import { Box, Link, Text } from '@pancakeswap/uikit'
+import { useTranslation, Trans } from '@simpleflow/l10n'
+import { Box, Link, Text } from '@simpleflow/uikit'
 
 const USDPlusWarning = () => {
   const { t } = useTranslation()

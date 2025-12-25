@@ -1,4 +1,4 @@
-import { ArrowDropDownIcon, ArrowDropUpIcon, Box, FlexGap, Text } from '@pancakeswap/uikit'
+import { ArrowDropDownIcon, ArrowDropUpIcon, Box, FlexGap, Text } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import Image from 'next/image'
 import { CHAIN_NAME_TO_CHAIN_ID } from 'views/Notifications/constants'

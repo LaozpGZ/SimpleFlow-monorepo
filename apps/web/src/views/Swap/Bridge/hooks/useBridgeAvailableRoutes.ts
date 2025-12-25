@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { CROSSCHAIN_SUPPORTED_CHAINS } from 'quoter/utils/crosschain-utils/config'
-import { ChainId, isSolana, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, isSolana, NonEVMChainId } from '@simpleflow/chains'
 import { usePrivyWalletAddress } from 'wallet/Privy/hooks/usePrivyWalletAddress'
 import { useExperimentalFeatureEnabled } from 'hooks/useExperimentalFeatureEnabled'
 import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'

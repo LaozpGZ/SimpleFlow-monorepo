@@ -7,7 +7,7 @@ import {
   ProtocolFeeControllerAbi,
   encodePoolKey,
   getPoolId,
-} from '@pancakeswap/infinity-sdk'
+} from '@simpleflow/infinity-sdk'
 import { UseQueryResult, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { publicClient } from 'utils/viem'

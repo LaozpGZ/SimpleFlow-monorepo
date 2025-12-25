@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { NFT_POSITION_MANAGER_ADDRESSES, nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
+import { Protocol } from '@simpleflow/farms'
+import { NFT_POSITION_MANAGER_ADDRESSES, nonfungiblePositionManagerABI } from '@simpleflow/v3-sdk'
 import BigNumber from 'bignumber.js'
 import { getMasterChefV3Contract } from 'utils/contractHelpers'
 import { publicClient } from 'utils/viem'

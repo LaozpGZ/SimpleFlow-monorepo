@@ -10,10 +10,10 @@ import {
   Box,
   Flex,
   ExpandableLabel,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId } from '@simpleflow/chains'
 import { LeaderboardDataItem, TeamRanksProps } from '../../../types'
 import TopTradersGrid from './TopTradersGrid'
 

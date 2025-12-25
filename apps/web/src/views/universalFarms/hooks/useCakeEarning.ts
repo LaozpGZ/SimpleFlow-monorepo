@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { Protocol } from '@simpleflow/farms'
+import { formatBigInt } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useMemo } from 'react'

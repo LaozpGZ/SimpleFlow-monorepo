@@ -1,5 +1,5 @@
 import React from 'react'
-import { Svg, SvgProps } from '@pancakeswap/uikit'
+import { Svg, SvgProps } from '@simpleflow/uikit'
 
 const DesktopIcon: React.FC<SvgProps> = ({ width = 24, height = 24, color = 'currentColor', ...props }) => (
   <Svg width={width} height={height} viewBox="0 0 24 24" fill="none" {...props}>

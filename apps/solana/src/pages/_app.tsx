@@ -13,7 +13,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { GoogleAnalytics } from '@next/third-parties/google'
-import { ResetCSS } from '@pancakeswap/uikit'
+import { ResetCSS } from '@simpleflow/uikit'
 
 import AppNavLayout from '@/components/AppLayout/AppNavLayout'
 import Content from '@/components/Content'

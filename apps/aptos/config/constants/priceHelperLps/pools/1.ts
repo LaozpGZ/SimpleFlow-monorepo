@@ -1,5 +1,5 @@
-// import { serializeTokens } from '@pancakeswap/tokens/src/helpers'
-import type { SerializedFarmConfig } from '@pancakeswap/farms'
+// import { serializeTokens } from '@simpleflow/tokens/src/helpers'
+import type { SerializedFarmConfig } from '@simpleflow/farms'
 // import { mainnetTokens } from 'config/constants/tokens'
 
 // const serializedTokens = serializeTokens(mainnetTokens)

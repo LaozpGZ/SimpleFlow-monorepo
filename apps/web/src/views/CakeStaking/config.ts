@@ -1,5 +1,5 @@
 import addresses from 'config/constants/contracts'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 export const poolStartWeekCursors = {
   [addresses.revenueSharingCakePool[ChainId.BSC]]: 1700697600,

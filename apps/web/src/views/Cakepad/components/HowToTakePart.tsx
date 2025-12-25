@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, CardBody, Flex, Heading, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Card, CardBody, Flex, Heading, Text } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
 import { useMemo } from 'react'

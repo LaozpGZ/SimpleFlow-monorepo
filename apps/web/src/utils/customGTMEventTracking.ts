@@ -1,4 +1,4 @@
-import { PoolIds } from '@pancakeswap/ifos'
+import { PoolIds } from '@simpleflow/ifos'
 import { BridgeStatus } from 'views/Swap/Bridge/types'
 import { getChainFullName } from 'views/universalFarms/utils'
 

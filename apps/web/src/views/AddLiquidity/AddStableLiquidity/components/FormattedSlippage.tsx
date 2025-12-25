@@ -1,4 +1,4 @@
-import { Percent, Rounding } from '@pancakeswap/sdk'
+import { Percent, Rounding } from '@simpleflow/sdk'
 
 import CircleLoader from 'components/Loader/CircleLoader'
 import { ONE_BIPS } from 'config/constants/exchange'

@@ -1,5 +1,5 @@
-import { Flex, Text, Button, Box, PageSection, Link } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Text, Button, Box, PageSection, Link } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { styled, keyframes } from 'styled-components'
 import useTheme from 'hooks/useTheme'
 // import Calculator from 'views/AffiliatesProgram/components/Overview/Calculator'

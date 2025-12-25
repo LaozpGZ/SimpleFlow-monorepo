@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import {
   _10000,
   _9975,
@@ -12,8 +12,8 @@ import {
   Price,
   sqrt,
   ZERO,
-} from '@pancakeswap/swap-sdk-core'
-import { ERC20Token } from '@pancakeswap/swap-sdk-evm'
+} from '@simpleflow/swap-sdk-core'
+import { ERC20Token } from '@simpleflow/swap-sdk-evm'
 import invariant from 'tiny-invariant'
 import {
   Address,

@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import useSWR, { KeyedMutator } from 'swr'
 import { shallow } from 'zustand/shallow'
-import { FormatFarmInfoOut } from '@pancakeswap/solana-core-sdk'
+import { FormatFarmInfoOut } from '@simpleflow/solana-core-sdk'
 import { AxiosResponse } from 'axios'
 
 import axios from '@/api/axios'

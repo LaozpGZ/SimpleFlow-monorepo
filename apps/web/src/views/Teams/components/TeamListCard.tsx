@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Card, CommunityIcon, Flex, Heading, PrizeIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Card, CommunityIcon, Flex, Heading, PrizeIcon, Text } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { Team } from 'config/constants/types'
 import Link from 'next/link'

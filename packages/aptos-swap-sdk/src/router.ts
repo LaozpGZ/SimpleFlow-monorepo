@@ -1,4 +1,4 @@
-import { Percent, TradeType } from '@pancakeswap/swap-sdk-core'
+import { Percent, TradeType } from '@simpleflow/swap-sdk-core'
 import {
   routerSwapExactInput,
   routerAddLiquidity,

@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from '@solana/web3.js'
-import { CpmmPoolInfoLayout } from '@pancakeswap/solana-core-sdk'
+import { CpmmPoolInfoLayout } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'

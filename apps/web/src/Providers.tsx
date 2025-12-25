@@ -1,5 +1,5 @@
-import { LanguageProvider } from '@pancakeswap/localization'
-import { DialogProvider, ModalProvider, UIKitProvider, dark, light } from '@pancakeswap/uikit'
+import { LanguageProvider } from '@simpleflow/l10n'
+import { DialogProvider, ModalProvider, UIKitProvider, dark, light } from '@simpleflow/uikit'
 import { Store } from '@reduxjs/toolkit'
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { HistoryManagerProvider } from 'contexts/HistoryContext'

@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
-import { formatFraction } from '@pancakeswap/utils/formatFractions'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/sdk'
+import { formatFraction } from '@simpleflow/utils/formatFractions'
 
 import { getPriceImpact } from '../v3-router/utils/getPriceImpact'
 import { findBestTrade } from './graph'

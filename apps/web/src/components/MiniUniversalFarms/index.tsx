@@ -1,4 +1,4 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { searchQueryAtom, updateFilterAtom } from 'views/universalFarms/atom/searchQueryAtom'
 import { PoolsFilterPanel } from 'views/universalFarms/components/PoolsFilterPanel'
 import { getIndexByProtocols } from 'views/universalFarms/utils/queryParser'
-import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
+import { isEvm, NonEVMChainId } from '@simpleflow/chains'
 import { PoolsTable } from './components/PoolsTable'
 
 const Container = styled(Box)`

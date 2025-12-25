@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Card, Flex, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { HoverProvider } from 'hooks/useHover'
 import { ReactNode } from 'react'
 import styled from 'styled-components'

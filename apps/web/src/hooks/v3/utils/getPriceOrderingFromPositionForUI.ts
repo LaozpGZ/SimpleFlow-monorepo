@@ -1,5 +1,5 @@
-import { Price, Token } from '@pancakeswap/sdk'
-import { Position, tickToPrice } from '@pancakeswap/v3-sdk'
+import { Price, Token } from '@simpleflow/sdk'
+import { Position, tickToPrice } from '@simpleflow/v3-sdk'
 
 export default function getPriceOrderingFromPositionForUI(position?: Position): {
   priceLower?: Price<Token, Token>

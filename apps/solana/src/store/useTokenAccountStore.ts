@@ -6,7 +6,7 @@ import {
   splAccountLayout,
   getATAAddress,
   TxBuilder
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { PublicKey, KeyedAccountInfo, Commitment, AccountInfo, RpcResponseAndContext, GetProgramAccountsResponse } from '@solana/web3.js'
 import {
   TOKEN_PROGRAM_ID,

@@ -1,5 +1,5 @@
-import { BIG_ONE, BIG_TWO, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { equalsIgnoreCase } from '@pancakeswap/utils/equalsIgnoreCase'
+import { BIG_ONE, BIG_TWO, BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { equalsIgnoreCase } from '@simpleflow/utils/equalsIgnoreCase'
 import BN from 'bignumber.js'
 import { FarmData, isStableFarm, SerializedFarmPublicData } from '../types'
 import { getFullDecimalMultiplier } from './getFullDecimalMultiplier'

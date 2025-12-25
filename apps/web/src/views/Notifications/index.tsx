@@ -1,4 +1,4 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@simpleflow/uikit'
 import { useSubscription } from '@web3inbox/react'
 import { useInitializeNotifications } from 'hooks/useInitializeNotifications'
 import React, { memo, useCallback, useEffect, useState } from 'react'

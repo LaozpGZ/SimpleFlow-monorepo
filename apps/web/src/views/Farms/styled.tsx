@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@pancakeswap/uikit'
+import { Flex, Heading } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 export const FarmFlexWrapper = styled(Flex)`

@@ -1,4 +1,4 @@
-import { CalculateIcon, Flex, IconButton } from "@pancakeswap/uikit";
+import { CalculateIcon, Flex, IconButton } from "@simpleflow/uikit";
 import { useCallback } from "react";
 import { styled } from "styled-components";
 

@@ -1,9 +1,9 @@
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, Trade, TradeType } from '@simpleflow/sdk'
 import { pancakeRouter02ABI } from 'config/abi/IPancakeRouter02'
 import { BIPS_BASE, V2_ROUTER_ADDRESS } from 'config/constants/exchange'
 import { StableTrade } from 'config/constants/types'
 
-import memoize from '@pancakeswap/utils/memoize'
+import memoize from '@simpleflow/utils/memoize'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useContract } from 'hooks/useContract'
 import { Field } from '../state/swap/actions'

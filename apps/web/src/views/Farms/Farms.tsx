@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { DeserializedFarm, FarmWithStakedValue, filterFarmsByQuery } from '@pancakeswap/farms'
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { ChainId } from '@simpleflow/chains'
+import { DeserializedFarm, FarmWithStakedValue, filterFarmsByQuery } from '@simpleflow/farms'
+import { useIntersectionObserver } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Flex,
@@ -17,9 +17,9 @@ import {
   Text,
   Toggle,
   ToggleView,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import { useActiveChainId } from 'hooks/useActiveChainId'

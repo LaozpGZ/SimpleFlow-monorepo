@@ -1,6 +1,6 @@
-import { useCountdown } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, BoxProps } from '@pancakeswap/uikit'
+import { useCountdown } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, BoxProps } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 const CountDownWrapper = styled(Box)`

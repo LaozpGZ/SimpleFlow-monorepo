@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { ChainId } from '@simpleflow/chains'
+import { TradeType } from '@simpleflow/swap-sdk-core'
 
 import {
   SerializedCurrency,

@@ -1,5 +1,5 @@
-import { atoms } from '@pancakeswap/uikit/css/atoms'
-import { responsiveStyle } from '@pancakeswap/uikit/css/responsiveStyle'
+import { atoms } from '@simpleflow/uikit/css/atoms'
+import { responsiveStyle } from '@simpleflow/uikit/css/responsiveStyle'
 import { keyframes, style } from '@vanilla-extract/css'
 
 const promotedGradientKf = keyframes({

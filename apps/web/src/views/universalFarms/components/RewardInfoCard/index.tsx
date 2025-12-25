@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, FlexGap, Link, RewardIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, FlexGap, Link, RewardIcon, Text } from '@simpleflow/uikit'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { RewardProvider } from '../FarmStatusDisplay/types'

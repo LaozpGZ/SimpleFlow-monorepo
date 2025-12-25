@@ -1,4 +1,4 @@
-import { Tag } from '@pancakeswap/uikit'
+import { Tag } from '@simpleflow/uikit'
 import { useTokenBalance } from 'state/wallet/hooks'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { LiquidityCardRow } from 'views/AddLiquidity/components/LiquidityCardRow'

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, MotionBox, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Flex, MotionBox, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { HomepageChain } from 'edge/home/types'
 import React from 'react'
 import styled from 'styled-components'

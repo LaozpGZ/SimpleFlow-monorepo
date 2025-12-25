@@ -1,4 +1,4 @@
-import { Native, Token, WETH9 } from '@pancakeswap/sdk'
+import { Native, Token, WETH9 } from '@simpleflow/sdk'
 import { describe, it, expect } from 'vitest'
 import { FeeAmount } from '../constants'
 import { Pool } from '../entities/pool'

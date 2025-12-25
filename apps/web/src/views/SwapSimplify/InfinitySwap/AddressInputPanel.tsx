@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, BscScanIcon, FlexGap, Link, SwapCSS, Text } from '@pancakeswap/uikit'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn, BscScanIcon, FlexGap, Link, SwapCSS, Text } from '@simpleflow/uikit'
 
 import { useCallback } from 'react'
 import { styled } from 'styled-components'

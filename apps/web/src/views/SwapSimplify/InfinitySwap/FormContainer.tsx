@@ -1,7 +1,7 @@
-import { Column } from '@pancakeswap/uikit'
+import { Column } from '@simpleflow/uikit'
 import { PropsWithChildren, memo } from 'react'
 
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 
 export const FormContainer = memo(function FormContainer({ children }: PropsWithChildren) {
   return (

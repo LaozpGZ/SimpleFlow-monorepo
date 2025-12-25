@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import type { components } from './schema'
 import { chainIdToExplorerInfoChainName } from './client'
 

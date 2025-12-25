@@ -28,11 +28,11 @@ import {
   PoolFetchType,
   TickUtils,
   getLiquidityFromAmounts
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { useEffect, useRef, useState } from 'react'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { PublicKey } from '@solana/web3.js'
 import { AprKey } from '@/hooks/pool/type'
 

@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import { ArrowDownIcon, ArrowUpDownIcon, ButtonProps, IconButton } from "@pancakeswap/uikit";
+import { ArrowDownIcon, ArrowUpDownIcon, ButtonProps, IconButton } from "@simpleflow/uikit";
 import { CurrencyInputHeader, CurrencyInputHeaderSubTitle, CurrencyInputHeaderTitle } from "./CurrencyInputHeader";
 import { CurrencyInputPanel } from "./CurrencyInputPanel";
 import { SwapFooter as Footer } from "./Footer";

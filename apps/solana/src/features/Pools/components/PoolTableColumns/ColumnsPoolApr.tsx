@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useMemo } from 'react'
 import { Desktop, Mobile } from '@/components/MobileDesktop'
 import Tooltip from '@/components/Tooltip'

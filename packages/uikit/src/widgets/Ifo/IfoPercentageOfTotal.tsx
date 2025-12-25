@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { Text, TextProps } from "../../components/Text";
 
 interface IfoPercentageOfTotalProps extends TextProps {

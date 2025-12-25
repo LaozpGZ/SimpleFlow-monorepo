@@ -1,5 +1,5 @@
-import { TradeType } from '@pancakeswap/swap-sdk-core'
-import { formatFraction } from '@pancakeswap/utils/formatFractions'
+import { TradeType } from '@simpleflow/swap-sdk-core'
+import { formatFraction } from '@simpleflow/utils/formatFractions'
 
 import { Trade } from './types'
 import { getPriceImpact } from './utils'

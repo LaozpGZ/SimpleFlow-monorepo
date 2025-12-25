@@ -11,11 +11,11 @@ import {
   Tab,
   TabMenu,
   Text,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import Image from 'next/image'
 import Trans from 'components/Trans'
 import { Tiers, PrizesConfig } from 'config/constants/trading-competition/prizes'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useState } from 'react'
 
 import { ASSET_CDN } from 'config/constants/endpoints'

@@ -1,4 +1,4 @@
-import { FarmWithStakedValue } from '@pancakeswap/farms'
+import { FarmWithStakedValue } from '@simpleflow/farms'
 import FarmCard from 'components/Farms/components/FarmCard/FarmCard'
 import { getDisplayApr } from 'components/Farms/components/getDisplayApr'
 import { FarmsContext, FarmsPageLayout } from 'components/Farms/components/index'

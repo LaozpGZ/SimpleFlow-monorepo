@@ -1,7 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Token } from '@pancakeswap/sdk'
-import { ArrowDropDownIcon, Box, BoxProps, Flex, SkeletonText, Text, useModal } from '@pancakeswap/uikit'
-import { NumberDisplay, NumericalInput } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, Token } from '@simpleflow/sdk'
+import { ArrowDropDownIcon, Box, BoxProps, Flex, SkeletonText, Text, useModal } from '@simpleflow/uikit'
+import { NumberDisplay, NumericalInput } from '@simpleflow/widgets-internal'
 import OnRampCurrencySearchModal, { CurrencySearchModalProps } from 'components/SearchModal/OnRampCurrencyModal'
 import { ClipboardEvent, KeyboardEvent, useCallback, useMemo } from 'react'
 import {

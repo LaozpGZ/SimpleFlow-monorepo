@@ -1,4 +1,4 @@
-import { Currency, Price } from '@pancakeswap/sdk'
+import { Currency, Price } from '@simpleflow/sdk'
 import { BigNumber as BN } from 'bignumber.js'
 
 export function bigNumberToPrice(

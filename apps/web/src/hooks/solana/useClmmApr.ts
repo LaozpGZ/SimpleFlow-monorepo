@@ -1,5 +1,5 @@
-import type { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
-import { PoolUtils } from '@pancakeswap/solana-core-sdk'
+import type { ApiV3PoolInfoConcentratedItem } from '@simpleflow/solana-core-sdk'
+import { PoolUtils } from '@simpleflow/solana-core-sdk'
 import BN from 'bn.js'
 import { useMemo } from 'react'
 

@@ -1,6 +1,6 @@
-import type { Pool, SerializableCurrency, SerializableCurrencyAmount } from '@pancakeswap/routing-sdk'
-import type { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import type { Tick } from '@pancakeswap/v3-sdk'
+import type { Pool, SerializableCurrency, SerializableCurrencyAmount } from '@simpleflow/routing-sdk'
+import type { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
+import type { Tick } from '@simpleflow/v3-sdk'
 
 import { INFI_BIN_POOL_TYPE, INFI_CL_POOL_TYPE } from './constants/poolType'
 

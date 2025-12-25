@@ -1,13 +1,13 @@
 // most of the code is duplicated, let's refactor it later
 
-import { ChainId } from '@pancakeswap/aptos-swap-sdk'
-import { HexString } from '@pancakeswap/awgmi'
+import { ChainId } from '@simpleflow/aptos-swap-sdk'
+import { HexString } from '@simpleflow/awgmi'
 import { DEFAULT_LIST_OF_LISTS, OFFICIAL_LISTS, WARNING_LIST_URLS } from 'config/constants/lists'
 import { atom, useAtomValue } from 'jotai'
 import fromPairs from 'lodash/fromPairs'
 import groupBy from 'lodash/groupBy'
-import { TokenAddressMap as TTokenAddressMap, WrappedTokenInfo, TokenList } from '@pancakeswap/token-lists'
-import { ListsState } from '@pancakeswap/token-lists/react'
+import { TokenAddressMap as TTokenAddressMap, WrappedTokenInfo, TokenList } from '@simpleflow/token-lists'
+import { ListsState } from '@simpleflow/token-lists/react'
 import uniqBy from 'lodash/uniqBy'
 import { useMemo } from 'react'
 import { UNSUPPORTED_LIST_URLS } from '../../config/constants/lists'

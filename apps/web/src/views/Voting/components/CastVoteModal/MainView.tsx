@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoRenewIcon,
   Button,
@@ -9,8 +9,8 @@ import {
   RocketIcon,
   Skeleton,
   Text,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'

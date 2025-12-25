@@ -3,7 +3,7 @@ import {
   PoolType,
   poolIdToPoolKey,
   type InfinitySupportedChains,
-} from '@pancakeswap/infinity-sdk'
+} from '@simpleflow/infinity-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { type Hex } from 'viem'
 import { useIsFarmSearchContext } from 'views/universalFarms/hooks/useFarmSearchContext'

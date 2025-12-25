@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, getChainName } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useDynamicRouteParam } from 'hooks/useDynamicRouteParam'
 import useNativeCurrency from 'hooks/useNativeCurrency'

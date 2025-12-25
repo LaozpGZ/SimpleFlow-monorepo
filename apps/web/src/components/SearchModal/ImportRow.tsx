@@ -1,4 +1,4 @@
-import { UnifiedCurrency, UnifiedToken } from '@pancakeswap/sdk'
+import { UnifiedCurrency, UnifiedToken } from '@simpleflow/sdk'
 import { useIsTokenActive, useIsUserAddedToken } from 'hooks/Tokens'
 import { CSSProperties } from 'react'
 import { useCombinedInactiveList } from 'state/lists/hooks'

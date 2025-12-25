@@ -1,4 +1,4 @@
-import { Box, CopyIcon, Flex, Text, Image, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { Box, CopyIcon, Flex, Text, Image, WalletFilledV2Icon } from '@simpleflow/uikit'
 import { useState, useMemo } from 'react'
 import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
@@ -7,8 +7,8 @@ import { ASSET_CDN } from 'config/constants/endpoints'
 import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtomValue } from 'jotai'
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets/src/state/atom'
+import { NonEVMChainId } from '@simpleflow/chains'
+import { previouslyUsedEvmWalletsAtom } from '@simpleflow/ui-wallets/src/state/atom'
 
 interface QRCodeCopyButtonProps {
   account: string

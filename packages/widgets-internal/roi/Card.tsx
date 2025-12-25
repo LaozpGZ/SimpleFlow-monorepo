@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import type {} from "csstype";
-import { Box } from "@pancakeswap/uikit";
+import { Box } from "@simpleflow/uikit";
 
 export const Card = styled(Box)<{
   width?: string;

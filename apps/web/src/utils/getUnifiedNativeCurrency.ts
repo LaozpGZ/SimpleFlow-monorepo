@@ -1,5 +1,5 @@
-import { ChainId, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { Native, SOL } from '@pancakeswap/sdk'
+import { ChainId, NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
+import { Native, SOL } from '@simpleflow/sdk'
 
 export const getUnifiedNativeCurrency = (chainId: UnifiedChainId) => {
   try {

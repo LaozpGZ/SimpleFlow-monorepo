@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -11,17 +11,17 @@ import {
   Text,
   ThemeSwitcher,
   Toggle,
-} from '@pancakeswap/uikit'
-import { ExpertModal } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ExpertModal } from '@simpleflow/widgets-internal'
 
-import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import { escapeRegExp } from '@simpleflow/utils/escapeRegExp'
 import {
   useAudioPlay,
   useExpertMode,
   useUserExpertModeAcknowledgement,
   useUserSingleHopOnly,
   useUserSlippage,
-} from '@pancakeswap/utils/user'
+} from '@simpleflow/utils/user'
 import { useTheme } from 'next-themes'
 import { useCallback, useState } from 'react'
 import { styled } from 'styled-components'

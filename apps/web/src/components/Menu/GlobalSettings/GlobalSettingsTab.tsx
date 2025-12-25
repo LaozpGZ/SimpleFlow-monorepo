@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { languageList, useTranslation } from '@pancakeswap/localization'
-import { Flex, LangSelectorV2, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@pancakeswap/uikit'
+import { ChainId } from '@simpleflow/chains'
+import { languageList, useTranslation } from '@simpleflow/l10n'
+import { Flex, LangSelectorV2, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@simpleflow/uikit'
 import { TOKEN_RISK } from 'components/AccessRisk'
 import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -73,6 +73,7 @@ export const GlobalSettingsTab = () => {
         />
       </Flex>
 
+      {/* Hidden: Show username
       <Flex justifyContent="space-between" alignItems="center" mb="24px">
         <Flex alignItems="center">
           <Text>{t('Show username')}</Text>
@@ -87,7 +88,9 @@ export const GlobalSettingsTab = () => {
           }}
         />
       </Flex>
+      */}
 
+      {/* Hidden: Allow notifications
       <Flex justifyContent="space-between" alignItems="center" mb="24px">
         <Flex alignItems="center">
           <Text>{t('Allow notifications')}</Text>
@@ -104,6 +107,7 @@ export const GlobalSettingsTab = () => {
           <WebNotiToggle enabled={enabled} />
         </Suspense>
       </Flex>
+      */}
 
       <Flex justifyContent="space-between" alignItems="center" mb="24px">
         <Flex alignItems="center">

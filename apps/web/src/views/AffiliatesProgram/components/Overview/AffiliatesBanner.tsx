@@ -1,7 +1,7 @@
 import { styled, keyframes } from 'styled-components'
-import { Flex, Text, Button, Box, PageSection, Link } from '@pancakeswap/uikit'
+import { Flex, Text, Button, Box, PageSection, Link } from '@simpleflow/uikit'
 import { SlideSvgDark, SlideSvgLight } from 'components/SlideSvg'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 const floatingStarsLeft = keyframes`
   from {

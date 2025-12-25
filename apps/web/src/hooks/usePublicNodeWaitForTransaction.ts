@@ -1,6 +1,6 @@
 import { ChainId } from '@gelatonetwork/limit-orders-lib'
-import { AVERAGE_CHAIN_BLOCK_TIMES } from '@pancakeswap/chains'
-import { useFetchBlockData } from '@pancakeswap/wagmi'
+import { AVERAGE_CHAIN_BLOCK_TIMES } from '@simpleflow/chains'
+import { useFetchBlockData } from '@simpleflow/wagmi'
 import { BSC_BLOCK_TIME } from 'config'
 import { CHAINS } from 'config/chains'
 import { PUBLIC_NODES } from 'config/nodes'

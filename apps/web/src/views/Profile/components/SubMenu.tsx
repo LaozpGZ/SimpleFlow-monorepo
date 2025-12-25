@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useRouter } from 'next/router'
 import BaseSubMenu from '../../Nft/market/components/BaseSubMenu'
 

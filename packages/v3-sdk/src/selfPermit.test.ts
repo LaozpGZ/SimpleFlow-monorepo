@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 import { describe, it, expect } from 'vitest'
 import { AllowedPermitArguments, SelfPermit, StandardPermitArguments } from './selfPermit'
 

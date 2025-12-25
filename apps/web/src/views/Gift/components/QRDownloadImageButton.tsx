@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button } from '@simpleflow/uikit'
 import { OPTIONS, useElementToCanvas } from 'hooks/useElementToCanvas'
 import { useCallback } from 'react'
 

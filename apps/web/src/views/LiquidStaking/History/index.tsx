@@ -1,6 +1,6 @@
-import { CardBody, Text, Box, RowBetween } from '@pancakeswap/uikit'
+import { CardBody, Text, Box, RowBetween } from '@simpleflow/uikit'
 // import { AppHeader } from 'components/App'
-// import { useTranslation } from '@pancakeswap/localization'
+// import { useTranslation } from '@simpleflow/l10n'
 import { LightGreyCard } from 'components/Card'
 
 export function LiquidStakingPageHistory() {

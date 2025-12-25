@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
-import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
-import { isStableSwapSupported as isStableSwapSupported_ } from '@pancakeswap/stable-swap-sdk'
+import { isEvm, NonEVMChainId } from '@simpleflow/chains'
+import { INFINITY_SUPPORTED_CHAINS } from '@simpleflow/infinity-sdk'
+import { isStableSwapSupported as isStableSwapSupported_ } from '@simpleflow/stable-swap-sdk'
 
 export const useProtocolSupported = () => {
   const isInfinitySupported = useCallback((chainId: number) => INFINITY_SUPPORTED_CHAINS.includes(chainId), [])

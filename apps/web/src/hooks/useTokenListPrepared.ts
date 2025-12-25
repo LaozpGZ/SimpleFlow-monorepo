@@ -1,4 +1,4 @@
-import { Loadable } from '@pancakeswap/utils/Loadable'
+import { Loadable } from '@simpleflow/utils/Loadable'
 import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { fetchListBatchAtom, useListStateReady } from 'state/lists/lists'

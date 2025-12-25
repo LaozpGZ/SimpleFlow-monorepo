@@ -1,4 +1,4 @@
-import { ButtonProps, CogIcon, Flex, IconButton, ModalV2, useModalV2 } from '@pancakeswap/uikit'
+import { ButtonProps, CogIcon, Flex, IconButton, ModalV2, useModalV2 } from '@simpleflow/uikit'
 
 import GlobalSettingsModal from './SettingsModal'
 

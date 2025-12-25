@@ -1,5 +1,5 @@
 import { MoveStructId } from '@aptos-labs/ts-sdk'
-import { fetchAccountResource, FetchAccountResourceArgs, FetchAccountResourceResult } from '@pancakeswap/awgmi/core'
+import { fetchAccountResource, FetchAccountResourceArgs, FetchAccountResourceResult } from '@simpleflow/awgmi/core'
 import { QueryFunction, useQuery } from '@tanstack/react-query'
 // import { QueryConfig, QueryFunctionArgs } from '../types'
 import { QueryConfig } from '../types'

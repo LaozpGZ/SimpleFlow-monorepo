@@ -1,4 +1,4 @@
-import { RowBetween } from '@pancakeswap/uikit'
+import { RowBetween } from '@simpleflow/uikit'
 import Card from 'components/Card'
 import dayjs from 'dayjs'
 import useTheme from 'hooks/useTheme'

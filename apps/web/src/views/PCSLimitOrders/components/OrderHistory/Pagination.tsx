@@ -1,4 +1,4 @@
-import { Box, BoxProps, PaginationButton } from '@pancakeswap/uikit'
+import { Box, BoxProps, PaginationButton } from '@simpleflow/uikit'
 import { useCallback, useEffect } from 'react'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 

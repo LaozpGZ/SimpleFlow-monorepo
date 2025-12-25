@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { ArrowDownIcon, IconButton, ArrowUpDownIcon, AutoColumn } from '@pancakeswap/uikit'
+import { ArrowDownIcon, IconButton, ArrowUpDownIcon, AutoColumn } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import { AutoRow } from 'components/Layout/Row'
 

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
-import { splAccountLayout } from '@pancakeswap/solana-core-sdk'
+import { splAccountLayout } from '@simpleflow/solana-core-sdk'
 import { Connection, PublicKey } from '@solana/web3.js'
 
 import { MINUTE_MILLISECONDS } from '@/utils/date'

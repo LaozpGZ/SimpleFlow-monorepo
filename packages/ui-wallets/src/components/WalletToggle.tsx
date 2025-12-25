@@ -1,5 +1,5 @@
-import { FlexGap, Text, Toggle, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { FlexGap, Text, Toggle, useMatchBreakpoints } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useWalletFilter } from '../state/hooks'
 
 export type WalletModalFilterProps = {

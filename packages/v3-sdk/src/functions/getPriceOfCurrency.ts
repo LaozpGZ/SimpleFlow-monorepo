@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import invariant from 'tiny-invariant'
 import { getCurrency0Price, getCurrency1Price } from './getCurrencyPrice'
 import { PoolState } from './getPool'

@@ -1,4 +1,4 @@
-import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION, UNLOCK_FREE_DURATION } from '@pancakeswap/pools'
+import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION, UNLOCK_FREE_DURATION } from '@simpleflow/pools'
 import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
 import { describe, it, vi } from 'vitest'

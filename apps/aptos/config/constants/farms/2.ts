@@ -1,5 +1,5 @@
-import { ChainId, Pair } from '@pancakeswap/aptos-swap-sdk'
-import type { SerializedFarmConfig } from '@pancakeswap/farms'
+import { ChainId, Pair } from '@simpleflow/aptos-swap-sdk'
+import type { SerializedFarmConfig } from '@simpleflow/farms'
 import { L0_USDC } from '../../coins'
 import { testnetTokens } from '../tokens/index'
 

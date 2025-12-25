@@ -1,4 +1,4 @@
-import type { BigintIsh, Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
+import type { BigintIsh, Currency, CurrencyAmount, TradeType } from '@simpleflow/swap-sdk-core'
 
 import type { Pool } from './pool'
 import type { Route, SerializableRoute } from './route'

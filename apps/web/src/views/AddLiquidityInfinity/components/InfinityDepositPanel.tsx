@@ -1,4 +1,4 @@
-import { Box, Card, CardBody } from '@pancakeswap/uikit'
+import { Box, Card, CardBody } from '@simpleflow/uikit'
 import { PoolType } from '@kyberswap/pancake-liquidity-widgets'
 import { ZAP_INFINITY_CL_SUPPORTED_CHAINS } from 'config/constants/zap'
 import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'

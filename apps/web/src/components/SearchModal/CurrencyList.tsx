@@ -11,9 +11,9 @@ import { styled } from 'styled-components'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId, Currency, UnifiedCurrency, UnifiedCurrencyAmount, UnifiedToken } from '@pancakeswap/sdk'
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId, Currency, UnifiedCurrency, UnifiedCurrencyAmount, UnifiedToken } from '@simpleflow/sdk'
+import { WrappedTokenInfo } from '@simpleflow/token-lists'
 import {
   useMatchBreakpoints,
   ArrowForwardIcon,
@@ -23,14 +23,14 @@ import {
   FlexGap,
   QuestionHelper,
   Text,
-} from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { useUnifiedTokenUsdPrice } from 'hooks/useUnifiedTokenUsdPrice'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isSolana, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
 
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import truncateHash from '@simpleflow/utils/truncateHash'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useCombinedActiveList } from '../../state/lists/hooks'
 import { isTokenOnList } from '../../utils'

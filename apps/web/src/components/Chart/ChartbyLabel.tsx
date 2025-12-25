@@ -1,5 +1,5 @@
-import { Flex, FlexProps, Link, Text, LinkProps } from '@pancakeswap/uikit'
-import { Trans } from '@pancakeswap/localization'
+import { Flex, FlexProps, Link, Text, LinkProps } from '@simpleflow/uikit'
+import { Trans } from '@simpleflow/l10n'
 
 export const ChartByLabel = ({
   symbol,

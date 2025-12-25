@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
-import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/swap-sdk-core'
+import { RemoteLogger } from '@simpleflow/utils/RemoteLogger'
 import { Pool, Route, TradeWithGraph } from '../types'
 
 export const logPools = (quoteId: string | undefined, pools: Pool[]) => {

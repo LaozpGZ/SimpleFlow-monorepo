@@ -1,5 +1,5 @@
-import { Flex, UserMenuItem, WarningIcon } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, UserMenuItem, WarningIcon } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useAccount, useBalance } from 'wagmi'
 import { parseEther } from 'viem'
 

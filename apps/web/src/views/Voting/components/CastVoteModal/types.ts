@@ -1,4 +1,4 @@
-import { InjectedModalProps } from '@pancakeswap/uikit'
+import { InjectedModalProps } from '@simpleflow/uikit'
 import { Proposal, ProposalTypeName } from 'state/types'
 import { VoteState } from 'views/Voting/Proposal/VoteType/types'
 

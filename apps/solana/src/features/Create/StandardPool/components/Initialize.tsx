@@ -3,7 +3,7 @@ import { Box, Flex, HStack, Text, VStack, useDisclosure, Skeleton } from '@chakr
 import { shallow } from 'zustand/shallow'
 import FocusTrap from 'focus-trap-react'
 import { usePopper } from 'react-popper'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { PublicKey } from '@solana/web3.js'
 import {
   ApiV3Token,
@@ -15,7 +15,7 @@ import {
   solToWSol,
   CREATE_CPMM_POOL_PROGRAM,
   ApiV3PoolInfoStandardItemCpmm
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'

@@ -1,4 +1,4 @@
-import { Percent, Token } from '@pancakeswap/sdk'
+import { Percent, Token } from '@simpleflow/sdk'
 import { describe, expect, it } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from '../constants'
 import { encodeSqrtRatioX96 } from '../utils/encodeSqrtRatioX96'

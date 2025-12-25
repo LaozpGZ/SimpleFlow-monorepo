@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Price } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Price } from '@simpleflow/sdk'
 
 /**
  * Given certain amount if input and output tokens

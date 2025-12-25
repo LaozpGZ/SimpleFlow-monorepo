@@ -1,4 +1,4 @@
-import { TOKEN_WSOL, WSOLMint, SOLMint, USDCMint, USDTMint, ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { TOKEN_WSOL, WSOLMint, SOLMint, USDCMint, USDTMint, ApiV3Token, SOL_INFO, TokenInfo } from '@simpleflow/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { sortItems } from '@/utils/sortItems'
 

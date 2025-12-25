@@ -1,8 +1,8 @@
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { useDebounce } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { Percent } from '@pancakeswap/sdk'
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
+import { NonEVMChainId } from '@simpleflow/chains'
+import { useDebounce } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { Percent } from '@simpleflow/sdk'
+import { WrappedTokenInfo } from '@simpleflow/token-lists'
 import {
   AutoRenewIcon,
   BalanceInput,
@@ -16,9 +16,9 @@ import {
   Text,
   domAnimation,
   useToast,
-} from '@pancakeswap/uikit'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { ToastDescriptionWithTx, SolanaDescriptionWithTx } from 'components/Toast'
 import { ASSET_CDN } from 'config/constants/endpoints'

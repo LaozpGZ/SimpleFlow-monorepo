@@ -1,4 +1,4 @@
-import type { ChainId } from '@pancakeswap/chains'
+import type { ChainId } from '@simpleflow/chains'
 import type { ONRAMP_PROVIDERS, OnRampChainId } from './constants'
 import { ProviderAvailabilities } from './hooks/useProviderAvailabilities'
 

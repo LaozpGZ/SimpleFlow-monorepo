@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/wagmi",
+  "name": "@simpleflow/wagmi",
   "version": "3.1.0",
   "license": "MIT",
   "description": "wagmi adaptor for pancakeswap",
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@blocto/sdk": "^0.5.4",
-    "@pancakeswap/tsconfig": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
     "@types/react": "catalog:",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

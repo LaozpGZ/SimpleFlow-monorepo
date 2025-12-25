@@ -1,5 +1,5 @@
 {
-  "extends": "@pancakeswap/tsconfig/nextjs.json",
+  "extends": "@simpleflow/tsconfig/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "vitest.config.ts"],
   "compilerOptions": {
@@ -8,11 +8,11 @@
     "baseUrl": ".",
     "types": ["vitest/globals"],
     "paths": {
-      "@pancakeswap/awgmi": ["../../packages/awgmi/src"],
-      "@pancakeswap/awgmi/core": ["../../packages/awgmi/core/src"],
-      "@pancakeswap/awgmi/connectors/*": ["../../packages/awgmi/connectors/*"],
-      "@pancakeswap/uikit": ["../../packages/uikit/src/index.ts"],
-      "@pancakeswap/uikit/*": ["../../packages/uikit/src/*"]
+      "@simpleflow/awgmi": ["../../packages/awgmi/src"],
+      "@simpleflow/awgmi/core": ["../../packages/awgmi/core/src"],
+      "@simpleflow/awgmi/connectors/*": ["../../packages/awgmi/connectors/*"],
+      "@simpleflow/uikit": ["../../packages/uikit/src/index.ts"],
+      "@simpleflow/uikit/*": ["../../packages/uikit/src/*"]
     }
   }
 }

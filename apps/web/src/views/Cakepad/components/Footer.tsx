@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { CardBody, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { CardBody, FlexGap, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import useIfo from '../hooks/useIfo'
 import FooterIcons from './FooterIcons'
 

@@ -1,5 +1,5 @@
-import { HOOK_CATEGORY } from '@pancakeswap/infinity-sdk'
-import { Route } from '@pancakeswap/smart-router'
+import { HOOK_CATEGORY } from '@simpleflow/infinity-sdk'
+import { Route } from '@simpleflow/smart-router'
 import { useMemo } from 'react'
 import { useBrevisHookDiscount } from './useBrevisHookDiscount'
 import { usePrimusHookDiscount } from './usePrimusHookDiscount'

@@ -1,11 +1,11 @@
 // bsc testnet
 
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 export const GIFT_PANCAKE_V1_ADDRESS = '0x68E5f51980e2AcbB9817E34f3A2db71F5Ce2ecE3'
 
 // @ts-ignore
-export const NEXT_PUBLIC_GIFT_API = process.env.NEXT_PUBLIC_GIFT_API
+export const { NEXT_PUBLIC_GIFT_API } = process.env
 
 export const GIFT_CODE_LENGTH = 20
 

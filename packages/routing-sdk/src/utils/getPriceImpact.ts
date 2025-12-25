@@ -1,4 +1,4 @@
-import { CurrencyAmount, Percent, TradeType, Price, Currency, Token } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Percent, TradeType, Price, Currency, Token } from '@simpleflow/swap-sdk-core'
 
 import { Trade, Route } from '../types'
 

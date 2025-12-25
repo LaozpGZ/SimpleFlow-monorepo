@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
-import { useToast } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { useToast } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 
 import { useAccount } from 'wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'

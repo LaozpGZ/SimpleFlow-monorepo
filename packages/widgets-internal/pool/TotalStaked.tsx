@@ -1,6 +1,6 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Balance, Skeleton, TooltipText, useTooltip } from "@pancakeswap/uikit";
-import { getBalanceNumber } from "@pancakeswap/utils/formatBalance";
+import { useTranslation } from "@simpleflow/l10n";
+import { Balance, Skeleton, TooltipText, useTooltip } from "@simpleflow/uikit";
+import { getBalanceNumber } from "@simpleflow/utils/formatBalance";
 import BigNumber from "bignumber.js";
 import { StatWrapper } from "./StatWrapper";
 

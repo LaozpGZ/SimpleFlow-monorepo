@@ -1,7 +1,7 @@
-import { POOL_TYPE } from "@pancakeswap/infinity-sdk";
-import { useTranslation } from "@pancakeswap/localization";
-import { AutoColumn, Flex, FlexGap, LinkExternal, Modal, Text } from "@pancakeswap/uikit";
-import Miscellaneous from "@pancakeswap/uikit/components/Svg/Icons/Miscellaneous";
+import { POOL_TYPE } from "@simpleflow/infinity-sdk";
+import { useTranslation } from "@simpleflow/l10n";
+import { AutoColumn, Flex, FlexGap, LinkExternal, Modal, Text } from "@simpleflow/uikit";
+import Miscellaneous from "@simpleflow/uikit/components/Svg/Icons/Miscellaneous";
 
 type PoolTypeModalProps = {
   poolType: POOL_TYPE | undefined;

@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/stable-swap-sdk",
+  "name": "@simpleflow/stable-swap-sdk",
   "version": "2.0.11",
   "description": "SDK for pancakeswap stable swap",
   "repository": {
@@ -23,16 +23,16 @@
     "dist"
   ],
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/tokens": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/tokens": "workspace:*",
     "tiny-invariant": "^1.3.0"
   },
   "devDependencies": {
-    "@pancakeswap/token-lists": "workspace:*",
-    "@pancakeswap/tsconfig": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
+    "@simpleflow/token-lists": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
     "tsup": "^6.7.0",
     "viem": "catalog:"
   },

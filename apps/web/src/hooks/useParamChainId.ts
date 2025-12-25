@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, getChainName } from '@simpleflow/chains'
 import { getChainId } from 'config/chains'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'

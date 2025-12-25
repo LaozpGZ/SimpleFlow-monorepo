@@ -1,4 +1,4 @@
-import { useIsMounted } from "@pancakeswap/hooks";
+import { useIsMounted } from "@simpleflow/hooks";
 import throttle from "lodash/throttle";
 import React, { ElementType, ReactElement, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { AtomBox } from "../../components/AtomBox";

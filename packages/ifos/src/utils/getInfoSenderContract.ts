@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/sdk'
 import { Address, GetContractReturnType, PublicClient, getContract } from 'viem'
 
 import { pancakeInfoSenderABI } from '../abis/PancakeInfoSender'

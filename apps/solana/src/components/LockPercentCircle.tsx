@@ -1,5 +1,5 @@
 import { CircularProgress, CircularProgressLabel, CircularProgressProps } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Tooltip from '@/components/Tooltip'
 import LiquidityLockIcon from '@/icons/misc/LiquidityLockIcon'
 import { colors } from '@/theme/cssVariables'

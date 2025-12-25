@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 
 const PRECISION = 10n ** 18n
 

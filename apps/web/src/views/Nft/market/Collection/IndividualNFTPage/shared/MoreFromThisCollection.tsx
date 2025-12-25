@@ -1,4 +1,4 @@
-import { ArrowBackIcon, ArrowForwardIcon, Box, Flex, IconButton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ArrowBackIcon, ArrowForwardIcon, Box, Flex, IconButton, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useQuery } from '@tanstack/react-query'
 import Trans from 'components/Trans'
 import shuffle from 'lodash/shuffle'

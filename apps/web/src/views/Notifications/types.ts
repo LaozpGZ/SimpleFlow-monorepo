@@ -1,4 +1,4 @@
-import { ContextApi } from '@pancakeswap/localization'
+import { ContextApi } from '@simpleflow/l10n'
 
 export enum ResponseEvents {
   NotificationsEnabled = 'NotificationsEnabled',

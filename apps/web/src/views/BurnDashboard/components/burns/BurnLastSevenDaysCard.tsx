@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, CardProps, Flex, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, CardProps, Flex, Text } from '@simpleflow/uikit'
 import { LightGreyCard } from 'components/Card'
 import { ProgressBar } from 'components/Progress/ProgressBar'
 import { formatAmount } from 'utils/formatInfoNumbers'

@@ -1,4 +1,4 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@simpleflow/uikit'
 import { QueryClient, dehydrate } from '@tanstack/react-query'
 import AllArticle from 'components/Article/AllArticle'
 import ChefsChoice from 'components/ChefsChoice'

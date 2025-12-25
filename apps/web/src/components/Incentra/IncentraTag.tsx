@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Tag } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Tag } from '@simpleflow/uikit'
 import { useIncentraInfo } from 'hooks/useIncentra'
 
 export function IncentraTag({ poolAddress }: { poolAddress?: string }) {

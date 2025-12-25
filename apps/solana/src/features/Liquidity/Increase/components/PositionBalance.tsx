@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 
 import { colors } from '@/theme/cssVariables'

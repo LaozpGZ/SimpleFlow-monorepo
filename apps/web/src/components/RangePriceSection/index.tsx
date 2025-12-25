@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
-import { Text, Heading } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { UnifiedCurrency } from '@simpleflow/swap-sdk-core'
+import { Text, Heading } from '@simpleflow/uikit'
 import { LightGreyCard, LightCardProps } from 'components/Card'
 
 interface RangePriceSectionProps extends LightCardProps {

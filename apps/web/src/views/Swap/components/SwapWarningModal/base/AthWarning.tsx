@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Text } from '@simpleflow/uikit'
 
 export const AthWarning = () => {
   const { t } = useTranslation()

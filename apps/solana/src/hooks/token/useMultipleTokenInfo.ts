@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { TokenInfo } from '@simpleflow/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useTokenStore } from '@/store/useTokenStore'
 import { getTokenInfo } from './api'

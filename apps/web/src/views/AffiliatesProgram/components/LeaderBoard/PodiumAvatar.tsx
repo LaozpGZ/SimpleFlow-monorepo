@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import { useProfileForAddress } from 'state/profile/hooks'
-import { Flex, Skeleton, ProfileAvatar, NoProfileAvatarIcon } from '@pancakeswap/uikit'
+import { Flex, Skeleton, ProfileAvatar, NoProfileAvatarIcon } from '@simpleflow/uikit'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 
 const StyledNoProfileAvatarIcon = styled(NoProfileAvatarIcon)`

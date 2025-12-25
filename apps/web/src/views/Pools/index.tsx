@@ -1,9 +1,9 @@
 import { styled } from 'styled-components'
 
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { checkIsBoostedPool } from '@pancakeswap/pools'
-import { Token } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { checkIsBoostedPool } from '@simpleflow/pools'
+import { Token } from '@simpleflow/sdk'
 import {
   Flex,
   FlexLayout,
@@ -15,8 +15,8 @@ import {
   Text,
   ViewMode,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
 import PinnedFAQButton from 'components/PinnedFAQButton'

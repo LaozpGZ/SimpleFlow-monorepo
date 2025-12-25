@@ -1,5 +1,5 @@
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
-import { Token } from '@pancakeswap/sdk'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
+import { Token } from '@simpleflow/sdk'
 import memoize from 'lodash/memoize'
 import { safeGetUnifiedAddress } from 'utils'
 

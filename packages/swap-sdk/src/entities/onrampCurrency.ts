@@ -1,4 +1,4 @@
-import { BaseCurrency, Currency, Token, SerializedToken } from '@pancakeswap/swap-sdk-core'
+import { BaseCurrency, Currency, Token, SerializedToken } from '@simpleflow/swap-sdk-core'
 import invariant from 'tiny-invariant'
 
 /**

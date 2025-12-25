@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
-import { Button } from '@pancakeswap/uikit'
+import { Button } from '@simpleflow/uikit'
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
 import { useSwapStore } from '@/features/Swap/useSwapStore'

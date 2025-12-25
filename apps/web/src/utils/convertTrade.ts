@@ -1,4 +1,4 @@
-import { type Pool, type Route, type Trade, toSerializableTrade } from '@pancakeswap/routing-sdk'
+import { type Pool, type Route, type Trade, toSerializableTrade } from '@simpleflow/routing-sdk'
 import {
   createInfinityBinPool,
   createInfinityCLPool,
@@ -6,18 +6,18 @@ import {
   isInfinityCLPool,
   toSerializableInfinityBinPool,
   toSerializableInfinityCLPool,
-} from '@pancakeswap/routing-sdk-addon-infinity'
-import { createStablePool, isStablePool, toSerializableStablePool } from '@pancakeswap/routing-sdk-addon-stable-swap'
-import { createV2Pool, isV2Pool, toSerializableV2Pool } from '@pancakeswap/routing-sdk-addon-v2'
-import { createV3Pool, isV3Pool, toSerializableV3Pool } from '@pancakeswap/routing-sdk-addon-v3'
+} from '@simpleflow/routing-sdk-addon-infinity'
+import { createStablePool, isStablePool, toSerializableStablePool } from '@simpleflow/routing-sdk-addon-stable-swap'
+import { createV2Pool, isV2Pool, toSerializableV2Pool } from '@simpleflow/routing-sdk-addon-v2'
+import { createV3Pool, isV3Pool, toSerializableV3Pool } from '@simpleflow/routing-sdk-addon-v3'
 import {
   type InfinityRouter,
   getRouteTypeByPools,
   PoolType,
   SmartRouter,
   Pool as SmartRouterPool,
-} from '@pancakeswap/smart-router'
-import type { TradeType } from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/smart-router'
+import type { TradeType } from '@simpleflow/swap-sdk-core'
 
 export function toRoutingSDKPool(p: SmartRouterPool): Pool {
   if (SmartRouter.isV3Pool(p)) {

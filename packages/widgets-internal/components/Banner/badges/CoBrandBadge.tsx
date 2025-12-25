@@ -1,4 +1,4 @@
-import { FlexGap } from "@pancakeswap/uikit";
+import { FlexGap } from "@simpleflow/uikit";
 import Image from "next/legacy/image";
 import { VerticalDivider } from "../VerticalDivider";
 import { BadgeLogo } from "./Badge";

@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { INFINITY_SUPPORTED_CHAINS } from '@simpleflow/infinity-sdk'
 import { PoolQuery, PoolQueryOptions, QuoteQuery, SVMQuoteQuery } from 'quoter/quoter.types'
 import { getViemClients, viemClients } from 'utils/viem'
 import { PoolHashHelper } from './PoolHashHelper'

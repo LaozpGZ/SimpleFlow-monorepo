@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, CardBody, CardHeader, Flex, Text, Image, IfoNotTokens } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Card, CardBody, CardHeader, Flex, Text, Image, IfoNotTokens } from '@simpleflow/uikit'
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { styled } from 'styled-components'
 import Trans from 'components/Trans'

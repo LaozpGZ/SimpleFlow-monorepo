@@ -1,4 +1,4 @@
-import { BigintIsh, Currency } from '@pancakeswap/sdk'
+import { BigintIsh, Currency } from '@simpleflow/sdk'
 
 import { OnChainProvider, Pool, PoolType, SubgraphProvider } from '../../types'
 import { getV2CandidatePools } from './getV2CandidatePools'

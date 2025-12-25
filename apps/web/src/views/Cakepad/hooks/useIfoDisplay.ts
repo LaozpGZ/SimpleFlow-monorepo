@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 import { useIFODuration } from './ifo/useIFODuration'
 import { useIfoTimeDisplay } from './ifo/useIfoTimeDisplay'
 import useIfo from './useIfo'

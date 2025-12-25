@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Pair, Token, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Pair, Token, UnifiedCurrency, UnifiedCurrencyAmount } from '@simpleflow/sdk'
 import {
   AtomBoxProps,
   Box,
@@ -13,11 +13,11 @@ import {
   Text,
   useMatchBreakpoints,
   useModal,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
-import { CurrencyLogo, DoubleCurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatBalance'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
+import isUndefinedOrNull from '@simpleflow/utils/isUndefinedOrNull'
+import { CurrencyLogo, DoubleCurrencyLogo, SwapUIV2 } from '@simpleflow/widgets-internal'
 import { RiskInputPanelDisplay } from 'components/AccessRisk/SwapRevampRiskDisplay'
 import { FiatLogo } from 'components/Logo/CurrencyLogo'
 import { CommonBasesType } from 'components/SearchModal/types'
@@ -29,7 +29,7 @@ import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { StablePair } from 'views/AddLiquidity/AddStableLiquidity/hooks/useStableLPDerivedMintInfo'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import { FONT_SIZE, LOGO_SIZE, useFontSize } from './state'
 

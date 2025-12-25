@@ -1,4 +1,4 @@
-import { Bytes32, EncodedPoolKey } from '@pancakeswap/infinity-sdk'
+import { Bytes32, EncodedPoolKey } from '@simpleflow/infinity-sdk'
 import { Address } from 'viem'
 
 export interface PathKey {

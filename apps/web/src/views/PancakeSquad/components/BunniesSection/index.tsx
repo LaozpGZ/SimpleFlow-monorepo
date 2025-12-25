@@ -1,7 +1,7 @@
-import { Box, Button, Flex, Text } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { Box, Button, Flex, Text } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import ColoredWordHeading from 'components/ColoredWordHeading'
 import { LandingBodyWrapper } from 'views/PancakeSquad/styles'
 import { SlideSvgDark, SlideSvgLight } from 'components/SlideSvg'

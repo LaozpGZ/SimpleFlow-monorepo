@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ERC20Token, Pair, Percent, Price, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, ERC20Token, Pair, Percent, Price, Trade, TradeType } from '@simpleflow/sdk'
 import invariant from 'tiny-invariant'
 import { Address } from 'viem'
 

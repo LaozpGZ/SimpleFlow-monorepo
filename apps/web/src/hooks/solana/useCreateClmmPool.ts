@@ -6,10 +6,10 @@ import {
   TxV0BuildData,
   TxVersion,
   type ApiV3PoolInfoConcentratedItem,
-} from '@pancakeswap/solana-core-sdk'
-import { PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
+} from '@simpleflow/solana-core-sdk'
+import { PancakeClmmProgramId } from '@simpleflow/solana-clmm-sdk'
 import Decimal from 'decimal.js'
-import { Currency, CurrencyAmount, SPLToken } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, SPLToken } from '@simpleflow/swap-sdk-core'
 import { useClmmAmmConfigs } from './useClmmAmmConfigs'
 import { useRaydium } from './useRaydium'
 

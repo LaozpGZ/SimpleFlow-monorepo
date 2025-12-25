@@ -1,9 +1,9 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
-import { Box, Button } from '@pancakeswap/uikit'
+import { Currency } from '@simpleflow/swap-sdk-core'
+import { Box, Button } from '@simpleflow/uikit'
 import React, { memo, useCallback, useMemo } from 'react'
 
-import { useTranslation } from '@pancakeswap/localization'
-import { PriceOrder } from '@pancakeswap/price-api-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { PriceOrder } from '@simpleflow/price-api-sdk'
 import { CommitButton } from 'components/CommitButton'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'

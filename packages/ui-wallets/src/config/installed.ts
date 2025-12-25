@@ -1,5 +1,5 @@
-import { getTrustWalletProvider } from '@pancakeswap/wagmi/connectors/trustWallet'
-import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
+import { getTrustWalletProvider } from '@simpleflow/wagmi/connectors/trustWallet'
+import safeGetWindow from '@simpleflow/utils/safeGetWindow'
 import { isCyberWallet } from '@cyberlab/cyber-app-sdk'
 
 export const isMetamaskInstalled = () => {

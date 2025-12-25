@@ -1,4 +1,4 @@
-import type { Language } from "@pancakeswap/localization";
+import type { Language } from "@simpleflow/l10n";
 import { ElementType, ReactElement, ReactNode } from "react";
 import { FooterLinkType } from "../../components/Footer/types";
 import { MenuItemsType } from "../../components/MenuItems/types";

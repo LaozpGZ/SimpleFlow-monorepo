@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Image } from '@pancakeswap/uikit'
-import { Swap } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Image } from '@simpleflow/uikit'
+import { Swap } from '@simpleflow/widgets-internal'
 
 export const ExchangeLayout = ({ children }: React.PropsWithChildren) => {
   const { t } = useTranslation()

@@ -3,7 +3,7 @@ import {
   DeserializedFarmUserData,
   getLegacyFarmConfig,
   supportedChainIdV2,
-} from '@pancakeswap/farms'
+} from '@simpleflow/farms'
 import { useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'

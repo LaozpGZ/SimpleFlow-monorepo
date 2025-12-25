@@ -1,7 +1,7 @@
-import { useTheme } from "@pancakeswap/hooks";
-import { useTranslation } from "@pancakeswap/localization";
-import { Box, TreeSelect, useMatchBreakpoints } from "@pancakeswap/uikit";
-import type { TreeNode, TreeSelectChangeEvent, TreeSelectProps } from "@pancakeswap/uikit/components/TreeSelect";
+import { useTheme } from "@simpleflow/hooks";
+import { useTranslation } from "@simpleflow/l10n";
+import { Box, TreeSelect, useMatchBreakpoints } from "@simpleflow/uikit";
+import type { TreeNode, TreeSelectChangeEvent, TreeSelectProps } from "@simpleflow/uikit/components/TreeSelect";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
 

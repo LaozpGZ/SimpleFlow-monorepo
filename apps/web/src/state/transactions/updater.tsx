@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Text, useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Text, useToast } from '@simpleflow/uikit'
 import { SolanaDescriptionWithTx, ToastDescriptionWithTx } from 'components/Toast'
 import { FAST_INTERVAL } from 'config/constants'
 import forEach from 'lodash/forEach'
@@ -16,12 +16,12 @@ import {
 import { usePublicClient } from 'wagmi'
 import { retry, RetryableError } from 'state/multicall/retry'
 import { useQuery } from '@tanstack/react-query'
-import { AVERAGE_CHAIN_BLOCK_TIMES, NonEVMChainId } from '@pancakeswap/chains'
+import { AVERAGE_CHAIN_BLOCK_TIMES, NonEVMChainId } from '@simpleflow/chains'
 import { BSC_BLOCK_TIME } from 'config'
-import { useFetchBlockData } from '@pancakeswap/wagmi'
+import { useFetchBlockData } from '@simpleflow/wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
-import { TxVersion } from '@pancakeswap/solana-core-sdk'
+import { TxVersion } from '@simpleflow/solana-core-sdk'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import {
   FarmTransactionStatus,

@@ -1,12 +1,12 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId } from '@pancakeswap/sdk'
-import { Box, Button, Container, Flex, Heading, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId } from '@simpleflow/sdk'
+import { Box, Button, Container, Flex, Heading, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
 
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { getChainName } from '@pancakeswap/chains'
+import { getChainName } from '@simpleflow/chains'
 import useIfo from '../hooks/useIfo'
 
 const StyledHero = styled(Box)`

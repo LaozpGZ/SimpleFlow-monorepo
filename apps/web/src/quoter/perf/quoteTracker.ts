@@ -1,5 +1,5 @@
 import { getIsMobile, isInBinance } from '@binance/w3w-utils'
-import { getCurrencyAddress, TradeType } from '@pancakeswap/swap-sdk-core'
+import { getCurrencyAddress, TradeType } from '@simpleflow/swap-sdk-core'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { QuoteQuery } from 'quoter/quoter.types'

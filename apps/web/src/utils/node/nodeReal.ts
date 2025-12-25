@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 export const getNodeRealUrl = (chainId: number, key?: string) => {
   let host: string | null = null

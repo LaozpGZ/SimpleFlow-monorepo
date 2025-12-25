@@ -1,7 +1,7 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { SpaceProps } from "styled-system";
 
-import { Box, Text } from "@pancakeswap/uikit";
+import { Box, Text } from "@simpleflow/uikit";
 
 export function Section({ title, children, ...rest }: { title?: ReactNode } & PropsWithChildren & SpaceProps) {
   return (

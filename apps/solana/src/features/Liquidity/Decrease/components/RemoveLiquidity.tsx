@@ -1,9 +1,9 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { useState, useRef } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import Decimal from 'decimal.js'
-import { getTransferAmountFeeV2 } from '@pancakeswap/solana-core-sdk'
+import { getTransferAmountFeeV2 } from '@simpleflow/solana-core-sdk'
 import BN from 'bn.js'
 import Button from '@/components/Button'
 import AmountSlider from '@/components/AmountSlider'

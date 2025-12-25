@@ -1,4 +1,4 @@
-import { isWSol, solToWSol, SPLToken, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { isWSol, solToWSol, SPLToken, TradeType, UnifiedCurrencyAmount } from '@simpleflow/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { create } from 'superstruct'
 import Decimal from 'decimal.js'

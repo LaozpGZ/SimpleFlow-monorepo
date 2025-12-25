@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { FetchTableItemArgs, fetchTableItem } from '@pancakeswap/awgmi/core'
+import { FetchTableItemArgs, fetchTableItem } from '@simpleflow/awgmi/core'
 import { QueryFunction, useQueries, useQuery } from '@tanstack/react-query'
 import { MoveResource } from '@aptos-labs/ts-sdk'
 import { useMemo } from 'react'

@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { binPoolIdToPoolKey, BinPoolManagerAbi, BinPositionManagerAbi } from '@pancakeswap/infinity-sdk'
+import { Protocol } from '@simpleflow/farms'
+import { binPoolIdToPoolKey, BinPoolManagerAbi, BinPositionManagerAbi } from '@simpleflow/infinity-sdk'
 import { getInfinityPositionManagerAddress, getPoolManagerAddress } from 'utils/addressHelpers'
 import { publicClient } from 'utils/viem'
 import { encodeAbiParameters, keccak256, maxUint24, parseAbiParameters, type Address, type Hex } from 'viem'

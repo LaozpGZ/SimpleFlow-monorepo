@@ -1,5 +1,5 @@
-import { Flex, Text, Button, Spinner } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Text, Button, Spinner } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { StepIndicator } from './styles'
 
 interface ApproveAndConfirmStageProps {

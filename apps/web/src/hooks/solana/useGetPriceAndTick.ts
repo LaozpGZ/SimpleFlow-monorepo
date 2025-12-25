@@ -1,8 +1,8 @@
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { useCallback, useMemo } from 'react'
 import { tryParsePrice } from 'hooks/v3/utils'
-import { TickUtils } from '@pancakeswap/solana-core-sdk'
+import { TickUtils } from '@simpleflow/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useClmmAmmConfigs } from './useClmmAmmConfigs'
 

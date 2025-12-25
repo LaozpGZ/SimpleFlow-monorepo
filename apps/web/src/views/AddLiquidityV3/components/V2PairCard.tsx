@@ -1,5 +1,5 @@
-import { Pair } from '@pancakeswap/sdk'
-import { Tag } from '@pancakeswap/uikit'
+import { Pair } from '@simpleflow/sdk'
+import { Tag } from '@simpleflow/uikit'
 import { useTokensDeposited } from 'components/PositionCard'
 import useTotalSupply from 'hooks/useTotalSupply'
 import React from 'react'

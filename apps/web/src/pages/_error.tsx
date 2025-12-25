@@ -13,7 +13,7 @@
 
 import { captureUnderscoreErrorException } from '@sentry/nextjs'
 import NextErrorComponent, { ErrorProps } from 'next/error'
-import { NotFound } from '@pancakeswap/uikit'
+import { NotFound } from '@simpleflow/uikit'
 import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 

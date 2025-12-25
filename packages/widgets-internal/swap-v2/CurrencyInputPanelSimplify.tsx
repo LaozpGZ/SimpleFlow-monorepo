@@ -1,4 +1,4 @@
-import { AtomBox, AtomBoxProps, SwapCSS } from "@pancakeswap/uikit";
+import { AtomBox, AtomBoxProps, SwapCSS } from "@simpleflow/uikit";
 
 import { NumericalInput, NumericalInputProps } from "./NumericalInput";
 

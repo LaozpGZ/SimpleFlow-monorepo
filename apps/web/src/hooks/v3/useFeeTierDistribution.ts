@@ -1,5 +1,5 @@
-import { Currency, Token } from '@pancakeswap/sdk'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
+import { Currency, Token } from '@simpleflow/sdk'
+import { FeeAmount } from '@simpleflow/v3-sdk'
 import { useMemo } from 'react'
 import { PoolState } from './types'
 import { useFeeTierDistributionQuery } from './useFeeTierDistributionQuery'

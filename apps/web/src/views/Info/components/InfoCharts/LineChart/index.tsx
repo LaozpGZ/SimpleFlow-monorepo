@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { darkColors, lightColors } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { darkColors, lightColors } from '@simpleflow/uikit'
 import { LineChartLoader } from 'components/ChartLoaders'
 import dayjs from 'dayjs'
 import useTheme from 'hooks/useTheme'

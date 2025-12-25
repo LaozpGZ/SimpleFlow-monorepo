@@ -1,5 +1,5 @@
-import { Trans } from '@pancakeswap/localization'
-import { AtomBox, Button, Heading, Image, LinkExternal, Text } from '@pancakeswap/uikit'
+import { Trans } from '@simpleflow/l10n'
+import { AtomBox, Button, Heading, Image, LinkExternal, Text } from '@simpleflow/uikit'
 import { useState, useCallback } from 'react'
 import 'swiper/css'
 import { Swiper, SwiperSlide } from 'swiper/react'

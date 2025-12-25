@@ -1,4 +1,4 @@
-import { Currency, Price } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price } from '@simpleflow/swap-sdk-core'
 import { createAction } from '@reduxjs/toolkit'
 import { CurrencyField as Field } from 'utils/types'
 

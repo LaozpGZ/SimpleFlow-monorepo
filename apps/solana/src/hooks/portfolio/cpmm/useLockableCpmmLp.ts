@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { CREATE_CPMM_POOL_PROGRAM } from '@pancakeswap/solana-core-sdk'
+import { CREATE_CPMM_POOL_PROGRAM } from '@simpleflow/solana-core-sdk'
 import Decimal from 'decimal.js'
 import useFetchAccLpMint from '@/hooks/token/useFetchAccLpMint'
 import useFetchPoolByLpMint from '@/hooks/pool/useFetchPoolByLpMint'

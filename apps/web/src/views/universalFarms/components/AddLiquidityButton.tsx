@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Box, BoxProps, Button, ButtonProps } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AddIcon, Box, BoxProps, Button, ButtonProps } from '@simpleflow/uikit'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 

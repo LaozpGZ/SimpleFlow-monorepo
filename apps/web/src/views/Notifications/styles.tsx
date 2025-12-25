@@ -1,4 +1,4 @@
-import { Colors, Flex } from '@pancakeswap/uikit'
+import { Colors, Flex } from '@simpleflow/uikit'
 import Link from 'next/link'
 import styled, { keyframes } from 'styled-components'
 

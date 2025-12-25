@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { Text } from "../Text";
 import { ArrowBackIcon, ArrowForwardIcon } from "../Svg";
 

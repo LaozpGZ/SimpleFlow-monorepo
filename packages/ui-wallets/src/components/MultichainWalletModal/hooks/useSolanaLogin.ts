@@ -1,4 +1,4 @@
-import { useIsMounted } from '@pancakeswap/hooks'
+import { useIsMounted } from '@simpleflow/hooks'
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
 import { useAtomValue } from 'jotai'

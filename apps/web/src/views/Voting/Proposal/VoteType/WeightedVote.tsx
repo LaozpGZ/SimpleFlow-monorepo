@@ -1,4 +1,4 @@
-import { AddIcon, Box, Flex, IconButton, Input, MinusIcon, Text } from '@pancakeswap/uikit'
+import { AddIcon, Box, Flex, IconButton, Input, MinusIcon, Text } from '@simpleflow/uikit'
 import { Dispatch, useCallback, useMemo } from 'react'
 import { Proposal, ProposalState } from 'state/types'
 import { styled } from 'styled-components'

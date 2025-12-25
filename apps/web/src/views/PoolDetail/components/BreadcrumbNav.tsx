@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Breadcrumbs, Flex, Text } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Breadcrumbs, Flex, Text } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { usePoolSymbol } from '../hooks/usePoolSymbol'
 
 export const BreadcrumbNav: React.FC = () => {

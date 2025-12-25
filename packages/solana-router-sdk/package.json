@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/solana-router-sdk",
+  "name": "@simpleflow/solana-router-sdk",
   "version": "1.4.9",
   "description": "A SDK for getting best routes from Solana",
   "main": "dist/index.js",
@@ -39,8 +39,8 @@
     "lint": "eslint '{src,test}/**/*.{js,jsx,ts,json}'"
   },
   "dependencies": {
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "@solana/web3.js": "catalog:",
     "decimal.js": "^10.4.2",
     "superstruct": "^2.0.2"

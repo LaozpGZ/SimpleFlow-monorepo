@@ -11,11 +11,11 @@ import {
   ApiStakePool,
   CreateFarmExtInfo,
   IdoKeysData
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
 import BN from 'bn.js'
-import { TranslateFunction } from '@pancakeswap/localization'
+import { TranslateFunction } from '@simpleflow/l10n'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { txStatusSubject } from '@/hooks/toast/useTxStatus'
 import { OwnerFullData } from '@/hooks/portfolio/useFetchOwnerIdo'

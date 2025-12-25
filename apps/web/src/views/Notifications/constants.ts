@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { ContextApi } from '@pancakeswap/localization'
-import { OptionProps } from '@pancakeswap/uikit'
+import { ChainId } from '@simpleflow/chains'
+import { ContextApi } from '@simpleflow/l10n'
+import { OptionProps } from '@simpleflow/uikit'
 import {
   EventInformation,
   PancakeNotificationBuilders,

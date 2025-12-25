@@ -1,4 +1,4 @@
-import { type Currency, CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core'
+import { type Currency, CurrencyAmount, Percent } from '@simpleflow/swap-sdk-core'
 import { useMemo } from 'react'
 import { useIFOPoolInfo } from './useIFOPoolInfo'
 

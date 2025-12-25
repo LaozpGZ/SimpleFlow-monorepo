@@ -1,5 +1,5 @@
-import { Trans } from '@pancakeswap/localization'
-import { Card, CardBody, CardHeader, Heading, Link, Text } from '@pancakeswap/uikit'
+import { Trans } from '@simpleflow/l10n'
+import { Card, CardBody, CardHeader, Heading, Link, Text } from '@simpleflow/uikit'
 import Divider from 'components/Divider'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import styled from 'styled-components'

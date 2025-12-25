@@ -1,4 +1,4 @@
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 
 export type NewRewardInfo = {
   id: string

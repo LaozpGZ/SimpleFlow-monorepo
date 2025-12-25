@@ -1,5 +1,5 @@
-import { AtomBox, AutoColumn, Flex, FlexGap, Modal, QuestionHelper, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { AtomBox, AutoColumn, Flex, FlexGap, Modal, QuestionHelper, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 import { colors } from '@/theme/cssVariables'

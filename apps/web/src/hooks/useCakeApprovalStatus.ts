@@ -1,4 +1,4 @@
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { Address, erc20Abi } from 'viem'
@@ -6,7 +6,7 @@ import { useAccount } from 'wagmi'
 
 import { getCakeContract } from 'utils/contractHelpers'
 
-import { useReadContract } from '@pancakeswap/wagmi'
+import { useReadContract } from '@simpleflow/wagmi'
 import { useActiveChainId } from './useActiveChainId'
 
 export const useCakeApprovalStatus = (spender: any) => {

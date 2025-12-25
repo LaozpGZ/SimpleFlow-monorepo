@@ -9,12 +9,12 @@ import {
   UserMenu,
   UserMenuDivider,
   UserMenuItem,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
-import { ChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { STABLE_SUPPORTED_CHAIN_IDS } from '@pancakeswap/stable-swap-sdk'
+import { ChainId, UnifiedChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { STABLE_SUPPORTED_CHAIN_IDS } from '@simpleflow/stable-swap-sdk'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import {} from 'hooks/useSwitchNetwork'

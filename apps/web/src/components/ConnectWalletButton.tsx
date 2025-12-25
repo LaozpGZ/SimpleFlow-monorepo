@@ -1,4 +1,4 @@
-import { Button, ButtonProps, FlexGap, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { Button, ButtonProps, FlexGap, WalletFilledV2Icon } from '@simpleflow/uikit'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { logGTMConnectWalletEvent } from 'utils/customGTMEventTracking'

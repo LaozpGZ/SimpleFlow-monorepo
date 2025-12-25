@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { AutoColumn, Box, CheckmarkCircleIcon, InfoIcon, Text } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { AutoColumn, Box, CheckmarkCircleIcon, InfoIcon, Text } from "@simpleflow/uikit";
 import { ReactNode } from "react";
 import { StepTitleAnimationContainer } from "./ApproveModalContent";
 import { FadePresence } from "./Logos";

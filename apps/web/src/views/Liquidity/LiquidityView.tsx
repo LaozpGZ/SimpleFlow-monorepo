@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { isActiveV3Farm } from '@pancakeswap/farms'
-import { Currency, CurrencyAmount, Fraction, Percent, Price, Token } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { isActiveV3Farm } from '@simpleflow/farms'
+import { Currency, CurrencyAmount, Fraction, Percent, Price, Token } from '@simpleflow/sdk'
 import {
   AtomBox,
   AutoColumn,
@@ -23,11 +23,11 @@ import {
   Toggle,
   useMatchBreakpoints,
   useModal,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 
-import { ConfirmationModalContent, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { ConfirmationModalContent, NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@simpleflow/l10n'
 import {
   MasterChefV3,
   NonfungiblePositionManager,
@@ -35,7 +35,7 @@ import {
   Position,
   isPoolTickInRange,
   tickToPrice,
-} from '@pancakeswap/v3-sdk'
+} from '@simpleflow/v3-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { AppHeader } from 'components/App'
 import { LightGreyCard } from 'components/Card'

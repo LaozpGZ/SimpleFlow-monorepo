@@ -1,4 +1,4 @@
-import { ArticleType, ResponseArticleDataType, ResponseArticleType, transformArticle } from '@pancakeswap/blog'
+import { ArticleType, ResponseArticleDataType, ResponseArticleType, transformArticle } from '@simpleflow/blog'
 import { useQuery } from '@tanstack/react-query'
 import qs from 'qs'
 import { filterTagArray } from 'utils/filterTagArray'

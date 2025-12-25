@@ -1,16 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId, UnifiedChainId } from '@pancakeswap/chains'
-import {
-  Box,
-  ButtonMenu,
-  ButtonMenuItem,
-  Flex,
-  Text,
-  UserMenu,
-  UserMenuDivider,
-  UserMenuItem,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId, UnifiedChainId } from '@simpleflow/chains'
+import { Box, ButtonMenu, ButtonMenuItem, Flex, Text, UserMenu, UserMenuDivider, UserMenuItem } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import { ChainLogo } from 'components/Logo/ChainLogo'
 import { ASSET_CDN } from 'config/constants/endpoints'

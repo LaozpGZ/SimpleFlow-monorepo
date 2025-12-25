@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/routing-sdk-addon-quoter",
+  "name": "@simpleflow/routing-sdk-addon-quoter",
   "version": "5.0.6",
   "description": "Routing sdk addon for on chain quoter",
   "repository": {
@@ -24,42 +24,42 @@
     "dist"
   ],
   "peerDependencies": {
-    "@pancakeswap/routing-sdk": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-stable-swap": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-v2": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-v3": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-infinity": "workspace:*",
-    "@pancakeswap/infinity-sdk": "workspace:*",
+    "@simpleflow/routing-sdk": "workspace:*",
+    "@simpleflow/routing-sdk-addon-stable-swap": "workspace:*",
+    "@simpleflow/routing-sdk-addon-v2": "workspace:*",
+    "@simpleflow/routing-sdk-addon-v3": "workspace:*",
+    "@simpleflow/routing-sdk-addon-infinity": "workspace:*",
+    "@simpleflow/infinity-sdk": "workspace:*",
     "viem": "catalog:"
   },
   "peerDependenciesMeta": {
-    "@pancakeswap/routing-sdk-addon-stable-swap": {
+    "@simpleflow/routing-sdk-addon-stable-swap": {
       "optional": true
     },
-    "@pancakeswap/routing-sdk-addon-v2": {
+    "@simpleflow/routing-sdk-addon-v2": {
       "optional": true
     },
-    "@pancakeswap/routing-sdk-addon-v3": {
+    "@simpleflow/routing-sdk-addon-v3": {
       "optional": true
     },
-    "@pancakeswap/routing-sdk-addon-infinity": {
+    "@simpleflow/routing-sdk-addon-infinity": {
       "optional": true
     }
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/v2-sdk": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/v2-sdk": "workspace:*",
     "tiny-invariant": "^1.3.0"
   },
   "devDependencies": {
-    "@pancakeswap/routing-sdk": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-stable-swap": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-v2": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-v3": "workspace:*",
-    "@pancakeswap/routing-sdk-addon-infinity": "workspace:*",
-    "@pancakeswap/tsconfig": "workspace:*",
-    "@pancakeswap/infinity-sdk": "workspace:*",
+    "@simpleflow/routing-sdk": "workspace:*",
+    "@simpleflow/routing-sdk-addon-stable-swap": "workspace:*",
+    "@simpleflow/routing-sdk-addon-v2": "workspace:*",
+    "@simpleflow/routing-sdk-addon-v3": "workspace:*",
+    "@simpleflow/routing-sdk-addon-infinity": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
+    "@simpleflow/infinity-sdk": "workspace:*",
     "tsup": "^6.7.0",
     "viem": "catalog:"
   },

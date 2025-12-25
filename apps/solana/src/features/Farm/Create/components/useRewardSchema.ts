@@ -1,9 +1,9 @@
 import * as yup from 'yup'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 export default function useRewardSchema() {
   const { t } = useTranslation()

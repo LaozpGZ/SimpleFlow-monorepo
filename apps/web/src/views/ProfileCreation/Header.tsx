@@ -1,7 +1,7 @@
-import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
-import { Breadcrumbs, Button, Heading, Text } from '@pancakeswap/uikit'
+import { TranslateFunction, useTranslation } from '@simpleflow/l10n'
+import { Breadcrumbs, Button, Heading, Text } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import useProfileCreation from './contexts/hook'
 
 const Wrapper = styled.div`

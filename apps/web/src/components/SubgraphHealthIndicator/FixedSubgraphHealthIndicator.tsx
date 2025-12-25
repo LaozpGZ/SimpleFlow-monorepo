@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 import { GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 

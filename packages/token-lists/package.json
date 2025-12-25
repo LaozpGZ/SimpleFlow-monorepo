@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/token-lists",
+  "name": "@simpleflow/token-lists",
   "version": "0.0.17",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -11,7 +11,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@pancakeswap/swap-sdk-core": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
     "ajv": "^6.12.3",
     "lodash": "^4.17.21"
   },
@@ -22,7 +22,7 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/react": "catalog:",
     "jotai": "catalog:",

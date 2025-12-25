@@ -1,8 +1,8 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { BaseCurrency, Price } from '@pancakeswap/swap-sdk-core'
-import { AddCircleIcon, AutoColumn, AutoRow, IconButton, RemoveIcon, Text } from '@pancakeswap/uikit'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
-import { LightSecondaryCard, NumericalInput } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { BaseCurrency, Price } from '@simpleflow/swap-sdk-core'
+import { AddCircleIcon, AutoColumn, AutoRow, IconButton, RemoveIcon, Text } from '@simpleflow/uikit'
+import { FeeAmount } from '@simpleflow/v3-sdk'
+import { LightSecondaryCard, NumericalInput } from '@simpleflow/widgets-internal'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 

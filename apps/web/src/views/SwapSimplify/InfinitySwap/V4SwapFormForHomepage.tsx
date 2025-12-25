@@ -1,4 +1,4 @@
-import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { SwapUIV2 } from '@simpleflow/widgets-internal'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
 import { ButtonAndDetailsPanel } from './ButtonAndDetailsPanel'
 import { FormMainForHomePage } from './FormMainV4ForHomePage'

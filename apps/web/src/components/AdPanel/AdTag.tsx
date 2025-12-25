@@ -1,4 +1,4 @@
-import { Text } from '@pancakeswap/uikit'
+import { Text } from '@simpleflow/uikit'
 import styled, { DefaultTheme } from 'styled-components'
 
 const colors = ['tertiary', 'input']

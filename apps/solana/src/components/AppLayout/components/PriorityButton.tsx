@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react'
-import { Button, Text } from '@pancakeswap/uikit'
+import { Button, Text } from '@simpleflow/uikit'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from '@/hooks/useDelayDisclosure'

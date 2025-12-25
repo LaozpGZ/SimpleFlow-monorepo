@@ -1,5 +1,5 @@
-import { Token } from "@pancakeswap/sdk";
-import { tickToPrice } from "@pancakeswap/v3-sdk";
+import { Token } from "@simpleflow/sdk";
+import { tickToPrice } from "@simpleflow/v3-sdk";
 
 import { PRICE_FIXED_DIGITS } from "../constants";
 import { TickProcessed, TickData } from "../types";

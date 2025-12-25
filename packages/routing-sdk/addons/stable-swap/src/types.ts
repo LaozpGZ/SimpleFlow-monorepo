@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core'
-import type { SerializableCurrencyAmount, Pool } from '@pancakeswap/routing-sdk'
+import { Currency, CurrencyAmount, Percent } from '@simpleflow/swap-sdk-core'
+import type { SerializableCurrencyAmount, Pool } from '@simpleflow/routing-sdk'
 
 import { STABLE_POOL_TYPE } from './constants/poolType'
 

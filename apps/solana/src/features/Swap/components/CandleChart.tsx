@@ -1,5 +1,5 @@
 import { AbsoluteCenter, Box, GridItem, Spinner, Text, useColorMode } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 import dayjs from 'dayjs'
 import {
   CandlestickData,
@@ -12,7 +12,7 @@ import {
   createChart
 } from 'lightweight-charts'
 import { useEffect, useRef } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import useFetchPoolKLine, { TimeType } from '@/hooks/pool/useFetchPoolKLine'
 import { colors } from '@/theme/cssVariables/colors'
 import { formatCurrency } from '@/utils/numberish/formatter'

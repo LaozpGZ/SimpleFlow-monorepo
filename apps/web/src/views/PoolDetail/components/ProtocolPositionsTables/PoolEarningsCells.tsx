@@ -2,13 +2,13 @@ import { useEffect, useMemo } from 'react'
 
 import { useAccount } from 'wagmi'
 
-import { Currency } from '@pancakeswap/swap-sdk-core'
-import { CAKE } from '@pancakeswap/tokens'
-import { FlexGap, Text } from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { formatAmount as formatCurrencyAmount } from '@pancakeswap/utils/formatFractions'
-import { Pool } from '@pancakeswap/v3-sdk'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { Currency } from '@simpleflow/swap-sdk-core'
+import { CAKE } from '@simpleflow/tokens'
+import { FlexGap, Text } from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatBalance'
+import { formatAmount as formatCurrencyAmount } from '@simpleflow/utils/formatFractions'
+import { Pool } from '@simpleflow/v3-sdk'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId, useUnclaimedFarmRewardsUSDByTokenId } from 'hooks/infinity/useFarmReward'
 import { useFeesEarnedUSD } from 'hooks/infinity/useFeesEarned'
@@ -24,7 +24,7 @@ import { useSolanaV3RewardInfoFromSimulation } from 'views/universalFarms/hooks/
 import { SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import { SolanaV3PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { TokenInfo } from '@simpleflow/solana-core-sdk'
 
 // Helper function to standardize number conversion
 const safeParseFloat = (value: string | number | undefined): number => {

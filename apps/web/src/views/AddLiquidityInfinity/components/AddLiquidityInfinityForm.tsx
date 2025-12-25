@@ -1,4 +1,4 @@
-import { Card, CardBody } from '@pancakeswap/uikit'
+import { Card, CardBody } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'

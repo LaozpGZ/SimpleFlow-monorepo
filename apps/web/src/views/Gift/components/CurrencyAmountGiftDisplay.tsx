@@ -1,7 +1,7 @@
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { CurrencyAmount, NativeCurrency, Token } from '@simpleflow/sdk'
+import { Flex, FlexProps, Text } from '@simpleflow/uikit'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
 

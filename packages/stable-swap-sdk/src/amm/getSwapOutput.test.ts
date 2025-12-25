@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core'
-import { bscTokens } from '@pancakeswap/tokens'
+import { CurrencyAmount, Percent } from '@simpleflow/swap-sdk-core'
+import { bscTokens } from '@simpleflow/tokens'
 
 import { getSwapOutput, getSwapInput } from './getSwapOutput'
 

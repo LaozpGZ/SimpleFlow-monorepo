@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   ModalTitle,
   ModalV2,
   Text,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import NextLink from 'next/link'
 import { styled, useTheme } from 'styled-components'
 

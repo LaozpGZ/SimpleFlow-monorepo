@@ -1,5 +1,5 @@
-import { LanguageProvider } from '@pancakeswap/localization'
-import { ModalProvider, UIKitProvider, dark, light } from '@pancakeswap/uikit'
+import { LanguageProvider } from '@simpleflow/l10n'
+import { ModalProvider, UIKitProvider, dark, light } from '@simpleflow/uikit'
 import { Provider } from 'jotai'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 

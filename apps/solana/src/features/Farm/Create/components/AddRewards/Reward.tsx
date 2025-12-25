@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Box, Collapse, useDisclosure, Text } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 import { useEvent } from '@/hooks/useEvent'
 import { colors } from '@/theme/cssVariables'
 import { useTokenAccountStore } from '@/store/useTokenAccountStore'

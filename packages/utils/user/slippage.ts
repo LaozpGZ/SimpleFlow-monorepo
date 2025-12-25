@@ -1,4 +1,4 @@
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { Percent } from '@simpleflow/swap-sdk-core'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 

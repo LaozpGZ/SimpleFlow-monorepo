@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { Address } from 'viem'
 
 const UNIVERSAL_ROUTER_ADDRESSES: Record<ChainId, Address> = {

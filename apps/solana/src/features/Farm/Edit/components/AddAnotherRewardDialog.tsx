@@ -13,11 +13,11 @@ import {
   VStack,
   useDisclosure
 } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, TokenInfo } from '@simpleflow/solana-core-sdk'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
 import { useMemo, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Button from '@/components/Button'
 import DatePickerModal from '@/components/FarmDatePickerModal'
 import TokenInput from '@/components/TokenInput'

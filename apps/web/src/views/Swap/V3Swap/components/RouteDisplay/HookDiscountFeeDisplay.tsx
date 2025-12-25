@@ -1,6 +1,6 @@
-import { HOOK_CATEGORY } from '@pancakeswap/infinity-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import { FlexGap, Text, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
+import { HOOK_CATEGORY } from '@simpleflow/infinity-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { FlexGap, Text, useMatchBreakpoints, useTooltip } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 

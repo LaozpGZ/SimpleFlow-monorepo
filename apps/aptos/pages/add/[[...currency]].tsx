@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn } from '@pancakeswap/uikit'
-import { Liquidity as LiquidityUI } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn } from '@simpleflow/uikit'
+import { Liquidity as LiquidityUI } from '@simpleflow/widgets-internal'
 import { PageMeta } from 'components/Layout/Page'
 
 import { ExchangeLayout } from 'components/Layout/ExchangeLayout'

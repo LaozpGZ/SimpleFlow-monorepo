@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   FlexGap,
@@ -6,7 +6,7 @@ import {
   useMatchBreakpoints,
   UserMenuVariant,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
@@ -28,7 +28,7 @@ import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendG
 import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvider'
 import { useAccount } from 'wagmi'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
-import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId } from '@simpleflow/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'

@@ -1,4 +1,4 @@
-import { Svg, SvgProps } from '@pancakeswap/uikit'
+import { Svg, SvgProps } from '@simpleflow/uikit'
 
 const RibbonUpMid: React.FC<React.PropsWithChildren<SvgProps>> = (props) => {
   return (

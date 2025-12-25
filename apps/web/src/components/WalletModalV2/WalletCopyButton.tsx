@@ -1,4 +1,4 @@
-import { Box, CopyButton, Flex, FlexProps, Image, Text, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { Box, CopyButton, Flex, FlexProps, Image, Text, WalletFilledV2Icon } from '@simpleflow/uikit'
 import { useQuery } from '@tanstack/react-query'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { walletsConfig } from 'config/wallet'
@@ -8,9 +8,9 @@ import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
 import { Connector, useAccount, useConnect } from 'wagmi'
-import { legacyPreviouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
+import { legacyPreviouslyUsedWalletsAtom } from '@simpleflow/ui-wallets'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { useSocialLoginProviderAtom } from '../../wallet/Privy/atom'
 
 interface CopyAddressProps extends FlexProps {

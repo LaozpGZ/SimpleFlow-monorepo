@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, IconButton, MinusIcon, useModalV2 } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Flex, IconButton, MinusIcon, useModalV2 } from '@simpleflow/uikit'
 import { useCallback, useMemo } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import styled from 'styled-components'

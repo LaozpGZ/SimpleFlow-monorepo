@@ -1,10 +1,10 @@
-import { getPoolId } from '@pancakeswap/infinity-sdk'
+import { getPoolId } from '@simpleflow/infinity-sdk'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import useIsTickAtLimit from 'hooks/infinity/useIsTickAtLimit'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePositionAmount } from 'hooks/infinity/usePositionAmount'
 import { useMemo } from 'react'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import isUndefinedOrNull from '@simpleflow/utils/isUndefinedOrNull'
 import { InfinityCLPositionDetail } from '../type'
 import { usePositionPrices } from './usePositionPrices'
 

@@ -175,11 +175,11 @@
     },
     {
       "name": "localization",
-      "path": "packages/localization",
+      "path": "packages/l10n",
       "type": "i18n",
       "language": "TypeScript",
       "description": "国际化库（26 种语言）",
-      "documentation": "packages/localization/CLAUDE.md",
+      "documentation": "packages/l10n/CLAUDE.md",
       "hasDetailedDoc": true,
       "keyFeatures": ["LRU缓存", "动态加载", "插值翻译"]
     },

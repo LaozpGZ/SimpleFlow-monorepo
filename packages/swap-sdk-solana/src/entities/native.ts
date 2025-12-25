@@ -1,4 +1,4 @@
-import { SPLNativeCurrency, SPLToken } from '@pancakeswap/swap-sdk-core'
+import { SPLNativeCurrency, SPLToken } from '@simpleflow/swap-sdk-core'
 import { SOL_INFO, WSOL } from '../constants'
 
 /**

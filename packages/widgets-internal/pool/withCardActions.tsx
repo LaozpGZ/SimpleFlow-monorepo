@@ -1,8 +1,8 @@
 import BigNumber from "bignumber.js";
 
-import { useTranslation } from "@pancakeswap/localization";
-import { Box, Flex, Text, TextProps } from "@pancakeswap/uikit";
-import { BIG_ZERO } from "@pancakeswap/utils/bigNumber";
+import { useTranslation } from "@simpleflow/l10n";
+import { Box, Flex, Text, TextProps } from "@simpleflow/uikit";
+import { BIG_ZERO } from "@simpleflow/utils/bigNumber";
 import { styled } from "styled-components";
 import { DeserializedPool } from "./types";
 

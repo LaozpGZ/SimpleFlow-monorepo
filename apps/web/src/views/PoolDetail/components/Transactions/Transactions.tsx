@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { AutoColumn } from '@pancakeswap/uikit'
+import { Protocol } from '@simpleflow/farms'
+import { AutoColumn } from '@simpleflow/uikit'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { useRouterQuery } from 'views/PoolDetail/hooks/useRouterQuery'
 import { LocalLoader } from 'views/V3Info/components/Loader'

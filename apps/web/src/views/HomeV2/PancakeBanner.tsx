@@ -1,4 +1,4 @@
-import { Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAtomValue } from 'jotai'
 import React from 'react'

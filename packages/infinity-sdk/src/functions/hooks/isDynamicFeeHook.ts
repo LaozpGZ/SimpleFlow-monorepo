@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { Address } from 'viem'
 
-import { cacheByMem } from '@pancakeswap/utils/cacheByMem'
+import { cacheByMem } from '@simpleflow/utils/cacheByMem'
 import { findHook, INFINITY_SUPPORTED_CHAINS } from '../../constants'
 import { HOOK_CATEGORY } from '../../types'
 

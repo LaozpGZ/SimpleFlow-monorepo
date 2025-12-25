@@ -1,4 +1,4 @@
-import { fetchLedgerInfo } from '@pancakeswap/awgmi/core'
+import { fetchLedgerInfo } from '@simpleflow/awgmi/core'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useActiveChainId } from './useNetwork'

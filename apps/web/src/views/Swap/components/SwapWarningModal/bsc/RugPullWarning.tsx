@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Text } from '@simpleflow/uikit'
 
 const RugPullWarning = () => {
   const { t } = useTranslation()

@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 export const CROSS_CHAIN_CONFIG: Record<
   number,

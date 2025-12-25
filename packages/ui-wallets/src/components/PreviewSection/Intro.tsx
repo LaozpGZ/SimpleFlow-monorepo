@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Image, Text, Button, AutoRow, Card, CardBody, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Image, Text, Button, AutoRow, Card, CardBody, useMatchBreakpoints } from '@simpleflow/uikit'
 import styled from 'styled-components'
 import { ASSET_CDN } from '../../config/url'
 

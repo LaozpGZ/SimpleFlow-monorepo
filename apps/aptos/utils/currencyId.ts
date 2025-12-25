@@ -1,5 +1,5 @@
-import { Currency } from '@pancakeswap/aptos-swap-sdk'
-import { APTOS_COIN } from '@pancakeswap/awgmi'
+import { Currency } from '@simpleflow/aptos-swap-sdk'
+import { APTOS_COIN } from '@simpleflow/awgmi'
 
 export function currencyId(currency: Currency): string {
   if (currency?.isNative) return APTOS_COIN

@@ -1,5 +1,5 @@
-import { AVERAGE_CHAIN_BLOCK_TIMES, ChainId } from '@pancakeswap/chains'
-import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
+import { AVERAGE_CHAIN_BLOCK_TIMES, ChainId } from '@simpleflow/chains'
+import { getFullDecimalMultiplier } from '@simpleflow/utils/getFullDecimalMultiplier'
 
 // BNB Chain Maxwell upgrade halves the block time from 1.5s to 0.75s
 export const BSC_BLOCK_TIME = AVERAGE_CHAIN_BLOCK_TIMES[ChainId.BSC]

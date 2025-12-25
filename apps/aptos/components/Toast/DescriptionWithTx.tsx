@@ -1,7 +1,7 @@
 // TODO: aptos merge
-import { AptosIcon, ScanLink, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import { AptosIcon, ScanLink, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import truncateHash from '@simpleflow/utils/truncateHash'
 import { useActiveChainId } from 'hooks/useNetwork'
 import { getBlockExploreLink } from '../../utils'
 

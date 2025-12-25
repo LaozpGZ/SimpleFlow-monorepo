@@ -1,4 +1,4 @@
-import { BCakeWrapperFarmConfig } from '@pancakeswap/farms'
+import { BCakeWrapperFarmConfig } from '@simpleflow/farms'
 import { useQuery } from '@tanstack/react-query'
 import { Address } from 'viem'
 import { useCallback } from 'react'

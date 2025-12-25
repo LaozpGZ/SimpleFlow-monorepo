@@ -1,4 +1,4 @@
-import { chainFullNames, UnifiedChainId } from '@pancakeswap/chains'
+import { chainFullNames, UnifiedChainId } from '@simpleflow/chains'
 
 export function getChainFullName(chainId: UnifiedChainId) {
   return chainFullNames[chainId]

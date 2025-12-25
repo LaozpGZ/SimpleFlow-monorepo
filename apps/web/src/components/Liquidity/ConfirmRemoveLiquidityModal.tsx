@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
-import { Currency, CurrencyAmount, Pair, Percent, Token } from '@pancakeswap/sdk'
-import { AddIcon, Button, InjectedModalProps, Text, AutoColumn } from '@pancakeswap/uikit'
-import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
+import { Currency, CurrencyAmount, Pair, Percent, Token } from '@simpleflow/sdk'
+import { AddIcon, Button, InjectedModalProps, Text, AutoColumn } from '@simpleflow/uikit'
+import { ConfirmationModalContent } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { Field } from 'state/burn/actions'

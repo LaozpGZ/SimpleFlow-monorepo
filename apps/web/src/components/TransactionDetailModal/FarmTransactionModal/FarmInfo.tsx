@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, LightBulbIcon, StyledLink, Text, useTooltip } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Flex, LightBulbIcon, StyledLink, Text, useTooltip } from '@simpleflow/uikit'
 import { FarmTransactionStatus, CrossChainFarmStepType } from 'state/transactions/actions'
 import { TransactionDetails } from 'state/transactions/reducer'
 import { styled } from 'styled-components'

@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Button, Text, useMatchBreakpoints } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { Button, Text, useMatchBreakpoints } from "@simpleflow/uikit";
 import { ActionContent, ActionTitles, StyledActionContainer } from "./styles";
 
 export interface StakeComponentProps {

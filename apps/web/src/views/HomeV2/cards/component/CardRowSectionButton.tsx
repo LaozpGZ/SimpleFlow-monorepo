@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, Button, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ArrowForwardIcon, Button, Flex, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useHoverContext } from 'hooks/useHover'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'

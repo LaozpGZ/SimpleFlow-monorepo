@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ArrowDropDownIcon, AutoColumn, Box, BoxProps, Button, Flex, SkeletonText } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { ArrowDropDownIcon, AutoColumn, Box, BoxProps, Button, Flex, SkeletonText } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import formatLocaleNumber from 'utils/formatLocaleNumber'
 import { OnRampProviderQuote } from 'views/BuyCrypto/types'

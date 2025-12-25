@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
 import { useMemo } from 'react'
 import { calculateGasMargin, getGasMarginByChain } from 'utils'
 import { isUserRejected } from 'utils/sentry'
@@ -14,7 +14,7 @@ import {
 } from 'viem'
 import { useSendTransaction } from 'wagmi'
 
-import { ClassicOrder, OrderType } from '@pancakeswap/price-api-sdk'
+import { ClassicOrder, OrderType } from '@simpleflow/price-api-sdk'
 import { usePaymaster } from 'hooks/usePaymaster'
 import { logger } from 'utils/datadog'
 import { InterfaceOrder } from 'views/Swap/utils'

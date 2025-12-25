@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { ChainId } from '@simpleflow/chains'
+import { CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { useTokenByChainId, useTokensByChainId } from 'hooks/Tokens'

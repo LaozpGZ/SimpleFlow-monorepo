@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Heading } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Heading } from '@simpleflow/uikit'
 import Page from 'components/Layout/Page'
 import PoolTable from 'views/Info/components/InfoTables/PoolsTable'
 import { useNonSpamPoolsData } from '../hooks/usePoolsData'

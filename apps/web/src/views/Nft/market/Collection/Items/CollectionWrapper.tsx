@@ -1,4 +1,4 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@simpleflow/uikit'
 import Container from 'components/Layout/Container'
 import { Collection } from 'state/nftMarket/types'
 import CollectionNfts from './CollectionNfts'

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, InfoFilledIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, InfoFilledIcon, Text } from '@simpleflow/uikit'
 import { useSubscription } from '@web3inbox/react'
 import { useInitializeNotifications } from 'hooks/useInitializeNotifications'
 import { useCallback, useMemo } from 'react'

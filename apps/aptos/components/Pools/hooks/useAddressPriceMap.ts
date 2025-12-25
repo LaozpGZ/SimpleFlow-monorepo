@@ -1,7 +1,7 @@
 import _uniqBy from 'lodash/uniqBy'
 import { useMemo } from 'react'
 
-import { Currency } from '@pancakeswap/aptos-swap-sdk'
+import { Currency } from '@simpleflow/aptos-swap-sdk'
 import { CE_USDC, L0_USDC, WH_USDC } from 'config/coins'
 import { usePairs } from 'hooks/usePairs'
 

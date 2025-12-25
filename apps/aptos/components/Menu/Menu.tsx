@@ -1,8 +1,8 @@
-import { languageList, useTranslation } from '@pancakeswap/localization'
-import { Menu as UIMenu } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { languageList, useTranslation } from '@simpleflow/l10n'
+import { Menu as UIMenu } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
-import { usePhishingBanner } from '@pancakeswap/utils/user'
+import { usePhishingBanner } from '@simpleflow/utils/user'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
 import PhishingWarningBanner from 'components/PhishingWarningBanner'
 import { useActiveChainId } from 'hooks/useNetwork'

@@ -1,5 +1,5 @@
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import { Box, BoxProps } from '@pancakeswap/uikit'
+import { useIntersectionObserver } from '@simpleflow/hooks'
+import { Box, BoxProps } from '@simpleflow/uikit'
 import { useEffect, useRef } from 'react'
 import { useAppDispatch } from 'state'
 import { useTryVideoNftMedia } from 'state/nftMarket/hooks'

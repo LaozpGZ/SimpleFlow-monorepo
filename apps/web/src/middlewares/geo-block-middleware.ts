@@ -1,6 +1,6 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 import { geolocation } from '@vercel/functions'
-import { shouldGeoBlock } from '@pancakeswap/utils/geoBlock'
+import { shouldGeoBlock } from '@simpleflow/utils/geoBlock'
 import { MiddlewareFactory, NextMiddleware } from './types'
 
 export const withGeoBlock: MiddlewareFactory = (next: NextMiddleware) => {

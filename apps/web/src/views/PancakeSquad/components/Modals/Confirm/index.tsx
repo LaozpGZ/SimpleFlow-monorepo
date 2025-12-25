@@ -15,12 +15,12 @@ import {
   Spinner,
   Text,
   ScanLink,
-} from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+} from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import useTheme from 'hooks/useTheme'
 
 import { getBlockExploreLink } from 'utils'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import truncateHash from '@simpleflow/utils/truncateHash'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 type ConfirmModalProps = {

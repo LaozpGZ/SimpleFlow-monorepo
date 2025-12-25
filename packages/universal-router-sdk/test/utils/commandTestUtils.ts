@@ -1,5 +1,5 @@
-import { ACTIONS, decodePoolKey, POOL_TYPE } from '@pancakeswap/infinity-sdk'
-import { Currency } from '@pancakeswap/sdk'
+import { ACTIONS, decodePoolKey, POOL_TYPE } from '@simpleflow/infinity-sdk'
+import { Currency } from '@simpleflow/sdk'
 import { Address } from 'viem'
 import { expect } from 'vitest'
 import { CommandType } from '../../src/router.types'

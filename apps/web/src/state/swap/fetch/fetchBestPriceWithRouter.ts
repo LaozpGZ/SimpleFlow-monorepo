@@ -1,5 +1,5 @@
-import { TradeType } from '@pancakeswap/sdk'
-import { LegacyRouteType as RouteType } from '@pancakeswap/smart-router/legacy-router'
+import { TradeType } from '@simpleflow/sdk'
+import { LegacyRouteType as RouteType } from '@simpleflow/smart-router/legacy-router'
 
 export interface RequestBody {
   networkId: number

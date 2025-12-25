@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@simpleflow/l10n'
 import {
   AutoRow,
   Button,
@@ -10,14 +10,14 @@ import {
   Text,
   TooltipText,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { LightGreyCard } from 'components/Card'
 
-import { ChainId } from '@pancakeswap/chains'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { ChainId } from '@simpleflow/chains'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { getMerklLink } from 'utils/getMerklLink'
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import useMerkl from '../../hooks/useMerkl'
 
 function TextWarning({ tokenAmount }: { tokenAmount: CurrencyAmount<Currency> }) {

@@ -1,4 +1,4 @@
-import { BigintIsh, Currency, CurrencyAmount, Percent, ZERO } from '@pancakeswap/swap-sdk-core'
+import { BigintIsh, Currency, CurrencyAmount, Percent, ZERO } from '@simpleflow/swap-sdk-core'
 import invariant from 'tiny-invariant'
 
 import { ONE_HUNDRED_PERCENT } from '../constants'

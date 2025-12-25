@@ -1,7 +1,7 @@
 import { styled } from 'styled-components'
-import { Flex, Text, Heading, NftIcon, BunnyPlaceholderIcon } from '@pancakeswap/uikit'
+import { Flex, Text, Heading, NftIcon, BunnyPlaceholderIcon } from '@simpleflow/uikit'
 import Image from 'next/image'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import MoboxFlipperBunny from '../../../pngs/mobox-flipper.png'
 
 const StyledFlex = styled(Flex)`

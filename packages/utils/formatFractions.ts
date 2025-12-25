@@ -8,7 +8,7 @@ import {
   Rounding,
   UnifiedCurrency,
   UnifiedCurrencyAmount,
-} from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/swap-sdk-core'
 
 export function formatPercent(percent?: Percent, precision?: number) {
   return percent ? formatFraction(percent.asFraction.multiply(100), precision) : undefined

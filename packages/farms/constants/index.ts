@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, getChainName } from '@simpleflow/chains'
 import { SerializedFarmConfig, SerializedFarmPublicData, isStableFarm, supportedChainIdV2 } from '..'
 
 let logged = false

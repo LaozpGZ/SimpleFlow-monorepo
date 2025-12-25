@@ -1,6 +1,6 @@
 import { styled } from 'styled-components'
-import { Trans } from '@pancakeswap/localization'
-import { Heading, Text, Flex, Box, useMatchBreakpoints, ChevronLeftIcon, ChevronRightIcon } from '@pancakeswap/uikit'
+import { Trans } from '@simpleflow/l10n'
+import { Heading, Text, Flex, Box, useMatchBreakpoints, ChevronLeftIcon, ChevronRightIcon } from '@simpleflow/uikit'
 import Image from 'next/image'
 import useTheme from 'hooks/useTheme'
 import { useState, useCallback } from 'react'

@@ -1,5 +1,5 @@
-import { ArticleDataType } from '@pancakeswap/blog'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { ArticleDataType } from '@simpleflow/blog'
+import { Box, Flex, Text } from '@simpleflow/uikit'
 import { StyledLineClamp } from 'components/StyledLineClamp'
 import NextLink from 'next/link'
 import { styled } from 'styled-components'

@@ -1,9 +1,9 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Message, MessageText, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn, Message, MessageText, Text } from '@simpleflow/uikit'
 import { useEffect, useMemo, useState } from 'react'
 
-import { Currency } from '@pancakeswap/sdk'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
+import { Currency } from '@simpleflow/sdk'
+import { FeeAmount } from '@simpleflow/v3-sdk'
 import { EvenWidthAutoRow } from 'components/Layout/EvenWidthAutoRow'
 import { SelectButton } from 'components/SelectButton'
 import { PoolState } from 'hooks/v3/types'

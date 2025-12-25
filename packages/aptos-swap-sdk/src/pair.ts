@@ -12,7 +12,7 @@ import {
   CurrencyAmount,
   sqrt,
   MINIMUM_LIQUIDITY,
-} from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/swap-sdk-core'
 import { TypeTagStruct, parseTypeTag } from '@aptos-labs/ts-sdk'
 
 import { HexString } from './hexString'

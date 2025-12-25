@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@pancakeswap/uikit";
+import { Button, ButtonProps } from "@simpleflow/uikit";
 import { PropsWithChildren } from "react";
 import { styled } from "styled-components";
 import { LinkExternalAction, LinkProps } from "./LinkExternal";

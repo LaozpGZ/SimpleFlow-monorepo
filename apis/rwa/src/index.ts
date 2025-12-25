@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-import { CORS_ALLOW, handleCors, wrapCorsHeader } from '@pancakeswap/worker-utils'
+import { CORS_ALLOW, handleCors, wrapCorsHeader } from '@simpleflow/worker-utils'
 import { Router } from 'itty-router'
 import { error, json, missing } from 'itty-router-extras'
 

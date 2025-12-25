@@ -1,6 +1,6 @@
 /**
  * @file This file is intended to be used in a browser environment only.
- * It can be moved to @pancakeswap/utils for future reuse if necessary
+ * It can be moved to @simpleflow/utils for future reuse if necessary
  * Ideally will use merkle tree for better performance in the future
  */
 

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { TranslateFunction } from '@pancakeswap/localization'
+import { TranslateFunction } from '@simpleflow/l10n'
 import { ReactNode } from 'react'
 import { ToastStatus, TxCallbackProps } from '@/types/tx'
 import { txStatusSubject, multiTxStatusSubject } from './useTxStatus'

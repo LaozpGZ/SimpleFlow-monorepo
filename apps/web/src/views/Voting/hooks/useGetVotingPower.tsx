@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { bscTokens } from '@pancakeswap/tokens'
+import { ChainId } from '@simpleflow/chains'
+import { bscTokens } from '@simpleflow/tokens'
 import { useQuery } from '@tanstack/react-query'
 import { getActivePools } from 'utils/calls'
 import { publicClient } from 'utils/wagmi'

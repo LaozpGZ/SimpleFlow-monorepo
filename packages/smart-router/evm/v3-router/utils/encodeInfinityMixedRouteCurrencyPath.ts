@@ -1,4 +1,4 @@
-import { Currency, getCurrencyAddress, getMatchedCurrency } from '@pancakeswap/swap-sdk-core'
+import { Currency, getCurrencyAddress, getMatchedCurrency } from '@simpleflow/swap-sdk-core'
 import { Address } from 'viem'
 
 import { BaseRoute, Pool } from '../types'

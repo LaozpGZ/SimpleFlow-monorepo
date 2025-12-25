@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { CurrencyAmount } from '@pancakeswap/sdk'
-import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
-import { deserializeToken } from '@pancakeswap/token-lists'
+import { ChainId } from '@simpleflow/chains'
+import { CurrencyAmount } from '@simpleflow/sdk'
+import { getStableSwapPools } from '@simpleflow/stable-swap-sdk'
+import { deserializeToken } from '@simpleflow/token-lists'
 
 import { createStableSwapPair } from './stableSwap'
 import { StableSwapPair } from './types'

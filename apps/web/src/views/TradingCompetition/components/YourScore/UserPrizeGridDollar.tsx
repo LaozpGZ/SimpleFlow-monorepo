@@ -1,4 +1,4 @@
-import { Skeleton, Text } from '@pancakeswap/uikit'
+import { Skeleton, Text } from '@simpleflow/uikit'
 
 interface UserPrizeGridDollarProps {
   dollarValueOfTokensReward: number | null

@@ -1,4 +1,4 @@
-import { useAccount } from '@pancakeswap/awgmi'
+import { useAccount } from '@simpleflow/awgmi'
 import { useQuery } from '@tanstack/react-query'
 import { CHECK_USER_IP_API } from 'config/index'
 

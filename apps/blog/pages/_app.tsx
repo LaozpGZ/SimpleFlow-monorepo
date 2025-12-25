@@ -1,5 +1,5 @@
-import { LanguageProvider } from '@pancakeswap/localization'
-import { ModalProvider, PancakeTheme, ResetCSS, UIKitProvider, dark, light } from '@pancakeswap/uikit'
+import { LanguageProvider } from '@simpleflow/l10n'
+import { ModalProvider, PancakeTheme, ResetCSS, UIKitProvider, dark, light } from '@simpleflow/uikit'
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DefaultSeo } from 'next-seo'
 import { SEO } from 'next-seo.config'

@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/sdk'
 
 import { ContractAddresses } from '../constants/contracts'
 import { isIfoSupported } from './isIfoSupported'

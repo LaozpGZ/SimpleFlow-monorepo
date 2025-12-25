@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { CurrencyAmount, Percent, Token, TradeType } from '@pancakeswap/swap-sdk-core'
-import { WNATIVE, Native } from '@pancakeswap/swap-sdk-evm'
+import { ChainId } from '@simpleflow/chains'
+import { CurrencyAmount, Percent, Token, TradeType } from '@simpleflow/swap-sdk-core'
+import { WNATIVE, Native } from '@simpleflow/swap-sdk-evm'
 import { describe, expect, it } from 'vitest'
 
 import { Pair, Route, Trade } from '../src/entities'

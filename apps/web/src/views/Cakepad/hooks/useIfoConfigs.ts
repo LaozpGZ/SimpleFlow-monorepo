@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { Token } from '@simpleflow/swap-sdk-core'
 import { CurrencyConfig, IFOConfig } from '../ifov2.types'
 import { CAKEPAD_CONFIGS_URL } from '../config'
 

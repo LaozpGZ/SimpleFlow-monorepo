@@ -1,4 +1,4 @@
-import { IfoStatus } from '@pancakeswap/ifos'
+import { IfoStatus } from '@simpleflow/ifos'
 
 export const getStatus = (currentBlock: number, startBlock: number, endBlock: number): IfoStatus => {
   // Add an extra check to currentBlock because it takes awhile to fetch so the initial value is 0

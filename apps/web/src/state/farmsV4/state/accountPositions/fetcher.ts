@@ -5,11 +5,11 @@ import {
   fetchAllUniversalFarmsMap,
   getFarmConfigKey,
   UniversalFarmConfig,
-} from '@pancakeswap/farms'
-import { CurrencyAmount, ERC20Token, Pair, Token, pancakePairV2ABI } from '@pancakeswap/sdk'
-import { LegacyStableSwapPair } from '@pancakeswap/smart-router/legacy-router'
-import { deserializeToken } from '@pancakeswap/token-lists'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+} from '@simpleflow/farms'
+import { CurrencyAmount, ERC20Token, Pair, Token, pancakePairV2ABI } from '@simpleflow/sdk'
+import { LegacyStableSwapPair } from '@simpleflow/smart-router/legacy-router'
+import { deserializeToken } from '@simpleflow/token-lists'
+import { getBalanceNumber } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { infoStableSwapABI } from 'config/abi/infoStableSwap'
 import { v2BCakeWrapperABI } from 'config/abi/v2BCakeWrapper'

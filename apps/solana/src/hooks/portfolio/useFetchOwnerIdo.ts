@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { PublicKey } from '@solana/web3.js'
-import { OwnerIdoInfo } from '@pancakeswap/solana-core-sdk'
+import { OwnerIdoInfo } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import axios from '@/api/axios'

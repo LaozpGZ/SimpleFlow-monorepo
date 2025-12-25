@@ -1,5 +1,5 @@
-import { ChainId } from "@pancakeswap/chains";
-import { useTranslation } from "@pancakeswap/localization";
+import { ChainId } from "@simpleflow/chains";
+import { useTranslation } from "@simpleflow/l10n";
 import {
   FarmMultiplierInfo,
   Flex,
@@ -9,7 +9,7 @@ import {
   Skeleton,
   Text,
   useTooltip,
-} from "@pancakeswap/uikit";
+} from "@simpleflow/uikit";
 import { ReactElement } from "react";
 import { styled } from "styled-components";
 

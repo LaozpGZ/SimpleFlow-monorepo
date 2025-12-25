@@ -1,4 +1,4 @@
-import { Checkbox, Flex, Link, Text } from '@pancakeswap/uikit'
+import { Checkbox, Flex, Link, Text } from '@simpleflow/uikit'
 import { Dispatch, SetStateAction } from 'react'
 
 export function DisclaimerCheckBox({

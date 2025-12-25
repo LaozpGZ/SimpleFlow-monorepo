@@ -10,7 +10,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { CORS_ALLOW, handleCors, wrapCorsHeader } from '@pancakeswap/worker-utils'
+import { CORS_ALLOW, handleCors, wrapCorsHeader } from '@simpleflow/worker-utils'
 import BigNumber from 'bignumber.js'
 import { Router } from 'itty-router'
 import { error, json, missing } from 'itty-router-extras'

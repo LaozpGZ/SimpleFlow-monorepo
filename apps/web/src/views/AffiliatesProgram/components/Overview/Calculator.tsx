@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { styled } from 'styled-components'
-import { Flex, Text, Box, Button, ArrowDownIcon, Input, Balance } from '@pancakeswap/uikit'
+import { Flex, Text, Box, Button, ArrowDownIcon, Input, Balance } from '@simpleflow/uikit'
 import BigNumber from 'bignumber.js'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 const CalculatorWrapper = styled(Flex)`
   padding: 24px;

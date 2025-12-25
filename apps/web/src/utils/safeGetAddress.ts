@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
-import memoize from '@pancakeswap/utils/memoize'
+import memoize from '@simpleflow/utils/memoize'
 import { Address } from 'viem/accounts'
-import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { NonEVMChainId, UnifiedChainId } from '@simpleflow/chains'
 import { checksumAddress } from './checksumAddress'
 
 export const safeGetAddress = memoize((value: any): Address | undefined => {

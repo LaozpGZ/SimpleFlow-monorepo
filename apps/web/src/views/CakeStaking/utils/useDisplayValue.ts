@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
+import { useTranslation } from '@simpleflow/l10n'
+import { getBalanceAmount } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import formatLocaleNumber from 'utils/formatLocaleNumber'
 

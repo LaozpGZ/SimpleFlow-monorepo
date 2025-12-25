@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, copyText, useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, copyText, useToast } from '@simpleflow/uikit'
 import { useCallback } from 'react'
 
 interface ShareGiftLinkButtonProps {

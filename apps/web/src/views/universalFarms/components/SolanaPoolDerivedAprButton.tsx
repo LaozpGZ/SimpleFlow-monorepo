@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import BN from 'bn.js'
-import { Text, useTooltip } from '@pancakeswap/uikit'
+import { Text, useTooltip } from '@simpleflow/uikit'
 import type { SolanaV3PoolInfo } from 'state/farmsV4/state/type'
 import { useSolanaOnchainClmmPool } from 'hooks/solana/useSolanaOnchainPool'
 import { useBirdeyeTokenPrice } from 'hooks/solana/useBirdeyeTokenPrice'

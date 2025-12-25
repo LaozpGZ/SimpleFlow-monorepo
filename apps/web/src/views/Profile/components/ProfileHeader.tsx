@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -10,10 +10,10 @@ import {
   VisibilityOff,
   VisibilityOn,
   useModal,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import { NextLinkFromReactRouter as ReactRouterLink } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatBalance'
+import truncateHash from '@simpleflow/utils/truncateHash'
+import { NextLinkFromReactRouter as ReactRouterLink } from '@simpleflow/widgets-internal'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import useGetUsernameWithVisibility from 'hooks/useUsernameWithVisibility'

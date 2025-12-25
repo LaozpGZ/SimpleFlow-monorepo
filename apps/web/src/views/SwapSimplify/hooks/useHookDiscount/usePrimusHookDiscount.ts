@@ -1,4 +1,4 @@
-import { InfinityBinPool, InfinityClPool, Route, SmartRouter } from '@pancakeswap/smart-router'
+import { InfinityBinPool, InfinityClPool, Route, SmartRouter } from '@simpleflow/smart-router'
 import { useQueries } from '@tanstack/react-query'
 import { usePrimusHooks } from 'hooks/infinity/useHooksList'
 import { useActiveChainId } from 'hooks/useActiveChainId'

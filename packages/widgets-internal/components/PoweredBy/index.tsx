@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { FlexGap, Text, Link } from "@pancakeswap/uikit";
-import { useTranslation } from "@pancakeswap/localization";
+import { FlexGap, Text, Link } from "@simpleflow/uikit";
+import { useTranslation } from "@simpleflow/l10n";
 
 type Props = {
   entity?: ReactNode;

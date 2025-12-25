@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import { SUPPORTED_CHAINS } from 'config/pcsx'
 import { useExperimentalFeatureEnabled } from 'hooks/useExperimentalFeatureEnabled'

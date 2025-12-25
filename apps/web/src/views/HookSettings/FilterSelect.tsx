@@ -1,6 +1,6 @@
-import { useTheme } from '@pancakeswap/hooks'
-import { IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from '@pancakeswap/uikit'
-import { Container } from '@pancakeswap/widgets-internal'
+import { useTheme } from '@simpleflow/hooks'
+import { IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from '@simpleflow/uikit'
+import { Container } from '@simpleflow/widgets-internal'
 import { useCallback, useState } from 'react'
 
 export const FilterSelect = <T extends string | number>({

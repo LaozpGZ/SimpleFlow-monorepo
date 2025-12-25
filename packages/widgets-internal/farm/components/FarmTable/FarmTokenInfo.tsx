@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Flex, Row, Skeleton, Text } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { Flex, Row, Skeleton, Text } from "@simpleflow/uikit";
 import { useMemo } from "react";
 import { styled } from "styled-components";
 import { FarmTableFarmTokenInfoProps } from "../../types";

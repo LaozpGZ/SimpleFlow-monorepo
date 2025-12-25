@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { Trans, useTranslation } from '@simpleflow/l10n'
 import {
   AutoColumn,
   CircleLoader,
@@ -11,9 +11,9 @@ import {
   Text,
   useModal,
   type InjectedModalProps,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 
-import type { Currency } from '@pancakeswap/swap-sdk-core'
+import type { Currency } from '@simpleflow/swap-sdk-core'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { memo, useCallback, useMemo, type MutableRefObject } from 'react'

@@ -1,5 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { getMulticall3ContractAddress, multicall3ABI } from '@pancakeswap/multicall'
+import { ChainId } from '@simpleflow/chains'
+import { getMulticall3ContractAddress, multicall3ABI } from '@simpleflow/multicall'
 import { getViemClients } from 'utils/viem'
 import { InternalRpcError, InvalidInputRpcError } from 'viem'
 import { Call } from './actions'

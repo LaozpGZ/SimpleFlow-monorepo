@@ -1,4 +1,4 @@
-import { memoizeAsync } from '@pancakeswap/utils/memoize'
+import { memoizeAsync } from '@simpleflow/utils/memoize'
 import { Connector } from 'wagmi'
 
 export const checkWalletCanRegisterToken = memoizeAsync(

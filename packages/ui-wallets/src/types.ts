@@ -1,4 +1,4 @@
-import { SvgProps } from '@pancakeswap/uikit'
+import { SvgProps } from '@simpleflow/uikit'
 import { WalletName } from '@solana/wallet-adapter-base'
 import { WalletIds as LegacyWalletIds } from './components/LegacyWalletModal/legacyWalletIds'
 import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'

@@ -1,5 +1,5 @@
-import { useModalV2 } from '@pancakeswap/uikit'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+import { useModalV2 } from '@simpleflow/uikit'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useMemo } from 'react'
 import { type V3Farm } from 'state/farms/types'

@@ -1,4 +1,4 @@
-import { MaxAllowanceExpiration, MaxAllowanceTransferAmount, PermitSingle } from '@pancakeswap/permit2-sdk'
+import { MaxAllowanceExpiration, MaxAllowanceTransferAmount, PermitSingle } from '@simpleflow/permit2-sdk'
 import { type Address } from 'viem'
 
 const TEST_DEADLINE = MaxAllowanceExpiration

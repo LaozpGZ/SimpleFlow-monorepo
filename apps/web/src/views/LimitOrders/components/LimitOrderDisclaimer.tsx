@@ -1,5 +1,5 @@
-import { Message, MessageText } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Message, MessageText } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 
 const LimitOrderDisclaimer = () => {
   const { t } = useTranslation()

@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/solana-clmm-sdk",
+  "name": "@simpleflow/solana-clmm-sdk",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "tsup": "^6.7.0",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "openapi-typescript": "7.8.0",
     "openapi-typescript-helpers": "0.0.15"
   },

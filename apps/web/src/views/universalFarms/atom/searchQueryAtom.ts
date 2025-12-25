@@ -1,10 +1,10 @@
-import { SORT_ORDER } from '@pancakeswap/uikit'
-import { INetworkProps, IProtocolMenuProps } from '@pancakeswap/widgets-internal'
+import { SORT_ORDER } from '@simpleflow/uikit'
+import { INetworkProps, IProtocolMenuProps } from '@simpleflow/widgets-internal'
 import { atom } from 'jotai'
 import { getQueryChainId } from 'wallet/util/getQueryChainId'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
 import { DEFAULT_CHAINS } from 'state/farmsV4/state/farmPools/fetcher'
-import { ChainId, isEvm, isTestnetChainId } from '@pancakeswap/chains'
+import { ChainId, isEvm, isTestnetChainId } from '@simpleflow/chains'
 import { userShowTestnetAtom } from 'state/user/hooks/useUserShowTestnet'
 import { getProtocolsByIndex, parseUrlToSearchQuery } from '../utils/queryParser'
 

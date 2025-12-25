@@ -1,4 +1,4 @@
-import { ChainId } from "@pancakeswap/chains";
+import { ChainId } from "@simpleflow/chains";
 
 // TODO: Consider moving to IFO package
 export const ChainNameMap = {

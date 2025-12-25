@@ -1,4 +1,4 @@
-import { Link } from '@pancakeswap/uikit'
+import { Link } from '@simpleflow/uikit'
 import Trans from 'components/Trans'
 import { ReactNode } from 'react'
 import { styled } from 'styled-components'

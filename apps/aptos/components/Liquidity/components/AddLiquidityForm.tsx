@@ -1,8 +1,8 @@
-import { CurrencyAmount, Token, Percent } from '@pancakeswap/aptos-swap-sdk'
-import { useTranslation } from '@pancakeswap/localization'
+import { CurrencyAmount, Token, Percent } from '@simpleflow/aptos-swap-sdk'
+import { useTranslation } from '@simpleflow/l10n'
 
-import { Column, AddIcon, CardBody, AutoColumn, Button } from '@pancakeswap/uikit'
-import { Liquidity } from '@pancakeswap/widgets-internal'
+import { Column, AddIcon, CardBody, AutoColumn, Button } from '@simpleflow/uikit'
+import { Liquidity } from '@simpleflow/widgets-internal'
 import { CurrencyInputPanel } from 'components/CurrencyInputPanel'
 import AddLiquidityButton from 'components/Liquidity/components/AddLiquidityButton'
 import { PairState } from 'hooks/usePairs'

@@ -1,4 +1,4 @@
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { formatBigInt } from '@simpleflow/utils/formatBalance'
 import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import {

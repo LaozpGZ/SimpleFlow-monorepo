@@ -1,11 +1,11 @@
-import '@pancakeswap/jupiter-terminal/global.css'
-import '@pancakeswap/jupiter-terminal/index.css'
+import '@simpleflow/jupiter-terminal/global.css'
+import '@simpleflow/jupiter-terminal/index.css'
 
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { init, syncProps } from '@pancakeswap/jupiter-terminal'
-import { AtomBox } from '@pancakeswap/uikit'
+import { init, syncProps } from '@simpleflow/jupiter-terminal'
+import { AtomBox } from '@simpleflow/uikit'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { TARGET_ELE_ID, TerminalCard, TerminalWrapper } from '@/features/JupiterSwap/SwapForm'

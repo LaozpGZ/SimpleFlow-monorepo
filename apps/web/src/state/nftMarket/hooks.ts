@@ -8,7 +8,7 @@ import { getPancakeProfileAddress } from 'utils/addressHelpers'
 
 import fromPairs from 'lodash/fromPairs'
 import { erc721Abi } from 'viem'
-import { useReadContracts } from '@pancakeswap/wagmi'
+import { useReadContracts } from '@simpleflow/wagmi'
 import { nftMarketActivityFiltersAtom, nftMarketFiltersAtom, tryVideoNftMediaAtom } from './atoms'
 import { getCollection, getCollections } from './helpers'
 import { ApiCollections, Collection, MarketEvent, NftAttribute, NftToken } from './types'

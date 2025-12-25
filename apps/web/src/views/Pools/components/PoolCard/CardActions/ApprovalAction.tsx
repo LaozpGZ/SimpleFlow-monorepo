@@ -1,9 +1,9 @@
-import { Button, AutoRenewIcon, Skeleton } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Button, AutoRenewIcon, Skeleton } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useERC20 } from 'hooks/useContract'
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 import { useApprovePool } from '../../../hooks/useApprove'
 
 interface ApprovalActionProps {

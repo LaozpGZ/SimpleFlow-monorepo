@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AtomBox,
   AutoColumn,
@@ -10,8 +10,8 @@ import {
   QuestionHelper,
   Text,
   Toggle,
-} from '@pancakeswap/uikit'
-import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
+} from '@simpleflow/uikit'
+import { useUserSingleHopOnly } from '@simpleflow/utils/user'
 import { PancakeSwapXTag } from 'components/PancakeSwapXTag'
 import { usePCSX, usePCSXFeatureEnabled } from 'hooks/usePCSX'
 import { useSpeedQuote } from 'hooks/useSpeedQuote'

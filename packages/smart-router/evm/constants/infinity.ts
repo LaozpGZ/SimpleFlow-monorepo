@@ -4,4 +4,4 @@ export {
   INFI_CL_TICK_LENS_ADDRESSES,
   INFI_MIXED_QUOTER_ADDRESSES,
   INFINITY_SUPPORTED_CHAINS as INFI_SUPPORTED_CHAINS,
-} from '@pancakeswap/infinity-sdk'
+} from '@simpleflow/infinity-sdk'

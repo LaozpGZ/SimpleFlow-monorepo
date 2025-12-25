@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { useState, useMemo, useCallback } from "react";
 import { TreeSelect as PrimereactTreeSelect, TreeSelectChangeEvent, TreeSelectProps } from "primereact/treeselect";
 import type { TreeNode } from "primereact/treenode";
-import { useTheme } from "@pancakeswap/hooks";
+import { useTheme } from "@simpleflow/hooks";
 import { ArrowDropDownIcon } from "../Svg";
 
 function traverseData(treeNodes: TreeNode[]) {

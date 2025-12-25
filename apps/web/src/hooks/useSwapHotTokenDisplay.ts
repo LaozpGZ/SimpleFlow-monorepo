@@ -1,4 +1,4 @@
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import atomWithStorageWithErrorCatch from 'utils/atomWithStorageWithErrorCatch'
 

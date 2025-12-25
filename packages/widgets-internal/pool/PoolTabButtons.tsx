@@ -1,4 +1,4 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import {
   ButtonMenu,
   ButtonMenuItem,
@@ -15,7 +15,7 @@ import {
   useMatchBreakpoints,
   useModalV2,
   ViewMode,
-} from "@pancakeswap/uikit";
+} from "@simpleflow/uikit";
 import { useRouter } from "next/router";
 import { styled } from "styled-components";
 import { NextLinkFromReactRouter } from "../components/NextLink";

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Raydium } from '@pancakeswap/solana-core-sdk'
+import { Raydium } from '@simpleflow/solana-core-sdk'
 import { useRaydium } from './useRaydium'
 
 export type SolanaOnchainClmmPoolData = Awaited<ReturnType<InstanceType<typeof Raydium>['clmm']['getPoolInfoFromRpc']>>

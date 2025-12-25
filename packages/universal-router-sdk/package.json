@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/universal-router-sdk",
+  "name": "@simpleflow/universal-router-sdk",
   "version": "1.4.16",
   "description": "🛠 An SDK for building applications on top of Pancakeswap.",
   "main": "dist/index.js",
@@ -37,20 +37,20 @@
     "lint": "eslint '{src,test}/**/*.{js,jsx,ts,json}'"
   },
   "devDependencies": {
-    "@pancakeswap/stable-swap-sdk": "workspace:*",
-    "@pancakeswap/tokens": "workspace:*",
+    "@simpleflow/stable-swap-sdk": "workspace:*",
+    "@simpleflow/tokens": "workspace:*",
     "@types/node": "^15.12.2",
     "tslib": "^2.3.0",
     "tsup": "^6.7.0",
     "@types/lodash": "*"
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/permit2-sdk": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/smart-router": "workspace:*",
-    "@pancakeswap/v3-sdk": "workspace:*",
-    "@pancakeswap/infinity-sdk": "workspace:*"
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/permit2-sdk": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/smart-router": "workspace:*",
+    "@simpleflow/v3-sdk": "workspace:*",
+    "@simpleflow/infinity-sdk": "workspace:*"
   },
   "peerDependencies": {
     "viem": "catalog:",

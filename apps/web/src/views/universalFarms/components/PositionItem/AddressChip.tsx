@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { CopyButton, FlexGap, FlexProps, Text, TextProps } from '@pancakeswap/uikit'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useTranslation } from '@simpleflow/l10n'
+import { CopyButton, FlexGap, FlexProps, Text, TextProps } from '@simpleflow/uikit'
+import truncateHash from '@simpleflow/utils/truncateHash'
 
 export type AddressChipProps = {
   address: string

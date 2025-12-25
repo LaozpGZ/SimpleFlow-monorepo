@@ -1,5 +1,5 @@
-import { getVersionUpgrade, VersionUpgrade } from '@pancakeswap/token-lists'
-import { acceptListUpdate, updateListVersion, useFetchListCallback } from '@pancakeswap/token-lists/react'
+import { getVersionUpgrade, VersionUpgrade } from '@simpleflow/token-lists'
+import { acceptListUpdate, updateListVersion, useFetchListCallback } from '@simpleflow/token-lists/react'
 import { useQuery } from '@tanstack/react-query'
 import { EXCHANGE_PAGE_PATHS, UNIVERSAL_PAGE_PATHS } from 'config/constants/exchange'
 import { UNSUPPORTED_LIST_URLS } from 'config/constants/lists'

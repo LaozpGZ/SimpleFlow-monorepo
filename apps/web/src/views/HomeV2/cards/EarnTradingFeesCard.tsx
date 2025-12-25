@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Flex, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useRouter } from 'next/router'
 import { HomePagePoolInfo } from 'edge/home/types'
 import styled from 'styled-components'

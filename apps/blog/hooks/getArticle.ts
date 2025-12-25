@@ -6,7 +6,7 @@ import {
   ResponseArticleType,
   ResponseCategoriesType,
   transformArticle,
-} from '@pancakeswap/blog'
+} from '@simpleflow/blog'
 import { fetchAPI } from 'utils/api'
 import { filterTagArray } from 'utils/filterTagArray'
 

@@ -1,6 +1,6 @@
-import { Box, Button, Flex, InjectedModalProps, ScanLink, Message, Skeleton, Text, AptosIcon } from '@pancakeswap/uikit'
+import { Box, Button, Flex, InjectedModalProps, ScanLink, Message, Skeleton, Text, AptosIcon } from '@simpleflow/uikit'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useSolBalance } from '@/hooks/token/useSolBalance'
 import { useAppStore } from '@/store'
 import { WalletAddress } from './WalletAddress'

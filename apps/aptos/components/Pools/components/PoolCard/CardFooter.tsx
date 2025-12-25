@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { styled } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, CardFooter, ExpandableLabel, HelpIcon, useTooltip } from '@pancakeswap/uikit'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, CardFooter, ExpandableLabel, HelpIcon, useTooltip } from '@simpleflow/uikit'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 
 interface FooterProps {
   defaultExpanded?: boolean

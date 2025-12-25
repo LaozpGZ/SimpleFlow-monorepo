@@ -1,5 +1,5 @@
-import { FlexGap, TextProps, Toggle, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { FlexGap, TextProps, Toggle, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { OrderStatus } from 'views/PCSLimitOrders/types/orders.types'
 import { useUserLimitOrders } from 'views/PCSLimitOrders/hooks/useUserLimitOrders'
 

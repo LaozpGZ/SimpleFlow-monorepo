@@ -1,7 +1,7 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Currency } from "@pancakeswap/swap-sdk-core";
-import { FlexGap, IColumnsType, TableView, Tag, Text, TooltipText, useTooltip } from "@pancakeswap/uikit";
-import { displayApr } from "@pancakeswap/utils/displayApr";
+import { useTranslation } from "@simpleflow/l10n";
+import { Currency } from "@simpleflow/swap-sdk-core";
+import { FlexGap, IColumnsType, TableView, Tag, Text, TooltipText, useTooltip } from "@simpleflow/uikit";
+import { displayApr } from "@simpleflow/utils/displayApr";
 import { useMemo } from "react";
 import styled from "styled-components";
 

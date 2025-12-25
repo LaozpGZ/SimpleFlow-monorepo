@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Checkbox, Flex, Link, Modal, ModalV2, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Checkbox, Flex, Link, Modal, ModalV2, Text } from '@simpleflow/uikit'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'

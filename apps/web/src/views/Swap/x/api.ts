@@ -1,4 +1,4 @@
-import { observe } from '@pancakeswap/utils/observe'
+import { observe } from '@simpleflow/utils/observe'
 import { X_API_ENDPOINT } from 'config/constants/endpoints'
 import { BaseError, isHash, stringify, type Address, type Hash, type Hex } from 'viem'
 

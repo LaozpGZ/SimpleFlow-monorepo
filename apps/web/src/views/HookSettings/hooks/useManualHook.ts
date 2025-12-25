@@ -1,4 +1,4 @@
-import { decodeHooksRegistration, type HookData } from '@pancakeswap/infinity-sdk'
+import { decodeHooksRegistration, type HookData } from '@simpleflow/infinity-sdk'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useHookByAddress } from 'hooks/infinity/useHooksList'
 import { useQueryState } from 'nuqs'

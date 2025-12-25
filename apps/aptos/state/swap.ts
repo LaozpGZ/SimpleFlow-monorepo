@@ -1,4 +1,4 @@
-import { APTOS_COIN } from '@pancakeswap/awgmi'
+import { APTOS_COIN } from '@simpleflow/awgmi'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { parseTypeTag } from '@aptos-labs/ts-sdk'
 import { CAKE } from 'config/coins'

@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Image, WalletFilledV2Icon, FlexGap, ChevronRightIcon } from '@pancakeswap/uikit'
+import { Box, Flex, Text, Image, WalletFilledV2Icon, FlexGap, ChevronRightIcon } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { SolanaWalletModal } from 'wallet/SolanaWalletModal'
-import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets/src/state/atom'
+import { previouslyUsedEvmWalletsAtom } from '@simpleflow/ui-wallets/src/state/atom'
 
 interface ReceiveOptionsViewProps {
   onSelectEVM: () => void

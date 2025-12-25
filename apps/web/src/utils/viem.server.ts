@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { CHAINS } from 'config/chains'
 import { SERVER_NODES } from 'config/nodes'
 import { createPublicClient, fallback, http, PublicClient } from 'viem'

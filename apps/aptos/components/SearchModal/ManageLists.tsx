@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoColumn,
   Button,
@@ -14,18 +14,18 @@ import {
   Toggle,
   useConfirm,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { ListLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ListLogo } from '@simpleflow/widgets-internal'
 
-import { TokenList, Version } from '@pancakeswap/token-lists'
+import { TokenList, Version } from '@simpleflow/token-lists'
 import {
   acceptListUpdate,
   disableList,
   enableList,
   removeList,
   useFetchListCallback,
-} from '@pancakeswap/token-lists/react'
-import uriToHttp from '@pancakeswap/utils/uriToHttp'
+} from '@simpleflow/token-lists/react'
+import uriToHttp from '@simpleflow/utils/uriToHttp'
 import Card from 'components/Card'
 import { UNSUPPORTED_LIST_URLS } from 'config/constants/lists'
 import { useAtomValue } from 'jotai'

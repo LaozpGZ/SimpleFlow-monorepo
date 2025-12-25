@@ -6,7 +6,7 @@ export default defineConfig((options) => ({
     index: './src/index.ts',
   },
   sourcemap: true,
-  noExternal: ['@pancakeswap/utils'],
+  noExternal: ['@simpleflow/utils'],
   skipNodeModulesBundle: true,
   format: ['esm', 'cjs'],
   dts: false,

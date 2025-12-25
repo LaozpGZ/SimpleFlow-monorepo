@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { pancakeProfileABI } from 'config/abi/pancakeProfile'
 import { API_PROFILE } from 'config/constants/endpoints'
 import { getNftApi } from 'state/nftMarket/helpers'

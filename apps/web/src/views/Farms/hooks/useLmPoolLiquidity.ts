@@ -1,4 +1,4 @@
-import { pancakeV3PoolABI } from '@pancakeswap/v3-sdk'
+import { pancakeV3PoolABI } from '@simpleflow/v3-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { safeGetAddress, isAddressEqual } from 'utils'
 import { publicClient } from 'utils/wagmi'

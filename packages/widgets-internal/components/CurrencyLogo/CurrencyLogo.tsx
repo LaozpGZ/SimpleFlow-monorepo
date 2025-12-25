@@ -1,6 +1,6 @@
-import { ChainId } from "@pancakeswap/chains";
-import { useHttpLocations } from "@pancakeswap/hooks";
-import { BinanceIcon, TokenLogo } from "@pancakeswap/uikit";
+import { ChainId } from "@simpleflow/chains";
+import { useHttpLocations } from "@simpleflow/hooks";
+import { BinanceIcon, TokenLogo } from "@simpleflow/uikit";
 import { useMemo } from "react";
 import { styled } from "styled-components";
 import { SpaceProps, space } from "styled-system";

@@ -1,4 +1,4 @@
-import { ChainId, getChainName, SunsetChainId } from '@pancakeswap/chains'
+import { ChainId, getChainName, SunsetChainId } from '@simpleflow/chains'
 
 const SUNSET_CHAIN_NAME_MAP: Record<SunsetChainId, string> = {
   [SunsetChainId.POLYGON_ZKEVM]: 'polygonZkEVM',

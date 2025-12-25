@@ -6,8 +6,8 @@ import { useV3MintActionHandlers } from 'views/AddLiquidityV3/formViews/V3FormVi
 import { tryParsePrice } from 'hooks/v3/utils'
 import { SolanaSubmitButton } from 'views/CreateLiquidityPool/components/Solana/SolanaSubmitButton'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useTranslation } from '@pancakeswap/localization'
-import { SPLToken, UnifiedCurrency, UnifiedCurrencyAmount, isUnifiedCurrencySorted } from '@pancakeswap/swap-sdk-core'
+import { useTranslation } from '@simpleflow/l10n'
+import { SPLToken, UnifiedCurrency, UnifiedCurrencyAmount, isUnifiedCurrencySorted } from '@simpleflow/swap-sdk-core'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
 import { maxUnifiedAmountSpend } from 'utils/maxAmountSpend'
@@ -17,10 +17,10 @@ import {
   logGTMClickAddLiquidityConfirmEvent,
   logGTMClickAddLiquidityEvent,
 } from 'utils/customGTMEventTracking'
-import { useIsExpertMode } from '@pancakeswap/utils/user'
+import { useIsExpertMode } from '@simpleflow/utils/user'
 
 import { RangeSelector as V3RangeSelector } from 'views/AddLiquidityV3/formViews/SolanaFormView/RangeSelector'
-import { Bound, ZoomLevels } from '@pancakeswap/widgets-internal'
+import { Bound, ZoomLevels } from '@simpleflow/widgets-internal'
 import {
   AutoColumn,
   Box,
@@ -35,9 +35,9 @@ import {
   Text,
   useModal,
   useModalV2,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 
-import { priceToClosestTick } from '@pancakeswap/v3-sdk'
+import { priceToClosestTick } from '@simpleflow/v3-sdk'
 
 import { formatPreviewPrice } from 'views/CreateLiquidityPool/utils'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'

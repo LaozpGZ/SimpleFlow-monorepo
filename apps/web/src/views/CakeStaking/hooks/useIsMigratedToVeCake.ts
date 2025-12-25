@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { isAddressEqual } from 'utils'
 import { zeroAddress } from 'viem'
 import { useVeCakeUserInfo } from './useVeCakeUserInfo'

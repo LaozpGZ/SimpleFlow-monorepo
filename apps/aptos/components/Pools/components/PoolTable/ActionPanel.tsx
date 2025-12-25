@@ -1,11 +1,11 @@
-import { Box, Flex, HelpIcon, Text, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
+import { Box, Flex, HelpIcon, Text, useMatchBreakpoints, useTooltip } from '@simpleflow/uikit'
 import { useIsAptosRewardToken } from 'components/Pools/hooks/useIsAptosRewardToken'
 import { css, keyframes, styled } from 'styled-components'
 
-import { Coin } from '@pancakeswap/aptos-swap-sdk'
-import { useTranslation } from '@pancakeswap/localization'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { FarmWidget, Pool } from '@pancakeswap/widgets-internal'
+import { Coin } from '@simpleflow/aptos-swap-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { FarmWidget, Pool } from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import isVaultPool from 'components/Pools/utils/isVaultPool'
 

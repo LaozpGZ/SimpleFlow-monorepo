@@ -1,6 +1,6 @@
-import { Box, FlexProps, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, FlexProps, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useAtomValue } from 'jotai'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Script from 'next/script'
 import { useEffect } from 'react'
 import { DefaultTheme, useTheme } from 'styled-components'

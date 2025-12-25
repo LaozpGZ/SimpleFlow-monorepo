@@ -1,5 +1,5 @@
-import { BigintIsh, Currency, Token } from '@pancakeswap/swap-sdk-core'
-import { DEPLOYER_ADDRESSES, FeeAmount, Pool, computePoolAddress } from '@pancakeswap/v3-sdk'
+import { BigintIsh, Currency, Token } from '@simpleflow/swap-sdk-core'
+import { DEPLOYER_ADDRESSES, FeeAmount, Pool, computePoolAddress } from '@simpleflow/v3-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { v3PoolStateABI } from 'config/abi/v3PoolState'
 import { QUERY_SETTINGS_IMMUTABLE, QUERY_SETTINGS_WITHOUT_INTERVAL_REFETCH } from 'config/constants'

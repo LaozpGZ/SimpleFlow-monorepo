@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { polygonRpcProvider } from 'utils/providers'

@@ -1,6 +1,6 @@
-import { isSolana } from '@pancakeswap/chains'
-import { useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { isSolana } from '@simpleflow/chains'
+import { useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Button,
   Flex,
@@ -13,8 +13,8 @@ import {
   useTooltip,
   WarningIcon,
   QuestionHelper,
-} from '@pancakeswap/uikit'
-import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
+} from '@simpleflow/uikit'
+import { useSolanaUserSlippage, useUserSlippage } from '@simpleflow/utils/user'
 import {
   SolanaSlippageSetting,
   EVMSlippageSetting,

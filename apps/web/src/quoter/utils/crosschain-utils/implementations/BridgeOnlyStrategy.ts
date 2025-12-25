@@ -1,4 +1,4 @@
-import { Loadable } from '@pancakeswap/utils/Loadable'
+import { Loadable } from '@simpleflow/utils/Loadable'
 import { type InterfaceOrder } from 'views/Swap/utils'
 import { CrossChainQuoteStrategy } from '../base/CrossChainQuoteStrategy'
 

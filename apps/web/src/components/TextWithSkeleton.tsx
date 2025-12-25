@@ -1,5 +1,5 @@
 import React from 'react'
-import { SkeletonText, type TextProps } from '@pancakeswap/uikit'
+import { SkeletonText, type TextProps } from '@simpleflow/uikit'
 
 interface TextWithSkeletonProps extends TextProps {
   loading: boolean

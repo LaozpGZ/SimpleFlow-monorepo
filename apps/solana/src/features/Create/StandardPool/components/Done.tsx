@@ -2,7 +2,7 @@ import { Box, Flex, Highlight, Image, Text, useClipboard, VStack } from '@chakra
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Button from '@/components/Button'
 import CopyIcon from '@/icons/misc/CopyIcon'
 import { colors } from '@/theme/cssVariables'

@@ -1,4 +1,4 @@
-import { ApiV3PoolInfoConcentratedItem, ClmmKeys, getPdaPoolRewardVaulId } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoConcentratedItem, ClmmKeys, getPdaPoolRewardVaulId } from '@simpleflow/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 
 export function getClmmKeysFromPoolInfo(poolInfo: ApiV3PoolInfoConcentratedItem): ClmmKeys {

@@ -1,14 +1,14 @@
-import { ClmmPositionLayout, PositionUtils, TokenInfo } from '@pancakeswap/solana-core-sdk'
-import { INetworkProps, ITokenProps } from '@pancakeswap/widgets-internal'
+import { ClmmPositionLayout, PositionUtils, TokenInfo } from '@simpleflow/solana-core-sdk'
+import { INetworkProps, ITokenProps } from '@simpleflow/widgets-internal'
 import { useMemo } from 'react'
 import { POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import { useSolanaPositionsInfoByAccount } from 'state/token/solanaPositionsInfo'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useSolanaV3Pools } from 'hooks/solana/useSolanaV3Pools'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { SolanaV3Pool } from 'state/pools/solana'
 import { useSolanaV3PoolsUpdater } from 'hooks/solana/useSolanaV3PoolsUpdater'
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
 
 export const getSolanaPoolStatus = (pos: ClmmPositionLayout, pool: SolanaV3Pool | undefined) => {

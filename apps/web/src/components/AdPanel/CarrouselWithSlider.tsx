@@ -1,4 +1,4 @@
-import { appearAnimation } from '@pancakeswap/uikit'
+import { appearAnimation } from '@simpleflow/uikit'
 import { css, keyframes, styled } from 'styled-components'
 import 'swiper/css'
 import 'swiper/css/effect-fade'

@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/extensions
-import { GetProviderArgs, getProvider, watchProvider } from '@pancakeswap/awgmi/core'
+import { GetProviderArgs, getProvider, watchProvider } from '@simpleflow/awgmi/core'
 import { Aptos } from '@aptos-labs/ts-sdk'
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector.js'
 

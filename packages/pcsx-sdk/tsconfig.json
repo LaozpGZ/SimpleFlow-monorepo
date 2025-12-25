@@ -1,5 +1,5 @@
 {
-  "extends": "@pancakeswap/tsconfig/base",
+  "extends": "@simpleflow/tsconfig/base",
   "include": ["src"],
   "exclude": ["**/*.test.ts", "./dist/**"],
   "compilerOptions": {

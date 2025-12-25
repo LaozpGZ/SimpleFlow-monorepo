@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { multicallByGasLimit } from '@pancakeswap/multicall'
-import { BigintIsh } from '@pancakeswap/swap-sdk-core'
-import { FeeAmount, Tick, TICK_SPACINGS } from '@pancakeswap/v3-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { multicallByGasLimit } from '@simpleflow/multicall'
+import { BigintIsh } from '@simpleflow/swap-sdk-core'
+import { FeeAmount, Tick, TICK_SPACINGS } from '@simpleflow/v3-sdk'
 import { Address, decodeFunctionResult, encodeFunctionData } from 'viem'
 
 import { infinityCLTickLensAbi } from '../abis/IInfinityCLTickLens'

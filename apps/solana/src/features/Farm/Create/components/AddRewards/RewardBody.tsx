@@ -1,8 +1,8 @@
 import { Box, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, TokenInfo } from '@simpleflow/solana-core-sdk'
 import { useMemo } from 'react'
 import Decimal from 'decimal.js'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import TokenInput from '@/components/TokenInput'
 import { colors } from '@/theme/cssVariables'
 

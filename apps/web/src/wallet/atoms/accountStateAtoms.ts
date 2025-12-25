@@ -1,4 +1,4 @@
-import { ChainId, isEvm } from '@pancakeswap/chains'
+import { ChainId, isEvm } from '@simpleflow/chains'
 import { atom } from 'jotai'
 import { getHashKey } from 'utils/hash'
 import { Connector } from 'wagmi'

@@ -1,4 +1,4 @@
-import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
+import { cacheByLRU } from '@simpleflow/utils/cacheByLRU'
 import { NextApiHandler } from 'next'
 import { homePageChainsInfo, homePageCurrencies, partners } from 'edge/home/homePageDataQuery'
 import { queryPools } from 'edge/home/queries/queryPools'

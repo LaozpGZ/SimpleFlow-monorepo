@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Column, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Column, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useCallback, useMemo } from 'react'
 import uniqBy from 'lodash/uniqBy'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'

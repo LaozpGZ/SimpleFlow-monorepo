@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/tokens",
+  "name": "@simpleflow/tokens",
   "license": "MIT",
   "version": "0.7.10",
   "description": "Tokens for pancakeswap",
@@ -13,13 +13,13 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/token-lists": "workspace:*"
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/token-lists": "workspace:*"
   },
   "devDependencies": {
-    "@pancakeswap/solana-core-sdk": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/solana-core-sdk": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "tsup": "^6.7.0"
   },
   "exports": {

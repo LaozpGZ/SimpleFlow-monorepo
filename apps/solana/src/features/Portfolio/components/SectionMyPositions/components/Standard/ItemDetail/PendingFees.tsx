@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { Button, Flex, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import Decimal from 'decimal.js'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'

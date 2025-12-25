@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ButtonProps, ExpandableButtonProps, ExpandableLabel, Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { ButtonProps, ExpandableButtonProps, ExpandableLabel, Flex, FlexProps, Text } from '@simpleflow/uikit'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 

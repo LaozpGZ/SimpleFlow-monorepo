@@ -1,7 +1,7 @@
-import { useIntersectionObserver } from "@pancakeswap/hooks";
-import { useTranslation } from "@pancakeswap/localization";
-import { Flex, OptionProps, SearchInput, Select, Text, ViewMode } from "@pancakeswap/uikit";
-import latinise from "@pancakeswap/utils/latinise";
+import { useIntersectionObserver } from "@simpleflow/hooks";
+import { useTranslation } from "@simpleflow/l10n";
+import { Flex, OptionProps, SearchInput, Select, Text, ViewMode } from "@simpleflow/uikit";
+import latinise from "@simpleflow/utils/latinise";
 import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useRouter } from "next/router";

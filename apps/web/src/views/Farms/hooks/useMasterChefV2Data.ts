@@ -1,5 +1,5 @@
-import { masterChefAddresses } from '@pancakeswap/farms/src/const'
-import { fetchMasterChefV2Data } from '@pancakeswap/farms/src/v2/fetchFarmsV2'
+import { masterChefAddresses } from '@simpleflow/farms/src/const'
+import { fetchMasterChefV2Data } from '@simpleflow/farms/src/v2/fetchFarmsV2'
 import { useQuery } from '@tanstack/react-query'
 import { publicClient } from 'utils/viem'
 

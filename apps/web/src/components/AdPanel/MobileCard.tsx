@@ -1,4 +1,4 @@
-import { BoxProps, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { BoxProps, useMatchBreakpoints } from '@simpleflow/uikit'
 import { AdPlayer } from './AdPlayer'
 import { StaticContainer } from './StaticContainer'
 import { AdPlayerProps } from './ads.types'

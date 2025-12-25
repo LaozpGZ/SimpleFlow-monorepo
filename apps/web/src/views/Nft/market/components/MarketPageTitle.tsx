@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Grid, GridProps, Heading, Message, MessageText } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Grid, GridProps, Heading, Message, MessageText } from '@simpleflow/uikit'
 import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import { ReactNode } from 'react'
 

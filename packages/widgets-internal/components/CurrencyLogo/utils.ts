@@ -1,6 +1,6 @@
-import { ChainId } from "@pancakeswap/chains";
-import { Currency, NATIVE, Token } from "@pancakeswap/sdk";
-import { bscTokens, ethereumTokens } from "@pancakeswap/tokens";
+import { ChainId } from "@simpleflow/chains";
+import { Currency, NATIVE, Token } from "@simpleflow/sdk";
+import { bscTokens, ethereumTokens } from "@simpleflow/tokens";
 import memoize from "lodash/memoize";
 import { getAddress } from "viem";
 import { CurrencyInfo } from "./types";

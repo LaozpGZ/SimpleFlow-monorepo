@@ -1,4 +1,4 @@
-import { Ether, Token } from '@pancakeswap/sdk'
+import { Ether, Token } from '@simpleflow/sdk'
 import { describe, expect, test } from 'vitest'
 import { encodeSqrtRatioX96 } from '../utils'
 import { getCurrency0Price, getCurrency1Price } from './getCurrencyPrice'

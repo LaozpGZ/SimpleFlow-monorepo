@@ -1,7 +1,7 @@
-import { usePreviousValue } from '@pancakeswap/hooks'
-import { POOL_TYPE, PoolType } from '@pancakeswap/infinity-sdk'
+import { usePreviousValue } from '@simpleflow/hooks'
+import { POOL_TYPE, PoolType } from '@simpleflow/infinity-sdk'
 import styled from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   BoxProps,
@@ -18,10 +18,10 @@ import {
   Toggle,
   useMatchBreakpoints,
   Select,
-} from '@pancakeswap/uikit'
-import type { OptionProps } from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
+import type { OptionProps } from '@simpleflow/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { useSolanaClmmFeeTiers } from 'hooks/solana/useSolanaClmmFeeTiers'
 import { useFeeLevelQueryState, useFeeTierSettingQueryState } from 'state/infinity/create'

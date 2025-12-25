@@ -13,7 +13,7 @@ import {
   Input
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { colors } from '@/theme/cssVariables'
 import TokenAvatar from '@/components/TokenAvatar'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'

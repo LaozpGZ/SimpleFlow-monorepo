@@ -1,4 +1,4 @@
-import { getChainName } from '@pancakeswap/chains'
+import { getChainName } from '@simpleflow/chains'
 import { LS_CB1 } from 'config/constants'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useEffect, useState } from 'react'

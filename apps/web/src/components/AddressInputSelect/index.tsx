@@ -1,8 +1,8 @@
 import { ChangeEvent, useState, useEffect } from 'react'
-import { Box, BoxProps, Text, Input } from '@pancakeswap/uikit'
+import { Box, BoxProps, Text, Input } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import { isAddress } from 'viem'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import CircleLoader from 'components/Loader/CircleLoader'
 
 enum ResultStatus {

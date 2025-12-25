@@ -1,4 +1,4 @@
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 
 export const INFINITY_PROTOCOLS = [Protocol.InfinityCLAMM, Protocol.InfinityBIN]
 

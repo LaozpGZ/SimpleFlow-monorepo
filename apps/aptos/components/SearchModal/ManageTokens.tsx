@@ -1,6 +1,6 @@
-import { Coin, PAIR_LP_TYPE_TAG, Token } from '@pancakeswap/aptos-swap-sdk'
-import { APTOS_COIN, isStructTag, useAccount, useBalance, useAccountBalances } from '@pancakeswap/awgmi'
-import { useTranslation } from '@pancakeswap/localization'
+import { Coin, PAIR_LP_TYPE_TAG, Token } from '@simpleflow/aptos-swap-sdk'
+import { APTOS_COIN, isStructTag, useAccount, useBalance, useAccountBalances } from '@simpleflow/awgmi'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AddCircleIcon,
   AptosIcon,
@@ -17,8 +17,8 @@ import {
   RowBetween,
   RowFixed,
   Text,
-} from '@pancakeswap/uikit'
-import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
+} from '@simpleflow/uikit'
+import replaceBrowserHistoryMultiple from '@simpleflow/utils/replaceBrowserHistoryMultiple'
 import { CoinRegisterButton } from 'components/CoinRegisterButton'
 import { CurrencyLogo } from 'components/Logo'
 import { L0_USDC } from 'config/coins'

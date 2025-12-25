@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Trans, useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { ChainId } from '@simpleflow/chains'
+import { Trans, useTranslation } from '@simpleflow/l10n'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import {
   AtomBox,
   AutoColumn,
@@ -12,7 +12,7 @@ import {
   ScanLink,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useQuery } from '@tanstack/react-query'
 import { CurrencyLogo } from 'components/Logo'
 import dayjs from 'dayjs'

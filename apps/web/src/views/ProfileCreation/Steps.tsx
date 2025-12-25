@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useAccount } from 'wagmi'
 import Mint from './Mint'
 import ProfilePicture from './ProfilePicture'

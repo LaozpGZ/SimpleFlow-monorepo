@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Currency, Token } from '@pancakeswap/sdk'
-import memoize from '@pancakeswap/utils/memoize'
-import uniqBy from '@pancakeswap/utils/uniqBy'
+import { ChainId } from '@simpleflow/chains'
+import { Currency, Token } from '@simpleflow/sdk'
+import memoize from '@simpleflow/utils/memoize'
+import uniqBy from '@simpleflow/utils/uniqBy'
 
 import { BASES_TO_CHECK_TRADES_AGAINST, CUSTOM_BASES } from '../../constants'
 import { wrappedCurrency } from '../../utils/currency'

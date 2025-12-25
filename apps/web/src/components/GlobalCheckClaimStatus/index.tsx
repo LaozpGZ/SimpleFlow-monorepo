@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import AnniversaryAchievementModal from './AnniversaryAchievementModal'
 import V3AirdropModal from './V3AirdropModal'

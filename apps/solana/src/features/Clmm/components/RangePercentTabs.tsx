@@ -1,5 +1,5 @@
 import { Button, HStack, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import { colors } from '@/theme/cssVariables/colors'
 import toPercentString from '@/utils/numberish/toPercentString'

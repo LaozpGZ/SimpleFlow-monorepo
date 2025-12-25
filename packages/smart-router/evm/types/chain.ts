@@ -1,5 +1,5 @@
-import { Token } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { Token } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 
 // a list of tokens by chain
 export type ChainMap<T> = {

@@ -1,11 +1,11 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react'
 import { AccountInfo, PublicKey } from '@solana/web3.js'
-import { FormatFarmInfoOutV6, ApiV3PoolInfoConcentratedItem, ApiV3Token, getATAAddress } from '@pancakeswap/solana-core-sdk'
+import { FormatFarmInfoOutV6, ApiV3PoolInfoConcentratedItem, ApiV3Token, getATAAddress } from '@simpleflow/solana-core-sdk'
 
 import Decimal from 'decimal.js'
 import { AccountState, NATIVE_MINT } from '@solana/spl-token-0.4'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useTokenAccountStore, useFarmStore, useClmmStore, useAppStore } from '@/store'
 import useFarmPositions from '@/hooks/portfolio/farm/useFarmPositions'
 import useFetchMultipleFarmInfo from '@/hooks/farm/useFetchMultipleFarmInfo'

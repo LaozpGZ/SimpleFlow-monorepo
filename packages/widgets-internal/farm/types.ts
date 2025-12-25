@@ -1,4 +1,4 @@
-import { Token } from "@pancakeswap/sdk";
+import { Token } from "@simpleflow/sdk";
 import BigNumber from "bignumber.js";
 import { ReactNode } from "react";
 import { Address } from "viem";

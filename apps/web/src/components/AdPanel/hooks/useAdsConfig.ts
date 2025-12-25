@@ -1,5 +1,5 @@
-import { ContextApi, useTranslation } from '@pancakeswap/localization'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ContextApi, useTranslation } from '@simpleflow/l10n'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useMemo } from 'react'
 import { AdsCampaignConfig, Priority } from '../ads.types'

@@ -1,5 +1,5 @@
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
-import { supportedChainId } from '@pancakeswap/farms'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
+import { supportedChainId } from '@simpleflow/farms'
 
 export const SUPPORT_ONLY_BSC = [ChainId.BSC]
 export const SUPPORT_FARMS = [...supportedChainId, NonEVMChainId.SOLANA]

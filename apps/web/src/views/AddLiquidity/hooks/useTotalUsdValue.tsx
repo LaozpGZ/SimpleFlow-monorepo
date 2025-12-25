@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/sdk'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 
 interface UseTotalUsdValueParams {
   parsedAmountA: CurrencyAmount<Currency> | undefined

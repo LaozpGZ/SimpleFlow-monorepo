@@ -1,4 +1,4 @@
-import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, useMatchBreakpoints } from '@simpleflow/uikit'
 import { HoverProvider } from 'hooks/useHover'
 import styled, { css } from 'styled-components'
 

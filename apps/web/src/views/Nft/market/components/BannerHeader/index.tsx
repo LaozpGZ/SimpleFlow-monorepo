@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@pancakeswap/uikit'
+import { Box, Flex, FlexProps } from '@simpleflow/uikit'
 import Image from 'next/image'
 import { ReactNode } from 'react'
 import StyledBannerImageWrapper from './BannerImage'

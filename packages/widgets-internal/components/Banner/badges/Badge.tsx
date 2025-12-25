@@ -1,4 +1,4 @@
-import { FlexGap, Text, TextProps, useMatchBreakpoints } from "@pancakeswap/uikit";
+import { FlexGap, Text, TextProps, useMatchBreakpoints } from "@simpleflow/uikit";
 import { PropsWithChildren, ReactNode } from "react";
 import styled from "styled-components";
 import Image from "next/legacy/image";

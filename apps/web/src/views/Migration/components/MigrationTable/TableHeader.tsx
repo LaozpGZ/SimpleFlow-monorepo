@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, CardHeader } from '@pancakeswap/uikit'
+import { Text, CardHeader } from '@simpleflow/uikit'
 
 export interface TableHeaderProps {
   title: string

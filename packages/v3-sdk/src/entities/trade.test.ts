@@ -1,4 +1,4 @@
-import { CurrencyAmount, Native, Percent, Price, Token, TradeType, WETH9, sqrt } from '@pancakeswap/sdk'
+import { CurrencyAmount, Native, Percent, Price, Token, TradeType, WETH9, sqrt } from '@simpleflow/sdk'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from '../constants'
 import { encodeSqrtRatioX96 } from '../utils/encodeSqrtRatioX96'

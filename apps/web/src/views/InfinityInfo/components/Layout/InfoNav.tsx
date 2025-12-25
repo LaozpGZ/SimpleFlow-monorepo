@@ -1,17 +1,8 @@
-import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
-import type { UnifiedChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import {
-  Box,
-  ButtonMenu,
-  ButtonMenuItem,
-  Flex,
-  Text,
-  UserMenu,
-  UserMenuDivider,
-  UserMenuItem,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { INFINITY_SUPPORTED_CHAINS } from '@simpleflow/infinity-sdk'
+import type { UnifiedChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, ButtonMenu, ButtonMenuItem, Flex, Text, UserMenu, UserMenuDivider, UserMenuItem } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import { ChainLogo } from 'components/Logo/ChainLogo'
 import { ASSET_CDN } from 'config/constants/endpoints'

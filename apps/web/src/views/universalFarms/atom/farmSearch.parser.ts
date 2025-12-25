@@ -1,5 +1,5 @@
-import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
-import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
+import { isEvm, NonEVMChainId } from '@simpleflow/chains'
+import { FarmV4SupportedChainId, Protocol } from '@simpleflow/farms'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
 
 const HEX_ADDRESS_REG = /^0x[a-zA-Z0-9]{40,64}$/

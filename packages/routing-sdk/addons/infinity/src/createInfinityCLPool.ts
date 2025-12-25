@@ -1,7 +1,7 @@
-import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
-import { logCurrency } from '@pancakeswap/routing-sdk'
-import { Currency, CurrencyAmount, ONE, Price, ZERO } from '@pancakeswap/swap-sdk-core'
-import { FeeAmount, LiquidityMath, SwapMath, TICK_SPACINGS, TickList, TickMath } from '@pancakeswap/v3-sdk'
+import { parseProtocolFeesToNumbers } from '@simpleflow/infinity-sdk'
+import { logCurrency } from '@simpleflow/routing-sdk'
+import { Currency, CurrencyAmount, ONE, Price, ZERO } from '@simpleflow/swap-sdk-core'
+import { FeeAmount, LiquidityMath, SwapMath, TICK_SPACINGS, TickList, TickMath } from '@simpleflow/v3-sdk'
 import memoize from 'lodash/memoize.js'
 import invariant from 'tiny-invariant'
 

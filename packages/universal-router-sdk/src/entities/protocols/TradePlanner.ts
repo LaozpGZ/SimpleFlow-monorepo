@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/sdk'
 import {
   ADDRESS_THIS,
   getPoolAddress,
@@ -9,9 +9,9 @@ import {
   SmartRouter,
   SmartRouterTrade,
   StablePool,
-} from '@pancakeswap/smart-router'
+} from '@simpleflow/smart-router'
 
-import { ACTIONS, ActionsPlanner, encodePoolKey } from '@pancakeswap/infinity-sdk'
+import { ACTIONS, ActionsPlanner, encodePoolKey } from '@simpleflow/infinity-sdk'
 import first from 'lodash/first'
 import last from 'lodash/last'
 import { Address, zeroAddress } from 'viem'

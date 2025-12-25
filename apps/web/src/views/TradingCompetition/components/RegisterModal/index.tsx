@@ -1,6 +1,6 @@
 import { styled } from 'styled-components'
-import { Modal, Button, NoProfileAvatarIcon, Flex } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Modal, Button, NoProfileAvatarIcon, Flex } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import ProfileAvatarWithTeam from 'components/ProfileAvatarWithTeam'
 import { CompetitionProps } from '../../types'
 import MakeProfile from './MakeProfile'

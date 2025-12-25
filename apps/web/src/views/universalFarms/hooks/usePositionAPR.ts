@@ -1,8 +1,8 @@
-import { Protocol } from '@pancakeswap/farms'
-import { BinLiquidityShape } from '@pancakeswap/infinity-sdk'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { BIG_ONE, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { formatPercent } from '@pancakeswap/utils/formatFractions'
+import { Protocol } from '@simpleflow/farms'
+import { BinLiquidityShape } from '@simpleflow/infinity-sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
+import { BIG_ONE, BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { formatPercent } from '@simpleflow/utils/formatFractions'
 import {
   encodeSqrtRatioX96,
   FeeAmount,
@@ -13,8 +13,8 @@ import {
   maxLiquidityForAmount1,
   parseProtocolFees,
   TickMath,
-} from '@pancakeswap/v3-sdk'
-import { useAmountsByUsdValue, useRoi } from '@pancakeswap/widgets-internal/roi'
+} from '@simpleflow/v3-sdk'
+import { useAmountsByUsdValue, useRoi } from '@simpleflow/widgets-internal/roi'
 import BN from 'bignumber.js'
 import { useCLPriceRange } from 'hooks/infinity/useCLPriceRange'
 import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'

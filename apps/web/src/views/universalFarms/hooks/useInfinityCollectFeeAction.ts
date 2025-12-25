@@ -1,4 +1,4 @@
-import { type PoolKey } from '@pancakeswap/infinity-sdk'
+import { type PoolKey } from '@simpleflow/infinity-sdk'
 import { useRemoveClLiquidity } from 'hooks/infinity/useRemoveClLiquidity'
 import { useCallback } from 'react'
 import { Address, zeroAddress, type Hex } from 'viem'

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@simpleflow/uikit'
 import { LightGreyCard } from 'components/Card'
 import groupBy from 'lodash/groupBy'
 import { useCallback, useMemo, useState } from 'react'

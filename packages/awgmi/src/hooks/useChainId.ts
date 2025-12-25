@@ -1,4 +1,4 @@
-import { FetchLedgerArgs as FetchChainIdArgs, FetchLedgerResult } from '@pancakeswap/awgmi/core'
+import { FetchLedgerArgs as FetchChainIdArgs, FetchLedgerResult } from '@simpleflow/awgmi/core'
 
 import { QueryConfig } from '../types'
 import { useLedger } from './useLedger'

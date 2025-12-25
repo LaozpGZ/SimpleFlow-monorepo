@@ -1,4 +1,4 @@
-import { RowBetween } from '@pancakeswap/uikit'
+import { RowBetween } from '@simpleflow/uikit'
 import dayjs from 'dayjs'
 import useTheme from 'hooks/useTheme'
 import { ColorType, createChart, IChartApi } from 'lightweight-charts'

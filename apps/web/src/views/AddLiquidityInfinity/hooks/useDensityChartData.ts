@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { Currency, isCurrencySorted } from '@pancakeswap/swap-sdk-core'
+import { Protocol } from '@simpleflow/farms'
+import { Currency, isCurrencySorted } from '@simpleflow/swap-sdk-core'
 import { BinTickProcessed, useBinPoolActiveLiquidity, usePoolActiveLiquidity } from 'hooks/infinity/usePoolTickData'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { useMemo } from 'react'

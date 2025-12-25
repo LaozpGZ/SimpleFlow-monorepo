@@ -1,4 +1,4 @@
-import { PoolType } from '@pancakeswap/infinity-sdk'
+import { PoolType } from '@simpleflow/infinity-sdk'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { usePoolById } from 'hooks/infinity/usePool'
 

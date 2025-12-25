@@ -1,5 +1,5 @@
-import { AutoColumn, Flex, RowBetween, Text } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { AutoColumn, Flex, RowBetween, Text } from '@simpleflow/uikit'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 import { useMemo } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { formatAmount } from 'utils/formatInfoNumbers'

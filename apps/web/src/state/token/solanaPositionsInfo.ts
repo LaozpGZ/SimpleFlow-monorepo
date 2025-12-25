@@ -6,12 +6,12 @@ import {
   getPdaPersonalPositionAddress,
   PositionInfoLayout,
   TokenAccount,
-} from '@pancakeswap/solana-core-sdk'
+} from '@simpleflow/solana-core-sdk'
 import BN from 'bn.js'
 import { useQuery } from '@tanstack/react-query'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { rpcUrlAtom } from '@pancakeswap/utils/user'
-import memoize from '@pancakeswap/utils/memoize'
+import { rpcUrlAtom } from '@simpleflow/utils/user'
+import memoize from '@simpleflow/utils/memoize'
 import { PANCAKE_CLMM_PROGRAM_ID, SLOW_INTERVAL } from 'config/constants'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { walletBalancesAtomFamily } from './atomFamily'

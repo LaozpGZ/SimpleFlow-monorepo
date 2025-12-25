@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { InfoFilledIcon, Message, MessageText, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { InfoFilledIcon, Message, MessageText, Text } from '@simpleflow/uikit'
 
 export const NetWorkUpdateToDateDisplay = () => {
   const { t } = useTranslation()

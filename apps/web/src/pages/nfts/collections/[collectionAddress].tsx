@@ -1,4 +1,4 @@
-import { Flex, Spinner } from '@pancakeswap/uikit'
+import { Flex, Spinner } from '@simpleflow/uikit'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'

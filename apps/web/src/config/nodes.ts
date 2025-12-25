@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { getNodeRealUrl } from 'utils/node/nodeReal'
 import { getGroveUrl } from 'utils/node/pokt'
 import {

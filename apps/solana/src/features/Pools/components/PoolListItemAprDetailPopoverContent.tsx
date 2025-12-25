@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { Badge, Box, Flex, Grid, HStack, VStack, useColorMode } from '@chakra-ui/react'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'

@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem, HStack, Text } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useEffect, useRef } from 'react'
 import { ColorType, IChartApi, ISeriesApi, createChart } from 'lightweight-charts'
 import TokenAvatarPair from '@/components/TokenAvatarPair'

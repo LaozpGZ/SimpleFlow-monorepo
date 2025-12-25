@@ -1,4 +1,4 @@
-import { INetworkProps, ITokenProps, toTokenValueByCurrency } from '@pancakeswap/widgets-internal'
+import { INetworkProps, ITokenProps, toTokenValueByCurrency } from '@simpleflow/widgets-internal'
 import { useMemo } from 'react'
 import { useAccountStableLpDetails } from 'state/farmsV4/hooks'
 import { POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'

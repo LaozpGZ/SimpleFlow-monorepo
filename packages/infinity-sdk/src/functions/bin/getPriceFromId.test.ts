@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import BigNumber from 'bignumber.js'
 import { describe, expect, it } from 'vitest'
 import { getCurrencyPriceFromId, getPriceFromId, getPriceX128FromId } from './getPriceFromId'

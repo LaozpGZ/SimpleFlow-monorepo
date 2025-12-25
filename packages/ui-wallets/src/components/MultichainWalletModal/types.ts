@@ -1,5 +1,5 @@
-import { ModalV2Props } from '@pancakeswap/uikit'
-import { ChainId } from '@pancakeswap/chains'
+import { ModalV2Props } from '@simpleflow/uikit'
+import { ChainId } from '@simpleflow/chains'
 import { EvmConnectorNames } from '../../config/connectorNames'
 import { ConnectData, WalletConfigV3 } from '../../types'
 

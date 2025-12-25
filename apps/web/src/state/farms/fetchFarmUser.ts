@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import BigNumber from 'bignumber.js'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { crossFarmingVaultABI } from 'config/abi/crossFarmingVault'

@@ -1,5 +1,5 @@
-import { PermitSingle } from '@pancakeswap/permit2-sdk'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { PermitSingle } from '@simpleflow/permit2-sdk'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { Address, Prettify } from 'viem'
 
 export interface Permit2Signature extends PermitSingle {

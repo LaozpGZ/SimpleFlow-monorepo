@@ -1,4 +1,4 @@
-import { useMatchBreakpoints, useModalV2 } from '@pancakeswap/uikit'
+import { useMatchBreakpoints, useModalV2 } from '@simpleflow/uikit'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useIsSlideExpanded } from '../useIsSlideExpanded'
 

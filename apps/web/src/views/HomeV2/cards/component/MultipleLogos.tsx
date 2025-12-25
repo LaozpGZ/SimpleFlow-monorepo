@@ -1,4 +1,4 @@
-import { Box, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 

@@ -1,4 +1,4 @@
-import { AutoColumn, Box, ColumnCenter, ErrorIcon, Modal, ModalProps, Text } from '@pancakeswap/uikit'
+import { AutoColumn, Box, ColumnCenter, ErrorIcon, Modal, ModalProps, Text } from '@simpleflow/uikit'
 
 export const ErrorModal: React.FC<
   {

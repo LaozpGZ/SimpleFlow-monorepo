@@ -1,4 +1,4 @@
-import { useTooltip } from '@pancakeswap/uikit'
+import { useTooltip } from '@simpleflow/uikit'
 import React from 'react'
 import { stringify } from 'viem'
 

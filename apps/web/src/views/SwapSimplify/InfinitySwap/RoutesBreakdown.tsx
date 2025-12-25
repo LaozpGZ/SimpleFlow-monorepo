@@ -1,7 +1,7 @@
-import { useDebounce, useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { Route } from '@pancakeswap/smart-router'
-import { Box, ModalV2, PoolTypeIcon, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
+import { useDebounce, useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { Route } from '@simpleflow/smart-router'
+import { Box, ModalV2, PoolTypeIcon, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@simpleflow/uikit'
 import { memo } from 'react'
 import { styled } from 'styled-components'
 
@@ -9,7 +9,7 @@ import { RowBetween, RowFixed } from 'components/Layout/Row'
 import SwapRoute from 'views/Swap/components/SwapRoute'
 import { RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { TertiaryButton } from 'views/Swap/components/SlippageButton'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import {
   RouteDisplayEssentials,
   RouteDisplayModal,

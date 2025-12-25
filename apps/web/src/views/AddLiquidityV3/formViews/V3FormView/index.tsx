@@ -1,7 +1,7 @@
-import { Protocol } from '@pancakeswap/farms'
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
-import { Price, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { Protocol } from '@simpleflow/farms'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount, Percent } from '@simpleflow/sdk'
+import { Price, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import {
   AutoColumn,
   Box,
@@ -22,10 +22,10 @@ import {
   useMatchBreakpoints,
   useModal,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { formatPrice } from '@pancakeswap/utils/formatFractions'
-import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
-import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
+} from '@simpleflow/uikit'
+import { formatPrice } from '@simpleflow/utils/formatFractions'
+import { useIsExpertMode, useUserSlippage } from '@simpleflow/utils/user'
+import { FeeAmount, NonfungiblePositionManager, Pool } from '@simpleflow/v3-sdk'
 import {
   ConfirmationModalContent,
   Liquidity,
@@ -33,7 +33,7 @@ import {
   PricePeriodRangeChart,
   ZOOM_LEVELS,
   ZoomLevels,
-} from '@pancakeswap/widgets-internal'
+} from '@simpleflow/widgets-internal'
 import BigNumber from 'bignumber.js'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'

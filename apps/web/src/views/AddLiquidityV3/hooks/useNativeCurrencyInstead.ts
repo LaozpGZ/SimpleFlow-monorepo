@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/sdk'
+import { Currency } from '@simpleflow/sdk'
 
 import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'

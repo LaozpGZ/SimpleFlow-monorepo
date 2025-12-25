@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Flex, Text } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
-import { useTheme } from '@pancakeswap/hooks'
+import { useTheme } from '@simpleflow/hooks'
 import NoSSR from 'components/NoSSR'
 
 const StyledChoiceContainer = styled(Flex)`

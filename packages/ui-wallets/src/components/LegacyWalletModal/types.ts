@@ -1,4 +1,4 @@
-import { ModalV2Props } from '@pancakeswap/uikit'
+import { ModalV2Props } from '@simpleflow/uikit'
 import { ConnectData, WalletConfigV2 } from '../../types'
 
 export interface WalletModalV2Props<T = unknown> extends ModalV2Props {

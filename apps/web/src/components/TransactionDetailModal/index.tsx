@@ -1,4 +1,4 @@
-import { ModalV2 } from '@pancakeswap/uikit'
+import { ModalV2 } from '@simpleflow/uikit'
 import { useAppDispatch } from 'state'
 import { toggleFarmTransactionModal } from 'state/global/actions'
 import { useFarmHarvestTransaction } from 'state/global/hooks'

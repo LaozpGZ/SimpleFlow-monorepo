@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { RowBetween, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { RowBetween, Text } from '@simpleflow/uikit'
 
 // import { useState } from 'react'
 

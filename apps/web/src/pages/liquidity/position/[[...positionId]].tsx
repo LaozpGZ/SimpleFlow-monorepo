@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { Box } from '@pancakeswap/uikit'
+import { Protocol } from '@simpleflow/farms'
+import { Box } from '@simpleflow/uikit'
 import PageLoader from 'components/Loader/PageLoader'
 import { PositionIdRoute } from 'dynamicRoute'
 import { usePositionIdRoute } from 'hooks/dynamicRoute/usePositionIdRoute'

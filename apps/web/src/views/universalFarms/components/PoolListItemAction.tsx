@@ -1,14 +1,14 @@
-import { useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, MoreIcon, SubMenu } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useTheme } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Flex, MoreIcon, SubMenu } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { memo, useCallback, useMemo } from 'react'
 import type { PoolInfo } from 'state/farmsV4/state/type'
 import styled, { css } from 'styled-components'
 import { getPoolAddLiquidityLink } from 'utils/getPoolLink'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isEvm } from '@pancakeswap/chains'
+import { isEvm } from '@simpleflow/chains'
 
 const BaseButtonStyle = css`
   color: ${({ theme }) => theme.colors.text};

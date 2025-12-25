@@ -1,5 +1,5 @@
-import { Pool, PoolType } from '@pancakeswap/smart-router'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Pool, PoolType } from '@simpleflow/smart-router'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { TokenFee } from 'hooks/useTokenFee'
 
 export function filterPools(

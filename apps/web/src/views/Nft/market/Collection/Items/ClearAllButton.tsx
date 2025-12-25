@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Button, ButtonProps } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useNftStorage } from 'state/nftMarket/storage'
 
 interface ClearAllButtonProps extends ButtonProps {

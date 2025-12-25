@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import memoize from 'lodash/memoize'
 import { isAddressEqual } from 'utils'
 import { rewardConfig } from './config'

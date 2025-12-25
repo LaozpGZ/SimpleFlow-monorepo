@@ -1,4 +1,4 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 export const StaticContainer = styled(Box)`

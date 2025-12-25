@@ -1,5 +1,5 @@
-import multiplyPriceByAmount from '@pancakeswap/utils/multiplyPriceByAmount'
-import { Coin, Pair, Percent, Price } from '@pancakeswap/aptos-swap-sdk'
+import multiplyPriceByAmount from '@simpleflow/utils/multiplyPriceByAmount'
+import { Coin, Pair, Percent, Price } from '@simpleflow/aptos-swap-sdk'
 import { memo, useMemo } from 'react'
 import { useCurrencyBalance } from 'hooks/Balances'
 import useTotalSupply from 'hooks/useTotalSupply'

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount, Percent } from '@simpleflow/sdk'
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import {
   PreTitle,
   RoiCard,
   useModalV2,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import toNumber from 'lodash/toNumber'
 import { useCallback, useMemo } from 'react'

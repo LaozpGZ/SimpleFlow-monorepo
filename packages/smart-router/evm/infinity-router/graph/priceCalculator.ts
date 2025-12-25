@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Price, Native } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Price, Native } from '@simpleflow/sdk'
 import invariant from 'tiny-invariant'
 
 import { Edge, Graph, Vertice } from '../types'

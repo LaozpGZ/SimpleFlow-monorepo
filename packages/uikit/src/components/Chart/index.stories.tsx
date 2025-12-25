@@ -1,4 +1,4 @@
-import { LanguageProvider } from "@pancakeswap/localization";
+import { LanguageProvider } from "@simpleflow/l10n";
 import { Meta, Story } from "@storybook/react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from "react";

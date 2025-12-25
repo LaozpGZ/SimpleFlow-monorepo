@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Image, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Image, Text } from '@simpleflow/uikit'
 
 import { ASSET_CDN } from 'config/constants/endpoints'
 

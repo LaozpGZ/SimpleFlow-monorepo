@@ -1,5 +1,5 @@
-import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
-import { bscTestnetTokens, ethereumTokens, goerliTestnetTokens } from '@pancakeswap/tokens'
+import { CurrencyAmount, Token } from '@simpleflow/swap-sdk-core'
+import { bscTestnetTokens, ethereumTokens, goerliTestnetTokens } from '@simpleflow/tokens'
 import { useMemo } from 'react'
 import { isAddressEqual } from 'utils'
 import { Address } from 'viem'

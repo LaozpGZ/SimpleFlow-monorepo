@@ -1,9 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import { isTestnetChainId } from '@pancakeswap/chains'
+import { isTestnetChainId } from '@simpleflow/chains'
 import edgeFarmQueries, { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
-import { FarmV4SupportedChainId } from '@pancakeswap/farms'
+import { FarmV4SupportedChainId } from '@simpleflow/farms'
 import { FarmInfo, farmToPoolInfo, getFarmKey } from 'state/farmsV4/search/farm.util'
-import uniqBy from '@pancakeswap/utils/uniqBy'
+import uniqBy from '@simpleflow/utils/uniqBy'
 import { getHashKey } from 'utils/hash'
 import {
   fillOnchainPoolData,
@@ -14,9 +14,9 @@ import {
 } from 'state/farmsV4/search/batchFarmDataFiller'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import keyBy from 'lodash/keyBy'
-import { Emitter } from '@pancakeswap/utils/Emitter'
+import { Emitter } from '@simpleflow/utils/Emitter'
 import { CakeAprValue } from 'state/farmsV4/atom'
-import { TokenInfo } from '@pancakeswap/token-lists'
+import { TokenInfo } from '@simpleflow/token-lists'
 import { farmFilters, isInWhitelist } from './farmSearch.filter'
 import { parseExtendSearchParams } from './farmSearch.parser'
 

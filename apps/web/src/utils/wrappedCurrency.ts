@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Currency, CurrencyAmount, Token, WNATIVE } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { Currency, CurrencyAmount, Token, WNATIVE } from '@simpleflow/sdk'
 
-export { unwrappedToken } from '@pancakeswap/tokens'
+export { unwrappedToken } from '@simpleflow/tokens'
 
 export function wrappedCurrency(
   currency: Currency | undefined | null,

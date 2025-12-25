@@ -1,4 +1,4 @@
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
 
 // @todo remove all other v2/v3 and type definitions
 export const supportedChainIdV4 = [

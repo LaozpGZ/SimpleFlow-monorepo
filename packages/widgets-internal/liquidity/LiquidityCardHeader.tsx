@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { styled } from "styled-components";
-import { AtomBox, ArrowBackIcon, IconButton, Text, Heading, QuestionHelper } from "@pancakeswap/uikit";
+import { AtomBox, ArrowBackIcon, IconButton, Text, Heading, QuestionHelper } from "@simpleflow/uikit";
 
 export interface LiquidityCardHeaderProps {
   title: string;

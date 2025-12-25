@@ -1,5 +1,5 @@
-import { Box, Modal, ModalV2, Text, useModalV2 } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Box, Modal, ModalV2, Text, useModalV2 } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { styled } from 'styled-components'
 
 const ContentContainer = styled(Box)`

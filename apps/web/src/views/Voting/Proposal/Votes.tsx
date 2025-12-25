@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   AutoRenewIcon,
   Button,
@@ -9,7 +9,7 @@ import {
   Flex,
   Heading,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { FetchStatus, TFetchStatus } from 'config/constants/types'
 import orderBy from 'lodash/orderBy'
 import { useState } from 'react'

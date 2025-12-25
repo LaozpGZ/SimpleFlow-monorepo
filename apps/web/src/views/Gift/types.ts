@@ -1,4 +1,4 @@
-import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, NativeCurrency, Token } from '@simpleflow/swap-sdk-core'
 import { QueryParams } from './utils/ApiAdapter'
 
 export enum GiftStatus {

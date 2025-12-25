@@ -1,4 +1,4 @@
-import { bscTokens } from '@pancakeswap/tokens'
+import { bscTokens } from '@simpleflow/tokens'
 import Trans from 'components/Trans'
 import { VaultKey } from 'state/types'
 

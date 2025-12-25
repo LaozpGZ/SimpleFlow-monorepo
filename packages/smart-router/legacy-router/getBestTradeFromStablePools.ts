@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop, no-continue */
-import { Currency, CurrencyAmount, Price, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Price, TradeType } from '@simpleflow/sdk'
 import { getStableSwapPairs } from './getStableSwapPairs'
 import { getStableSwapFee, getStableSwapOutputAmount } from './onchain'
 import { createTradeWithStableSwap, getFeePercent } from './stableSwap'

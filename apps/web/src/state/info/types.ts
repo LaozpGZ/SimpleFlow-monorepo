@@ -1,4 +1,4 @@
-import { ComputedFarmConfigV3, Protocol } from '@pancakeswap/farms'
+import { ComputedFarmConfigV3, Protocol } from '@simpleflow/farms'
 
 export interface Block {
   number: number

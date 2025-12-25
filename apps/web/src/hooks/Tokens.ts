@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@simpleflow/chains'
 import {
   Currency,
   ERC20Token,
@@ -12,11 +12,11 @@ import {
   UnifiedCurrency,
   UnifiedNativeCurrency,
   UnifiedToken,
-} from '@pancakeswap/sdk'
+} from '@simpleflow/sdk'
 import { type Address, erc20Abi, zeroAddress } from 'viem'
 
-import { TokenAddressMap } from '@pancakeswap/token-lists'
-import { useReadContracts } from '@pancakeswap/wagmi'
+import { TokenAddressMap } from '@simpleflow/token-lists'
+import { useReadContracts } from '@simpleflow/wagmi'
 import { GELATO_NATIVE } from 'config/constants'
 import { UnsafeCurrency } from 'config/constants/types'
 import { atom, useAtomValue } from 'jotai'

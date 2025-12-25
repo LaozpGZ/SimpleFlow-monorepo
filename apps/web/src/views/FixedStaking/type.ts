@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Token } from '@simpleflow/sdk'
 import BigNumber from 'bignumber.js'
 
 export enum FIXED_STAKING_PERIOD {

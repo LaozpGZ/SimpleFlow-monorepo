@@ -1,4 +1,4 @@
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import styled from 'styled-components'
 import { MultipleLogos } from './MultipleLogos'

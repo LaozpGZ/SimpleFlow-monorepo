@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { solanaTokenListAtom, solanaListSettingsAtom } from 'state/token/solanaTokenAtoms'
 
-import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
-import type { SPLToken } from '@pancakeswap/swap-sdk-core'
+import type { TokenInfo } from '@simpleflow/solana-core-sdk'
+import type { SPLToken } from '@simpleflow/swap-sdk-core'
 
 import { useQuery } from '@tanstack/react-query'
 import { SOLANA_LISTS_CONFIG, TokenListKey, USER_ADDED_KEY, convertRawTokenInfoIntoSPLToken } from 'config/solana-list'

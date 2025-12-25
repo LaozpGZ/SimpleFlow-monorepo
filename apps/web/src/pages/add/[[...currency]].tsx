@@ -1,4 +1,4 @@
-import { isStableFarm } from '@pancakeswap/farms'
+import { isStableFarm } from '@simpleflow/farms'
 import { useCurrency, useUnifiedCurrency } from 'hooks/Tokens'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'

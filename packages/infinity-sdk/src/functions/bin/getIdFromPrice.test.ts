@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { describe, expect, it } from 'vitest'
 import { getIdFromCurrencyPrice, getIdFromPrice } from './getIdFromPrice'
 import { getCurrencyPriceFromId } from './getPriceFromId'

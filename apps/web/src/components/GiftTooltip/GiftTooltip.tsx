@@ -1,4 +1,4 @@
-import { Box, Text, TooltipText, useTooltip } from '@pancakeswap/uikit'
+import { Box, Text, TooltipText, useTooltip } from '@simpleflow/uikit'
 import { PropsWithChildren, useCallback } from 'react'
 import { logger } from 'utils/datadog'
 import { useChainId } from 'wagmi'

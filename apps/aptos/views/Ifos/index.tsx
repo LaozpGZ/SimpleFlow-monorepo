@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { SubMenuItems } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { SubMenuItems } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { PageMeta } from 'components/Layout/Page'
 import { useRouter } from 'next/router'
 import Hero from './components/Hero'

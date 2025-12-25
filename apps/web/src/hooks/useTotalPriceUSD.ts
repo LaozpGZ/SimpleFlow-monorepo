@@ -1,5 +1,5 @@
-import { ERC20Token } from '@pancakeswap/sdk'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { ERC20Token } from '@simpleflow/sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useMemo } from 'react'
 

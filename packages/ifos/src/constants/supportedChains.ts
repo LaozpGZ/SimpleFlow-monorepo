@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 // Chains that only support cross chain ifo
 export const CROSS_CHAIN_ONLY_SUPPORTED_CHAIN_IDS = [ChainId.GOERLI, ChainId.ARBITRUM_ONE] as const

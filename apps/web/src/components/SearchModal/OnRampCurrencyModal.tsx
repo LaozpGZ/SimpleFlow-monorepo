@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency } from '@simpleflow/sdk'
 import {
   Box,
   Button,
@@ -14,8 +14,8 @@ import {
   RowBetween,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { ChainLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ChainLogo } from '@simpleflow/widgets-internal'
 import isArray from 'lodash/isArray'
 import Image from 'next/image'
 import { useCallback, useMemo, useRef, useState } from 'react'

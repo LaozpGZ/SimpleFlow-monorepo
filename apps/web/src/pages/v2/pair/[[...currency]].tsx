@@ -10,8 +10,8 @@ import {
   MessageText,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import { AppHeader } from 'components/App'
 
@@ -20,9 +20,9 @@ import { styled } from 'styled-components'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
 
-import { getLegacyFarmConfig, Protocol } from '@pancakeswap/farms'
-import { useTranslation } from '@pancakeswap/localization'
-import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
+import { getLegacyFarmConfig, Protocol } from '@simpleflow/farms'
+import { useTranslation } from '@simpleflow/l10n'
+import { formatFiatNumber } from '@simpleflow/utils/formatFiatNumber'
 import { useQuery } from '@tanstack/react-query'
 import { LightGreyCard } from 'components/Card'
 import { MerklSection } from 'components/Merkl/MerklSection'

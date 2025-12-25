@@ -1,8 +1,8 @@
-import { ChainId } from '@pancakeswap/chains'
-import { TokenAddressMap as TTokenAddressMap, TokenInfo, TokenList, WrappedTokenInfo } from '@pancakeswap/token-lists'
-import { ListsState } from '@pancakeswap/token-lists/react'
-import { EMPTY_LIST } from '@pancakeswap/tokens'
-import { enumValues } from '@pancakeswap/utils/enumValues'
+import { ChainId } from '@simpleflow/chains'
+import { TokenAddressMap as TTokenAddressMap, TokenInfo, TokenList, WrappedTokenInfo } from '@simpleflow/token-lists'
+import { ListsState } from '@simpleflow/token-lists/react'
+import { EMPTY_LIST } from '@simpleflow/tokens'
+import { enumValues } from '@simpleflow/utils/enumValues'
 import {
   DEFAULT_LIST_OF_LISTS,
   MULTI_CHAIN_LIST_URLS,

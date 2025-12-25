@@ -1,5 +1,5 @@
-import { bscTokens } from '@pancakeswap/tokens'
-import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
+import { bscTokens } from '@simpleflow/tokens'
+import { FeeAmount, Pool } from '@simpleflow/v3-sdk'
 import { describe, expect, it } from 'vitest'
 import { getFarmsPrices } from './fetchFarmsV3'
 import { FarmV3Data } from './types'

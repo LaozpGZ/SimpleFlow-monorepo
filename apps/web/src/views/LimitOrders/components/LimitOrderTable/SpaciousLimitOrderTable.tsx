@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { Table, Th, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Table, Th, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import FullRow from './FullRow'
 
 const SpaciousLimitOrderTable = ({ orders }) => {

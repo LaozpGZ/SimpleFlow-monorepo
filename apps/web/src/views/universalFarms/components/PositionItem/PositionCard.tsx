@@ -1,4 +1,4 @@
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import {
   InfinityBinPositionDetail,
   InfinityCLPositionDetail,
@@ -8,7 +8,7 @@ import {
   V2LPDetail,
 } from 'state/farmsV4/state/accountPositions/type'
 import { getKeyForPools } from 'state/farmsV4/hooks'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { InfinityPositionActions } from '../PositionActions/InfinityPositionActions'
 import { InfinityBinPositionItem } from './InfinityBinPositionItem'
 import { InfinityCLPositionItem } from './InfinityCLPositionItem'

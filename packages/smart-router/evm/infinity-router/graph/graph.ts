@@ -1,6 +1,6 @@
-import { Currency, CurrencyAmount, Fraction, TradeType } from '@pancakeswap/sdk'
-import { formatFraction } from '@pancakeswap/utils/formatFractions'
-import memoize from '@pancakeswap/utils/memoize'
+import { Currency, CurrencyAmount, Fraction, TradeType } from '@simpleflow/sdk'
+import { formatFraction } from '@simpleflow/utils/formatFractions'
+import memoize from '@simpleflow/utils/memoize'
 import invariant from 'tiny-invariant'
 import { Address } from 'viem'
 

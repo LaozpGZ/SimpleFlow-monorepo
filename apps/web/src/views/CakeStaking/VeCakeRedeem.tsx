@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Card, ChevronDownIcon, Flex, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Button, Card, ChevronDownIcon, Flex, Text } from '@simpleflow/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
 import { ASSET_CDN } from 'config/constants/endpoints'

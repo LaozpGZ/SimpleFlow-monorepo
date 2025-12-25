@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { useMatchBreakpoints } from '@simpleflow/uikit'
 import { HomepageChain, HomePageCurrency } from 'edge/home/types'
 import React from 'react'
 import { CardRowLayout } from './component/CardRowLayout'

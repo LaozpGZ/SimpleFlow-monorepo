@@ -1,4 +1,4 @@
-import { Card, CardBody, FlexGap, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Card, CardBody, FlexGap, useMatchBreakpoints } from '@simpleflow/uikit'
 import useTheme from 'hooks/useTheme'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { IfoAllocationCard } from '../IfoAllocationCard'

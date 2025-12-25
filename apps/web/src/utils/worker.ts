@@ -1,4 +1,4 @@
-import { InfinityRouter } from '@pancakeswap/smart-router'
+import { InfinityRouter } from '@simpleflow/smart-router'
 
 import type { WorkerGetBestTradeEvent, WorkerGetBestTradeOffchainEvent, WorkerMultiChunkEvent } from 'quote-worker'
 import type { FetchChunkResult } from 'state/multicall/fetchChunk'

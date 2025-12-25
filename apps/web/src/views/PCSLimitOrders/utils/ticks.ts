@@ -1,8 +1,8 @@
-import { Currency, Price } from '@pancakeswap/sdk'
+import { Currency, Price } from '@simpleflow/sdk'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { BigNumber as BN } from 'bignumber.js'
-import { nearestUsableTick } from '@pancakeswap/v3-sdk'
+import { nearestUsableTick } from '@simpleflow/v3-sdk'
 import { bigNumberToPrice } from './price'
 
 /**

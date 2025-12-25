@@ -1,5 +1,5 @@
-import { ContextApi, useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
+import { ContextApi, useTranslation } from '@simpleflow/l10n'
+import { InjectedModalProps, useToast } from '@simpleflow/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'

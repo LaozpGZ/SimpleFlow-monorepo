@@ -1,4 +1,4 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { Text } from "../Text";
 import { Dots } from "../Loader/Dots";
 

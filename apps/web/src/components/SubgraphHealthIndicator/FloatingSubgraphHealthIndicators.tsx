@@ -1,8 +1,8 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useMemo } from 'react'
 import { createPortal } from 'react-dom'
 
-import { getPortalRoot } from '@pancakeswap/uikit'
+import { getPortalRoot } from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { SubgraphHealthIndicator, SubgraphHealthIndicatorProps } from './SubgraphHealthIndicator'
 

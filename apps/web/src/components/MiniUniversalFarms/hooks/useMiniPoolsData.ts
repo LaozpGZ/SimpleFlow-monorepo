@@ -1,4 +1,4 @@
-import { ISortOrder } from '@pancakeswap/uikit'
+import { ISortOrder } from '@simpleflow/uikit'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'

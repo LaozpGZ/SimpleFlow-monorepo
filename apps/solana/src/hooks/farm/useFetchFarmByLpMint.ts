@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { PublicKey } from '@solana/web3.js'
-import { FormatFarmInfoOut, FetchPoolParams } from '@pancakeswap/solana-core-sdk'
+import { FormatFarmInfoOut, FetchPoolParams } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import axios from '@/api/axios'

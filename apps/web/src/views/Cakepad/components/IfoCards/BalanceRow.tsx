@@ -1,7 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Text, FlexGap, LazyAnimatePresence, domAnimation, Box } from '@pancakeswap/uikit'
-import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
-import type { Currency } from '@pancakeswap/swap-sdk-core'
+import { useTranslation } from '@simpleflow/l10n'
+import { Text, FlexGap, LazyAnimatePresence, domAnimation, Box } from '@simpleflow/uikit'
+import { CurrencyLogo, SwapUIV2 } from '@simpleflow/widgets-internal'
+import type { Currency } from '@simpleflow/swap-sdk-core'
 import { useAccount } from 'wagmi'
 
 interface BalanceRowProps {

@@ -1,4 +1,4 @@
-import { Currency, Price, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { tryParsePrice } from './v3/utils'

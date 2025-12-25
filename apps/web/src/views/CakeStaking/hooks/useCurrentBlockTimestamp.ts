@@ -1,7 +1,7 @@
 import { useCurrentBlockTimestamp as useBlockTimestamp } from 'state/block/hooks'
 import { verifyBscNetwork } from 'utils/verifyBscNetwork'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 export const useCurrentBlockTimestamp = () => {
   const { chainId } = useActiveChainId()

@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { BoosterConfig } from '../../utils/boosted/types'
 import { arbBoostedPools } from './arb'
 import { opBnbBoostedPools } from './opBNB'

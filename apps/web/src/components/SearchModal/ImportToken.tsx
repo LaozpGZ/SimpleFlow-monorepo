@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Token } from '@pancakeswap/sdk'
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, Token } from '@simpleflow/sdk'
+import { WrappedTokenInfo } from '@simpleflow/token-lists'
 import {
   AutoColumn,
   BscScanIcon,
@@ -16,9 +16,9 @@ import {
   Tag,
   Text,
   useTooltip,
-} from '@pancakeswap/uikit'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import { ListLogo } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import truncateHash from '@simpleflow/utils/truncateHash'
+import { ListLogo } from '@simpleflow/widgets-internal'
 import { useQuery } from '@tanstack/react-query'
 import AccessRisk, { TOKEN_RISK } from 'components/AccessRisk'
 import { ACCESS_TOKEN_SUPPORT_CHAIN_IDS } from 'components/AccessRisk/config/supportedChains'

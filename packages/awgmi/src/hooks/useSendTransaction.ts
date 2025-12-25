@@ -1,4 +1,4 @@
-import { sendTransaction, SendTransactionArgs, SendTransactionResult } from '@pancakeswap/awgmi/core'
+import { sendTransaction, SendTransactionArgs, SendTransactionResult } from '@simpleflow/awgmi/core'
 import { useMutation } from '@tanstack/react-query'
 import * as React from 'react'
 

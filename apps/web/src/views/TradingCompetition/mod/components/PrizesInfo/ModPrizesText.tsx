@@ -1,5 +1,5 @@
-import { Flex, Heading, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Heading, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import Image from 'next/image'
 import { styled } from 'styled-components'
 import FlipperBunny from '../../../pngs/MoD-flipper.png'

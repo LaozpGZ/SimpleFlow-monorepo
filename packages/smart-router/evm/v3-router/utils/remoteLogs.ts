@@ -1,5 +1,5 @@
-import { Pair } from '@pancakeswap/sdk'
-import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
+import { Pair } from '@simpleflow/sdk'
+import { RemoteLogger } from '@simpleflow/utils/RemoteLogger'
 import { BaseRoute, Pool, PoolType, RouteType, RouteWithQuote } from '../types'
 
 export const logPools = (quoteId: string | undefined, pools: Pool[], indent = 1) => {

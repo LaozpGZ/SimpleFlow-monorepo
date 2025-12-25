@@ -1,4 +1,4 @@
-import { ContextApi } from "@pancakeswap/localization";
+import { ContextApi } from "@simpleflow/l10n";
 import { FooterLinkType } from "../../../components/Footer/types";
 
 export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [

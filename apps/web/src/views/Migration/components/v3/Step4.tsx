@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token } from '@simpleflow/sdk'
 import {
   AtomBox,
   AutoRow,
@@ -13,7 +13,7 @@ import {
   Tag,
   Text,
   useModalV2,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { AppBody, AppHeader } from 'components/App'
 import { LightGreyCard } from 'components/Card'
 import { CommitButton } from 'components/CommitButton'

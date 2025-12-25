@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Tag } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Tag } from '@simpleflow/uikit'
 import { useMerklInfo } from 'hooks/useMerkl'
 
 export function MerklTag({ poolAddress }: { poolAddress?: string }) {

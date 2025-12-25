@@ -1,4 +1,4 @@
-import { ChainId, isSolana } from '@pancakeswap/chains'
+import { ChainId, isSolana } from '@simpleflow/chains'
 import {
   OrderType,
   type BridgeOrder,
@@ -6,9 +6,9 @@ import {
   type PriceOrder,
   type SVMOrder,
   type XOrder,
-} from '@pancakeswap/price-api-sdk'
-import { UnifiedCurrencyAmount, type Currency, type TradeType } from '@pancakeswap/swap-sdk-core'
-import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
+} from '@simpleflow/price-api-sdk'
+import { UnifiedCurrencyAmount, type Currency, type TradeType } from '@simpleflow/swap-sdk-core'
+import { CAKE, STABLE_COIN, USDC, USDT } from '@simpleflow/tokens'
 import { BridgeOrderFee, computeBridgeOrderFee } from './Bridge/utils'
 import { computeTradePriceBreakdown, SVMTradePriceBreakdown, TradePriceBreakdown } from './V3Swap/utils/exchange'
 

@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/solana-core-sdk",
+  "name": "@simpleflow/solana-core-sdk",
   "version": "0.1.139-alpha",
   "description": "An SDK for building applications fork from Raydium.",
   "private": true,

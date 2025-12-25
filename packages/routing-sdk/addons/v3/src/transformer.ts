@@ -1,12 +1,12 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import {
   parseCurrency,
   parseCurrencyAmount,
   toSerializableCurrency,
   toSerializableCurrencyAmount,
-} from '@pancakeswap/routing-sdk'
-import { Percent } from '@pancakeswap/swap-sdk-core'
-import { Tick } from '@pancakeswap/v3-sdk'
+} from '@simpleflow/routing-sdk'
+import { Percent } from '@simpleflow/swap-sdk-core'
+import { Tick } from '@simpleflow/v3-sdk'
 
 import { SerializableTick, SerializableV3Pool, V3Pool, V3PoolData } from './types'
 import { createV3Pool } from './createV3Pool'

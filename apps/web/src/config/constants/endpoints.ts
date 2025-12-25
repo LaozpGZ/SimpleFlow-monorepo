@@ -1,4 +1,4 @@
-import { ChainId, STABLESWAP_SUBGRAPHS, V2_SUBGRAPHS, V3_SUBGRAPHS } from '@pancakeswap/chains'
+import { ChainId, STABLESWAP_SUBGRAPHS, V2_SUBGRAPHS, V3_SUBGRAPHS } from '@simpleflow/chains'
 
 export const THE_GRAPH_PROXY_API = 'https://thegraph.simpleflow.finance'
 

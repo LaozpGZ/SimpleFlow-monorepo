@@ -1,5 +1,5 @@
 import { Badge, Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import Decimal from 'decimal.js'
 import AddressChip from '@/components/AddressChip'
 import TokenAvatar from '@/components/TokenAvatar'

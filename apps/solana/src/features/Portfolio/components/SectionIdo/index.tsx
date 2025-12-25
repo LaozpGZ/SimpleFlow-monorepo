@@ -1,5 +1,5 @@
 import { Box, Heading, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import useFetchOwnerIdo from '@/hooks/portfolio/useFetchOwnerIdo'
 import useFetchIdoKeys from '@/hooks/portfolio/useFetchIdoKeys'
 import { colors } from '@/theme/cssVariables/colors'

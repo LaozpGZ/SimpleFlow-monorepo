@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { Box, SubMenuItems, DropdownMenuItemType } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Box, SubMenuItems, DropdownMenuItemType } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { useRouter } from 'next/router'
 import useAuthAffiliateExist from 'views/AffiliatesProgram/hooks/useAuthAffiliateExist'
 

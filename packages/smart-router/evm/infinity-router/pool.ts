@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/sdk'
 
 import { Pool } from '../v3-router/types'
 import { isStablePool, isV2Pool, isV3Pool } from '../v3-router/utils'

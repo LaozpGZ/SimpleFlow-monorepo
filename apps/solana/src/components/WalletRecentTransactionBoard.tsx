@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Collapse,

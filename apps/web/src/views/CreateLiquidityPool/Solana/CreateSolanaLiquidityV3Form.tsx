@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
-import { Protocol } from '@pancakeswap/farms'
+import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@simpleflow/uikit'
+import { Protocol } from '@simpleflow/farms'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { CurrencyField as Field } from 'utils/types'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'

@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { AppHeader } from 'components/App'
 import { BodyWrapper } from 'components/App/AppBody'
 import { V2_MIGRATE_PAGE_SUPPORTED_CHAINS } from 'config/constants/supportChains'

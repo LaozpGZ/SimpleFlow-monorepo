@@ -1,4 +1,4 @@
-import { Skeleton } from '@pancakeswap/uikit'
+import { Skeleton } from '@simpleflow/uikit'
 import BigNumber from 'bignumber.js'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import { useActiveChainId } from 'hooks/useActiveChainId'

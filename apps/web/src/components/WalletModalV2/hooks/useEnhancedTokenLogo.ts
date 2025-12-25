@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 
 /**
  * Enhanced token logo hook that looks up better logoURIs from token lists

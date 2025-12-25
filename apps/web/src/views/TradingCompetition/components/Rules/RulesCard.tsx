@@ -1,4 +1,4 @@
-import { Heading, Card, CardBody } from '@pancakeswap/uikit'
+import { Heading, Card, CardBody } from '@simpleflow/uikit'
 
 const RulesCard: React.FC<React.PropsWithChildren<{ title?: string }>> = ({ title, children }) => {
   return (

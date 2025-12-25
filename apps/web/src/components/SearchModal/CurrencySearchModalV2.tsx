@@ -1,8 +1,8 @@
-import { usePreviousValue } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
-import { Token, UnifiedCurrency, UnifiedToken } from '@pancakeswap/sdk'
-import { TokenList } from '@pancakeswap/token-lists'
-import { enableList, removeList, useFetchListCallback } from '@pancakeswap/token-lists/react'
+import { usePreviousValue } from '@simpleflow/hooks'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token, UnifiedCurrency, UnifiedToken } from '@simpleflow/sdk'
+import { TokenList } from '@simpleflow/token-lists'
+import { enableList, removeList, useFetchListCallback } from '@simpleflow/token-lists/react'
 import {
   Button,
   Heading,
@@ -15,14 +15,14 @@ import {
   ModalHeader,
   ModalTitle,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { ImportList } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { ImportList } from '@simpleflow/widgets-internal'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAllLists } from 'state/lists/hooks'
 import { useListState } from 'state/lists/lists'
 import useListUpdater from 'state/lists/useListUpdater'
 import { styled } from 'styled-components'
-import { UnifiedChainId } from '@pancakeswap/chains'
+import { UnifiedChainId } from '@simpleflow/chains'
 import ImportToken from './ImportToken'
 import Manage from './Manage'
 import { CommonBasesType, CurrencyModalView } from './types'

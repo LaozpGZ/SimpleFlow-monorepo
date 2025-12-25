@@ -17,7 +17,7 @@ export {
   isUserTransaction,
   parseVmStatusError,
   HexString,
-} from '@pancakeswap/awgmi/core'
+} from '@simpleflow/awgmi/core'
 
 export * from './client'
 export * from './context'

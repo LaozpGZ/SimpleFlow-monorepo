@@ -1,4 +1,4 @@
-import { Box, NotFound } from '@pancakeswap/uikit'
+import { Box, NotFound } from '@simpleflow/uikit'
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
 import ArticleInfo from 'components/Article/SingleArticle/ArticleInfo'
 import HowItWork from 'components/Article/SingleArticle/HowItWork'
@@ -10,7 +10,7 @@ import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { filterTagArray } from 'utils/filterTagArray'
-import { ArticleDataType } from '@pancakeswap/blog'
+import { ArticleDataType } from '@simpleflow/blog'
 
 export async function getStaticPaths() {
   return {

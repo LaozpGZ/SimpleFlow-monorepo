@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/uikit",
+  "name": "@simpleflow/uikit",
   "version": "0.69.4",
   "description": "Set of UI components for pancake projects",
   "type": "module",
@@ -55,9 +55,9 @@
     "@babel/core": "7.23.9",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-react": "^7.23.3",
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/hooks": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/hooks": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "@storybook/addon-a11y": "^7.0.7",
     "@storybook/addon-actions": "^7.0.7",
     "@storybook/addon-essentials": "^7.0.7",
@@ -114,8 +114,8 @@
     "styled-components": "6.0.7"
   },
   "dependencies": {
-    "@pancakeswap/hooks": "workspace:*",
-    "@pancakeswap/localization": "workspace:*",
+    "@simpleflow/hooks": "workspace:*",
+    "@simpleflow/l10n": "workspace:*",
     "@popperjs/core": "^2.9.2",
     "@radix-ui/react-dismissable-layer": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.0",

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Card, CardBody, CardHeader, Heading, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Card, CardBody, CardHeader, Heading, Text } from '@simpleflow/uikit'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { FAQType } from 'views/LiquidStaking/constants/types'
 

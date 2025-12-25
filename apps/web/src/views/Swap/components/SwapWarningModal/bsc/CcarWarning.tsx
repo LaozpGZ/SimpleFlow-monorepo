@@ -1,5 +1,5 @@
-import { useTranslation, Trans } from '@pancakeswap/localization'
-import { Box, Text, Link } from '@pancakeswap/uikit'
+import { useTranslation, Trans } from '@simpleflow/l10n'
+import { Box, Text, Link } from '@simpleflow/uikit'
 
 const CcarWarning = () => {
   const { t } = useTranslation()

@@ -1,4 +1,4 @@
 module.exports = {
-  extends: ['@pancakeswap/eslint-config-pancake'],
+  extends: ['@simpleflow/eslint-config'],
   ignorePatterns: ['overrides/**/*'],
 }

@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, Link, OpenNewIcon, Text, TextProps } from "@pancakeswap/uikit";
+import { ArrowForwardIcon, Link, OpenNewIcon, Text, TextProps } from "@simpleflow/uikit";
 import { AnchorHTMLAttributes, PropsWithChildren } from "react";
 import { styled } from "styled-components";
 

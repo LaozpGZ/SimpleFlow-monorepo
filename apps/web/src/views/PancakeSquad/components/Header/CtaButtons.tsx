@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { ContextApi } from '@pancakeswap/localization'
-import { Flex } from '@pancakeswap/uikit'
+import { ContextApi } from '@simpleflow/l10n'
+import { Flex } from '@simpleflow/uikit'
 import { DefaultTheme } from 'styled-components'
 import { Address } from 'viem'
 import { SaleStatusEnum, UserStatusEnum } from '../../types'

@@ -1,5 +1,5 @@
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { PoolTypeItem } from '@pancakeswap/solana-core-sdk'
+import { NonEVMChainId } from '@simpleflow/chains'
+import { PoolTypeItem } from '@simpleflow/solana-core-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { QUERY_SETTINGS_IMMUTABLE } from 'config/constants'

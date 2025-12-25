@@ -1,11 +1,11 @@
-import { Trans, useTranslation } from "@pancakeswap/localization";
+import { Trans, useTranslation } from "@simpleflow/l10n";
 import {
   Button,
   IMultiSelectChangeEvent,
   IMultiSelectProps,
   MultiSelect,
   useMatchBreakpoints,
-} from "@pancakeswap/uikit";
+} from "@simpleflow/uikit";
 import { useCallback, useState } from "react";
 import styled, { css } from "styled-components";
 

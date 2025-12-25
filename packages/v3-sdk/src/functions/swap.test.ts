@@ -1,4 +1,4 @@
-import { CurrencyAmount, Ether, Token } from '@pancakeswap/sdk'
+import { CurrencyAmount, Ether, Token } from '@simpleflow/sdk'
 import { beforeEach, describe, expect, test } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from '../constants'
 import { TickListDataProvider } from '../entities'

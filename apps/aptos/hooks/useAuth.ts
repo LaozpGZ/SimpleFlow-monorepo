@@ -1,6 +1,6 @@
-import { useConnect, useDisconnect } from '@pancakeswap/awgmi'
-import { ConnectorNotFoundError } from '@pancakeswap/awgmi/core'
-import { WalletConnectorNotFoundError } from '@pancakeswap/ui-wallets'
+import { useConnect, useDisconnect } from '@simpleflow/awgmi'
+import { ConnectorNotFoundError } from '@simpleflow/awgmi/core'
+import { WalletConnectorNotFoundError } from '@simpleflow/ui-wallets'
 import { ConnectorNames } from 'config/wallets'
 import { useActiveNetwork } from './useNetwork'
 

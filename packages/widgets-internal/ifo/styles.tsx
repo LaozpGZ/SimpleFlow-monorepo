@@ -1,4 +1,4 @@
-import { Box, Tag } from "@pancakeswap/uikit";
+import { Box, Tag } from "@simpleflow/uikit";
 import styled from "styled-components";
 
 export const GradientCard = styled(Box)`

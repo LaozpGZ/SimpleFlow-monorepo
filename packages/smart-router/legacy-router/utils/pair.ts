@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/sdk'
+import { Currency } from '@simpleflow/sdk'
 
 import { Pair, StableSwapPair } from '../types'
 

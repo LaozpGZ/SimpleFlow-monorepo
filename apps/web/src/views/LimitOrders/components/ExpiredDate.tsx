@@ -1,6 +1,6 @@
 import { constants } from '@gelatonetwork/limit-orders-lib'
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Text, HelpIcon, useTooltip } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Text, HelpIcon, useTooltip } from '@simpleflow/uikit'
 
 const ExpiredDate = () => {
   const { t } = useTranslation()

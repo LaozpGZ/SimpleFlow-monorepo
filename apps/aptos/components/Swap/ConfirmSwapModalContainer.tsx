@@ -1,5 +1,5 @@
-import { Modal } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Modal } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 
 const ConfirmSwapModalContainer = ({ children, handleDismiss }) => {
   const { t } = useTranslation()

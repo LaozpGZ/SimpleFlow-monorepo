@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { ApiV3PoolInfoItem, FetchPoolParams, PoolFetchType } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoItem, FetchPoolParams, PoolFetchType } from '@simpleflow/solana-core-sdk'
 import useSWR, { KeyedMutator } from 'swr'
 import { shallow } from 'zustand/shallow'
 import { isValidPublicKey } from '@/utils/publicKey'

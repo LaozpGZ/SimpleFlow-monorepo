@@ -7,7 +7,7 @@ export default defineConfig((options) => ({
   },
   sourcemap: false,
   skipNodeModulesBundle: true,
-  noExternal: ['@pancakeswap/utils'],
+  noExternal: ['@simpleflow/utils'],
   format: ['esm', 'cjs'],
   dts: false,
   clean: !options.watch,

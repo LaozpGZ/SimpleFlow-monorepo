@@ -1,8 +1,8 @@
 import { memo, useMemo, CSSProperties, ReactNode } from "react";
 import styled from "styled-components";
-import { FlexGap, Text, useMatchBreakpoints, type TextProps } from "@pancakeswap/uikit";
-import { useTranslation } from "@pancakeswap/localization";
-import { useCountdown } from "@pancakeswap/hooks";
+import { FlexGap, Text, useMatchBreakpoints, type TextProps } from "@simpleflow/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { useCountdown } from "@simpleflow/hooks";
 
 type CountdownProps = {
   targetTimestamp: number;

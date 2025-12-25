@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react'
-import { Currency, Token } from '@pancakeswap/aptos-swap-sdk'
+import { Currency, Token } from '@simpleflow/aptos-swap-sdk'
 import { useCombinedInactiveList } from 'state/lists/hooks'
 import { useIsUserAddedToken, useIsTokenActive } from 'hooks/Tokens'
-import { APTOS_COIN } from '@pancakeswap/awgmi'
+import { APTOS_COIN } from '@simpleflow/awgmi'
 import { useActiveChainId } from 'hooks/useNetwork'
 import ImportTokenRow from './ImportTokenRow'
 

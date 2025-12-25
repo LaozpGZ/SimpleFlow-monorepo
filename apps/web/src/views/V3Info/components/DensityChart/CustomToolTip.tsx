@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn, Text } from '@simpleflow/uikit'
 import useTheme from 'hooks/useTheme'
 import { PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'

@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 export const SUPPORTED_CHAIN_IDS = [
   ChainId.BSC,

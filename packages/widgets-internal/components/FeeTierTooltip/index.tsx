@@ -1,7 +1,7 @@
-import { Protocol } from "@pancakeswap/farms";
-import { useTranslation } from "@pancakeswap/localization";
-import { Percent } from "@pancakeswap/swap-sdk-core";
-import { FeeTier, LinkExternal, Text, useTooltip } from "@pancakeswap/uikit";
+import { Protocol } from "@simpleflow/farms";
+import { useTranslation } from "@simpleflow/l10n";
+import { Percent } from "@simpleflow/swap-sdk-core";
+import { FeeTier, LinkExternal, Text, useTooltip } from "@simpleflow/uikit";
 import { useMemo } from "react";
 
 export type FeeTierTooltipProps = {

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { styled } from 'styled-components'
-import { Flex, Text, Link } from '@pancakeswap/uikit'
+import { Flex, Text, Link } from '@simpleflow/uikit'
 
 export const Container = styled(Flex)`
   display: grid;

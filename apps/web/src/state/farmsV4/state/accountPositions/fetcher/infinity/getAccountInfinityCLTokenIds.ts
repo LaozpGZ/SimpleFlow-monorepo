@@ -1,4 +1,4 @@
-import { BinPositionManagerAbi, CLPositionManagerAbi } from '@pancakeswap/infinity-sdk'
+import { BinPositionManagerAbi, CLPositionManagerAbi } from '@simpleflow/infinity-sdk'
 import { getInfinityPositionManagerAddress } from 'utils/addressHelpers'
 import { publicClient } from 'utils/viem'
 import { Address, isAddressEqual } from 'viem'

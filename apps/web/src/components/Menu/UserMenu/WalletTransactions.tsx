@@ -1,4 +1,4 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box } from '@simpleflow/uikit'
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 
 interface WalletTransactionsProps {

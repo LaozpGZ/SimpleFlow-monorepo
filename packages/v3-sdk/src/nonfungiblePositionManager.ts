@@ -6,7 +6,7 @@ import {
   Percent,
   Token,
   validateAndParseAddress,
-} from '@pancakeswap/sdk'
+} from '@simpleflow/sdk'
 import { Address, Hex, encodeFunctionData } from 'viem'
 
 import invariant from 'tiny-invariant'

@@ -1,8 +1,8 @@
-import { ChainId } from '@pancakeswap/chains'
-import { BigintIsh, Currency, CurrencyAmount, erc20Abi, Percent } from '@pancakeswap/sdk'
-import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
-import { deserializeToken } from '@pancakeswap/token-lists'
-import { DEPLOYER_ADDRESSES, FeeAmount, pancakeV3PoolABI, parseProtocolFees } from '@pancakeswap/v3-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { BigintIsh, Currency, CurrencyAmount, erc20Abi, Percent } from '@simpleflow/sdk'
+import { getStableSwapPools } from '@simpleflow/stable-swap-sdk'
+import { deserializeToken } from '@simpleflow/token-lists'
+import { DEPLOYER_ADDRESSES, FeeAmount, pancakeV3PoolABI, parseProtocolFees } from '@simpleflow/v3-sdk'
 import { Abi, Address } from 'viem'
 
 import { pancakePairABI } from '../../../abis/IPancakePair'

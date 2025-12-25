@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Text, Message, MessageText } from '@pancakeswap/uikit'
-import { ChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@simpleflow/l10n'
+import { Text, Message, MessageText } from '@simpleflow/uikit'
+import { ChainId } from '@simpleflow/chains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const WrongNetworkWarning = () => {

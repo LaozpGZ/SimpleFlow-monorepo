@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Token, UnifiedToken } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token, UnifiedToken } from '@simpleflow/sdk'
 import {
   AutoColumn,
   BscScanIcon,
@@ -10,7 +10,7 @@ import {
   Input,
   Link,
   Text,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import Row, { RowBetween, RowFixed } from 'components/Layout/Row'
 import { CurrencyLogo } from 'components/Logo'
 import { useTokenByChainId } from 'hooks/Tokens'

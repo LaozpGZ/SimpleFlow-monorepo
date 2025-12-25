@@ -1,4 +1,4 @@
-import { nearestUsableTick, TickMath } from '@pancakeswap/v3-sdk'
+import { nearestUsableTick, TickMath } from '@simpleflow/v3-sdk'
 import { Bound } from 'config/constants/types'
 import { useMemo } from 'react'
 

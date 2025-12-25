@@ -1,10 +1,10 @@
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { useCallback, useEffect, useState, useMemo, memo } from "react";
-import { Currency, CurrencyAmount, ERC20Token, ONE_HUNDRED_PERCENT, ZERO_PERCENT } from "@pancakeswap/sdk";
-import { FeeCalculator, encodeSqrtRatioX96 } from "@pancakeswap/v3-sdk";
+import { Currency, CurrencyAmount, ERC20Token, ONE_HUNDRED_PERCENT, ZERO_PERCENT } from "@simpleflow/sdk";
+import { FeeCalculator, encodeSqrtRatioX96 } from "@simpleflow/v3-sdk";
 import { styled } from "styled-components";
-import { CAKE } from "@pancakeswap/tokens";
-import { Box, Row, AutoColumn, Toggle, RowBetween, Message } from "@pancakeswap/uikit";
+import { CAKE } from "@simpleflow/tokens";
+import { Box, Row, AutoColumn, Toggle, RowBetween, Message } from "@simpleflow/uikit";
 import { DoubleCurrencyLogo } from "../components/CurrencyLogo";
 
 import { Section } from "./Section";

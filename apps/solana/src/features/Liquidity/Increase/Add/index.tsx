@@ -1,7 +1,7 @@
 import { Flex, HStack, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiV3PoolInfoStandardItem, ApiV3Token, TokenInfo, ApiV3PoolInfoStandardItemCpmm } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoStandardItem, ApiV3Token, TokenInfo, ApiV3PoolInfoStandardItemCpmm } from '@simpleflow/solana-core-sdk'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 
 import Decimal from 'decimal.js'
 import { shallow } from 'zustand/shallow'

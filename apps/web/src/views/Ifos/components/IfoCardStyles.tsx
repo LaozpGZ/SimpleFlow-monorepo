@@ -1,4 +1,4 @@
-import { Card, StyledLink } from '@pancakeswap/uikit'
+import { Card, StyledLink } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import NextLink from 'next/link'
 import { TypographyProps, typography } from 'styled-system'

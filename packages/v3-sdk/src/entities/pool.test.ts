@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token, WETH9 } from '@pancakeswap/sdk'
+import { CurrencyAmount, Token, WETH9 } from '@simpleflow/sdk'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from '../constants'
 import { NEGATIVE_ONE } from '../internalConstants'

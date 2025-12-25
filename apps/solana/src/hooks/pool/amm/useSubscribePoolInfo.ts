@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { PublicKey, GetProgramAccountsFilter } from '@solana/web3.js'
-import { ApiV3Token, liquidityStateV4Layout, liquidityStateV5Layout } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, liquidityStateV4Layout, liquidityStateV5Layout } from '@simpleflow/solana-core-sdk'
 
 import { Subject, throttleTime, filter, asyncScheduler } from 'rxjs'
 import { useAppStore } from '@/store'

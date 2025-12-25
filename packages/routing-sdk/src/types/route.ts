@@ -1,4 +1,4 @@
-import type { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import type { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 
 import type { Pool, SerializablePool } from './pool'
 import type { GasUseEstimate, SerializableGasUseEstimate } from './gasEstimate'

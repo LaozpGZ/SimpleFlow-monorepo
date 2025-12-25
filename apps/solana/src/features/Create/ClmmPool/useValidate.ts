@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { ApiClmmConfigInfo, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ApiClmmConfigInfo, TokenInfo } from '@simpleflow/solana-core-sdk'
 import * as yup from 'yup'
-import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
+import { useTranslation, type TranslateFunction } from '@simpleflow/l10n'
 
 interface Props {
   config?: ApiClmmConfigInfo

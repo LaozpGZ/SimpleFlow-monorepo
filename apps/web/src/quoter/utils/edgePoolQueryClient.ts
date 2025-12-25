@@ -1,8 +1,8 @@
-import { InfinityBinPool, InfinityClPool, SmartRouter, StablePool, V2Pool, V3Pool } from '@pancakeswap/smart-router'
+import { InfinityBinPool, InfinityClPool, SmartRouter, StablePool, V2Pool, V3Pool } from '@simpleflow/smart-router'
 
-import { ChainId } from '@pancakeswap/chains'
-import { Currency, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
-import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
+import { ChainId } from '@simpleflow/chains'
+import { Currency, getCurrencyAddress } from '@simpleflow/swap-sdk-core'
+import { cacheByLRU } from '@simpleflow/utils/cacheByLRU'
 import qs from 'qs'
 import { PoolHashHelper } from './PoolHashHelper'
 import { Protocol } from './edgeQueries.util'

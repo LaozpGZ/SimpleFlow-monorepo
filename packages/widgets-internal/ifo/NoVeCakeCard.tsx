@@ -1,6 +1,6 @@
-import { ChainId } from "@pancakeswap/chains";
-import { useTranslation } from "@pancakeswap/localization";
-import { Box, Button, Flex, Text } from "@pancakeswap/uikit";
+import { ChainId } from "@simpleflow/chains";
+import { useTranslation } from "@simpleflow/l10n";
+import { Box, Button, Flex, Text } from "@simpleflow/uikit";
 import Link from "next/link";
 import { ChainLogo } from "./ChainLogo";
 import { ChainNameMap, IfoChainId } from "./constants";

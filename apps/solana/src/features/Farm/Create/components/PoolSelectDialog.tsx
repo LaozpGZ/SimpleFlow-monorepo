@@ -14,10 +14,10 @@ import {
   Skeleton,
   Text
 } from '@chakra-ui/react'
-import { ApiV3Token, PoolFetchType } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, PoolFetchType } from '@simpleflow/solana-core-sdk'
 import { useCallback, useState } from 'react'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { FormattedPoolInfoItem } from '@/hooks/pool/type'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
 import useFetchPoolByMint from '@/hooks/pool/useFetchPoolByMint'

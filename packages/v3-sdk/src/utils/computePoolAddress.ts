@@ -14,8 +14,8 @@ import {
   getAddress,
   ByteArray,
 } from 'viem'
-import { Token } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { Token } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 import { FeeAmount, POOL_INIT_CODE_HASHES } from '../constants'
 
 function getCreate2Address(

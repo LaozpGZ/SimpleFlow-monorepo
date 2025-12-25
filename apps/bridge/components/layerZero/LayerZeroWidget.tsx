@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Box, PancakeTheme } from '@pancakeswap/uikit'
+import { Box, PancakeTheme } from '@simpleflow/uikit'
 
 declare global {
   interface Window {

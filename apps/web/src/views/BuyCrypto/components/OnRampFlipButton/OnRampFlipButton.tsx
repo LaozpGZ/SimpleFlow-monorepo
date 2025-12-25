@@ -1,4 +1,4 @@
-import { Box, IconButton, RefreshIcon } from '@pancakeswap/uikit'
+import { Box, IconButton, RefreshIcon } from '@simpleflow/uikit'
 
 import { memo } from 'react'
 

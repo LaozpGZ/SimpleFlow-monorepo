@@ -1,17 +1,17 @@
 /* eslint-disable camelcase */
-import { ChainId, Coin, Pair, PAIR_RESERVE_TYPE_TAG } from '@pancakeswap/aptos-swap-sdk'
-import { useAccount, useAccountResource, useCoins } from '@pancakeswap/awgmi'
+import { ChainId, Coin, Pair, PAIR_RESERVE_TYPE_TAG } from '@simpleflow/aptos-swap-sdk'
+import { useAccount, useAccountResource, useCoins } from '@simpleflow/awgmi'
 import {
   FetchAccountResourceResult,
   fetchAptosView,
   FetchCoinResult,
   fetchTableItem,
   unwrapTypeArgFromString,
-} from '@pancakeswap/awgmi/core'
-import { DeserializedFarmsState, deserializeFarm, SerializedFarmConfig } from '@pancakeswap/farms'
-import { getFarmsPrices } from '@pancakeswap/farms/farmPrices'
-import { BIG_TWO, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
+} from '@simpleflow/awgmi/core'
+import { DeserializedFarmsState, deserializeFarm, SerializedFarmConfig } from '@simpleflow/farms'
+import { getFarmsPrices } from '@simpleflow/farms/farmPrices'
+import { BIG_TWO, BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { getFullDecimalMultiplier } from '@simpleflow/utils/getFullDecimalMultiplier'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import { FARM_DEFAULT_DECIMALS } from 'components/Farms/constants'

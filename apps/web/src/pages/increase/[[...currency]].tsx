@@ -1,4 +1,4 @@
-import { CAKE, USDC } from '@pancakeswap/tokens'
+import { CAKE, USDC } from '@simpleflow/tokens'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'

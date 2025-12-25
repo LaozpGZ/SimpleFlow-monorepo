@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 const pocketPrefix = {
   [ChainId.ARBITRUM_ONE]: 'arbitrum-one',

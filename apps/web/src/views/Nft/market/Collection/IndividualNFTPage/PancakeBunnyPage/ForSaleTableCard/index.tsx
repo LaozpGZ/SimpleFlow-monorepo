@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -10,8 +10,8 @@ import {
   Spinner,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+} from '@simpleflow/uikit'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import useTheme from 'hooks/useTheme'
 import chunk from 'lodash/chunk'

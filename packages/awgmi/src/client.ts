@@ -1,4 +1,4 @@
-import { ClientConfig, Client as CoreClient, createClient as createCoreClient } from '@pancakeswap/awgmi/core'
+import { ClientConfig, Client as CoreClient, createClient as createCoreClient } from '@simpleflow/awgmi/core'
 import { Aptos } from '@aptos-labs/ts-sdk'
 
 export type CreateClientConfig<TProvider extends Aptos> = ClientConfig<TProvider>

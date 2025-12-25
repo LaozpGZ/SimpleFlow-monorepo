@@ -1,4 +1,4 @@
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import memoize from 'lodash/memoize'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'

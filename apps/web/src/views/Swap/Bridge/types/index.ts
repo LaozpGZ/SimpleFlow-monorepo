@@ -1,5 +1,5 @@
-import { BridgeTransactionData, PriceOrder, SVMOrder } from '@pancakeswap/price-api-sdk'
-import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { BridgeTransactionData, PriceOrder, SVMOrder } from '@simpleflow/price-api-sdk'
+import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@simpleflow/swap-sdk-core'
 import { Address } from 'viem/accounts'
 import { CrossChainAPIErrorCode } from '../CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 

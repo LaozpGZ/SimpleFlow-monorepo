@@ -1,10 +1,10 @@
-import { ChainId } from '@pancakeswap/chains'
-import { HookData, hooksList, whitelistLabeledHooksList } from '@pancakeswap/infinity-sdk'
+import { ChainId } from '@simpleflow/chains'
+import { HookData, hooksList, whitelistLabeledHooksList } from '@simpleflow/infinity-sdk'
 import { Address } from 'viem'
 import keyBy from 'lodash/keyBy'
 import memoize from 'lodash/memoize'
 import { isAddressEqual } from 'utils'
-import { ZERO_ADDRESS } from '@pancakeswap/sdk'
+import { ZERO_ADDRESS } from '@simpleflow/sdk'
 
 export const getHooksMap = memoize((chainId: number) => {
   const list = hooksList[chainId] ?? []

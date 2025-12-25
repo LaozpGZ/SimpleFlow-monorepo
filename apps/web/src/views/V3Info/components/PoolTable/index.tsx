@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ArrowBackIcon, ArrowForwardIcon, Box, SortArrowIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { ArrowBackIcon, ArrowForwardIcon, Box, SortArrowIcon, Text } from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import NextLink from 'next/link'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'

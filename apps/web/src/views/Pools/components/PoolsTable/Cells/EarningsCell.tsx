@@ -1,13 +1,13 @@
 import { styled } from 'styled-components'
-import { Skeleton, Text, Flex, Box, useModal, useMatchBreakpoints, Balance } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Skeleton, Text, Flex, Box, useModal, useMatchBreakpoints, Balance } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 
 import BigNumber from 'bignumber.js'
 import { PoolCategory } from 'config/constants/types'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { formatNumber, getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
-import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { formatNumber, getBalanceNumber, getFullDisplayBalance } from '@simpleflow/utils/formatBalance'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token } from '@simpleflow/sdk'
 import CollectModal from '../../Modals/CollectModal'
 
 interface EarningsCellProps {

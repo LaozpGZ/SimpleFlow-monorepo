@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
-import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
+import { getFullDecimalMultiplier } from '@simpleflow/utils/getFullDecimalMultiplier'
 import { useSousChef } from 'hooks/useContract'
 
 const options = {}

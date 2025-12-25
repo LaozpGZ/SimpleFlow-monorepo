@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/tsconfig",
+  "name": "@simpleflow/tsconfig",
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.js",

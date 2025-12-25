@@ -1,4 +1,4 @@
-import { CurrencyAmount, Ether, Native, Percent, Token, TradeType, WETH9 } from '@pancakeswap/sdk'
+import { CurrencyAmount, Ether, Native, Percent, Token, TradeType, WETH9 } from '@simpleflow/sdk'
 import { describe, it, expect } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from './constants'
 import { Pool } from './entities/pool'

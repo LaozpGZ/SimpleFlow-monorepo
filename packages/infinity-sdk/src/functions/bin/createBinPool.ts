@@ -1,4 +1,4 @@
-import { BigintIsh, Currency, sortCurrencies } from '@pancakeswap/swap-sdk-core'
+import { BigintIsh, Currency, sortCurrencies } from '@simpleflow/swap-sdk-core'
 import invariant from 'tiny-invariant'
 import { Address } from 'viem'
 import { MAX_BIN_STEP, MIN_BIN_STEP } from '../../constants'

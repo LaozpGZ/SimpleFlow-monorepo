@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { RocketIcon, Tag, TagProps } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { RocketIcon, Tag, TagProps } from '@simpleflow/uikit'
 import { memo } from 'react'
 
 interface BoostedTag extends TagProps {

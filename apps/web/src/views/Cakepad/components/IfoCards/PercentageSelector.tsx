@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, FlexGap } from '@pancakeswap/uikit'
-import type { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, FlexGap } from '@simpleflow/uikit'
+import type { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 
 interface PercentageSelectorProps {
   maxAmountInput?: CurrencyAmount<Currency>

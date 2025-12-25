@@ -1,5 +1,5 @@
 import { HStack, Text, useDisclosure } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useEffect } from 'react'
 import useFetchOwnerIdo from '@/hooks/portfolio/useFetchOwnerIdo'
 import { useAppStore } from '@/store'

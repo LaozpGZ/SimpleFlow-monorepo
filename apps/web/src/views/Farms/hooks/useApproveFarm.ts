@@ -1,4 +1,4 @@
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
+import { MaxUint256 } from '@simpleflow/swap-sdk-core'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useERC20 } from 'hooks/useContract'
 import { useCallback } from 'react'

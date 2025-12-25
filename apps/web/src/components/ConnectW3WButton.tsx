@@ -1,5 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Button,
   type ButtonProps,
@@ -11,7 +11,7 @@ import {
   Text,
   WalletFilledV2Icon,
   useToast,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useCallback, useState } from 'react'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { binanceWeb3WalletConnector } from 'utils/wagmi'

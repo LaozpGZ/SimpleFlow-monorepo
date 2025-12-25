@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { Flex, FlexProps, Text } from "@pancakeswap/uikit";
+import { Flex, FlexProps, Text } from "@simpleflow/uikit";
 
 export const BaseCell = styled(Flex)<FlexProps>`
   color: black;

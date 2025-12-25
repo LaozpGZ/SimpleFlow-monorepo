@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { PublicKey } from '@solana/web3.js'
-import { OwnerCreatedFarmInfo } from '@pancakeswap/solana-core-sdk'
+import { OwnerCreatedFarmInfo } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import axios from '@/api/axios'

@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { Link } from "../Link";
 import { Text } from "../Text";
 

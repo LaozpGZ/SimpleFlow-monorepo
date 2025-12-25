@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useActiveIfoConfigAcrossChains } from 'hooks/useIfoConfig'
 import dayjs from 'dayjs'
 import { BodyText } from '../BodyText'

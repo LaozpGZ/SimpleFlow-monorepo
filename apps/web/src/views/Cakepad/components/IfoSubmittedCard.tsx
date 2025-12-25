@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Card, CardBody, Button } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Card, CardBody, Button } from '@simpleflow/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useBlockExploreLink } from 'utils'
 import dynamic from 'next/dynamic'

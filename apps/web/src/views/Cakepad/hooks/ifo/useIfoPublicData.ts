@@ -1,5 +1,5 @@
-import { IfoStatus } from '@pancakeswap/ifos'
-import { type Currency, CurrencyAmount, Percent, Price } from '@pancakeswap/swap-sdk-core'
+import { IfoStatus } from '@simpleflow/ifos'
+import { type Currency, CurrencyAmount, Percent, Price } from '@simpleflow/swap-sdk-core'
 import { UnsafeCurrency } from 'config/constants/types'
 import { getStatusByTimestamp } from '../helpers'
 import { useIFOStatus } from './useIFOStatus'

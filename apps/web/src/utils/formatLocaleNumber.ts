@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Price, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Price, UnifiedCurrency } from '@simpleflow/sdk'
 
 interface FormatLocaleNumberArgs {
   number: CurrencyAmount<Currency> | Price<UnifiedCurrency, UnifiedCurrency> | number

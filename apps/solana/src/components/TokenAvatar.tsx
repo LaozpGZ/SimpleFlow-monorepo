@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AvatarProps, Box, forwardRef } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import { DefaultTokenIcon } from '@pancakeswap/uikit'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
+import { DefaultTokenIcon } from '@simpleflow/uikit'
 
 import useTokenInfo from '@/hooks/token/useTokenInfo'
 import { colors } from '@/theme/cssVariables'

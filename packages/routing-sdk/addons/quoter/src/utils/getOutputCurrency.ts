@@ -1,8 +1,8 @@
-import { isInfinityBinPool, isInfinityCLPool } from '@pancakeswap/routing-sdk-addon-infinity'
-import { isStablePool } from '@pancakeswap/routing-sdk-addon-stable-swap'
-import { isV2Pool } from '@pancakeswap/routing-sdk-addon-v2'
-import { isV3Pool } from '@pancakeswap/routing-sdk-addon-v3'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { isInfinityBinPool, isInfinityCLPool } from '@simpleflow/routing-sdk-addon-infinity'
+import { isStablePool } from '@simpleflow/routing-sdk-addon-stable-swap'
+import { isV2Pool } from '@simpleflow/routing-sdk-addon-v2'
+import { isV3Pool } from '@simpleflow/routing-sdk-addon-v3'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { SupportedPool } from '../types'
 
 // FIXME: current version is not working with stable pools that have more than 2 tokens

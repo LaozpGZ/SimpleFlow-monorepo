@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { pancakeProfileABI } from 'config/abi/pancakeProfile'
 import teamsList from 'config/constants/teams'
 import { Team } from 'config/constants/types'

@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token, TradeType, WETH9 } from '@pancakeswap/sdk'
+import { CurrencyAmount, Token, TradeType, WETH9 } from '@simpleflow/sdk'
 import { describe, expect, it } from 'vitest'
 import { FeeAmount, TICK_SPACINGS } from './constants'
 import { SwapQuoter } from './quoter'

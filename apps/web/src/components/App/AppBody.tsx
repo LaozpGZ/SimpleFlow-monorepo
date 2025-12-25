@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { Card, CardProps } from '@pancakeswap/uikit'
+import { Card, CardProps } from '@simpleflow/uikit'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 24px;

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Flex, Text } from '@simpleflow/uikit'
 import Page from 'components/Layout/Page'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'

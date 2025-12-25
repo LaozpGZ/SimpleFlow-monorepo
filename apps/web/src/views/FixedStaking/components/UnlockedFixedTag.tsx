@@ -1,4 +1,4 @@
-import { Tag, UnlockIcon } from '@pancakeswap/uikit'
+import { Tag, UnlockIcon } from '@simpleflow/uikit'
 import { CSSProperties, ReactNode } from 'react'
 
 export function UnlockedFixedTag({ children, style }: { children: ReactNode; style?: CSSProperties }) {

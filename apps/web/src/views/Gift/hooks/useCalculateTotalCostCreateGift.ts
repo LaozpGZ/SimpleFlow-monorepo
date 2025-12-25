@@ -1,4 +1,4 @@
-import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
+import { CurrencyAmount, NativeCurrency, Token } from '@simpleflow/sdk'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
 

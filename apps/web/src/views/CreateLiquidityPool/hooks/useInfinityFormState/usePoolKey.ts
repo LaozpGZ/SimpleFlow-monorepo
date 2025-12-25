@@ -1,4 +1,4 @@
-import { DYNAMIC_FEE_FLAG, PoolKey } from '@pancakeswap/infinity-sdk'
+import { DYNAMIC_FEE_FLAG, PoolKey } from '@simpleflow/infinity-sdk'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useLPFeeFromTotalFee } from 'hooks/infinity/useLPFeeFromTotalFee'
 import { useMemo } from 'react'

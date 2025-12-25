@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { SECONDS_IN_YEAR } from 'config'
-import { BIG_TEN } from '@pancakeswap/utils/bigNumber'
+import { BIG_TEN } from '@simpleflow/utils/bigNumber'
 import { FARM_DEFAULT_DECIMALS } from 'components/Farms/constants'
 
 /**

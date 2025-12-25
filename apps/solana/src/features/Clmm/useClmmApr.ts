@@ -1,4 +1,4 @@
-import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoConcentratedItem } from '@simpleflow/solana-core-sdk'
 import BN from 'bn.js'
 import { useMemo } from 'react'
 import { AprKey } from '@/hooks/pool/type'

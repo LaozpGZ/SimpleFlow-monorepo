@@ -1,4 +1,4 @@
-import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useCallback } from 'react'
 import currencyId from 'utils/currencyId'

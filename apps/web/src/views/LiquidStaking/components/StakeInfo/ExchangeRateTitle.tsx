@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, QuestionHelper, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, QuestionHelper, Text } from '@simpleflow/uikit'
 
 interface ExchangeRateTitleProps {
   tokenOSymbol?: string

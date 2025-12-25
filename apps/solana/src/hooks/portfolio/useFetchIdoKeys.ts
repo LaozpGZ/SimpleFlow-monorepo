@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { IdoKeysData } from '@pancakeswap/solana-core-sdk'
+import { IdoKeysData } from '@simpleflow/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import axios from '@/api/axios'

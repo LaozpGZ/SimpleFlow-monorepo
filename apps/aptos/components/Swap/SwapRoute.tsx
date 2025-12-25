@@ -1,5 +1,5 @@
-import { Currency, Trade, TradeType } from '@pancakeswap/aptos-swap-sdk'
-import { ChevronRightIcon, Flex, Text } from '@pancakeswap/uikit'
+import { Currency, Trade, TradeType } from '@simpleflow/aptos-swap-sdk'
+import { ChevronRightIcon, Flex, Text } from '@simpleflow/uikit'
 import { Fragment, memo } from 'react'
 
 export default memo(function SwapRoute({ trade }: { trade: Trade<Currency, Currency, TradeType> }) {

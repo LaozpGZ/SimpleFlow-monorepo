@@ -4,9 +4,9 @@ import {
   Permit2ABI,
   generatePermitTypedData,
   getPermit2Address,
-} from '@pancakeswap/permit2-sdk'
-import { Token } from '@pancakeswap/swap-sdk-core'
-import { Permit2Signature } from '@pancakeswap/universal-router-sdk'
+} from '@simpleflow/permit2-sdk'
+import { Token } from '@simpleflow/swap-sdk-core'
+import { Permit2Signature } from '@simpleflow/universal-router-sdk'
 import { useCallback } from 'react'
 import { publicClient } from 'utils/viem'
 import { Address, isHex } from 'viem'

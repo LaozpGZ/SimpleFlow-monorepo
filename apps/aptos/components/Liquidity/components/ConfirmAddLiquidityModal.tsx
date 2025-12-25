@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
-import { Coin, Currency, CurrencyAmount, Percent, Price } from '@pancakeswap/aptos-swap-sdk'
-import { InjectedModalProps, Button } from '@pancakeswap/uikit'
-import { TransactionErrorContent, ConfirmationModalContent } from '@pancakeswap/widgets-internal'
+import { Coin, Currency, CurrencyAmount, Percent, Price } from '@simpleflow/aptos-swap-sdk'
+import { InjectedModalProps, Button } from '@simpleflow/uikit'
+import { TransactionErrorContent, ConfirmationModalContent } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 import formatAmountDisplay from 'utils/formatAmountDisplay'
 import { AddLiquidityModalHeader, PairDistribution } from './common'

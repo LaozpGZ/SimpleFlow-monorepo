@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation, Trans } from '@pancakeswap/localization'
-import { Flex, Link, Text } from '@pancakeswap/uikit'
+import { ChainId } from '@simpleflow/chains'
+import { useTranslation, Trans } from '@simpleflow/l10n'
+import { Flex, Link, Text } from '@simpleflow/uikit'
 import { TOKEN_RISK } from 'components/AccessRisk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 

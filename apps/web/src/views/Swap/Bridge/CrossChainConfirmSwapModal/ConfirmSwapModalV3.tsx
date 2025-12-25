@@ -1,11 +1,11 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@simpleflow/sdk'
 import { useCallback, useMemo } from 'react'
 
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
-import { Box, BscScanIcon, Flex, InjectedModalProps, Link, Text } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import { WrappedTokenInfo } from '@simpleflow/token-lists'
+import { Box, BscScanIcon, Flex, InjectedModalProps, Link, Text } from '@simpleflow/uikit'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
+import truncateHash from '@simpleflow/utils/truncateHash'
 import {
   ApproveModalContent,
   ApproveModalContentV3,
@@ -13,7 +13,7 @@ import {
   SwapPendingModalContent,
   SwapPendingModalContentV3,
   SwapTransactionReceiptModalContent,
-} from '@pancakeswap/widgets-internal'
+} from '@simpleflow/widgets-internal'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'

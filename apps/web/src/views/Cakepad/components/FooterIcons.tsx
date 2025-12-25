@@ -6,7 +6,7 @@ import {
   TelegramIcon,
   TwitterIcon,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import useTheme from 'hooks/useTheme'
 import { getBlockExploreLink, safeGetAddress } from 'utils'
 import useIfo from '../hooks/useIfo'

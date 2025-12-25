@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token } from '@simpleflow/sdk'
 import {
   AutoRow,
   Box,
@@ -11,9 +11,9 @@ import {
   Tag,
   Text,
   useTooltip,
-} from '@pancakeswap/uikit'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { FeeAmount } from '@simpleflow/v3-sdk'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 import { GiftTooltip } from 'components/GiftTooltip/GiftTooltip'
 import { TokenPairImage } from 'components/TokenImage'
 import { styled } from 'styled-components'

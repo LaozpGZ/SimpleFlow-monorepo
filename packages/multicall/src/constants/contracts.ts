@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { Address } from 'viem'
 
 export const MULTICALL3_ADDRESS = '0xcA11bde05977b3631167028862bE2a173976CA11'

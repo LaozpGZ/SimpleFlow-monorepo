@@ -1,6 +1,6 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Flex, Text, TimerIcon, useTooltip } from "@pancakeswap/uikit";
-import getTimePeriods from "@pancakeswap/utils/getTimePeriods";
+import { useTranslation } from "@simpleflow/l10n";
+import { Flex, Text, TimerIcon, useTooltip } from "@simpleflow/uikit";
+import getTimePeriods from "@simpleflow/utils/getTimePeriods";
 import { useMemo } from "react";
 
 import { DeserializedPool } from "../types";

@@ -1,5 +1,5 @@
-import { UnifiedCurrency } from '@pancakeswap/sdk'
-import { TickUtils } from '@pancakeswap/solana-core-sdk'
+import { UnifiedCurrency } from '@simpleflow/sdk'
+import { TickUtils } from '@simpleflow/solana-core-sdk'
 import { useClmmAmmConfigs } from 'hooks/solana/useClmmAmmConfigs'
 import { tryParsePriceSolana } from 'hooks/v3/utils/tryParsePriceSolana'
 import { useCallback, useMemo } from 'react'

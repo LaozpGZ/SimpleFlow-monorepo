@@ -1,4 +1,4 @@
-import { LegacyWalletConfig, LegacyWalletIds } from '@pancakeswap/ui-wallets'
+import { LegacyWalletConfig, LegacyWalletIds } from '@simpleflow/ui-wallets'
 
 export enum ConnectorNames {
   Petra = 'petra',

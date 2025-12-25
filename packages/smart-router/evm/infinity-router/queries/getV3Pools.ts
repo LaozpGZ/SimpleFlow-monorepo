@@ -1,4 +1,4 @@
-import { BigintIsh, Currency } from '@pancakeswap/sdk'
+import { BigintIsh, Currency } from '@simpleflow/sdk'
 
 import { getPairCombinations } from '../../v3-router/functions'
 import { getV3PoolsWithoutTicksOnChain } from '../../v3-router/providers'

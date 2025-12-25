@@ -1,5 +1,5 @@
-import { Currency } from '@pancakeswap/aptos-swap-sdk'
-import { withCurrencyLogo } from '@pancakeswap/widgets-internal'
+import { Currency } from '@simpleflow/aptos-swap-sdk'
+import { withCurrencyLogo } from '@simpleflow/widgets-internal'
 
 import { CurrencyLogo } from '../Logo'
 

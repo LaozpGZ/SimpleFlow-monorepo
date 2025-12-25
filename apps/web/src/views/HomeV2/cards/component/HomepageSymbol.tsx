@@ -1,4 +1,4 @@
-import { Text } from '@pancakeswap/uikit'
+import { Text } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 // We add a small helper function to handle the font size based on isMobile and isTablet

@@ -1,16 +1,16 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { MultichainWalletModal } from '@pancakeswap/ui-wallets'
+import { useTranslation } from '@simpleflow/l10n'
+import { MultichainWalletModal } from '@simpleflow/ui-wallets'
 import { createQrCode, getDocLink } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useFirebaseAuth } from 'wallet/Privy/firebase'
 import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useWalletFilterEffect } from '@pancakeswap/ui-wallets/src/state/hooks'
+import { useWalletFilterEffect } from '@simpleflow/ui-wallets/src/state/hooks'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()

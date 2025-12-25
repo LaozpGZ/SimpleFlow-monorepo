@@ -1,5 +1,5 @@
 import { Button, HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import AddressChip from '@/components/AddressChip'
 import CircleCheck from '@/icons/misc/CircleCheck'
 import { colors } from '@/theme/cssVariables'

@@ -1,6 +1,6 @@
 import { Hex, Address, encodeFunctionData } from 'viem'
-import { Percent, Token, validateAndParseAddress } from '@pancakeswap/sdk'
-import { FeeOptions, Payments } from '@pancakeswap/v3-sdk'
+import { Percent, Token, validateAndParseAddress } from '@simpleflow/sdk'
+import { FeeOptions, Payments } from '@simpleflow/v3-sdk'
 
 import { peripheryPaymentsWithFeeExtendedAbi } from '../../abis/IPeripheryPaymentsWithFeeExtended'
 

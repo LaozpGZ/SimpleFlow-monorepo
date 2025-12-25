@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import SortUpDownArrow from '@/components/SortUpDownArrow'
 import { colors } from '@/theme/cssVariables'
 import { Desktop, Mobile } from '@/components/MobileDesktop'

@@ -7,7 +7,7 @@ import {
   MotionBox,
   Skeleton,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { useAtomValue } from 'jotai'
 import { Suspense } from 'react'
 import styled from 'styled-components'

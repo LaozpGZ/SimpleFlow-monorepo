@@ -1,4 +1,4 @@
-import type { FarmV4SupportedChainId } from '@pancakeswap/farms'
+import type { FarmV4SupportedChainId } from '@simpleflow/farms'
 import { getCorsHeaders, handleCors } from 'edge/cors'
 import { NextRequest, NextResponse } from 'next/server'
 import { edgeQueries } from 'quoter/utils/edgePoolQueries'

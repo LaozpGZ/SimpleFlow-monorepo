@@ -1,5 +1,5 @@
-import { Currency, Price, Token } from '@pancakeswap/swap-sdk-core'
-import { tickToPrice } from '@pancakeswap/v3-sdk'
+import { Currency, Price, Token } from '@simpleflow/swap-sdk-core'
+import { tickToPrice } from '@simpleflow/v3-sdk'
 
 export function getTickToPrice<T extends Currency | Token = Token>(
   baseToken?: T,

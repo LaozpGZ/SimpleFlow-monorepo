@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { CHAINS } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMemo } from 'react'

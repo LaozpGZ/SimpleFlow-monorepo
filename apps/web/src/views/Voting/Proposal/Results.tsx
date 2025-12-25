@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, CardBody, CardHeader, Flex, Heading, Skeleton } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, Card, CardBody, CardHeader, Flex, Heading, Skeleton } from '@simpleflow/uikit'
 import { FetchStatus, TFetchStatus } from 'config/constants/types'
 import { Proposal, ProposalTypeName, Vote } from 'state/types'
 import { SingleVoteResults } from 'views/Voting/Proposal/ResultType/SingleVoteResults'

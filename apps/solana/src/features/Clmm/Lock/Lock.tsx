@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Grid, GridItem, HStack, Skeleton, Text, useDisclosure } from '@chakra-ui/react'
 import { useState, useCallback, useMemo, useEffect } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { BN } from 'bn.js'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { colors } from '@/theme/cssVariables/colors'

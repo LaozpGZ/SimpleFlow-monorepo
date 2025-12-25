@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/sdk'
 import invariant from 'tiny-invariant'
 import { NEGATIVE_ONE, ONE, ZERO } from '../internalConstants'
 import { LiquidityMath, SwapMath, TickMath } from '../utils'

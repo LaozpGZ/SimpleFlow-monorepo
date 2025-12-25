@@ -1,4 +1,4 @@
-import { ContextApi } from '@pancakeswap/localization'
+import { ContextApi } from '@simpleflow/l10n'
 import { DefaultTheme } from 'styled-components'
 import { Address } from 'viem'
 import { EventInfos, UserInfos, UserStatusEnum } from 'views/PancakeSquad/types'

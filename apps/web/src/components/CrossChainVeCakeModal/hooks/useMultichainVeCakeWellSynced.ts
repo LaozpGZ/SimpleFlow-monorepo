@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { useQuery } from '@tanstack/react-query'
 import { veSDXABI } from 'config/abi/veCake'
 import { FAST_INTERVAL } from 'config/constants'

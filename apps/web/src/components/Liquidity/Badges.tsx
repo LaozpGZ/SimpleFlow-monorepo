@@ -1,5 +1,5 @@
-import { PoolType } from '@pancakeswap/infinity-sdk'
-import { BarChartIcon, Box, BoxProps, CurvedChartIcon, Text } from '@pancakeswap/uikit'
+import { PoolType } from '@simpleflow/infinity-sdk'
+import { BarChartIcon, Box, BoxProps, CurvedChartIcon, Text } from '@simpleflow/uikit'
 import styled from 'styled-components'
 import { space } from 'styled-system'
 

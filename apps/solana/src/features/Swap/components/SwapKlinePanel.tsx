@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem, HStack } from '@chakra-ui/react'
-import { FlexGap, SwapHorizIcon, Text } from '@pancakeswap/uikit'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { FlexGap, SwapHorizIcon, Text } from '@simpleflow/uikit'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import Tabs from '@/components/Tabs'

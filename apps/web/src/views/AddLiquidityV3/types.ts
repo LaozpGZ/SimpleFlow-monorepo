@@ -1,5 +1,5 @@
-import { FeeAmount } from '@pancakeswap/v3-sdk'
-import { ZoomLevels } from '@pancakeswap/widgets-internal'
+import { FeeAmount } from '@simpleflow/v3-sdk'
+import { ZoomLevels } from '@simpleflow/widgets-internal'
 
 export enum SELECTOR_TYPE {
   V3,

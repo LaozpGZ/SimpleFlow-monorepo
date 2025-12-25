@@ -1,3 +1,3 @@
-import { CircleLoader } from '@pancakeswap/uikit'
+import { CircleLoader } from '@simpleflow/uikit'
 
 export default CircleLoader

@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, InjectedModalProps, Modal } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, InjectedModalProps, Modal } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import GlobalSettings from './GlobalSettings'
 

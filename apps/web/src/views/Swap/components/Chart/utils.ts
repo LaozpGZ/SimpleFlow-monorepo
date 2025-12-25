@@ -1,4 +1,4 @@
-import { NATIVE, WNATIVE } from '@pancakeswap/sdk'
+import { NATIVE, WNATIVE } from '@simpleflow/sdk'
 
 const MIN_VALUE_DISPLAYED = 0.001
 

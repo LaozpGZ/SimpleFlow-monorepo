@@ -1,6 +1,6 @@
-import { bscTestnetTokens } from '@pancakeswap/tokens'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
+import { bscTestnetTokens } from '@simpleflow/tokens'
+import { BIG_ZERO } from '@simpleflow/utils/bigNumber'
+import { getBalanceAmount } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { DeserializedBCakeWrapperUserData, DeserializedFarmUserData, SerializedFarm } from '../types'
 

@@ -1,4 +1,4 @@
-import { Modal, ModalV2, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Modal, ModalV2, useMatchBreakpoints } from '@simpleflow/uikit'
 import { ReactNode } from 'react'
 import { ExpandableActions } from './ExpandableActions'
 

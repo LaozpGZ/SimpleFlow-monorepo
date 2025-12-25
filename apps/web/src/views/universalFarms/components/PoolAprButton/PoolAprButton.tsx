@@ -1,5 +1,5 @@
-import { Protocol } from '@pancakeswap/farms'
-import { TextProps, useModalV2, useTooltip } from '@pancakeswap/uikit'
+import { Protocol } from '@simpleflow/farms'
+import { TextProps, useModalV2, useTooltip } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import { CakeApr } from 'state/farmsV4/atom'
 import {
@@ -13,7 +13,7 @@ import { getMerklLink } from 'utils/getMerklLink'
 import { isInfinityProtocol } from 'utils/protocols'
 
 import { getIncentraLink } from 'utils/getIncentraLink'
-import { isEvm } from '@pancakeswap/chains'
+import { isEvm } from '@simpleflow/chains'
 import { sumApr } from '../../utils/sumApr'
 import { InfinityPoolAprModal } from '../Modals/InfinityPoolAprModal'
 import { V2PoolAprModal } from '../Modals/V2PoolAprModal'

@@ -1,4 +1,4 @@
-import { Box, BoxProps, HelpIcon } from "@pancakeswap/uikit";
+import { Box, BoxProps, HelpIcon } from "@simpleflow/uikit";
 import Image from "next/image";
 import { CSSProperties, memo, useState } from "react";
 import { ASSET_CDN } from "../../utils/endpoints";

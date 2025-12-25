@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, ERC20Token, Fraction, Percent, Price, Token } from '@pancakeswap/sdk'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount, ERC20Token, Fraction, Percent, Price, Token } from '@simpleflow/sdk'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
 import { useAccount } from 'wagmi'
 
 import { BIG_INT_ZERO } from 'config/constants/exchange'

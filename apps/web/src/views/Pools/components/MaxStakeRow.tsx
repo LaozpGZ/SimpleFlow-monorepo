@@ -1,10 +1,10 @@
-import { Flex, Text } from '@pancakeswap/uikit'
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Flex, Text } from '@simpleflow/uikit'
+import { Pool } from '@simpleflow/widgets-internal'
 import React from 'react'
 
-import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
-import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { useTranslation } from '@simpleflow/l10n'
+import { Token } from '@simpleflow/sdk'
+import { getFullDisplayBalance } from '@simpleflow/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 
 interface MaxStakeRowProps {

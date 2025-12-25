@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { PreTitle } from '@pancakeswap/uikit'
-import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
+import { useTranslation } from '@simpleflow/l10n'
+import { PreTitle } from '@simpleflow/uikit'
+import { useSolanaUserSlippage, useUserSlippage } from '@simpleflow/utils/user'
 import { SlippageTabsComponent } from 'components/Menu/GlobalSettings/TransactionSettings'
 import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
 

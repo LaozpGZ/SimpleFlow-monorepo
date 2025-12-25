@@ -1,5 +1,5 @@
-import { ERC20Token, Pair } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { ERC20Token, Pair } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 import { safeGetAddress } from 'utils'
 import memoize from 'lodash/memoize'
 

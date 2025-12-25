@@ -1,4 +1,4 @@
-import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
+import { getFullDecimalMultiplier } from '@simpleflow/utils/getFullDecimalMultiplier'
 
 export const DOMAIN = 'https://aptos.simpleflow.finance'
 export const BASE_ADD_LIQUIDITY_URL = `${DOMAIN}/add`

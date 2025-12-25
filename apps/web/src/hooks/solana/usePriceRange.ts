@@ -1,11 +1,11 @@
-import { TickUtils, TokenInfo, MAX_TICK, MIN_TICK } from '@pancakeswap/solana-core-sdk'
-import { Percent, Price } from '@pancakeswap/swap-sdk-core'
+import { TickUtils, TokenInfo, MAX_TICK, MIN_TICK } from '@simpleflow/solana-core-sdk'
+import { Percent, Price } from '@simpleflow/swap-sdk-core'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
 import { useMemo } from 'react'
 import { SolanaV3Pool } from 'state/pools/solana'
 import BigNumber from 'bignumber.js'
 import { calculateSolanaTickLimits, getTickAtLimitStatus } from 'views/PoolDetail/utils'
-import { Bound } from '@pancakeswap/widgets-internal'
+import { Bound } from '@simpleflow/widgets-internal'
 import { formatPercentage } from 'views/PoolDetail/utils/formatting'
 
 export type PriceRangeProps = {

@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { JSXElementConstructor, ReactNode, createElement } from "react";
-import { useTranslation } from "@pancakeswap/localization";
+import { useTranslation } from "@simpleflow/l10n";
 import { LogoIcon } from "../Svg";
 import { Heading } from "../Heading";
 import { Text } from "../Text";

@@ -1,7 +1,7 @@
-import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
-import { AutoColumn, Row, FlexGap, Text, AtomBoxProps } from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { UnifiedCurrency } from '@simpleflow/swap-sdk-core'
+import { AutoColumn, Row, FlexGap, Text, AtomBoxProps } from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatNumber'
+import { CurrencyLogo } from '@simpleflow/widgets-internal'
 
 export const EarningsWithToken: React.FC<{
   currency: UnifiedCurrency

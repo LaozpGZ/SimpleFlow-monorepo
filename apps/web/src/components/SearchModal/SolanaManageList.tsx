@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Column, Text, Toggle } from '@pancakeswap/uikit'
-import { ListLogo } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { AutoColumn, Column, Text, Toggle } from '@simpleflow/uikit'
+import { ListLogo } from '@simpleflow/widgets-internal'
 
 import { useAtom } from 'jotai'
 import { memo, useCallback } from 'react'

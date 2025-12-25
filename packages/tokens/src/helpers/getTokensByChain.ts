@@ -1,5 +1,5 @@
-import type { ChainId } from '@pancakeswap/chains'
-import type { SerializedToken, Token } from '@pancakeswap/sdk'
+import type { ChainId } from '@simpleflow/chains'
+import type { SerializedToken, Token } from '@simpleflow/sdk'
 
 import { allTokens } from '../allTokens'
 

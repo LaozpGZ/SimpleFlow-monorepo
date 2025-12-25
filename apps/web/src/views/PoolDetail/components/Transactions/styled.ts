@@ -1,4 +1,4 @@
-import { Button, Text } from '@pancakeswap/uikit'
+import { Button, Text } from '@simpleflow/uikit'
 import styled, { css } from 'styled-components'
 import { SortDirection } from './type'
 

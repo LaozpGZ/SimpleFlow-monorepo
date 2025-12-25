@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button, Text, Image, Box, Flex, QuestionHelper } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Button, Text, Image, Box, Flex, QuestionHelper } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import styled from 'styled-components'
 import { useAtom } from 'jotai'
-import { solanaExplorerAtom, supportedExplorers } from '@pancakeswap/utils/user'
+import { solanaExplorerAtom, supportedExplorers } from '@simpleflow/utils/user'
 
 const ExplorerContainer = styled.div`
   display: flex;

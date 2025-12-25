@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/blog",
+  "name": "@simpleflow/blog",
   "version": "0.0.1",
   "sideEffects": false,
   "private": true,
@@ -12,7 +12,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@pancakeswap/tsconfig": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
     "@types/lodash": "^4.14.168",
     "@types/qs": "^6.0.0"
   }

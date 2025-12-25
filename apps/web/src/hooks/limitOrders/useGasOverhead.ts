@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, Price } from '@pancakeswap/sdk'
-import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { Currency, CurrencyAmount, Price } from '@simpleflow/sdk'
+import tryParseAmount from '@simpleflow/utils/tryParseAmount'
 import { GENERIC_GAS_LIMIT_ORDER_EXECUTION } from 'config/constants/exchange'
 import { useTradeExactIn } from 'hooks/Trades'
 import useNativeCurrency from 'hooks/useNativeCurrency'

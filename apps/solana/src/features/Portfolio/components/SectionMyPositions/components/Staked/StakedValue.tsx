@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { ApiV3Token } from '@simpleflow/solana-core-sdk'
 
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'

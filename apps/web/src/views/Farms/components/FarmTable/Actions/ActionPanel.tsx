@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Flex,
@@ -11,8 +11,8 @@ import {
   VerifiedIcon,
   useMatchBreakpoints,
   useModalV2,
-} from '@pancakeswap/uikit'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -31,7 +31,7 @@ import { V2Farm } from 'views/Farms/FarmsV3'
 import { useAccount } from 'wagmi'
 import { useIncentraInfo } from 'hooks/useIncentra'
 import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
-import { Protocol } from '@pancakeswap/farms'
+import { Protocol } from '@simpleflow/farms'
 import { FarmV3ApyButton, FarmV3ApyButtonProps } from '../../FarmCard/V3/FarmV3ApyButton'
 import FarmV3CardList from '../../FarmCard/V3/FarmV3CardList'
 import { YieldBoosterStateContext } from '../../YieldBooster/components/ProxyFarmContainer'

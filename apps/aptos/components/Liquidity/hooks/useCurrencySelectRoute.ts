@@ -1,11 +1,11 @@
-import { Currency } from '@pancakeswap/aptos-swap-sdk'
-import { APTOS_COIN } from '@pancakeswap/awgmi'
+import { Currency } from '@simpleflow/aptos-swap-sdk'
+import { APTOS_COIN } from '@simpleflow/awgmi'
 import { useCurrency } from 'hooks/Tokens'
 import { useRouter } from 'next/router'
 import { createContext, useCallback, useMemo } from 'react'
 import currencyId from 'utils/currencyId'
 import _noop from 'lodash/noop'
-import { useIsMounted } from '@pancakeswap/hooks'
+import { useIsMounted } from '@simpleflow/hooks'
 
 export interface CurrencySelectorValue {
   currencyA: Currency | undefined

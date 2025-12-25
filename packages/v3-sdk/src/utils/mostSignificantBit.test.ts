@@ -1,4 +1,4 @@
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
+import { MaxUint256 } from '@simpleflow/swap-sdk-core'
 import { describe, it, expect } from 'vitest'
 import { ONE } from '../internalConstants'
 import { mostSignificantBit } from './mostSignificantBit'

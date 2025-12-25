@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, ChevronDownIcon, ChevronUpIcon, Flex, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, ChevronDownIcon, ChevronUpIcon, Flex, FlexGap, Text, useMatchBreakpoints } from '@simpleflow/uikit'
 import type { NotifyClientTypes } from '@walletconnect/notify-client'
 import { useNotificationTypes } from '@web3inbox/react'
 import Image from 'next/image'

@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
-import { Flex, Box, Text, ReleasedChart } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Box, Text, ReleasedChart } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import BigNumber from 'bignumber.js'
 import { Ifo } from 'config/constants/types'
-import { getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
-import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+import { getBalanceNumber, getFullDisplayBalance } from '@simpleflow/utils/formatBalance'
+import isUndefinedOrNull from '@simpleflow/utils/isUndefinedOrNull'
 
 const Dot = styled.div<{ isActive?: boolean }>`
   width: 8px;

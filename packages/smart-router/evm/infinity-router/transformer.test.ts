@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { CurrencyAmount, Native, Percent, TradeType } from '@pancakeswap/sdk'
-import { opBnbTokens } from '@pancakeswap/tokens'
+import { ChainId } from '@simpleflow/chains'
+import { CurrencyAmount, Native, Percent, TradeType } from '@simpleflow/sdk'
+import { opBnbTokens } from '@simpleflow/tokens'
 import { describe, expect, it } from 'vitest'
 
 import { PoolType, RouteType } from '../v3-router/types'

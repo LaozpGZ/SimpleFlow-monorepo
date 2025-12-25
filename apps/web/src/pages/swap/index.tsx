@@ -1,4 +1,4 @@
-import { Box, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Skeleton, useMatchBreakpoints } from '@simpleflow/uikit'
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
 import { NextPageWithLayout } from 'utils/page.types'

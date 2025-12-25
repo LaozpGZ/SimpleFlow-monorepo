@@ -2,7 +2,7 @@ import { useSetAtom } from 'jotai'
 import { SolanaV3Pool, updateSolanaV3PoolAtom } from 'state/pools/solana'
 import { useEffect, useState } from 'react'
 import { PublicKey } from '@solana/web3.js'
-import { PoolInfoLayout, SqrtPriceMath } from '@pancakeswap/solana-core-sdk'
+import { PoolInfoLayout, SqrtPriceMath } from '@simpleflow/solana-core-sdk'
 import { useSolanaConnectionWithRpcAtom } from './useSolanaConnectionWithRpcAtom'
 
 export const useSolanaV3PoolsUpdater = (

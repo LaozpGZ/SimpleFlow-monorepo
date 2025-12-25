@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { Currency, CurrencyAmount, Pair, SWAP_ADDRESS } from '@pancakeswap/aptos-swap-sdk'
-import { accountResourceQueryKey } from '@pancakeswap/awgmi'
-import { fetchAccountResource } from '@pancakeswap/awgmi/core'
+import { Currency, CurrencyAmount, Pair, SWAP_ADDRESS } from '@simpleflow/aptos-swap-sdk'
+import { accountResourceQueryKey } from '@simpleflow/awgmi'
+import { fetchAccountResource } from '@simpleflow/awgmi/core'
 import { MoveStructId } from '@aptos-labs/ts-sdk'
 import { UseQueryResult, useQueries } from '@tanstack/react-query'
 import fromPairs from 'lodash/fromPairs'

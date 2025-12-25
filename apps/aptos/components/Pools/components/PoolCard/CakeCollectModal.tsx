@@ -1,4 +1,4 @@
-import { Pool } from '@pancakeswap/widgets-internal'
+import { Pool } from '@simpleflow/widgets-internal'
 import { useQueryClient } from '@tanstack/react-query'
 import useHarvestFarm from 'components/Farms/hooks/useHarvestFarm'
 import cakePoolRelatedQueries from 'components/Pools/utils/cakePoolRelatedQueries'

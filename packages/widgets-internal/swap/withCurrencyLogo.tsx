@@ -1,6 +1,6 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { BaseCurrency } from "@pancakeswap/swap-sdk-core";
-import { AutoColumn, AutoRow, Button, Flex, RowFixed, Text, useMatchBreakpoints } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { BaseCurrency } from "@simpleflow/swap-sdk-core";
+import { AutoColumn, AutoRow, Button, Flex, RowFixed, Text, useMatchBreakpoints } from "@simpleflow/uikit";
 import { CSSProperties, ReactElement } from "react";
 import { styled } from "styled-components";
 import { ListLogo } from "./ListLogo";

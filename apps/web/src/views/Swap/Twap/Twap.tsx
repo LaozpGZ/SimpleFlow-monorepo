@@ -1,7 +1,7 @@
 import { Orders, TWAP as PancakeTWAP, ToastProps } from '@orbs-network/twap-ui-pancake'
-import { useTheme } from '@pancakeswap/hooks'
-import { Percent } from '@pancakeswap/sdk'
-import { Currency, CurrencyAmount, TradeType, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
+import { useTheme } from '@simpleflow/hooks'
+import { Percent } from '@simpleflow/sdk'
+import { Currency, CurrencyAmount, TradeType, UnifiedCurrency } from '@simpleflow/swap-sdk-core'
 import {
   AutoColumn,
   Button,
@@ -11,10 +11,10 @@ import {
   useMatchBreakpoints,
   useToast,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 
-import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
-import { CurrencyLogo, NumericalInput, SwapUIV2 } from '@pancakeswap/widgets-internal'
+import replaceBrowserHistoryMultiple from '@simpleflow/utils/replaceBrowserHistoryMultiple'
+import { CurrencyLogo, NumericalInput, SwapUIV2 } from '@simpleflow/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
 import { CommonBasesType } from 'components/SearchModal/types'
@@ -39,7 +39,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { keyframes, styled } from 'styled-components'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useRouter } from 'next/router'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'

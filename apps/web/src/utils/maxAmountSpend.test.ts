@@ -1,4 +1,4 @@
-import { CurrencyAmount, Native, SOL, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { CurrencyAmount, Native, SOL, UnifiedCurrencyAmount } from '@simpleflow/sdk'
 import { maxAmountSpend, maxUnifiedAmountSpend } from './maxAmountSpend'
 
 describe('maxAmountSpend', () => {

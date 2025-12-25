@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@pancakeswap/uikit";
+import { Box, BoxProps } from "@simpleflow/uikit";
 import { styled } from "styled-components";
 
 export interface LightCardProps extends BoxProps {

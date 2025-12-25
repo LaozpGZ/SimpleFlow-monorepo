@@ -1,4 +1,4 @@
-import { Flex, StarCircle, Text } from '@pancakeswap/uikit'
+import { Flex, StarCircle, Text } from '@simpleflow/uikit'
 import { FixedStakingPool, PoolGroup } from '../type'
 import { AprRange, calculateAPRPercent } from './AprRange'
 import { FixedStakingCalculator } from './FixedStakingCalculator'

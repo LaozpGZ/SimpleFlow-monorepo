@@ -1,4 +1,4 @@
-import { QuestionHelper, Text } from '@pancakeswap/uikit'
+import { QuestionHelper, Text } from '@simpleflow/uikit'
 import React from 'react'
 
 interface Props {

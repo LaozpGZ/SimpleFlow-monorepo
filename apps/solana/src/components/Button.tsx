@@ -1,6 +1,6 @@
 import { ButtonProps as ChakraButtonProps, Button as ChakraButton } from '@chakra-ui/react'
 import { forwardRef, useMemo } from 'react'
-import { MayArray, MayFunction } from '@pancakeswap/solana-core-sdk'
+import { MayArray, MayFunction } from '@simpleflow/solana-core-sdk'
 import { shrinkToValue } from '@/utils/shrinkToValue'
 
 /**

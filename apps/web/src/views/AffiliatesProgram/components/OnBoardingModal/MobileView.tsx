@@ -1,6 +1,6 @@
 import { styled } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Message, MessageText } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Flex, Message, MessageText } from '@simpleflow/uikit'
 import { Views } from 'views/AffiliatesProgram/components/OnBoardingModal/index'
 import useShowWarningMessage from 'views/AffiliatesProgram/hooks/useShowWarningMessage'
 import WelcomePage from './WelcomePage'

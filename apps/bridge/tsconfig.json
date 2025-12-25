@@ -1,11 +1,11 @@
 {
-  "extends": "@pancakeswap/tsconfig/nextjs.json",
+  "extends": "@simpleflow/tsconfig/nextjs.json",
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
       "*": ["./*"],
-      "@pancakeswap/uikit": ["../../packages/uikit/src/index.ts"],
-      "@pancakeswap/uikit/*": ["../../packages/uikit/src/*"]
+      "@simpleflow/uikit": ["../../packages/uikit/src/index.ts"],
+      "@simpleflow/uikit/*": ["../../packages/uikit/src/*"]
     }
   },
   "exclude": ["node_modules"],

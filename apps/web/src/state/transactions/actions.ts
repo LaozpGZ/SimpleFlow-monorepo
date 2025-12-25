@@ -1,5 +1,5 @@
 import { Order } from '@gelatonetwork/limit-orders-lib'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { createAction } from '@reduxjs/toolkit'
 
 export type TransactionType =

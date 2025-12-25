@@ -1,6 +1,6 @@
-import { IPendingCakeByTokenId, PositionDetails } from '@pancakeswap/farms'
-import { Trans, useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/swap-sdk-core'
+import { IPendingCakeByTokenId, PositionDetails } from '@simpleflow/farms'
+import { Trans, useTranslation } from '@simpleflow/l10n'
+import { Token } from '@simpleflow/swap-sdk-core'
 import {
   AtomBox,
   AtomBoxProps,
@@ -13,11 +13,11 @@ import {
   StyledTooltip,
   Text,
   useModalV2,
-} from '@pancakeswap/uikit'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
-import { isPositionOutOfRange } from '@pancakeswap/utils/isPositionOutOfRange'
-import { Pool } from '@pancakeswap/v3-sdk'
-import { FarmWidget } from '@pancakeswap/widgets-internal'
+} from '@simpleflow/uikit'
+import { formatBigInt } from '@simpleflow/utils/formatBalance'
+import { isPositionOutOfRange } from '@simpleflow/utils/isPositionOutOfRange'
+import { Pool } from '@simpleflow/v3-sdk'
+import { FarmWidget } from '@simpleflow/widgets-internal'
 import { BigNumber } from 'bignumber.js'
 import { LightCard } from 'components/Card'
 import { RangeTag } from 'components/RangeTag'

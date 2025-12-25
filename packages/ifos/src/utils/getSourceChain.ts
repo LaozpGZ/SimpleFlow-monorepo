@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 import { isIfoSupported, isNativeIfoSupported } from './isIfoSupported'
 import { SOURCE_CHAIN_MAP } from '../constants'

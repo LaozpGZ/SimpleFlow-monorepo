@@ -1,13 +1,13 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { Link, useToast } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
+import { Link, useToast } from '@simpleflow/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useFixedStakingContract } from 'hooks/useContract'
 import { createElement, useCallback, useMemo } from 'react'
-import { useReadContract } from '@pancakeswap/wagmi'
+import { useReadContract } from '@simpleflow/wagmi'
 
 import { getBep20Contract } from 'utils/contractHelpers'
 

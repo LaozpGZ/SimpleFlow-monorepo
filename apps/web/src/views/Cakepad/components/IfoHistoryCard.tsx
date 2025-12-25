@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Card, CardBody, CardHeader, ExpandableButton, FlexGap } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, CardHeader, ExpandableButton, FlexGap } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 import { IfoRibbon } from './IfoCards/IfoRibbon'
 import { IfoSaleInfoDisplay } from './IfoCards/IfoSaleInfoCard'

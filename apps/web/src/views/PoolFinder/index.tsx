@@ -1,8 +1,8 @@
-import { Currency, UnifiedCurrency } from '@pancakeswap/sdk'
-import { AddIcon, AutoColumn, Button, ChevronDownIcon, ColumnCenter, Text, useModal } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { Currency, UnifiedCurrency } from '@simpleflow/sdk'
+import { AddIcon, AutoColumn, Button, ChevronDownIcon, ColumnCenter, Text, useModal } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { LightCard } from 'components/Card'
 import { MinimalPositionCard } from 'components/PositionCard'
 import { CommonBasesType } from 'components/SearchModal/types'

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Fraction, Price, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Fraction, Price, UnifiedCurrency } from '@simpleflow/sdk'
 import formatLocaleNumber from './formatLocaleNumber'
 
 export function formatCurrencyAmount(

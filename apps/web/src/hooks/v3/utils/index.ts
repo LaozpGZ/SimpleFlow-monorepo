@@ -1,4 +1,4 @@
-import { Currency, Price, Token, UnifiedCurrency, UnifiedToken } from '@pancakeswap/swap-sdk-core'
+import { Currency, Price, Token, UnifiedCurrency, UnifiedToken } from '@simpleflow/swap-sdk-core'
 import {
   encodeSqrtRatioX96,
   FeeAmount,
@@ -6,7 +6,7 @@ import {
   priceToClosestTick,
   TICK_SPACINGS,
   TickMath,
-} from '@pancakeswap/v3-sdk'
+} from '@simpleflow/v3-sdk'
 
 export function tryParsePrice(baseToken?: UnifiedCurrency, quoteToken?: UnifiedCurrency, value?: string) {
   if (!baseToken || !quoteToken || !value) {

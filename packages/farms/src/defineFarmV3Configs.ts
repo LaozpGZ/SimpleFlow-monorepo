@@ -1,6 +1,6 @@
-import { WNATIVE } from '@pancakeswap/sdk'
-import { Token } from '@pancakeswap/swap-sdk-core'
-import { CAKE, unwrappedToken } from '@pancakeswap/tokens'
+import { WNATIVE } from '@simpleflow/sdk'
+import { Token } from '@simpleflow/swap-sdk-core'
+import { CAKE, unwrappedToken } from '@simpleflow/tokens'
 import { priceHelperTokens } from '../constants/common'
 import { ComputedFarmConfigV3, FarmConfigV3, UniversalFarmConfigV3 } from './types'
 

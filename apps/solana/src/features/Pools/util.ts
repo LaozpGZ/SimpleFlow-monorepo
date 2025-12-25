@@ -1,4 +1,4 @@
-import { ApiV3PoolInfoItem, ApiV3PoolInfoCountItem, TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoItem, ApiV3PoolInfoCountItem, TokenInfo } from '@simpleflow/solana-core-sdk'
 
 import { isClient } from '@/utils/common'
 import { formatLocaleStr } from '@/utils/numberish/formatter'

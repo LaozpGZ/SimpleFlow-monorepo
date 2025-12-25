@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { styled } from 'styled-components'
-import { Flex, Box, Text, Skeleton } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Skeleton } from '@simpleflow/uikit'
 import TeamPodiumIcon from './TeamPodiumIcon'
 import { PodiumBase } from '../../../svgs'
 import { localiseTradingVolume } from '../../../helpers'

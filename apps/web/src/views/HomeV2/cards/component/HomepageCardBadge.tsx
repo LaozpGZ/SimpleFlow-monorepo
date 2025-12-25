@@ -1,4 +1,4 @@
-import { Box, Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useHoverContext } from 'hooks/useHover'
 import React, { ReactNode } from 'react'
 import styled, { useTheme } from 'styled-components'

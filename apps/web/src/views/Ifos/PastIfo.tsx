@@ -1,5 +1,5 @@
-import { Ifo } from '@pancakeswap/ifos'
-import { Box, Card, CardHeader, Container } from '@pancakeswap/uikit'
+import { Ifo } from '@simpleflow/ifos'
+import { Box, Card, CardHeader, Container } from '@simpleflow/uikit'
 
 import { useInActiveIfoConfigs } from 'hooks/useIfoConfig'
 

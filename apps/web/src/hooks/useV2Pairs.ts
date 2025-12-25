@@ -1,4 +1,4 @@
-import { Pair } from '@pancakeswap/sdk'
+import { Pair } from '@simpleflow/sdk'
 import { useMemo } from 'react'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from 'state/wallet/hooks'

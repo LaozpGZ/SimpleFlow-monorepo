@@ -1,5 +1,5 @@
-import { Box, LinkExternal, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Box, LinkExternal, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 
 const ABNBWarning = () => {
   const { t } = useTranslation()

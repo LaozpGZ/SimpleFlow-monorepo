@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Link, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Link, useMatchBreakpoints } from '@simpleflow/uikit'
 import { useMemo } from 'react'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'

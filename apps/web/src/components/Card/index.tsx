@@ -1,4 +1,4 @@
-import { Card } from '@pancakeswap/widgets-internal'
+import { Card } from '@simpleflow/widgets-internal'
 
 export {
   type LightCardProps,
@@ -9,6 +9,6 @@ export {
   GreyCard,
   LightTertiaryCard,
   DisableCard,
-} from '@pancakeswap/widgets-internal'
+} from '@simpleflow/widgets-internal'
 
 export default Card

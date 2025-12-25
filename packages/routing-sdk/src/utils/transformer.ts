@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
-import { Native, ERC20Token } from '@pancakeswap/swap-sdk-evm'
+import { ChainId } from '@simpleflow/chains'
+import { Currency, CurrencyAmount, TradeType } from '@simpleflow/swap-sdk-core'
+import { Native, ERC20Token } from '@simpleflow/swap-sdk-evm'
 
 import {
   SerializableCurrency,

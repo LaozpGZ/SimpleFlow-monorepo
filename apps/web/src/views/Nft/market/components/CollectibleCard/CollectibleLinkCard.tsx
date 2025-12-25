@@ -1,4 +1,4 @@
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { safeGetAddress } from 'utils'
 import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
 import CardBody from './CardBody'

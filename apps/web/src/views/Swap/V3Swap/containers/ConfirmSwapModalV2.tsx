@@ -1,17 +1,17 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@pancakeswap/sdk'
+import { useTranslation } from '@simpleflow/l10n'
+import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@simpleflow/sdk'
 import { useCallback, useMemo } from 'react'
 
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
-import { Box, BscScanIcon, Flex, InjectedModalProps, Link } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import { WrappedTokenInfo } from '@simpleflow/token-lists'
+import { Box, BscScanIcon, Flex, InjectedModalProps, Link } from '@simpleflow/uikit'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
+import truncateHash from '@simpleflow/utils/truncateHash'
 import {
   ApproveModalContent,
   ConfirmModalState,
   SwapPendingModalContent,
   SwapTransactionReceiptModalContent,
-} from '@pancakeswap/widgets-internal'
+} from '@simpleflow/widgets-internal'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
@@ -21,7 +21,7 @@ import { useBlockExploreLink, useBlockExploreName } from 'utils'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import ConfirmSwapModalContainer from 'views/Swap/components/ConfirmSwapModalContainer'
 import { SwapTransactionErrorContent } from 'views/Swap/components/SwapTransactionErrorContent'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@simpleflow/chains'
 
 import { Hash } from 'viem'
 import { EVMInterfaceOrder, InterfaceOrder, isXOrder } from 'views/Swap/utils'

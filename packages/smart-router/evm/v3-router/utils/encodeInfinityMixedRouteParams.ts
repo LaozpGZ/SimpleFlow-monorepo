@@ -4,8 +4,8 @@ import {
   decodeHooksRegistration,
   encodePoolKey,
   isDynamicFeeHook,
-} from '@pancakeswap/infinity-sdk'
-import { getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+} from '@simpleflow/infinity-sdk'
+import { getCurrencyAddress } from '@simpleflow/swap-sdk-core'
 import { Hex, encodeAbiParameters, parseAbiParameters } from 'viem'
 
 import { BaseRoute } from '../types'

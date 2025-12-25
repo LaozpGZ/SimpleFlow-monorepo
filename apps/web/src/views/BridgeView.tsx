@@ -1,5 +1,5 @@
-import { ChainId, chainNames, NonEVMChainId } from '@pancakeswap/chains'
-import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ChainId, chainNames, NonEVMChainId } from '@simpleflow/chains'
+import { Flex, useMatchBreakpoints } from '@simpleflow/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { PUBLIC_NODES } from 'config/nodes'
 import dynamic from 'next/dynamic'
@@ -11,7 +11,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 const DISABLED_TO_CHAINS: ChainId[] = []
 // Dynamic import to avoid import trace warnings
 const CanonicalBridge = dynamic(
-  () => import('@pancakeswap/canonical-bridge').then((mod) => ({ default: mod.CanonicalBridge })),
+  () => import('@simpleflow/canonical-bridge').then((mod) => ({ default: mod.CanonicalBridge })),
   {
     ssr: false,
   },

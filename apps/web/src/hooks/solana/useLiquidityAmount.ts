@@ -1,5 +1,5 @@
-import { PositionUtils, TokenInfo } from '@pancakeswap/solana-core-sdk'
-import { Percent, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { PositionUtils, TokenInfo } from '@simpleflow/solana-core-sdk'
+import { Percent, UnifiedCurrencyAmount } from '@simpleflow/swap-sdk-core'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'

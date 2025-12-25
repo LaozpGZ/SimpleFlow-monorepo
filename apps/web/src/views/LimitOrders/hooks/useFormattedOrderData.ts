@@ -1,5 +1,5 @@
 import { Order } from '@gelatonetwork/limit-orders-lib'
-import { Currency, CurrencyAmount, Fraction, Token } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Fraction, Token } from '@simpleflow/sdk'
 import { useCurrency } from 'hooks/Tokens'
 import useGelatoLimitOrdersLib from 'hooks/limitOrders/useGelatoLimitOrdersLib'
 import { useActiveChainId } from 'hooks/useActiveChainId'

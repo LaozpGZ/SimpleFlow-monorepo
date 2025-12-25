@@ -1,4 +1,4 @@
-import { useTranslation, ContextApi } from '@pancakeswap/localization'
+import { useTranslation, ContextApi } from '@simpleflow/l10n'
 import {
   Box,
   Card,
@@ -10,7 +10,7 @@ import {
   useTooltip,
   ExpandableLabel,
   CardFooter,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { Ifo, PoolIds } from 'config/constants/types'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useMemo, useState } from 'react'

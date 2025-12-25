@@ -1,4 +1,4 @@
-import type { Pool } from '@pancakeswap/routing-sdk'
+import type { Pool } from '@simpleflow/routing-sdk'
 
 import { INFI_CL_POOL_TYPE } from '../constants'
 import { InfinityCLPool } from '../types'

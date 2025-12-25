@@ -1,4 +1,4 @@
-import { FARMING_OFFCHAIN_ABI, INFI_FARMING_DISTRIBUTOR_ADDRESSES } from '@pancakeswap/infinity-sdk'
+import { FARMING_OFFCHAIN_ABI, INFI_FARMING_DISTRIBUTOR_ADDRESSES } from '@simpleflow/infinity-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { publicClient } from 'utils/viem'
 

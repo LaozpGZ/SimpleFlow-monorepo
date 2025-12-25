@@ -1,6 +1,6 @@
-import { bscTokens } from '@pancakeswap/tokens'
-import { ERC20Token } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { bscTokens } from '@simpleflow/tokens'
+import { ERC20Token } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 
 export const WALLCHAIN_ENABLED = true
 

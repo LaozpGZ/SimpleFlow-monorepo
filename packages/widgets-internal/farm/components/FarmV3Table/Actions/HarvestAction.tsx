@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Balance, Flex, Button, Text } from "@pancakeswap/uikit";
+import { useTranslation } from "@simpleflow/l10n";
+import { Balance, Flex, Button, Text } from "@simpleflow/uikit";
 import { ActionContent, ActionTitles } from "./styles";
 
 export interface HarvestActionProps {

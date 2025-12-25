@@ -1,5 +1,5 @@
-import { Flex, FlexProps, PrizeIcon, Text } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, FlexProps, PrizeIcon, Text } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 
 interface PointsLabelProps extends FlexProps {
   points: number

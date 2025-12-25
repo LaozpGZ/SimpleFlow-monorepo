@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { PositionMath } from '@pancakeswap/v3-sdk'
+import { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
+import { PositionMath } from '@simpleflow/v3-sdk'
 import isUndefined from 'lodash/isUndefined'
 import { useMemo } from 'react'
 

@@ -1,4 +1,4 @@
-import type { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import type { Currency, CurrencyAmount } from '@simpleflow/swap-sdk-core'
 import React, { useMemo } from 'react'
 import { useExtraInfinityPositionInfo } from 'state/farmsV4/hooks'
 import type { InfinityCLPositionDetail, PositionDetail } from 'state/farmsV4/state/accountPositions/type'

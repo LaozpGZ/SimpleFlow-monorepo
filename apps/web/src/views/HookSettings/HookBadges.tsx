@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, CheckmarkIcon, LockIcon, useTooltip } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Box, CheckmarkIcon, LockIcon, useTooltip } from '@simpleflow/uikit'
 import styled from 'styled-components'
 
 const Badge = styled(Box)`

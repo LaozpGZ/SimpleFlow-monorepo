@@ -1,4 +1,4 @@
-import { Trans } from "@pancakeswap/localization";
+import { Trans } from "@simpleflow/l10n";
 import { Box, Button, ChevronDownIcon, Flex, FlexGap } from "../../../components";
 import { LabelText, StyledUserMenu } from "../../Menu/components/UserMenu";
 import MenuIcon from "../../Menu/components/UserMenu/MenuIcon";

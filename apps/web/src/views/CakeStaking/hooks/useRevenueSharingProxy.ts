@@ -1,4 +1,4 @@
-import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
+import { ONE_WEEK_DEFAULT } from '@simpleflow/pools'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import { WEEK } from 'config/constants/veSDX'

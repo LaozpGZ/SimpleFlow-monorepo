@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 import { SerializedPool } from '../../types'
 import { isPoolsSupported } from '../../utils/isPoolsSupported'
 import { POOLS_API } from '../config/endpoint'

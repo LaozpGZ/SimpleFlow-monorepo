@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, Percent } from '@simpleflow/swap-sdk-core'
 import { useMemo } from 'react'
 import { DAYS_A_YEAR } from '../constant'
 import { useCurrentDay } from './useStakedPools'

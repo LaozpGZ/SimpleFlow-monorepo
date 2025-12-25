@@ -1,4 +1,4 @@
-import { fetchAccountResources, FetchAccountResourcesArgs, FetchAccountResourcesResult } from '@pancakeswap/awgmi/core'
+import { fetchAccountResources, FetchAccountResourcesArgs, FetchAccountResourcesResult } from '@simpleflow/awgmi/core'
 
 import { QueryFunction, useQuery } from '@tanstack/react-query'
 import { QueryConfig } from '../types'

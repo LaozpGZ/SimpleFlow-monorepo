@@ -1,9 +1,9 @@
 /* eslint-disable address/addr-type */
-import { Token, Percent, CurrencyAmount } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { Token, Percent, CurrencyAmount } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 import { getBlockExploreLink, safeGetAddress, calculateGasMargin } from 'utils'
 import { calculateSlippageAmount, basisPointsToPercent } from 'utils/exchange'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { ADDRESS_ZERO } from '@simpleflow/v3-sdk'
 
 describe('utils', () => {
   describe('#getBscScanLink', () => {

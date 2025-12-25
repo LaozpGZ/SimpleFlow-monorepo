@@ -1,6 +1,6 @@
-import { ChainId } from '@pancakeswap/chains'
-import { FeeAmount } from '@pancakeswap/v3-sdk'
-import { simplechainTestnetTokens } from '@pancakeswap/tokens'
+import { ChainId } from '@simpleflow/chains'
+import { FeeAmount } from '@simpleflow/v3-sdk'
+import { simplechainTestnetTokens } from '@simpleflow/tokens'
 import { Protocol, UniversalFarmConfig } from '../types'
 
 export const simplechainFarmConfig: UniversalFarmConfig[] = [

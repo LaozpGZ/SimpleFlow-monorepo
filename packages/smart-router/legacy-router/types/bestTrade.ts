@@ -1,5 +1,5 @@
-import { BestTradeOptions as BaseBestTradeOptions, Currency, Pair } from '@pancakeswap/sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { BestTradeOptions as BaseBestTradeOptions, Currency, Pair } from '@simpleflow/sdk'
+import { ChainId } from '@simpleflow/chains'
 import { PublicClient } from 'viem'
 
 export type Provider = ({ chainId }: { chainId?: ChainId }) => PublicClient

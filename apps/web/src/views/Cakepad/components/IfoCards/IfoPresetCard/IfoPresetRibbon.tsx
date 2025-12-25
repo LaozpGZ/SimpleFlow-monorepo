@@ -1,7 +1,7 @@
-import { Box, Flex } from '@pancakeswap/uikit'
+import { Box, Flex } from '@simpleflow/uikit'
 import { styled } from 'styled-components'
 
-import { IfoStatus } from '@pancakeswap/ifos'
+import { IfoStatus } from '@simpleflow/ifos'
 import useTheme from 'hooks/useTheme'
 import { IfoChainBoard } from 'views/Ifos/components/IfoChainBoard'
 import useIfo from 'views/Cakepad/hooks/useIfo'

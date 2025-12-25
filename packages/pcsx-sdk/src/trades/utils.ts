@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { zeroAddress } from 'viem'
 
 export function areCurrenciesEqual(currency: Currency, address: string | null, chainId: number) {

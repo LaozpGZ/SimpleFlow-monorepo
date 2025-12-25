@@ -3,7 +3,7 @@ import { NextPageWithLayout } from 'utils/page.types'
 import Page from 'views/Page'
 import SwapLayout from 'views/Swap/SwapLayout'
 import { PCSLimitOrdersView } from 'views/PCSLimitOrders'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@simpleflow/chains'
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (

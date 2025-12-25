@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { ApiTransaction, Transaction, TransactionType } from 'state/info/types'
 import { safeGetAddress } from 'utils/safeGetAddress'
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { Percent } from '@simpleflow/swap-sdk-core'
 
 export function shortenAddress(address: string, chars = 4): string {
   const parsed = safeGetAddress(address)

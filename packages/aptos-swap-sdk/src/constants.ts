@@ -1,4 +1,4 @@
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { Percent } from '@simpleflow/swap-sdk-core'
 
 import { ADDRESS } from './generated/swap'
 

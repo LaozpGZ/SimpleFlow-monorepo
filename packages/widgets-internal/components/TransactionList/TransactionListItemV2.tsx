@@ -1,4 +1,4 @@
-import { Box, CheckmarkCircleFillIcon, ErrorFillIcon, FlexGap, SwapLoading, Text } from "@pancakeswap/uikit";
+import { Box, CheckmarkCircleFillIcon, ErrorFillIcon, FlexGap, SwapLoading, Text } from "@simpleflow/uikit";
 import { PropsWithChildren, ReactNode } from "react";
 import { styled } from "styled-components";
 

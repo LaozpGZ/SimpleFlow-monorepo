@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Fraction, Percent, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Fraction, Percent, Trade, TradeType } from '@simpleflow/sdk'
 import {
   ALLOWED_PRICE_IMPACT_HIGH,
   ALLOWED_PRICE_IMPACT_LOW,

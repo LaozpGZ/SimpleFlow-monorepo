@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { Percent } from '@pancakeswap/swap-sdk-core'
+import { Percent } from '@simpleflow/swap-sdk-core'
 
 interface PriceRangeBarProps {
   priceLowerDiffPercent?: Percent

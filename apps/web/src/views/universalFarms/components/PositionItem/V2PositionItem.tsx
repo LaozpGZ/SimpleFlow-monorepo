@@ -1,4 +1,4 @@
-import { unwrappedToken } from '@pancakeswap/tokens'
+import { unwrappedToken } from '@simpleflow/tokens'
 import { useTotalPriceUSD } from 'hooks/useTotalPriceUSD'
 import { memo, useMemo } from 'react'
 import { usePoolInfo, usePoolTimeFrame } from 'state/farmsV4/hooks'

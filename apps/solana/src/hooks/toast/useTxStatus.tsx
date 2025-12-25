@@ -1,8 +1,8 @@
 import { useEffect, ReactNode } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { SignatureResult, Context, VersionedTransaction, Transaction } from '@solana/web3.js'
 import { Flex, Box } from '@chakra-ui/react'
-import { ApiV3Token, TxVersion } from '@pancakeswap/solana-core-sdk'
+import { ApiV3Token, TxVersion } from '@simpleflow/solana-core-sdk'
 import { Subject } from 'rxjs'
 
 import { useAppStore } from '@/store/useAppStore'

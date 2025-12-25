@@ -1,6 +1,6 @@
 import { Flex, HStack, Text } from '@chakra-ui/react'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import { colors } from '@/theme/cssVariables'
 import toApr from '@/utils/numberish/toApr'

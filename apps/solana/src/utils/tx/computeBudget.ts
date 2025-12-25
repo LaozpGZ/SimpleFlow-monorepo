@@ -1,4 +1,4 @@
-import { SOL_INFO } from '@pancakeswap/solana-core-sdk'
+import { SOL_INFO } from '@simpleflow/solana-core-sdk'
 import { useAppStore } from '@/store'
 import axios from '@/api/axios'
 import { SolanaFeeInfoJson } from '@/type'

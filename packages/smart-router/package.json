@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/smart-router",
+  "name": "@simpleflow/smart-router",
   "version": "7.5.4",
   "description": "A SDK for getting best routes from AMM",
   "repository": {
@@ -23,15 +23,15 @@
     "dist"
   ],
   "dependencies": {
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/multicall": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
-    "@pancakeswap/stable-swap-sdk": "workspace:*",
-    "@pancakeswap/swap-sdk-core": "workspace:*",
-    "@pancakeswap/token-lists": "workspace:*",
-    "@pancakeswap/tokens": "workspace:*",
-    "@pancakeswap/v3-sdk": "workspace:*",
-    "@pancakeswap/infinity-sdk": "workspace:*",
+    "@simpleflow/chains": "workspace:*",
+    "@simpleflow/multicall": "workspace:*",
+    "@simpleflow/sdk": "workspace:*",
+    "@simpleflow/stable-swap-sdk": "workspace:*",
+    "@simpleflow/swap-sdk-core": "workspace:*",
+    "@simpleflow/token-lists": "workspace:*",
+    "@simpleflow/tokens": "workspace:*",
+    "@simpleflow/v3-sdk": "workspace:*",
+    "@simpleflow/infinity-sdk": "workspace:*",
     "async-retry": "^1.3.1",
     "debug": "^4.3.4",
     "graphql": "^16.8.1",
@@ -44,8 +44,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@pancakeswap/tsconfig": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
+    "@simpleflow/tsconfig": "workspace:*",
+    "@simpleflow/utils": "workspace:*",
     "@types/async-retry": "^1.4.4",
     "@types/debug": "^4.1.7",
     "@types/lodash": "^4.14.178",

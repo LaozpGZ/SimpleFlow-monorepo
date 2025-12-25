@@ -1,8 +1,8 @@
-import { Box, Button, Flex, Heading, LinkExternal, PageHeader, PageSection } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { Box, Button, Flex, Heading, LinkExternal, PageHeader, PageSection } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { styled } from 'styled-components'
 
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import SectionsWithFoldableText from 'components/FoldableSection/SectionsWithFoldableText'
 import PageLoader from 'components/Loader/PageLoader'
 import useTheme from 'hooks/useTheme'

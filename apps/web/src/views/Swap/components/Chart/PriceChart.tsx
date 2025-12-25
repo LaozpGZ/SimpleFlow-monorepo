@@ -11,9 +11,9 @@ import {
   SyncAltIcon,
   Text,
   useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+} from '@simpleflow/uikit'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import { useCallback, useState } from 'react'
 import SwapChart from './SwapChart'
 import { StyledPriceChart } from './styles'

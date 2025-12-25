@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { Pair, Trade, Currency, CurrencyAmount, Token, TradeType } from '@pancakeswap/aptos-swap-sdk'
+import { Pair, Trade, Currency, CurrencyAmount, Token, TradeType } from '@simpleflow/aptos-swap-sdk'
 import flatMap from 'lodash/flatMap'
 import { useMemo } from 'react'
 
-import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
+import { useUserSingleHopOnly } from '@simpleflow/utils/user'
 import {
   BASES_TO_CHECK_TRADES_AGAINST,
   CUSTOM_BASES,

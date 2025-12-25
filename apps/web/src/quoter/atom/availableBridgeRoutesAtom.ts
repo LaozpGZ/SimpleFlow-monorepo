@@ -1,7 +1,7 @@
 import { atomFamily } from 'jotai/utils'
 import { type QuoteQuery } from 'quoter/quoter.types'
 import { getBridgeAvailableRoutes } from 'views/Swap/Bridge/api'
-import { isSolana } from '@pancakeswap/chains'
+import { isSolana } from '@simpleflow/chains'
 import { atomWithLoadable } from './atomWithLoadable'
 
 // Atoms for bridge quote

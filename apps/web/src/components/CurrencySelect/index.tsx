@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   ArrowDropDownIcon,
   Box,
@@ -8,14 +8,14 @@ import {
   Flex,
   Text,
   useModal,
-} from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+} from '@simpleflow/uikit'
+import { formatNumber } from '@simpleflow/utils/formatBalance'
+import { formatAmount } from '@simpleflow/utils/formatFractions'
 import CurrencySearchModal, { CurrencySearchModalProps } from 'components/SearchModal/CurrencySearchModal'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useAccount } from 'wagmi'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency } from '@simpleflow/swap-sdk-core'
 import { AutoRow, RowBetween } from '../Layout/Row'
 import { CurrencyLogo } from '../Logo'
 

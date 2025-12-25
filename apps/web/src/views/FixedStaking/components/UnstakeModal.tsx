@@ -1,5 +1,5 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Card, Modal, ModalV2, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Card, Modal, ModalV2, Text } from '@simpleflow/uikit'
 import { LightCard } from 'components/Card'
 
 import { UnstakeType } from '../type'

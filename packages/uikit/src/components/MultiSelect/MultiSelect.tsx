@@ -1,4 +1,4 @@
-import { useTheme } from "@pancakeswap/hooks";
+import { useTheme } from "@simpleflow/hooks";
 import noop from "lodash/noop";
 import { MultiSelect as PrimereactSelect } from "primereact/multiselect";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";

@@ -1,4 +1,4 @@
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { formatBigInt } from '@simpleflow/utils/formatBalance'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
 import { useEffect, useRef, useState } from 'react'

@@ -1,6 +1,6 @@
 import { ErrorBoundary as SErrorBoundary } from '@sentry/nextjs'
-import { useTranslation } from '@pancakeswap/localization'
-import { Button, Text, LogoIcon, Flex, IconButton, CopyIcon, copyText } from '@pancakeswap/uikit'
+import { useTranslation } from '@simpleflow/l10n'
+import { Button, Text, LogoIcon, Flex, IconButton, CopyIcon, copyText } from '@simpleflow/uikit'
 import { PropsWithChildren, useCallback } from 'react'
 import Page from './Layout/Page'
 

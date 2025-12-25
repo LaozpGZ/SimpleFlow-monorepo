@@ -1,4 +1,4 @@
-import { Ether, Token, WETH9 } from '@pancakeswap/sdk'
+import { Ether, Token, WETH9 } from '@simpleflow/sdk'
 import { zeroAddress } from 'viem'
 import { describe, expect, test } from 'vitest'
 import { hasInvolvedCurrency } from './hasInvolvedCurrency'

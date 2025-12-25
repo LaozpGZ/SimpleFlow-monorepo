@@ -1,4 +1,4 @@
-import { Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@simpleflow/uikit'
 import { HomePageToken } from 'edge/home/types'
 import styled from 'styled-components'
 

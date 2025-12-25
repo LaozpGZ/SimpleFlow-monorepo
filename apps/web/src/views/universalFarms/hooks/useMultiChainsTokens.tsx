@@ -1,6 +1,6 @@
-import { ChainId, ERC20Token, SPLToken } from '@pancakeswap/sdk'
-import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
-import type { TokenInfo } from '@pancakeswap/token-lists'
+import { ChainId, ERC20Token, SPLToken } from '@simpleflow/sdk'
+import { isEvm, NonEVMChainId } from '@simpleflow/chains'
+import type { TokenInfo } from '@simpleflow/token-lists'
 import {
   PANCAKE_ARB_DEFAULT,
   PANCAKE_BASE_DEFAULT,

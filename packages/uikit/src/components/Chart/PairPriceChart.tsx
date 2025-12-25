@@ -1,5 +1,5 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { formatAmount, formatAmountNotation, tokenPrecisionStyle } from "@pancakeswap/utils/formatInfoNumbers";
+import { useTranslation } from "@simpleflow/l10n";
+import { formatAmount, formatAmountNotation, tokenPrecisionStyle } from "@simpleflow/utils/formatInfoNumbers";
 import dayjs from "dayjs";
 import {
   BarData,

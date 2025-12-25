@@ -1,6 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { ArrowBackIcon, ArrowForwardIcon, Box, Flex, Skeleton, Text } from '@pancakeswap/uikit'
-import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@simpleflow/l10n'
+import { ArrowBackIcon, ArrowForwardIcon, Box, Flex, Skeleton, Text } from '@simpleflow/uikit'
+import { NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 
 import { ITEMS_PER_INFO_TABLE_PAGE } from 'config/constants/info'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'

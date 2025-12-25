@@ -1,22 +1,22 @@
-import { ChainId, chainNamesInKebabCase } from '@pancakeswap/chains'
+import { ChainId, chainNamesInKebabCase } from '@simpleflow/chains'
 import {
   FarmV4SupportedChainId,
   fetchAllUniversalFarms,
   Protocol,
   supportedChainIdV4,
   UniversalFarmConfig,
-} from '@pancakeswap/farms'
-import { getCurrencyAddress, Pair } from '@pancakeswap/sdk'
-import { InfinityRouter } from '@pancakeswap/smart-router'
+} from '@simpleflow/farms'
+import { getCurrencyAddress, Pair } from '@simpleflow/sdk'
+import { InfinityRouter } from '@simpleflow/smart-router'
 
-import { SORT_ORDER } from '@pancakeswap/uikit'
-import uniqBy from '@pancakeswap/utils/uniqBy'
-import { computePoolAddress, DEPLOYER_ADDRESSES } from '@pancakeswap/v3-sdk'
+import { SORT_ORDER } from '@simpleflow/uikit'
+import uniqBy from '@simpleflow/utils/uniqBy'
+import { computePoolAddress, DEPLOYER_ADDRESSES } from '@simpleflow/v3-sdk'
 import { edgeQueries } from 'quoter/utils/edgePoolQueries'
 import { getEdgeChainName } from 'quoter/utils/edgeQueries.util'
 import { explorerApiClient } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
-import chunk from '@pancakeswap/utils/chunk'
+import chunk from '@simpleflow/utils/chunk'
 import { FarmInfo, normalizeAddress, safeGetAddress } from './farm.util'
 
 const DEFAULT_PROTOCOLS: Protocol[] = Object.values(Protocol)

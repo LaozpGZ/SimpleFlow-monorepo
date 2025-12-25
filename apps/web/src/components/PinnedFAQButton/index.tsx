@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@simpleflow/l10n'
 import {
   Box,
   Button,
@@ -11,8 +11,8 @@ import {
   ModalProps,
   ModalV2,
   Text,
-} from '@pancakeswap/uikit'
-import ChevronsCollapse from '@pancakeswap/uikit/components/Svg/Icons/ChevronsCollapse'
+} from '@simpleflow/uikit'
+import ChevronsCollapse from '@simpleflow/uikit/components/Svg/Icons/ChevronsCollapse'
 import FoldableText from 'components/FoldableSection/FoldableText'
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'

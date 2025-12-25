@@ -1,5 +1,5 @@
-import { ModalV2, MotionModal, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { ModalV2, MotionModal, useMatchBreakpoints } from '@simpleflow/uikit'
+import { useTranslation } from '@simpleflow/l10n'
 import { OrdersTable } from './OrdersTable'
 import { OpenOrdersToggle } from './OpenOrdersToggle'
 

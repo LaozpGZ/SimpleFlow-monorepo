@@ -1,4 +1,4 @@
-import { isEvm } from '@pancakeswap/chains'
+import { isEvm } from '@simpleflow/chains'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'

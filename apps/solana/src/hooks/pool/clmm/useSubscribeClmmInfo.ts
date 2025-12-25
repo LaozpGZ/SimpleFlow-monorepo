@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PublicKey } from '@solana/web3.js'
 import { shallow } from 'zustand/shallow'
-import { PoolInfoLayout, SqrtPriceMath, ApiV3Token, ApiClmmConfigV3 } from '@pancakeswap/solana-core-sdk'
+import { PoolInfoLayout, SqrtPriceMath, ApiV3Token, ApiClmmConfigV3 } from '@simpleflow/solana-core-sdk'
 
 import Decimal from 'decimal.js'
 import { Subject, throttleTime, filter, asyncScheduler } from 'rxjs'

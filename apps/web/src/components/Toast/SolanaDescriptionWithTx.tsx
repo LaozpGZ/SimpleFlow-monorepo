@@ -1,7 +1,7 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Link, Text } from '@pancakeswap/uikit'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import { solanaExplorerAtom } from '@pancakeswap/utils/user'
+import { useTranslation } from '@simpleflow/l10n'
+import { Link, Text } from '@simpleflow/uikit'
+import truncateHash from '@simpleflow/utils/truncateHash'
+import { solanaExplorerAtom } from '@simpleflow/utils/user'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 
