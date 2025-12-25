@@ -13,6 +13,7 @@ import { PoolsModule } from './modules/pools/pools.module';
 import { FarmsModule } from './modules/farms/farms.module';
 import { RoutingModule } from './modules/routing/routing.module';
 import { AssetsModule } from './modules/assets/assets.module';
+import { InfoModule } from './modules/info/info.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AssetsModule } from './modules/assets/assets.module';
     FarmsModule,
     RoutingModule,
     AssetsModule,
+    InfoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
