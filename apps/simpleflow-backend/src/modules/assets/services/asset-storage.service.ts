@@ -1,10 +1,11 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import sharp from 'sharp';
-
-/* eslint-disable no-await-in-loop */
 
 /**
  * 资源存储服务
@@ -127,7 +128,7 @@ export class AssetStorageService {
   /**
    * 读取文件（如果不存在返回 null）
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async readFile(filePath: string): Promise<Buffer | null> {
     try {
       return await fs.readFile(filePath);
@@ -217,7 +218,7 @@ export class AssetStorageService {
   /**
    * 从外部 URL 下载图片
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async downloadFromUrl(url: string): Promise<Buffer> {
     const response = await fetch(url);
 

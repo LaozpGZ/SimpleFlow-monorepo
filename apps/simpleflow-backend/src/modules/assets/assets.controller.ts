@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import {
   Controller,
   Get,
@@ -40,7 +43,6 @@ import { UploadAssetDto, AssetType } from './dto/asset.dto';
  */
 @Controller('assets')
 export class AssetsController {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private readonly assetsService: AssetsService) {}
 
   /**
@@ -363,7 +365,7 @@ export class AssetsController {
    *
    * 示例: GET /assets/health
    */
-  // eslint-disable-next-line class-methods-use-this
+
   @Get('health')
   async health() {
     return {
@@ -378,7 +380,7 @@ export class AssetsController {
    *
    * 示例: GET /assets/
    */
-  // eslint-disable-next-line class-methods-use-this
+
   @Get()
   async info() {
     return {

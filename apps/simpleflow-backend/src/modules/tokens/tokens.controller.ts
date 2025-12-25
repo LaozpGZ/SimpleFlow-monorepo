@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import {
   Controller,
   Get,
@@ -9,7 +12,6 @@ import { TokensService } from './tokens.service';
 
 @Controller('tokens')
 export class TokensController {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private readonly tokensService: TokensService) {}
 
   // 获取默认 token list

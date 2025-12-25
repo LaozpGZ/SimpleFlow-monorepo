@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import {
   Controller,
   Get,
@@ -75,7 +78,6 @@ interface CalculateTvlRequest {
 
 @Controller('farms')
 export class FarmsController {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private readonly farmsService: FarmsService) {}
 
   /**

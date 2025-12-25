@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import {
   Controller,
   Get,
@@ -19,7 +22,6 @@ interface PoolsQueryDto extends PoolQueryDto {
  */
 @Controller('pools')
 export class PoolsController {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private readonly poolsService: PoolsService) {}
 
   /**

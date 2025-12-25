@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import { Injectable, Logger } from '@nestjs/common';
 import { ChainId } from '@pancakeswap/chains';
 import { getTokensByChain } from '@pancakeswap/tokens';
@@ -25,13 +28,12 @@ export interface TokenList {
 export class TokensService {
   private readonly logger = new Logger(TokensService.name);
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(private cacheService: CacheService) {}
 
   /**
    * 获取 Token List
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async getTokenList(_type: 'default' | 'extended') {
     // 直接使用 PancakeSwap 的 tokens
     // type 暂时不区分，都返回全部支持的链的 tokens
@@ -101,7 +103,7 @@ export class TokensService {
   /**
    * 搜索 Tokens
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async searchTokens(query: string) {
     const q = query.toLowerCase();
     const allTokens: TokenInfo[] = [];

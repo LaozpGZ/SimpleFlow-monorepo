@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import {
   Controller,
   Get,
@@ -12,7 +15,6 @@ import { RoutingService } from './routing.service';
 
 @Controller('routing')
 export class RoutingController {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private readonly routingService: RoutingService) {}
 
   // 获取最佳报价（GET 方法）

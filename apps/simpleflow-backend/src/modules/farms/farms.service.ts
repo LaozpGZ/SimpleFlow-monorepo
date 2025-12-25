@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import BN from 'bignumber.js';
@@ -79,7 +82,6 @@ const CAKE_PER_YEAR = (365 * 24 * 60 * 60) / BSC_BLOCK_TIME;
 export class FarmsService {
   private readonly logger = new Logger(FarmsService.name);
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(
     private configService: ConfigService,
     private cacheService: CacheService,
@@ -89,7 +91,7 @@ export class FarmsService {
   /**
    * 检查链是否支持
    */
-  // eslint-disable-next-line class-methods-use-this
+
   isChainSupported(chainId: number, version: 'v2' | 'v3' = 'v2'): boolean {
     const supported =
       version === 'v2' ? SUPPORTED_CHAINS_V2 : SUPPORTED_CHAINS_V3;
@@ -99,7 +101,7 @@ export class FarmsService {
   /**
    * 获取支持的链列表
    */
-  // eslint-disable-next-line class-methods-use-this
+
   getSupportedChains(): { v2: number[]; v3: number[] } {
     return {
       v2: [...SUPPORTED_CHAINS_V2],
@@ -189,9 +191,7 @@ export class FarmsService {
    */
   async getCakePrice(): Promise<CakePriceData> {
     const cacheKey = 'price:cake';
-    const cached = (await this.cacheService.get(
-      cacheKey,
-    )) as CakePriceData | null;
+    const cached = await this.cacheService.get(cacheKey);
     if (cached) {
       return cached;
     }
@@ -234,9 +234,7 @@ export class FarmsService {
    */
   async getMasterChefData(chainId: number): Promise<MasterChefData> {
     const cacheKey = `masterchef:data:${chainId}`;
-    const cached = (await this.cacheService.get(
-      cacheKey,
-    )) as MasterChefData | null;
+    const cached = await this.cacheService.get(cacheKey);
     if (cached) {
       return cached;
     }
@@ -263,7 +261,7 @@ export class FarmsService {
    *
    * 公式：APR = (cakePerYear * cakePrice * poolWeight / totalAllocPoint) / tvl * 100
    */
-  // eslint-disable-next-line class-methods-use-this
+
   calculateFarmApr(params: {
     poolWeight: string;
     tvlUsd: string;
@@ -297,7 +295,7 @@ export class FarmsService {
   /**
    * 计算池子的 TVL
    */
-  // eslint-disable-next-line class-methods-use-this
+
   calculateTvl(params: {
     token0Amount: string;
     token0Price: string;

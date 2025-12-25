@@ -1,10 +1,11 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { AssetStorageService } from './asset-storage.service';
 import { AssetType } from '../dto/asset.dto';
-
-/* eslint-disable no-await-in-loop */
 
 /**
  * 链ID到TrustWallet路径的映射
@@ -389,7 +390,7 @@ export class AssetsService {
   /**
    * 从 URL 下载图片
    */
-  // eslint-disable-next-line class-methods-use-this
+
   private async downloadImage(url: string): Promise<Buffer> {
     const response = await axios.get<ArrayBuffer>(url, {
       responseType: 'arraybuffer',

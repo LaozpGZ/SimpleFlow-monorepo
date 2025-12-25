@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import { Injectable, Logger } from '@nestjs/common';
 import { SmartRouter } from '@pancakeswap/smart-router';
 import { GraphQLClient } from 'graphql-request';
@@ -25,7 +28,6 @@ export class RoutingService {
       this.rpcService.getClient(chainId || 56),
   });
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(
     private cacheService: CacheService,
     private rpcService: RpcService,
@@ -101,7 +103,7 @@ export class RoutingService {
     const trade = await SmartRouter.getBestTrade(
       currencyAAmount,
       currencyB,
-      (tradeType as any) || 'EXACT_INPUT',
+      tradeType || 'EXACT_INPUT',
       {
         gasPriceWei: gasPriceWei
           ? BigInt(gasPriceWei)
@@ -114,7 +116,7 @@ export class RoutingService {
         quoteProvider: this.onChainQuoteProvider,
         maxHops: maxHops || 3,
         maxSplits: maxSplits || 2,
-        allowedPoolTypes: poolTypes as any,
+        allowedPoolTypes: poolTypes,
         quoterOptimization: false,
       },
     );
@@ -125,7 +127,7 @@ export class RoutingService {
   /**
    * 获取池子列表
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async getPools(chainId: number) {
     // TODO: 实现获取池子列表的逻辑
     return {

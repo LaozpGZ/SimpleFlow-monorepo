@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable no-await-in-loop */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ChainId } from '@pancakeswap/chains';
 import { readFileSync, existsSync } from 'fs';
@@ -10,8 +13,6 @@ import {
   StablePoolInfo,
   PoolsResponse,
 } from './dto/pool-response.dto';
-
-/* eslint-disable no-await-in-loop */
 
 // V3 池子 ABI - 只包含需要的函数
 const V3_POOL_ABI = [
@@ -126,7 +127,6 @@ export class PoolsService implements OnModuleInit {
   // 缓存 farms 配置数据
   private farmsConfig: Map<number, FarmPoolConfig[]> = new Map();
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(
     private cacheService: CacheService,
     private rpcService: RpcService,
@@ -326,7 +326,7 @@ export class PoolsService implements OnModuleInit {
   /**
    * 获取 Stable 池子
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async getStablePools(_chainId: number): Promise<StablePoolInfo[]> {
     // 暂不支持 Stable 池子
     return [];
@@ -397,8 +397,8 @@ export class PoolsService implements OnModuleInit {
       ]);
 
       return {
-        sqrtPriceX96: (slot0 as any)[0] as bigint,
-        tick: (slot0 as any)[1] as number,
+        sqrtPriceX96: slot0[0] as bigint,
+        tick: slot0[1] as number,
         liquidity: liquidity as bigint,
       };
     } catch (error) {
@@ -439,8 +439,8 @@ export class PoolsService implements OnModuleInit {
       ]);
 
       return {
-        reserve0: (reserves as any)[0] as bigint,
-        reserve1: (reserves as any)[1] as bigint,
+        reserve0: reserves[0] as bigint,
+        reserve1: reserves[1] as bigint,
         totalSupply: totalSupply as bigint,
       };
     } catch (error) {
@@ -507,7 +507,7 @@ export class PoolsService implements OnModuleInit {
   /**
    * 批量获取池子的链上数据（限制并发数）
    */
-  // eslint-disable-next-line class-methods-use-this
+
   private async batchEnrichPools<T extends V3PoolInfo | V2PoolInfo>(
     pools: T[],
     chainId: number,
@@ -533,7 +533,7 @@ export class PoolsService implements OnModuleInit {
   /**
    * 返回空响应
    */
-  // eslint-disable-next-line class-methods-use-this
+
   private emptyResponse(chainId: number): PoolsResponse {
     return {
       chainId,
