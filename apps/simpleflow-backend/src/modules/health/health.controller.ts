@@ -1,9 +1,10 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
 import { Controller, Get } from '@nestjs/common';
 import { HealthService } from './health.service';
 
 @Controller('health')
 export class HealthController {
-  // eslint-disable-next-line no-useless-constructor
   constructor(private readonly healthService: HealthService) {}
 
   @Get()

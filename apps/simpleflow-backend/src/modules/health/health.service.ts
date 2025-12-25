@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
 import { Injectable, Logger } from '@nestjs/common';
 import { ChainId } from '@pancakeswap/chains';
 import { RpcService } from '@/common/rpc/rpc.service';
@@ -27,7 +29,6 @@ export class HealthService {
     [ChainId.SIMPLECHAIN]: 'SimpleChain',
   };
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(private rpcService: RpcService) {}
 
   async check() {

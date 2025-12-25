@@ -1,8 +1,9 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  // eslint-disable-next-line class-methods-use-this
   getHello(): string {
     return 'SimpleFlow Backend API is running!';
   }

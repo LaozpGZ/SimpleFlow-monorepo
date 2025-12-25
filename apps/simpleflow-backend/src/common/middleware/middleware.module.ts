@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { RateLimitMiddleware } from './rate-limit.middleware';
 import { RequestLoggerMiddleware } from './request-logger.middleware';
@@ -11,7 +13,6 @@ import { RequestLoggerMiddleware } from './request-logger.middleware';
   exports: [RateLimitMiddleware, RequestLoggerMiddleware],
 })
 export class MiddlewareModule implements NestModule {
-  // eslint-disable-next-line class-methods-use-this
   configure(consumer: MiddlewareConsumer) {
     // 请求日志中间件应用于所有路由
     consumer.apply(RequestLoggerMiddleware).forRoutes('*');

@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-constructor */
 import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
@@ -83,7 +85,7 @@ export class RateLimitMiddleware implements NestMiddleware {
   /**
    * 获取客户端 IP
    */
-  // eslint-disable-next-line class-methods-use-this
+
   private getClientIp(req: Request): string {
     return (
       (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() ||
