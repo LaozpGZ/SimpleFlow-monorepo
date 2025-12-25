@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-constructor */
+
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createPublicClient, http } from 'viem';
@@ -13,7 +15,6 @@ export class RpcService implements OnModuleInit {
 
   private clients: Map<ChainId, PublicClient> = new Map();
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(private configService: ConfigService) {}
 
   async onModuleInit() {
@@ -134,6 +135,29 @@ export class RpcService implements OnModuleInit {
             },
           },
           transport: http(simplechainRpc),
+        }),
+      );
+    }
+
+    // SimpleChain Testnet
+    const simplechainTestnetRpc = this.configService.get<string>(
+      'app.rpc.simplechainTestnet',
+    );
+    if (simplechainTestnetRpc) {
+      this.clients.set(
+        ChainId.SIMPLECHAIN_TESTNET,
+        createPublicClient({
+          chain: {
+            id: ChainId.SIMPLECHAIN_TESTNET,
+            name: 'SimpleChain Testnet',
+            nativeCurrency: { name: 'SimpleCoin', symbol: 'SIM', decimals: 18 },
+            rpcUrls: {
+              default: {
+                http: [simplechainTestnetRpc],
+              },
+            },
+          },
+          transport: http(simplechainTestnetRpc),
         }),
       );
     }

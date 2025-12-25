@@ -21,6 +21,9 @@ export default registerAs('app', () => ({
     arbitrum: process.env.ARBITRUM_NODE || 'https://arb1.arbitrum.io/rpc',
     linea: process.env.LINEA_NODE || 'https://rpc.linea.build',
     simplechain: process.env.SIMPLECHAIN_NODE || 'https://rpc.simplechain.com',
+    simplechainTestnet:
+      process.env.SIMPLECHAIN_TESTNET_NODE ||
+      'https://rpc-testnet.simplechain.com',
   },
   assets: {
     storagePath: process.env.ASSETS_STORAGE_PATH || './public/assets',
