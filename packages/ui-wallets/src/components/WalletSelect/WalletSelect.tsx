@@ -5,7 +5,7 @@ import uniqBy from 'lodash/uniqBy'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
 import { scrollbarClass } from '../WalletModal.css'
 import { MoreWalletSection } from './MoreWalletSection'
-import { WalletSelectItem, WalletSelectSection } from './WalletSelectSection'
+import { WalletSelectItem, WalletSelectSection, ChainBoxPlaceholder } from './WalletSelectSection'
 import { useWalletFilterValue, WalletFilterValue } from '../../state/hooks'
 
 export type WalletSelectProps = {
@@ -102,6 +102,7 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
           {topWallets_.map((wallet) => (
             <WalletSelectItem key={wallet.id} wallet={wallet} onClick={handleWalletClick} />
           ))}
+          <ChainBoxPlaceholder />
         </WalletSelectSection>
       )}
       <MoreWalletSection onClick={handleWalletClick} wallets={moreWallets} />

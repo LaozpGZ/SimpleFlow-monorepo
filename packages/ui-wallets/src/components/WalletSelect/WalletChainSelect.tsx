@@ -27,7 +27,7 @@ import { ChainId } from '@simpleflow/chains'
 import { useTheme } from '@simpleflow/hooks'
 import { WalletConfigV3, WalletAdaptedNetwork } from '../../types'
 import { ASSET_CDN } from '../../config/url'
-import { useMetamaskVersionWarning } from '../../hooks/useMetamaskVersionWarning'
+// import { useMetamaskVersionWarning } from '../../hooks/useMetamaskVersionWarning'
 
 export type WalletChainSelectProps = {
   wallet: WalletConfigV3<any> | null
@@ -83,7 +83,7 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
     },
   )
 
-  const shouldShowMetamaskVersionWarning = useMetamaskVersionWarning()
+  // const shouldShowMetamaskVersionWarning = useMetamaskVersionWarning()
 
   if (!wallet || wallet.networks.length <= 1) return null
 
@@ -155,7 +155,8 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
                 </RowBetween>
               )}
 
-              {supportsSolana && (
+              {/* Solana 连接选项已隐藏 */}
+              {/* {supportsSolana && (
                 <>
                   <RowBetween flexWrap="nowrap">
                     <Row gap="8px" alignItems="center">
@@ -188,7 +189,7 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
                     </Message>
                   )}
                 </>
-              )}
+              )} */}
             </Column>
           </Column>
         </CardBody>

@@ -57,7 +57,7 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
         <FarmFlexWrapper>
           <Box style={{ flex: '1 1 100%' }}>
             {!isMobile ? (
-              <FarmH1 as="h1" scale="xxl" color="secondary" mb="24px">
+              <FarmH1 as="h1" scale="xxl" color="secondary" mb="24px" style={{ textAlign: 'center' }}>
                 {t('Earn from LP')}
               </FarmH1>
             ) : (
@@ -104,27 +104,9 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
 
             {!isMobile && (
               <>
-                <FarmH2 scale="lg" color="text">
+                <FarmH2 scale="lg" color="text" style={{ textAlign: 'center' }}>
                   {t('Liquidity Pools & Farms')}
                 </FarmH2>
-                <Row flexWrap="wrap" gap="16px">
-                  <LinkExternal
-                    href="https://docs.simpleflow.finance/products/yield-farming/how-to-use-farms"
-                    showExternalIcon={false}
-                  >
-                    <Button p="0" variant="text">
-                      <Text color="primary" bold fontSize="16px" mr="4px">
-                        {t('Learn How')}
-                      </Text>
-                    </Button>
-                  </LinkExternal>
-                  {!!additionLink && (
-                    <>
-                      <VerticalDivider bg={theme.colors.inputSecondary} />
-                      {additionLink}
-                    </>
-                  )}
-                </Row>
               </>
             )}
           </Box>

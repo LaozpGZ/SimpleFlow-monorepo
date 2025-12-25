@@ -8,6 +8,7 @@ import {
   EarnIcon,
   MenuItemsType,
   MoreIcon,
+  PoolIcon,
   RocketIcon,
   SwapFillIcon,
   SwapIcon,
@@ -99,7 +100,7 @@ const config: (
     //   showItemsOnMobile: false,
     // },
     {
-      label: t('Earn.verb'),
+      label: t('Dashboard'),
       href: '/liquidity/pools',
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
@@ -110,11 +111,6 @@ const config: (
           label: t('Farm / Liquidity'),
           href: '/liquidity/pools',
           supportChainIds: SUPPORT_FARMS,
-        },
-        {
-          label: t('veSDX Redeem'),
-          href: '/cake-staking/redeem',
-          supportChainIds: POOL_SUPPORTED_CHAINS,
         },
         // {
         //   label: t('Syrup Pools'),
@@ -129,23 +125,53 @@ const config: (
           matchHrefs: ['/liquidity/positions', '/farms'],
           supportChainIds: SUPPORT_FARMS,
         },
+      ].map((item) => addMenuItemSupported(item, chainId)),
+    },
+    {
+      label: t('LP'),
+      href: '/farms',
+      icon: PoolIcon,
+      fillIcon: PoolIcon,
+      supportChainIds: SUPPORT_FARMS,
+      hideSubNav: true,
+      items: [
         {
-          label: t('Staking'),
-          items: [
-            {
-              label: t('veSDX Redeem'),
-              href: '/cake-staking/redeem',
-              supportChainIds: POOL_SUPPORTED_CHAINS,
-            },
-            // {
-            //   label: t('Syrup Pools'),
-            //   href: '/pools',
-            //   supportChainIds: POOL_SUPPORTED_CHAINS,
-            // },
-          ].map((item) => addMenuItemSupported(item, chainId)),
+          label: t('Legacy Farm Page'),
+          href: '/farms',
+          supportChainIds: SUPPORT_FARMS,
+          display: false,
+        },
+        {
+          label: t('Create Pool'),
+          href: '/liquidity/create',
+          supportChainIds: SUPPORT_FARMS,
+        },
+        {
+          label: t('Add Liquidity'),
+          href: '/liquidity/select',
+          supportChainIds: SUPPORT_FARMS,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
+    // {
+    //   label: t('Staking'),
+    //   href: '/',
+    //   icon: EarnIcon,
+    //   fillIcon: EarnFillIcon,
+    //   hideSubNav: true,
+    //   items: [
+    //     {
+    //       label: t('veSDX Redeem'),
+    //       href: '/cake-staking/redeem',
+    //       supportChainIds: POOL_SUPPORTED_CHAINS,
+    //     },
+    //     // {
+    //     //   label: t('Syrup Pools'),
+    //     //   href: '/pools',
+    //     //   supportChainIds: POOL_SUPPORTED_CHAINS,
+    //     // },
+    //   ].map((item) => addMenuItemSupported(item, chainId)),
+    // },
     // {
     //   label: t('Prob'),
     //   icon: RocketIcon,

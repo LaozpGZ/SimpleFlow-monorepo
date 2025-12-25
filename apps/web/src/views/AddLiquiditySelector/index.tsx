@@ -70,15 +70,16 @@ export const AddLiquiditySelector = () => {
   )
 
   const types = useMemo(() => {
-    return isMobile ? COMPACT_LIQUIDITY_TYPES : LIQUIDITY_TYPES
-  }, [isMobile])
+    // 只显示 v3
+    return ['v3'] as const
+  }, [])
 
   /// Functions
   const onLiquidityTypeClick = useCallback(
     (index: number) => {
-      updateParams({ protocol: LIQUIDITY_TYPES[index] })
+      updateParams({ protocol: types[index] })
     },
-    [updateParams],
+    [updateParams, types],
   )
 
   // TODO: implement relevant checks for native, token collision, etc. like in AddLiquidityV3
@@ -129,7 +130,7 @@ export const AddLiquiditySelector = () => {
   }, [baseCurrency, quoteCurrency, poolTypeQuery, chainId, queryChainName])
 
   const nextStep = useMemo(() => {
-    const key = protocol ?? 'infinity'
+    const key = protocol ?? 'v3'
     return nextStepURLMap[key]
   }, [protocol, nextStepURLMap])
 
@@ -185,7 +186,7 @@ export const AddLiquiditySelector = () => {
           <FlexGap gap="6px" flexDirection="column">
             <PreTitle>{t('1. Select where to provide liquidity')}</PreTitle>
             <ButtonMenu
-              activeIndex={protocol ? LIQUIDITY_TYPES.indexOf(protocol) : 0}
+              activeIndex={protocol ? types.indexOf(protocol as (typeof types)[number]) : 0}
               onItemClick={onLiquidityTypeClick}
               scale="sm"
               variant="subtle"

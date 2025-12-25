@@ -19,7 +19,7 @@ export type MultiChainName =
   | 'OPBNB'
   | 'SOLANA'
   | 'SIMPLECHAIN'
-export type MultiChainNameExtend = MultiChainName | 'BSC_TESTNET' | 'ZKSYNC_TESTNET'
+export type MultiChainNameExtend = MultiChainName | 'BSC_TESTNET' | 'ZKSYNC_TESTNET' | 'SIMPLECHAIN_TESTNET'
 
 export const multiChainName: Record<number | string, MultiChainNameExtend> = {
   [ChainId.BSC]: 'BSC',
@@ -31,6 +31,7 @@ export const multiChainName: Record<number | string, MultiChainNameExtend> = {
   [ChainId.OPBNB]: 'OPBNB',
   [ChainId.ARBITRUM_ONE]: 'ARB',
   [ChainId.SIMPLECHAIN]: 'SIMPLECHAIN',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'SIMPLECHAIN_TESTNET',
   [ChainId.ZKSYNC_TESTNET]: 'ZKSYNC_TESTNET',
 }
 
@@ -61,6 +62,7 @@ export const multiChainId: Record<MultiChainNameExtend, UnifiedChainId> = {
   BSC_TESTNET: ChainId.BSC_TESTNET,
   ZKSYNC_TESTNET: ChainId.ZKSYNC_TESTNET,
   SIMPLECHAIN: ChainId.SIMPLECHAIN,
+  SIMPLECHAIN_TESTNET: ChainId.SIMPLECHAIN_TESTNET,
 }
 
 export const multiChainPaths = {
@@ -73,6 +75,7 @@ export const multiChainPaths = {
   [ChainId.BASE]: '/base',
   [ChainId.OPBNB]: '/opbnb',
   [ChainId.SIMPLECHAIN]: '/simplechain',
+  [ChainId.SIMPLECHAIN_TESTNET]: '/simplechain-testnet',
   [ChainId.ZKSYNC_TESTNET]: '/zksync-testnet',
 }
 

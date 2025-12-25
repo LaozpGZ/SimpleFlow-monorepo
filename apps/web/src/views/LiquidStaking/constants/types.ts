@@ -19,6 +19,7 @@ interface ExchangeRateMultiCall {
 export enum FunctionName {
   exchangeRate = 'exchangeRate',
   convertSnBnbToBnb = 'convertSnBnbToBnb',
+  convertSSrwToSrw = 'convertSSrwToSrw',
 }
 
 export interface FAQType {

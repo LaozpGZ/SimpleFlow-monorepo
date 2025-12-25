@@ -4,7 +4,6 @@ import { useDefaultSelectIdRoute, useSelectIdRoute } from 'hooks/dynamicRoute/us
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
-import { BreadcrumbNav } from 'views/CreateLiquidityPool/components/BreadcrumbNav'
 import { CreateLiquidityInfinityForm } from 'views/CreateLiquidityPool/Infinity/CreateLiquidityInfinityForm'
 import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquidityV3Form'
 import PageLayout from 'components/Layout/Page'
@@ -35,7 +34,6 @@ const CreateLiquidityPage = () => {
   return (
     <StyledBox>
       <PageLayout>
-        <BreadcrumbNav />
         <Box mt="24px">
           {protocolName === 'infinity' ? (
             <CreateLiquidityInfinityForm />

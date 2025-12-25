@@ -12,4 +12,11 @@ export const SNBNB: Record<number, Address> = {
   [ChainId.BSC]: '0x1adB950d8bB3dA4bE104211D5AB038628e477fE6',
 }
 
+// SimpleChain Liquid Staking - sSRW (Staked SRW)
+// TODO: 部署后替换为实际合约地址
+export const SSRW: Record<number, Address> = {
+  [ChainId.SIMPLECHAIN]: '0x1234567890123456789012345678901234567890',
+  [ChainId.SIMPLECHAIN_TESTNET]: '0x1234567890123456789012345678901234567890',
+}
+
 export const UNWRAPPED_ETH_ADDRESS: Address = '0x79973d557CD9dd87eb61E250cc2572c990e20196'

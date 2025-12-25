@@ -149,4 +149,13 @@ export const simplechainTokens = {
     'SimpleFlow Token',
     'https://simplechain.com/',
   ),
+  // sSRW - Staked SRW (Liquid Staking Token)
+  ssrw: new ERC20Token(
+    ChainId.SIMPLECHAIN,
+    '0x1234567890123456789012345678901234567890', // TODO: 部署后替换为实际合约地址
+    18,
+    'sSRW',
+    'Staked SRW',
+    'https://simplechain.com/',
+  ),
 }

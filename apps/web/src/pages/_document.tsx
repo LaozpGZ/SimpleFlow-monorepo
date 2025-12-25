@@ -43,7 +43,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&amp;display=swap"
             rel="stylesheet"
           />
-          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="apple-touch-icon" href="/logo.png" />
           <link rel="manifest" href="/manifest.json" />
         </Head>

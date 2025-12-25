@@ -5,7 +5,6 @@ import { useTranslation } from '@simpleflow/l10n'
 import { LightGreyCard, NextLinkFromReactRouter } from '@simpleflow/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getChainName } from '@simpleflow/chains'
-import { BreadcrumbNav } from './components/BreadcrumbNav'
 import { useProtocolSupported } from './hooks/useProtocolSupported'
 
 const StyledBox = styled(Box)`
@@ -107,9 +106,6 @@ export const CreateLiquiditySelector = () => {
   return (
     <StyledBox>
       <Page>
-        <Box mt="2px">
-          <BreadcrumbNav />
-        </Box>
         <Container px="0" mt="24px" maxWidth={[null, null, null, '520px']}>
           <Card>
             <CardBody>
@@ -120,15 +116,7 @@ export const CreateLiquiditySelector = () => {
                 </LinkExternal>
               </FlexGap>
 
-              {isInfinitySupported(chainId) ? (
-                <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
-                  <InfinityCard />
-                </NextLinkFromReactRouter>
-              ) : (
-                <>
-                  <InfinityCard disabled />
-                </>
-              )}
+              {/* Infinity Pool hidden */}
 
               <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v3`}>
                 <StyledCard mt="16px">
@@ -148,13 +136,7 @@ export const CreateLiquiditySelector = () => {
                 </StyledCard>
               </NextLinkFromReactRouter>
 
-              {isV2Supported(chainId) ? (
-                <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v2`}>
-                  <V2Card />
-                </NextLinkFromReactRouter>
-              ) : (
-                <V2Card disabled />
-              )}
+              {/* V2 Pool hidden */}
             </CardBody>
           </Card>
         </Container>

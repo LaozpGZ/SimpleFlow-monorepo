@@ -1439,6 +1439,7 @@ export interface components {
       | 'sol'
       | 'monad'
       | 'simplechain'
+      | 'simplechain-testnet'
     /**
      * @description Protocol version
      * @default v2
@@ -1791,6 +1792,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -1936,6 +1938,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2081,6 +2084,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2226,6 +2230,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2366,6 +2371,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2407,6 +2413,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2448,6 +2455,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2490,6 +2498,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2531,6 +2540,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2602,6 +2612,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -2645,6 +2656,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description EVM (0x…) or Solana base-58 address */
@@ -2692,6 +2704,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2737,6 +2750,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description EVM (0x…) or Solana base-58 address */
@@ -2781,6 +2795,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description EVM (0x…) or Solana base-58 address */
@@ -2825,6 +2840,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2892,6 +2908,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2936,6 +2953,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -2972,6 +2990,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -3008,6 +3027,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -3044,6 +3064,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -3103,6 +3124,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -3168,6 +3190,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -3233,6 +3256,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -3298,6 +3322,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -3363,6 +3388,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -3479,6 +3505,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Pool address */
         pool: string
       }
@@ -3523,6 +3550,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Pool address */
         pool: string
       }
@@ -3564,6 +3592,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Infinity pool ID */
         pool: string
         /** @description EVM (0x…) or Solana base-58 address */
@@ -3607,6 +3636,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Infinity pool ID */
         pool: string
       }
@@ -3648,6 +3678,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         owner: string
       }
@@ -3689,6 +3720,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         owner: string
       }
@@ -3730,6 +3762,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Pool ID (EVM 0x… or Solana base58) */
         address: string
       }
@@ -3774,6 +3807,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Pool ID (EVM 0x… or Solana base58) */
         address: string
       }
@@ -3815,6 +3849,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Infinity pool ID */
         address: string
       }
@@ -3859,6 +3894,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Pool ID (EVM 0x… or Solana base58) */
@@ -3903,6 +3939,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
         /** @description Pool ID (EVM 0x… or Solana base58) */
@@ -3994,6 +4031,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -4030,6 +4068,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -4095,6 +4134,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -4129,6 +4169,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -4163,6 +4204,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -4197,6 +4239,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Pool ID */
         id: string
       }
@@ -5174,6 +5217,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         currencyA: string
         /** @description EVM (0x…) or Solana base-58 address */
@@ -5593,6 +5637,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Infinity pool ID */
         address: string
       }
@@ -5704,6 +5749,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Infinity pool ID */
         address: string
       }
@@ -5815,6 +5861,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -5912,6 +5959,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -6067,6 +6115,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6139,6 +6188,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6211,6 +6261,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6277,6 +6328,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6389,6 +6441,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6498,6 +6551,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description EVM (0x…) or Solana base-58 address */
         address: string
       }
@@ -6540,6 +6594,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Pool ID */
         pool: string
       }
@@ -6588,6 +6643,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6701,6 +6757,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -6799,6 +6856,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
       }
       cookie?: never
     }
@@ -7002,6 +7060,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7044,6 +7103,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7085,6 +7145,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7153,6 +7214,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7227,6 +7289,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }
@@ -7274,6 +7337,7 @@ export interface operations {
           | 'sol'
           | 'monad'
           | 'simplechain'
+          | 'simplechain-testnet'
         /** @description Protocol version */
         protocol: 'v2' | 'v3' | 'infinityBin' | 'infinityCl' | 'stable'
       }

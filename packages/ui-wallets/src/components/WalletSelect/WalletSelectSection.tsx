@@ -204,3 +204,50 @@ const NetworkTag = styled(Card)`
     border-radius: 5px;
   }
 `
+
+// ChainBox 钱包占位组件 - 功能待实现
+export const ChainBoxPlaceholder: React.FC = () => {
+  return (
+    <AtomBox
+      border="1"
+      borderRadius="default"
+      p="8px"
+      style={{ maxWidth: '106px', width: '100%', borderBottomWidth: '2px', opacity: 0.6, cursor: 'not-allowed' }}
+      background="backgroundAlt"
+    >
+      <AtomBox
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+        height="auto"
+        width="100%"
+        style={{ justifyContent: 'flex-start', letterSpacing: 'normal', padding: '0' }}
+      >
+        <AtomBox borderRadius="12px" mb="4px" position="relative">
+          <AtomBox
+            bgc="dropdown"
+            display="flex"
+            position="relative"
+            justifyContent="center"
+            alignItems="center"
+            className={walletIconClass}
+            style={{ borderRadius: '12px' }}
+            overflow="hidden"
+          >
+            <Text fontSize="20px" fontWeight="bold" color="textSubtle">
+              CB
+            </Text>
+          </AtomBox>
+        </AtomBox>
+        <Row gap="2px">
+          <Text color="textSubtle" fontSize="12px" textAlign="center" width="100%" ellipsis>
+            ChainBox
+          </Text>
+        </Row>
+        <Text color="textDisabled" fontSize="10px">
+          Coming Soon
+        </Text>
+      </AtomBox>
+    </AtomBox>
+  )
+}
