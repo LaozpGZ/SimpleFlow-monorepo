@@ -92,11 +92,11 @@ const Menu = (props) => {
       rightSide={
         <>
           <GlobalSettings />
-          {enabled && (
+          {/* {enabled && (
             <Suspense fallback={null}>
               <Notifications />
             </Suspense>
-          )}
+          )} */}
           <NetworkSwitcher />
           <UserMenu />
         </>
@@ -145,16 +145,15 @@ const SharedComponentWithOutMenuWrapper = styled.div`
 `
 
 export const SharedComponentWithOutMenu: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { enabled } = useWebNotifications()
   return (
     <>
       <SharedComponentWithOutMenuWrapper>
         <GlobalSettings />
-        {enabled && (
+        {/* {enabled && (
           <Suspense fallback={null}>
             <Notifications />
           </Suspense>
-        )}
+        )} */}
         <NetworkSwitcher />
         <UserMenu />
       </SharedComponentWithOutMenuWrapper>
