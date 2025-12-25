@@ -22,6 +22,7 @@
     "build:storybook": "turbo run build:storybook --filter=@pancakeswap/uikit...",
     "build": "turbo run build --filter=web...",
     "build:web": "NODE_OPTIONS='--max-old-space-size=8192' turbo run build --filter=web...",
+    "12nolinttodocker": "NODE_OPTIONS='--max-old-space-size=12288' turbo run build:nolint --filter=web...",
     "build:blog": "turbo run build --filter=blog...",
     "build:aptos": "turbo run build --filter=aptos-web...",
     "build:bridge": "turbo run build --filter=bridge...",
