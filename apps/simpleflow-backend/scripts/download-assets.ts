@@ -14,7 +14,7 @@ import * as path from 'path';
 
 /**
  * 常用代币列表
- * 可以根据需要添加更多
+ * 注意：地址必须保持原始大小写，PancakeSwap CDN 对大小写敏感！
  */
 const COMMON_TOKENS = [
   // BSC 链
@@ -68,6 +68,31 @@ const COMMON_TOKENS = [
     address: '0xfD5840Cd36d94D7229439859C0112a4185BC0255',
     symbol: 'USDD',
   },
+  {
+    chainId: 56,
+    address: '0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE',
+    symbol: 'XVS',
+  },
+  {
+    chainId: 56,
+    address: '0xFa60D973F7642B748046464e165A65B7323b0DEE',
+    symbol: 'GMC',
+  },
+  {
+    chainId: 56,
+    address: '0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47',
+    symbol: 'ADA',
+  },
+  {
+    chainId: 56,
+    address: '0x1D3F76ccC48181A389b9aA8B59aCa0bc4Ec4F6D2',
+    symbol: 'DOT',
+  },
+  {
+    chainId: 56,
+    address: '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402',
+    symbol: 'MATIC',
+  },
 
   // Ethereum 链
   {
@@ -94,6 +119,11 @@ const COMMON_TOKENS = [
     chainId: 1,
     address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
     symbol: 'DAI',
+  },
+  {
+    chainId: 1,
+    address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+    symbol: 'SHIB',
   },
 
   // Polygon 链
@@ -155,6 +185,25 @@ const COMMON_TOKENS = [
     address: '0x4200000000000000000000000000000000000006',
     symbol: 'WETH',
   },
+
+  // Optimism 链
+  {
+    chainId: 10,
+    address: '0x4200000000000000000000000000000000000006',
+    symbol: 'WETH',
+  },
+  {
+    chainId: 10,
+    address: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+    symbol: 'USDC',
+  },
+
+  // Fantom 链
+  {
+    chainId: 250,
+    address: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
+    symbol: 'WFTM',
+  },
 ];
 
 /**
@@ -201,40 +250,77 @@ async function downloadFile(url: string): Promise<Buffer | null> {
 
 /**
  * 获取代币图标（多源尝试）
+ *
+ * 注意：PancakeSwap CDN 对地址大小写敏感，需要使用原始大小写！
  */
 async function downloadTokenIcon(
   chainId: number,
   address: string,
 ): Promise<Buffer | null> {
-  const addr = address.toLowerCase();
+  // PancakeSwap CDN 需要原始大小写
+  const originalAddr = address;
+  // TrustWallet CDN 需要小写 + checksum
+  const lowerAddr = address.toLowerCase();
 
-  // 1. PancakeSwap CDN
-  let url = `${PCS_CDN}/images/${addr}.png`;
+  // 1. PancakeSwap CDN (原始大小写 - 主要源)
+  let url = `${PCS_CDN}/images/${originalAddr}.png`;
   let icon = await downloadFile(url);
   if (icon) return icon;
 
-  // 2. PancakeSwap CDN (带链ID)
-  url = `${PCS_CDN}/images/${chainId}/${addr}.png`;
+  // 2. PancakeSwap CDN (小写尝试)
+  url = `${PCS_CDN}/images/${lowerAddr}.png`;
+  icon = await downloadFile(url);
+  if (icon) return icon;
+
+  // 3. PancakeSwap CDN (带链ID路径)
+  url = `${PCS_CDN}/images/${chainId}/${originalAddr}.png`;
+  icon = await downloadFile(url);
+  if (icon) return icon;
+
+  // 4. TrustWallet CDN (小写)
+  const trustPath = CHAIN_TO_TRUSTWALLET[chainId];
+  if (trustPath) {
+    url = `${TRUSTWALLET_CDN}/blockchains/${trustPath}/assets/${lowerAddr}/logo.png`;
+    icon = await downloadFile(url);
+    if (icon) return icon;
+  }
+
+  // 5. assets.pancakeswap.finance (备用CDN)
+  url = `https://assets.pancakeswap.finance/tokens/${chainId}/${lowerAddr}.png`;
+  icon = await downloadFile(url);
+  if (icon) return icon;
+
+  return null;
+}
+
+/**
+ * 获取链图标（多源尝试）
+ */
+async function downloadChainIcon(chainId: number): Promise<Buffer | null> {
+  // 1. assets.pancakeswap.finance - 主要源
+  let url = `https://assets.pancakeswap.finance/images/chains/${chainId}.png`;
+  let icon = await downloadFile(url);
+  if (icon) return icon;
+
+  // 2. 带 eip155 前缀
+  url = `https://assets.pancakeswap.finance/images/chains/eip155:${chainId}.png`;
   icon = await downloadFile(url);
   if (icon) return icon;
 
   // 3. TrustWallet CDN
   const trustPath = CHAIN_TO_TRUSTWALLET[chainId];
   if (trustPath) {
-    url = `${TRUSTWALLET_CDN}/blockchains/${trustPath}/assets/${addr}/logo.png`;
+    url = `${TRUSTWALLET_CDN}/blockchains/${trustPath}/info/logo.png`;
     icon = await downloadFile(url);
     if (icon) return icon;
   }
 
-  return null;
-}
+  // 4. PancakeSwap Token CDN (备用)
+  url = `${PCS_CDN}/web/chains/${chainId}.png`;
+  icon = await downloadFile(url);
+  if (icon) return icon;
 
-/**
- * 获取链图标
- */
-async function downloadChainIcon(chainId: number): Promise<Buffer | null> {
-  const url = `${PCS_CDN}/web/chains/${chainId}.png`;
-  return downloadFile(url);
+  return null;
 }
 
 /**
