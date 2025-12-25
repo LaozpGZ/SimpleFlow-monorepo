@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createPublicClient, http } from 'viem';
-import { mainnet, bsc } from 'viem/chains';
+import { mainnet, bsc, opBNB, base, arbitrum, linea } from 'viem/chains';
 import { ChainId } from '@pancakeswap/chains';
 
 // 简化类型定义，避免 TypeScript 类型实例化过深
@@ -46,23 +46,97 @@ export class RpcService implements OnModuleInit {
       }),
     );
 
-    // SimpleChain
-    this.clients.set(
-      ChainId.SIMPLECHAIN,
-      createPublicClient({
-        chain: {
-          id: 8802,
-          name: 'SimpleChain',
-          nativeCurrency: { name: 'SimpleCoin', symbol: 'SIM', decimals: 18 },
-          rpcUrls: {
-            default: {
-              http: [this.configService.get<string>('app.rpc.simplechain')!],
+    // opBNB
+    const opbnbRpc = this.configService.get<string>('app.rpc.opbnb');
+    if (opbnbRpc) {
+      this.clients.set(
+        ChainId.OPBNB,
+        createPublicClient({
+          chain: opBNB,
+          transport: http(opbnbRpc),
+        }),
+      );
+    }
+
+    // zkSync Era
+    const zksyncRpc = this.configService.get<string>('app.rpc.zksync');
+    if (zksyncRpc) {
+      this.clients.set(
+        ChainId.ZKSYNC,
+        createPublicClient({
+          chain: {
+            id: ChainId.ZKSYNC,
+            name: 'zkSync Era',
+            nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+            rpcUrls: {
+              default: {
+                http: [zksyncRpc],
+              },
             },
           },
-        },
-        transport: http(this.configService.get<string>('app.rpc.simplechain')),
-      }),
+          transport: http(zksyncRpc),
+        }),
+      );
+    }
+
+    // Base
+    const baseRpc = this.configService.get<string>('app.rpc.base');
+    if (baseRpc) {
+      this.clients.set(
+        ChainId.BASE,
+        createPublicClient({
+          chain: base,
+          transport: http(baseRpc),
+        }),
+      );
+    }
+
+    // Arbitrum One
+    const arbRpc = this.configService.get<string>('app.rpc.arbitrum');
+    if (arbRpc) {
+      this.clients.set(
+        ChainId.ARBITRUM_ONE,
+        createPublicClient({
+          chain: arbitrum,
+          transport: http(arbRpc),
+        }),
+      );
+    }
+
+    // Linea
+    const lineaRpc = this.configService.get<string>('app.rpc.linea');
+    if (lineaRpc) {
+      this.clients.set(
+        ChainId.LINEA,
+        createPublicClient({
+          chain: linea,
+          transport: http(lineaRpc),
+        }),
+      );
+    }
+
+    // SimpleChain
+    const simplechainRpc = this.configService.get<string>(
+      'app.rpc.simplechain',
     );
+    if (simplechainRpc) {
+      this.clients.set(
+        ChainId.SIMPLECHAIN,
+        createPublicClient({
+          chain: {
+            id: ChainId.SIMPLECHAIN,
+            name: 'SimpleChain',
+            nativeCurrency: { name: 'SimpleCoin', symbol: 'SIM', decimals: 18 },
+            rpcUrls: {
+              default: {
+                http: [simplechainRpc],
+              },
+            },
+          },
+          transport: http(simplechainRpc),
+        }),
+      );
+    }
 
     this.logger.log(`RPC clients initialized for ${this.clients.size} chains`);
   }

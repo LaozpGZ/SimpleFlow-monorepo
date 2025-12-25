@@ -1,6 +1,6 @@
-import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { Injectable, Logger } from '@nestjs/common';
+import { ChainId } from '@pancakeswap/chains';
+import { getTokensByChain } from '@pancakeswap/tokens';
 
 import { CacheService } from '@/common/cache/cache.service';
 
@@ -10,7 +10,7 @@ export interface TokenInfo {
   symbol: string;
   name: string;
   decimals: number;
-  logoURI?: string;
+  projectLink?: string;
 }
 
 export interface TokenList {
@@ -22,137 +22,109 @@ export interface TokenList {
 }
 
 @Injectable()
-export class TokensService implements OnModuleInit {
+export class TokensService {
   private readonly logger = new Logger(TokensService.name);
-
-  private defaultList: TokenList | null = null;
-
-  private extendedList: TokenList | null = null;
 
   // eslint-disable-next-line no-useless-constructor
   constructor(private cacheService: CacheService) {}
 
-  onModuleInit() {
-    this.loadTokenLists();
-  }
-
+  /**
+   * 获取 Token List
+   */
   // eslint-disable-next-line class-methods-use-this
-  private loadTokenLists() {
-    const distDir = join(process.cwd(), 'dist', 'tokens');
+  async getTokenList(_type: 'default' | 'extended') {
+    // 直接使用 PancakeSwap 的 tokens
+    // type 暂时不区分，都返回全部支持的链的 tokens
+    const allTokens: TokenInfo[] = [];
 
-    try {
-      const defaultPath = join(distDir, 'simpleflow-default.json');
-      const extendedPath = join(distDir, 'simpleflow-extended.json');
+    // 支持的链ID
+    const supportedChains: ChainId[] = [
+      ChainId.ETHEREUM,
+      ChainId.BSC,
+      ChainId.BSC_TESTNET,
+    ];
 
-      if (existsSync(defaultPath)) {
-        const defaultData = JSON.parse(readFileSync(defaultPath, 'utf-8'));
-        // 验证是否为有效的 TokenList 结构
-        if (
-          defaultData &&
-          typeof defaultData === 'object' &&
-          'tokens' in defaultData
-        ) {
-          this.defaultList = defaultData;
-          this.logger.log(
-            `Loaded default list with ${
-              this.defaultList.tokens?.length || 0
-            } tokens`,
-          );
-        } else {
-          this.logger.warn(
-            'Invalid default token list format, using empty list',
-          );
-          this.defaultList = this.createEmptyList('Default');
-        }
-      } else {
-        this.logger.warn('Default token list not found, using empty list');
-        this.defaultList = this.createEmptyList('Default');
+    for (const chainId of supportedChains) {
+      const tokens = getTokensByChain(chainId);
+      for (const token of tokens) {
+        allTokens.push({
+          chainId: token.chainId,
+          address: token.address,
+          symbol: token.symbol,
+          name: token.name,
+          decimals: token.decimals,
+          projectLink: token.projectLink,
+        });
       }
-
-      if (existsSync(extendedPath)) {
-        const extendedData = JSON.parse(readFileSync(extendedPath, 'utf-8'));
-        // 验证是否为有效的 TokenList 结构
-        if (
-          extendedData &&
-          typeof extendedData === 'object' &&
-          'tokens' in extendedData
-        ) {
-          this.extendedList = extendedData;
-          this.logger.log(
-            `Loaded extended list with ${
-              this.extendedList.tokens?.length || 0
-            } tokens`,
-          );
-        } else {
-          this.logger.warn(
-            'Invalid extended token list format, using empty list',
-          );
-          this.extendedList = this.createEmptyList('Extended');
-        }
-      } else {
-        this.logger.warn('Extended token list not found, using empty list');
-        this.extendedList = this.createEmptyList('Extended');
-      }
-    } catch (e) {
-      this.logger.error('Failed to load token lists', e);
-      this.defaultList = this.createEmptyList('Default');
-      this.extendedList = this.createEmptyList('Extended');
     }
-  }
 
-  // eslint-disable-next-line class-methods-use-this
-  private createEmptyList(type: string): TokenList {
     return {
-      name: `SimpleFlow ${type} List`,
+      name: `PancakeSwap Token List`,
       timestamp: new Date().toISOString(),
       version: { major: 1, minor: 0, patch: 0 },
-      tokens: [],
-      logoURI: 'https://simpleflow.finance/tokens/logos',
-    };
-  }
-
-  async getTokenList(type: 'default' | 'extended') {
-    const list = type === 'default' ? this.defaultList : this.extendedList;
-
-    return {
-      ...list,
+      tokens: allTokens,
+      logoURI: 'https://pancakeswap.finance/tokens/logos',
       _cache: {
         maxAge: 3600, // 1小时
       },
     };
   }
 
+  /**
+   * 获取指定链的 Tokens
+   */
   async getTokensByChain(chainId: number) {
     const cacheKey = `tokens:chain:${chainId}`;
     const cached = await this.cacheService.get<TokenInfo[]>(cacheKey);
     if (cached) return cached;
 
-    const tokens: TokenInfo[] = [];
+    try {
+      const tokens = getTokensByChain(chainId as ChainId);
 
-    if (this.defaultList) {
-      tokens.push(
-        ...this.defaultList.tokens.filter((t) => t.chainId === chainId),
-      );
-    }
-    if (this.extendedList) {
-      tokens.push(
-        ...this.extendedList.tokens.filter((t) => t.chainId === chainId),
-      );
-    }
+      const tokenInfo: TokenInfo[] = tokens.map((token) => ({
+        chainId: token.chainId,
+        address: token.address,
+        symbol: token.symbol,
+        name: token.name,
+        decimals: token.decimals,
+        projectLink: token.projectLink,
+      }));
 
-    await this.cacheService.set(cacheKey, tokens, 3600);
-    return tokens;
+      await this.cacheService.set(cacheKey, tokenInfo, 3600);
+      return tokenInfo;
+    } catch (error) {
+      this.logger.error(`Failed to get tokens for chain ${chainId}`, error);
+      return [];
+    }
   }
 
+  /**
+   * 搜索 Tokens
+   */
+  // eslint-disable-next-line class-methods-use-this
   async searchTokens(query: string) {
     const q = query.toLowerCase();
     const allTokens: TokenInfo[] = [];
 
-    if (this.defaultList) {
-      allTokens.push(...this.defaultList.tokens);
-    }
-    if (this.extendedList) {
-      allTokens.push(...this.extendedList.tokens);
+    // 支持的链ID
+    const supportedChains: ChainId[] = [
+      ChainId.ETHEREUM,
+      ChainId.BSC,
+      ChainId.BSC_TESTNET,
+    ];
+
+    for (const chainId of supportedChains) {
+      const tokens = getTokensByChain(chainId);
+      for (const token of tokens) {
+        allTokens.push({
+          chainId: token.chainId,
+          address: token.address,
+          symbol: token.symbol,
+          name: token.name,
+          decimals: token.decimals,
+          projectLink: token.projectLink,
+        });
+      }
     }
 
     return allTokens.filter(

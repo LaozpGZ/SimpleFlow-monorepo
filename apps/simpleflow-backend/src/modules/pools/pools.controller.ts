@@ -2,11 +2,16 @@ import {
   Controller,
   Get,
   Param,
+  Query,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { PoolsService } from './pools.service';
 import { PoolQueryDto, PoolAddressDto } from './dto/pool-query.dto';
+
+interface PoolsQueryDto extends PoolQueryDto {
+  enrich?: string; // 'true' | 'false'
+}
 
 /**
  * Pools API 控制器
@@ -20,17 +25,34 @@ export class PoolsController {
   /**
    * 获取指定链的所有池子数据
    * GET /pools/:chainId
+   *
+   * 查询参数:
+   * - enrich: 'true' 时从链上获取详细数据（liquidity, reserves 等），较慢
+   * - limit: 限制返回的池子数量（配合 enrich 使用避免请求过慢）
+   *
+   * 示例:
+   * - GET /pools/56 - 获取基本配置数据（快）
+   * - GET /pools/56?enrich=true&limit=10 - 获取前 10 个池子的链上数据（慢）
    */
   @Get(':chainId')
-  async getPools(@Param() params: PoolQueryDto) {
+  async getPools(
+    @Param() params: PoolQueryDto,
+    @Query() query: Pick<PoolsQueryDto, 'enrich' | 'limit'>,
+  ) {
     const { chainId } = params;
+    const { enrich, limit } = query;
 
     // 验证 chainId
     if (Number.isNaN(chainId) || chainId <= 0) {
       throw new HttpException('Invalid chainId', HttpStatus.BAD_REQUEST);
     }
 
-    return this.poolsService.getPools(chainId);
+    const options = {
+      enrich: enrich === 'true',
+      limit: limit ?? undefined,
+    };
+
+    return this.poolsService.getPools(chainId, options);
   }
 
   /**

@@ -10,8 +10,9 @@ import { MiddlewareModule } from './common/middleware/middleware.module';
 import { HealthModule } from './modules/health/health.module';
 import { TokensModule } from './modules/tokens/tokens.module';
 import { PoolsModule } from './modules/pools/pools.module';
-// import { FarmsModule } from './modules/farms/farms.module';
-// import { RoutingModule } from './modules/routing/routing.module';
+import { FarmsModule } from './modules/farms/farms.module';
+import { RoutingModule } from './modules/routing/routing.module';
+import { AssetsModule } from './modules/assets/assets.module';
 
 @Module({
   imports: [
@@ -32,8 +33,9 @@ import { PoolsModule } from './modules/pools/pools.module';
     HealthModule,
     TokensModule,
     PoolsModule,
-    // FarmsModule, // 暂时禁用，等待 workspace 包编译问题修复
-    // RoutingModule, // 暂时禁用，等待 workspace 包编译问题修复
+    FarmsModule,
+    RoutingModule,
+    AssetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
