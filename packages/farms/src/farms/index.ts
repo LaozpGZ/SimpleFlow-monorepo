@@ -17,6 +17,12 @@ const chainIds: ChainId[] = [
   ChainId.SIMPLECHAIN,
 ]
 
+export const UNIVERSAL_FARMS_WITH_TESTNET: UniversalFarmConfig[] = [
+  ...bscTestnetFarmConfig,
+  ...zkSyncTestnetFarmConfig,
+  ...simplechainTestnetFarmConfig,
+]
+
 export const fetchAllUniversalFarms = async (): Promise<UniversalFarmConfig[]> => {
   try {
     const farmPromises = chainIds.map((chainId) => fetchUniversalFarms(chainId))
@@ -27,9 +33,10 @@ export const fetchAllUniversalFarms = async (): Promise<UniversalFarmConfig[]> =
     })
     const combinedFarms = allFarms.flat()
 
-    return combinedFarms
+    // Include testnet farms
+    return [...combinedFarms, ...UNIVERSAL_FARMS_WITH_TESTNET]
   } catch (error) {
-    return []
+    return UNIVERSAL_FARMS_WITH_TESTNET
   }
 }
 
@@ -48,9 +55,3 @@ export const fetchAllUniversalFarmsMap = async (): Promise<Record<string, Univer
     return {}
   }
 }
-
-export const UNIVERSAL_FARMS_WITH_TESTNET: UniversalFarmConfig[] = [
-  ...bscTestnetFarmConfig,
-  ...zkSyncTestnetFarmConfig,
-  ...simplechainTestnetFarmConfig,
-]

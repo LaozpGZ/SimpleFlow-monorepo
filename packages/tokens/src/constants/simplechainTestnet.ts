@@ -48,7 +48,7 @@ export const simplechainTestnetTokens = {
   ),
   wbtc: new ERC20Token(
     ChainId.SIMPLECHAIN_TESTNET,
-    '0xc48DC2507A162E2Ab63e12055CA5C79cf9b19BF2',
+    '0x770556F853a17893b1187A9754F17c6f57776b7c',
     8,
     'WBTC',
     'Wrapped Bitcoin',

@@ -35,6 +35,7 @@ export function getPoolAddLiquidityLink(pool: PoolInfo): string {
 
 export async function getLinkForPool(pool: UnifiedPoolInfo, type: 'detail' | 'info'): Promise<string> {
   const { chainId, protocol, lpAddress, stableSwapAddress } = pool
+  const { poolId } = pool as Partial<InfinityPoolInfo>
 
   if (type === 'detail') {
     const linkPrefix = `/liquidity/pool${multiChainPaths[chainId] || '/bsc'}`
@@ -50,6 +51,9 @@ export async function getLinkForPool(pool: UnifiedPoolInfo, type: 'detail' | 'in
     }
     if (chainId === NonEVMChainId.SOLANA) {
       return `/liquidity/pool/solana/${lpAddress}`
+    }
+    if ([Protocol.InfinityBIN, Protocol.InfinityCLAMM].includes(protocol)) {
+      return `${linkPrefix}/${poolId || lpAddress}`
     }
     return `${linkPrefix}/${lpAddress}`
   }

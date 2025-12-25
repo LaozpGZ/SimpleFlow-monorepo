@@ -95,6 +95,7 @@ export const mainnetChainNamesInKebabCase = {
   [ChainId.BASE_SEPOLIA]: 'base',
   [NonEVMChainId.SOLANA]: 'sol',
   [ChainId.SIMPLECHAIN]: 'simplechain',
+  [ChainId.SIMPLECHAIN_TESTNET]: 'simplechain-testnet',
   [NonEVMChainId.APTOS]: 'aptos',
 } as const
 
